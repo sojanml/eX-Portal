@@ -42,6 +42,12 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+#Directories
 bin
+obj
 
+#Files
+eX-Portal.csproj.user
+eX-Portal.csproj
+.suo
 
