@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ExponentPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ExponentPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="DroneData">
           <Key>
             <PropertyRef Name="DroneDataId" />
@@ -139,10 +139,11 @@
           <Property Name="IsAcitive" Type="bit" />
           <Property Name="RecordType" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.M2M_UserProfile' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="M2M_UserProfile">
-          <Property Name="Id" Type="int" />
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="MenuId" Type="int" />
           <Property Name="ProfileId" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
@@ -153,7 +154,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.M2M_UserProfile' does not have 
           <Property Name="CreatedBy" Type="datetime" />
           <Property Name="ModifiedBy" Type="datetime" />
           <Property Name="ApprovedBy" Type="datetime" />
-        </EntityType>-->
+        </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
             <PropertyRef Name="AccountId" />
@@ -333,10 +334,11 @@ warning 6013: The table/view 'ExponentPortal.dbo.M2M_UserProfile' does not have 
           <Property Name="RecordType" Type="int" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.ProductHistory' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="ProductHistory">
-          <Property Name="ProHistoryId" Type="int" />
+          <Key>
+            <PropertyRef Name="ProHistoryId" />
+          </Key>
+          <Property Name="ProHistoryId" Type="int" Nullable="false" />
           <Property Name="Latitude" Type="int" />
           <Property Name="Logitude" Type="int" />
           <Property Name="ProductId" Type="int" />
@@ -345,7 +347,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.ProductHistory' does not have a
           <Property Name="RSSI" Type="nvarchar" MaxLength="50" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="RecordType" Type="int" />
-        </EntityType>-->
+        </EntityType>
         <EntityType Name="ProductTransactions">
           <Key>
             <PropertyRef Name="ProTransId" />
@@ -381,6 +383,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.ProductHistory' does not have a
           <EntitySet Name="M2M_DroneParts" EntityType="Self.M2M_DroneParts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M2M_DroneServiceParts" EntityType="Self.M2M_DroneServiceParts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M2M_UserAccount" EntityType="Self.M2M_UserAccount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M2M_UserProfile" EntityType="Self.M2M_UserProfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Account" EntityType="Self.MSTR_Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Drone" EntityType="Self.MSTR_Drone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_DroneService" EntityType="Self.MSTR_DroneService" Schema="dbo" store:Type="Tables" />
@@ -390,14 +393,14 @@ warning 6013: The table/view 'ExponentPortal.dbo.ProductHistory' does not have a
           <EntitySet Name="MSTR_Profile" EntityType="Self.MSTR_Profile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User" EntityType="Self.MSTR_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
             <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
             <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ExponentPortalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -765,7 +768,39 @@ warning 6013: The table/view 'ExponentPortal.dbo.ProductHistory' does not have a
             <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
             <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
           </AssociationSet>
+          <EntitySet Name="M2M_UserProfile" EntityType="ExponentPortalModel.M2M_UserProfile" />
+          <EntitySet Name="ProductHistories" EntityType="ExponentPortalModel.ProductHistory" />
         </EntityContainer>
+        <EntityType Name="M2M_UserProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="MenuId" Type="Int32" />
+          <Property Name="ProfileId" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="RecordType" Type="Int32" />
+          <Property Name="CreatedBy" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="DateTime" Precision="3" />
+          <Property Name="ApprovedBy" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ProductHistory">
+          <Key>
+            <PropertyRef Name="ProHistoryId" />
+          </Key>
+          <Property Name="ProHistoryId" Type="Int32" Nullable="false" />
+          <Property Name="Latitude" Type="Int32" />
+          <Property Name="Logitude" Type="Int32" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="ProRFID" Type="Int32" />
+          <Property Name="ReadTime" Type="DateTime" Precision="3" />
+          <Property Name="RSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="RecordType" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1114,6 +1149,38 @@ warning 6013: The table/view 'ExponentPortal.dbo.ProductHistory' does not have a
                 <ScalarProperty Name="RecordType" ColumnName="RecordType" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M2M_UserProfile">
+            <EntityTypeMapping TypeName="ExponentPortalModel.M2M_UserProfile">
+              <MappingFragment StoreEntitySet="M2M_UserProfile">
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
+                <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductHistories">
+            <EntityTypeMapping TypeName="ExponentPortalModel.ProductHistory">
+              <MappingFragment StoreEntitySet="ProductHistory">
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RSSI" ColumnName="RSSI" />
+                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+                <ScalarProperty Name="ProRFID" ColumnName="ProRFID" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Logitude" ColumnName="Logitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="ProHistoryId" ColumnName="ProHistoryId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

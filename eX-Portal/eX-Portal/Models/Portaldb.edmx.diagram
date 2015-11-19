@@ -24,6 +24,8 @@
         <EntityTypeShape EntityType="ExponentPortalModel.ProductDefinition" Width="1.5" PointX="10.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.ProductTransaction" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_UserProfile" Width="1.5" PointX="13.375" PointY="4.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ProductHistory" Width="1.5" PointX="13.375" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

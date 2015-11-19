@@ -13,11 +13,8 @@ namespace eX_Portal.Controllers
         // GET: Drone
         public ActionResult Index()
         {
-            var Drones = this.db.Albums.Include(a => a.Genre).Include(a => a.Artist)
-            .OrderBy(a => a.Price);
 
-            return this.View(albums.ToList());
-           
+            return View();
         }
 
         // GET: Drone/Details/5

@@ -170,6 +170,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DroneController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -201,6 +202,9 @@
     <Compile Include="Models\M2M_UserAccount.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\M2M_UserProfile.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MSTR_Account.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
@@ -226,26 +230,23 @@
     <Compile Include="Models\MSTR_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Portaldb.Context.cs" />
     <Compile Include="Models\Portaldb.cs" />
     <Compile Include="Models\Portaldb.Designer.cs">
       <DependentUpon>Portaldb.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Portaldb1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
+    <Compile Include="Models\ProductDefinition.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Portaldb1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Portaldb.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ProductDefinition.cs">
+    <Compile Include="Models\ProductHistory.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductTransaction.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -256,10 +257,21 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Models\Portaldb.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Portaldb.Context1.cs</LastGenOutput>
+    </Content>
     <Content Include="Models\Portaldb.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Portaldb1.cs</LastGenOutput>
     </Content>
+    <Content Include="obj\Debug\eX-Portal.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\eX-Portal.dll" />
+    <Content Include="obj\Debug\eX-Portal.pdb" />
+    <Content Include="obj\Debug\TempPE\Models.Portaldb.cs.dll" />
+    <Content Include="obj\Debug\TempPE\Models.Portaldb.Designer.cs.dll" />
+    <Content Include="obj\Debug\TempPE\Models.Portaldb1.cs.dll" />
+    <Content Include="obj\Debug\TempPE\Models.Portaldb1.Designer.cs.dll" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\Portaldb.edmx">
@@ -269,6 +281,8 @@
     <Content Include="Models\Portaldb.edmx.diagram">
       <DependentUpon>Portaldb.edmx</DependentUpon>
     </Content>
+    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <Content Include="obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -316,6 +330,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_exPortal.cshtml" />
+    <Content Include="Views\Drone\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
