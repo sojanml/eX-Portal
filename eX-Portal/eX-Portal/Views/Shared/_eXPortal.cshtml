@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@ViewBag.Title - My ASP.NET Application</title>
+  @Styles.Render("~/Content/css")
+  @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body>
+
+  <header class="clearfix">
+    <section class="layout">
+      <div class="logo">
+        <img alt="" height="62" src="~/images/logo.png" width="300">
+      </div>
+
+      <nav>
+        <ul>
+          <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "active" })</li>
+          <li><a href="#">Drone</a></li>
+          <li><a href="#">Product</a></li>
+          <li><a href="#">Admin</a></li>
+          <li><a href="#">Reports</a></li>
+        </ul>
+      </nav>
+    </section>
+  </header>
+  <section class="sep"></section>
+  <article>
+    <section class="layout">
+      <div class="toolbar clearfix">
+        <nav class="breadcrumbs">
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Drone</a></li>
+            <li>@ViewBag.Title</li>
+          </ul>
+        </nav>
+        @Html.Partial("_LoginPartial")
+      </div>
+    </section>
+  </article>
+
+  <section class="sep"></section>
+
+  <article>
+    <section class="layout content">
+      <h1>@ViewBag.Title</h1>
+
+      @RenderBody()
+    </section>
+  </article>
+  <section class="sep"></section>
+  <footer>
+    <section class="layout">
+      <P>&copy; @DateTime.Now.Year -  Exponent TS All rights reserved.</P>
+    </section>
+  </footer>
+
+  @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/bootstrap")
+  @RenderSection("scripts", required: false)
+
+</body>
+
+</html>
+
+
