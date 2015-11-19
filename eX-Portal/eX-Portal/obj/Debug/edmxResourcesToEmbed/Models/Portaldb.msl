@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ExponentPortalModelStoreContainer" CdmEntityContainer="ExponentPortalEntities">
+    <EntitySetMapping Name="DroneDatas">
+      <EntityTypeMapping TypeName="ExponentPortalModel.DroneData">
+        <MappingFragment StoreEntitySet="DroneData">
+          <ScalarProperty Name="DroneDataId" ColumnName="DroneDataId" />
+          <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+          <ScalarProperty Name="DroneRFID" ColumnName="DroneRFID" />
+          <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+          <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+          <ScalarProperty Name="ProductRFID" ColumnName="ProductRFID" />
+          <ScalarProperty Name="ProductQrCode" ColumnName="ProductQrCode" />
+          <ScalarProperty Name="ProductRSSI" ColumnName="ProductRSSI" />
+          <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+          <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DroneDefinitions">
+      <EntityTypeMapping TypeName="ExponentPortalModel.DroneDefinition">
+        <MappingFragment StoreEntitySet="DroneDefinition">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+          <ScalarProperty Name="BitLength" ColumnName="BitLength" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="LastModifiedOn" ColumnName="LastModifiedOn" />
+          <ScalarProperty Name="CommissionDate" ColumnName="CommissionDate" />
+          <ScalarProperty Name="SerialNo" ColumnName="SerialNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LUP_Drone">
+      <EntityTypeMapping TypeName="ExponentPortalModel.LUP_Drone">
+        <MappingFragment StoreEntitySet="LUP_Drone">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+          <ScalarProperty Name="BinaryCode" ColumnName="BinaryCode" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LUP_Product">
+      <EntityTypeMapping TypeName="ExponentPortalModel.LUP_Product">
+        <MappingFragment StoreEntitySet="LUP_Product">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+          <ScalarProperty Name="BinaryCode" ColumnName="BinaryCode" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M2M_DroneDetails">
+      <EntityTypeMapping TypeName="ExponentPortalModel.M2M_DroneDetails">
+        <MappingFragment StoreEntitySet="M2M_DroneDetails">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M2M_DroneParts">
+      <EntityTypeMapping TypeName="ExponentPortalModel.M2M_DroneParts">
+        <MappingFragment StoreEntitySet="M2M_DroneParts">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PartsGroupId" ColumnName="PartsGroupId" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M2M_DroneServiceParts">
+      <EntityTypeMapping TypeName="ExponentPortalModel.M2M_DroneServiceParts">
+        <MappingFragment StoreEntitySet="M2M_DroneServiceParts">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PartsGroupId" ColumnName="PartsGroupId" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="M2M_UserAccount">
+      <EntityTypeMapping TypeName="ExponentPortalModel.M2M_UserAccount">
+        <MappingFragment StoreEntitySet="M2M_UserAccount">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserAccountName" ColumnName="UserAccountName" />
+          <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+          <ScalarProperty Name="IsAcitive" ColumnName="IsAcitive" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MSTR_Account">
+      <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Account">
+        <MappingFragment StoreEntitySet="MSTR_Account">
+          <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+          <ScalarProperty Name="OfficeNo" ColumnName="OfficeNo" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+          <ScalarProperty Name="AccountDescription" ColumnName="AccountDescription" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="Address3" ColumnName="Address3" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MSTR_Drone">
+      <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
+        <MappingFragment StoreEntitySet="MSTR_Drone">
+          <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+          <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+          <ScalarProperty Name="ManufactureId" ColumnName="ManufactureId" />
+          <ScalarProperty Name="UavTypeId" ColumnName="UavTypeId" />
+          <ScalarProperty Name="PartsGroupId" ColumnName="PartsGroupId" />
+          <ScalarProperty Name="DroneName" ColumnName="DroneName" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+          <ScalarProperty Name="DroneIdBitString" ColumnName="DroneIdBitString" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="DroneIdHexa" ColumnName="DroneIdHexa" />
+          <ScalarProperty Name="DroneIdBarCode" ColumnName="DroneIdBarCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MSTR_DroneService">
+      <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_DroneService">
+        <MappingFragment StoreEntitySet="MSTR_DroneService">
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="AcceptedBy" ColumnName="AcceptedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="AcceptedOn" ColumnName="AcceptedOn" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MSTR_Menu">
+      <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Menu">
+        <MappingFragment StoreEntitySet="MSTR_Menu">
+          <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+          <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+          <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+          <ScalarProperty Name="PageUrl" ColumnName="PageUrl" />
+          <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+          <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="LastModifiedOn" ColumnName="LastModifiedOn" />
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MSTR_Parts">
+      <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Parts">
+        <MappingFragment StoreEntitySet="MSTR_Parts">
+          <ScalarProperty Name="PartsGroupId" ColumnName="PartsGroupId" />
+          <ScalarProperty Name="PartsGroupName" ColumnName="PartsGroupName" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MSTR_Product">
+      <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Product">
+        <MappingFragment StoreEntitySet="MSTR_Product">
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="RFID" ColumnName="RFID" />
+          <ScalarProperty Name="DecimalCode" ColumnName="DecimalCode" />
+          <ScalarProperty Name="BinaryCode" ColumnName="BinaryCode" />
+          <ScalarProperty Name="IsAssigned" ColumnName="IsAssigned" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="Product_Name" ColumnName="Product_Name" />
+          <ScalarProperty Name="SerialNo" ColumnName="SerialNo" />
+          <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+          <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+          <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+          <ScalarProperty Name="LastReadTime" ColumnName="LastReadTime" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MSTR_Profile">
+      <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Profile">
+        <MappingFragment StoreEntitySet="MSTR_Profile">
+          <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
+          <ScalarProperty Name="ProfileName" ColumnName="ProfileName" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="LastModifiedOn" ColumnName="LastModifiedOn" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MSTR_User">
+      <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
+        <MappingFragment StoreEntitySet="MSTR_User">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="RememberMe" ColumnName="RememberMe" />
+          <ScalarProperty Name="PhotoUrl" ColumnName="PhotoUrl" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+          <ScalarProperty Name="UserAccountId" ColumnName="UserAccountId" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+          <ScalarProperty Name="OfficeNo" ColumnName="OfficeNo" />
+          <ScalarProperty Name="HomeNo" ColumnName="HomeNo" />
+          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+          <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="LastModifiedOn" ColumnName="LastModifiedOn" />
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductDefinitions">
+      <EntityTypeMapping TypeName="ExponentPortalModel.ProductDefinition">
+        <MappingFragment StoreEntitySet="ProductDefinition">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+          <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+          <ScalarProperty Name="BitLength" ColumnName="BitLength" />
+          <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ApprovedDate" ColumnName="ApprovedDate" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductTransactions">
+      <EntityTypeMapping TypeName="ExponentPortalModel.ProductTransaction">
+        <MappingFragment StoreEntitySet="ProductTransactions">
+          <ScalarProperty Name="ProTransId" ColumnName="ProTransId" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="ProductRFID" ColumnName="ProductRFID" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

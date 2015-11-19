@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ExponentPortalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="DroneData">
+    <Key>
+      <PropertyRef Name="DroneDataId" />
+    </Key>
+    <Property Name="DroneDataId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DroneId" Type="Int32" />
+    <Property Name="DroneRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ProductRSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ReadTime" Type="DateTime" Precision="3" />
+    <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="ProductId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="DroneDefinition">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BitLength" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="LastModifiedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="0" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="LastModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="CommissionDate" Type="DateTime" Precision="3" />
+    <Property Name="SerialNo" Type="Int32" />
+  </EntityType>
+  <EntityType Name="LUP_Drone">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Code" Type="Int32" Nullable="false" />
+    <Property Name="TypeId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BinaryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="LUP_Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Code" Type="Int32" />
+    <Property Name="TypeId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BinaryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="AccountId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="M2M_DroneDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DroneId" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+    <Property Name="IsActive" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="M2M_DroneParts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PartsGroupId" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Manufacturer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="M2M_DroneServiceParts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PartsGroupId" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="ServiceId" Type="Int32" />
+    <NavigationProperty Name="M2M_DroneServiceParts1" Relationship="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts" ToRole="M2M_DroneServiceParts1" />
+    <NavigationProperty Name="M2M_DroneServiceParts2" Relationship="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts1" ToRole="M2M_DroneServiceParts" />
+  </EntityType>
+  <EntityType Name="M2M_UserAccount">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserAccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AccountId" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+    <Property Name="IsAcitive" Type="Boolean" />
+    <Property Name="RecordType" Type="Int32" />
+  </EntityType>
+  <EntityType Name="MSTR_Account">
+    <Key>
+      <PropertyRef Name="AccountId" />
+    </Key>
+    <Property Name="AccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EmailId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MobileNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="OfficeNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+    <Property Name="AccountDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CountryCode" Type="Int32" />
+  </EntityType>
+  <EntityType Name="MSTR_Drone">
+    <Key>
+      <PropertyRef Name="DroneId" />
+    </Key>
+    <Property Name="DroneId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OwnerId" Type="Int32" />
+    <Property Name="ManufactureId" Type="Int32" />
+    <Property Name="UavTypeId" Type="Int32" />
+    <Property Name="PartsGroupId" Type="Int32" />
+    <Property Name="DroneName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+    <Property Name="DroneIdBitString" Type="String" MaxLength="96" FixedLength="false" Unicode="true" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="DroneIdHexa" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
+    <Property Name="DroneIdBarCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="MSTR_DroneService">
+    <Key>
+      <PropertyRef Name="ServiceId" />
+    </Key>
+    <Property Name="ServiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="AcceptedBy" Type="Int32" Nullable="false" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="AcceptedOn" Type="DateTime" Precision="3" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="DroneId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="MSTR_Menu">
+    <Key>
+      <PropertyRef Name="MenuId" />
+    </Key>
+    <Property Name="MenuId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MenuName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ParentId" Type="Int32" />
+    <Property Name="PageUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ControllerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ImageUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="LastModifiedBy" Type="Int32" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="LastModifiedOn" Type="DateTime" Precision="0" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="0" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="0" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="MSTR_Parts">
+    <Key>
+      <PropertyRef Name="PartsGroupId" />
+    </Key>
+    <Property Name="PartsGroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PartsGroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="MSTR_Product">
+    <Key>
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DecimalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BinaryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsAssigned" Type="Boolean" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="Product_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SerialNo" Type="Int32" />
+    <Property Name="AccountId" Type="Int32" />
+    <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastReadTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="MSTR_Profile">
+    <Key>
+      <PropertyRef Name="ProfileId" />
+    </Key>
+    <Property Name="ProfileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProfileName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="LastModifiedBy" Type="Int32" />
+    <Property Name="LastModifiedOn" Type="DateTime" Precision="0" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="MSTR_User">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RememberMe" Type="Boolean" />
+    <Property Name="PhotoUrl" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="LastModifiedBy" Type="Int32" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="UserProfileId" Type="Int32" />
+    <Property Name="UserAccountId" Type="Int32" />
+    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="MobileNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="OfficeNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="HomeNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="EmailId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CountryId" Type="Int32" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="LastModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="ProductDefinition">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AccountId" Type="Int32" />
+    <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BitLength" Type="Int32" />
+    <Property Name="IsMaster" Type="Boolean" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+    <Property Name="ApprovedDate" Type="DateTime" Precision="0" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="ProductTransaction">
+    <Key>
+      <PropertyRef Name="ProTransId" />
+    </Key>
+    <Property Name="ProTransId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductId" Type="Int32" />
+    <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
+    <End Role="M2M_DroneServiceParts" Type="Self.M2M_DroneServiceParts" Multiplicity="1" />
+    <End Role="M2M_DroneServiceParts1" Type="Self.M2M_DroneServiceParts" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="M2M_DroneServiceParts">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="M2M_DroneServiceParts1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ExponentPortalEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="DroneDatas" EntityType="Self.DroneData" />
+    <EntitySet Name="DroneDefinitions" EntityType="Self.DroneDefinition" />
+    <EntitySet Name="LUP_Drone" EntityType="Self.LUP_Drone" />
+    <EntitySet Name="LUP_Product" EntityType="Self.LUP_Product" />
+    <EntitySet Name="M2M_DroneDetails" EntityType="Self.M2M_DroneDetails" />
+    <EntitySet Name="M2M_DroneParts" EntityType="Self.M2M_DroneParts" />
+    <EntitySet Name="M2M_DroneServiceParts" EntityType="Self.M2M_DroneServiceParts" />
+    <EntitySet Name="M2M_UserAccount" EntityType="Self.M2M_UserAccount" />
+    <EntitySet Name="MSTR_Account" EntityType="Self.MSTR_Account" />
+    <EntitySet Name="MSTR_Drone" EntityType="Self.MSTR_Drone" />
+    <EntitySet Name="MSTR_DroneService" EntityType="Self.MSTR_DroneService" />
+    <EntitySet Name="MSTR_Menu" EntityType="Self.MSTR_Menu" />
+    <EntitySet Name="MSTR_Parts" EntityType="Self.MSTR_Parts" />
+    <EntitySet Name="MSTR_Product" EntityType="Self.MSTR_Product" />
+    <EntitySet Name="MSTR_Profile" EntityType="Self.MSTR_Profile" />
+    <EntitySet Name="MSTR_User" EntityType="Self.MSTR_User" />
+    <EntitySet Name="ProductDefinitions" EntityType="Self.ProductDefinition" />
+    <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransaction" />
+    <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
+      <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
+      <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
