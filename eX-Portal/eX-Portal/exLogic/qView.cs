@@ -9,7 +9,7 @@ using System.Web;
 
 namespace eX_Portal.exLogic {
 
-  public class qView {
+   public  class  qView {
     private ExponentPortalEntities ctx;
     public String SQL { get; set; }
     public List<String> ColumDef = new List<String>();

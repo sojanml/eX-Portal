@@ -8,7 +8,7 @@ using System.Data.Common;
 using System.Text.RegularExpressions;
 
 namespace eX_Portal.exLogic {
-  public class Util {
+  public partial class Util {
     public static SqlConnection getDB() {
       String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ExponentPortalEntities"].ConnectionString;
       return new SqlConnection(DSN);
@@ -21,6 +21,8 @@ namespace eX_Portal.exLogic {
       Title = Regex.Replace(Title, "\\s+", " ");
       return Title.Trim().ToString();
     }
+
+
 
   }//class Util
 }
