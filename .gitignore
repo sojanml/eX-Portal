@@ -51,3 +51,6 @@ eX-Portal.csproj.user
 eX-Portal.csproj
 .suo
 
+eX-Portal/.vs/eX-Portal/v14/.suo
+*.suo
+eX-Portal/eX-Portal/eX-Portal.csproj
