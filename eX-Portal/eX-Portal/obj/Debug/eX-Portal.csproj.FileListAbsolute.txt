@@ -64,7 +64,6 @@ C:\Web\eX-Portal\eX-Portal\eX-Portal\bin\Microsoft.Owin.Security.OAuth.xml
 C:\Web\eX-Portal\eX-Portal\eX-Portal\bin\Microsoft.Owin.Security.Google.xml
 C:\Web\eX-Portal\eX-Portal\eX-Portal\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Web\eX-Portal\eX-Portal\eX-Portal\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Web\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache
 C:\Web\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.dll
 C:\Web\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.pdb
 C:\Users\Cathey\Documents\GitHub\eX-Portal\eX-Portal\eX-Portal\bin\roslyn\csc.exe
@@ -136,3 +135,4 @@ C:\Users\Cathey\Documents\GitHub\eX-Portal\eX-Portal\eX-Portal\bin\Microsoft.Owi
 C:\Users\Cathey\Documents\GitHub\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache
 C:\Users\Cathey\Documents\GitHub\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.dll
 C:\Users\Cathey\Documents\GitHub\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.pdb
+C:\Web\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache

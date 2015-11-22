@@ -134,21 +134,22 @@
     <Property Name="IsAcitive" Type="bit" />
     <Property Name="RecordType" Type="int" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.M2M_UserProfile' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="M2M_UserProfile">
-          <Property Name="Id" Type="int" />
-          <Property Name="MenuId" Type="int" />
-          <Property Name="ProfileId" Type="int" />
-          <Property Name="CreatedOn" Type="datetime" />
-          <Property Name="ModifiedOn" Type="datetime" />
-          <Property Name="ApprovedOn" Type="datetime" />
-          <Property Name="IsActive" Type="bit" />
-          <Property Name="RecordType" Type="int" />
-          <Property Name="CreatedBy" Type="datetime" />
-          <Property Name="ModifiedBy" Type="datetime" />
-          <Property Name="ApprovedBy" Type="datetime" />
-        </EntityType>-->
+  <EntityType Name="M2M_UserProfile">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="MenuId" Type="int" />
+    <Property Name="ProfileId" Type="int" />
+    <Property Name="CreatedOn" Type="datetime" />
+    <Property Name="ModifiedOn" Type="datetime" />
+    <Property Name="ApprovedOn" Type="datetime" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="RecordType" Type="int" />
+    <Property Name="CreatedBy" Type="datetime" />
+    <Property Name="ModifiedBy" Type="datetime" />
+    <Property Name="ApprovedBy" Type="datetime" />
+  </EntityType>
   <EntityType Name="MSTR_Account">
     <Key>
       <PropertyRef Name="AccountId" />
@@ -328,19 +329,20 @@ warning 6013: The table/view 'ExponentPortal.dbo.M2M_UserProfile' does not have 
     <Property Name="RecordType" Type="int" />
     <Property Name="IsActive" Type="bit" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.ProductHistory' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="ProductHistory">
-          <Property Name="ProHistoryId" Type="int" />
-          <Property Name="Latitude" Type="int" />
-          <Property Name="Logitude" Type="int" />
-          <Property Name="ProductId" Type="int" />
-          <Property Name="ProRFID" Type="int" />
-          <Property Name="ReadTime" Type="datetime" />
-          <Property Name="RSSI" Type="nvarchar" MaxLength="50" />
-          <Property Name="IsActive" Type="bit" />
-          <Property Name="RecordType" Type="int" />
-        </EntityType>-->
+  <EntityType Name="ProductHistory">
+    <Key>
+      <PropertyRef Name="ProHistoryId" />
+    </Key>
+    <Property Name="ProHistoryId" Type="int" Nullable="false" />
+    <Property Name="Latitude" Type="int" />
+    <Property Name="Logitude" Type="int" />
+    <Property Name="ProductId" Type="int" />
+    <Property Name="ProRFID" Type="int" />
+    <Property Name="ReadTime" Type="datetime" />
+    <Property Name="RSSI" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="RecordType" Type="int" />
+  </EntityType>
   <EntityType Name="ProductTransactions">
     <Key>
       <PropertyRef Name="ProTransId" />
@@ -376,6 +378,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.ProductHistory' does not have a
     <EntitySet Name="M2M_DroneParts" EntityType="Self.M2M_DroneParts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="M2M_DroneServiceParts" EntityType="Self.M2M_DroneServiceParts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="M2M_UserAccount" EntityType="Self.M2M_UserAccount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="M2M_UserProfile" EntityType="Self.M2M_UserProfile" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MSTR_Account" EntityType="Self.MSTR_Account" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MSTR_Drone" EntityType="Self.MSTR_Drone" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MSTR_DroneService" EntityType="Self.MSTR_DroneService" Schema="dbo" store:Type="Tables" />
@@ -385,6 +388,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.ProductHistory' does not have a
     <EntitySet Name="MSTR_Profile" EntityType="Self.MSTR_Profile" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MSTR_User" EntityType="Self.MSTR_User" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
       <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />

@@ -364,5 +364,37 @@
       <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
       <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
     </AssociationSet>
+    <EntitySet Name="M2M_UserProfile" EntityType="ExponentPortalModel.M2M_UserProfile" />
+    <EntitySet Name="ProductHistories" EntityType="ExponentPortalModel.ProductHistory" />
   </EntityContainer>
+  <EntityType Name="M2M_UserProfile">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="MenuId" Type="Int32" />
+    <Property Name="ProfileId" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="RecordType" Type="Int32" />
+    <Property Name="CreatedBy" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedBy" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="ProductHistory">
+    <Key>
+      <PropertyRef Name="ProHistoryId" />
+    </Key>
+    <Property Name="ProHistoryId" Type="Int32" Nullable="false" />
+    <Property Name="Latitude" Type="Int32" />
+    <Property Name="Logitude" Type="Int32" />
+    <Property Name="ProductId" Type="Int32" />
+    <Property Name="ProRFID" Type="Int32" />
+    <Property Name="ReadTime" Type="DateTime" Precision="3" />
+    <Property Name="RSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="RecordType" Type="Int32" />
+  </EntityType>
 </Schema>

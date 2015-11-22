@@ -134,14 +134,18 @@ table.report {
  width: 100%;
  empty-cells: show;
 }
-table.report tr th {
+table.report thead tr th,
+table.report tfoot tr th {
  font-weight: bold;
  color: #ea050e;
  border-bottom: 1px solid gray;
+ border-top: 1px solid gray;
  text-align: left;
+ padding: 3px 0px 3px 0px;
 }
 table.report tr td {
  border-bottom: 1px solid silver;
+ padding: 3px 0px 3px 0px;
 }
 footer {
  border-bottom: 10px gray solid;
