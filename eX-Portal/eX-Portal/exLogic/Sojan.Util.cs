@@ -37,7 +37,7 @@ namespace eX_Portal.exLogic {
 
           cmd.CommandText = "SELECT scope_identity()";
           result = Int32.Parse(cmd.ExecuteScalar().ToString());
-
+           
         }
       }
       return result;

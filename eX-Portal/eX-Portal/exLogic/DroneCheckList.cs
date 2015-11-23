@@ -94,7 +94,7 @@ namespace eX_Portal.exLogic {
       ")";
 
       var DroneCheckListID = Util.InsertSQL(SQL);
-
+       
 
       foreach(var item in HeaderCheckItems) {
         item.saveCheckListItem(DroneCheckListID);
