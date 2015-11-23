@@ -28,5 +28,6 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<int> RecordType { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public Nullable<int> SortOrder { get; set; }
     }
 }

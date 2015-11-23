@@ -1,9 +1,84 @@
-﻿@model eX_Portal.Models.MSTR_Drone
+﻿@model eX_Portal.ViewModel.DroneView
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "UAS Registration";
     Layout = "~/Views/Shared/_exPortal.cshtml";
 }
 
-<h2>Create</h2>
 
+
+
+
+   
+    @Html.HiddenFor(model => model.Drone.DroneId)
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Drone.OwnerId,"Owner")
+    </div>
+    <div class="editor-field">
+       
+        @Html.DropDownListFor(model => model.Drone.OwnerId ,Model.OwnerList,
+
+                                              // Text for the first 'default' option
+                                              "- Please select your state -",
+
+                                              // A class name to put on the "<select>"
+                                              new { @class = "form-control" }
+                                             )
+       
+
+
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Drone.UavTypeId)
+    </div>
+    <div class="editor-field">
+        
+        @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList,
+
+                                              // Text for the first 'default' option
+                                              "- Please select your state -",
+
+                                              // A class name to put on the "<select>"
+                                              new { @class = "form-control" }
+                                             )
+        @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
+
+
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Drone.ManufactureId)
+    </div>
+    <div class="editor-field">
+        @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList,
+
+                                              // Text for the first 'default' option
+                                              "- Please select your state -",
+
+                                              // A class name to put on the "<select>"
+                                              new { @class = "form-control" }
+                                             )
+        @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
+    </div>
+    <div class="editor-label">
+    @Html.LabelFor(model => model.Drone.ManufactureId)
+</div>
+<div class="editor-field">
+    @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList,
+
+                                              // Text for the first 'default' option
+                                              "- Please select your state -",
+
+                                              // A class name to put on the "<select>"
+                                              new { @class = "form-control" }
+                                             )
+    @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
+</div>
+
+   
+    <p>
+        <input type="submit" value="Save" />
+    </p>
+         

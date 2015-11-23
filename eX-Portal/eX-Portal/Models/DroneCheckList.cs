@@ -12,18 +12,13 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DroneDefinition
+    public partial class DroneCheckList
     {
-        public int Id { get; set; }
-        public string FieldName { get; set; }
-        public string BitLength { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> DroneCheckListID { get; set; }
+        public Nullable<int> DroneID { get; set; }
+        public Nullable<int> FlightID { get; set; }
         public Nullable<int> CreatedBy { get; set; }
-        public Nullable<int> LastModifiedBy { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
-        public Nullable<int> RecordType { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public Nullable<System.DateTime> LastModifiedOn { get; set; }
-        public Nullable<int> MaxValue { get; set; }
-        public Nullable<int> Default { get; set; }
     }
 }
