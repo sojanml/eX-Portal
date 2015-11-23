@@ -6,13 +6,10 @@ using System.Web;
 using System.Configuration;
 using System.Data.Common;
 using System.Text.RegularExpressions;
+using eX_Portal.Models;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
-    public static SqlConnection getDB() {
-      String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ExponentPortalEntities"].ConnectionString;
-      return new SqlConnection(DSN);
-    }//getDB()
 
 
     public static String toCaption(String Title) {
@@ -22,7 +19,41 @@ namespace eX_Portal.exLogic {
       return Title.Trim().ToString();
     }
 
+    public static int doSQL(String SQL) {
+      int result = 0;
+      using (var ctx = new ExponentPortalEntities()) {
+        result = ctx.Database.ExecuteSqlCommand(SQL);
+      }
+      return result;
+    }
 
+    public static int InsertSQL(String SQL) {
+      int result = 0;
+      using (var ctx = new ExponentPortalEntities()) {
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          cmd.ExecuteNonQuery();
+
+          cmd.CommandText = "SELECT scope_identity()";
+          result = Int32.Parse(cmd.ExecuteScalar().ToString());
+
+        }
+      }
+      return result;
+    }
+
+    public String getQ(String FieldName) {
+      HttpRequest Request = HttpContext.Current.Request;
+      return Request[FieldName].ToString();
+    }
+
+    public static String toSQL(String FieldValue) {
+      String sVal = FieldValue;
+      sVal = sVal.Replace("\\", "\\\\");
+      sVal = sVal.Replace("'", "\\'");
+      return sVal;
+    }
 
   }//class Util
 }

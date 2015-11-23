@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace eX_Portal.Controllers
 {
-    public class HomeController : DesignController
+    public class HomeController: Controller
     {
         public ActionResult Index()
         {
@@ -26,5 +26,6 @@ namespace eX_Portal.Controllers
 
             return View();
         }
+
     }
 }

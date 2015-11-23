@@ -189,6 +189,30 @@ table.report tr td.note-field input[type=text] {
   width: 100%;
 }
 
+div.form-toolbar {
+  padding:10px 0px 10px 0px;
+  text-align:right;
+}
+div.form-toolbar input,
+div.form-toolbar button {
+    color: white;
+    font-size: 12pt;
+    font-weight: bold;
+    border-radius: 5px;
+    height: auto;
+    background-color: gray;
+    padding: 5px 10px 5px 10px;
+    border: none;
+    cursor: pointer;
+  
+}
+
+
+div.form-toolbar input[type=submit] {
+  background-color: forestgreen;
+}
+
+
 footer {
  border-bottom: 10px gray solid;
  padding-bottom: 10px;
