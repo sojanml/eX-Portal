@@ -4,12 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using eX_Portal.Models;
+using eX_Portal.exLogic;
 
 namespace eX_Portal.Controllers
 {
     public class DroneController : Controller
     {
-     //   private Models.MSTR_Drone db=new M
+      
         // GET: Drone
         public ActionResult Index()
         {
@@ -26,7 +27,17 @@ namespace eX_Portal.Controllers
         // GET: Drone/Create
         public ActionResult Create()
         {
-            return View();
+
+            var viewModel = new ViewModel.DroneView
+            {
+                Drone = new MSTR_Drone(),
+                OwnerList = Util.GetDropDowntList("Owner", "Name", "Code", "usp_Portal_GetDroneDropDown"),
+                UAVTypeList = Util.GetDropDowntList("Owner", "Name", "Code", "usp_Portal_GetDroneDropDown"),
+                ManufactureList = Util.GetDropDowntList("Owner", "Name", "Code", "usp_Portal_GetDroneDropDown")
+                //PartsGroupList = Util.GetDropDowntList();
+            } ;
+
+            return View(viewModel);
         }
 
         // POST: Drone/Create
@@ -37,6 +48,7 @@ namespace eX_Portal.Controllers
             {
                 // TODO: Add insert logic here
 
+
                 return RedirectToAction("Index");
             }
             catch
@@ -44,6 +56,28 @@ namespace eX_Portal.Controllers
                 return View();
             }
         }
+
+        // POST: Drone/Create
+        [HttpPost]
+        public ActionResult Create(ViewModel.DroneView DroneView)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+                var Drone = new MSTR_Drone
+                {
+                    DroneName = DroneView.Drone.DroneName,
+                    OwnerId=DroneView.Drone.OwnerId
+
+                };
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
 
         // GET: Drone/Edit/5
         public ActionResult Edit(int id)
@@ -87,6 +121,8 @@ namespace eX_Portal.Controllers
             {
                 return View();
             }
-        }
+        } 
+        
+        
     }
 }

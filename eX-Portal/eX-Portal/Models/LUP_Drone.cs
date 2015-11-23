@@ -16,8 +16,8 @@ namespace eX_Portal.Models
     {
         public int Id { get; set; }
         public string Type { get; set; }
-        public int Code { get; set; }
-        public string TypeId { get; set; }
+        public string Code { get; set; }
+        public Nullable<int> TypeId { get; set; }
         public string BinaryCode { get; set; }
         public string Name { get; set; }
         public Nullable<int> CreatedBy { get; set; }
