@@ -49,3 +49,5 @@ obj
 
 #Files
 *.csproj
+eX-Portal/eX-Portal/obj/Debug/edmxResourcesToEmbed/Models/Portaldb.csdl
+eX-Portal/eX-Portal/obj/Debug/edmxResourcesToEmbed/Models/Portaldb.csdl

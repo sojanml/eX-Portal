@@ -14,18 +14,18 @@
 
   <!--section show items with zero index on top one-->
   @if (Model.HeaderCheckItems.Any()) {
-    <table>
+    <table class="cheklist">
       @foreach (var item in Model.HeaderCheckItems) {
         <tr>
           <td>@item.Title</td>
-          <td>@Html.Raw(item.DisplayField())</td>
+          <td class="note-field">@Html.Raw(item.DisplayField())</td>
         </tr>
       }
     </table>
   }
 
 
-  <table class="report">
+  <table class="cheklist">
     <thead>
       <tr>
         <th>No.</th>
