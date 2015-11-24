@@ -170,16 +170,22 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DroneCheckListController.cs" />
     <Compile Include="Controllers\DroneController.cs" />
+    <Compile Include="Controllers\DroneFlightController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="exLogic\Cathey.Util.cs" />
+    <Compile Include="exLogic\DroneCheckListForm.cs" />
+    <Compile Include="exLogic\qDetailView.cs" />
     <Compile Include="exLogic\qView.cs" />
-    <Compile Include="exLogic\Util.cs" />
+    <Compile Include="exLogic\Sojan.Util.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DroneCheckList.cs" />
     <Compile Include="Models\DroneData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -215,6 +221,7 @@
     <Compile Include="Models\MSTR_Drone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MSTR_DroneCheckList.cs" />
     <Compile Include="Models\MSTR_DroneService.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -252,6 +259,8 @@
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\DroneView.cs" />
+    <Compile Include="ViewModel\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -299,6 +308,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\DroneCheckList\Index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -337,6 +347,11 @@
     <Content Include="Views\Drone\Create.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Shared\qViewData.cshtml" />
+    <Content Include="Views\DroneCheckList\Details.cshtml" />
+    <Content Include="Views\DroneCheckList\Create.cshtml" />
+    <Content Include="Views\DroneFlight\Index.cshtml" />
+    <Content Include="Views\DroneFlight\Detail.cshtml" />
+    <Content Include="Views\DroneCheckList\CreateCheckList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

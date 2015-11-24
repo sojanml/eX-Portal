@@ -9,14 +9,21 @@ using System.Web;
 
 namespace eX_Portal.exLogic {
 
-   public  class  qView {
+  public class qView {
     private ExponentPortalEntities ctx;
     public String SQL { get; set; }
     public List<String> ColumDef = new List<String>();
+    public String onRowClick { get; set; }
 
+    public int _TotalRecords {
+      get; set;
+    }
+
+    public bool HasRows { get; set; }
 
     public qView(String sSQL = "") {
       if (sSQL != "") SQL = sSQL;
+      _TotalRecords = 0;
       ctx = new ExponentPortalEntities();
       setColumDef();
     } //qView
@@ -24,7 +31,7 @@ namespace eX_Portal.exLogic {
 
     public String getDataJson() {
       int x = 0;
-      String _TotalRecords = "";
+      
       StringBuilder Row = new StringBuilder();
       StringBuilder Data = new StringBuilder();
 
@@ -40,7 +47,7 @@ namespace eX_Portal.exLogic {
             if (x > 0) {
               Row.AppendLine(",");
             } else {
-              _TotalRecords = reader["_TotalRecords"].ToString();
+              _TotalRecords = Int32.Parse(reader["_TotalRecords"].ToString());
             }
             StringBuilder Columns = new StringBuilder();
             for (int i = 0; i < reader.FieldCount; i++) {
@@ -109,8 +116,9 @@ namespace eX_Portal.exLogic {
       }
       ScriptColumns.AppendLine("]");
 
+      Scripts.AppendLine("var qViewDataTable = null;");
       Scripts.AppendLine("$(document).ready(function() {");
-      Scripts.AppendLine("    $('#qViewTable').DataTable( {");
+      Scripts.AppendLine("    qViewDataTable = $('#qViewTable').DataTable( {");
       Scripts.AppendLine("    \"processing\": true,");
       Scripts.AppendLine("        \"serverSide\": true, ");
       Scripts.AppendLine("        \"ajax\": \"" + HttpContext.Current.Request.RequestContext.HttpContext.Request.Url + "\",");
@@ -124,18 +132,29 @@ namespace eX_Portal.exLogic {
 
 
     private void setColumDef() {
-      String mySQL = SQL.Replace("SELECT ", "SELECT TOP 0 ");
-
+      String mySQL = SQL.Replace("SELECT ", "SELECT TOP 1 ");
+      HttpResponse Response = HttpContext.Current.Response;
 
       var cmd = ctx.Database.Connection.CreateCommand();
       DataTable schemaTable;
       ctx.Database.Connection.Open();
       cmd.CommandText = mySQL;
 
+      
       DbDataReader myReader = cmd.ExecuteReader(CommandBehavior.KeyInfo);
+      HasRows = myReader.HasRows;
 
       //Retrieve column schema into a DataTable.
       schemaTable = myReader.GetSchemaTable();
+      /*
+      foreach (DataRow myField in schemaTable.Rows) {
+        Response.Write("<P>");
+        foreach (DataColumn Field in schemaTable.Columns) {
+          Response.Write(Field + ": " + myField[Field] + "<br>\n");
+        }
+        Response.Write("</P>");
+      }
+      */
 
       //For each field in the table...
       foreach (DataRow myField in schemaTable.Rows) {
@@ -143,14 +162,15 @@ namespace eX_Portal.exLogic {
         //Columns.Add(myField["BaseTableName"] + "." + myField["BaseColumnName"]);      
         String ColumnName = myField["ColumnName"].ToString();
 
-
-        switch (ColumnName) {
-          case "_TotalRecords":
-            break;
-          default:
-            ColumDef.Add(ColumnName);
-            break;
-        } //switch
+        if (myField["IsHidden"].ToString() == "False") {
+          switch (ColumnName) {
+            case "_TotalRecords":
+              break;
+            default:
+              ColumDef.Add(ColumnName);
+              break;
+          } //switch
+        }
 
       }//foreach
 

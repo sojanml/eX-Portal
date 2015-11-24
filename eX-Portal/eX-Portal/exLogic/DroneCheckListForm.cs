@@ -5,10 +5,11 @@ using System.Linq;
 using System.Web;
 
 namespace eX_Portal.exLogic {
-  public class DroneCheckList {
+  public class DroneCheckListForm {
     public int CheckListID = 0;
     public String CheckListTitle {get; set;}
     public String CheckListSubTitle { get; set; }
+    public int FlightID { get; set; }
 
     public List<CheckItem> HeaderCheckItems = new List<CheckItem>();
     public List<CheckItem> CheckItems = new List<CheckItem>();
@@ -17,7 +18,7 @@ namespace eX_Portal.exLogic {
     System.Web.SessionState.HttpSessionState Session = HttpContext.Current.Session;
 
     //constructior
-    public DroneCheckList(int pCheckListID) {
+    public DroneCheckListForm(int pCheckListID) {
       CheckListID = pCheckListID;
       using (var ctx = new ExponentPortalEntities())
       using (var cmd = ctx.Database.Connection.CreateCommand()) {
@@ -75,9 +76,10 @@ namespace eX_Portal.exLogic {
 
 
 
-    public bool saveCheckList() {
+    public int saveCheckList() {
       String SQL = "";
-      String UserID = Session["UserID"] == null ? "" : Session["UserID"].ToString();
+      String UserID = Session["UserID"] == null ? "1" : Session["UserID"].ToString();
+ 
 
       //Save the header of checklist
       SQL = 
@@ -85,12 +87,14 @@ namespace eX_Portal.exLogic {
       "   [DroneCheckListID],\n" +
       "   [DroneID],\n" +
       "   [FlightID],\n" +
-      "   [CreatedBy]\n" +
+      "   [CreatedBy],\n" +
+      "   [CreatedOn]\n" +
       ") VALUES(\n" +
-      " "+ CheckListID.ToString() + ",\n" +
-      " 0,\n" +
-      " 0,\n" +
-       " '" + UserID + "'\n" +
+      "  "+ CheckListID.ToString() + ",\n" +
+      "  0,\n" +
+      "  " + FlightID.ToString() + ",\n" +
+      "  '" + UserID + "',\n" +
+      "  GETDATE()\n" +
       ")";
 
       var DroneCheckListID = Util.InsertSQL(SQL);
@@ -102,7 +106,7 @@ namespace eX_Portal.exLogic {
       foreach (var item in CheckItems) {
         item.saveCheckListItem(DroneCheckListID);
       }
-      return false;
+      return DroneCheckListID;
 
 
     } 
@@ -145,7 +149,7 @@ namespace eX_Portal.exLogic {
           break;
         case "checkbox":
           String isChecked = FieldValue == "1" ? " checked" : "";
-          Field = "<input" + isChecked + " type =\"checkbox\" name=\"Field_" + ID.ToString() + "\">";
+          Field = "<input" + isChecked + " type =\"checkbox\" value=\"1\" name=\"Field_" + ID.ToString() + "\">";
           break;
       }
       return Field;
@@ -158,14 +162,16 @@ namespace eX_Portal.exLogic {
       return Field;
     }//DisplayField()
 
-    public int saveCheckListItem(int CheckListItemID) {
+    public int saveCheckListItem(int DroneCheckListID) {
 
-      String SQL = "INSERT INTO [DroneCheckListItem](\n" +
+      String SQL = "INSERT INTO [DroneCheckListItem](\n" +        
         "  [DroneCheckListID],\n" +
+        "  [DroneCheckListItemID],\n" +
         "  [FieldValue],\n" +
         "  [FieldNote]\n" +
         ") VALUES(\n" +
-        "  " + CheckListItemID.ToString() + ",\n" +
+        "  " + DroneCheckListID.ToString() + ",\n" +
+        "  " + ID.ToString() + ",\n" +
         "  '" + Util.toSQL(FieldValue) + "',\n" +
         "  '" + Util.toSQL(FieldNote) + "'\n" +
         ")";

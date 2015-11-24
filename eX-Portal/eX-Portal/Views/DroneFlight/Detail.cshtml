@@ -1,0 +1,20 @@
+﻿@model eX_Portal.exLogic.qView
+@{ 
+  int FlightID = ViewBag.FlightID;
+}
+@Html.Action("DroneFlightDetail", new { ID = FlightID })
+@if(Model.HasRows) {
+<h2>Available Checklist</h2>
+@Html.Raw(Model.getDataTable())
+}
+
+<h2>Create a Checklist</h2>
+
+@Html.Action("CreateCheckList", "DroneCheckList", new { FlightID = FlightID })
+
+
+@section scripts {
+  <script type="text/javascript">
+@Html.Raw(Model.getScripts())
+  </script>
+}

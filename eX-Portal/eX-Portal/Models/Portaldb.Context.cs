@@ -41,7 +41,8 @@ namespace eX_Portal.Models
         public virtual DbSet<MSTR_Product> MSTR_Product { get; set; }
         public virtual DbSet<MSTR_Profile> MSTR_Profile { get; set; }
         public virtual DbSet<MSTR_User> MSTR_User { get; set; }
-        public virtual DbSet<ProductDefinition> ProductDefinitions { get; set; }
+    public virtual DbSet<MSTR_DroneCheckList> MSTR_DroneCheckList { get; set; }
+    public virtual DbSet<ProductDefinition> ProductDefinitions { get; set; }
         public virtual DbSet<ProductTransaction> ProductTransactions { get; set; }
     }
 }

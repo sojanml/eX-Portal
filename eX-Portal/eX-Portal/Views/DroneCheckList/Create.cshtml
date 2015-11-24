@@ -1,0 +1,59 @@
+﻿@model eX_Portal.exLogic.DroneCheckListForm
+@{
+  ViewBag.Title = Model.CheckListTitle;
+}
+@Html.Action("DroneFlightDetail", "DroneFlight", new { ID = Model.FlightID })
+
+
+
+<h2>@Model.CheckListSubTitle</h2>
+
+
+
+<form method="post" action="@Url.Action()">
+
+  <!--section show items with zero index on top one-->
+  @if (Model.HeaderCheckItems.Any()) {
+    <table>
+      @foreach (var item in Model.HeaderCheckItems) {
+        <tr>
+          <td>@item.Title</td>
+          <td>@Html.Raw(item.DisplayField())</td>
+        </tr>
+      }
+    </table>
+  }
+
+
+  <table class="report">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Checklist Steps</th>
+        <th>&nbsp;</th>
+        <th>Responsibility</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    @foreach (var item in Model.CheckItems) {
+      <tr>
+        @if ((item.SlNo % 1) == 0) {
+          <td>@item.SlNo.ToString("##0.0")</td>
+          <td>@item.Title</td>
+        } else {
+          <td>&nbsp;</td>
+          <td>@item.SlNo.ToString("##0.0")<span class="sub-item">@item.Title</span></td>
+        }
+        <td class="entry-field">@Html.Raw(item.DisplayField())</td>
+        <td>@item.Responsibility</td>
+        <td class="note-field">@Html.Raw(item.DisplayNote())</td>
+      </tr>
+    }
+  </table>
+
+  <div class="form-toolbar">
+    <input type="submit" value="Save Checklist" />
+  </div>
+  <input type="hidden" name="CheckListID" value="@Model.CheckListID">
+  <input type="hidden" name="FlightID" value="@Model.FlightID">
+</form>

@@ -1,0 +1,13 @@
+﻿@model IEnumerable<eX_Portal.Models.MSTR_DroneCheckList>
+@{
+  Layout = null;
+}
+<ul class="general-list">
+  @foreach (var item in Model) {
+    <li><a href="@Url.Action("Create", "DroneCheckList", new {ID = item.ID, FlightID = ViewBag.FlightID } )">
+          @Html.DisplayFor(modelItem => item.CheckListTitle)
+          <span class="subtitles"> - @Html.DisplayFor(modelItem => item.CheckListSubTitle)</span>
+</a>
+  </li>
+  }
+</ul>

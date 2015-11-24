@@ -43,6 +43,18 @@ namespace eX_Portal.exLogic {
       return result;
     }
 
+    public static string getDBVal(String SQL) {
+      String Result = "";
+      using (var ctx = new ExponentPortalEntities()) {
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          Result = cmd.ExecuteScalar().ToString();
+        }
+      }
+      return Result;
+    }
+
     public String getQ(String FieldName) {
       HttpRequest Request = HttpContext.Current.Request;
       return Request[FieldName].ToString();
