@@ -20,6 +20,9 @@ namespace eX_Portal.exLogic {
     }
 
     public bool HasRows { get; set; }
+    
+    private List<qViewMenu> qViewMenus = new List<qViewMenu>();
+    private bool IsPrimaryKey = false;
 
     public qView(String sSQL = "") {
       if (sSQL != "") SQL = sSQL;
@@ -28,10 +31,32 @@ namespace eX_Portal.exLogic {
       setColumDef();
     } //qView
 
+    public bool addMenu(String Caption, String URL) {
+      qViewMenu Menu = new qViewMenu{
+        Caption= Caption,
+        URL= URL
+      };
+      qViewMenus.Add(Menu);
+      return true;
+    }
+
+    private StringBuilder getMenu() {
+      StringBuilder Menus = new StringBuilder();
+      int i = 0;
+      foreach(var Menu in qViewMenus) {
+        i = i + 1;
+        if (i > 1) Menus.AppendLine(",");
+        Menus.AppendLine("{");
+        Menus.AppendLine("\"caption\": \"" + Menu.Caption +  "\",");
+        Menus.AppendLine("\"url\": \"" + Menu.URL + "\"");
+        Menus.Append("}");
+      }
+      return Menus;
+    }
 
     public String getDataJson() {
       int x = 0;
-      
+
       StringBuilder Row = new StringBuilder();
       StringBuilder Data = new StringBuilder();
 
@@ -62,13 +87,13 @@ namespace eX_Portal.exLogic {
             x = x + 1;
           }//while
 
-
         }
       }
 
       Data.AppendLine("{");
       Data.AppendLine("\"recordsTotal\" : " + _TotalRecords + ",");
       Data.AppendLine("\"recordsFiltered\" : " + _TotalRecords + ",");
+
       Data.AppendLine("\"data\" : [");
       Data.Append(Row);
       Data.AppendLine("]");
@@ -77,6 +102,8 @@ namespace eX_Portal.exLogic {
 
       return Data.ToString();
     }//getData
+
+
 
     public String getDataTable() {
       StringBuilder Table = new StringBuilder();
@@ -88,12 +115,15 @@ namespace eX_Portal.exLogic {
         THead.Append(Util.toCaption(Column));
         THead.AppendLine("</th>");
       }//foreach
+      if(IsPrimaryKey) THead.Append("<th class=\"menu\">&nbsp;</th>");
       THead.AppendLine("</tr>");
 
       Table.AppendLine("<table id=\"qViewTable\" class=\"report\">");
       Table.AppendLine("<thead>");
       Table.Append(THead);
+
       Table.AppendLine("</thead>");
+
 
       Table.AppendLine("<tfoot>");
       Table.Append(THead);
@@ -110,22 +140,33 @@ namespace eX_Portal.exLogic {
       bool isFirstColumn = true;
       ScriptColumns.AppendLine("\"columns\": [");
       foreach (var Column in ColumDef) {
+        String ColumnName = Column;
         if (!isFirstColumn) ScriptColumns.AppendLine(",");
-        ScriptColumns.Append("{ \"data\": \"" + Column + "\" }");
+        ScriptColumns.Append("{ \"data\": \"" + ColumnName + "\"");
+        ScriptColumns.Append("}");
         isFirstColumn = false;
       }
+      if(IsPrimaryKey) ScriptColumns.AppendLine("\n, { \"data\": null, \"defaultContent\": \"<img class=button src=/images/drop-down.png>\", className: \"menu\" }");
+
       ScriptColumns.AppendLine("]");
 
       Scripts.AppendLine("var qViewDataTable = null;");
+      Scripts.AppendLine("var qViewMenu =  [");
+      Scripts.Append(getMenu());
+      Scripts.AppendLine("];");
+
       Scripts.AppendLine("$(document).ready(function() {");
-      Scripts.AppendLine("    qViewDataTable = $('#qViewTable').DataTable( {");
+      Scripts.AppendLine("  qViewDataTable = $('#qViewTable').DataTable( {");
       Scripts.AppendLine("    \"processing\": true,");
-      Scripts.AppendLine("        \"serverSide\": true, ");
-      Scripts.AppendLine("        \"ajax\": \"" + HttpContext.Current.Request.RequestContext.HttpContext.Request.Url + "\",");
-      //Scripts.AppendLine("        \"ajax\": \"/Product/Index2\",");
+      Scripts.AppendLine("    \"serverSide\": true, ");
+      Scripts.AppendLine("    \"ajax\": \"" + HttpContext.Current.Request.RequestContext.HttpContext.Request.Url + "\",");
       Scripts.Append(ScriptColumns);
+
       Scripts.AppendLine("  } );");
       Scripts.AppendLine("} );");
+
+
+
 
       return Scripts.ToString();
     }
@@ -140,7 +181,7 @@ namespace eX_Portal.exLogic {
       ctx.Database.Connection.Open();
       cmd.CommandText = mySQL;
 
-      
+
       DbDataReader myReader = cmd.ExecuteReader(CommandBehavior.KeyInfo);
       HasRows = myReader.HasRows;
 
@@ -163,8 +204,11 @@ namespace eX_Portal.exLogic {
         String ColumnName = myField["ColumnName"].ToString();
 
         if (myField["IsHidden"].ToString() == "False") {
-          switch (ColumnName) {
-            case "_TotalRecords":
+          switch (ColumnName.ToLower()) {
+            case "_totalrecords":
+              break;
+            case "_pkey":
+              IsPrimaryKey = true;
               break;
             default:
               ColumDef.Add(ColumnName);
@@ -181,7 +225,10 @@ namespace eX_Portal.exLogic {
     }//setColumDef()
 
 
-
-
   }//class qView
+
+  public class qViewMenu{
+    public String Caption { get; set; }
+    public String URL { get; set; }
+  }
 }//namespace eX_Portal.exLogic

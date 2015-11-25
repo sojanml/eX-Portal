@@ -19,7 +19,8 @@ namespace eX_Portal.Controllers {
       "   tblGSC.FirstName as GSCName,\n" +
       "   tblCreated.FirstName as CreatedBy,\n" +
       "   FlightDate,\n" +
-      "   Count(*) Over() as _TotalRecords\n" +
+      "   Count(*) Over() as _TotalRecords,\n" +
+      "   DroneFlight.ID as _PKey\n" +
       "FROM\n" +
       "  DroneFlight\n" +
       "LEFT JOIN MSTR_Drone ON\n" +
@@ -32,6 +33,10 @@ namespace eX_Portal.Controllers {
       "  tblCreated.UserID = DroneFlight.CreatedBy";
 
       qView nView = new qView(SQL);
+      nView.addMenu("Edit", Url.Action("Edit", new {ID = "_PKey" }));
+      nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
+      nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
