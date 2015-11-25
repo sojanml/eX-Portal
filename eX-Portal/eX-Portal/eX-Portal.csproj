@@ -9,7 +9,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F9259056-3FE2-4233-880A-4AE5254AFCBF}</ProjectGuid>
+    <ProjectGuid>{1080A9BA-ADEC-4269-A02A-FD3F5B311494}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -170,12 +170,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DesignController.cs" />
     <Compile Include="Controllers\DroneCheckListController.cs" />
     <Compile Include="Controllers\DroneController.cs" />
     <Compile Include="Controllers\DroneFlightController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\UserLoginController.cs" />
     <Compile Include="exLogic\Cathey.Util.cs" />
     <Compile Include="exLogic\DroneCheckListForm.cs" />
     <Compile Include="exLogic\qDetailView.cs" />
@@ -185,11 +187,19 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\DroneCheckList.cs" />
+    <Compile Include="Models\DroneCheckList.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DroneCheckListItem.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DroneData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DroneDefinition.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
@@ -215,13 +225,19 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\MSTR_Account.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MSTR_Drone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MSTR_DroneCheckList.cs" />
+    <Compile Include="Models\MSTR_DroneCheckList.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MSTR_DroneCheckListItems.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MSTR_DroneService.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -240,10 +256,20 @@
     <Compile Include="Models\MSTR_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Portaldb.Context.cs" />
-    <Compile Include="Models\Portaldb.cs" />
+    <Compile Include="Models\Portaldb.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Portaldb.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Portaldb.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Portaldb.Designer.cs">
-      <DependentUpon>Portaldb.cs</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Portaldb.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductDefinition.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
@@ -254,9 +280,13 @@
     <Compile Include="Models\ProductTransaction.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="Models\UserLogin.cs" />
+    <Compile Include="Models\usp_Portal_CreateDrone_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\usp_Portal_GetDroneDropDown_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\DroneView.cs" />
@@ -265,44 +295,61 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\jqsimplemenu.css" />
+    <Content Include="dataTable\css\dataTables.bootstrap.css" />
+    <Content Include="dataTable\css\dataTables.bootstrap.min.css" />
+    <Content Include="dataTable\css\dataTables.foundation.css" />
+    <Content Include="dataTable\css\dataTables.foundation.min.css" />
+    <Content Include="dataTable\css\dataTables.jqueryui.css" />
+    <Content Include="dataTable\css\dataTables.jqueryui.min.css" />
+    <Content Include="dataTable\css\jquery.dataTables.css" />
+    <Content Include="dataTable\css\jquery.dataTables.custom.css" />
+    <Content Include="dataTable\css\jquery.dataTables.min.css" />
+    <Content Include="dataTable\css\jquery.dataTables_themeroller.css" />
+    <Content Include="dataTable\images\favicon.ico" />
+    <Content Include="dataTable\images\sort_asc.png" />
+    <Content Include="dataTable\images\sort_asc_disabled.png" />
+    <Content Include="dataTable\images\sort_both.png" />
+    <Content Include="dataTable\images\sort_desc.png" />
+    <Content Include="dataTable\images\sort_desc_disabled.png" />
+    <Content Include="dataTable\js\dataTables.bootstrap.js" />
+    <Content Include="dataTable\js\dataTables.bootstrap.min.js" />
+    <Content Include="dataTable\js\dataTables.foundation.js" />
+    <Content Include="dataTable\js\dataTables.foundation.min.js" />
+    <Content Include="dataTable\js\dataTables.jqueryui.js" />
+    <Content Include="dataTable\js\dataTables.jqueryui.min.js" />
+    <Content Include="dataTable\js\jquery.dataTables.js" />
+    <Content Include="dataTable\js\jquery.dataTables.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\DINNextLTPro-Light.svg" />
     <Content Include="fonts\DINNextLTPro-LightCondensed.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\logo.png" />
     <Content Include="Models\Portaldb.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Portaldb.Context1.cs</LastGenOutput>
+      <LastGenOutput>Portaldb.Context.cs</LastGenOutput>
+      <DependentUpon>Portaldb.edmx</DependentUpon>
     </Content>
     <Content Include="Models\Portaldb.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Portaldb1.cs</LastGenOutput>
-    </Content>
-    <Content Include="obj\Debug\eX-Portal.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\eX-Portal.dll" />
-    <Content Include="obj\Debug\eX-Portal.pdb" />
-    <Content Include="obj\Debug\TempPE\Models.Portaldb.cs.dll" />
-    <Content Include="obj\Debug\TempPE\Models.Portaldb.Designer.cs.dll" />
-    <Content Include="obj\Debug\TempPE\Models.Portaldb1.cs.dll" />
-    <Content Include="obj\Debug\TempPE\Models.Portaldb1.Designer.cs.dll" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\Portaldb.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Portaldb1.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Portaldb.edmx.diagram">
+      <LastGenOutput>Portaldb.cs</LastGenOutput>
       <DependentUpon>Portaldb.edmx</DependentUpon>
     </Content>
-    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <Content Include="obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache" />
-    <Content Include="fonts\DINNextLTPro-LightCondensed.eot" />
-    <Content Include="fonts\DINNextLTPro-LightCondensed.ttf" />
-    <Content Include="fonts\DINNextLTPro-LightCondensed.woff" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="fonts\DINNextLTPro-Light.eot" />
     <Content Include="fonts\DINNextLTPro-Light.ttf" />
     <Content Include="fonts\DINNextLTPro-Light.woff" />
+    <Content Include="fonts\DINNextLTPro-LightCondensed.eot" />
+    <Content Include="fonts\DINNextLTPro-LightCondensed.ttf" />
+    <Content Include="fonts\DINNextLTPro-LightCondensed.woff" />
+    <EntityDeploy Include="Models\Portaldb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Portaldb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="dataTable\images\Sorting icons.psd" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -316,7 +363,6 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\DroneCheckList\Index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -351,22 +397,21 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Shared\_exPortal.cshtml" />
-    <Content Include="Views\Drone\Create.cshtml" />
-    <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Shared\qViewData.cshtml" />
-    <Content Include="Views\DroneCheckList\Details.cshtml" />
+    <Content Include="Views\Shared\_eXPortal.cshtml" />
+    <Content Include="Views\Drone\Create.cshtml" />
+    <Content Include="Views\Drone\Index.cshtml" />
     <Content Include="Views\DroneCheckList\Create.cshtml" />
-    <Content Include="Views\DroneFlight\Index.cshtml" />
-    <Content Include="Views\DroneFlight\Detail.cshtml" />
     <Content Include="Views\DroneCheckList\CreateCheckList.cshtml" />
+    <Content Include="Views\DroneCheckList\Details.cshtml" />
+    <Content Include="Views\DroneCheckList\Index.cshtml" />
+    <Content Include="Views\DroneFlight\Detail.cshtml" />
+    <Content Include="Views\DroneFlight\Index.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\UserLogin\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="dataTable\css\" />
-    <Folder Include="dataTable\images\" />
-    <Folder Include="dataTable\js\" />
-    <Folder Include="images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -393,11 +438,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4137</DevelopmentServerPort>
+          <DevelopmentServerPort>2727</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:4137/</IISUrl>
+          <IISUrl>http://localhost:2727/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
