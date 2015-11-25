@@ -255,9 +255,17 @@ table.report tr.even td {
   background-color: rgba(234, 5, 14, 0.15);
 }
 
+table.report tr td img.button{
+  visibility:hidden;
+}
+
 table.report tbody tr:hover td {
   background-color: rgba(234, 5, 14, 0.3);
 }
+table.report tbody tr:hover td img.button {
+ visibility:visible;
+}
+
 
 div.form-toolbar {
   padding:10px 0px 10px 0px;
@@ -331,3 +339,42 @@ ul.general-list li:hover a,
 ul.general-list li:hover a span.subtitles {
   color: white;
 }
+
+td.menu,
+th.menu{
+  width:20px;
+  display:block;
+  position:relative;
+}
+
+td.menu UL.qViewMenu {
+  position: absolute;
+  right:0px;
+  top:20px;
+  background-color: white;
+  border:1px #ea050e solid;
+  list-style:none;
+  margin:0px;
+  padding:0px;
+  z-index:10;
+}
+
+td.menu UL.qViewMenu li {
+  margin:5px;
+
+}
+td.menu UL.qViewMenu li a {
+  color:black;
+  text-decoration:none;
+  display:block;
+  min-width:120px;
+  padding:5px 10px 5px 10px;
+}
+td.menu UL.qViewMenu li:hover {
+  background-color: #ea050e;
+  
+}
+
+  td.menu UL.qViewMenu li:hover a {
+    color: white;
+  }
