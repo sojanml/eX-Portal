@@ -24,6 +24,7 @@ namespace eX_Portal.Models
         public Nullable<bool> IsActive { get; set; }
         public Nullable<System.DateTime> LastModifiedOn { get; set; }
         public Nullable<int> MaxValue { get; set; }
-        public Nullable<int> Default { get; set; }
+        public string DefaultValue { get; set; }
+        public Nullable<int> ParentID { get; set; }
     }
 }

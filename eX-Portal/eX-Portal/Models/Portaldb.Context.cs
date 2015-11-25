@@ -12,6 +12,8 @@ namespace eX_Portal.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class ExponentPortalEntities : DbContext
     {
@@ -41,8 +43,44 @@ namespace eX_Portal.Models
         public virtual DbSet<MSTR_Product> MSTR_Product { get; set; }
         public virtual DbSet<MSTR_Profile> MSTR_Profile { get; set; }
         public virtual DbSet<MSTR_User> MSTR_User { get; set; }
-    public virtual DbSet<MSTR_DroneCheckList> MSTR_DroneCheckList { get; set; }
-    public virtual DbSet<ProductDefinition> ProductDefinitions { get; set; }
+        public virtual DbSet<ProductDefinition> ProductDefinitions { get; set; }
         public virtual DbSet<ProductTransaction> ProductTransactions { get; set; }
+        public virtual DbSet<M2M_UserProfile> M2M_UserProfile { get; set; }
+        public virtual DbSet<ProductHistory> ProductHistories { get; set; }
+        public virtual DbSet<DroneCheckList> DroneCheckList { get; set; }
+        public virtual DbSet<MSTR_DroneCheckList> MSTR_DroneCheckList { get; set; }
+        public virtual DbSet<MSTR_DroneCheckListItems> MSTR_DroneCheckListItems { get; set; }
+        public virtual DbSet<DroneCheckListItem> DroneCheckListItems { get; set; }
+        public virtual DbSet<DroneFlight> DroneFlights { get; set; }
+    
+        public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
+        {
+            var ownerIDParameter = ownerID.HasValue ?
+                new ObjectParameter("OwnerID", ownerID) :
+                new ObjectParameter("OwnerID", typeof(int));
+    
+            var manufacturerIDParameter = manufacturerID.HasValue ?
+                new ObjectParameter("ManufacturerID", manufacturerID) :
+                new ObjectParameter("ManufacturerID", typeof(int));
+    
+            var uAVTypeIDParameter = uAVTypeID.HasValue ?
+                new ObjectParameter("UAVTypeID", uAVTypeID) :
+                new ObjectParameter("UAVTypeID", typeof(int));
+    
+            var commissionDateParameter = commissionDate.HasValue ?
+                new ObjectParameter("CommissionDate", commissionDate) :
+                new ObjectParameter("CommissionDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Portal_CreateDrone_Result>("usp_Portal_CreateDrone", ownerIDParameter, manufacturerIDParameter, uAVTypeIDParameter, commissionDateParameter);
+        }
+    
+        public virtual ObjectResult<usp_Portal_GetDroneDropDown_Result> usp_Portal_GetDroneDropDown(string type)
+        {
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Portal_GetDroneDropDown_Result>("usp_Portal_GetDroneDropDown", typeParameter);
+        }
     }
 }

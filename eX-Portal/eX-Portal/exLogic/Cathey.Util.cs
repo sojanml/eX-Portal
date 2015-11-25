@@ -1,7 +1,9 @@
-﻿using System;
+﻿using eX_Portal.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -12,34 +14,61 @@ namespace eX_Portal.exLogic
     public partial class Util
     {
         static IEnumerable<SelectListItem> DropDownList = Enumerable.Empty<SelectListItem>();
-
-        static string connection = ConfigurationManager.ConnectionStrings["ExponentPortalEntities"].ConnectionString;
+        private static ExponentPortalEntities ctx;
+        //static string connection = ConfigurationManager.ConnectionStrings["ExponentPortalSql"].ConnectionString;
         public static IEnumerable<SelectListItem> GetDropDowntList(string TypeField, string NameField, string ValueField, string SPName)
         {
-            using (SqlConnection conn = new SqlConnection(connection))
+          //  ctx=new ExponentPortalEntities();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            using (var ctx = new ExponentPortalEntities())
+            { 
+            using (var cmd = ctx.Database.Connection.CreateCommand())
             {
-                conn.Open();
-                SqlDataReader myReader = null;
 
-                SqlCommand myCommand = new SqlCommand("usp_Portal_GetDroneDropDown", conn);
-                SqlParameter[] Param = new SqlParameter[1];
-                Param[0] = new SqlParameter("@Type", TypeField);
-                myCommand.Parameters.Add(Param[0]);
+                ctx.Database.Connection.Open();
 
-                myCommand.CommandType = CommandType.StoredProcedure;
-                myReader = myCommand.ExecuteReader();
-                while (myReader.Read())
+
+                cmd.CommandText = "usp_Portal_GetDroneDropDown";
+                DbParameter Param = cmd.CreateParameter();
+                Param.ParameterName = "@Type";
+                Param.Value = TypeField;
+                //  Param[0] = new DbParameter("@Type", TypeField);
+                cmd.Parameters.Add(Param);
+                cmd.CommandType = CommandType.StoredProcedure;
+                using (var reader = cmd.ExecuteReader())
                 {
-                    //DropDownList.Add(new SelectListItem { Text = myReader["Tournament"].ToString(), Value = myReader["Id"].ToString() });
-                    //DropDownList.
-                    //tournament.Add(new SelectListItem { Text = myReader["Tournament"].ToString(), Value = myReader["Id"].ToString() });
-                }
+                    while (reader.Read())
+                    {
 
-                conn.Close();
+                        SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Code"].ToString() });
+
+                    }
+                }
+                DropDownList = SelectList.ToList();
+                ctx.Database.Connection.Close();
                 return DropDownList; //return the list objects
 
             }
+            }
+        }
+        public static int InsertSQL(String SQL,string[] Parameter)
+        {
+            int result = 0;
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+                    cmd.CommandText = SQL;
+                    cmd.Parameters.Add(Parameter.ToList());
+                    cmd.ExecuteNonQuery();
 
+                    cmd.CommandText = "SELECT scope_identity()";
+                    result = Int32.Parse(cmd.ExecuteScalar().ToString());
+
+                }
+            }
+            return result;
         }
     }
 }

@@ -32,5 +32,8 @@ namespace eX_Portal.Models
         public Nullable<bool> IsActive { get; set; }
         public string DroneIdHexa { get; set; }
         public string DroneIdBarCode { get; set; }
+        public Nullable<System.DateTime> CommissionDate { get; set; }
+        public Nullable<int> DroneSerialNo { get; set; }
+        public Nullable<int> DroneDefinitionID { get; set; }
     }
 }

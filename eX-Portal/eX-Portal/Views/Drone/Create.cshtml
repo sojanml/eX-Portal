@@ -6,7 +6,9 @@
 }
 
 
-
+<script src = "~/Scripts/bootstrap.js" ></script >
+@using (Html.BeginForm())
+{
 
 
    
@@ -17,68 +19,44 @@
     </div>
     <div class="editor-field">
        
-        @Html.DropDownListFor(model => model.Drone.OwnerId ,Model.OwnerList,
-
-                                              // Text for the first 'default' option
-                                              "- Please select your state -",
-
-                                              // A class name to put on the "<select>"
-                                              new { @class = "form-control" }
-                                             )
+        @Html.DropDownListFor(model => model.Drone.OwnerId, Model.OwnerList)
        
 
 
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.Drone.UavTypeId)
+        @Html.LabelFor(model => model.Drone.UavTypeId,"UAV Type")
     </div>
     <div class="editor-field">
         
-        @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList,
-
-                                              // Text for the first 'default' option
-                                              "- Please select your state -",
-
-                                              // A class name to put on the "<select>"
-                                              new { @class = "form-control" }
-                                             )
+        @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)
         @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
 
 
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.Drone.ManufactureId)
+        @Html.LabelFor(model => model.Drone.ManufactureId,"Manufacturer")
     </div>
     <div class="editor-field">
-        @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList,
-
-                                              // Text for the first 'default' option
-                                              "- Please select your state -",
-
-                                              // A class name to put on the "<select>"
-                                              new { @class = "form-control" }
-                                             )
+        @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList)
         @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
     </div>
     <div class="editor-label">
-    @Html.LabelFor(model => model.Drone.ManufactureId)
+    @Html.LabelFor(model => model.Drone.CommissionDate,"Commission Date")
 </div>
 <div class="editor-field">
-    @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList,
-
-                                              // Text for the first 'default' option
-                                              "- Please select your state -",
-
-                                              // A class name to put on the "<select>"
-                                              new { @class = "form-control" }
-                                             )
-    @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
+    @Html.EditorFor(model => model.Drone.CommissionDate)
+    @Html.ValidationMessageFor(model => model.Drone.CommissionDate)
 </div>
 
-   
-    <p>
-        <input type="submit" value="Save" />
-    </p>
-         
+  
+        <div class="form-toolbar">
+            <input type="submit" value="Create" />
+            </div>
+
+
+}    
+
+

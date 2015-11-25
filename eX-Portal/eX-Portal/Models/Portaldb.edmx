@@ -16,6 +16,16 @@
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
+        <EntityType Name="DroneCheckListItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DroneCheckListID" Type="int" />
+          <Property Name="FieldValue" Type="varchar" MaxLength="120" />
+          <Property Name="FieldNote" Type="varchar" MaxLength="256" />
+          <Property Name="DroneCheckListItemID" Type="int" />
+        </EntityType>
         <EntityType Name="DroneData">
           <Key>
             <PropertyRef Name="DroneDataId" />
@@ -48,7 +58,20 @@
           <Property Name="IsActive" Type="bit" />
           <Property Name="LastModifiedOn" Type="datetime" />
           <Property Name="MaxValue" Type="int" />
-          <Property Name="Default" Type="int" />
+          <Property Name="DefaultValue" Type="nvarchar" MaxLength="50" />
+          <Property Name="ParentID" Type="int" />
+        </EntityType>
+        <EntityType Name="DroneFlight">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PilotID" Type="int" />
+          <Property Name="GSCID" Type="int" />
+          <Property Name="FlightDate" Type="datetime" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="DroneID" Type="int" />
         </EntityType>
         <EntityType Name="LUP_Drone">
           <Key>
@@ -154,7 +177,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MenuId" Type="int" />
           <Property Name="ProfileId" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
@@ -211,6 +234,9 @@
           <Property Name="IsActive" Type="bit" />
           <Property Name="DroneIdHexa" Type="varchar" MaxLength="24" />
           <Property Name="DroneIdBarCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="CommissionDate" Type="datetime" />
+          <Property Name="DroneSerialNo" Type="int" />
+          <Property Name="DroneDefinitionID" Type="int" />
         </EntityType>
         <EntityType Name="MSTR_DroneCheckList">
           <Key>
@@ -405,9 +431,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="ConvertFromBase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bigint">
+          <Parameter Name="value" Type="varchar(max)" Mode="In" />
+          <Parameter Name="base" Type="bigint" Mode="In" />
+        </Function>
         <Function Name="ConvertToBase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar(max)">
           <Parameter Name="value" Type="bigint" Mode="In" />
           <Parameter Name="base" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GenerateHexCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar(max)">
+          <Parameter Name="string" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="stringlength" Type="int" Mode="In" />
         </Function>
         <Function Name="usp_Portal_CreateDrone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OwnerID" Type="int" Mode="In" />
@@ -420,8 +454,10 @@
         </Function>
         <EntityContainer Name="ExponentPortalModelStoreContainer">
           <EntitySet Name="DroneCheckList" EntityType="Self.DroneCheckList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DroneCheckListItem" EntityType="Self.DroneCheckListItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneData" EntityType="Self.DroneData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneDefinition" EntityType="Self.DroneDefinition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DroneFlight" EntityType="Self.DroneFlight" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LUP_Drone" EntityType="Self.LUP_Drone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LUP_Product" EntityType="Self.LUP_Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M2M_DroneDetails" EntityType="Self.M2M_DroneDetails" Schema="dbo" store:Type="Tables" />
@@ -483,7 +519,8 @@
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="LastModifiedOn" Type="DateTime" Precision="3" />
           <Property Name="MaxValue" Type="Int32" />
-          <Property Name="Default" Type="Int32" />
+          <Property Name="DefaultValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ParentID" Type="Int32" />
         </EntityType>
         <EntityType Name="LUP_Drone">
           <Key>
@@ -491,7 +528,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Code" Type="String" />
+          <Property Name="Code" Type="String" MaxLength="25" Unicode="true" FixedLength="false" />
           <Property Name="TypeId" Type="Int32" />
           <Property Name="BinaryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -568,9 +605,9 @@
           <Property Name="RecordType" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="ServiceId" Type="Int32" />
-          <NavigationProperty Name="M2M_DroneServiceParts1" Relationship="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts" ToRole="M2M_DroneServiceParts1" />
-          <NavigationProperty Name="M2M_DroneServiceParts2" Relationship="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts1" ToRole="M2M_DroneServiceParts" />
-        </EntityType>
+          <NavigationProperty Name="M2M_DroneServiceParts1" Relationship="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts" ToRole="M2M_DroneServiceParts1" />
+          <NavigationProperty Name="M2M_DroneServiceParts2" Relationship="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts1" ToRole="M2M_DroneServiceParts" />
+          </EntityType>
         <EntityType Name="M2M_UserAccount">
           <Key>
             <PropertyRef Name="Id" />
@@ -632,6 +669,9 @@
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="DroneIdHexa" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
           <Property Name="DroneIdBarCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CommissionDate" Type="DateTime" Precision="3" />
+          <Property Name="DroneSerialNo" Type="Int32" />
+          <Property Name="DroneDefinitionID" Type="Int32" />
         </EntityType>
         <EntityType Name="MSTR_DroneService">
           <Key>
@@ -781,18 +821,6 @@
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <Association Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
-          <End Role="M2M_DroneServiceParts" Type="Self.M2M_DroneServiceParts" Multiplicity="1" />
-          <End Role="M2M_DroneServiceParts1" Type="Self.M2M_DroneServiceParts" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="M2M_DroneServiceParts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="M2M_DroneServiceParts1">
-              <PropertyRef Name="Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ExponentPortalEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="DroneDatas" EntityType="Self.DroneData" />
           <EntitySet Name="DroneDefinitions" EntityType="Self.DroneDefinition" />
@@ -812,10 +840,6 @@
           <EntitySet Name="MSTR_User" EntityType="Self.MSTR_User" />
           <EntitySet Name="ProductDefinitions" EntityType="Self.ProductDefinition" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransaction" />
-          <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
-            <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
-            <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
-          </AssociationSet>
           <EntitySet Name="M2M_UserProfile" EntityType="ExponentPortalModel.M2M_UserProfile" />
           <EntitySet Name="ProductHistories" EntityType="ExponentPortalModel.ProductHistory" />
           <EntitySet Name="DroneCheckList" EntityType="ExponentPortalModel.DroneCheckList" />
@@ -830,6 +854,12 @@
           <FunctionImport Name="usp_Portal_GetDroneDropDown" ReturnType="Collection(ExponentPortalModel.usp_Portal_GetDroneDropDown_Result)">
           <Parameter Name="Type" Mode="In" Type="String" />
           </FunctionImport>
+          <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
+            <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
+            <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
+          </AssociationSet>
+          <EntitySet Name="DroneCheckListItems" EntityType="ExponentPortalModel.DroneCheckListItem" />
+          <EntitySet Name="DroneFlights" EntityType="ExponentPortalModel.DroneFlight" />
         </EntityContainer>
         <EntityType Name="M2M_UserProfile">
           <Key>
@@ -903,6 +933,40 @@
           <Property Type="String" Name="Code" Nullable="true" MaxLength="25" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <Association Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
+          <End Type="ExponentPortalModel.M2M_DroneServiceParts" Role="M2M_DroneServiceParts" Multiplicity="1" />
+          <End Type="ExponentPortalModel.M2M_DroneServiceParts" Role="M2M_DroneServiceParts1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="M2M_DroneServiceParts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="M2M_DroneServiceParts1">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="DroneCheckListItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DroneCheckListID" Type="Int32" />
+          <Property Name="FieldValue" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="FieldNote" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="DroneCheckListItemID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="DroneFlight">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PilotID" Type="Int32" />
+          <Property Name="GSCID" Type="Int32" />
+          <Property Name="FlightDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="DroneID" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -931,7 +995,8 @@
           <EntitySetMapping Name="DroneDefinitions">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneDefinition">
               <MappingFragment StoreEntitySet="DroneDefinition">
-                <ScalarProperty Name="Default" ColumnName="Default" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
                 <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="FieldName" ColumnName="FieldName" />
@@ -1078,6 +1143,9 @@
           <EntitySetMapping Name="MSTR_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
               <MappingFragment StoreEntitySet="MSTR_Drone">
+                <ScalarProperty Name="DroneDefinitionID" ColumnName="DroneDefinitionID" />
+                <ScalarProperty Name="DroneSerialNo" ColumnName="DroneSerialNo" />
+                <ScalarProperty Name="CommissionDate" ColumnName="CommissionDate" />
                 <ScalarProperty Name="DroneId" ColumnName="DroneId" />
                 <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
                 <ScalarProperty Name="ManufactureId" ColumnName="ManufactureId" />
@@ -1340,6 +1408,30 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="DroneCheckListItems">
+            <EntityTypeMapping TypeName="ExponentPortalModel.DroneCheckListItem">
+              <MappingFragment StoreEntitySet="DroneCheckListItem">
+                <ScalarProperty Name="DroneCheckListItemID" ColumnName="DroneCheckListItemID" />
+                <ScalarProperty Name="FieldNote" ColumnName="FieldNote" />
+                <ScalarProperty Name="FieldValue" ColumnName="FieldValue" />
+                <ScalarProperty Name="DroneCheckListID" ColumnName="DroneCheckListID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DroneFlights">
+            <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
+              <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />
+                <ScalarProperty Name="GSCID" ColumnName="GSCID" />
+                <ScalarProperty Name="PilotID" ColumnName="PilotID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1361,6 +1453,35 @@
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
-    <Diagrams></Diagrams>
+    <Diagrams>
+      <Diagram DiagramId="d9309f375bd04426b0f6d7ea335c942c" Name="Diagram1">
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneData" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneDefinition" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.LUP_Drone" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.LUP_Product" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneDetails" Width="1.5" PointX="4.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneParts" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneServiceParts" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_UserAccount" Width="1.5" PointX="6.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Account" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone" Width="1.5" PointX="8.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_DroneService" Width="1.5" PointX="2.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Menu" Width="1.5" PointX="4.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Parts" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Product" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Profile" Width="1.5" PointX="10.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_User" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ProductDefinition" Width="1.5" PointX="6.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ProductTransaction" Width="1.5" PointX="12.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_UserProfile" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ProductHistory" Width="1.5" PointX="0.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneCheckList" Width="1.5" PointX="14.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_DroneCheckList" Width="1.5" PointX="2.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_DroneCheckListItems" Width="1.5" PointX="14.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneCheckListItem" Width="1.5" PointX="14.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneFlight" Width="1.5" PointX="8.75" PointY="14.75" IsExpanded="true" />
+        <AssociationConnector Association="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" ManuallyRouted="false" />
+      </Diagram>
+    </Diagrams>
   </Designer>
 </edmx:Edmx>

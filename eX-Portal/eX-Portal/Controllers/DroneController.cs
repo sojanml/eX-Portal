@@ -14,8 +14,25 @@ namespace eX_Portal.Controllers
         // GET: Drone
         public ActionResult Index()
         {
+            ViewBag.Title = "Drone Listing";
 
-            return View();
+            String SQL = "SELECT \n" +
+                "D.[DroneId] ,D.[DroneName],D.[DroneIdHexa]  ,D.[CommissionDate] ,D.[DroneSerialNo], O.Name as OwnerName, M.Name as ManufactureName, U.Name as UAVType, Count(*) Over() as _TotalRecords \n" +
+                "FROM [ExponentPortal].[dbo].[MSTR_Drone] D \n" +
+                "inner join[ExponentPortal].[dbo].LUP_Drone  O on OwnerID = O.TypeID and O.Type = 'Owner' " +
+                "inner join[ExponentPortal].[dbo].LUP_Drone M on ManufactureID = M.TypeID and M.Type='Manufacturer' " +
+                "inner join [ExponentPortal].[dbo].LUP_Drone U on UAVTypeID = U.TypeID and U.Type= 'UAV Type' ";
+            qView nView = new qView(SQL);
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+            
         }
 
         // GET: Drone/Details/5
@@ -32,47 +49,30 @@ namespace eX_Portal.Controllers
             {
                 Drone = new MSTR_Drone(),
                 OwnerList = Util.GetDropDowntList("Owner", "Name", "Code", "usp_Portal_GetDroneDropDown"),
-                UAVTypeList = Util.GetDropDowntList("Owner", "Name", "Code", "usp_Portal_GetDroneDropDown"),
-                ManufactureList = Util.GetDropDowntList("Owner", "Name", "Code", "usp_Portal_GetDroneDropDown")
+                UAVTypeList = Util.GetDropDowntList("UAV Type", "Name", "Code", "usp_Portal_GetDroneDropDown"),
+                ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
                 //PartsGroupList = Util.GetDropDowntList();
             } ;
 
             return View(viewModel);
         }
 
-        // POST: Drone/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+       
 
         // POST: Drone/Create
         [HttpPost]
+       
         public ActionResult Create(ViewModel.DroneView DroneView)
         {
             try
             {
                 // TODO: Add insert logic here
-                var Drone = new MSTR_Drone
-                {
-                    DroneName = DroneView.Drone.DroneName,
-                    OwnerId=DroneView.Drone.OwnerId
+                MSTR_Drone Drone = DroneView.Drone;
 
-                };
+                int ID=Util.InsertSQL("INSERT INTO MSTR_DRONE(OWNERID,MANUFACTUREID,UAVTYPEID,COMMISSIONDATE) VALUES('"+Drone.OwnerId+"','"+Drone.ManufactureId+"','"+Drone.UavTypeId+"','"+Drone.CommissionDate.Value.ToString("yyyy-MM-dd")+"');");
                 return RedirectToAction("Index");
             }
-            catch
+            catch(Exception ex)
             {
                 return View();
             }
