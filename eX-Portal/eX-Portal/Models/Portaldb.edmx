@@ -265,13 +265,17 @@
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="ModifiedBy" Type="int" />
-          <Property Name="AcceptedBy" Type="int" Nullable="false" />
+          <Property Name="AcceptedBy" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="ModifiedOn" Type="datetime" />
           <Property Name="AcceptedOn" Type="datetime" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="RecordType" Type="int" />
           <Property Name="DroneId" Type="int" />
+          <Property Name="TypeOfService" Type="nvarchar" MaxLength="50" />
+          <Property Name="FlightHour" Type="int" />
+          <Property Name="DateOfService" Type="datetime" />
+          <Property Name="TypeOfServiceId" Type="int" />
         </EntityType>
         <EntityType Name="MSTR_Menu">
           <Key>
@@ -292,6 +296,8 @@
           <Property Name="RecordType" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="SortOrder" Type="int" />
+          <Property Name="Visible" Type="bit" />
+          <Property Name="PermissionId" Type="nvarchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="MSTR_Parts">
           <Key>
@@ -681,13 +687,17 @@
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="ModifiedBy" Type="Int32" />
-          <Property Name="AcceptedBy" Type="Int32" Nullable="false" />
+          <Property Name="AcceptedBy" Type="Int32" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
           <Property Name="AcceptedOn" Type="DateTime" Precision="3" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="RecordType" Type="Int32" />
           <Property Name="DroneId" Type="Int32" />
+          <Property Name="TypeOfService" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightHour" Type="Int32" />
+          <Property Name="DateOfService" Type="DateTime" Precision="3" />
+          <Property Name="TypeOfServiceId" Type="Int32" />
         </EntityType>
         <EntityType Name="MSTR_Menu">
           <Key>
@@ -708,6 +718,8 @@
           <Property Name="RecordType" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="SortOrder" Type="Int32" />
+          <Property Name="Visible" Type="Boolean" />
+          <Property Name="PermissionId" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_Parts">
           <Key>
@@ -1170,6 +1182,10 @@
           <EntitySetMapping Name="MSTR_DroneService">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_DroneService">
               <MappingFragment StoreEntitySet="MSTR_DroneService">
+                <ScalarProperty Name="TypeOfServiceId" ColumnName="TypeOfServiceId" />
+                <ScalarProperty Name="DateOfService" ColumnName="DateOfService" />
+                <ScalarProperty Name="FlightHour" ColumnName="FlightHour" />
+                <ScalarProperty Name="TypeOfService" ColumnName="TypeOfService" />
                 <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -1187,6 +1203,8 @@
           <EntitySetMapping Name="MSTR_Menu">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Menu">
               <MappingFragment StoreEntitySet="MSTR_Menu">
+                <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
+                <ScalarProperty Name="Visible" ColumnName="Visible" />
                 <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
                 <ScalarProperty Name="MenuId" ColumnName="MenuId" />
                 <ScalarProperty Name="MenuName" ColumnName="MenuName" />

@@ -18,12 +18,16 @@ namespace eX_Portal.Models
         public string Description { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
-        public int AcceptedBy { get; set; }
+        public Nullable<int> AcceptedBy { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<System.DateTime> ModifiedOn { get; set; }
         public Nullable<System.DateTime> AcceptedOn { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> RecordType { get; set; }
         public Nullable<int> DroneId { get; set; }
+        public string TypeOfService { get; set; }
+        public Nullable<int> FlightHour { get; set; }
+        public Nullable<System.DateTime> DateOfService { get; set; }
+        public Nullable<int> TypeOfServiceId { get; set; }
     }
 }
