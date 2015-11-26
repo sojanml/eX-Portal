@@ -29,5 +29,7 @@ namespace eX_Portal.Models
         public Nullable<int> RecordType { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> SortOrder { get; set; }
+        public Nullable<bool> Visible { get; set; }
+        public string PermissionId { get; set; }
     }
 }

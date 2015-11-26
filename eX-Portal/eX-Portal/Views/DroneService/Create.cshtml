@@ -1,0 +1,64 @@
+﻿@model eX_Portal.ViewModel.DroneServiceViewModel
+@{
+    ViewBag.Title = "UAS Service";
+    Layout = "~/Views/Shared/_exPortal.cshtml";
+}
+<script src="~/Scripts/bootstrap.js"></script>
+<section class="general-form">
+    @using (Html.BeginForm())
+    {
+
+
+
+        @Html.HiddenFor(model => model.DroneService.ServiceId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DroneService.DroneId, "UAV Name")
+        </div>
+        <div class="editor-field">
+
+            @Html.DropDownListFor(model => model.DroneService.DroneId, Model.DroneList)
+
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DroneService.TypeOfService, "Service Type")
+        </div>
+        <div class="editor-field">
+
+            @Html.DropDownListFor(model => model.DroneService.TypeOfService, Model.ServiceType)
+
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DroneService.Description, "Description")
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.DroneService.Description, 10, 55, null)
+
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DroneService.FlightHour, "Flight Hour")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DroneService.FlightHour)
+
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DroneService.DateOfService, "Date Of Service")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DroneService.DateOfService)
+            @Html.ValidationMessageFor(model => model.DroneService.DateOfService)
+        </div>
+
+
+        <div class="form-toolbar">
+            <input type="submit" value="Create" />
+        </div>
+    }
+</section>
