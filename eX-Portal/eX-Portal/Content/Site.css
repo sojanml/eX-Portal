@@ -126,6 +126,8 @@ header nav ul {
  margin: 0px 0px 0px 50px;
  padding: 0px;
  list-style: none;
+ transition: all 0.5s ease;
+
 }
 header nav ul li {
  margin: 0px 0px 0px 20px;
@@ -133,7 +135,6 @@ header nav ul li {
  position: relative;
 }
 header nav ul li A {
- transition: all 0.5s ease;
  color: black;
  text-decoration: none;
  font-weight: bold;
@@ -141,23 +142,48 @@ header nav ul li A {
  line-height: 62px;
  padding: 0px 10px 0px 10px;
 }
-header nav ul li A:hover {
- color: white;
- background-color: #ea050e;
+
+header nav ul li:hover {
+   background-color: #ea050e;
 }
+header nav ul li:hover A {
+ color: white;
+}
+
+header nav ul li:hover UL LI A {
+ color: black;
+}
+
+
+header nav ul li UL LI:hover A {
+ color: white;
+}
+
 header nav ul li:hover UL {
   display: block;
 }
 header nav ul li UL {
- display: none;
+  display:none;
+ background-color: white;
+ border:1px red solid;
  position:absolute;
- top:30px;
+ top:60px;
+ right: 0px;
+ width:200px;
+ white-space:nowrap;
+ margin: 0px;
+ padding: 0px;
  
 }
 header nav ul li UL li {
   display:block;
+ margin: 0px;
+ padding: 0px;
 }
-
+  header nav ul li UL li a {
+    color: black;
+    line-height: 200%;
+  }
 
 nav.user-management ul,
 nav.breadcrumbs UL {
@@ -174,6 +200,7 @@ nav.breadcrumbs UL LI A {
   transition: all 0.5s ease;
  text-decoration: none;
  color: gray;
+
 }
 
 nav.user-management ul li A:hover,
