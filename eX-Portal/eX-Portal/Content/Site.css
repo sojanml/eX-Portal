@@ -432,3 +432,9 @@ div.form-group select
 span.field-validation-error {
   color: red;
 }
+
+input.date-picker{
+  background-image:url('../images/cal-icon.png');
+  background-position: calc(100% - 10px) 5px;
+  background-repeat:no-repeat;
+}

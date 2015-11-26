@@ -60,10 +60,6 @@ namespace eX_Portal.Controllers
                 // TODO: Add insert logic here
 
                 MSTR_DroneService DroneService= DroneServiceView.DroneService;
-<<<<<<< HEAD
-               
-=======
->>>>>>> 1f8fd9e9c1a0634541cc0c60242d778bd1502496
 
                 string SQL = "INSERT INTO MSTR_DRONESERVICE(Description,CreatedBy,CreatedOn,DroneId,TypeOfServiceId,TypeOfService,DateOfService) VALUES('"
                           + DroneService.Description + "'," + Session["UserId"]
