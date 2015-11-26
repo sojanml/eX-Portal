@@ -1472,7 +1472,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="d9309f375bd04426b0f6d7ea335c942c" Name="Diagram1">
+      <Diagram DiagramId="d9309f375bd04426b0f6d7ea335c942c" Name="Diagram1" ZoomLevel="96">
         <EntityTypeShape EntityType="ExponentPortalModel.DroneData" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.DroneDefinition" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.LUP_Drone" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />

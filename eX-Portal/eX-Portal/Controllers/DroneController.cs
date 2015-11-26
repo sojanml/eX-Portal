@@ -67,6 +67,7 @@ namespace eX_Portal.Controllers
             try
             {
                 // TODO: Add insert logic here
+                
                 MSTR_Drone Drone = DroneView.Drone;
 
                 int ID=Util.InsertSQL("INSERT INTO MSTR_DRONE(OWNERID,MANUFACTUREID,UAVTYPEID,COMMISSIONDATE) VALUES('"+Drone.OwnerId+"','"+Drone.ManufactureId+"','"+Drone.UavTypeId+"','"+Drone.CommissionDate.Value.ToString("yyyy-MM-dd")+"');");
