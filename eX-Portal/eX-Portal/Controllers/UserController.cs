@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using eX_Portal.Models;
 using eX_Portal.ViewModel;
+using eX_Portal.exLogic;
 namespace eX_Portal.Controllers
 {
     public class UserController :Controller
@@ -18,25 +19,21 @@ namespace eX_Portal.Controllers
         [HttpPost]
         public ActionResult Login(UserLogin _objuserlogin)
         {
+
             /*Create instance of entity model*/
              ExponentPortalEntities objentity = new ExponentPortalEntities();
             /*Getting data from database for user validation*/
 
-            var _objuserdetail = (from data in objentity.MSTR_User
-                                  where data.UserName == _objuserlogin.UserName                                  
-                                  && data.Password == _objuserlogin.Password
-
-                                  select data);
-                         if (_objuserdetail.Count() > 0)
+            
+                         if (eX_Portal.exLogic.User.UserValidation(_objuserlogin.UserName , _objuserlogin.Password )> 0)
                              {
                 /*Redirect user to success apge after successfull login*/
                                   ViewBag.Message = 1;
 
-                String SQL = "select UserId from MSTR_User" +
-               " where UserName='" + _objuserlogin.UserName + "'";
-                int UserId = objentity.Database.SqlQuery<int>( SQL).FirstOrDefault<int>();
-                // var UserId = objentity.Database.SqlQuery<string>(SQL);
-
+               
+                int UserId = eX_Portal.exLogic.User.GetUserId(_objuserlogin.UserName);
+                string UserFirstName = eX_Portal.exLogic.User.GetFirstName(_objuserlogin.UserName);
+                Session["UserFirstName"] = UserFirstName;
                 Session["UserId"] = UserId;
                 Session["UserName"] = _objuserlogin.UserName;
                 return RedirectToAction("Index", "Home");

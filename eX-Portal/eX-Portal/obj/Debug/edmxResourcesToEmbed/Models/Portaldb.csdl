@@ -31,8 +31,9 @@
     <Property Name="RecordType" Type="Int32" />
     <Property Name="IsActive" Type="Boolean" />
     <Property Name="LastModifiedOn" Type="DateTime" Precision="3" />
-    <Property Name="CommissionDate" Type="DateTime" Precision="3" />
-    <Property Name="SerialNo" Type="Int32" />
+    <Property Name="MaxValue" Type="Int32" />
+    <Property Name="DefaultValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ParentID" Type="Int32" />
   </EntityType>
   <EntityType Name="LUP_Drone">
     <Key>
@@ -40,8 +41,8 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Code" Type="Int32" Nullable="false" />
-    <Property Name="TypeId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Code" Type="String" MaxLength="25" Unicode="true" FixedLength="false" />
+    <Property Name="TypeId" Type="Int32" />
     <Property Name="BinaryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CreatedBy" Type="Int32" />
@@ -117,8 +118,8 @@
     <Property Name="RecordType" Type="Int32" />
     <Property Name="IsActive" Type="Boolean" />
     <Property Name="ServiceId" Type="Int32" />
-    <NavigationProperty Name="M2M_DroneServiceParts1" Relationship="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts" ToRole="M2M_DroneServiceParts1" />
-    <NavigationProperty Name="M2M_DroneServiceParts2" Relationship="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts1" ToRole="M2M_DroneServiceParts" />
+    <NavigationProperty Name="M2M_DroneServiceParts1" Relationship="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts" ToRole="M2M_DroneServiceParts1" />
+    <NavigationProperty Name="M2M_DroneServiceParts2" Relationship="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts1" ToRole="M2M_DroneServiceParts" />
   </EntityType>
   <EntityType Name="M2M_UserAccount">
     <Key>
@@ -181,6 +182,9 @@
     <Property Name="IsActive" Type="Boolean" />
     <Property Name="DroneIdHexa" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
     <Property Name="DroneIdBarCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CommissionDate" Type="DateTime" Precision="3" />
+    <Property Name="DroneSerialNo" Type="Int32" />
+    <Property Name="DroneDefinitionID" Type="Int32" />
   </EntityType>
   <EntityType Name="MSTR_DroneService">
     <Key>
@@ -190,13 +194,17 @@
     <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="CreatedBy" Type="Int32" />
     <Property Name="ModifiedBy" Type="Int32" />
-    <Property Name="AcceptedBy" Type="Int32" Nullable="false" />
+    <Property Name="AcceptedBy" Type="Int32" />
     <Property Name="CreatedOn" Type="DateTime" Precision="3" />
     <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
     <Property Name="AcceptedOn" Type="DateTime" Precision="3" />
     <Property Name="IsActive" Type="Boolean" />
     <Property Name="RecordType" Type="Int32" />
     <Property Name="DroneId" Type="Int32" />
+    <Property Name="TypeOfService" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FlightHour" Type="Int32" />
+    <Property Name="DateOfService" Type="DateTime" Precision="3" />
+    <Property Name="TypeOfServiceId" Type="Int32" />
   </EntityType>
   <EntityType Name="MSTR_Menu">
     <Key>
@@ -216,6 +224,7 @@
     <Property Name="CreatedOn" Type="DateTime" Precision="0" />
     <Property Name="RecordType" Type="Int32" />
     <Property Name="IsActive" Type="Boolean" />
+    <Property Name="SortOrder" Type="Int32" />
   </EntityType>
   <EntityType Name="MSTR_Parts">
     <Key>
@@ -329,18 +338,6 @@
     <Property Name="IsActive" Type="Boolean" />
     <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
-  <Association Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
-    <End Role="M2M_DroneServiceParts" Type="Self.M2M_DroneServiceParts" Multiplicity="1" />
-    <End Role="M2M_DroneServiceParts1" Type="Self.M2M_DroneServiceParts" Multiplicity="0..1" />
-    <ReferentialConstraint>
-      <Principal Role="M2M_DroneServiceParts">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="M2M_DroneServiceParts1">
-        <PropertyRef Name="Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityContainer Name="ExponentPortalEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="DroneDatas" EntityType="Self.DroneData" />
     <EntitySet Name="DroneDefinitions" EntityType="Self.DroneDefinition" />
@@ -360,12 +357,26 @@
     <EntitySet Name="MSTR_User" EntityType="Self.MSTR_User" />
     <EntitySet Name="ProductDefinitions" EntityType="Self.ProductDefinition" />
     <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransaction" />
-    <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
+    <EntitySet Name="M2M_UserProfile" EntityType="ExponentPortalModel.M2M_UserProfile" />
+    <EntitySet Name="ProductHistories" EntityType="ExponentPortalModel.ProductHistory" />
+    <EntitySet Name="DroneCheckList" EntityType="ExponentPortalModel.DroneCheckList" />
+    <EntitySet Name="MSTR_DroneCheckList" EntityType="ExponentPortalModel.MSTR_DroneCheckList" />
+    <EntitySet Name="MSTR_DroneCheckListItems" EntityType="ExponentPortalModel.MSTR_DroneCheckListItems" />
+    <FunctionImport Name="usp_Portal_CreateDrone" ReturnType="Collection(ExponentPortalModel.usp_Portal_CreateDrone_Result)">
+      <Parameter Name="OwnerID" Mode="In" Type="Int32" />
+      <Parameter Name="ManufacturerID" Mode="In" Type="Int32" />
+      <Parameter Name="UAVTypeID" Mode="In" Type="Int32" />
+      <Parameter Name="CommissionDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="usp_Portal_GetDroneDropDown" ReturnType="Collection(ExponentPortalModel.usp_Portal_GetDroneDropDown_Result)">
+      <Parameter Name="Type" Mode="In" Type="String" />
+    </FunctionImport>
+    <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
       <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
       <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
     </AssociationSet>
-    <EntitySet Name="M2M_UserProfile" EntityType="ExponentPortalModel.M2M_UserProfile" />
-    <EntitySet Name="ProductHistories" EntityType="ExponentPortalModel.ProductHistory" />
+    <EntitySet Name="DroneCheckListItems" EntityType="ExponentPortalModel.DroneCheckListItem" />
+    <EntitySet Name="DroneFlights" EntityType="ExponentPortalModel.DroneFlight" />
   </EntityContainer>
   <EntityType Name="M2M_UserProfile">
     <Key>
@@ -396,5 +407,81 @@
     <Property Name="RSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="IsActive" Type="Boolean" />
     <Property Name="RecordType" Type="Int32" />
+  </EntityType>
+  <EntityType Name="DroneCheckList">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DroneCheckListID" Type="Int32" />
+    <Property Name="DroneID" Type="Int32" />
+    <Property Name="FlightID" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="MSTR_DroneCheckList">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CheckListTitle" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+    <Property Name="CheckListSubTitle" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="MSTR_DroneCheckListItems">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DroneCheckList_ID" Type="Int32" Nullable="false" />
+    <Property Name="SlNo" Type="Decimal" Precision="5" Scale="2" />
+    <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="FieldType" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="Responsibility" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <ComplexType Name="usp_Portal_CreateDrone_Result">
+    <Property Type="String" Name="Column1" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="Column2" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="Column3" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="Column4" Nullable="true" MaxLength="25" />
+  </ComplexType>
+  <ComplexType Name="usp_Portal_GetDroneDropDown_Result">
+    <Property Type="String" Name="Type" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="TypeID" Nullable="true" />
+    <Property Type="String" Name="Code" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <Association Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
+    <End Type="ExponentPortalModel.M2M_DroneServiceParts" Role="M2M_DroneServiceParts" Multiplicity="1" />
+    <End Type="ExponentPortalModel.M2M_DroneServiceParts" Role="M2M_DroneServiceParts1" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="M2M_DroneServiceParts">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="M2M_DroneServiceParts1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="DroneCheckListItem">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DroneCheckListID" Type="Int32" />
+    <Property Name="FieldValue" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+    <Property Name="FieldNote" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+    <Property Name="DroneCheckListItemID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="DroneFlight">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PilotID" Type="Int32" />
+    <Property Name="GSCID" Type="Int32" />
+    <Property Name="FlightDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="DroneID" Type="Int32" />
   </EntityType>
 </Schema>

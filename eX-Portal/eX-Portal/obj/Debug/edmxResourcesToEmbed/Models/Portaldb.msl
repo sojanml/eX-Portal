@@ -23,6 +23,9 @@
     <EntitySetMapping Name="DroneDefinitions">
       <EntityTypeMapping TypeName="ExponentPortalModel.DroneDefinition">
         <MappingFragment StoreEntitySet="DroneDefinition">
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
+          <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="FieldName" ColumnName="FieldName" />
           <ScalarProperty Name="BitLength" ColumnName="BitLength" />
@@ -32,8 +35,6 @@
           <ScalarProperty Name="RecordType" ColumnName="RecordType" />
           <ScalarProperty Name="IsActive" ColumnName="IsActive" />
           <ScalarProperty Name="LastModifiedOn" ColumnName="LastModifiedOn" />
-          <ScalarProperty Name="CommissionDate" ColumnName="CommissionDate" />
-          <ScalarProperty Name="SerialNo" ColumnName="SerialNo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -170,6 +171,9 @@
     <EntitySetMapping Name="MSTR_Drone">
       <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
         <MappingFragment StoreEntitySet="MSTR_Drone">
+          <ScalarProperty Name="DroneDefinitionID" ColumnName="DroneDefinitionID" />
+          <ScalarProperty Name="DroneSerialNo" ColumnName="DroneSerialNo" />
+          <ScalarProperty Name="CommissionDate" ColumnName="CommissionDate" />
           <ScalarProperty Name="DroneId" ColumnName="DroneId" />
           <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
           <ScalarProperty Name="ManufactureId" ColumnName="ManufactureId" />
@@ -194,6 +198,10 @@
     <EntitySetMapping Name="MSTR_DroneService">
       <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_DroneService">
         <MappingFragment StoreEntitySet="MSTR_DroneService">
+          <ScalarProperty Name="TypeOfServiceId" ColumnName="TypeOfServiceId" />
+          <ScalarProperty Name="DateOfService" ColumnName="DateOfService" />
+          <ScalarProperty Name="FlightHour" ColumnName="FlightHour" />
+          <ScalarProperty Name="TypeOfService" ColumnName="TypeOfService" />
           <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -211,6 +219,7 @@
     <EntitySetMapping Name="MSTR_Menu">
       <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Menu">
         <MappingFragment StoreEntitySet="MSTR_Menu">
+          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
           <ScalarProperty Name="MenuId" ColumnName="MenuId" />
           <ScalarProperty Name="MenuName" ColumnName="MenuName" />
           <ScalarProperty Name="ParentId" ColumnName="ParentId" />
@@ -375,6 +384,83 @@
           <ScalarProperty Name="Logitude" ColumnName="Logitude" />
           <ScalarProperty Name="Latitude" ColumnName="Latitude" />
           <ScalarProperty Name="ProHistoryId" ColumnName="ProHistoryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DroneCheckList">
+      <EntityTypeMapping TypeName="ExponentPortalModel.DroneCheckList">
+        <MappingFragment StoreEntitySet="DroneCheckList">
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+          <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+          <ScalarProperty Name="DroneCheckListID" ColumnName="DroneCheckListID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MSTR_DroneCheckList">
+      <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_DroneCheckList">
+        <MappingFragment StoreEntitySet="MSTR_DroneCheckList">
+          <ScalarProperty Name="CheckListSubTitle" ColumnName="CheckListSubTitle" />
+          <ScalarProperty Name="CheckListTitle" ColumnName="CheckListTitle" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MSTR_DroneCheckListItems">
+      <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_DroneCheckListItems">
+        <MappingFragment StoreEntitySet="MSTR_DroneCheckListItems">
+          <ScalarProperty Name="Responsibility" ColumnName="Responsibility" />
+          <ScalarProperty Name="FieldType" ColumnName="FieldType" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="SlNo" ColumnName="SlNo" />
+          <ScalarProperty Name="DroneCheckList_ID" ColumnName="DroneCheckList_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="usp_Portal_CreateDrone" FunctionName="ExponentPortalModel.Store.usp_Portal_CreateDrone">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ExponentPortalModel.usp_Portal_CreateDrone_Result">
+          <ScalarProperty Name="Column1" ColumnName="Column1" />
+          <ScalarProperty Name="Column2" ColumnName="Column2" />
+          <ScalarProperty Name="Column3" ColumnName="Column3" />
+          <ScalarProperty Name="Column4" ColumnName="Column4" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="usp_Portal_GetDroneDropDown" FunctionName="ExponentPortalModel.Store.usp_Portal_GetDroneDropDown">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ExponentPortalModel.usp_Portal_GetDroneDropDown_Result">
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="DroneCheckListItems">
+      <EntityTypeMapping TypeName="ExponentPortalModel.DroneCheckListItem">
+        <MappingFragment StoreEntitySet="DroneCheckListItem">
+          <ScalarProperty Name="DroneCheckListItemID" ColumnName="DroneCheckListItemID" />
+          <ScalarProperty Name="FieldNote" ColumnName="FieldNote" />
+          <ScalarProperty Name="FieldValue" ColumnName="FieldValue" />
+          <ScalarProperty Name="DroneCheckListID" ColumnName="DroneCheckListID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DroneFlights">
+      <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
+        <MappingFragment StoreEntitySet="DroneFlight">
+          <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />
+          <ScalarProperty Name="GSCID" ColumnName="GSCID" />
+          <ScalarProperty Name="PilotID" ColumnName="PilotID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
