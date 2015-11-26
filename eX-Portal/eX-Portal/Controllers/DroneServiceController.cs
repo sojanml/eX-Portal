@@ -14,9 +14,11 @@ namespace eX_Portal.Controllers
         // GET: DroneService
         public ActionResult Index()
         {
-            ViewBag.Title = "Drone Listing";
+            ViewBag.Title = "Drone Service Listing";
 
-            String SQL = "";
+            String SQL = " select  ROW_NUMBER() Over (Order by a.ServiceId) As SNo,  b.DroneName as DroneName,c.Name as ServiceType,a.DateOfService as DateOfService,a.FlightHour , a.Description,Count(*) Over() as _TotalRecords  " +
+                " from [ExponentPortal].[dbo].MSTR_DroneService a left join  [ExponentPortal].[dbo].MSTR_Drone b on a.DroneId = b.DroneId left join [ExponentPortal].[dbo].LUP_Drone c on a.TypeOfServiceId " +
+                "= c.TypeId where c.Type = 'ServiceType'"; 
             qView nView = new qView(SQL);
             if (Request.IsAjaxRequest())
             {
@@ -60,17 +62,15 @@ namespace eX_Portal.Controllers
                 // TODO: Add insert logic here
 
                 MSTR_DroneService DroneService= DroneServiceView.DroneService;
-<<<<<<< HEAD
-               
-=======
->>>>>>> 1f8fd9e9c1a0634541cc0c60242d778bd1502496
 
-                string SQL = "INSERT INTO MSTR_DRONESERVICE(Description,CreatedBy,CreatedOn,DroneId,TypeOfServiceId,TypeOfService,DateOfService) VALUES('"
+
+                string SQL = "INSERT INTO MSTR_DRONESERVICE(Description,CreatedBy,CreatedOn,DroneId,TypeOfServiceId,TypeOfService,DateOfService,FlightHour) VALUES('"
                           + DroneService.Description + "'," + Session["UserId"]
                          + ",'" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") +
-                         "','" + DroneService.DroneId + "'," + DroneService.ServiceId + ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'); ";
+                         "','" + DroneService.DroneId + "'," + DroneService.TypeOfService + ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'," + DroneService.FlightHour  +"); ";
                 int ID = Util.InsertSQL(SQL);
 
+                // return RedirectToAction("Index");
                 return RedirectToAction("Index");
             }
             catch
