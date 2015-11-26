@@ -7,7 +7,7 @@ using eX_Portal.Models;
 using eX_Portal.ViewModel;
 namespace eX_Portal.Controllers
 {
-    public class UserLoginController :Controller
+    public class UserController :Controller
     {
         // GET: UserLogin
         public ActionResult Login()
@@ -25,6 +25,7 @@ namespace eX_Portal.Controllers
             var _objuserdetail = (from data in objentity.MSTR_User
                                   where data.UserName == _objuserlogin.UserName                                  
                                   && data.Password == _objuserlogin.Password
+
                                   select data);
                          if (_objuserdetail.Count() > 0)
                              {
@@ -37,7 +38,7 @@ namespace eX_Portal.Controllers
                 // var UserId = objentity.Database.SqlQuery<string>(SQL);
 
                 Session["UserId"] = UserId;
-
+                Session["UserName"] = _objuserlogin.UserName;
                 return RedirectToAction("Index", "Home");
 
                                }
