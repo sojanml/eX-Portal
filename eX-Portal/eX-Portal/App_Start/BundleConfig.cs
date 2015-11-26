@@ -20,19 +20,20 @@ namespace eX_Portal {
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/respond.js"));
 
-
-
       bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/site.css"));
 
-
-
       bundles.Add(new ScriptBundle("~/bundles/dataTableScript").Include(
+                "~/jquery-ui/jquery-ui.min.js",
                 "~/dataTable/js/jquery.dataTables.js",
                 "~/Scripts/site.js"
                 ));
       bundles.Add(new StyleBundle("~/bundles/dataTableCss").Include(
-                "~/dataTable/css/jquery.dataTables.custom.css"));
+                "~/dataTable/css/jquery.dataTables.custom.css",
+                "~/jquery-ui/jquery-ui.min.css"
+                ));
+
+
 
     }
   }

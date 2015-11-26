@@ -24,7 +24,12 @@
         Btn.parent().append(getqViewMenu(pKey));
 
         //alert('Key: ' + pKey)
-      }); 
+      });
+
+
+      $('input.date-picker').datepicker({
+        dateFormat: 'dd-M-yy',
+      });
 
     });
 
