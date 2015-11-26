@@ -403,17 +403,22 @@ td.menu UL.qViewMenu li:hover {
   }
 
 /* general form formatting*/
-section.general-form {
+section.general-form,
+div.form-horizontal {
   width: 60%;
   margin:auto;
 }
 
-section.general-form div.editor-field {
+section.general-form div.editor-field,
+div.form-horizontal div.form-group {
   margin-bottom:20px;
 }
 
 section.general-form div.editor-field input,
-section.general-form div.editor-field select {
+section.general-form div.editor-field select,
+div.form-group input,
+div.form-group select
+ {
     width: 100%;
     padding: 5px;
     max-width: 100%;
@@ -422,4 +427,8 @@ section.general-form div.editor-field select {
     border: 1px silver solid;
     font-size: 12pt;
     font-family: 'Conv_DINNextLTPro-Light', Arial;
+}
+
+span.field-validation-error {
+  color: red;
 }

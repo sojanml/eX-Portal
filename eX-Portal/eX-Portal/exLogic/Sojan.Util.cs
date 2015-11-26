@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Data.Common;
 using System.Text.RegularExpressions;
 using eX_Portal.Models;
+using System.Web.Mvc;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
@@ -66,6 +67,36 @@ namespace eX_Portal.exLogic {
       sVal = sVal.Replace("'", "\\'");
       return sVal;
     }
+
+    public static IEnumerable<SelectListItem> GetDropDowntList(String TypeOfList) {
+      List<SelectListItem> SelectList = new List<SelectListItem>();
+      SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
+
+      String SQL = "SELECT 0 as Value, 'Not Available' as Name";
+      using (var ctx = new ExponentPortalEntities()) {
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
+          switch (TypeOfList.ToLower()) {
+            case "drone":
+              SQL = "SELECT [DroneId] as Value  ,[DroneName] as Name FROM [MSTR_Drone] ORDER BY [DroneName]";
+              break;
+            case "pilot":
+            case "gsc":
+              SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User ORDER BY FirstName";
+              break;
+          }
+          cmd.CommandText = SQL;
+          using (var reader = cmd.ExecuteReader()) {
+            while (reader.Read()) {
+              SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Value"].ToString() });
+            }
+          }
+
+          ctx.Database.Connection.Close();
+        } //using Database.Connection
+      }//using ExponentPortalEntities;
+      return SelectList; //return the list objects
+    }//function GetDropDowntList
 
   }//class Util
 }

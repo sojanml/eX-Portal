@@ -1,4 +1,5 @@
 ﻿using eX_Portal.exLogic;
+using eX_Portal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,33 @@ namespace eX_Portal.Controllers {
 
     }//Index()
 
+    public ActionResult Create() {
+
+      ViewBag.Title = "Create Drone Flight";
+      return View();
+    }
+
+    [HttpPost]
+    public ActionResult Create(DroneFlight theFlight) {
+      if (theFlight.DroneID < 1 || theFlight.DroneID == null) ModelState.AddModelError("DroneID", "You must select a Drone.");
+      if (theFlight.PilotID < 1 || theFlight.PilotID == null) ModelState.AddModelError("PilotID", "Pilot is required for a Flight.");
+      if (theFlight.GSCID < 1 || theFlight.GSCID == null) ModelState.AddModelError("GSCID", "A Ground Station Controller should be slected.");
+
+      if (ModelState.IsValid) {
+        int ID = 0;
+        ExponentPortalEntities db = new ExponentPortalEntities();
+        db.DroneFlights.Add(theFlight);
+        db.SaveChanges();
+        ID = theFlight.ID;
+        db.Dispose();
+        return RedirectToAction("Detail", new { ID = ID });
+      } else {
+        ViewBag.Title = "Create Drone Flight";
+        return View(theFlight);
+      }
+
+    }
+
     public ActionResult Detail(int ID = 0) {
       ViewBag.Title = "Drone Flight Details";
       ViewBag.FlightID = ID;
@@ -68,6 +96,7 @@ namespace eX_Portal.Controllers {
       "  [DroneCheckList].[FlightID] = " + ID.ToString();
 
       qView nView = new qView(SQL);
+
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
