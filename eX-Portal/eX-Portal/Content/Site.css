@@ -295,27 +295,23 @@ table.report tbody tr:hover td img.button {
 
 
 div.form-toolbar {
-  padding:10px 0px 10px 0px;
+  margin:10px 0px 10px 0px;
   text-align:right;
 }
 div.form-toolbar input,
 div.form-toolbar button {
     color: white;
-    font-size: 12pt;
-    font-weight: bold;
-    border-radius: 5px;
+    font-size: 16pt;
+    border-radius: 3px;
     height: auto;
-    background-color: gray;
-    padding: 5px 10px 5px 10px;
+    background-color: #484747;
+    padding: 5px 15px 5px 15px;
     border: none;
     cursor: pointer;
-  
+  font-family: 'Conv_DINNextLTPro-LightCondensed', Arial;
 }
 
 
-div.form-toolbar input[type=submit] {
-  background-color: forestgreen;
-}
 
 
 footer {
@@ -405,3 +401,25 @@ td.menu UL.qViewMenu li:hover {
   td.menu UL.qViewMenu li:hover a {
     color: white;
   }
+
+/* general form formatting*/
+section.general-form {
+  width: 60%;
+  margin:auto;
+}
+
+section.general-form div.editor-field {
+  margin-bottom:20px;
+}
+
+section.general-form div.editor-field input,
+section.general-form div.editor-field select {
+    width: 100%;
+    padding: 5px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 3px;
+    border: 1px silver solid;
+    font-size: 12pt;
+    font-family: 'Conv_DINNextLTPro-Light', Arial;
+}
