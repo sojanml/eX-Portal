@@ -50,15 +50,18 @@ namespace eX_Portal.exLogic {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
-          Result = cmd.ExecuteScalar().ToString();
+          var oResult = cmd.ExecuteScalar();
+          if (oResult != null)
+            Result = oResult.ToString();
         }
       }
       return Result;
     }
-
-    public String getQ(String FieldName) {
+     
+    public static String getQ(String FieldName) {
       HttpRequest Request = HttpContext.Current.Request;
-      return Request[FieldName].ToString();
+      String FieldValue = Request[FieldName];
+      return FieldValue == null ? "" : FieldValue.ToString();
     }
 
     public static String toSQL(String FieldValue) {
