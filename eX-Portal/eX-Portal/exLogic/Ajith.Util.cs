@@ -20,6 +20,7 @@ using System.Data.SqlClient;
     {
         //  ctx=new ExponentPortalEntities();
         List<SelectListItem> SelectList = new List<SelectListItem>();
+      
         using (var ctx = new ExponentPortalEntities())
         {
             using (var cmd = ctx.Database.Connection.CreateCommand())
@@ -56,6 +57,7 @@ using System.Data.SqlClient;
     public static IEnumerable<SelectListItem> DroneList(string SPName)
     {
         //  ctx=new ExponentPortalEntities();
+        
         List<SelectListItem> SelectList = new List<SelectListItem>();
         using (var ctx = new ExponentPortalEntities())
         {
@@ -87,6 +89,58 @@ using System.Data.SqlClient;
             }
         }
     }
+
+
+    public static IEnumerable<SelectListItem> DronePartsList(string SPName)
+    {
+        //  ctx=new ExponentPortalEntities();
+        List<SelectListItem> SelectList = new List<SelectListItem>();
+        using (var ctx = new ExponentPortalEntities())
+        {
+            using (var cmd = ctx.Database.Connection.CreateCommand())
+            {
+
+                ctx.Database.Connection.Open();
+
+
+                cmd.CommandText = "usp_Portal_GetDroneParts";
+                // DbParameter Param = cmd.CreateParameter();
+
+
+                //cmd.Parameters.Add(Param);
+                cmd.CommandType = CommandType.StoredProcedure;
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+
+                        SelectList.Add(new SelectListItem { Text = reader["PartsName"].ToString(), Value = reader["PartsId"].ToString() });
+
+                    }
+                }
+                DropDownList = SelectList.ToList();
+                ctx.Database.Connection.Close();
+                return DropDownList; //return the list objects
+
+            }
+        }
+    }
+
+
+
+    public static int GetServiceId()
+    {
+        int result = 0;
+        using (var ctx = new ExponentPortalEntities())
+        {
+            String SQL = "select MAX(ServiceId)as ServiceId from MSTR_DroneService";
+            int ServiceId = ctx.Database.SqlQuery<int>(SQL).FirstOrDefault<int>();
+            result = ServiceId;
+        }
+
+        return result;
+    }
+
 
 }
 

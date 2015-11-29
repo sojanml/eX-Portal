@@ -14,8 +14,6 @@ namespace eX_Portal.Models
     
     public partial class MSTR_Parts
     {
-        public int PartsGroupId { get; set; }
-        public string PartsGroupName { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
         public Nullable<int> ApprovedBy { get; set; }
@@ -25,5 +23,7 @@ namespace eX_Portal.Models
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> RecordType { get; set; }
         public string Description { get; set; }
+        public int PartsId { get; set; }
+        public string PartsName { get; set; }
     }
 }
