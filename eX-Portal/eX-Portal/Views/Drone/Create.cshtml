@@ -45,8 +45,9 @@
     <div class="editor-label">
       @Html.LabelFor(model => model.Drone.CommissionDate, "Commission Date")
     </div>
-    <div class="editor-field">
-      @Html.EditorFor(model => model.Drone.CommissionDate)
+    <div class="editor-field" >
+    
+      @Html.EditorFor(model => model.Drone.CommissionDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
       @Html.ValidationMessageFor(model => model.Drone.CommissionDate)
     </div>
 

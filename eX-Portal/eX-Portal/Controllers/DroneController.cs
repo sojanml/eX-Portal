@@ -70,12 +70,12 @@ namespace eX_Portal.Controllers
                 
                 MSTR_Drone Drone = DroneView.Drone;
 
-                int ID=Util.InsertSQL("INSERT INTO MSTR_DRONE(OWNERID,MANUFACTUREID,UAVTYPEID,COMMISSIONDATE) VALUES('"+Drone.OwnerId+"','"+Drone.ManufactureId+"','"+Drone.UavTypeId+"','"+Drone.CommissionDate.Value.ToString("yyyy-MM-dd")+"');");
+                int ID=Util.InsertSQL("INSERT INTO MSTR_DRONE(OWNERID,MANUFACTUREID,UAVTYPEID,COMMISSIONDATE,DRONEDEFINITIONID,ISACTIVE) VALUES('"+Drone.OwnerId+"','"+Drone.ManufactureId+"','"+Drone.UavTypeId+"','"+Drone.CommissionDate.Value.ToString("yyyy-MM-dd")+"',11,'True');");
                 return RedirectToAction("Index");
             }
             catch(Exception ex)
             {
-                return View();
+              return View(DroneView);
             }
         }
 

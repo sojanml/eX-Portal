@@ -416,8 +416,10 @@ div.form-horizontal div.form-group {
 
 section.general-form div.editor-field input,
 section.general-form div.editor-field select,
+section.general-form div.editor-field textarea,
 div.form-group input,
-div.form-group select
+div.form-group select,
+div.form-group textarea
  {
     width: 100%;
     padding: 5px;
@@ -428,7 +430,10 @@ div.form-group select
     font-size: 12pt;
     font-family: 'Conv_DINNextLTPro-Light', Arial;
 }
-
+section.general-form div.editor-field textarea,
+div.form-group textarea {
+  height: 80px;
+}
 span.field-validation-error {
   color: red;
 }
