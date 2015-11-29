@@ -8,7 +8,7 @@
     @using (Html.BeginForm())
     {
 
-
+  
 
         @Html.HiddenFor(model => model.DroneService.ServiceId)
 
@@ -30,6 +30,12 @@
 
         </div>
 
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DroneParts.PartsName, "Parts Name Type")
+        </div>
+        <div class="editor-field">
+            @Html.ListBoxFor(model => model.SelectItems, Model.DronePartsList, new { size = 6 })
+        </div>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.DroneService.Description, "Description")
@@ -56,7 +62,7 @@
             @Html.ValidationMessageFor(model => model.DroneService.DateOfService)
         </div>
 
-
+       
         <div class="form-toolbar">
             <input type="submit" value="Create" />
         </div>

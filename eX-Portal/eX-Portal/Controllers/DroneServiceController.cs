@@ -45,8 +45,8 @@ namespace eX_Portal.Controllers
                 DroneService = new MSTR_DroneService(),
 
                 ServiceType = Util1.GetDropDowntList("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
-                DroneList = Util1.DroneList("usp_Portal_DroneNameList")
-
+                DroneList = Util1.DroneList("usp_Portal_DroneNameList"),
+                DronePartsList=Util1.DronePartsList("usp_Portal_GetDroneParts")
 
             };
 
@@ -60,15 +60,33 @@ namespace eX_Portal.Controllers
             try
             {
                 // TODO: Add insert logic here
+                if (ModelState.IsValid)
+                {
 
-                MSTR_DroneService DroneService= DroneServiceView.DroneService;
+                    MSTR_DroneService DroneService = DroneServiceView.DroneService;
 
+                    
+                    string SQL = "INSERT INTO MSTR_DRONESERVICE(Description,CreatedBy,CreatedOn,DroneId,TypeOfServiceId,TypeOfService,DateOfService,FlightHour) VALUES('"
+                              + DroneService.Description + "'," + Session["UserId"]
+                             + ",'" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") +
+                             "','" + DroneService.DroneId + "'," + DroneService.TypeOfService + ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'," + DroneService.FlightHour + "); ";
+                    int ID = Util.InsertSQL(SQL);
 
-                string SQL = "INSERT INTO MSTR_DRONESERVICE(Description,CreatedBy,CreatedOn,DroneId,TypeOfServiceId,TypeOfService,DateOfService,FlightHour) VALUES('"
-                          + DroneService.Description + "'," + Session["UserId"]
-                         + ",'" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") +
-                         "','" + DroneService.DroneId + "'," + DroneService.TypeOfService + ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'," + DroneService.FlightHour  +"); ";
-                int ID = Util.InsertSQL(SQL);
+                    int ServiceId = Util1.GetServiceId();
+                    for (var count=0;count< DroneServiceView.SelectItems.Count();count++)
+                    {
+                        //int PartsId = Int32.Parse((DroneServiceView.SelectItems)[2])
+
+                       string PartsId=    ((string[])DroneServiceView.SelectItems)[count];
+                       SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId) values(" + ServiceId +"," + PartsId + ");";
+
+                        ID = Util.InsertSQL(SQL);
+                    }
+
+                 
+                        
+
+                }
 
                 // return RedirectToAction("Index");
                 return RedirectToAction("Index");

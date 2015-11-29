@@ -232,7 +232,7 @@
           <Property Name="DroneIdBitString" Type="nvarchar" MaxLength="96" />
           <Property Name="RecordType" Type="int" />
           <Property Name="IsActive" Type="bit" />
-          <Property Name="DroneIdHexa" Type="varchar" MaxLength="24" />
+          <Property Name="DroneIdHexa" Type="nvarchar" MaxLength="255" />
           <Property Name="DroneIdBarCode" Type="nvarchar" MaxLength="50" />
           <Property Name="CommissionDate" Type="datetime" />
           <Property Name="DroneSerialNo" Type="int" />
@@ -301,10 +301,8 @@
         </EntityType>
         <EntityType Name="MSTR_Parts">
           <Key>
-            <PropertyRef Name="PartsGroupId" />
+            <PropertyRef Name="PartsId" />
           </Key>
-          <Property Name="PartsGroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PartsGroupName" Type="nvarchar" MaxLength="50" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ApprovedBy" Type="int" />
@@ -314,6 +312,8 @@
           <Property Name="IsActive" Type="bit" />
           <Property Name="RecordType" Type="int" />
           <Property Name="Description" Type="nvarchar" MaxLength="100" />
+          <Property Name="PartsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartsName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MSTR_Product">
           <Key>
@@ -673,7 +673,7 @@
           <Property Name="DroneIdBitString" Type="String" MaxLength="96" FixedLength="false" Unicode="true" />
           <Property Name="RecordType" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" />
-          <Property Name="DroneIdHexa" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Name="DroneIdHexa" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="DroneIdBarCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CommissionDate" Type="DateTime" Precision="3" />
           <Property Name="DroneSerialNo" Type="Int32" />
@@ -723,10 +723,8 @@
         </EntityType>
         <EntityType Name="MSTR_Parts">
           <Key>
-            <PropertyRef Name="PartsGroupId" />
+            <PropertyRef Name="PartsId" />
           </Key>
-          <Property Name="PartsGroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PartsGroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ApprovedBy" Type="Int32" />
@@ -736,6 +734,8 @@
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="RecordType" Type="Int32" />
           <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PartsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartsName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_Product">
           <Key>
@@ -1226,8 +1226,8 @@
           <EntitySetMapping Name="MSTR_Parts">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Parts">
               <MappingFragment StoreEntitySet="MSTR_Parts">
-                <ScalarProperty Name="PartsGroupId" ColumnName="PartsGroupId" />
-                <ScalarProperty Name="PartsGroupName" ColumnName="PartsGroupName" />
+                <ScalarProperty Name="PartsName" ColumnName="PartsName" />
+                <ScalarProperty Name="PartsId" ColumnName="PartsId" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
