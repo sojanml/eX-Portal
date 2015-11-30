@@ -57,7 +57,27 @@ namespace eX_Portal.exLogic {
       }
       return Result;
     }
-     
+
+    public static Dictionary<String, Object> getDBRow(String SQL) {
+      var Result = new Dictionary<String, Object>();
+      Result["hasRows"] = false;
+      using (var ctx = new ExponentPortalEntities()) {
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          using (var reader = cmd.ExecuteReader()) {
+            if (reader.Read()) {
+              Result["hasRows"] = true;
+              for (int i = 0; i < reader.FieldCount; i++) {
+                Result[reader.GetName(i)] = reader.GetValue(i);
+              }//for
+            }//if
+          }//using reader
+        }//using ctx.Database.Connection.CreateCommand
+      }//using ExponentPortalEntities
+      return Result;
+    }//function
+
     public static String getQ(String FieldName) {
       HttpRequest Request = HttpContext.Current.Request;
       String FieldValue = Request[FieldName];

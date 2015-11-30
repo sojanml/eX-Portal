@@ -1,0 +1,17 @@
+﻿
+@{
+  int DroneID = ViewBag.DroneID;
+}
+@Html.Action("DroneDetail", new { ID = DroneID })
+
+
+<h2>Create a Checklist</h2>
+
+@Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })
+
+
+@section scripts {
+  <script type="text/javascript">
+
+  </script>
+}

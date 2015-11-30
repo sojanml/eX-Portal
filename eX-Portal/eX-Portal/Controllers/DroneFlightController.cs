@@ -85,7 +85,8 @@ namespace eX_Portal.Controllers {
       "  MSTR_DroneCheckList.CheckListSubTitle,\n" +
       "  MSTR_User.FirstName as CreatedBy,\n" +
       "  [DroneCheckList].[CreatedOn],\n" +
-      "  Count(*) Over() as _TotalRecords \n" +
+      "  Count(*) Over() as _TotalRecords, \n" +
+      "  [DroneCheckList].[ID] as _PKey\n" +
       "FROM\n" +
       "[DroneCheckList]\n" +
       "LEFT JOIN MSTR_DroneCheckList ON\n" +
@@ -96,7 +97,7 @@ namespace eX_Portal.Controllers {
       "  [DroneCheckList].[FlightID] = " + ID.ToString();
 
       qView nView = new qView(SQL);
-
+      nView.addMenu("View", Url.Action("View", "DroneCheckList", new { ID = "_PKey" }));
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);

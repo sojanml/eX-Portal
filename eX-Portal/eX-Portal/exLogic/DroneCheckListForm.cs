@@ -8,10 +8,12 @@ using System.Web.Mvc;
 namespace eX_Portal.exLogic {
   public class DroneCheckListForm {
     private int pCheckListID = 0;
-    public String CheckListTitle {get; set;}
+    public String CheckListTitle { get; set; }
     public String CheckListSubTitle { get; set; }
     public int FlightID { get; set; }
     public int DroneID { get; set; }
+    public int DroneCheckListID { get; set; }
+    public int ThisCheckListID { get; set; }
 
     public List<CheckItem> HeaderCheckItems = new List<CheckItem>();
     public List<CheckItem> CheckItems = new List<CheckItem>();
@@ -21,7 +23,7 @@ namespace eX_Portal.exLogic {
 
 
     //constructior
-    public DroneCheckListForm( int CheckListID, int DroneID= 0, int FlightID = 0) {
+    public DroneCheckListForm(int CheckListID, int DroneID = 0, int FlightID = 0) {
       this.FlightID = FlightID;
       this.DroneID = DroneID;
       this.CheckListID = CheckListID;
@@ -29,7 +31,7 @@ namespace eX_Portal.exLogic {
     //constructior
     public DroneCheckListForm(int CheckListID) {
       this.CheckListID = CheckListID;
-     
+
     }//Constructor
 
     public int CheckListID {
@@ -40,7 +42,7 @@ namespace eX_Portal.exLogic {
         pCheckListID = value;
         init();
       }
-     }
+    }
 
     private void init() {
       using (var ctx = new ExponentPortalEntities())
@@ -100,10 +102,10 @@ namespace eX_Portal.exLogic {
     public int saveCheckList() {
       String SQL = "";
       String UserID = Session["UserID"] == null ? "1" : Session["UserID"].ToString();
- 
+
 
       //Save the header of checklist
-      SQL = 
+      SQL =
       "INSERT INTO [DroneCheckList](\n" +
       "   [DroneCheckListID],\n" +
       "   [DroneID],\n" +
@@ -111,7 +113,7 @@ namespace eX_Portal.exLogic {
       "   [CreatedBy],\n" +
       "   [CreatedOn]\n" +
       ") VALUES(\n" +
-      "  "+ CheckListID.ToString() + ",\n" +
+      "  " + CheckListID.ToString() + ",\n" +
       "  0,\n" +
       "  " + FlightID.ToString() + ",\n" +
       "  '" + UserID + "',\n" +
@@ -119,16 +121,16 @@ namespace eX_Portal.exLogic {
       ")";
 
       var DroneCheckListID = Util.InsertSQL(SQL);
-       
 
-      foreach(var item in HeaderCheckItems) {
+
+      foreach (var item in HeaderCheckItems) {
         item.saveCheckListItem(DroneCheckListID);
       }
       foreach (var item in CheckItems) {
         item.saveCheckListItem(DroneCheckListID);
       }
       return DroneCheckListID;
-    } 
+    }
 
     public bool saveValidation() {
 
@@ -141,26 +143,56 @@ namespace eX_Portal.exLogic {
       return true;
     }
 
+    public List<ValidationMap> getValidationMessages(int ThisCheckListID) {
+      String SQL = "SELECT\n" +
+        "  DroneFlight.DroneID\n" +
+        "FROM\n" +
+        "  DroneCheckList,\n" +
+        "  DroneFlight\n" +
+        "WHERE\n" +
+        "  DroneFlight.ID = DroneCheckList.FlightID and\n" +
+        "  DroneCheckList.ID =" + ThisCheckListID;
+
+      List<ValidationMap> ValidationMessages = new List<ValidationMap>();
+      //Load the drone ID to check against 
+      String sDroneID = Util.getDBVal(SQL);
+      DroneID = Int32.Parse(sDroneID);
+
+      //check the validation agains the saved checklist for drone
+      foreach (var item in CheckItems) {
+        if (!item.isValidated(ThisCheckListID, DroneID)) {
+          ValidationMessages.Add(new ValidationMap {
+            ItemTitle = item.Title,
+            FieldType = item.FieldType,
+            SlNo = item.SlNo
+          });
+        };
+      }
+
+      return ValidationMessages;
+    }
+
   }//class
 
   public class CheckItem {
     private HttpRequest Request = HttpContext.Current.Request;
-    private int sID  ;
-    
+    private int sID;
+
     public Decimal SlNo { get; set; }
     public String Title { get; set; }
     public String Responsibility { get; set; }
     public String FieldType { get; set; }
 
-    public String FieldValue {get; set; }
+    public String FieldValue { get; set; }
     public String FieldNote { get; set; }
 
     public int CheckListID { get; set; }
     public int FlightID { get; set; }
     public int DroneID { get; set; }
+    public bool isValid { get; set; }
 
     public int ID {
-      get {        
+      get {
         return sID;
       }
       set {
@@ -176,16 +208,29 @@ namespace eX_Portal.exLogic {
     }
 
 
+
     private void setValues(int FieldID) {
       FieldValue = Request["Field_" + FieldID] != null ? Request["Field_" + FieldID].ToString() : "";
       FieldNote = Request["FieldNote_" + FieldID] != null ? Request["FieldNote_" + FieldID].ToString() : "";
     }//setValues
 
+    public String getValue() {
+      if(this.FieldType.ToLower() == "checkbox") {
+        if(this.FieldValue.ToString() == "1") {
+          return "Passed";
+        } else {
+          return "Failed";
+        }
+      } else {
+        return this.FieldValue;
+      }
+    }
+
     //generate form field for the item
     public String DisplayField() {
       String Field = "";
       switch (FieldType.ToLower()) {
-        case "textbox":          
+        case "textbox":
           Field = "<input type=\"text\" value=\"" + HttpUtility.HtmlDecode(FieldValue) + "\" name=\"Field_" + ID.ToString() + "\">";
           break;
         case "checkbox":
@@ -198,7 +243,7 @@ namespace eX_Portal.exLogic {
 
     public String DisplayNote() {
       String Field = "";
-          Field = "<input type=\"text\" value=\"" + HttpUtility.HtmlDecode(FieldNote) + "\" name=\"FieldNote_" + ID.ToString() + "\">";
+      Field = "<input type=\"text\" value=\"" + HttpUtility.HtmlDecode(FieldNote) + "\" name=\"FieldNote_" + ID.ToString() + "\">";
 
       return Field;
     }//DisplayField()
@@ -207,7 +252,7 @@ namespace eX_Portal.exLogic {
       String SQL = "";
 
 
-      SQL = "INSERT INTO [DroneCheckListItem](\n" +        
+      SQL = "INSERT INTO [DroneCheckListItem](\n" +
         "  [DroneCheckListID],\n" +
         "  [DroneCheckListItemID],\n" +
         "  [FieldValue],\n" +
@@ -247,7 +292,7 @@ namespace eX_Portal.exLogic {
       Decimal FieldValue = getValidationFieldValue(Sufix);
       switch (FieldType.ToLower()) {
         case "textbox":
-          String showFieldValue = FieldValue > 0 ? FieldValue.ToString(): "";
+          String showFieldValue = FieldValue > 0 ? FieldValue.ToString() : "";
           Field = "<input type=\"text\" value=\"" + showFieldValue + "\" name=\"Field_" + Sufix + "_" + ID.ToString() + "\">";
           break;
         case "checkbox":
@@ -272,12 +317,12 @@ namespace eX_Portal.exLogic {
 
       String MinFieldValue = Util.getQ("Field_Min_" + ID);
       String MaxFieldValue = Util.getQ("Field_Max_" + ID);
-      if(FieldType.ToLower() == "checkbox") {
+      if (FieldType.ToLower() == "checkbox") {
         String FieldValue = Util.getQ("Field_" + ID);
         if (FieldValue == "1") {
           MinFieldValue = "1";
           MaxFieldValue = "1";
-        }else {
+        } else {
           MinFieldValue = "0";
           MaxFieldValue = "0";
         }
@@ -289,7 +334,7 @@ namespace eX_Portal.exLogic {
       String SQL = "DELETE FROM [DroneCheckListValidation] WHERE \n" +
         "  [DroneID]= " + DroneID + " AND\n" +
         "  [DroneCheckListID] = " + CheckListID + " AND\n" +
-        "  [DroneCheckListItemID] = " + ID ;
+        "  [DroneCheckListItemID] = " + ID;
       Util.doSQL(SQL);
 
       //Save Mi
@@ -313,6 +358,65 @@ namespace eX_Portal.exLogic {
       Util.doSQL(SQL);
       return true;
     }
+
+    public bool isValidated(int ThisCheckListID, int DroneID) {
+      String SQL;
+      String sFieldValue;
+      Decimal FieldValue = 0;
+      bool Validated = true;
+      SQL = "SELECT FieldValue, FieldNote FROM [DroneCheckListItem] WHERE\n" +
+        "  [DroneCheckListID] = " + ThisCheckListID + " AND\n" +
+        "  [DroneCheckListItemID] = " + ID;
+      var Result = Util.getDBRow(SQL);
+
+      sFieldValue = Result["FieldValue"].ToString();
+      this.FieldNote = Result["FieldNote"].ToString();
+      this.FieldValue = sFieldValue;
+      try {
+        FieldValue = Convert.ToDecimal(sFieldValue);
+      }  catch(Exception e) {
+        //error in parsing data. set to zero
+        FieldValue = 0;
+      }
+
+      SQL = "SELECT MinValue, MaxValue FROM [DroneCheckListValidation] WHERE \n" +
+        "  [DroneID]= " + DroneID + " AND\n" +
+        "  [DroneCheckListID] = " + CheckListID + " AND\n" +
+        "  [DroneCheckListItemID] = " + ID;
+
+      Result = Util.getDBRow(SQL);
+      if ((bool)Result["hasRows"]) {
+        Decimal MinValue = (Decimal)Result["MinValue"];
+        Decimal MaxValue = (Decimal)Result["MaxValue"];
+        if (MinValue > 0 && MaxValue > 0 && FieldValue >= MinValue && FieldValue <= MaxValue) {
+          Validated = true;
+        } else if (MinValue == 0 && MaxValue == 0) {
+          Validated = true;
+        } else {
+          Validated = false;
+        }
+      }
+
+      this.isValid = Validated;
+      return Validated;
+
+    }//function isValidated
+
   }//class CheckItem
+
+
+  public class ValidationMap {
+    public String ItemTitle { get; set; }
+    public String FieldType { get; set; }
+    public Decimal SlNo { get; set; }
+    public String getMessage() {
+      String Message = "Checkpoint failed";
+      if(FieldType.ToLower() == "textbox") {
+        return "Value is not in range.";
+      }
+      return Message;
+    }
+
+  }
 
 }//namespace
