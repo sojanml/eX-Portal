@@ -120,6 +120,9 @@
     <Property Name="ServiceId" Type="Int32" />
     <NavigationProperty Name="M2M_DroneServiceParts1" Relationship="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts" ToRole="M2M_DroneServiceParts1" />
     <NavigationProperty Name="M2M_DroneServiceParts2" Relationship="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts1" ToRole="M2M_DroneServiceParts" />
+    <Property Name="PartsId" Type="Int32" />
+    <Property Name="ServicePartsType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="QtyCount" Type="Int32" />
   </EntityType>
   <EntityType Name="M2M_UserAccount">
     <Key>
@@ -180,7 +183,7 @@
     <Property Name="DroneIdBitString" Type="String" MaxLength="96" FixedLength="false" Unicode="true" />
     <Property Name="RecordType" Type="Int32" />
     <Property Name="IsActive" Type="Boolean" />
-    <Property Name="DroneIdHexa" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
+    <Property Name="DroneIdHexa" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="DroneIdBarCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="CommissionDate" Type="DateTime" Precision="3" />
     <Property Name="DroneSerialNo" Type="Int32" />
@@ -225,13 +228,13 @@
     <Property Name="RecordType" Type="Int32" />
     <Property Name="IsActive" Type="Boolean" />
     <Property Name="SortOrder" Type="Int32" />
+    <Property Name="Visible" Type="Boolean" />
+    <Property Name="PermissionId" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="MSTR_Parts">
     <Key>
-      <PropertyRef Name="PartsGroupId" />
+      <PropertyRef Name="PartsId" />
     </Key>
-    <Property Name="PartsGroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PartsGroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="CreatedBy" Type="Int32" />
     <Property Name="ModifiedBy" Type="Int32" />
     <Property Name="ApprovedBy" Type="Int32" />
@@ -241,6 +244,10 @@
     <Property Name="IsActive" Type="Boolean" />
     <Property Name="RecordType" Type="Int32" />
     <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="PartsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PartsName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SupplierId" Type="Int32" />
+    <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="MSTR_Product">
     <Key>

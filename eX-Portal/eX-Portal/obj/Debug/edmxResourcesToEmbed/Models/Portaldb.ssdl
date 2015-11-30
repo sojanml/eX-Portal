@@ -151,6 +151,9 @@
     <Property Name="RecordType" Type="int" />
     <Property Name="IsActive" Type="bit" />
     <Property Name="ServiceId" Type="int" />
+    <Property Name="PartsId" Type="int" />
+    <Property Name="ServicePartsType" Type="nvarchar" MaxLength="10" />
+    <Property Name="QtyCount" Type="int" />
   </EntityType>
   <EntityType Name="M2M_UserAccount">
     <Key>
@@ -227,7 +230,7 @@
     <Property Name="DroneIdBitString" Type="nvarchar" MaxLength="96" />
     <Property Name="RecordType" Type="int" />
     <Property Name="IsActive" Type="bit" />
-    <Property Name="DroneIdHexa" Type="varchar" MaxLength="24" />
+    <Property Name="DroneIdHexa" Type="nvarchar" MaxLength="255" />
     <Property Name="DroneIdBarCode" Type="nvarchar" MaxLength="50" />
     <Property Name="CommissionDate" Type="datetime" />
     <Property Name="DroneSerialNo" Type="int" />
@@ -291,13 +294,13 @@
     <Property Name="RecordType" Type="int" />
     <Property Name="IsActive" Type="bit" />
     <Property Name="SortOrder" Type="int" />
+    <Property Name="Visible" Type="bit" />
+    <Property Name="PermissionId" Type="nvarchar" MaxLength="15" />
   </EntityType>
   <EntityType Name="MSTR_Parts">
     <Key>
-      <PropertyRef Name="PartsGroupId" />
+      <PropertyRef Name="PartsId" />
     </Key>
-    <Property Name="PartsGroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="PartsGroupName" Type="nvarchar" MaxLength="50" />
     <Property Name="CreatedBy" Type="int" />
     <Property Name="ModifiedBy" Type="int" />
     <Property Name="ApprovedBy" Type="int" />
@@ -307,6 +310,10 @@
     <Property Name="IsActive" Type="bit" />
     <Property Name="RecordType" Type="int" />
     <Property Name="Description" Type="nvarchar" MaxLength="100" />
+    <Property Name="PartsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PartsName" Type="nvarchar" MaxLength="50" />
+    <Property Name="SupplierId" Type="int" />
+    <Property Name="Model" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="MSTR_Product">
     <Key>

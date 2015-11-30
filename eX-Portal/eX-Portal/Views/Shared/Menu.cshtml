@@ -1,0 +1,53 @@
+﻿
+@{
+    List<eX_Portal.ViewModel.MenuModel> menuList = ViewBag.Menu;
+}
+<ul id="navigation" class="menu">
+
+    @foreach (var mp in menuList.Where(p => p.ParentId == 0))
+    {
+
+        <li>
+            <a href=@mp.PageUrl>@mp.Name</a>
+            @if (menuList.Count(p => p.ParentId == mp.Id) > 0)
+            {
+                @:<ul>
+        }
+
+            @RenderMenuItem(menuList, mp)
+
+            @if (menuList.Count(p => p.ParentId == mp.Id) > 0)
+            {
+                @:</ul>
+        }
+
+        </li>
+    }
+</ul>
+
+
+@helper RenderMenuItem(List<eX_Portal.ViewModel.MenuModel> menuList, eX_Portal.ViewModel.MenuModel mi)
+{
+foreach (var cp in menuList.Where(p => p.ParentId == mi.Id))
+{
+
+
+        @:<li>
+            <a href=@cp.PageUrl>@cp.Name</a>
+
+    if (menuList.Count(p => p.ParentId == cp.Id) > 0)
+    {
+            @:<ul>
+        }
+
+        @RenderMenuItem(menuList, cp)
+    if (menuList.Count(p => p.ParentId == cp.Id) > 0)
+    {
+            @:</ul>
+      }
+    else
+    {
+            @:</li>
+      }
+    }
+}

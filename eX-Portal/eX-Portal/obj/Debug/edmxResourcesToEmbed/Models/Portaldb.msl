@@ -111,6 +111,9 @@
     <EntitySetMapping Name="M2M_DroneServiceParts">
       <EntityTypeMapping TypeName="ExponentPortalModel.M2M_DroneServiceParts">
         <MappingFragment StoreEntitySet="M2M_DroneServiceParts">
+          <ScalarProperty Name="QtyCount" ColumnName="QtyCount" />
+          <ScalarProperty Name="ServicePartsType" ColumnName="ServicePartsType" />
+          <ScalarProperty Name="PartsId" ColumnName="PartsId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="PartsGroupId" ColumnName="PartsGroupId" />
           <ScalarProperty Name="Description" ColumnName="Description" />
@@ -219,6 +222,8 @@
     <EntitySetMapping Name="MSTR_Menu">
       <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Menu">
         <MappingFragment StoreEntitySet="MSTR_Menu">
+          <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
+          <ScalarProperty Name="Visible" ColumnName="Visible" />
           <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
           <ScalarProperty Name="MenuId" ColumnName="MenuId" />
           <ScalarProperty Name="MenuName" ColumnName="MenuName" />
@@ -240,8 +245,10 @@
     <EntitySetMapping Name="MSTR_Parts">
       <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Parts">
         <MappingFragment StoreEntitySet="MSTR_Parts">
-          <ScalarProperty Name="PartsGroupId" ColumnName="PartsGroupId" />
-          <ScalarProperty Name="PartsGroupName" ColumnName="PartsGroupName" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+          <ScalarProperty Name="PartsName" ColumnName="PartsName" />
+          <ScalarProperty Name="PartsId" ColumnName="PartsId" />
           <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
           <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
           <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />

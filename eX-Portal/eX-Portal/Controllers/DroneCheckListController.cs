@@ -29,6 +29,58 @@ namespace eX_Portal.Controllers {
       return RedirectToAction("Detail", "DroneFlight", new { ID = CheckList.FlightID });
     }//Index
 
+<<<<<<< HEAD
+=======
+
+    public ActionResult View([Bind(Prefix = "ID")] int ThisCheckListID = 0) {
+      //if (FlightID == 0) Int32.TryParse(Request["FlightID"], out FlightID);
+      var Result = Util.getDBRow("SELECT [DroneCheckListID],[FlightID] FROM [DroneCheckList] WHERE [ID]=" + ThisCheckListID);
+      if (!(bool)Result["hasRows"]) {
+        return RedirectToAction("Error", "Home");
+      } else {
+        int CheckListID = Int32.Parse(Result["DroneCheckListID"].ToString());
+        ViewBag.Title = "View Checklist";
+        ViewBag.FlightID = Result["FlightID"].ToString();
+        DroneCheckListForm CheckList = new DroneCheckListForm(CheckListID);
+        CheckList.getValidationMessages(ThisCheckListID);
+        return View(CheckList);
+      }
+    }//Index
+
+    public ActionResult Complete([Bind(Prefix = "ID")] int ThisCheckListID = 0) {
+      var Result = Util.getDBRow("SELECT [DroneCheckListID],[FlightID] FROM [DroneCheckList] WHERE [ID]=" + ThisCheckListID);
+      List<ValidationMap> Validated = new List<ValidationMap>();
+      if (!(bool)Result["hasRows"]) {
+        return RedirectToAction("Error", "Home");
+      } else {
+        int CheckListID = Int32.Parse(Result["DroneCheckListID"].ToString());
+        ViewBag.FlightID = Result["FlightID"].ToString();
+        ViewBag.ThisCheckListID = ThisCheckListID;
+        DroneCheckListForm CheckList = new DroneCheckListForm(CheckListID);
+        CheckList.ThisCheckListID = ThisCheckListID;
+        Validated = CheckList.getValidationMessages(ThisCheckListID);
+        //Process to save Checklist files
+        ViewBag.Title = "Confirm Checklist Action - " + CheckList.CheckListTitle;
+      }
+      return View(Validated);
+    }//Index
+
+    [HttpPost]
+    [ActionName("Complete")]
+    public ActionResult PostComplete([Bind(Prefix = "ID")] int ThisCheckListID = 0, int FlightID = 0) {
+      int IsOverride = Util.getQ("Override") == "1" ? 1 : 0;
+      String SQL = "Update DroneCheckList SET \n" +
+        "  IsOverride =" + IsOverride + ",\n" +
+        " Comments='" + Util.getQ("Comments") + "',\n" +
+        " SignedBy='" + Util.getQ("SignedBy") + "'\n" +
+        "WHERE\n" +
+        "  ID=" + ThisCheckListID;
+      Util.doSQL(SQL);
+
+      return RedirectToAction("Detail", "DroneFlight", new { ID = FlightID });
+    }
+
+>>>>>>> cbd8da4440f926610cb438281d69a9c01c1704bc
     public ActionResult Details(int ID = 0) {
       ViewBag.FlightID = ID.ToString();
       ViewBag.Title = "View Checklist";

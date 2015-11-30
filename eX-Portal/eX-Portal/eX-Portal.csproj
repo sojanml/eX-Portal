@@ -301,26 +301,41 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\Antlr3.Runtime.pdb" />
     <Content Include="bin\EntityFramework.dll" />
     <Content Include="bin\EntityFramework.SqlServer.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.xml" />
+    <Content Include="bin\EntityFramework.xml" />
     <Content Include="bin\eX-Portal.dll" />
     <Content Include="bin\eX-Portal.pdb" />
     <Content Include="bin\Microsoft.AspNet.Identity.Core.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.xml" />
     <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.xml" />
     <Content Include="bin\Microsoft.AspNet.Identity.Owin.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Owin.xml" />
     <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
-    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
     <Content Include="bin\Microsoft.Owin.dll" />
     <Content Include="bin\Microsoft.Owin.Host.SystemWeb.dll" />
+    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.xml" />
     <Content Include="bin\Microsoft.Owin.Security.Cookies.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Cookies.xml" />
     <Content Include="bin\Microsoft.Owin.Security.dll" />
     <Content Include="bin\Microsoft.Owin.Security.Facebook.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Facebook.xml" />
     <Content Include="bin\Microsoft.Owin.Security.Google.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Google.xml" />
     <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.xml" />
     <Content Include="bin\Microsoft.Owin.Security.OAuth.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.OAuth.xml" />
     <Content Include="bin\Microsoft.Owin.Security.Twitter.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Twitter.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.xml" />
+    <Content Include="bin\Microsoft.Owin.xml" />
     <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
     <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Newtonsoft.Json.xml" />
     <Content Include="bin\Owin.dll" />
     <Content Include="bin\roslyn\csc.exe" />
     <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
@@ -332,12 +347,19 @@
     <Content Include="bin\roslyn\vbc.exe" />
     <Content Include="bin\roslyn\VBCSCompiler.exe" />
     <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Helpers.xml" />
     <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Mvc.xml" />
     <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Optimization.xml" />
     <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.Razor.xml" />
     <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
     <Content Include="bin\System.Web.WebPages.dll" />
     <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.xml" />
     <Content Include="bin\WebGrease.dll" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -373,6 +395,15 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="images\logo.png" />
+    <Content Include="jquery-ui\index.html" />
+    <Content Include="jquery-ui\jquery-ui.css" />
+    <Content Include="jquery-ui\jquery-ui.js" />
+    <Content Include="jquery-ui\jquery-ui.min.css" />
+    <Content Include="jquery-ui\jquery-ui.min.js" />
+    <Content Include="jquery-ui\jquery-ui.structure.css" />
+    <Content Include="jquery-ui\jquery-ui.structure.min.css" />
+    <Content Include="jquery-ui\jquery-ui.theme.css" />
+    <Content Include="jquery-ui\jquery-ui.theme.min.css" />
     <Content Include="Models\Portaldb.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Portaldb.Context.cs</LastGenOutput>
@@ -383,6 +414,11 @@
       <LastGenOutput>Portaldb.cs</LastGenOutput>
       <DependentUpon>Portaldb.edmx</DependentUpon>
     </Content>
+    <Content Include="obj\Debug\eX-Portal.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\eX-Portal.dll" />
+    <Content Include="obj\Debug\eX-Portal.pdb" />
+    <Content Include="obj\Debug\TempPE\Models.Portaldb.cs.dll" />
+    <Content Include="obj\Debug\TempPE\Models.Portaldb.Designer.cs.dll" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="fonts\DINNextLTPro-Light.eot" />
@@ -400,6 +436,11 @@
     <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
     <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\Portaldb.csdl" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\Portaldb.msl" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\Portaldb.ssdl" />
+    <Content Include="obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -412,7 +453,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\site.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -460,10 +500,12 @@
     <Content Include="Views\DroneFlight\Index.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\UserLogin\Login.cshtml" />
-    <Content Include="Views\Design\SystemMenu.cshtml" />
-    <Content Include="Views\DroneService\Create.cshtml" />
-    <Content Include="Views\DroneService\Index.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\DroneService\Create.cshtml" />
+    <Content Include="Views\Design\SystemMenu.cshtml" />
+    <Content Include="Views\DroneService\Index.cshtml" />
+    <Content Include="Views\DroneService\Details.cshtml" />
+    <Content Include="Views\DroneCheckList\Complete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
