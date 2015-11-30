@@ -18,7 +18,7 @@ namespace eX_Portal.Controllers
 
             String SQL = " select  ROW_NUMBER() Over (Order by a.ServiceId) As SNo, " +
                 " b.DroneName as DroneName,c.Name as ServiceType,a.DateOfService as DateOfService,a.FlightHour"+
-                " , a.Description,Count(*) Over() as _TotalRecords ,  a.ServiceId as _PKey  ,b.DroneId as _PDroneId " +
+                " , a.Description,Count(*) Over() as _TotalRecords ,  a.ServiceId as _PKey "  +
                 " from [ExponentPortal].[dbo].MSTR_DroneService a left join" +
                 "[ExponentPortal].[dbo].MSTR_Drone b on a.DroneId = b.DroneId" +
                 " left join [ExponentPortal].[dbo].LUP_Drone c on a.TypeOfServiceId " +
