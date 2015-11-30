@@ -298,6 +298,17 @@ table.report tbody tr:hover td img.button {
  visibility:visible;
 }
 
+table.report a.delete {
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+}
+
 
 div.form-toolbar {
   margin:10px 0px 10px 0px;
