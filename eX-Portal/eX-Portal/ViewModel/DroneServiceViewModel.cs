@@ -9,7 +9,9 @@ namespace eX_Portal.ViewModel
 {
     public class DroneServiceViewModel
     {
-        public IEnumerable<string> SelectItems { set; get; }
+        public string DroneID { set; get; }
+        public IEnumerable<string> SelectItemsForRefurbished { set; get; }
+       public IEnumerable<string> SelectItemsForReplaced { set; get; }
         public IEnumerable<SelectListItem> ServiceType { get; set; }
         public IEnumerable<SelectListItem> DroneList { get; set; }
         public IEnumerable<SelectListItem> DronePartsList { get; set; }
