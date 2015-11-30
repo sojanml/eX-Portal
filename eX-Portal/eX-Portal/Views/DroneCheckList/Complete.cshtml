@@ -1,1 +1,52 @@
-﻿<h1>Complete</h1>
+﻿@model List<eX_Portal.exLogic.ValidationMap>
+
+@Html.Action("DroneFlightDetail", "DroneFlight", new { ID = ViewBag.FlightID })
+
+@if (Model.Any()) {
+  <h2>Failed Checkpoints</h2>
+  <ul class="checkpoints">
+    @foreach (eX_Portal.exLogic.ValidationMap item in Model) {
+      <LI><span class="slno">@item.SlNo</span> @item.ItemTitle <span class="info">@item.getMessage()</span></LI>
+    }
+  </ul>
+
+
+} else {
+  <h2>Checkpoint Passed</h2>
+  <div>All checklist points are passed and you are authorized to contine with the flight.</div>
+}
+
+<div class="form-horizontal" style="margin-top:30px;">
+  <form method="post" action="@Url.Action()">
+
+    <div class="form-group">
+      Enter your comments (if any)
+      <div class="col-md-10">
+        <textarea name="Comments"></textarea>
+      </div>
+    </div>
+
+@if (Model.Any()) {
+    <div class="form-group">
+      <b><span class="info">Please note you are not authorised to continue with this flight.</span></b>
+      <div class="col-md-10">
+       <input type="checkbox" name="Override" value="1" />I want to overide this checklist
+      </div>
+    </div>
+}
+
+    <div class="form-group">
+      Enter your name
+      <div class="col-md-10">
+        <input type="text" value="@Session["FristName"]" name="SignedBy" />
+      </div>
+    </div>
+
+    <b><span class="info">I verify that all entries on this checklist are true and correct</span></b>
+    <div class="form-toolbar">
+      <input type="submit" value="Continue" />
+    </div>
+    <input type="hidden" name="ID" value="@ViewBag.ThisCheckListID">
+    <input type="hidden" name="FlightID" value="@ViewBag.FlightID">
+  </form>
+</div>

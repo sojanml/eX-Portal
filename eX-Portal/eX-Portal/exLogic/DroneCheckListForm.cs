@@ -3,15 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace eX_Portal.exLogic {
   public class DroneCheckListForm {
-<<<<<<< HEAD
-    public int CheckListID = 0;
-    public String CheckListTitle {get; set;}
-    public String CheckListSubTitle { get; set; }
-    public int FlightID { get; set; }
-=======
     private int pCheckListID = 0;
     public String CheckListTitle { get; set; }
     public String CheckListSubTitle { get; set; }
@@ -19,7 +14,6 @@ namespace eX_Portal.exLogic {
     public int DroneID { get; set; }
     public int DroneCheckListID { get; set; }
     public int ThisCheckListID { get; set; }
->>>>>>> cbd8da4440f926610cb438281d69a9c01c1704bc
 
     public List<CheckItem> HeaderCheckItems = new List<CheckItem>();
     public List<CheckItem> CheckItems = new List<CheckItem>();
@@ -27,11 +21,6 @@ namespace eX_Portal.exLogic {
 
     System.Web.SessionState.HttpSessionState Session = HttpContext.Current.Session;
 
-<<<<<<< HEAD
-    //constructior
-    public DroneCheckListForm(int pCheckListID) {
-      CheckListID = pCheckListID;
-=======
 
     //constructior
     public DroneCheckListForm(int CheckListID, int DroneID = 0, int FlightID = 0) {
@@ -56,7 +45,6 @@ namespace eX_Portal.exLogic {
     }
 
     private void init() {
->>>>>>> cbd8da4440f926610cb438281d69a9c01c1704bc
       using (var ctx = new ExponentPortalEntities())
       using (var cmd = ctx.Database.Connection.CreateCommand()) {
         ctx.Database.Connection.Open();
@@ -74,9 +62,7 @@ namespace eX_Portal.exLogic {
 
       }//using cmd
 
-
-    }//Constructor
-
+    }
 
     private void setSubItems(System.Data.Common.DbCommand cmd, int CheckListID) {
       cmd.CommandText = "SELECT" + "\n" +
@@ -93,7 +79,7 @@ namespace eX_Portal.exLogic {
       using (var reader = cmd.ExecuteReader()) {
         //For each row
         while (reader.Read()) {
-          CheckItem item = new CheckItem {
+          CheckItem item = new CheckItem(CheckListID, DroneID, FlightID) {
             ID = reader.GetInt32(reader.GetOrdinal("ID")),
             SlNo = reader.GetDecimal(reader.GetOrdinal("SlNo")),
             Title = reader["Title"].ToString(),
@@ -144,13 +130,18 @@ namespace eX_Portal.exLogic {
         item.saveCheckListItem(DroneCheckListID);
       }
       return DroneCheckListID;
-<<<<<<< HEAD
-=======
     }
->>>>>>> cbd8da4440f926610cb438281d69a9c01c1704bc
 
+    public bool saveValidation() {
 
-    } 
+      //foreach (var item in HeaderCheckItems) {
+      //  item.saveValidationItem();
+      //}
+      foreach (var item in CheckItems) {
+        item.saveValidationItem();
+      }
+      return true;
+    }
 
     public List<ValidationMap> getValidationMessages(int ThisCheckListID) {
       String SQL = "SELECT\n" +
@@ -195,14 +186,11 @@ namespace eX_Portal.exLogic {
     public String FieldValue { get; set; }
     public String FieldNote { get; set; }
 
-<<<<<<< HEAD
-=======
     public int CheckListID { get; set; }
     public int FlightID { get; set; }
     public int DroneID { get; set; }
     public bool isValid { get; set; }
 
->>>>>>> cbd8da4440f926610cb438281d69a9c01c1704bc
     public int ID {
       get {
         return sID;
@@ -213,8 +201,6 @@ namespace eX_Portal.exLogic {
       }
     }
 
-<<<<<<< HEAD
-=======
     public CheckItem(int CheckListID = 0, int DroneID = 0, int FlightID = 0) {
       this.DroneID = DroneID;
       this.CheckListID = CheckListID;
@@ -223,7 +209,6 @@ namespace eX_Portal.exLogic {
 
 
 
->>>>>>> cbd8da4440f926610cb438281d69a9c01c1704bc
     private void setValues(int FieldID) {
       FieldValue = Request["Field_" + FieldID] != null ? Request["Field_" + FieldID].ToString() : "";
       FieldNote = Request["FieldNote_" + FieldID] != null ? Request["FieldNote_" + FieldID].ToString() : "";
@@ -264,12 +249,10 @@ namespace eX_Portal.exLogic {
     }//DisplayField()
 
     public int saveCheckListItem(int DroneCheckListID) {
+      String SQL = "";
 
-<<<<<<< HEAD
-      String SQL = "INSERT INTO [DroneCheckListItem](\n" +        
-=======
+
       SQL = "INSERT INTO [DroneCheckListItem](\n" +
->>>>>>> cbd8da4440f926610cb438281d69a9c01c1704bc
         "  [DroneCheckListID],\n" +
         "  [DroneCheckListItemID],\n" +
         "  [FieldValue],\n" +
@@ -284,8 +267,6 @@ namespace eX_Portal.exLogic {
       return 0;
     }
 
-<<<<<<< HEAD
-=======
 
     public String getValidationFieldMin() {
       return getValidationField("Min");
@@ -421,7 +402,6 @@ namespace eX_Portal.exLogic {
 
     }//function isValidated
 
->>>>>>> cbd8da4440f926610cb438281d69a9c01c1704bc
   }//class CheckItem
 
 

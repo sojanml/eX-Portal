@@ -50,15 +50,14 @@ namespace eX_Portal.exLogic {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
-          Result = cmd.ExecuteScalar().ToString();
+          var oResult = cmd.ExecuteScalar();
+          if (oResult != null)
+            Result = oResult.ToString();
         }
       }
       return Result;
     }
 
-<<<<<<< HEAD
-    public String getQ(String FieldName) {
-=======
     public static Dictionary<String, Object> getDBRow(String SQL) {
       var Result = new Dictionary<String, Object>();
       Result["hasRows"] = false;
@@ -80,9 +79,9 @@ namespace eX_Portal.exLogic {
     }//function
 
     public static String getQ(String FieldName) {
->>>>>>> cbd8da4440f926610cb438281d69a9c01c1704bc
       HttpRequest Request = HttpContext.Current.Request;
-      return Request[FieldName].ToString();
+      String FieldValue = Request[FieldName];
+      return FieldValue == null ? "" : FieldValue.ToString();
     }
 
     public static String toSQL(String FieldValue) {
