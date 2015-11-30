@@ -17,7 +17,8 @@
         </div>
         <div class="editor-field">
 
-            @Html.DropDownListFor(model => model.DroneService.DroneId, Model.DroneList)
+            @Html.DropDownListFor(model => model.DroneID, Model.DroneList,"Select Item",
+            new { @class = "form-control", @onchange="FillParts()" })
 
         </div>
 
@@ -31,11 +32,30 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.DroneParts.PartsName, "Parts Name Type")
+            @Html.LabelFor(model => model.DroneParts.PartsName, "Parts Refurbished")
         </div>
         <div class="editor-field">
-            @Html.ListBoxFor(model => model.SelectItems, Model.DronePartsList, new { size = 6 })
+
+            @Html.ListBoxFor(model => model.SelectItemsForRefurbished,
+       new SelectList(Enumerable.Empty<SelectListItem>(), "PartsId", "PartsName"),
+             
+              new { @class = "form-control" })
+           
         </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DroneParts.PartsName, "Parts Replaced")
+        </div>
+        <div class="editor-field">
+
+            @Html.ListBoxFor(model => model.SelectItemsForReplaced,
+       new SelectList(Enumerable.Empty<SelectListItem>(), "PartsId", "PartsName"),
+
+              new { @class = "form-control" })
+
+        </div>
+
 
         <div class="editor-label">
             @Html.LabelFor(model => model.DroneService.Description, "Description")
@@ -68,3 +88,31 @@
         </div>
     }
 </section>
+
+@section Scripts {
+    <script>
+  function FillParts() {
+      var droneId = $('#DroneID').val();
+      $.ajax({
+          url: '/DroneService/FillParts',
+          type: "GET",
+          dataType: "JSON",
+          data: { DroneId: droneId },
+          success: function (cities) {
+              $("#SelectItemsForRefurbished").html(""); // clear before appending new list 
+              $("#SelectItemsForReplaced").html("");// clear before appending new list 
+              $.each(cities, function (i, city) {
+                  $("#SelectItemsForRefurbished").append(
+                      $('<option></option>').val(city.PartsId).html(city.PartsName + "-" + city.Model));
+                  $("#SelectItemsForReplaced").append(
+                     $('<option></option>').val(city.PartsId).html(city.PartsName + "-" + city.Model));
+              });
+           
+          }
+      });
+
+
+    
+  }
+    </script>
+}
