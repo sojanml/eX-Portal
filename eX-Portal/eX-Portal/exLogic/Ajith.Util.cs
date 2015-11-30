@@ -113,8 +113,10 @@ using System.Data.SqlClient;
                 {
                     while (reader.Read())
                     {
+                        string SupplierId = reader["SupplierId"].ToString();
 
-                        SelectList.Add(new SelectListItem { Text = reader["PartsName"].ToString(), Value = reader["PartsId"].ToString() });
+                        
+                        SelectList.Add(new SelectListItem { Text = reader["PartsName"].ToString()+"::" +reader["Model"].ToString()+ "::" + GetCompanyName(SupplierId) , Value = reader["PartsId"].ToString() });
 
                     }
                 }
@@ -125,6 +127,10 @@ using System.Data.SqlClient;
             }
         }
     }
+
+
+   
+
 
 
 
@@ -141,6 +147,18 @@ using System.Data.SqlClient;
         return result;
     }
 
+    public static string GetCompanyName(string AccId)
+    {
+        string result;
+        using (var ctx = new ExponentPortalEntities())
+        {
+            String SQL = "select name from MSTR_Account where  AccountId="+ AccId;
+            string ServiceId = ctx.Database.SqlQuery<string>(SQL).FirstOrDefault<string>();
+            result = ServiceId;
+        }
+
+        return result;
+    }
 
 }
 

@@ -27,6 +27,9 @@ namespace eX_Portal.Models
         public Nullable<int> RecordType { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> ServiceId { get; set; }
+        public Nullable<int> PartsId { get; set; }
+        public string ServicePartsType { get; set; }
+        public Nullable<int> QtyCount { get; set; }
     
         public virtual M2M_DroneServiceParts M2M_DroneServiceParts1 { get; set; }
         public virtual M2M_DroneServiceParts M2M_DroneServiceParts2 { get; set; }

@@ -33,7 +33,7 @@ namespace eX_Portal.Controllers
                
                 int UserId = eX_Portal.exLogic.User.GetUserId(_objuserlogin.UserName);
                 string UserFirstName = eX_Portal.exLogic.User.GetFirstName(_objuserlogin.UserName);
-                Session["UserFirstName"] = UserFirstName;
+                Session["FirstName"] = UserFirstName;
                 Session["UserId"] = UserId;
                 Session["UserName"] = _objuserlogin.UserName;
                 return RedirectToAction("Index", "Home");

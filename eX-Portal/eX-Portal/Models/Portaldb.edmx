@@ -156,6 +156,9 @@
           <Property Name="RecordType" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="ServiceId" Type="int" />
+          <Property Name="PartsId" Type="int" />
+          <Property Name="ServicePartsType" Type="nvarchar" MaxLength="10" />
+          <Property Name="QtyCount" Type="int" />
         </EntityType>
         <EntityType Name="M2M_UserAccount">
           <Key>
@@ -314,6 +317,8 @@
           <Property Name="Description" Type="nvarchar" MaxLength="100" />
           <Property Name="PartsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PartsName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SupplierId" Type="int" />
+          <Property Name="Model" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MSTR_Product">
           <Key>
@@ -613,6 +618,9 @@
           <Property Name="ServiceId" Type="Int32" />
           <NavigationProperty Name="M2M_DroneServiceParts1" Relationship="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts" ToRole="M2M_DroneServiceParts1" />
           <NavigationProperty Name="M2M_DroneServiceParts2" Relationship="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" FromRole="M2M_DroneServiceParts1" ToRole="M2M_DroneServiceParts" />
+          <Property Name="PartsId" Type="Int32" />
+          <Property Name="ServicePartsType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="QtyCount" Type="Int32" />
           </EntityType>
         <EntityType Name="M2M_UserAccount">
           <Key>
@@ -736,6 +744,8 @@
           <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="PartsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PartsName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierId" Type="Int32" />
+          <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_Product">
           <Key>
@@ -1095,6 +1105,9 @@
           <EntitySetMapping Name="M2M_DroneServiceParts">
             <EntityTypeMapping TypeName="ExponentPortalModel.M2M_DroneServiceParts">
               <MappingFragment StoreEntitySet="M2M_DroneServiceParts">
+                <ScalarProperty Name="QtyCount" ColumnName="QtyCount" />
+                <ScalarProperty Name="ServicePartsType" ColumnName="ServicePartsType" />
+                <ScalarProperty Name="PartsId" ColumnName="PartsId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PartsGroupId" ColumnName="PartsGroupId" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -1226,6 +1239,8 @@
           <EntitySetMapping Name="MSTR_Parts">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Parts">
               <MappingFragment StoreEntitySet="MSTR_Parts">
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
                 <ScalarProperty Name="PartsName" ColumnName="PartsName" />
                 <ScalarProperty Name="PartsId" ColumnName="PartsId" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -1479,7 +1494,7 @@
         <EntityTypeShape EntityType="ExponentPortalModel.LUP_Product" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneDetails" Width="1.5" PointX="4.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneParts" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneServiceParts" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneServiceParts" Width="2.125" PointX="0.5" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.M2M_UserAccount" Width="1.5" PointX="6.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Account" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone" Width="1.5" PointX="8.75" PointY="6.75" IsExpanded="true" />

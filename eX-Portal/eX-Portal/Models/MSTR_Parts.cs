@@ -25,5 +25,7 @@ namespace eX_Portal.Models
         public string Description { get; set; }
         public int PartsId { get; set; }
         public string PartsName { get; set; }
+        public Nullable<int> SupplierId { get; set; }
+        public string Model { get; set; }
     }
 }
