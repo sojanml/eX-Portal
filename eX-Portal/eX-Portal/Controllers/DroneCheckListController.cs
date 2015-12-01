@@ -105,8 +105,14 @@ namespace eX_Portal.Controllers {
 
     public ActionResult Validation([Bind(Prefix = "ID")] int CheckListID = 0, int DroneID = 0) {
       //if (FlightID == 0) Int32.TryParse(Request["FlightID"], out FlightID);
-      ViewBag.Title = "Create Checklist";
+      String SQL = "SELECT \n" +
+           "  D.[DroneName] + ' - ' +  DroneIdHexa as DroneName\n" +
+           "FROM\n" +
+           "  [ExponentPortal].[dbo].[MSTR_Drone] D\n" +
+           "WHERE\n" +
+           "  D.[DroneId]=" + DroneID;
       DroneCheckListForm CheckList = new DroneCheckListForm(CheckListID, DroneID);
+      ViewBag.Title = "Checklist set-up - " + CheckList.CheckListTitle + " [" + Util.getDBVal(SQL) + "]";
       CheckList.DroneID = DroneID;
       return View(CheckList);
     }
@@ -118,7 +124,7 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "Create Checklist";
       DroneCheckListForm CheckList = new DroneCheckListForm(CheckListID, DroneID);
       CheckList.saveValidation();
-      return View(CheckList);
+      return RedirectToAction("Detail", "Drone", new { ID = DroneID });
     }
 
   }//class
