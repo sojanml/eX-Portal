@@ -2,10 +2,10 @@
 
 
 <section class="general-form" id="loginForm">
-  @using (Html.BeginForm("Login", "User", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+  @using (Html.BeginForm("Index", "User", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
     @Html.AntiForgeryToken()
     if(ViewBag.Message == 0) {
-      <p>Invalid username or password. Please try again</p>
+      <p><span class="info">Invalid username or password. Please try again</span></p>
     }
       @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="editor-label">
