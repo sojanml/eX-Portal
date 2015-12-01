@@ -78,10 +78,10 @@ namespace eX_Portal.exLogic
                 " in(select b.MenuId from  MSTR_Profile a left join   M2M_UserProfile b" +
                  "  on a.ProfileId = b.ProfileId left join MSTR_User c on b.ProfileId = c.UserProfileId" +
                  "   where c.UserId =" + UserId + ")order by SortOrder asc ";
-            var studentName = db.Database.SqlQuery<MSTR_Menu>(SQL);
+            var MenuName = db.Database.SqlQuery<MSTR_Menu>(SQL);
 
 
-            foreach (MSTR_Menu mnu in studentName)
+            foreach (MSTR_Menu mnu in MenuName)
             {
 
                 MenuModel model = new MenuModel();
