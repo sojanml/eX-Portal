@@ -49,9 +49,9 @@ namespace eX_Portal.Controllers
             ViewBag.Title = "View Checklist";
             ViewBag.Title = "Drone Service Details";
 
-            SQL = "select b.PartsName,a.ServicePartsType as Info,b.Model as ModelType, Count(*) Over() as _TotalRecords from M2M_DroneServiceParts" +
+            SQL = "select b.PartsName,a.ServicePartsType as Info,b.Model as ModelType,a.QtyCount as Qty, Count(*) Over() as _TotalRecords from M2M_DroneServiceParts" +
                 " a left join MSTR_Parts b on a.PartsId=b.PartsId where a.ServiceId=" + id +
-                " group by a.ServicePartsType,b.PartsName,b.Model";
+                " group by a.ServicePartsType,b.PartsName,b.Model,a.QtyCount";
 
 
             qView nView = new qView(SQL);
@@ -138,27 +138,40 @@ namespace eX_Portal.Controllers
                     int ID = Util.InsertSQL(SQL);
 
                     int ServiceId = Util1.GetServiceId();
-                    for (var count = 0; count < DroneServiceView.SelectItemsForReplaced.Count(); count++)
+                    if (DroneServiceView.SelectItemsForReplaced != null)
                     {
-                       
+                        if (DroneServiceView.SelectItemsForReplaced != null)
+                        {
+                            for (var count = 0; count < DroneServiceView.SelectItemsForReplaced.Count(); count++)
+                            {
 
-                        string PartsId = ((string[])DroneServiceView.SelectItemsForReplaced)[count];
-                        SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType) values(" + ServiceId + "," + PartsId + ",'REP');";
 
-                        ID = Util.InsertSQL(SQL);
+                                string PartsId = ((string[])DroneServiceView.SelectItemsForReplaced)[count];
+                                int Qty = Util1.toInt(Request["SelectItemsForReplaced_" + PartsId]);
+                                SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REP',"+ Qty + ");";
+
+                                
+
+                                ID = Util.InsertSQL(SQL);
+                            }
+                        }
                     }
+                   
 
-                    for (var count = 0; count < DroneServiceView.SelectItemsForRefurbished.Count(); count++)
-                    { //int PartsId = Int32.Parse((DroneServiceView.SelectItems)[2])
+                    if (DroneServiceView.SelectItemsForRefurbished != null)
+                    { 
+                        for (var count = 0; count < DroneServiceView.SelectItemsForRefurbished.Count(); count++)
+                        { //int PartsId = Int32.Parse((DroneServiceView.SelectItems)[2])
 
-                        string PartsId = ((string[])DroneServiceView.SelectItemsForRefurbished)[count];
-                        SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType) values(" + ServiceId + "," + PartsId + ",'REF' );";
+                            string PartsId = ((string[])DroneServiceView.SelectItemsForRefurbished)[count];
+                            int Qty = Util1.toInt(Request["SelectItemsForRefurbished_" + PartsId]);
+                            SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REF'," + Qty + " );";
+                             
+                            ID = Util.InsertSQL(SQL);
+                        }
 
-                        ID = Util.InsertSQL(SQL);
+
                     }
-
-
-
 
                 }
 

@@ -121,5 +121,15 @@ namespace eX_Portal.exLogic {
       return SelectList; //return the list objects
     }//function GetDropDowntList
 
+    public static String getDroneName(int DroneID) {
+      String SQL = "SELECT \n" +
+     "  D.[DroneName] + ' - ' +  DroneIdHexa as DroneName\n" +
+     "FROM\n" +
+     "  [ExponentPortal].[dbo].[MSTR_Drone] D\n" +
+     "WHERE\n" +
+     "  D.[DroneId]=" + DroneID;
+      return getDBVal(SQL);
+    }
+
   }//class Util
 }

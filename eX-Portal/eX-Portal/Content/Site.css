@@ -389,7 +389,6 @@ ul.general-list li:hover a span.subtitles {
 td.menu,
 th.menu{
   width:20px;
-  display:block;
   position:relative;
 }
 
