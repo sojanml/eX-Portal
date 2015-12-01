@@ -16,6 +16,18 @@ using System.Data.SqlClient;
     static IEnumerable<SelectListItem> DropDownList = Enumerable.Empty<SelectListItem>();
     private static ExponentPortalEntities ctx;
 
+    public static Int32 toInt(String sItem)
+    {
+        int Temp;
+        if(Int32.TryParse(sItem, out Temp))
+        {
+            return Int32.Parse(sItem);
+        } else
+        {
+            return 0;
+        }
+    }
+
     public static IEnumerable<SelectListItem> GetDropDowntList(string TypeField, string NameField, string ValueField, string SPName)
     {
         //  ctx=new ExponentPortalEntities();
