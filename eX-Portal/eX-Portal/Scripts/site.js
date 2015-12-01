@@ -19,9 +19,9 @@
         var Btn = $(this);
         LastButton = Btn;
         var data = qViewDataTable.row($(this).parents('tr')).data();
-        var pKey = data['_PKey'];
+        //var pKey = data['_PKey'];
         //Btn.parent().find('UL').remove();
-        Btn.parent().append(getqViewMenu(pKey));
+        Btn.parent().append(getqViewMenu(data));
 
         //alert('Key: ' + pKey)
       });
@@ -34,11 +34,16 @@
     });
 
 
-    function getqViewMenu(pKey) {
+    function getqViewMenu(data) {
       var List = $('<UL class="qViewMenu"></UL>');
       for (var i = 0; i < qViewMenu.length; i++) {
         var Menu = qViewMenu[i];
-        var URL = Menu.url.replace('_PKey', pKey)
+        var URL = Menu.url;
+        //replace all the variables in query string
+        for (var key in data) {
+          var Exp = new RegExp(key, "ig");
+          URL = URL.replace(Exp, data[key]);
+        }
         var LI = $('<LI><A href="' + URL + '">' + Menu.caption + '</a></LI>');
         List.append(LI);
       };
