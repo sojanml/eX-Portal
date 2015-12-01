@@ -37,6 +37,9 @@ namespace eX_Portal.Controllers {
           "  U.Type= 'UAV Type' ";
       qView nView = new qView(SQL);
       nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
+      nView.addMenu("Create Flight", Url.Action("Create", "DroneFlight", new { ID = "_Pkey" }));
+      nView.addMenu("Flights", Url.Action("Index", "DroneFlight", new { ID = "_Pkey" }));
+
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);

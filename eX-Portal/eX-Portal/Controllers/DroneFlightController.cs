@@ -9,8 +9,9 @@ using System.Web.Mvc;
 namespace eX_Portal.Controllers {
   public class DroneFlightController : Controller {
     // GET: DroneFlight
-    public ActionResult Index() {
+    public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0) {
       ViewBag.Title = "Drone Flights";
+      ViewBag.DroneID = DroneID;
 
       String SQL =
       "SELECT\n" +
@@ -33,11 +34,19 @@ namespace eX_Portal.Controllers {
       "LEFT JOIN MSTR_User as tblCreated ON\n" +
       "  tblCreated.UserID = DroneFlight.CreatedBy";
 
+      if (DroneID > 0) {
+        SQL = SQL + "\n" +
+        "WHERE\n" +
+        "  DroneFlight.DroneID=" + DroneID;
+
+        ViewBag.Title += " [" + Util.getDroneName(DroneID) + "]";
+      }
+
       qView nView = new qView(SQL);
-      nView.addMenu("Edit", Url.Action("Edit", new {ID = "_PKey" }));
+      nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
       nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
-            nView.addMenu("Live Map", Url.Action("FlightData","Map", new { ID = "_PKey" }));
-            nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+      nView.addMenu("Live Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
+      nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -48,10 +57,11 @@ namespace eX_Portal.Controllers {
 
     }//Index()
 
-    public ActionResult Create() {
-
+    public ActionResult Create([Bind(Prefix = "ID")] int DroneID = 0) {
       ViewBag.Title = "Create Drone Flight";
-      return View();
+      DroneFlight InitialData = new DroneFlight();
+      InitialData.DroneID = DroneID;
+      return View(InitialData);
     }
 
     [HttpPost]
