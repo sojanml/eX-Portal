@@ -44,6 +44,7 @@
     var truckStatus = false;
     var geocoder;
 
+    var INTERVAL = 2000;
 
 
     $(document).ready(function () {
@@ -76,9 +77,10 @@
 
 
         GetDrones();
+
     };
 
-
+   
     function GetDrones() {
         var _locVal = [];
         $.ajax({
@@ -108,6 +110,7 @@
                 alert('Live Trucks ' + msg);
             }
         });
+        window.setTimeout(GetDrones, INTERVAL);
     }
 
     function setMarker(map, location) {
