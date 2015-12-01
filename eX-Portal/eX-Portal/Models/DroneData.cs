@@ -27,5 +27,13 @@ namespace eX_Portal.Models
         public Nullable<int> RecordType { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> ProductId { get; set; }
+        public string Altitude { get; set; }
+        public string Speed { get; set; }
+        public string FixQuality { get; set; }
+        public string Satellites { get; set; }
+        public string Pitch { get; set; }
+        public string Roll { get; set; }
+        public string Heading { get; set; }
+        public string TotalFlightTime { get; set; }
     }
 }

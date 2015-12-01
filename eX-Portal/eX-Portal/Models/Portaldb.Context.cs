@@ -52,6 +52,8 @@ namespace eX_Portal.Models
         public virtual DbSet<MSTR_DroneCheckListItems> MSTR_DroneCheckListItems { get; set; }
         public virtual DbSet<DroneCheckListItem> DroneCheckListItems { get; set; }
         public virtual DbSet<DroneFlight> DroneFlights { get; set; }
+        public virtual DbSet<DroneCheckListValidation> DroneCheckListValidations { get; set; }
+        public virtual DbSet<LiveDrone> LiveDrones { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {
@@ -81,6 +83,25 @@ namespace eX_Portal.Models
                 new ObjectParameter("Type", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Portal_GetDroneDropDown_Result>("usp_Portal_GetDroneDropDown", typeParameter);
+        }
+    
+        public virtual ObjectResult<usp_Portal_DroneNameList_Result> usp_Portal_DroneNameList()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Portal_DroneNameList_Result>("usp_Portal_DroneNameList");
+        }
+    
+        public virtual ObjectResult<usp_Portal_DroneServiceType_Result> usp_Portal_DroneServiceType(string type)
+        {
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Portal_DroneServiceType_Result>("usp_Portal_DroneServiceType", typeParameter);
+        }
+    
+        public virtual ObjectResult<usp_Portal_GetDroneParts_Result> usp_Portal_GetDroneParts()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Portal_GetDroneParts_Result>("usp_Portal_GetDroneParts");
         }
     }
 }
