@@ -13,7 +13,7 @@ namespace eX_Portal.Controllers {
       String SQL =
       "select\n" +
       "  PartsId as id,\n" +
-      "  CONCAT(PartsName, ' - ', Model, ' - ', MSTR_User.FirstName) as value,\n" +
+      "  PartsName +  ' - ' + Model + ' - ' + MSTR_User.FirstName as value,\n" +
       "  PartsName,\n" +
       "  Model,\n" +
       "  ISNULL(MSTR_User.FirstName, '') as Supplier\n" +
