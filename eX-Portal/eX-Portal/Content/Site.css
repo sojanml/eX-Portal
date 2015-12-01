@@ -173,13 +173,18 @@ header nav ul li UL {
  border:1px red solid;
  position:absolute;
  top:60px;
- right: 0px;
+ left: 0px;
  width:200px;
  white-space:nowrap;
  margin: 0px;
- padding: 0px;
- 
+ padding: 0px; 
 }
+
+header nav ul li:last-child UL {
+  right: 0px;
+  left: auto;
+}
+
 header nav ul li UL li {
   display:block;
  margin: 0px;

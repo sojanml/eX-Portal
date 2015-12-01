@@ -13,20 +13,20 @@ namespace eX_Portal.Controllers {
       String SQL =
       "select\n" +
       "  PartsId as id,\n" +
-      "  PartsName +  ' - ' + Model + ' - ' + MSTR_User.FirstName as value,\n" +
+      "  PartsName +  ' - ' + Model + ' - ' + MSTR_Account.Name as value,\n" +
       "  PartsName,\n" +
       "  Model,\n" +
-      "  ISNULL(MSTR_User.FirstName, '') as Supplier\n" +
+      "  ISNULL(MSTR_Account.Name, '') as Supplier\n" +
       "from\n" +
       "  MSTR_Parts\n" +
-      "LEFT JOIN MSTR_User On\n" +
-      "  MSTR_User.UserId = MSTR_Parts.SupplierId\n";
+      "LEFT JOIN MSTR_Account On\n" +
+      "  MSTR_Account.AccountId = MSTR_Parts.SupplierId\n";
 
       if (Term != "") {
         SQL += "WHERE\n" +
         "MSTR_Parts.PartsName LIKE '" + Term + "%' OR\n" +
         "MSTR_Parts.Model LIKE '" + Term + "%' OR\n" +
-        "MSTR_User.FirstName LIKE '" + Term + "%'";
+        "MSTR_Account.Name LIKE '" + Term + "%'";
       }
 
 

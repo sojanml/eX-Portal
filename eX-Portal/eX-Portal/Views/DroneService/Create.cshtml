@@ -34,8 +34,8 @@
           @Html.LabelFor(model => model.DroneParts.PartsName, "Parts Refurbished")
         </div>
         <div class="editor-field">
-          <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="PartsRefurbished" />
-          <table class="report" id="Table_PartsRefurbished" style="display:none;">
+          <input type="text" id="SelectItemsForRefurbished" placeholder="Enter the Part name, Model or Supplier to Search"  />
+          <table class="report" id="Table_SelectItemsForRefurbished" style="display:none;">
             <thead>
               <tr>
                 <th>Parts Name</th>
@@ -53,8 +53,8 @@
           @Html.LabelFor(model => model.DroneParts.PartsName, "Parts Replaced")
         </div>
         <div class="editor-field">
-          <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="PartsReplaced" />
-          <table class="report" id="Table_PartsReplaced" style="display:none;">
+          <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="SelectItemsForReplaced" />
+          <table class="report" id="Table_SelectItemsForReplaced" style="display:none;">
             <thead>
               <tr>
                 <th>Parts Name</th>
@@ -103,22 +103,22 @@
 @section Scripts {
   <script>
     $(document).ready(function () {
-      $('#PartsRefurbished').autocomplete({
+      $('#SelectItemsForRefurbished').autocomplete({
         source: "/AutoComplete/Parts/",
         minLength: 2,
         select: AutoCompleteSelect
       });
-      $('#PartsReplaced').autocomplete({
+      $('#SelectItemsForReplaced').autocomplete({
         source: "/AutoComplete/Parts/",
         minLength: 2,
         select: AutoCompleteSelect
       });
 
-      $('#Table_PartsRefurbished').on("click", "a.delete", function () {
+      $('#Table_SelectItemsForRefurbished').on("click", "a.delete", function () {
         $(this).parent().parent().remove();
       })
 
-      $('#Table_PartsReplaced').on("click", "a.delete", function () {
+      $('#Table_SelectItemsForReplaced').on("click", "a.delete", function () {
         $(this).parent().parent().remove();
       })
       
