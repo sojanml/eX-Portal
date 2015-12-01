@@ -13,6 +13,9 @@
           <Property Name="DroneCheckListID" Type="int" />
           <Property Name="DroneID" Type="int" />
           <Property Name="FlightID" Type="int" />
+          <Property Name="Comments" Type="varchar" MaxLength="200" />
+          <Property Name="IsOverride" Type="bit" />
+          <Property Name="SignedBy" Type="varchar" MaxLength="60" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
@@ -25,6 +28,19 @@
           <Property Name="FieldValue" Type="varchar" MaxLength="120" />
           <Property Name="FieldNote" Type="varchar" MaxLength="256" />
           <Property Name="DroneCheckListItemID" Type="int" />
+        </EntityType>
+        <EntityType Name="DroneCheckListValidation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DroneID" Type="int" />
+          <Property Name="DroneCheckListID" Type="int" />
+          <Property Name="DroneCheckListItemID" Type="int" />
+          <Property Name="MinValue" Type="numeric" Precision="12" Scale="2" />
+          <Property Name="MaxValue" Type="numeric" Precision="12" Scale="2" />
+          <Property Name="CanBeIgnored" Type="bit" />
+          <Property Name="MustBeChecked" Type="bit" />
         </EntityType>
         <EntityType Name="DroneData">
           <Key>
@@ -43,6 +59,14 @@
           <Property Name="RecordType" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="ProductId" Type="int" />
+          <Property Name="Altitude" Type="nvarchar" MaxLength="50" />
+          <Property Name="Speed" Type="nvarchar" MaxLength="50" />
+          <Property Name="FixQuality" Type="nvarchar" MaxLength="50" />
+          <Property Name="Satellites" Type="nvarchar" MaxLength="50" />
+          <Property Name="Pitch" Type="nvarchar" MaxLength="50" />
+          <Property Name="Roll" Type="nvarchar" MaxLength="50" />
+          <Property Name="Heading" Type="nvarchar" MaxLength="50" />
+          <Property Name="TotalFlightTime" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -72,6 +96,16 @@
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="DroneID" Type="int" />
+        </EntityType>
+        <EntityType Name="LiveDrone">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DroneID" Type="int" />
+          <Property Name="DroneHex" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastLatitude" Type="float" />
+          <Property Name="LastLongitude" Type="float" />
         </EntityType>
         <EntityType Name="LUP_Drone">
           <Key>
@@ -138,6 +172,8 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Manufacturer" Type="nvarchar" MaxLength="50" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+          <Property Name="DroneId" Type="int" />
+          <Property Name="PartsId" Type="int" />
         </EntityType>
         <EntityType Name="M2M_DroneServiceParts">
           <Key>
@@ -460,15 +496,22 @@
           <Parameter Name="UAVTypeID" Type="int" Mode="In" />
           <Parameter Name="CommissionDate" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="usp_Portal_DroneNameList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="usp_Portal_DroneServiceType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Type" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="usp_Portal_GetDroneDropDown" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Type" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="usp_Portal_GetDroneParts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="ExponentPortalModelStoreContainer">
           <EntitySet Name="DroneCheckList" EntityType="Self.DroneCheckList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckListItem" EntityType="Self.DroneCheckListItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DroneCheckListValidation" EntityType="Self.DroneCheckListValidation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneData" EntityType="Self.DroneData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneDefinition" EntityType="Self.DroneDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneFlight" EntityType="Self.DroneFlight" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LiveDrone" EntityType="Self.LiveDrone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LUP_Drone" EntityType="Self.LUP_Drone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LUP_Product" EntityType="Self.LUP_Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M2M_DroneDetails" EntityType="Self.M2M_DroneDetails" Schema="dbo" store:Type="Tables" />
@@ -515,6 +558,14 @@
           <Property Name="RecordType" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="ProductId" Type="Int32" />
+          <Property Name="Altitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Speed" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FixQuality" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Satellites" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Pitch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Roll" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Heading" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TotalFlightTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -598,6 +649,8 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Manufacturer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DroneId" Type="Int32" />
+          <Property Name="PartsId" Type="Int32" />
         </EntityType>
         <EntityType Name="M2M_DroneServiceParts">
           <Key>
@@ -882,6 +935,13 @@
           </AssociationSet>
           <EntitySet Name="DroneCheckListItems" EntityType="ExponentPortalModel.DroneCheckListItem" />
           <EntitySet Name="DroneFlights" EntityType="ExponentPortalModel.DroneFlight" />
+          <EntitySet Name="DroneCheckListValidations" EntityType="ExponentPortalModel.DroneCheckListValidation" />
+          <EntitySet Name="LiveDrones" EntityType="ExponentPortalModel.LiveDrone" />
+          <FunctionImport Name="usp_Portal_DroneNameList" ReturnType="Collection(ExponentPortalModel.usp_Portal_DroneNameList_Result)" />
+          <FunctionImport Name="usp_Portal_DroneServiceType" ReturnType="Collection(ExponentPortalModel.usp_Portal_DroneServiceType_Result)">
+          <Parameter Name="Type" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Portal_GetDroneParts" ReturnType="Collection(ExponentPortalModel.usp_Portal_GetDroneParts_Result)" />
         </EntityContainer>
         <EntityType Name="M2M_UserProfile">
           <Key>
@@ -923,6 +983,9 @@
           <Property Name="FlightID" Type="Int32" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="Comments" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IsOverride" Type="Boolean" />
+          <Property Name="SignedBy" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="MSTR_DroneCheckList">
           <Key>
@@ -989,6 +1052,45 @@
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="DroneID" Type="Int32" />
         </EntityType>
+        <EntityType Name="DroneCheckListValidation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DroneID" Type="Int32" />
+          <Property Name="DroneCheckListID" Type="Int32" />
+          <Property Name="DroneCheckListItemID" Type="Int32" />
+          <Property Name="MinValue" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="MaxValue" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="CanBeIgnored" Type="Boolean" />
+          <Property Name="MustBeChecked" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="LiveDrone">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DroneID" Type="Int32" />
+          <Property Name="DroneHex" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastLatitude" Type="Double" />
+          <Property Name="LastLongitude" Type="Double" />
+        </EntityType>
+        <ComplexType Name="usp_Portal_DroneNameList_Result">
+          <Property Type="Int32" Name="DroneId" Nullable="false" />
+          <Property Type="String" Name="DroneName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="usp_Portal_DroneServiceType_Result">
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="TypeID" Nullable="true" />
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="usp_Portal_GetDroneParts_Result">
+          <Property Type="Int32" Name="PartsId" Nullable="false" />
+          <Property Type="String" Name="PartsName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Model" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="SupplierId" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -998,6 +1100,14 @@
           <EntitySetMapping Name="DroneDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneData">
               <MappingFragment StoreEntitySet="DroneData">
+                <ScalarProperty Name="TotalFlightTime" ColumnName="TotalFlightTime" />
+                <ScalarProperty Name="Heading" ColumnName="Heading" />
+                <ScalarProperty Name="Roll" ColumnName="Roll" />
+                <ScalarProperty Name="Pitch" ColumnName="Pitch" />
+                <ScalarProperty Name="Satellites" ColumnName="Satellites" />
+                <ScalarProperty Name="FixQuality" ColumnName="FixQuality" />
+                <ScalarProperty Name="Speed" ColumnName="Speed" />
+                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
                 <ScalarProperty Name="DroneDataId" ColumnName="DroneDataId" />
                 <ScalarProperty Name="DroneId" ColumnName="DroneId" />
                 <ScalarProperty Name="DroneRFID" ColumnName="DroneRFID" />
@@ -1086,6 +1196,8 @@
           <EntitySetMapping Name="M2M_DroneParts">
             <EntityTypeMapping TypeName="ExponentPortalModel.M2M_DroneParts">
               <MappingFragment StoreEntitySet="M2M_DroneParts">
+                <ScalarProperty Name="PartsId" ColumnName="PartsId" />
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PartsGroupId" ColumnName="PartsGroupId" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -1391,6 +1503,9 @@
           <EntitySetMapping Name="DroneCheckList">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneCheckList">
               <MappingFragment StoreEntitySet="DroneCheckList">
+                <ScalarProperty Name="SignedBy" ColumnName="SignedBy" />
+                <ScalarProperty Name="IsOverride" ColumnName="IsOverride" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="FlightID" ColumnName="FlightID" />
@@ -1465,6 +1580,59 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="DroneCheckListValidations">
+            <EntityTypeMapping TypeName="ExponentPortalModel.DroneCheckListValidation">
+              <MappingFragment StoreEntitySet="DroneCheckListValidation">
+                <ScalarProperty Name="MustBeChecked" ColumnName="MustBeChecked" />
+                <ScalarProperty Name="CanBeIgnored" ColumnName="CanBeIgnored" />
+                <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
+                <ScalarProperty Name="MinValue" ColumnName="MinValue" />
+                <ScalarProperty Name="DroneCheckListItemID" ColumnName="DroneCheckListItemID" />
+                <ScalarProperty Name="DroneCheckListID" ColumnName="DroneCheckListID" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LiveDrones">
+            <EntityTypeMapping TypeName="ExponentPortalModel.LiveDrone">
+              <MappingFragment StoreEntitySet="LiveDrone">
+                <ScalarProperty Name="LastLongitude" ColumnName="LastLongitude" />
+                <ScalarProperty Name="LastLatitude" ColumnName="LastLatitude" />
+                <ScalarProperty Name="DroneHex" ColumnName="DroneHex" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_Portal_DroneNameList" FunctionName="ExponentPortalModel.Store.usp_Portal_DroneNameList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ExponentPortalModel.usp_Portal_DroneNameList_Result">
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+                <ScalarProperty Name="DroneName" ColumnName="DroneName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_Portal_DroneServiceType" FunctionName="ExponentPortalModel.Store.usp_Portal_DroneServiceType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ExponentPortalModel.usp_Portal_DroneServiceType_Result">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_Portal_GetDroneParts" FunctionName="ExponentPortalModel.Store.usp_Portal_GetDroneParts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ExponentPortalModel.usp_Portal_GetDroneParts_Result">
+                <ScalarProperty Name="PartsId" ColumnName="PartsId" />
+                <ScalarProperty Name="PartsName" ColumnName="PartsName" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
