@@ -138,27 +138,32 @@ namespace eX_Portal.Controllers
                     int ID = Util.InsertSQL(SQL);
 
                     int ServiceId = Util1.GetServiceId();
-                    for (var count = 0; count < DroneServiceView.SelectItemsForReplaced.Count(); count++)
+                    if (DroneServiceView.SelectItemsForReplaced != null)
                     {
-                       
+                        for (var count = 0; count < DroneServiceView.SelectItemsForReplaced.Count(); count++)
+                        {
 
-                        string PartsId = ((string[])DroneServiceView.SelectItemsForReplaced)[count];
-                        SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType) values(" + ServiceId + "," + PartsId + ",'REP');";
 
-                        ID = Util.InsertSQL(SQL);
+                            string PartsId = ((string[])DroneServiceView.SelectItemsForReplaced)[count];
+                            SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType) values(" + ServiceId + "," + PartsId + ",'REP');";
+
+                            ID = Util.InsertSQL(SQL);
+                        }
                     }
 
-                    for (var count = 0; count < DroneServiceView.SelectItemsForRefurbished.Count(); count++)
-                    { //int PartsId = Int32.Parse((DroneServiceView.SelectItems)[2])
+                    if (DroneServiceView.SelectItemsForRefurbished != null)
+                    { 
+                        for (var count = 0; count < DroneServiceView.SelectItemsForRefurbished.Count(); count++)
+                        { //int PartsId = Int32.Parse((DroneServiceView.SelectItems)[2])
 
-                        string PartsId = ((string[])DroneServiceView.SelectItemsForRefurbished)[count];
-                        SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType) values(" + ServiceId + "," + PartsId + ",'REF' );";
+                            string PartsId = ((string[])DroneServiceView.SelectItemsForRefurbished)[count];
+                            SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType) values(" + ServiceId + "," + PartsId + ",'REF' );";
 
-                        ID = Util.InsertSQL(SQL);
+                            ID = Util.InsertSQL(SQL);
+                        }
+
+
                     }
-
-
-
 
                 }
 
