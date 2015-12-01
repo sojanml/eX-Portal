@@ -166,7 +166,7 @@ namespace eX_Portal.Controllers
                             string PartsId = ((string[])DroneServiceView.SelectItemsForRefurbished)[count];
                             int Qty = Util1.toInt(Request["SelectItemsForRefurbished_" + PartsId]);
                             SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REF'," + Qty + " );";
-
+                             
                             ID = Util.InsertSQL(SQL);
                         }
 
