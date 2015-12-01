@@ -36,7 +36,8 @@ namespace eX_Portal.Controllers {
       qView nView = new qView(SQL);
       nView.addMenu("Edit", Url.Action("Edit", new {ID = "_PKey" }));
       nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
-      nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+            nView.addMenu("Live Map", Url.Action("FlightData","Map", new { ID = "_PKey" }));
+            nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";

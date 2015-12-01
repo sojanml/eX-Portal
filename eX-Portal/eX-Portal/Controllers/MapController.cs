@@ -21,8 +21,9 @@ namespace eX_Portal.Controllers
             return View();
         }
 
-        public ActionResult FlightData()
+        public ActionResult FlightData(int id=0)
         {
+            ViewBag.FlightID = id;
             return View();
         }
         [System.Web.Mvc.HttpGet]
