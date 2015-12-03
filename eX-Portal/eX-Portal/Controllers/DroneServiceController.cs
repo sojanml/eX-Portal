@@ -107,8 +107,8 @@ namespace eX_Portal.Controllers
             {
                 DroneService = new MSTR_DroneService(),
 
-                ServiceType = Util1.GetDropDowntList("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
-                DroneList = Util1.DroneList("usp_Portal_DroneNameList"),
+                ServiceType = Util.GetDropDowntList("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
+                DroneList = Util.DroneList("usp_Portal_DroneNameList"),
              //   DronePartsList=Util1.DronePartsList("usp_Portal_GetDroneParts")
 
             };
@@ -137,7 +137,7 @@ namespace eX_Portal.Controllers
                              "','" + DroneServiceView.DroneID + "'," + DroneService.TypeOfService + ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'," + DroneService.FlightHour + "); ";
                     int ID = Util.InsertSQL(SQL);
 
-                    int ServiceId = Util1.GetServiceId();
+                    int ServiceId = Util.GetServiceId();
                     if (DroneServiceView.SelectItemsForReplaced != null)
                     {
                         if (DroneServiceView.SelectItemsForReplaced != null)
@@ -147,7 +147,7 @@ namespace eX_Portal.Controllers
 
 
                                 string PartsId = ((string[])DroneServiceView.SelectItemsForReplaced)[count];
-                                int Qty = Util1.toInt(Request["SelectItemsForReplaced_" + PartsId]);
+                                int Qty = Util.toInt(Request["SelectItemsForReplaced_" + PartsId]);
                                 SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REP',"+ Qty + ");";
 
                                 
@@ -164,7 +164,7 @@ namespace eX_Portal.Controllers
                         { //int PartsId = Int32.Parse((DroneServiceView.SelectItems)[2])
 
                             string PartsId = ((string[])DroneServiceView.SelectItemsForRefurbished)[count];
-                            int Qty = Util1.toInt(Request["SelectItemsForRefurbished_" + PartsId]);
+                            int Qty = Util.toInt(Request["SelectItemsForRefurbished_" + PartsId]);
                             SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REF'," + Qty + " );";
                              
                             ID = Util.InsertSQL(SQL);
