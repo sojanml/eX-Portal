@@ -15,8 +15,9 @@ namespace eX_Portal.ViewModel
         public IEnumerable<SelectListItem> ManufactureList { get; set; }
         public IEnumerable<SelectListItem> UAVTypeList { get; set; }
         public IEnumerable<SelectListItem> PartsGroupList { get; set; }
-        
-
+        public IEnumerable<SelectListItem> DronePartsList { get; set; }
+        public IEnumerable<string> SelectItemsForParts { set; get; }
+        public MSTR_Parts DroneParts { get; set; }
 
     }
 }
