@@ -44,9 +44,13 @@
           <td>&nbsp;</td>
           <td>@item.SlNo.ToString("##0.0")<span class="sub-item">@item.Title</span></td>
         }
+        @if (item.FieldType.ToLower() == "textarea") {
+        <td colspan="3" class="entry-textarea">@Html.Raw(item.DisplayField())</td>
+        } else {
         <td class="entry-field">@Html.Raw(item.DisplayField())</td>
         <td>@item.Responsibility</td>
         <td class="note-field">@Html.Raw(item.DisplayNote())</td>
+        }
       </tr>
     }
   </table>

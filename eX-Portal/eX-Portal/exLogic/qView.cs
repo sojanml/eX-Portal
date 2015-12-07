@@ -92,7 +92,6 @@ namespace eX_Portal.exLogic {
 
       return ColumDef.ElementAt(OrderColumn) + " " + OrderDir;
 
-
     }
 
     private String setOrderAndFilter(String SQL) {
@@ -141,10 +140,11 @@ namespace eX_Portal.exLogic {
             }
             StringBuilder Columns = new StringBuilder();
             for (int i = 0; i < reader.FieldCount; i++) {
+              String DisplayValue = getFieldVal(reader, i);
               if (i > 0) Columns.AppendLine(",");
               Columns.Append("\"" + reader.GetName(i) + "\"");
               Columns.Append(" : ");
-              Columns.Append("\"" + reader.GetValue(i).ToString() + "\"");
+              Columns.Append("\"" + DisplayValue + "\"");
             }
             Row.Append("{");
             Row.Append(Columns);
@@ -158,7 +158,7 @@ namespace eX_Portal.exLogic {
       Data.AppendLine("{");
       Data.AppendLine("\"recordsTotal\" : " + _TotalRecords + ",");
       Data.AppendLine("\"recordsFiltered\" : " + _TotalRecords + ",");
-
+      Data.AppendLine("\"searchDelay\" : 1000,");
       Data.AppendLine("\"data\" : [");
       Data.Append(Row);
       Data.AppendLine("]");
@@ -168,6 +168,23 @@ namespace eX_Portal.exLogic {
       return Data.ToString();
     }//getData
 
+
+    private String getFieldVal(DbDataReader reader, int i) {
+      String FieldValue = "";
+      switch (reader.GetFieldType(i).ToString()) {
+      case "System.DateTime":
+          if (String.IsNullOrEmpty(reader.GetValue(i).ToString())) {
+            FieldValue = "Invalid";
+          } else {
+            FieldValue = String.Format("{0:dd-MMM-yyyy hh:mm tt}", reader.GetDateTime(i));
+          }
+          break;
+      default:
+          FieldValue = reader.GetValue(i).ToString();
+          break;
+      }
+      return FieldValue;
+    }
 
 
     public String getDataTable() {
@@ -224,7 +241,7 @@ namespace eX_Portal.exLogic {
       Scripts.AppendLine("  qViewDataTable = $('#qViewTable').DataTable( {");
       Scripts.AppendLine("    \"processing\": true,");
       Scripts.AppendLine("    \"serverSide\": true, ");
-      Scripts.AppendLine("    \"searchDelay\": 350, ");
+      Scripts.AppendLine("    \"searchDelay\": 1000, ");
       
       Scripts.AppendLine("    \"ajax\": \"" + HttpContext.Current.Request.RequestContext.HttpContext.Request.Url + "\",");
       Scripts.Append(ScriptColumns);
@@ -232,15 +249,16 @@ namespace eX_Portal.exLogic {
       Scripts.AppendLine("  } );");
       Scripts.AppendLine("} );");
 
-
-
-
       return Scripts.ToString();
     }
 
 
     private void setColumDef() {
-      //String mySQL = SQL.Replace("SELECT ", "SELECT TOP 1 ");
+      String mySQL = SQL.Replace("SELECT ", "SELECT TOP 1 ");
+      /*
+      //can not use the none filter, we need to find is there any rows
+      //exists to build the list
+
       //http://www.codeproject.com/Articles/32524/SQL-Parser
 
       String NowRowFilter = "1 = 0";
@@ -252,17 +270,13 @@ namespace eX_Portal.exLogic {
         myParser.WhereClause += " AND " + NowRowFilter;
       }
       String mySQL = myParser.ToText();
-
-
-      
-
+      */
 
       var cmd = ctx.Database.Connection.CreateCommand();
       DataTable schemaTable;
       ctx.Database.Connection.Open();
       cmd.CommandText = mySQL;
-
-     
+ 
       DbDataReader myReader = cmd.ExecuteReader(CommandBehavior.KeyInfo);
       HasRows = myReader.HasRows;
       schemaTable = myReader.GetSchemaTable();

@@ -12,9 +12,8 @@
 
 @Html.Action("CreateCheckList", "DroneCheckList", new { FlightID = FlightID })
 
-
 @section scripts {
   <script type="text/javascript">
-@Html.Raw(Model.getScripts())
+  @Html.Raw(Model.getScripts())
   </script>
 }

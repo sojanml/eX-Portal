@@ -30,7 +30,6 @@ namespace eX_Portal.Controllers {
       return RedirectToAction("Complete", "DroneCheckList", new { ID = DroneCheckListID });
     }//Index
 
-
     public ActionResult View([Bind(Prefix = "ID")] int ThisCheckListID = 0) {
       //if (FlightID == 0) Int32.TryParse(Request["FlightID"], out FlightID);
       var Result = Util.getDBRow("SELECT [DroneCheckListID],[FlightID] FROM [DroneCheckList] WHERE [ID]=" + ThisCheckListID);
@@ -86,14 +85,12 @@ namespace eX_Portal.Controllers {
       return View();
     }//Index
 
-
     public ActionResult CreateCheckList(int FlightID = 0) {
       ViewBag.FlightID = FlightID.ToString();
       ExponentPortalEntities db = new ExponentPortalEntities();
       List<MSTR_DroneCheckList> TheRows = db.MSTR_DroneCheckList.ToList();
       return View(TheRows);
     }
-        
 
     public ActionResult ValidationList(int DroneID = 0) {
       ViewBag.DroneID = DroneID.ToString();

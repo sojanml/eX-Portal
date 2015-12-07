@@ -37,18 +37,23 @@
     @foreach (var item in Model.CheckItems) {
       <tr>
         @if ((item.SlNo % 1) == 0) {
-          <td>@item.SlNo.ToString("##0.0")</td>
-          <td>@item.Title</td>
+          <td><span class="slno">@item.SlNo.ToString("##0.0")</span></td>
+          <td><span class="view-item">@item.Title</span></td>
         } else {
           <td>&nbsp;</td>
-          <td>@item.SlNo.ToString("##0.0")<span class="sub-item">@item.Title</span></td>
+          <td><span class="slno">@item.SlNo.ToString("##0.0")</span><span class="view-item">@item.Title</span></td>
         }
+
+        @if (item.FieldType.ToLower() == "textarea") {
+          <td colspan="4" class="note-field">@item.FieldNote</td>
+        } else {
         <td class="entry-field">@item.getValue()</td>
         <td>@if (!item.isValid) {
           <span class="info">Check Failed</span>
         }</td>
         <td>@item.Responsibility</td>
         <td class="note-field">@item.FieldNote</td>
+        }
       </tr>
     }
   </table>
