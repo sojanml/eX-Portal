@@ -233,6 +233,10 @@ namespace eX_Portal.exLogic {
         case "textbox":
           Field = "<input type=\"text\" value=\"" + HttpUtility.HtmlDecode(FieldValue) + "\" name=\"Field_" + ID.ToString() + "\">";
           break;
+        case "textarea":
+          Field = "<textarea name=\"FieldNote_" + ID.ToString() + "\">" + HttpUtility.HtmlDecode(FieldNote) + "</textarea>";
+          break;
+
         case "checkbox":
           String isChecked = FieldValue == "1" ? " checked" : "";
           Field = "<input" + isChecked + " type =\"checkbox\" value=\"1\" name=\"Field_" + ID.ToString() + "\">";
@@ -294,6 +298,10 @@ namespace eX_Portal.exLogic {
         case "textbox":
           String showFieldValue = FieldValue > 0 ? FieldValue.ToString() : "";
           Field = "<input type=\"text\" value=\"" + showFieldValue + "\" name=\"Field_" + Sufix + "_" + ID.ToString() + "\">";
+          break;
+        case "textarea":
+          String textFieldValue = FieldValue > 0 ? FieldValue.ToString() : "";
+          Field = "<textarea name=\"Field_" + Sufix + "_" + ID.ToString() + "\">" + textFieldValue + "</textarea>";
           break;
         case "checkbox":
           String isChecked = "";

@@ -2,12 +2,15 @@
 @{
   Layout = null;
 }
-<ul class="general-list">
+<ul class="checkpoints">
   @foreach (var item in Model) {
-    <li><a href="@Url.Action("Create", "DroneCheckList", new {ID = item.ID, FlightID = ViewBag.FlightID } )">
-          @Html.DisplayFor(modelItem => item.CheckListTitle)
+    <li>
+      <a href="@Url.Action("Create", "DroneCheckList", new {ID = item.ID, FlightID = ViewBag.FlightID } )">
+        @Html.DisplayFor(modelItem => item.CheckListTitle)
+        @if (!String.IsNullOrEmpty(item.CheckListSubTitle)) {
           <span class="subtitles"> - @Html.DisplayFor(modelItem => item.CheckListSubTitle)</span>
-</a>
-  </li>
+        }
+      </a>
+    </li>
   }
 </ul>

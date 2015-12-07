@@ -17,15 +17,16 @@ namespace eX_Portal.Controllers
             ViewBag.Title = "Drone Service Listing";
 
             String SQL = " select  ROW_NUMBER() Over (Order by a.ServiceId) As SNo, " +
-                " b.DroneName as DroneName,c.Name as ServiceType,a.DateOfService as DateOfService,a.FlightHour"+
-                " , a.Description,Count(*) Over() as _TotalRecords ,  a.ServiceId as _PKey "  +
+                " b.DroneName as DroneName,c.Name as ServiceType,a.DateOfService as DateOfService,a.FlightHour" +
+                " , a.Description,Count(*) Over() as _TotalRecords ,  a.ServiceId as _PKey " +
                 " from [ExponentPortal].[dbo].MSTR_DroneService a left join" +
                 "[ExponentPortal].[dbo].MSTR_Drone b on a.DroneId = b.DroneId" +
                 " left join [ExponentPortal].[dbo].LUP_Drone c on a.TypeOfServiceId " +
-                "= c.TypeId where c.Type = 'ServiceType'"; 
+                "= c.TypeId where c.Type = 'ServiceType'";
             qView nView = new qView(SQL);
-          
+
             nView.addMenu("Detail", Url.Action("Details", new { ID = "_PKey" }));
+            nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
             if (Request.IsAjaxRequest())
             {
@@ -42,8 +43,8 @@ namespace eX_Portal.Controllers
         public ActionResult Details(int id)
         {
 
-           
-            String  SQL = "select DroneId from MSTR_DroneService where  ServiceId=" + id;
+
+            String SQL = "select DroneId from MSTR_DroneService where  ServiceId=" + id;
 
             ViewBag.FlightID = Util.getDBVal(SQL);
             ViewBag.Title = "View Checklist";
@@ -64,10 +65,102 @@ namespace eX_Portal.Controllers
             {
                 return View(nView);
             }//if(IsAjaxRequest)
-           
+
         }
 
+        public ActionResult ServicePartsReplaced(int ID = 0)
+        {
+            //String SQL = "select \n" +
+            //            "PartsName,\n" +
+            //            "Model,\n" +
+            //            "ISNULL(MSTR_Account.Name, '') as Supplier,\n" +
+            //            "M2M_DroneServiceParts.QtyCount,\n" +
+            //            " mstr_parts.PartsId as id\n" +
+            //          " from M2M_DroneServiceParts LEFT JOIN  MSTR_Parts on \n" +
+            //            "    M2M_DroneServiceParts.PartsId = MSTR_Parts.PartsId \n" +
+            //            "    LEFT JOIN MSTR_Account On\n " +
+            //            "   MSTR_Account.AccountId = MSTR_Parts.SupplierId \n" +
+            //            "    where M2M_DroneServiceParts.ServiceId =" + ID + " and M2M_DroneServiceParts.ServicePartsType = 'REP'";
 
+
+            //List<String> theData = new List<String>();
+            //using (var ctx = new ExponentPortalEntities())
+            //using (var cmd = ctx.Database.Connection.CreateCommand())
+            //{
+            //    ctx.Database.Connection.Open();
+            //    cmd.CommandText = SQL;
+            //    using (var reader = cmd.ExecuteReader())
+            //    {
+            //        while (reader.Read()) {
+            //            var PartID = reader.GetValue(4).ToString();
+            //            var Val =
+            //                    "<td>" + reader.GetValue(0).ToString() + "</td>\n" +
+            //                    "<td>" + reader.GetValue(1).ToString() + "</td>\n" +
+            //                    "<td>" + reader.GetValue(2).ToString() + "</td>\n" +
+            //                    // "<td>" + reader.GetValue(3).ToString() + "</td>\n" +
+            //                    "<td><Input type='Text'  name='SelectItemsForReplaced_" + PartID + "' style='width:40px' value=" + reader.GetValue(3).ToString() + ">" +
+            //                    "<Input type='hidden'  name='SelectItemsForReplaced' style='width:40px' value=" + PartID + ">" +
+            //                    "</td>" +
+
+            //                    "<td><a class='delete' href='#'>x</a></td>\n";
+            //            theData.Add(Val);
+            //        }
+            //    }
+            //}
+
+            List<String> theData = new List<String>();
+            theData = Listing.ServicePartsListing(ID, "REP");
+            return PartialView(theData);
+
+        }//
+
+
+
+        public ActionResult ServicePartsRefurbished(int ID = 0)
+        {
+            //String SQL = "select \n" +
+            //            "PartsName,\n" +
+            //            "Model,\n" +
+            //            "ISNULL(MSTR_Account.Name, '') as Supplier,\n" +
+            //            "M2M_DroneServiceParts.QtyCount,\n" +
+            //            " mstr_parts.PartsId as id\n" +
+            //          " from M2M_DroneServiceParts LEFT JOIN  MSTR_Parts on \n" +
+            //            "    M2M_DroneServiceParts.PartsId = MSTR_Parts.PartsId \n" +
+            //            "    LEFT JOIN MSTR_Account On\n " +
+            //            "   MSTR_Account.AccountId = MSTR_Parts.SupplierId \n" +
+            //            "    where M2M_DroneServiceParts.ServiceId =" + ID + " and M2M_DroneServiceParts.ServicePartsType = 'REF'";
+
+
+            //List<String> theData = new List<String>();
+            //using (var ctx = new ExponentPortalEntities())
+            //using (var cmd = ctx.Database.Connection.CreateCommand())
+            //{
+            //    ctx.Database.Connection.Open();
+            //    cmd.CommandText = SQL;
+            //    using (var reader = cmd.ExecuteReader())
+            //    {
+            //        while (reader.Read())
+            //        {
+            //            var PartID = reader.GetValue(4).ToString();
+            //            var Val =
+            //                    "<td>" + reader.GetValue(0).ToString() + "</td>\n" +
+            //                    "<td>" + reader.GetValue(1).ToString() + "</td>\n" +
+            //                    "<td>" + reader.GetValue(2).ToString() + "</td>\n" +
+            //                     // "<td>" + reader.GetValue(3).ToString() + "</td>\n" +
+            //                     "<td><Input type='Text'  name='SelectItemsForRefurbished_" + PartID + "' style='width:40px' value=" + reader.GetValue(3).ToString() + ">" +
+            //                    "<Input type='hidden'  name='SelectItemsForRefurbished' style='width:40px' value=" + PartID + ">" +
+            //                    "</td>" +
+            //                    "<td><a class='delete' href='#'>x</a></td>\n";
+            //            theData.Add(Val);
+            //        }
+            //    }
+            //}
+
+            List<String> theData = new List<String>();
+            theData = Listing.ServicePartsListing(ID, "REF");
+            return PartialView(theData);
+
+        }//
 
         public String DroneDetail(int ID = 0)
         {
@@ -107,9 +200,9 @@ namespace eX_Portal.Controllers
             {
                 DroneService = new MSTR_DroneService(),
 
-                ServiceType = Util.GetDropDowntList("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
+                ServiceType = Util.GetDropDowntLists("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
                 DroneList = Util.DroneList("usp_Portal_DroneNameList"),
-             //   DronePartsList=Util1.DronePartsList("usp_Portal_GetDroneParts")
+                //   DronePartsList=Util1.DronePartsList("usp_Portal_GetDroneParts")
 
             };
 
@@ -130,11 +223,14 @@ namespace eX_Portal.Controllers
 
                     MSTR_DroneService DroneService = DroneServiceView.DroneService;
 
-                    
+                    if (Session["UserId"] == null)
+                    {
+                        Session["UserId"] = -1;
+                    }
                     string SQL = "INSERT INTO MSTR_DRONESERVICE(Description,CreatedBy,CreatedOn,DroneId,TypeOfServiceId,TypeOfService,DateOfService,FlightHour) VALUES('"
-                              + DroneService.Description + "'," + Session["UserId"]
-                             + ",'" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") +
-                             "','" + DroneServiceView.DroneID + "'," + DroneService.TypeOfService + ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'," + DroneService.FlightHour + "); ";
+                              + DroneService.Description + "'," + Session["UserId"] + ",'" +
+                               DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "','"
+                              + DroneServiceView.DroneID + "'," + DroneService.TypeOfService + ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'," + DroneService.FlightHour + "); ";
                     int ID = Util.InsertSQL(SQL);
 
                     int ServiceId = Util.GetServiceId();
@@ -148,25 +244,25 @@ namespace eX_Portal.Controllers
 
                                 string PartsId = ((string[])DroneServiceView.SelectItemsForReplaced)[count];
                                 int Qty = Util.toInt(Request["SelectItemsForReplaced_" + PartsId]);
-                                SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REP',"+ Qty + ");";
+                                SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REP'," + Qty + ");";
 
-                                
+
 
                                 ID = Util.InsertSQL(SQL);
                             }
                         }
                     }
-                   
+
 
                     if (DroneServiceView.SelectItemsForRefurbished != null)
-                    { 
+                    {
                         for (var count = 0; count < DroneServiceView.SelectItemsForRefurbished.Count(); count++)
                         { //int PartsId = Int32.Parse((DroneServiceView.SelectItems)[2])
 
                             string PartsId = ((string[])DroneServiceView.SelectItemsForRefurbished)[count];
                             int Qty = Util.toInt(Request["SelectItemsForRefurbished_" + PartsId]);
                             SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REF'," + Qty + " );";
-                             
+
                             ID = Util.InsertSQL(SQL);
                         }
 
@@ -187,21 +283,90 @@ namespace eX_Portal.Controllers
         // GET: DroneService/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
-        }
+            ExponentPortalEntities db = new ExponentPortalEntities();
+            int DroneId = Util.GetDroneIdFromService(id);
+            int TypeOfServiceId = Util.GetTypeOfIdFromService(id);
+            ViewBag.ServiceId = id;
+            var list = (from data in db.M2M_DroneServiceParts
+                        where data.ServiceId == 39
+                        select new
+                        {
+                            data.PartsId
+                        });
+            var viewModel = new ViewModel.DroneServiceViewModel
+            {
 
+
+                DroneService = db.MSTR_DroneService.Find(id),
+
+                ServiceType = Util.GetDropDowntLists("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
+                DroneList = Util.DroneList("usp_Portal_DroneNameList")
+             // SelectItemsForRefurbished = list;
+            };
+            
+
+           
+            return View(viewModel);
+       
+    }
         // POST: DroneService/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(ViewModel.DroneServiceViewModel DroneServiceView)
         {
             try
             {
                 // TODO: Add update logic here
+                if (ModelState.IsValid)
+                {
 
-                return RedirectToAction("Index");
+                    MSTR_DroneService DroneService = DroneServiceView.DroneService;
+                    if (Session["UserId"] == null)
+                    {
+                        Session["UserId"] = -1;
+                    }
+
+                    string SQL = "UPDATE MSTR_DRONESERVICE SET Description='" + DroneService.Description + "',CreatedBy=" + Session["UserId"] + ", CreatedOn='" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") +
+                        "', DroneId=" + DroneService.DroneId + ",TypeOfServiceId='" + DroneService.TypeOfService + "' ,DateOfService='" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "', FlightHour=" + DroneService.FlightHour + " WHERE ServiceId=" + DroneService.ServiceId;
+
+                    int ID = Util.doSQL(SQL);
+                    SQL = "delete from M2M_DroneServiceParts where ServiceId =" + DroneService.ServiceId;
+                    ID = Util.doSQL(SQL);
+                    if (DroneServiceView.SelectItemsForReplaced != null)
+                    {
+                       
+                        for (var count = 0; count < DroneServiceView.SelectItemsForReplaced.Count(); count++)
+                        {
+                           
+                            string PartsId = ((string[])DroneServiceView.SelectItemsForReplaced)[count];
+                            int Qty = Util.toInt(Request["SelectItemsForReplaced_" + PartsId]);
+                            SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + DroneService.ServiceId + "," + PartsId + ",'REP'," + Qty + ");";
+                            ID = Util.InsertSQL(SQL);
+                        }
+                    }
+
+                    if (DroneServiceView.SelectItemsForRefurbished != null)
+                    {
+                      
+                        for (var count = 0; count < DroneServiceView.SelectItemsForRefurbished.Count(); count++)
+                        { 
+                            
+                            string PartsId = ((string[])DroneServiceView.SelectItemsForRefurbished)[count];
+                            int Qty = Util.toInt(Request["SelectItemsForRefurbished_" + PartsId]);
+                            SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + DroneService.ServiceId + "," + PartsId + ",'REF'," + Qty + " );";
+
+                            ID = Util.InsertSQL(SQL);
+                        }
+
+
+                    }
+
+
+                }
+                    return RedirectToAction("Index");
             }
-            catch
+            catch(Exception e)
             {
+                
                 return View();
             }
         }

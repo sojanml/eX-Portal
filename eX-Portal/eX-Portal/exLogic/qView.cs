@@ -13,7 +13,10 @@ namespace eX_Portal.exLogic {
     private ExponentPortalEntities ctx;
     public String SQL { get; set; }
     public List<String> ColumDef = new List<String>();
+    public List<String> FilterColumns = new List<String>();
     public String onRowClick { get; set; }
+    HttpResponse Response = HttpContext.Current.Response;
+    HttpRequest Request = HttpContext.Current.Request;
 
     public int _TotalRecords {
       get; set;
@@ -54,6 +57,67 @@ namespace eX_Portal.exLogic {
       return Menus;
     }
 
+    private String getQueryFilter() {
+      String Filter = "";
+      SimpleParser DataColumns = new SimpleParser();
+      Dictionary<String, String> ColumnMapping = new Dictionary<string, string>();
+      var SearchTerm = Request["search[value]"].ToString();
+      if (SearchTerm != "") {
+        DataColumns.Parse("ALTER VIEW X as\n" + SQL);
+      
+        foreach (var col in DataColumns.aColumnInfoList.ColumnList) {
+          String ColName = col.Alias;
+          String FieldName = (col.TableAlias == "" ? "" : col.TableAlias + ".") + col.TableColumnName;
+          ColumnMapping.Add(ColName, FieldName);
+        }
+
+        foreach (var Column in FilterColumns) {
+          if (Filter != "") Filter += " OR ";
+          Filter += ColumnMapping[Column] + " LIKE '%" + SearchTerm + "%'";
+        }
+
+        if (Filter != "") Filter = " (" + Filter + ")";
+      }
+      return Filter;
+    }
+
+    private String getQueryOrder() {
+      String OrderColumnKey = "order[0][column]";
+      String OrderDirKey = "order[0][dir]";
+
+      int OrderColumn = 0;
+      String OrderDir = Request[OrderDirKey];
+      Int32.TryParse(Request[OrderColumnKey], out OrderColumn);
+      if (OrderDir != "asc") OrderDir = "desc";
+
+      return ColumDef.ElementAt(OrderColumn) + " " + OrderDir;
+
+    }
+
+    private String setOrderAndFilter(String SQL) {
+      //http://www.codeproject.com/Articles/32524/SQL-Parser
+
+      String SearchFilter = getQueryFilter();
+      String SearchOrderBy = getQueryOrder();
+      Parser.SqlParser myParser = new Parser.SqlParser();
+      myParser.Parse(SQL);
+
+      if (SearchFilter != "") {
+        if (string.IsNullOrEmpty(myParser.WhereClause)) {
+          myParser.WhereClause = SearchFilter;
+        } else {
+          myParser.WhereClause += " AND " + SearchFilter;
+        }//if string.IsNullOrEmpty(myParser.WhereClause)
+      }//if (SearchFilter != "")
+
+      if(SearchOrderBy != "") {
+        myParser.OrderByClause = SearchOrderBy;
+      }
+
+      return myParser.ToText();
+
+    }
+
     public String getDataJson() {
       int x = 0;
 
@@ -63,7 +127,7 @@ namespace eX_Portal.exLogic {
       using (var ctx = new ExponentPortalEntities())
       using (var cmd = ctx.Database.Connection.CreateCommand()) {
         ctx.Database.Connection.Open();
-        cmd.CommandText = SQL;
+        cmd.CommandText = setOrderAndFilter(SQL);
         using (var reader = cmd.ExecuteReader()) {
 
           //For each row
@@ -76,10 +140,11 @@ namespace eX_Portal.exLogic {
             }
             StringBuilder Columns = new StringBuilder();
             for (int i = 0; i < reader.FieldCount; i++) {
+              String DisplayValue = getFieldVal(reader, i);
               if (i > 0) Columns.AppendLine(",");
               Columns.Append("\"" + reader.GetName(i) + "\"");
               Columns.Append(" : ");
-              Columns.Append("\"" + reader.GetValue(i).ToString() + "\"");
+              Columns.Append("\"" + DisplayValue + "\"");
             }
             Row.Append("{");
             Row.Append(Columns);
@@ -93,7 +158,7 @@ namespace eX_Portal.exLogic {
       Data.AppendLine("{");
       Data.AppendLine("\"recordsTotal\" : " + _TotalRecords + ",");
       Data.AppendLine("\"recordsFiltered\" : " + _TotalRecords + ",");
-
+      Data.AppendLine("\"searchDelay\" : 1000,");
       Data.AppendLine("\"data\" : [");
       Data.Append(Row);
       Data.AppendLine("]");
@@ -103,6 +168,23 @@ namespace eX_Portal.exLogic {
       return Data.ToString();
     }//getData
 
+
+    private String getFieldVal(DbDataReader reader, int i) {
+      String FieldValue = "";
+      switch (reader.GetFieldType(i).ToString()) {
+      case "System.DateTime":
+          if (String.IsNullOrEmpty(reader.GetValue(i).ToString())) {
+            FieldValue = "Invalid";
+          } else {
+            FieldValue = String.Format("{0:dd-MMM-yyyy hh:mm tt}", reader.GetDateTime(i));
+          }
+          break;
+      default:
+          FieldValue = reader.GetValue(i).ToString();
+          break;
+      }
+      return FieldValue;
+    }
 
 
     public String getDataTable() {
@@ -159,14 +241,13 @@ namespace eX_Portal.exLogic {
       Scripts.AppendLine("  qViewDataTable = $('#qViewTable').DataTable( {");
       Scripts.AppendLine("    \"processing\": true,");
       Scripts.AppendLine("    \"serverSide\": true, ");
+      Scripts.AppendLine("    \"searchDelay\": 1000, ");
+      
       Scripts.AppendLine("    \"ajax\": \"" + HttpContext.Current.Request.RequestContext.HttpContext.Request.Url + "\",");
       Scripts.Append(ScriptColumns);
 
       Scripts.AppendLine("  } );");
       Scripts.AppendLine("} );");
-
-
-
 
       return Scripts.ToString();
     }
@@ -174,24 +255,37 @@ namespace eX_Portal.exLogic {
 
     private void setColumDef() {
       String mySQL = SQL.Replace("SELECT ", "SELECT TOP 1 ");
-      HttpResponse Response = HttpContext.Current.Response;
+      /*
+      //can not use the none filter, we need to find is there any rows
+      //exists to build the list
+
+      //http://www.codeproject.com/Articles/32524/SQL-Parser
+
+      String NowRowFilter = "1 = 0";
+      Parser.SqlParser myParser = new Parser.SqlParser();
+      myParser.Parse(SQL);
+      if(string.IsNullOrEmpty(myParser.WhereClause)) {
+        myParser.WhereClause = NowRowFilter;
+      } else {
+        myParser.WhereClause += " AND " + NowRowFilter;
+      }
+      String mySQL = myParser.ToText();
+      */
 
       var cmd = ctx.Database.Connection.CreateCommand();
       DataTable schemaTable;
       ctx.Database.Connection.Open();
       cmd.CommandText = mySQL;
-
-
+ 
       DbDataReader myReader = cmd.ExecuteReader(CommandBehavior.KeyInfo);
       HasRows = myReader.HasRows;
-
-      //Retrieve column schema into a DataTable.
       schemaTable = myReader.GetSchemaTable();
       /*
+      //Retrieve column schema into a DataTable.
       foreach (DataRow myField in schemaTable.Rows) {
         Response.Write("<P>");
         foreach (DataColumn Field in schemaTable.Columns) {
-          Response.Write(Field + ": " + myField[Field] + "<br>\n");
+          Response.Write(Field.ColumnName + ": " + myField[Field] + "<br>\n");
         }
         Response.Write("</P>");
       }
@@ -202,6 +296,11 @@ namespace eX_Portal.exLogic {
         //For each property of the field...
         //Columns.Add(myField["BaseTableName"] + "." + myField["BaseColumnName"]);      
         String ColumnName = myField["ColumnName"].ToString();
+        String FieldType = myField["DataType"].ToString();
+        if (FieldType == "System.String") {
+          FilterColumns.Add(ColumnName);
+        }
+
 
         if (myField["IsHidden"].ToString() == "False") {
           switch (ColumnName.ToLower()) {
