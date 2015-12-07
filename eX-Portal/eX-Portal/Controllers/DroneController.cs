@@ -144,6 +144,7 @@ namespace eX_Portal.Controllers {
 
                 return RedirectToAction("Index");
       } catch (Exception ex) {
+        Util.ErrorHandler(ex);
         return View(DroneView);
       }
     }
