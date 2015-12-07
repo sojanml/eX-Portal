@@ -53,14 +53,14 @@ namespace eX_Portal.exLogic
                     {
                         while (reader.Read())
                         {
-
-                            SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Code"].ToString() });
-
+                           
+                                SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Code"].ToString() });
+                           
                         }
                     }
                     DropDownList = SelectList.ToList();
                     cotx.Database.Connection.Close();
-                    return DropDownLists; //return the list objects
+                    return DropDownList; //return the list objects
 
                 }
             }
@@ -91,9 +91,9 @@ namespace eX_Portal.exLogic
                     {
                         while (reader.Read())
                         {
-
-                            SelectList.Add(new SelectListItem { Text = reader["DroneName"].ToString(), Value = reader["DroneId"].ToString() });
-
+                           
+                                SelectList.Add(new SelectListItem { Text = reader["DroneName"].ToString(), Value = reader["DroneId"].ToString() });
+                           
                         }
                     }
                     DropDownLists = SelectList.ToList();
@@ -142,9 +142,31 @@ namespace eX_Portal.exLogic
             }
         }
 
+        public static int GetDroneIdFromService(int ServiceId)
+        {
+            int result = 0;
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL =  "select DroneId from MSTR_DroneService where  ServiceId=" + ServiceId;
+                int Id = cotx.Database.SqlQuery<int>(SQL).FirstOrDefault<int>();
+                result = Id;
+            }
 
+            return result;
+        }
 
+        public static int GetTypeOfIdFromService(int ServiceId)
+        {
+            int result = 0;
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL = "select TypeOfServiceId from MSTR_DroneService where  ServiceId=" + ServiceId;
+                int Id = cotx.Database.SqlQuery<int>(SQL).FirstOrDefault<int>();
+                result = Id;
+            }
 
+            return result;
+        }
 
 
 

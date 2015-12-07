@@ -1,0 +1,22 @@
+﻿@model List<String>
+
+
+<table class="report" id="Table_SelectItemsForReplaced">
+    <thead>
+        <tr>
+            <th>Parts Name</th>
+            <th>Model</th>
+            <th>Supplier</th>
+            <th>Qty</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            @Html.Raw(item)
+        </tr>
+    }
+</table>
