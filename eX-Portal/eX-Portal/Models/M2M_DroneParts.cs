@@ -29,5 +29,6 @@ namespace eX_Portal.Models
         public string Remarks { get; set; }
         public Nullable<int> DroneId { get; set; }
         public Nullable<int> PartsId { get; set; }
+        public Nullable<int> Quantity { get; set; }
     }
 }

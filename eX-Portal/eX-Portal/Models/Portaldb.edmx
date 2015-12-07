@@ -174,6 +174,7 @@
           <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
           <Property Name="DroneId" Type="int" />
           <Property Name="PartsId" Type="int" />
+          <Property Name="Quantity" Type="int" />
         </EntityType>
         <EntityType Name="M2M_DroneServiceParts">
           <Key>
@@ -196,6 +197,22 @@
           <Property Name="ServicePartsType" Type="nvarchar" MaxLength="10" />
           <Property Name="QtyCount" Type="int" />
         </EntityType>
+        <EntityType Name="M2M_ProfileMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuId" Type="int" />
+          <Property Name="ProfileId" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ApprovedOn" Type="datetime" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="RecordType" Type="int" />
+          <Property Name="CreatedBy" Type="datetime" />
+          <Property Name="ModifiedBy" Type="datetime" />
+          <Property Name="ApprovedBy" Type="datetime" />
+        </EntityType>
         <EntityType Name="M2M_UserAccount">
           <Key>
             <PropertyRef Name="Id" />
@@ -211,22 +228,6 @@
           <Property Name="ApprovedOn" Type="datetime" />
           <Property Name="IsAcitive" Type="bit" />
           <Property Name="RecordType" Type="int" />
-        </EntityType>
-        <EntityType Name="M2M_UserProfile">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MenuId" Type="int" />
-          <Property Name="ProfileId" Type="int" />
-          <Property Name="CreatedOn" Type="datetime" />
-          <Property Name="ModifiedOn" Type="datetime" />
-          <Property Name="ApprovedOn" Type="datetime" />
-          <Property Name="IsActive" Type="bit" />
-          <Property Name="RecordType" Type="int" />
-          <Property Name="CreatedBy" Type="datetime" />
-          <Property Name="ModifiedBy" Type="datetime" />
-          <Property Name="ApprovedBy" Type="datetime" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -517,8 +518,8 @@
           <EntitySet Name="M2M_DroneDetails" EntityType="Self.M2M_DroneDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M2M_DroneParts" EntityType="Self.M2M_DroneParts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M2M_DroneServiceParts" EntityType="Self.M2M_DroneServiceParts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M2M_ProfileMenu" EntityType="Self.M2M_ProfileMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M2M_UserAccount" EntityType="Self.M2M_UserAccount" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="M2M_UserProfile" EntityType="Self.M2M_UserProfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Account" EntityType="Self.MSTR_Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Drone" EntityType="Self.MSTR_Drone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_DroneCheckList" EntityType="Self.MSTR_DroneCheckList" Schema="dbo" store:Type="Tables" />
@@ -651,6 +652,7 @@
           <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="DroneId" Type="Int32" />
           <Property Name="PartsId" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
         </EntityType>
         <EntityType Name="M2M_DroneServiceParts">
           <Key>
@@ -915,7 +917,6 @@
           <EntitySet Name="MSTR_User" EntityType="Self.MSTR_User" />
           <EntitySet Name="ProductDefinitions" EntityType="Self.ProductDefinition" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransaction" />
-          <EntitySet Name="M2M_UserProfile" EntityType="ExponentPortalModel.M2M_UserProfile" />
           <EntitySet Name="ProductHistories" EntityType="ExponentPortalModel.ProductHistory" />
           <EntitySet Name="DroneCheckList" EntityType="ExponentPortalModel.DroneCheckList" />
           <EntitySet Name="MSTR_DroneCheckList" EntityType="ExponentPortalModel.MSTR_DroneCheckList" />
@@ -942,23 +943,8 @@
           <Parameter Name="Type" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="usp_Portal_GetDroneParts" ReturnType="Collection(ExponentPortalModel.usp_Portal_GetDroneParts_Result)" />
+          <EntitySet Name="M2M_ProfileMenu" EntityType="ExponentPortalModel.M2M_ProfileMenu" />
         </EntityContainer>
-        <EntityType Name="M2M_UserProfile">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="MenuId" Type="Int32" />
-          <Property Name="ProfileId" Type="Int32" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
-          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="RecordType" Type="Int32" />
-          <Property Name="CreatedBy" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedBy" Type="DateTime" Precision="3" />
-          <Property Name="ApprovedBy" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="ProductHistory">
           <Key>
             <PropertyRef Name="ProHistoryId" />
@@ -1091,6 +1077,22 @@
           <Property Type="String" Name="Model" Nullable="true" MaxLength="50" />
           <Property Type="Int32" Name="SupplierId" Nullable="true" />
         </ComplexType>
+        <EntityType Name="M2M_ProfileMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuId" Type="Int32" />
+          <Property Name="ProfileId" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="RecordType" Type="Int32" />
+          <Property Name="CreatedBy" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="DateTime" Precision="3" />
+          <Property Name="ApprovedBy" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1196,6 +1198,7 @@
           <EntitySetMapping Name="M2M_DroneParts">
             <EntityTypeMapping TypeName="ExponentPortalModel.M2M_DroneParts">
               <MappingFragment StoreEntitySet="M2M_DroneParts">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="PartsId" ColumnName="PartsId" />
                 <ScalarProperty Name="DroneId" ColumnName="DroneId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -1468,23 +1471,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="M2M_UserProfile">
-            <EntityTypeMapping TypeName="ExponentPortalModel.M2M_UserProfile">
-              <MappingFragment StoreEntitySet="M2M_UserProfile">
-                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
-                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
-                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
-                <ScalarProperty Name="MenuId" ColumnName="MenuId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ProductHistories">
             <EntityTypeMapping TypeName="ExponentPortalModel.ProductHistory">
               <MappingFragment StoreEntitySet="ProductHistory">
@@ -1633,6 +1619,23 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="M2M_ProfileMenu">
+            <EntityTypeMapping TypeName="ExponentPortalModel.M2M_ProfileMenu">
+              <MappingFragment StoreEntitySet="M2M_ProfileMenu">
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
+                <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

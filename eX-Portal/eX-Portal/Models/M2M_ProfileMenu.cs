@@ -12,7 +12,7 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class M2M_UserProfile
+    public partial class M2M_ProfileMenu
     {
         public int Id { get; set; }
         public Nullable<int> MenuId { get; set; }

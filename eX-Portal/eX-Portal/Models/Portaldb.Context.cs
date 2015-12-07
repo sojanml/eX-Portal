@@ -45,7 +45,6 @@ namespace eX_Portal.Models
         public virtual DbSet<MSTR_User> MSTR_User { get; set; }
         public virtual DbSet<ProductDefinition> ProductDefinitions { get; set; }
         public virtual DbSet<ProductTransaction> ProductTransactions { get; set; }
-        public virtual DbSet<M2M_UserProfile> M2M_UserProfile { get; set; }
         public virtual DbSet<ProductHistory> ProductHistories { get; set; }
         public virtual DbSet<DroneCheckList> DroneCheckList { get; set; }
         public virtual DbSet<MSTR_DroneCheckList> MSTR_DroneCheckList { get; set; }
@@ -54,6 +53,7 @@ namespace eX_Portal.Models
         public virtual DbSet<DroneFlight> DroneFlights { get; set; }
         public virtual DbSet<DroneCheckListValidation> DroneCheckListValidations { get; set; }
         public virtual DbSet<LiveDrone> LiveDrones { get; set; }
+        public virtual DbSet<M2M_ProfileMenu> M2M_ProfileMenu { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {
