@@ -8,9 +8,9 @@ using eX_Portal.exLogic;
 
 namespace eX_Portal.Controllers {
   public class DroneController : Controller {
-
-    // GET: Drone
-    public ActionResult Index() {
+        public ExponentPortalEntities ctx = new ExponentPortalEntities();
+        // GET: Drone
+        public ActionResult Index() {
       ViewBag.Title = "Drone Listing";
 
       String SQL = "SELECT \n" +
@@ -117,8 +117,21 @@ namespace eX_Portal.Controllers {
 
         MSTR_Drone Drone = DroneView.Drone;
 
-        int ID = Util.InsertSQL("INSERT INTO MSTR_DRONE(OWNERID,MANUFACTUREID,UAVTYPEID,COMMISSIONDATE,DRONEDEFINITIONID,ISACTIVE) VALUES('" + Drone.OwnerId + "','" + Drone.ManufactureId + "','" + Drone.UavTypeId + "','" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',11,'True');");
-        return RedirectToAction("Index");
+        int DroneId = Util.InsertSQL("INSERT INTO MSTR_DRONE(OWNERID,MANUFACTUREID,UAVTYPEID,COMMISSIONDATE,DRONEDEFINITIONID,ISACTIVE) VALUES('" + Drone.OwnerId + "','" + Drone.ManufactureId + "','" + Drone.UavTypeId + "','" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',11,'True');");
+       
+        if (DroneView.SelectItemsForParts != null)
+        {
+               for (var count = 0; count < DroneView.SelectItemsForParts.Count(); count++)
+                {
+                    string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
+                    int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
+                   string  SQL = "Insert into M2M_DroneParts (DroneId,PartsId,Quantity) values(" + DroneId + "," + PartsId +","+ Qty + ");";
+                        int  ID = Util.doSQL(SQL);
+                }
+          
+        }
+
+                return RedirectToAction("Index");
       } catch (Exception ex) {
         return View(DroneView);
       }
@@ -157,11 +170,31 @@ namespace eX_Portal.Controllers {
       } catch {
         return View();
       }
+
     }
+        public ActionResult FillParts(int DroneId)
+        {
+            var DroneParts = (from MSTR_Parts in ctx.MSTR_Parts
+                              select new
+                              {
+                                  MSTR_Parts.PartsId,
+                                  MSTR_Parts.Model,
+                                  MSTR_Parts.PartsName,
+                              });
+
+
+
+            return Json(DroneParts, JsonRequestBehavior.AllowGet);
+        }
+
+        private object Toint(int? supplierId)
+        {
+            throw new NotImplementedException();
+        }
 
 
 
 
 
-  }
+    }
 }

@@ -145,7 +145,7 @@ namespace eX_Portal.exLogic
             SqlConnection con = new SqlConnection();
           //  Connection conSonrai = new Connection();
             con =Util.getSonraiSQLServer();
-            string query = "Select  TOP 14  [Lat],[Lon] ,[Alt]  ,[Speed]  ,[FixQuality]  ,[Satellites] ,[Timstamp] ,[Pitch] ,[Roll] ,[Heading]  ,[TotalFlightTime]  FROM[sonrai001].[dbo].[WorkOrderTemp] order by  1 desc";
+            string query = "Select  TOP 50 WorkorderTempID as SNO,[Lat],[Lon] ,[Alt]  ,[Speed]  ,[FixQuality]  ,[Satellites] ,[Timstamp] ,[Pitch] ,[Roll] ,[Heading]  ,[TotalFlightTime]  FROM[sonrai001].[dbo].[WorkOrderTemp] order by  1 desc";
 
             DataSet ds = Util.ExecuteDataset(con, CommandType.Text, query);
             if(ds.Tables.Count>0)
