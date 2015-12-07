@@ -364,10 +364,10 @@ namespace eX_Portal.Controllers
                 }
                     return RedirectToAction("Index");
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                
-                return View();
+        Util.ErrorHandler(ex);
+        return View();
             }
         }
 
