@@ -89,7 +89,7 @@ namespace eX_Portal.exLogic
 
 
                 String SQL = "select * from MSTR_Menu where MenuId" +
-                    " in(select b.MenuId from  MSTR_Profile a left join   M2M_UserProfile b" +
+                    " in(select b.MenuId from  MSTR_Profile a left join   M2M_ProfileMenu b" +
                      "  on a.ProfileId = b.ProfileId left join MSTR_User c on b.ProfileId = c.UserProfileId" +
                      "   where c.UserId =" + UserId + ")order by SortOrder asc ";
                 var MenuName = db.Database.SqlQuery<MSTR_Menu>(SQL);
