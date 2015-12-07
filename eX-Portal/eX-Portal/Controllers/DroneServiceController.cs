@@ -70,44 +70,46 @@ namespace eX_Portal.Controllers
 
         public ActionResult ServicePartsReplaced(int ID = 0)
         {
-            String SQL = "select \n" +
-                        "PartsName,\n" +
-                        "Model,\n" +
-                        "ISNULL(MSTR_Account.Name, '') as Supplier,\n" +
-                        "M2M_DroneServiceParts.QtyCount,\n" +
-                        " mstr_parts.PartsId as id\n" +
-                      " from M2M_DroneServiceParts LEFT JOIN  MSTR_Parts on \n" +
-                        "    M2M_DroneServiceParts.PartsId = MSTR_Parts.PartsId \n" +
-                        "    LEFT JOIN MSTR_Account On\n " +
-                        "   MSTR_Account.AccountId = MSTR_Parts.SupplierId \n" +
-                        "    where M2M_DroneServiceParts.ServiceId =" + ID + " and M2M_DroneServiceParts.ServicePartsType = 'REP'";
+            //String SQL = "select \n" +
+            //            "PartsName,\n" +
+            //            "Model,\n" +
+            //            "ISNULL(MSTR_Account.Name, '') as Supplier,\n" +
+            //            "M2M_DroneServiceParts.QtyCount,\n" +
+            //            " mstr_parts.PartsId as id\n" +
+            //          " from M2M_DroneServiceParts LEFT JOIN  MSTR_Parts on \n" +
+            //            "    M2M_DroneServiceParts.PartsId = MSTR_Parts.PartsId \n" +
+            //            "    LEFT JOIN MSTR_Account On\n " +
+            //            "   MSTR_Account.AccountId = MSTR_Parts.SupplierId \n" +
+            //            "    where M2M_DroneServiceParts.ServiceId =" + ID + " and M2M_DroneServiceParts.ServicePartsType = 'REP'";
 
+
+            //List<String> theData = new List<String>();
+            //using (var ctx = new ExponentPortalEntities())
+            //using (var cmd = ctx.Database.Connection.CreateCommand())
+            //{
+            //    ctx.Database.Connection.Open();
+            //    cmd.CommandText = SQL;
+            //    using (var reader = cmd.ExecuteReader())
+            //    {
+            //        while (reader.Read()) {
+            //            var PartID = reader.GetValue(4).ToString();
+            //            var Val =
+            //                    "<td>" + reader.GetValue(0).ToString() + "</td>\n" +
+            //                    "<td>" + reader.GetValue(1).ToString() + "</td>\n" +
+            //                    "<td>" + reader.GetValue(2).ToString() + "</td>\n" +
+            //                    // "<td>" + reader.GetValue(3).ToString() + "</td>\n" +
+            //                    "<td><Input type='Text'  name='SelectItemsForReplaced_" + PartID + "' style='width:40px' value=" + reader.GetValue(3).ToString() + ">" +
+            //                    "<Input type='hidden'  name='SelectItemsForReplaced' style='width:40px' value=" + PartID + ">" +
+            //                    "</td>" +
+
+            //                    "<td><a class='delete' href='#'>x</a></td>\n";
+            //            theData.Add(Val);
+            //        }
+            //    }
+            //}
 
             List<String> theData = new List<String>();
-            using (var ctx = new ExponentPortalEntities())
-            using (var cmd = ctx.Database.Connection.CreateCommand())
-            {
-                ctx.Database.Connection.Open();
-                cmd.CommandText = SQL;
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read()) {
-                        var PartID = reader.GetValue(4).ToString();
-                        var Val =
-                                "<td>" + reader.GetValue(0).ToString() + "</td>\n" +
-                                "<td>" + reader.GetValue(1).ToString() + "</td>\n" +
-                                "<td>" + reader.GetValue(2).ToString() + "</td>\n" +
-                                // "<td>" + reader.GetValue(3).ToString() + "</td>\n" +
-                                "<td><Input type='Text'  name='SelectItemsForReplaced_" + PartID + "' style='width:40px' value=" + reader.GetValue(3).ToString() + ">" +
-                                "<Input type='hidden'  name='SelectItemsForReplaced' style='width:40px' value=" + PartID + ">" +
-                                "</td>" +
-                                
-                                "<td><a class='delete' href='#'>x</a></td>\n";
-                        theData.Add(Val);
-                    }
-                }
-            }
-
+            theData = Listing.ServicePartsListing(ID, "REP");
             return PartialView(theData);
 
         }//
@@ -116,44 +118,46 @@ namespace eX_Portal.Controllers
 
         public ActionResult ServicePartsRefurbished(int ID = 0)
         {
-            String SQL = "select \n" +
-                        "PartsName,\n" +
-                        "Model,\n" +
-                        "ISNULL(MSTR_Account.Name, '') as Supplier,\n" +
-                        "M2M_DroneServiceParts.QtyCount,\n" +
-                        " mstr_parts.PartsId as id\n" +
-                      " from M2M_DroneServiceParts LEFT JOIN  MSTR_Parts on \n" +
-                        "    M2M_DroneServiceParts.PartsId = MSTR_Parts.PartsId \n" +
-                        "    LEFT JOIN MSTR_Account On\n " +
-                        "   MSTR_Account.AccountId = MSTR_Parts.SupplierId \n" +
-                        "    where M2M_DroneServiceParts.ServiceId =" + ID + " and M2M_DroneServiceParts.ServicePartsType = 'REF'";
+            //String SQL = "select \n" +
+            //            "PartsName,\n" +
+            //            "Model,\n" +
+            //            "ISNULL(MSTR_Account.Name, '') as Supplier,\n" +
+            //            "M2M_DroneServiceParts.QtyCount,\n" +
+            //            " mstr_parts.PartsId as id\n" +
+            //          " from M2M_DroneServiceParts LEFT JOIN  MSTR_Parts on \n" +
+            //            "    M2M_DroneServiceParts.PartsId = MSTR_Parts.PartsId \n" +
+            //            "    LEFT JOIN MSTR_Account On\n " +
+            //            "   MSTR_Account.AccountId = MSTR_Parts.SupplierId \n" +
+            //            "    where M2M_DroneServiceParts.ServiceId =" + ID + " and M2M_DroneServiceParts.ServicePartsType = 'REF'";
 
+
+            //List<String> theData = new List<String>();
+            //using (var ctx = new ExponentPortalEntities())
+            //using (var cmd = ctx.Database.Connection.CreateCommand())
+            //{
+            //    ctx.Database.Connection.Open();
+            //    cmd.CommandText = SQL;
+            //    using (var reader = cmd.ExecuteReader())
+            //    {
+            //        while (reader.Read())
+            //        {
+            //            var PartID = reader.GetValue(4).ToString();
+            //            var Val =
+            //                    "<td>" + reader.GetValue(0).ToString() + "</td>\n" +
+            //                    "<td>" + reader.GetValue(1).ToString() + "</td>\n" +
+            //                    "<td>" + reader.GetValue(2).ToString() + "</td>\n" +
+            //                     // "<td>" + reader.GetValue(3).ToString() + "</td>\n" +
+            //                     "<td><Input type='Text'  name='SelectItemsForRefurbished_" + PartID + "' style='width:40px' value=" + reader.GetValue(3).ToString() + ">" +
+            //                    "<Input type='hidden'  name='SelectItemsForRefurbished' style='width:40px' value=" + PartID + ">" +
+            //                    "</td>" +
+            //                    "<td><a class='delete' href='#'>x</a></td>\n";
+            //            theData.Add(Val);
+            //        }
+            //    }
+            //}
 
             List<String> theData = new List<String>();
-            using (var ctx = new ExponentPortalEntities())
-            using (var cmd = ctx.Database.Connection.CreateCommand())
-            {
-                ctx.Database.Connection.Open();
-                cmd.CommandText = SQL;
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var PartID = reader.GetValue(4).ToString();
-                        var Val =
-                                "<td>" + reader.GetValue(0).ToString() + "</td>\n" +
-                                "<td>" + reader.GetValue(1).ToString() + "</td>\n" +
-                                "<td>" + reader.GetValue(2).ToString() + "</td>\n" +
-                                 // "<td>" + reader.GetValue(3).ToString() + "</td>\n" +
-                                 "<td><Input type='Text'  name='SelectItemsForRefurbished_" + PartID + "' style='width:40px' value=" + reader.GetValue(3).ToString() + ">" +
-                                "<Input type='hidden'  name='SelectItemsForRefurbished' style='width:40px' value=" + PartID + ">" +
-                                "</td>" +
-                                "<td><a class='delete' href='#'>x</a></td>\n";
-                        theData.Add(Val);
-                    }
-                }
-            }
-
+            theData = Listing.ServicePartsListing(ID, "REF");
             return PartialView(theData);
 
         }//
