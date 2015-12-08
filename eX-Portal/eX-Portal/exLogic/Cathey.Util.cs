@@ -15,7 +15,7 @@ namespace eX_Portal.exLogic
     public partial class Util
     {
         static IEnumerable<SelectListItem> DropDownList = Enumerable.Empty<SelectListItem>();
-        
+        private static ExponentPortalEntities ctx;
         //static string connection = ConfigurationManager.ConnectionStrings["ExponentPortalSql"].ConnectionString;
         public static IEnumerable<SelectListItem> GetDropDowntList(string TypeField, string NameField, string ValueField, string SPName)
         {
