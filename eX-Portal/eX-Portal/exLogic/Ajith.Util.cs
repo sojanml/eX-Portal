@@ -15,7 +15,7 @@ namespace eX_Portal.exLogic
     {
 
         static IEnumerable<SelectListItem> DropDownLists = Enumerable.Empty<SelectListItem>();
-        private static ExponentPortalEntities cotx;
+        //private static ExponentPortalEntities cotx;
 
         public static Int32 toInt(String sItem)
         {

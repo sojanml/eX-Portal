@@ -162,6 +162,19 @@ namespace eX_Portal.Controllers
 
         }//
 
+        public String DroneServiceDetail(int ID=0)
+        {
+            string SQL = "select a.ServiceId as ServiceId ,a.DateOfService as " +
+                "ServiceDate,b.DroneId,b.DroneIdHexa as DroneHex,c.UserName as  " +
+                " ServicedBy, Count(*) Over() as _TotalRecords from MSTR_DroneService" +
+                " a left join MSTR_Drone b on a.DroneId=b.DroneId  " +
+                " left join MSTR_User c on a.CreatedBy=c.UserId where a.ServiceId="+ID;
+            qDetailView theView = new qDetailView(SQL);
+            theView.Columns = 3;
+
+            return theView.getTable();
+
+        }
         public String DroneDetail(int ID = 0)
         {
             String SQL =
@@ -364,10 +377,10 @@ namespace eX_Portal.Controllers
                 }
                     return RedirectToAction("Index");
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                
-                return View();
+        Util.ErrorHandler(ex);
+        return View();
             }
         }
 
