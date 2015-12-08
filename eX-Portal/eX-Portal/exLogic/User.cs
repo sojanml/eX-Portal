@@ -5,10 +5,34 @@ using System.Web;
 using eX_Portal.Models;
 using eX_Portal.ViewModel;
 using System.Web.Mvc;
+using System.Web.SessionState;
 
 namespace eX_Portal.exLogic {
   public class User {
     public static ExponentPortalEntities db = new ExponentPortalEntities();
+
+    public static bool hasAccess(String PermissionID) {
+      HttpSessionState Session = HttpContext.Current.Session;
+      int UserID = 0;
+      if(Session["UserID"] != null) Int32.TryParse(Session["UserID"].ToString(), out UserID);
+      String SQL =
+      "select\n" +
+      "  Count(MSTR_Menu.MenuID) as PermissionCount\n" +
+      "FROM\n" +
+      "  MSTR_User,\n" +
+      "  MSTR_Profile,\n" +
+      "  M2M_ProfileMenu,\n" +
+      "  MSTR_Menu\n" +
+      "WHERE\n" +
+      "  MSTR_User.UserID = " + UserID + " AND\n" +
+      "  MSTR_User.UserProfileId = MSTR_Profile.ProfileId AND\n" +
+      "  M2M_ProfileMenu.ProfileID = MSTR_Profile.ProfileId AND\n" +
+      "  MSTR_Menu.MenuId = M2M_ProfileMenu.MenuID AND\n" +
+      "  MSTR_Menu.PermissionId = '" + PermissionID + "'";
+      String PermissionCount = Util.getDBVal(SQL);
+
+      return (PermissionCount == "1");
+    }
 
     public static int UserValidation(String UserName, String Password) {
       try {

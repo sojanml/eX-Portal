@@ -10,20 +10,29 @@ using System.Web;
 namespace eX_Portal.exLogic {
 
   public class qView {
+    private bool _isFilterByTop = false;
     private ExponentPortalEntities ctx;
     public String SQL { get; set; }
     public List<String> ColumDef = new List<String>();
     public List<String> FilterColumns = new List<String>();
     public String onRowClick { get; set; }
-    HttpResponse Response = HttpContext.Current.Response;
-    HttpRequest Request = HttpContext.Current.Request;
+    public HttpResponse Response = HttpContext.Current.Response;
+    public HttpRequest Request = HttpContext.Current.Request;
+    private Dictionary<String, String> ColumnMapping = new Dictionary<string, string>();
 
     public int _TotalRecords {
       get; set;
     }
+    public bool isFilterByTop {
+      get {
+        return _isFilterByTop;
+      }
+      set {
+        _isFilterByTop = value;
+      }
+    }
 
     public bool HasRows { get; set; }
-    
     private List<qViewMenu> qViewMenus = new List<qViewMenu>();
     private bool IsPrimaryKey = false;
 
@@ -34,10 +43,11 @@ namespace eX_Portal.exLogic {
       setColumDef();
     } //qView
 
-    public bool addMenu(String Caption, String URL) {
+    public bool addMenu(String Caption, String URL, String Icon = "") {
       qViewMenu Menu = new qViewMenu{
         Caption= Caption,
-        URL= URL
+        URL= URL,
+        Icon = Icon
       };
       qViewMenus.Add(Menu);
       return true;
@@ -51,25 +61,29 @@ namespace eX_Portal.exLogic {
         if (i > 1) Menus.AppendLine(",");
         Menus.AppendLine("{");
         Menus.AppendLine("\"caption\": \"" + Menu.Caption +  "\",");
-        Menus.AppendLine("\"url\": \"" + Menu.URL + "\"");
+        Menus.AppendLine("\"url\": \"" + Menu.URL + "\",");
+        Menus.AppendLine("\"class\": \"" + Menu.ClassName + "\"");
         Menus.Append("}");
       }
       return Menus;
     }
 
+    private void setColumnMapping() {
+      SimpleParser DataColumns = new SimpleParser();
+      DataColumns.Parse("ALTER VIEW X as\n" + SQL);
+
+      foreach (var col in DataColumns.aColumnInfoList.ColumnList) {
+        String ColName = col.Alias;
+        String FieldName = (col.TableAlias == "" ? "" : col.TableAlias + ".") + col.TableColumnName;
+        ColumnMapping.Add(ColName, FieldName);
+      }
+    }
+
     private String getQueryFilter() {
       String Filter = "";
-      SimpleParser DataColumns = new SimpleParser();
-      Dictionary<String, String> ColumnMapping = new Dictionary<string, string>();
+
       var SearchTerm = Request["search[value]"].ToString();
       if (SearchTerm != "") {
-        DataColumns.Parse("ALTER VIEW X as\n" + SQL);
-      
-        foreach (var col in DataColumns.aColumnInfoList.ColumnList) {
-          String ColName = col.Alias;
-          String FieldName = (col.TableAlias == "" ? "" : col.TableAlias + ".") + col.TableColumnName;
-          ColumnMapping.Add(ColName, FieldName);
-        }
 
         foreach (var Column in FilterColumns) {
           if (Filter != "") Filter += " OR ";
@@ -91,17 +105,21 @@ namespace eX_Portal.exLogic {
       if (OrderDir != "asc") OrderDir = "desc";
 
       return ColumDef.ElementAt(OrderColumn) + " " + OrderDir;
-
+      
     }
 
-    private String setOrderAndFilter(String SQL) {
+    private String setOrderFilterPaging(String SQL) {
       //http://www.codeproject.com/Articles/32524/SQL-Parser
+
+      setColumnMapping();
 
       String SearchFilter = getQueryFilter();
       String SearchOrderBy = getQueryOrder();
       Parser.SqlParser myParser = new Parser.SqlParser();
       myParser.Parse(SQL);
 
+
+      //Add Required Filter
       if (SearchFilter != "") {
         if (string.IsNullOrEmpty(myParser.WhereClause)) {
           myParser.WhereClause = SearchFilter;
@@ -110,13 +128,33 @@ namespace eX_Portal.exLogic {
         }//if string.IsNullOrEmpty(myParser.WhereClause)
       }//if (SearchFilter != "")
 
-      if(SearchOrderBy != "") {
+
+      //Set Paging for SQL Query
+      String OrderColumn = Request["order[0][column]"];
+      String OrderField = ColumDef.ElementAt(Util.toInt(OrderColumn));
+      int StartAt = Util.toInt(Request["start"]);
+      int RowLength = Util.toInt(Request["length"]);
+      myParser.OrderByClause = "";
+      SQL = myParser.ToText();
+      String newSQL = "SELECT * FROM (\n" +
+        SQL.Replace("SELECT ", "SELECT ROW_NUMBER() OVER (ORDER BY " + ColumnMapping[OrderField] + ") AS _RowNumber,\n") +
+        ") as QueryTable\n" +
+        "WHERE\n" +
+        "  _RowNumber > " + StartAt + " AND _RowNumber <= " + (RowLength + StartAt) + "\n" +
+        "ORDER BY\n" +
+        SearchOrderBy;
+
+      return newSQL;
+      /*
+      //Add Order BY
+      if (SearchOrderBy != "") {
         myParser.OrderByClause = SearchOrderBy;
       }
 
       return myParser.ToText();
-
+      */
     }
+
 
     public String getDataJson() {
       int x = 0;
@@ -127,7 +165,7 @@ namespace eX_Portal.exLogic {
       using (var ctx = new ExponentPortalEntities())
       using (var cmd = ctx.Database.Connection.CreateCommand()) {
         ctx.Database.Connection.Open();
-        cmd.CommandText = setOrderAndFilter(SQL);
+        cmd.CommandText = setOrderFilterPaging(SQL);
         using (var reader = cmd.ExecuteReader()) {
 
           //For each row
@@ -187,7 +225,7 @@ namespace eX_Portal.exLogic {
     }
 
 
-    public String getDataTable() {
+    public String getDataTable(bool isIncludeData = false, bool isIncludeFooter = true) {
       StringBuilder Table = new StringBuilder();
       StringBuilder THead = new StringBuilder();
 
@@ -206,14 +244,48 @@ namespace eX_Portal.exLogic {
 
       Table.AppendLine("</thead>");
 
+      if(isIncludeData) {
+        Table.AppendLine("<tbody>");
+        Table.Append(getTableRows());
+        Table.AppendLine("</tbody>");
+      }
 
-      Table.AppendLine("<tfoot>");
-      Table.Append(THead);
-      Table.AppendLine("</tfoot>");
+      if(isIncludeFooter) { 
+        Table.AppendLine("<tfoot>");
+        Table.Append(THead);
+        Table.AppendLine("</tfoot>");
+      }
+
       Table.AppendLine("</table>");
       return Table.ToString();
     }//getDataTable()
 
+
+    public StringBuilder getTableRows() {
+
+      StringBuilder Rows = new StringBuilder();
+      bool isEven = false;
+
+      using (var ctx = new ExponentPortalEntities())
+      using (var cmd = ctx.Database.Connection.CreateCommand()) {
+        ctx.Database.Connection.Open();
+        cmd.CommandText = SQL;
+        using (var reader = cmd.ExecuteReader()) {
+          //For each row
+          while (reader.Read()) {
+            Rows.AppendLine("<tr class=\"" + (isEven ? "even" :"odd") +  "\">");
+            for (int i = 0; i < reader.FieldCount; i++) {
+              String DisplayValue = getFieldVal(reader, i);
+              Rows.AppendLine("<td>" + DisplayValue + "</td>");
+            }
+            Rows.AppendLine("</tr>");
+            isEven = !isEven;
+          } //while
+        }
+      }
+
+      return Rows;
+    }
 
     public String getScripts() {
 
@@ -254,7 +326,8 @@ namespace eX_Portal.exLogic {
 
 
     private void setColumDef() {
-      String mySQL = SQL.Replace("SELECT ", "SELECT TOP 1 ");
+      String mySQL = isFilterByTop ?
+        SQL.Replace("SELECT ", "SELECT TOP 1 ") : SQL;
       /*
       //can not use the none filter, we need to find is there any rows
       //exists to build the list
@@ -327,7 +400,18 @@ namespace eX_Portal.exLogic {
   }//class qView
 
   public class qViewMenu{
-    public String Caption { get; set; }
+    private String pCaption = "";
+    public String Caption {
+      get {
+        return pCaption;
+      }//set
+      set {
+        pCaption = value;
+        if(String.IsNullOrEmpty(ClassName)) ClassName = "_" + pCaption.ToLower().Replace(" ", "_");
+      }//set
+    }//property Caption
     public String URL { get; set; }
+    public String ClassName { get; set; }
+    public String Icon { get; set; }
   }
 }//namespace eX_Portal.exLogic

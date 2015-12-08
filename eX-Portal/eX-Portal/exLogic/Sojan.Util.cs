@@ -58,6 +58,19 @@ namespace eX_Portal.exLogic {
       return Result;
     }
 
+    public static int getDBInt(String SQL) {
+      int Result = 0;
+      using (var ctx = new ExponentPortalEntities()) {
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          var oResult = cmd.ExecuteScalar();
+          if (oResult != null) Int32.TryParse(oResult.ToString(), out Result);
+        }
+      }
+      return Result;
+    }
+
     public static Dictionary<String, Object> getDBRow(String SQL) {
       var Result = new Dictionary<String, Object>();
       Result["hasRows"] = false;
@@ -140,6 +153,14 @@ namespace eX_Portal.exLogic {
       // Get the line number from the stack frame
       var line = frame.GetFileLineNumber();
     }
+
+    public static String jsonStat(String Status, String Message = "") {
+      return "{\n" +
+        "\"status\":\"" + toSQL(Status) + "\",\n" +
+        "\"message\":\"" + toSQL(Message) + "\"\n" +
+        "}";
+    }
+
 
   }//class Util
 }
