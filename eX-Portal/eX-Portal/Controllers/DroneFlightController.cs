@@ -147,6 +147,41 @@ namespace eX_Portal.Controllers {
     }//DroneFlightDetail ()
 
 
+    public String ByDrone([Bind(Prefix = "ID")] int DroneID = 0) {
+      String SQL =
+      "SELECT TOP 5" +
+      "   MSTR_Drone.DroneName,\n" +
+      "   tblPilot.FirstName as PilotName,\n" +
+      "   tblGSC.FirstName as GSCName,\n" +
+      "   tblCreated.FirstName as CreatedBy,\n" +
+      "   FlightDate\n" +
+      "FROM\n" +
+      "  DroneFlight\n" +
+      "LEFT JOIN MSTR_Drone ON\n" +
+      "  MSTR_Drone.DroneId = DroneFlight.DroneID\n" +
+      "LEFT JOIN MSTR_User as tblPilot ON\n" +
+      "  tblPilot.UserID = DroneFlight.PilotID\n" +
+      "LEFT JOIN MSTR_User as tblGSC ON\n" +
+      "  tblGSC.UserID = DroneFlight.GSCID\n" +
+      "LEFT JOIN MSTR_User as tblCreated ON\n" +
+      "  tblCreated.UserID = DroneFlight.CreatedBy\n" +
+      "WHERE\n" +
+      "  DroneFlight.DroneID=" + DroneID + "\n" +
+      "ORDER BY" +
+      "  DroneFlight.ID DESC";
+
+      qView nView = new qView(SQL);
+      if(nView.HasRows) { 
+        nView.isFilterByTop = false;
+        return 
+          "<h2>Recent Flights</h2>\n"+
+          nView.getDataTable(true, false);
+      }
+
+      return "";
+      
+    }
+
 
   }//class
 }//namespace

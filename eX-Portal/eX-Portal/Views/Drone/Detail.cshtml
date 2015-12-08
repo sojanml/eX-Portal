@@ -4,10 +4,13 @@
 }
 @Html.Action("DroneDetail","Drone", new { ID = DroneID })
 
+<!-- Recent Flights-->
+@Html.Action("ByDrone", "DroneFlight", new { ID = DroneID })
 
 <h2>Checklist Set-Up</h2>
-
 @Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })
+
+
 
 
 @section scripts {
