@@ -275,12 +275,6 @@ table.report tfoot tr th {
 
 }
 
-table.report tr.to-delete td {
-  color:red !important;
-  text-decoration:line-through
-}
-
-
 table.report tr td,
 table.cheklist tr td
  {
@@ -512,10 +506,4 @@ ul.checkpoints li span.slno {
 span.info,
 span.slno {
   color: #ea050e;
-}
-
-#delete-confirm {
-  width: 300px;
-  height:200px;
-  font-size:10pt;
 }

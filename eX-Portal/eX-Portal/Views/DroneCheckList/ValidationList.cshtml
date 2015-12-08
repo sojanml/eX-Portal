@@ -2,14 +2,12 @@
 @{
   Layout = null;
 }
-<ul class="checkpoints">
+<ul class="general-list">
   @foreach (var item in Model) {
     <li>
       <a href="@Url.Action("Validation", "DroneCheckList", new {ID = item.ID, DroneID = ViewBag.DroneID } )">
         @Html.DisplayFor(modelItem => item.CheckListTitle)
-        @if (!String.IsNullOrEmpty(item.CheckListSubTitle)) {
-          <span class="subtitles"> - @Html.DisplayFor(modelItem => item.CheckListSubTitle)</span>
-        }
+        <span class="subtitles"> - @Html.DisplayFor(modelItem => item.CheckListSubTitle)</span>
       </a>
     </li>
   }

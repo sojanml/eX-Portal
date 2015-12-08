@@ -38,7 +38,7 @@ namespace eX_Portal.Controllers
         }
 
         [System.Web.Mvc.HttpGet]
-        public JsonResult GetFlightData()
+        public JsonResult GetFlightData(int id=0)
         {
 
             IList<DroneData> DroneDataList = Util.GetDroneData();

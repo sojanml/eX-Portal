@@ -15,7 +15,7 @@ namespace eX_Portal.exLogic
     public partial class Util
     {
         static IEnumerable<SelectListItem> DropDownList = Enumerable.Empty<SelectListItem>();
-        //private static ExponentPortalEntities ctx;
+        private static ExponentPortalEntities ctx;
         //static string connection = ConfigurationManager.ConnectionStrings["ExponentPortalSql"].ConnectionString;
         public static IEnumerable<SelectListItem> GetDropDowntList(string TypeField, string NameField, string ValueField, string SPName)
         {
@@ -145,7 +145,7 @@ namespace eX_Portal.exLogic
             SqlConnection con = new SqlConnection();
           //  Connection conSonrai = new Connection();
             con =Util.getSonraiSQLServer();
-            string query = "Select  TOP 50 WorkorderTempID as SNO,[Lat],[Lon] ,[Alt]  ,[Speed]  ,[FixQuality]  ,[Satellites] ,[Timstamp] ,[Pitch] ,[Roll] ,[Heading]  ,[TotalFlightTime]  FROM[sonrai001].[dbo].[WorkOrderTemp] order by  1 desc";
+            string query = "Select  TOP 30 WorkorderTempID as SNO,[Lat],[Lon] ,[Alt]  ,[Speed]  ,[FixQuality]  ,[Satellites] ,[Timstamp] ,[Pitch] ,[Roll] ,[Heading]  ,[TotalFlightTime]  FROM [sonrai001].[dbo].[WorkOrderTemp] order by  1 desc";
 
             DataSet ds = Util.ExecuteDataset(con, CommandType.Text, query);
             if(ds.Tables.Count>0)
@@ -160,7 +160,9 @@ namespace eX_Portal.exLogic
                         dd.Longitude = dr["Lon"].ToString();
                         dd.Roll = dr["Roll"].ToString();
                         dd.TotalFlightTime = dr["TotalFlightTime"].ToString();
-                     //   dd.ReadTime = Convert.ToDateTime(dr["Timestamp"].ToString());
+                        dd.DroneDataId = Convert.ToInt32(dr["SNO"].ToString());
+                        if(IsDate(dr["Timstamp"].ToString()))
+                        dd.ReadTime = Convert.ToDateTime(dr["Timstamp"].ToString());                        
                         dd.Satellites = dr["Satellites"].ToString();
                         dd.Speed = dr["Speed"].ToString();
                         dd.FixQuality = dr["FixQuality"].ToString();
@@ -175,5 +177,10 @@ namespace eX_Portal.exLogic
 
         }
 
+        public static  bool IsDate(string Timestamp)
+        {
+            DateTime tempDate;
+            return  DateTime.TryParse(Timestamp, out tempDate) ? true : false;
+        }
     }
 }

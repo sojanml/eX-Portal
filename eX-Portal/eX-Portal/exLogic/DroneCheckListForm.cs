@@ -382,8 +382,7 @@ namespace eX_Portal.exLogic {
       this.FieldValue = sFieldValue;
       try {
         FieldValue = Convert.ToDecimal(sFieldValue);
-      }  catch(Exception ex) {
-        Util.ErrorHandler(ex);
+      }  catch(Exception e) {
         //error in parsing data. set to zero
         FieldValue = 0;
       }

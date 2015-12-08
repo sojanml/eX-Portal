@@ -58,19 +58,6 @@ namespace eX_Portal.exLogic {
       return Result;
     }
 
-    public static int getDBInt(String SQL) {
-      int Result = 0;
-      using (var ctx = new ExponentPortalEntities()) {
-        using (var cmd = ctx.Database.Connection.CreateCommand()) {
-          ctx.Database.Connection.Open();
-          cmd.CommandText = SQL;
-          var oResult = cmd.ExecuteScalar();
-          if (oResult != null) Int32.TryParse(oResult.ToString(), out Result);
-        }
-      }
-      return Result;
-    }
-
     public static Dictionary<String, Object> getDBRow(String SQL) {
       var Result = new Dictionary<String, Object>();
       Result["hasRows"] = false;
@@ -143,24 +130,6 @@ namespace eX_Portal.exLogic {
      "  D.[DroneId]=" + DroneID;
       return getDBVal(SQL);
     }
-
-    public static void ErrorHandler(Exception ex) {
-      //Reference - http://stackoverflow.com/questions/3328990/c-sharp-get-line-number-which-threw-exception
-      // Get stack trace for the exception with source file information
-      var st = new System.Diagnostics.StackTrace(ex, true);
-      // Get the top stack frame
-      var frame = st.GetFrame(0);
-      // Get the line number from the stack frame
-      var line = frame.GetFileLineNumber();
-    }
-
-    public static String jsonStat(String Status, String Message = "") {
-      return "{\n" +
-        "\"status\":\"" + toSQL(Status) + "\",\n" +
-        "\"message\":\"" + toSQL(Message) + "\"\n" +
-        "}";
-    }
-
 
   }//class Util
 }

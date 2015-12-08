@@ -26,11 +26,6 @@ namespace eX_Portal.Controllers
 
             return View();
         }
-
-      public ActionResult NoAccess() {
-      return View();
-    }
-
     public ActionResult Error() {
       ViewBag.Title = "Error in processing";
       ViewBag.Message = "Internal Error while processing.";
