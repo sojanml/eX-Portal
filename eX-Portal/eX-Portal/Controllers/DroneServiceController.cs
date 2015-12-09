@@ -177,9 +177,10 @@ namespace eX_Portal.Controllers
                               + DroneService.Description + "'," + Session["UserId"] + ",'" +
                                DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "','"
                               + DroneServiceView.DroneID + "'," + DroneService.TypeOfService + ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'," + DroneService.FlightHour + "); ";
-                    int ID = Util.InsertSQL(SQL);
+                 // int ID = Util.InsertSQL(SQL);
+                    int ServiceId= Util.InsertSQL(SQL);
 
-                    int ServiceId = Util.GetServiceId();
+                    //   int ServiceId = Util.GetServiceId();
                     if (DroneServiceView.SelectItemsForReplaced != null)
                     {
                         if (DroneServiceView.SelectItemsForReplaced != null)
@@ -194,7 +195,7 @@ namespace eX_Portal.Controllers
 
 
 
-                                ID = Util.InsertSQL(SQL);
+                                int ID = Util.InsertSQL(SQL);
                             }
                         }
                     }
@@ -209,7 +210,7 @@ namespace eX_Portal.Controllers
                             int Qty = Util.toInt(Request["SelectItemsForRefurbished_" + PartsId]);
                             SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REF'," + Qty + " );";
 
-                            ID = Util.InsertSQL(SQL);
+                            int ID = Util.InsertSQL(SQL);
                         }
 
 
