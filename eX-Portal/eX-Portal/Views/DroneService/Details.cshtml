@@ -4,7 +4,7 @@
     ViewBag.Title = " ";
     Layout = "~/Views/Shared/_exPortal.cshtml";
 }
-@Html.Action("DroneDetail", "DroneService", new { ID =ViewBag.FlightID })
+@Html.Action("DroneServiceDetail", "DroneService", new { ID = ViewBag.ServiceId })
 @Html.Raw(Model.getDataTable())
 
 

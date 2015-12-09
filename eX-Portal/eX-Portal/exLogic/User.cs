@@ -92,7 +92,7 @@ namespace eX_Portal.exLogic {
         var UserId = System.Web.HttpContext.Current.Session["UserId"] == null ? 0 : System.Web.HttpContext.Current.Session["UserId"];
 
 
-        String SQL = "select * from MSTR_Menu where MenuId" +
+        String SQL = "select * from MSTR_Menu where Visible=1 and  MenuId" +
             " in(select b.MenuId from  MSTR_Profile a left join   M2M_ProfileMenu b" +
              "  on a.ProfileId = b.ProfileId left join MSTR_User c on b.ProfileId = c.UserProfileId" +
              "   where c.UserId =" + UserId + ")order by SortOrder asc ";
