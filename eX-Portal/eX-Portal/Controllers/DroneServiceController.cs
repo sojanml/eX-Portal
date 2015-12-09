@@ -14,6 +14,7 @@ namespace eX_Portal.Controllers
         // GET: DroneService
         public ActionResult Index()
         {
+            if (!exLogic.User.hasAccess("SERVICE.VIEW")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Drone Service Listing";
 
             String SQL = "select  a.ServiceId As ServiceId, " +
@@ -25,9 +26,9 @@ namespace eX_Portal.Controllers
                 "= c.TypeId where c.Type = 'ServiceType'";
             qView nView = new qView(SQL);
 
-            nView.addMenu("Detail", Url.Action("Details", new { ID = "_PKey" }));
-            nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-            nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("SERVICE.VIEW")) nView.addMenu("Detail", Url.Action("Details", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("SERVICE.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("SERVICE.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
             if (Request.IsAjaxRequest())
             {
                 Response.ContentType = "text/javascript";
@@ -42,11 +43,12 @@ namespace eX_Portal.Controllers
         // GET: DroneService/Details/5
         public ActionResult Details(int id)
         {
-
+            if (!exLogic.User.hasAccess("SERVICE.VIEW")) return RedirectToAction("NoAccess", "Home");
 
             String SQL = "select DroneId from MSTR_DroneService where  ServiceId=" + id;
 
             ViewBag.FlightID = Util.getDBVal(SQL);
+            ViewBag.ServiceId = id;
             ViewBag.Title = "View Checklist";
             ViewBag.Title = "Drone Service Details";
 
@@ -70,43 +72,7 @@ namespace eX_Portal.Controllers
 
         public ActionResult ServicePartsReplaced(int ID = 0)
         {
-            //String SQL = "select \n" +
-            //            "PartsName,\n" +
-            //            "Model,\n" +
-            //            "ISNULL(MSTR_Account.Name, '') as Supplier,\n" +
-            //            "M2M_DroneServiceParts.QtyCount,\n" +
-            //            " mstr_parts.PartsId as id\n" +
-            //          " from M2M_DroneServiceParts LEFT JOIN  MSTR_Parts on \n" +
-            //            "    M2M_DroneServiceParts.PartsId = MSTR_Parts.PartsId \n" +
-            //            "    LEFT JOIN MSTR_Account On\n " +
-            //            "   MSTR_Account.AccountId = MSTR_Parts.SupplierId \n" +
-            //            "    where M2M_DroneServiceParts.ServiceId =" + ID + " and M2M_DroneServiceParts.ServicePartsType = 'REP'";
-
-
-            //List<String> theData = new List<String>();
-            //using (var ctx = new ExponentPortalEntities())
-            //using (var cmd = ctx.Database.Connection.CreateCommand())
-            //{
-            //    ctx.Database.Connection.Open();
-            //    cmd.CommandText = SQL;
-            //    using (var reader = cmd.ExecuteReader())
-            //    {
-            //        while (reader.Read()) {
-            //            var PartID = reader.GetValue(4).ToString();
-            //            var Val =
-            //                    "<td>" + reader.GetValue(0).ToString() + "</td>\n" +
-            //                    "<td>" + reader.GetValue(1).ToString() + "</td>\n" +
-            //                    "<td>" + reader.GetValue(2).ToString() + "</td>\n" +
-            //                    // "<td>" + reader.GetValue(3).ToString() + "</td>\n" +
-            //                    "<td><Input type='Text'  name='SelectItemsForReplaced_" + PartID + "' style='width:40px' value=" + reader.GetValue(3).ToString() + ">" +
-            //                    "<Input type='hidden'  name='SelectItemsForReplaced' style='width:40px' value=" + PartID + ">" +
-            //                    "</td>" +
-
-            //                    "<td><a class='delete' href='#'>x</a></td>\n";
-            //            theData.Add(Val);
-            //        }
-            //    }
-            //}
+            if (!exLogic.User.hasAccess("SERVICE.VIEW")) RedirectToAction("NoAccess", "Home");
 
             List<String> theData = new List<String>();
             theData = Listing.ServicePartsListing(ID, "REP");
@@ -117,45 +83,8 @@ namespace eX_Portal.Controllers
 
 
         public ActionResult ServicePartsRefurbished(int ID = 0)
-        {
-            //String SQL = "select \n" +
-            //            "PartsName,\n" +
-            //            "Model,\n" +
-            //            "ISNULL(MSTR_Account.Name, '') as Supplier,\n" +
-            //            "M2M_DroneServiceParts.QtyCount,\n" +
-            //            " mstr_parts.PartsId as id\n" +
-            //          " from M2M_DroneServiceParts LEFT JOIN  MSTR_Parts on \n" +
-            //            "    M2M_DroneServiceParts.PartsId = MSTR_Parts.PartsId \n" +
-            //            "    LEFT JOIN MSTR_Account On\n " +
-            //            "   MSTR_Account.AccountId = MSTR_Parts.SupplierId \n" +
-            //            "    where M2M_DroneServiceParts.ServiceId =" + ID + " and M2M_DroneServiceParts.ServicePartsType = 'REF'";
-
-
-            //List<String> theData = new List<String>();
-            //using (var ctx = new ExponentPortalEntities())
-            //using (var cmd = ctx.Database.Connection.CreateCommand())
-            //{
-            //    ctx.Database.Connection.Open();
-            //    cmd.CommandText = SQL;
-            //    using (var reader = cmd.ExecuteReader())
-            //    {
-            //        while (reader.Read())
-            //        {
-            //            var PartID = reader.GetValue(4).ToString();
-            //            var Val =
-            //                    "<td>" + reader.GetValue(0).ToString() + "</td>\n" +
-            //                    "<td>" + reader.GetValue(1).ToString() + "</td>\n" +
-            //                    "<td>" + reader.GetValue(2).ToString() + "</td>\n" +
-            //                     // "<td>" + reader.GetValue(3).ToString() + "</td>\n" +
-            //                     "<td><Input type='Text'  name='SelectItemsForRefurbished_" + PartID + "' style='width:40px' value=" + reader.GetValue(3).ToString() + ">" +
-            //                    "<Input type='hidden'  name='SelectItemsForRefurbished' style='width:40px' value=" + PartID + ">" +
-            //                    "</td>" +
-            //                    "<td><a class='delete' href='#'>x</a></td>\n";
-            //            theData.Add(Val);
-            //        }
-            //    }
-            //}
-
+         {
+            if (!exLogic.User.hasAccess("SERVICE.VIEW")) RedirectToAction("NoAccess", "Home");
             List<String> theData = new List<String>();
             theData = Listing.ServicePartsListing(ID, "REF");
             return PartialView(theData);
@@ -163,7 +92,8 @@ namespace eX_Portal.Controllers
         }//
 
         public String DroneServiceDetail(int ID=0)
-        {
+             {
+            if (!exLogic.User.hasAccess("SERVICE.VIEW")) return "Access Denied";
             string SQL = "select a.ServiceId as ServiceId ,a.DateOfService as " +
                 "ServiceDate,b.DroneId,b.DroneIdHexa as DroneHex,c.UserName as  " +
                 " ServicedBy, Count(*) Over() as _TotalRecords from MSTR_DroneService" +
@@ -177,6 +107,7 @@ namespace eX_Portal.Controllers
         }
         public String DroneDetail(int ID = 0)
         {
+            if (!exLogic.User.hasAccess("SERVICE.VIEW")) return  "Access Denied";
             String SQL =
             "SELECT \n" +
             "  D.[DroneId] , \n" +
@@ -209,6 +140,7 @@ namespace eX_Portal.Controllers
         // GET: DroneService/Create
         public ActionResult Create()
         {
+            if (!exLogic.User.hasAccess("SERVICE.CREATE")) return RedirectToAction("NoAccess", "Home");
             var viewModel = new ViewModel.DroneServiceViewModel
             {
                 DroneService = new MSTR_DroneService(),
@@ -230,6 +162,7 @@ namespace eX_Portal.Controllers
         {
             try
             {
+                if (!exLogic.User.hasAccess("SERVICE.CREATE")) return RedirectToAction("NoAccess", "Home");
                 // TODO: Add insert logic here
                 if (ModelState.IsValid)
                 {
@@ -296,6 +229,7 @@ namespace eX_Portal.Controllers
         // GET: DroneService/Edit/5
         public ActionResult Edit(int id)
         {
+            if (!exLogic.User.hasAccess("SERVICE.EDIT")) return RedirectToAction("NoAccess", "Home");
             ExponentPortalEntities db = new ExponentPortalEntities();
             int DroneId = Util.GetDroneIdFromService(id);
             int TypeOfServiceId = Util.GetTypeOfIdFromService(id);
@@ -329,6 +263,7 @@ namespace eX_Portal.Controllers
             try
             {
                 // TODO: Add update logic here
+                if (!exLogic.User.hasAccess("SERVICE.EDIT")) return RedirectToAction("NoAccess", "Home");
                 if (ModelState.IsValid)
                 {
 
@@ -385,10 +320,10 @@ namespace eX_Portal.Controllers
         }
 
         // GET: DroneService/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
 
 
 
@@ -416,19 +351,36 @@ namespace eX_Portal.Controllers
         }
 
 
-        // POST: DroneService/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        // GET: DroneService/Delete/5
+
+        public string Delete([Bind(Prefix = "ID")]int DroneServiceID = 0)
         {
             try
             {
                 // TODO: Add delete logic here
 
-                return RedirectToAction("Index");
+                String SQL = "";
+                Response.ContentType = "text/json";
+                if (!exLogic.User.hasAccess("SERVICE.DELETE"))
+                  
+                    return Util.jsonStat("ERROR", "Access Denied");
+
+                //Delete the drone from database if there is no flights are created
+              
+
+                SQL = "DELETE FROM [M2M_DroneServiceParts] WHERE ServiceId = " + DroneServiceID;
+                Util.doSQL(SQL);
+
+                SQL = "DELETE FROM [MSTR_DRONESERVICE] WHERE ServiceId = " + DroneServiceID;
+                Util.doSQL(SQL);
+
+                return Util.jsonStat("OK");
+
+               
             }
             catch
             {
-                return View();
+                return"error";
             }
         }
     }
