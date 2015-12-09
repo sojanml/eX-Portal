@@ -16,11 +16,11 @@ namespace eX_Portal.Controllers
         {
             ViewBag.Title = "Drone Service Listing";
 
-            String SQL = " select  ROW_NUMBER() Over (Order by a.ServiceId) As SNo, " +
+            String SQL = "select  a.ServiceId As ServiceId, " +
                 " b.DroneName as DroneName,c.Name as ServiceType,a.DateOfService as DateOfService,a.FlightHour" +
                 " , a.Description,Count(*) Over() as _TotalRecords ,  a.ServiceId as _PKey " +
-                " from [ExponentPortal].[dbo].MSTR_DroneService a left join" +
-                "[ExponentPortal].[dbo].MSTR_Drone b on a.DroneId = b.DroneId" +
+                " from MSTR_DroneService a left join " +
+                " MSTR_Drone b on a.DroneId = b.DroneId" +
                 " left join [ExponentPortal].[dbo].LUP_Drone c on a.TypeOfServiceId " +
                 "= c.TypeId where c.Type = 'ServiceType'";
             qView nView = new qView(SQL);
