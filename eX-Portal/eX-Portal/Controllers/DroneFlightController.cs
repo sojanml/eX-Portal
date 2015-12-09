@@ -2,6 +2,7 @@
 using eX_Portal.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,6 +11,7 @@ namespace eX_Portal.Controllers {
   public class DroneFlightController : Controller {
     // GET: DroneFlight
     public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Drone Flights";
       ViewBag.DroneID = DroneID;
 
@@ -43,10 +45,10 @@ namespace eX_Portal.Controllers {
       }
 
       qView nView = new qView(SQL);
-      nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-      nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("FLIGHT.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("FLIGHT.VIEW")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
       nView.addMenu("Live Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
-      nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("FLIGHT.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -58,6 +60,7 @@ namespace eX_Portal.Controllers {
     }//Index()
 
     public ActionResult Create([Bind(Prefix = "ID")] int DroneID = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT.CREATE")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Create Drone Flight";
       DroneFlight InitialData = new DroneFlight();
       InitialData.DroneID = DroneID;
@@ -66,6 +69,7 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public ActionResult Create(DroneFlight theFlight) {
+      if (!exLogic.User.hasAccess("FLIGHT.CREATE")) return RedirectToAction("NoAccess", "Home");
       if (theFlight.DroneID < 1 || theFlight.DroneID == null) ModelState.AddModelError("DroneID", "You must select a Drone.");
       if (theFlight.PilotID < 1 || theFlight.PilotID == null) ModelState.AddModelError("PilotID", "Pilot is required for a Flight.");
       if (theFlight.GSCID < 1 || theFlight.GSCID == null) ModelState.AddModelError("GSCID", "A Ground Station Controller should be slected.");
@@ -85,7 +89,51 @@ namespace eX_Portal.Controllers {
 
     }
 
+    public ActionResult Edit([Bind(Prefix = "ID")] int FlightID = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT.EDIT")) return RedirectToAction("NoAccess", "Home");
+      ViewBag.Title = "Edit Drone Flight";
+      ExponentPortalEntities db = new ExponentPortalEntities();   
+      DroneFlight InitialData = db.DroneFlights.Find(FlightID); 
+      return View(InitialData);
+    }
+
+    [HttpPost]
+    public ActionResult Edit(DroneFlight InitialData) {
+      if (!exLogic.User.hasAccess("FLIGHT.EDIT")) return RedirectToAction("NoAccess", "Home");
+
+      ViewBag.Title = "Edit Drone Flight";
+      ExponentPortalEntities db = new ExponentPortalEntities();
+      db.Entry(InitialData).State = EntityState.Modified;
+      db.SaveChanges();
+      return RedirectToAction("Detail", new { ID = InitialData.ID });
+    }
+
+
+    // GET: Drone/Delete/5
+    public String Delete([Bind(Prefix = "ID")]int FlightID = 0) {
+      String SQL = "";
+      Response.ContentType = "text/json";
+      if (!exLogic.User.hasAccess("FLIGHT.DELETE"))
+        return Util.jsonStat("ERROR", "Access Denied");
+
+      //Delete the drone from database if there is no checklist is created
+      SQL = "SELECT Count(*) FROM [DroneCheckList] WHERE FlightID = " + FlightID;
+      if (Util.getDBInt(SQL) != 0)
+        return Util.jsonStat("ERROR", "You can not delete a flight after creating checklist");
+
+      SQL = "SELECT Count(*) FROM [FlightMapData] WHERE FlightID = " + FlightID;
+      if (Util.getDBInt(SQL) != 0)
+        return Util.jsonStat("ERROR", "You can not delete a flight when contain the GPS data");
+
+      SQL = "DELETE FROM [DroneFlight] WHERE ID = " + FlightID;
+      Util.doSQL(SQL);
+
+
+      return Util.jsonStat("OK");
+    }
+
     public ActionResult Detail(int ID = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT.VIEW")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Drone Flight Details";
       ViewBag.FlightID = ID;
 
@@ -119,6 +167,7 @@ namespace eX_Portal.Controllers {
     }//Detail()
 
     public String DroneFlightDetail(int ID = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT.VIEW")) return "Access Denied";
       String SQL =
       "SELECT\n" +
       "   DroneFlight.ID,\n" +
@@ -148,6 +197,7 @@ namespace eX_Portal.Controllers {
 
 
     public String ByDrone([Bind(Prefix = "ID")] int DroneID = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT")) return "Access Denied";
       String SQL =
       "SELECT TOP 5" +
       "   MSTR_Drone.DroneName,\n" +
