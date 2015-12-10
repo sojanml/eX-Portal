@@ -101,10 +101,12 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult Validation([Bind(Prefix = "ID")] int CheckListID = 0, int DroneID = 0) {
+      if (!exLogic.User.hasAccess("CHECKLIST.SETUP")) return RedirectToAction("NoAccess", "Home");
       //if (FlightID == 0) Int32.TryParse(Request["FlightID"], out FlightID);
 
       DroneCheckListForm CheckList = new DroneCheckListForm(CheckListID, DroneID);
-      ViewBag.Title = "Checklist set-up - " + CheckList.CheckListTitle + " [" + Util.getDroneName(DroneID) + "]";
+      ViewBag.Title = "Set Up " + CheckList.CheckListTitle +
+        (CheckList.CheckListSubTitle == "" ? "" : " (" + CheckList.CheckListSubTitle + ")");
       CheckList.DroneID = DroneID;
       return View(CheckList);
     }

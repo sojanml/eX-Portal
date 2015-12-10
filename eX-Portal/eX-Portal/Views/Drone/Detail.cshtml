@@ -13,9 +13,10 @@
 
 @Html.Action("getDroneParts", "Drone", new { ID = DroneID })
 
-<h2>Checklist Set-Up</h2>
-@Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })
-
+@if (eX_Portal.exLogic.User.hasAccess("CHECKLIST.SETUP")) { 
+  <h2>Checklist Set-Up</h2>
+  @Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })
+}
 
 
 

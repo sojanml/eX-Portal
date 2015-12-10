@@ -159,7 +159,7 @@ namespace eX_Portal.exLogic {
 
     public static String getDroneName(int DroneID) {
       String SQL = "SELECT \n" +
-     "  D.[DroneName] + ' - ' +  DroneIdHexa as DroneName\n" +
+     "  D.[DroneName]\n" +
      "FROM\n" +
      "  [ExponentPortal].[dbo].[MSTR_Drone] D\n" +
      "WHERE\n" +
