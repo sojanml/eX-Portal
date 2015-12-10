@@ -18,7 +18,6 @@ namespace eX_Portal.Controllers {
       String SQL = "SELECT \n" +
           "  D.[DroneId],\n" +
           "  D.[DroneName],\n" +
-          "  D.[DroneIdHexa],\n" +
           "  D.[CommissionDate],\n" +
           "  D.[DroneSerialNo],\n" +
           "  O.Name as OwnerName,\n" +
