@@ -17,6 +17,39 @@ namespace eX_Portal.exLogic
         static IEnumerable<SelectListItem> DropDownLists = Enumerable.Empty<SelectListItem>();
         //private static ExponentPortalEntities cotx;
 
+
+        public static IEnumerable<SelectListItem>LUPTypeList()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+           
+
+            String SQL = "SELECT 0 as Value, 'Not Available' as Name";
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+                    SQL=  "SELECT MIN(x.id)as value,x.type  as name FROM LUP_Drone x  JOIN(SELECT p.type " +
+                        "FROM LUP_Drone p  GROUP BY p.type) y ON y.type = x.type GROUP BY x.type";
+
+                           
+                           
+                    cmd.CommandText = SQL;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Value"].ToString() });
+                        }
+                    }
+
+                    ctx.Database.Connection.Close();
+                } //using Database.Connection
+            }//using ExponentPortalEntities;
+            return SelectList; //return the list objects
+        }//function GetDropDownt
+
+
         public static Int32 toInt(String sItem)
         {
             int Temp;
@@ -198,4 +231,5 @@ namespace eX_Portal.exLogic
 
     }
 }
+
 

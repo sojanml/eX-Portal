@@ -34,7 +34,7 @@ namespace eX_Portal.Controllers
             //string JsonData=Json(LiveDrones)
             // return Json(JsonData);
             return Json(LiveDrones, JsonRequestBehavior.AllowGet);
-           // return LiveDrones;
+           // return LiveDrones;GetMessage
         }
 
         [System.Web.Mvc.HttpGet]
@@ -50,7 +50,24 @@ namespace eX_Portal.Controllers
         }
 
 
+        public string Send()
+        {
+            /*
+            SqlConnection con = new SqlConnection();
+            DataSet dsLogin = new DataSet();
+            Connection conSonrai = new Connection();
+            // Response.Write("OK");
+            string reuestquery = Request.QueryString["Message"];
+            string[] data = reuestquery.Split('|');
 
+            string strInsQry = "INSERT INTO [dbo].[WorkOrderTemp] ([QueueMessage],Workordernumber,[Lat] ,[Lon] ,[Alt] ,[Speed] ,[FixQuality] ,[Satellites]  ,[Timstamp] ,[Pitch]   ,[Roll]    ,[Heading]  ,[TotalFlightTime])"
+            + "VALUES ('" + reuestquery + "','" + data[0] + "','" + data[1] + "','" + data[2] + "','" + data[3] + "','" + data[4] + "','" + data[5] + "','" + data[6] + "','" + data[7] + "','" + data[8] + "','" + data[9] + "','" + data[10] + "','" + data[11] + "')";
 
+            con = conSonrai.getSonraiConnection();
+            con.Open();
+            dsLogin = SqlHelper.ExecuteDataset(con, CommandType.Text, strInsQry);
+            con.Close();*/
+            return "";
+        }
     }
 }
