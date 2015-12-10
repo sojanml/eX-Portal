@@ -29,11 +29,8 @@
     <section class="layout">
       <div class="toolbar clearfix">
         <nav class="breadcrumbs">
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Drone</a></li>
-            <li>@ViewBag.Title</li>
-          </ul>
+          @Html.Partial("_BreadCrumbs")
+
         </nav>
         @Html.Partial("_LoginPartial")
       </div>

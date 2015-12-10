@@ -94,13 +94,14 @@ namespace eX_Portal.exLogic {
 
     public static List<Dictionary<String, Object>> getDBRows(String SQL) {      
       var Rows = new List<Dictionary<String, Object>>();
+      var Result = new Dictionary<String, Object>();
       using (var ctx = new ExponentPortalEntities()) {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {
-            var Result = new Dictionary<String, Object>();
             while (reader.Read()) {
+              Result = new Dictionary<String, Object>();
               Result["hasRows"] = true;
               for (int i = 0; i < reader.FieldCount; i++) {
                 Result[reader.GetName(i)] = reader.GetValue(i);

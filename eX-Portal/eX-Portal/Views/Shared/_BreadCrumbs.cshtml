@@ -1,0 +1,12 @@
+﻿@using eX_Portal.exLogic;
+@{
+  String ControllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+  String ActionName = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+}
+<ul>
+  <li><a href="@Url.Action("Index", "Home")">Dashboard</a></li>
+  @if (ActionName != "Index") {
+    <li><a href="@Url.Action("Index", ControllerName)">@Util.toCaption(ControllerName)</a></li>
+  }
+  <li>@ViewBag.Title</li>
+</ul>
