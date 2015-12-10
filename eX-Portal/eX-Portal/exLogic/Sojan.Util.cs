@@ -44,7 +44,7 @@ namespace eX_Portal.exLogic {
       return result;
     }
 
-    public static string getDBVal(String SQL) {
+    public static String getDBVal(String SQL) {
       String Result = "";
       using (var ctx = new ExponentPortalEntities()) {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
@@ -89,6 +89,28 @@ namespace eX_Portal.exLogic {
         }//using ctx.Database.Connection.CreateCommand
       }//using ExponentPortalEntities
       return Result;
+    }//function
+
+
+    public static List<Dictionary<String, Object>> getDBRows(String SQL) {      
+      var Rows = new List<Dictionary<String, Object>>();
+      using (var ctx = new ExponentPortalEntities()) {
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          using (var reader = cmd.ExecuteReader()) {
+            var Result = new Dictionary<String, Object>();
+            while (reader.Read()) {
+              Result["hasRows"] = true;
+              for (int i = 0; i < reader.FieldCount; i++) {
+                Result[reader.GetName(i)] = reader.GetValue(i);
+              }//for
+              Rows.Add(Result);
+            }//while
+          }//using reader
+        }//using ctx.Database.Connection.CreateCommand
+      }//using ExponentPortalEntities
+      return Rows;
     }//function
 
     public static String getQ(String FieldName) {

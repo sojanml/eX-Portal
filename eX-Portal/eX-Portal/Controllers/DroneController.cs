@@ -74,6 +74,13 @@ namespace eX_Portal.Controllers {
       Parts = Listing.DroneListing(ID);
       return PartialView(Parts);
     }
+
+    public ActionResult getDroneParts(int ID = 0) {
+      if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
+      var Parts = Listing.getParts(ID);
+      return PartialView(Parts);
+    }
+
     // GET: Drone/Details/5
     public String DroneDetail([Bind(Prefix = "ID")]  int DroneID) {
       if (!exLogic.User.hasAccess("DRONE")) return "Access Denied";
@@ -85,9 +92,7 @@ namespace eX_Portal.Controllers {
           "  D.[DroneSerialNo],\n" +
           "  O.Name as OwnerName,\n" +
           "  M.Name as ManufactureName,\n" +
-          "  U.Name as UAVType,\n" +
-          "  Count(*) Over() as _TotalRecords,\n" +
-          "  D.[DroneId] as _PKey\n" +
+          "  U.Name as UAVType\n" +
           "FROM\n" +
           "  [ExponentPortal].[dbo].[MSTR_Drone] D\n" +
           "inner join LUP_Drone  O on\n" +

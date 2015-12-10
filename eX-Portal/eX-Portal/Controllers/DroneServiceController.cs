@@ -105,6 +105,30 @@ namespace eX_Portal.Controllers
             return theView.getTable();
 
         }
+
+
+    public String ByDrone([Bind(Prefix = "ID")] int DroneID = 0) {
+      String SQL = "select TOP 5" +
+          "  a.ServiceId As ServiceId," +
+          "  b.DroneName as DroneName," +
+          "  c.Name as ServiceType," +
+          "  a.DateOfService as DateOfService," +
+          "  a.FlightHour\n" +
+          "from" +
+          "  MSTR_DroneService a\n" +
+          "left join MSTR_Drone b on\n" +
+          "  a.DroneId = b.DroneId\n" +
+          "left join LUP_Drone c on\n" +
+          "  a.TypeOfServiceId = c.TypeId\n" +
+          "where\n" +
+          " c.Type = 'ServiceType'\n" +
+          "ORDER BY\n" +
+          "  a.DateOfService DESC";
+      qView nView = new qView(SQL);
+      return
+        (nView.HasRows ? "<h2>Recent Services</h2>": "") + 
+        nView.getDataTable(true, false);
+    }
         public String DroneDetail(int ID = 0)
         {
             if (!exLogic.User.hasAccess("SERVICE.VIEW")) return  "Access Denied";
