@@ -1,0 +1,26 @@
+﻿@model List<Dictionary<String, Object>>
+
+@if(Model.Any()) { 
+  <h2>Used Parts</h2>
+<table class="report" id="Table_SelectItemsForParts">
+  <thead>
+    <tr>
+      <th>Parts Name</th>
+      <th>Model</th>
+      <th>Supplier</th>
+      <th>Qty</th>
+    </tr>
+  </thead>
+
+  @foreach (var item in Model) {
+    <tr>
+      <td>@item["PartsName"]</td>
+      <td>@item["Model"]</td>
+      <td>@item["Supplier"]</td>
+      <td>@item["Quantity"]</td>
+    </tr>
+  }
+</table>
+
+
+}

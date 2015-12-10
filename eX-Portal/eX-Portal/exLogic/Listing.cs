@@ -12,6 +12,25 @@ namespace eX_Portal.exLogic
     public class Listing
     {
 
+    public static List<Dictionary<String, Object>>getParts(int DroneID = 0) {
+      string SQL = "select\n" +
+        "  PartsName,\n" +
+        "  Model,\n" +
+        "  ISNULL(MSTR_Account.Name, '') as Supplier," +
+        "  M2M_DroneParts.Quantity,\n" +
+        "  M2M_DroneParts.PartsId as id " +
+        "from\n" +
+        "  M2M_DroneParts\n" +
+        "LEFT JOIN  MSTR_Parts on\n" +
+        "  M2M_DroneParts.PartsId = MSTR_Parts.PartsId\n" +
+        "LEFT JOIN MSTR_Account On\n" +
+        "  MSTR_Account.AccountId = MSTR_Parts.SupplierId\n" +
+        "where\n" +
+        "  M2M_DroneParts.DroneId =" + DroneID;
+      return Util.getDBRows(SQL);
+    }
+
+
         //this creates list of droneparts  for partial view
         public static List<string>DroneListing(int DroneId)
           {

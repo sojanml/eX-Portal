@@ -255,7 +255,8 @@ table.report,
 table.cheklist {
  width: 100%;
  empty-cells: show;
-    padding-top: 10px;
+ padding-top: 10px;
+ margin-bottom:20px;
 }
 table.report thead tr th,
 table.report tfoot tr th,
