@@ -16,14 +16,31 @@ namespace eX_Portal.Controllers
             return View();
         }
 
+
+
+
+
+        public PartialViewResult ListNames(ViewModel.ListViewModel list   ,String TypeName)
+        {
+            ExponentPortalEntities db = new ExponentPortalEntities();
+            var result = from r in db.LUP_Drone
+                         where r.Type == TypeName
+                         select r;
+
+            list.NameList = result;
+            list.TypeCopy = TypeName;
+            return PartialView("Details", list);
+        }
+
+        
         // GET: List/Details/5
-        public ActionResult Details(string Name)
+        public ActionResult Details(string TypeName)
         {
 
 
 
 
-            String SQL = "select name, Count(*) Over() as _TotalRecords,TypeId as _PKey from LUP_Drone where type=" + Name;
+            String SQL = "select name, Count(*) Over() as _TotalRecords,TypeId as _PKey from LUP_Drone where type='" + TypeName +"'";
             qView nView = new qView(SQL);
 
           
@@ -43,7 +60,7 @@ namespace eX_Portal.Controllers
         public ActionResult Create()
 
         {
-
+            
             var viewModel = new ViewModel.ListViewModel
             {
                Typelist = Util.LUPTypeList()
@@ -55,12 +72,36 @@ namespace eX_Portal.Controllers
 
         // POST: List/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(ViewModel.ListViewModel ListView)
         {
             try
             {
-                // TODO: Add insert logic here
 
+                // TODO: Add insert logic here
+                if (ModelState.IsValid)
+                {
+                    ExponentPortalEntities db = new ExponentPortalEntities();
+
+                    int id = ListView.Id;
+                    int TypeId = Util.GetTypeId(ListView.TypeCopy);
+                    if (Session["UserId"] == null)
+                    {
+                        Session["UserId"] = -1;
+                    }
+
+                    string SQL = "INSERT INTO LUP_DRONE(Type,Code,TypeId,BinaryCode,Name,CreatedBy,CreatedOn)" +
+                        "VALUES('" + ListView.TypeCopy + "','" + ListView.Code + "'," + TypeId +
+                        ",'" + ListView.BinaryCode + "','" + ListView.Name + "',"
+                        + Session["UserId"] + ",'" + DateTime.Now.ToString("yyyy-MM-dd") + "')";
+                        
+                    int ServiceId = Util.InsertSQL(SQL);
+                  return  RedirectToAction("Create", "List");
+
+                   // return RedirectToAction("Listnames");
+
+
+
+                }
                 return RedirectToAction("Index");
             }
             catch
@@ -92,25 +133,35 @@ namespace eX_Portal.Controllers
         }
 
         // GET: List/Delete/5
-        public ActionResult Delete(int id)
+        public String Delete([Bind(Prefix = "ID")]int LupID = 0)
         {
-            return View();
-        }
 
-        // POST: List/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
             try
             {
-                // TODO: Add delete logic here
 
-                return RedirectToAction("Index");
+                String SQL = "";
+                Response.ContentType = "text/json";
+              
+
+              
+
+
+                SQL = "DELETE FROM [LUP_Drone] WHERE Id = " + LupID;
+                Util.doSQL(SQL);
+
+                
+                return Util.jsonStat("OK");
+
+
+
             }
             catch
             {
-                return View();
+                return "error";
             }
+            
         }
+
+       
     }
 }
