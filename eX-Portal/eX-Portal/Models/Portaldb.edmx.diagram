@@ -28,6 +28,7 @@
         <EntityTypeShape EntityType="ExponentPortalModel.DroneCheckListValidation" Width="1.5" PointX="13.375" PointY="12.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.LiveDrone" Width="1.5" PointX="15.375" PointY="0.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.M2M_ProfileMenu" Width="1.5" PointX="0.75" PointY="15.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.FlightMapData" Width="1.5" PointX="15.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

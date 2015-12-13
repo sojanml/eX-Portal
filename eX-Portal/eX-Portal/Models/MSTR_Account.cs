@@ -32,5 +32,7 @@ namespace eX_Portal.Models
         public string Address2 { get; set; }
         public string Address3 { get; set; }
         public Nullable<int> CountryCode { get; set; }
+        public string Code { get; set; }
+        public string BinaryCode { get; set; }
     }
 }

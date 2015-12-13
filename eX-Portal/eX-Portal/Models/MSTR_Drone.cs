@@ -15,7 +15,6 @@ namespace eX_Portal.Models
     public partial class MSTR_Drone
     {
         public int DroneId { get; set; }
-        public Nullable<int> OwnerId { get; set; }
         public Nullable<int> ManufactureId { get; set; }
         public Nullable<int> UavTypeId { get; set; }
         public Nullable<int> PartsGroupId { get; set; }
@@ -35,5 +34,6 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> CommissionDate { get; set; }
         public Nullable<int> DroneSerialNo { get; set; }
         public Nullable<int> DroneDefinitionID { get; set; }
+        public Nullable<int> AccountID { get; set; }
     }
 }
