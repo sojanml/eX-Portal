@@ -1,0 +1,72 @@
+﻿<!--@@model IEnumerable<eX_Portal.Models.LUP_Drone>-->
+@model eX_Portal.ViewModel.ListViewModel
+<div id="listData" align="right">
+    <table id="List">
+        <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>BinaryCode</th>
+        </tr>
+
+        @foreach (var item in Model.NameList)
+        {
+
+            <tbody>
+                <tr>
+
+                    <td>
+                        <!-- @@Html.DisplayFor(modelItem => item.name)-->
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BinaryCode)
+                    </td>
+                    <td><a class="Edit" href="#">Edit</a></td>
+                    <td>@Html.ActionLink("Delete", "Delete", new { ID = item.Id })</td>
+
+                </tr>
+            </tbody>
+        }
+
+
+
+        <tr>
+            <td>
+
+                @Html.HiddenFor(model => model.TypeCopy)
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="editor-field">
+
+                    @Html.EditorFor(model => model.Name)
+
+                </div>
+
+            </td>
+            <td>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Code)
+
+                </div>
+
+
+            </td>
+            <td>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.BinaryCode)
+                </div>
+            </td>
+
+            <td>
+                <div class="form-toolbar">
+                    <input type="submit" value="Create" id="Save" />
+                </div>
+            </td>
+        </tr>
+    </table>
+       
+    </div>
+
