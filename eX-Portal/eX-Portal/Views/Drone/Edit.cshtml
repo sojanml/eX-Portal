@@ -2,92 +2,81 @@
 @model eX_Portal.ViewModel.DroneView
 
 @{
-    ViewBag.Title = "UAS Registration";
-    Layout = "~/Views/Shared/_exPortal.cshtml";
+  ViewBag.Title = "UAS Registration";
+  Layout = "~/Views/Shared/_exPortal.cshtml";
 }
 
 <section class="general-form" id="loginForm">
-    <script src="~/Scripts/bootstrap.js"></script>
-    @using (Html.BeginForm())
-    {
+  @using (Html.BeginForm()) {
 
 
 
-        @Html.HiddenFor(model => model.Drone.DroneId)
+    @Html.HiddenFor(model => model.Drone.DroneId)
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Drone.OwnerId, "Owner")
-        </div>
+    <div class="editor-label">
+      @Html.LabelFor(model => model.Drone.AccountID, "Owner")
+    </div>
         <div class="editor-field">
-
-            @Html.DropDownListFor(model => model.Drone.OwnerId, Model.OwnerList)
-
-
-
+          @Html.DropDownListFor(model => model.Drone.AccountID, Model.OwnerList)
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Drone.UavTypeId, "UAV Type")
+          @Html.LabelFor(model => model.Drone.UavTypeId, "UAV Type")
         </div>
         <div class="editor-field">
-
-            @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)
-            @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
-
-
+          @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)
+          @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Drone.ManufactureId, "Manufacturer")
+          @Html.LabelFor(model => model.Drone.ManufactureId, "Manufacturer")
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList)
-            @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
+          @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList)
+          @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
         </div>
         <div class="editor-label">
-            @Html.LabelFor(model => model.Drone.CommissionDate, "Commission Date")
+          @Html.LabelFor(model => model.Drone.CommissionDate, "Commission Date")
         </div>
         <div class="editor-field">
 
-            @Html.EditorFor(model => model.Drone.CommissionDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
-            @Html.ValidationMessageFor(model => model.Drone.CommissionDate)
+          @Html.EditorFor(model => model.Drone.CommissionDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
+          @Html.ValidationMessageFor(model => model.Drone.CommissionDate)
         </div>
-
-
         <div class="editor-label">
-            @Html.LabelFor(model => model.DroneParts.PartsName, "Parts")
+          @Html.LabelFor(model => model.DroneParts.PartsName, "Parts")
         </div>
         <div class="editor-field">
-            <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="SelectItemsForParts" />
-            @Html.Action("DroneParts", "Drone", new { ID = ViewBag.DroneId })
-           <!-- <table class="report" id="Table_SelectItemsForParts" style="display:none;">
-                <thead>
-                    <tr>
-                        <th>Parts Name</th>
-                        <th>Model</th>
-                        <th>Supplier</th>
-                        <th>Qty</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-            </table>-->
+          <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="SelectItemsForParts" />
+          @Html.Action("DroneParts", "Drone", new { ID = ViewBag.DroneId })
+          <!-- <table class="report" id="Table_SelectItemsForParts" style="display:none;">
+               <thead>
+                   <tr>
+                       <th>Parts Name</th>
+                       <th>Model</th>
+                       <th>Supplier</th>
+                       <th>Qty</th>
+                       <th>&nbsp;</th>
+                   </tr>
+               </thead>
+           </table>-->
         </div>
 
         <div class="form-toolbar">
-            <input type="submit" value="Save" />
+          <input type="submit" value="Save" />
         </div>
 
 
-    }
+  }
 
 
 
 </section>
 
 @section Scripts {
-    <script>
+  <script>
     $(document).ready(function () {
-        $('#SelectItemsForParts').autocomplete({
+      $('#SelectItemsForParts').autocomplete({
         source: "/AutoComplete/Parts/",
         minLength: 2,
         select: AutoCompleteSelect
@@ -102,7 +91,7 @@
       event.preventDefault();
       var ID = $(event.target).prop("id");
       $('#Table_' + ID).show();
-      $('#'+ ID).val('');
+      $('#' + ID).val('');
       var HTML = "<tr>" +
         "<td>" + ui.item.PartsName +
         '<input type="hidden" name="' + ID + '" value="' + ui.item.id + '">' +
@@ -113,6 +102,6 @@
         '<td><a class="delete" href="#">x</a></td>\n' +
         '</tr>';
       $('#Table_' + ID).append(HTML);
-      }
-    </script>
+    }
+  </script>
 }

@@ -14,11 +14,11 @@
     @Html.HiddenFor(model => model.Drone.DroneId)
 
     <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.OwnerId, "Owner")
+      @Html.LabelFor(model => model.Drone.AccountID, "Owner")
     </div>
     <div class="editor-field">
 
-      @Html.DropDownListFor(model => model.Drone.OwnerId, Model.OwnerList)
+      @Html.DropDownListFor(model => model.Drone.AccountID, Model.OwnerList)
 
 
 

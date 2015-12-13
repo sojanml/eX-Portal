@@ -25,11 +25,11 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-    public ActionResult Error() {
+    public ActionResult Error(Exception ex) {
       ViewBag.Title = "Error in processing";
       ViewBag.Message = "Internal Error while processing.";
 
-      return View();
+      return View(ex);
     }
 
   }

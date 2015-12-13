@@ -14,10 +14,29 @@ namespace eX_Portal.exLogic
 {
     public partial class Util
     {
-        static IEnumerable<SelectListItem> DropDownList = Enumerable.Empty<SelectListItem>();
-        private static ExponentPortalEntities ctx;
+    static IEnumerable<SelectListItem> DropDownList = Enumerable.Empty<SelectListItem>();
+    public static IEnumerable<SelectListItem> getListSQL(string SQL) {
+      List<SelectListItem> SelectList = new List<SelectListItem>();
+      using (var ctx = new ExponentPortalEntities()) {
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          using (var reader = cmd.ExecuteReader()) {
+            while (reader.Read()) {
+              SelectList.Add(new SelectListItem {
+                Text = reader[0].ToString(),
+                Value = reader[1].ToString()
+              });
+            }//while
+          }//using reader
+        }//using command
+      }//using database
+      return SelectList;
+    }//function
+
+
         //static string connection = ConfigurationManager.ConnectionStrings["ExponentPortalSql"].ConnectionString;
-        public static IEnumerable<SelectListItem> GetDropDowntList(string TypeField, string NameField, string ValueField, string SPName)
+    public static IEnumerable<SelectListItem> GetDropDowntList(string TypeField, string NameField, string ValueField, string SPName)
         {
           //  ctx=new ExponentPortalEntities();
             List<SelectListItem> SelectList = new List<SelectListItem>();
@@ -52,7 +71,7 @@ namespace eX_Portal.exLogic
             }
             }
         }
-        public static int InsertSQL(String SQL,string[] Parameter)
+        public static int InsertSQL(String SQL, string[] Parameter)
         {
             int result = 0;
             using (var ctx = new ExponentPortalEntities())
