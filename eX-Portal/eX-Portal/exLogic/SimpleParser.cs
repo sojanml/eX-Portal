@@ -221,6 +221,9 @@ namespace eX_Portal.exLogic {
           ColumnInfo aColumnInfo = ColumnList[aSelectElementID];
           int aIdentIdx = 0;
           foreach (Identifier aIdentifier in aMultiPartIdentifier.Identifiers) {
+            if (aMultiPartIdentifier.Identifiers.Count == 1) {
+                aColumnInfo.TableColumnName = aIdentifier.Value;
+            }
             if (aMultiPartIdentifier.Identifiers.Count == 2) {
               if (aIdentIdx == 0)
                 aColumnInfo.TableAlias = aIdentifier.Value;
