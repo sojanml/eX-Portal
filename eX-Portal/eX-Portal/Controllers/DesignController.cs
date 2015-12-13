@@ -7,30 +7,22 @@ using eX_Portal.Models;
 using eX_Portal.ViewModel;
 using eX_Portal.exLogic;
 
-namespace eX_Portal.Controllers
-{
-    public class DesignController : Controller
-    {
-        // GET: Design
+namespace eX_Portal.Controllers {
+  public class DesignController : Controller {
+    // GET: Design
 
 
-        public DesignController()
-        {
-            ViewBag.Menu = eX_Portal.exLogic.User.BuildMenu();
-       
-       
-        
-
-        }
-
-       
-        public ActionResult SystemMenu()
-        {
-
-            var MenuList = eX_Portal.exLogic.User.BuildMenu();
-            return View(MenuList);
-        }
-
-      
+    public DesignController() {
+      ViewBag.Menu = eX_Portal.exLogic.User.BuildMenu();
     }
+
+
+    [OutputCache(Duration = 3600, VaryByCustom = "User")]
+    public ActionResult SystemMenu() {
+      var MenuList = eX_Portal.exLogic.User.BuildMenu();
+      return View(MenuList);
+    }
+
+
+  }
 }
