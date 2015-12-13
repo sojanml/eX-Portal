@@ -121,13 +121,13 @@ namespace eX_Portal.Controllers
           "left join LUP_Drone c on\n" +
           "  a.TypeOfServiceId = c.TypeId\n" +
           "where\n" +
-          " c.Type = 'ServiceType'\n" +
+          " c.Type = 'ServiceType' AND\n" +
+          " b.DroneID = " + DroneID + "\n" +
           "ORDER BY\n" +
           "  a.DateOfService DESC";
       qView nView = new qView(SQL);
       return
-        (nView.HasRows ? "<h2>Recent Services</h2>": "") + 
-        nView.getDataTable(true, false);
+        (nView.HasRows ? "<h2>Recent Services</h2>" + nView.getDataTable(true, false) : "");
     }
         public String DroneDetail(int ID = 0)
         {

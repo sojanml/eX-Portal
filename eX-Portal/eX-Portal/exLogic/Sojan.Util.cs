@@ -167,7 +167,8 @@ namespace eX_Portal.exLogic {
       return getDBVal(SQL);
     }
 
-    public static void ErrorHandler(Exception ex) {
+    public static void ErrorHandler(Exception ex = null) {
+      /*
       //Reference - http://stackoverflow.com/questions/3328990/c-sharp-get-line-number-which-threw-exception
       // Get stack trace for the exception with source file information
       var st = new System.Diagnostics.StackTrace(ex, true);
@@ -175,6 +176,7 @@ namespace eX_Portal.exLogic {
       var frame = st.GetFrame(0);
       // Get the line number from the stack frame
       var line = frame.GetFileLineNumber();
+      */
     }
 
     public static String jsonStat(String Status, String Message = "") {
