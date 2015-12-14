@@ -3,6 +3,7 @@
 <div id="listData" align="right">
     <table id="List">
         <tr>
+           
             <th>Name</th>
             <th>Code</th>
             <th>BinaryCode</th>
@@ -11,29 +12,37 @@
         @foreach (var item in Model.NameList)
         {
 
-            <tbody>
+           
                 <tr>
-
+                    <td  style="display:none">
+                        <span id="ID_@item.Id"> @Html.DisplayFor(modelItem => item.Id)</span> 
+                    </td>
                     <td>
                         <!-- @@Html.DisplayFor(modelItem => item.name)-->
-                        @Html.DisplayFor(modelItem => item.Name)
+                        <span id="name_@item.Id">@Html.DisplayFor(modelItem => item.Name)</span>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Code)
-                    </td>
+                        <span id="code_@item.Id">@Html.DisplayFor(modelItem => item.Code)</span></td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.BinaryCode)
-                    </td>
-                    <td><a class="Edit" href="#">Edit</a></td>
+                        <span id="binarycode_@item.Id">@Html.DisplayFor(modelItem => item.BinaryCode)</span></td>
+                    <td><a data-id="@item.Id" class="Edit" href="#">Edit</a></td>
                     <td>@Html.ActionLink("Delete", "Delete", new { ID = item.Id })</td>
 
                 </tr>
-            </tbody>
+           
         }
 
 
 
         <tr>
+
+            <td style="display:none">
+                <div class="editor-field" >
+
+                    @Html.EditorFor(model => model.Id)
+
+                </div>
+            </td>
             <td>
 
                 @Html.HiddenFor(model => model.TypeCopy)
