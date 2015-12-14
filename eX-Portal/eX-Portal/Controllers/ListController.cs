@@ -150,7 +150,7 @@ namespace eX_Portal.Controllers
         }
 
         // GET: List/Delete/5
-        public String Delete([Bind(Prefix = "ID")]int LupID = 0)
+        public ActionResult Delete([Bind(Prefix = "ID")]int LupID = 0)
         {
 
             try
@@ -166,15 +166,15 @@ namespace eX_Portal.Controllers
                 SQL = "DELETE FROM [LUP_Drone] WHERE Id = " + LupID;
                 Util.doSQL(SQL);
 
-                
-                return Util.jsonStat("OK");
+                return RedirectToAction("Create", "List");
+                // return Util.jsonStat("OK");
 
 
 
             }
             catch
             {
-                return "error";
+                return RedirectToAction("Create", "List");
             }
             
         }
