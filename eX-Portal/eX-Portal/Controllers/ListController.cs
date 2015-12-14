@@ -81,21 +81,38 @@ namespace eX_Portal.Controllers
                 if (ModelState.IsValid)
                 {
                     ExponentPortalEntities db = new ExponentPortalEntities();
-
-                    int id = ListView.Id;
-                    int TypeId = Util.GetTypeId(ListView.TypeCopy);
                     if (Session["UserId"] == null)
                     {
                         Session["UserId"] = -1;
                     }
 
-                    string SQL = "INSERT INTO LUP_DRONE(Type,Code,TypeId,BinaryCode,Name,CreatedBy,CreatedOn)" +
-                        "VALUES('" + ListView.TypeCopy + "','" + ListView.Code + "'," + TypeId +
-                        ",'" + ListView.BinaryCode + "','" + ListView.Name + "',"
-                        + Session["UserId"] + ",'" + DateTime.Now.ToString("yyyy-MM-dd") + "')";
-                        
-                    int ServiceId = Util.InsertSQL(SQL);
-                  return  RedirectToAction("Create", "List");
+                    int ID = ListView.Id;
+                    //checking for upadation or new record creation
+                    if (ID == 0)
+                    {
+
+
+
+                        int TypeId = Util.GetTypeId(ListView.TypeCopy);
+                       
+
+                        string SQL = "INSERT INTO LUP_DRONE(Type,Code,TypeId,BinaryCode,Name,CreatedBy,CreatedOn)" +
+                            "VALUES('" + ListView.TypeCopy + "','" + ListView.Code + "'," + TypeId +
+                            ",'" + ListView.BinaryCode + "','" + ListView.Name + "',"
+                            + Session["UserId"] + ",'" + DateTime.Now.ToString("yyyy-MM-dd") + "')";
+
+                        int ListId = Util.InsertSQL(SQL);
+                        return RedirectToAction("Create", "List");
+
+                    }
+                    else
+                    {
+                        string SQL = "UPDATE LUP_DRONE SET Type='" + ListView.TypeCopy + "',Code='" + ListView.Code +
+                            "', BinaryCode='" + ListView.BinaryCode + "',Name='" + ListView.Name
+                            + "',ModifiedBy=" + Session["UserId"] + ",ModifiedOn='" + DateTime.Now.ToString("yyyy-MM-dd") + "' where Id="+ID;
+                        int ListId = Util.doSQL(SQL);
+                        return RedirectToAction("Create", "List");
+                    }
 
                    // return RedirectToAction("Listnames");
 
