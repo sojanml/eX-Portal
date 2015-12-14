@@ -1,0 +1,81 @@
+﻿<!--@@model IEnumerable<eX_Portal.Models.LUP_Drone>-->
+@model eX_Portal.ViewModel.ListViewModel
+<div id="listData" align="right">
+    <table id="List">
+        <tr>
+           
+            <th>Name</th>
+            <th>Code</th>
+            <th>BinaryCode</th>
+        </tr>
+
+        @foreach (var item in Model.NameList)
+        {
+
+           
+                <tr>
+                    <td  style="display:none">
+                        <span id="ID_@item.Id"> @Html.DisplayFor(modelItem => item.Id)</span> 
+                    </td>
+                    <td>
+                        <!-- @@Html.DisplayFor(modelItem => item.name)-->
+                        <span id="name_@item.Id">@Html.DisplayFor(modelItem => item.Name)</span>
+                    </td>
+                    <td>
+                        <span id="code_@item.Id">@Html.DisplayFor(modelItem => item.Code)</span></td>
+                    <td>
+                        <span id="binarycode_@item.Id">@Html.DisplayFor(modelItem => item.BinaryCode)</span></td>
+                    <td><a data-id="@item.Id" class="Edit" href="#">Edit</a></td>
+                    <td>@Html.ActionLink("Delete", "Delete", new { ID = item.Id })</td>
+
+                </tr>
+           
+        }
+
+
+
+        <tr>
+
+            <td style="display:none">
+                <div class="editor-field" >
+
+                    @Html.EditorFor(model => model.Id)
+
+                </div>
+            </td>
+            <td>
+
+                @Html.HiddenFor(model => model.TypeCopy)
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="editor-field">
+
+                    @Html.EditorFor(model => model.Name)
+
+                </div>
+
+            </td>
+            <td>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Code)
+
+                </div>
+
+
+            </td>
+            <td>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.BinaryCode)
+                </div>
+            </td>
+
+            <td>
+                <div class="form-toolbar">
+                    <input type="submit" value="Create" id="Save" />
+                </div>
+            </td>
+        </tr>
+    </table>
+       
+    </div>
+
