@@ -5,108 +5,98 @@
 }
 
 <section class="general-form">
-@using (Html.BeginForm("Create", "List", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    
-        <div id="list"  align="left">
-            <ul >
-                                @foreach (var TypeList in Model.Typelist)
-                                {
+    @using (Html.BeginForm("Create", "List", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div id="list" align="left">
+            <ul>
+                @foreach (var TypeList in Model.Typelist)
+                {
 
 
-                                    <li>
-                                        @Ajax.ActionLink(TypeList.Text, // <-- Text to display
+                    <li>
+
+                        @Ajax.ActionLink(TypeList.Text, // <-- Text to display
                 "ListNames", // <-- Action Method Name
                 new { TypeName = TypeList.Text },
                  new AjaxOptions
                  {
                      UpdateTargetId = "ListOfItems", // <-- DOM element ID to update
-                     InsertionMode = InsertionMode.Replace, // <-- Replace the content of DOM element               
+                     InsertionMode = InsertionMode.Replace, // <-- Replace the content of DOM element
                      HttpMethod = "GET",
-                    // <-- HTTP method
+                     // <-- HTTP method
                  })
-                                    </li>
+                    </li>
 
-                                 //   <li>@Html.ActionLink("Details", "Details", new  {Name=TypeList.Text})<a href="#"   >@TypeList.Text</a> </li>
-                                    
+                    //   <li>@Html.ActionLink("Details", "Details", new  {Name=TypeList.Text})<a href="#"   >@TypeList.Text</a> </li>
 
 
-                                }
+
+                }
             </ul>
         </div>
 
-        
-
-
-       <div id="ListOfItems" align="right"  >
-           <div class="editor-field">
-              
-
-           </div>
-          
-       </div>
-    
 
 
 
+        <div id="ListOfItems" align="right">
+            <div class="editor-field">
 
 
-}
+            </div>
 
-    </section>
+        </div>
+
+
+
+
+
+
+    }
+
+</section>
 
 
 @section Scripts{
 
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-    $('#Table_List').on("click", "a.Edit", function () {
-        alert("abc");
-    })
-
-   
-    
-    function TakeData()
-    {
         $(document).ready(function () {
-        
-         
-            var table = document.getElementById("List");
-        
-       
-            $(table).find('tr').click(function () {            
-                var row = $(this).find('td:first').text();                 
-           
-           
-                document.getElementById("Name").value = $(this).find('td:nth-child(1)').text();
-                var Code = $(this).find('td:nth-child(2)').text();
-                var BinaryCode = $(this).find('td:nth-child(3)').text();
-            
-                document.getElementById("Code").value = Code;
-                document.getElementById("BinaryCode").value = BinaryCode;
-                document.getElementById("Save").value = "Save";
 
-                var cells = target.getElementsByTagName("td");
-                alert(cells[1].innerHTML)
-           
+            $('#ListOfItems').on("click", "a.Edit", function (e) {
+                e.preventDefault();
+                var Link = $(this);
+                var ID = Link.attr("data-id");
+
+                TakeData(ID);
             });
+
         });
-       
-    }
-     
 
-    
+        function TakeData(ID) {
+            document.getElementById("Id").value = ID;
+           // document.getElementById("Id").value = $('#ID_' + ID).html();
+            document.getElementById("Name").value = $('#name_' + ID).html();
+
+            document.getElementById("Code").value = $('#code_' + ID).html();
+            document.getElementById("BinaryCode").value = $('#binarycode_' + ID).html();
+            document.getElementById("Save").value = "Save";
+           
+        }
 
 
-       
-          
- 
-   
 
-</script>
-@Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+
+
+
+
+
+
+
+    </script>
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
 
 }
