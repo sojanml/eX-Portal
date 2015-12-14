@@ -60,7 +60,7 @@ namespace eX_Portal.Controllers
         public ActionResult Create()
 
         {
-            
+            if (!exLogic.User.hasAccess("lOOKUP.CREATE")) return RedirectToAction("NoAccess", "Home");
             var viewModel = new ViewModel.ListViewModel
             {
                Typelist = Util.LUPTypeList()
@@ -78,6 +78,7 @@ namespace eX_Portal.Controllers
             {
 
                 // TODO: Add insert logic here
+            
                 if (ModelState.IsValid)
                 {
                     ExponentPortalEntities db = new ExponentPortalEntities();
@@ -91,7 +92,7 @@ namespace eX_Portal.Controllers
                     if (ID == 0)
                     {
 
-
+                        if (!exLogic.User.hasAccess("lOOKUP.CREATE")) return RedirectToAction("NoAccess", "Home");
 
                         int TypeId = Util.GetTypeId(ListView.TypeCopy);
                        
@@ -107,6 +108,7 @@ namespace eX_Portal.Controllers
                     }
                     else
                     {
+                        if (!exLogic.User.hasAccess("lOOKUP.EDIT")) return RedirectToAction("NoAccess", "Home");
                         string SQL = "UPDATE LUP_DRONE SET Type='" + ListView.TypeCopy + "',Code='" + ListView.Code +
                             "', BinaryCode='" + ListView.BinaryCode + "',Name='" + ListView.Name
                             + "',ModifiedBy=" + Session["UserId"] + ",ModifiedOn='" + DateTime.Now.ToString("yyyy-MM-dd") + "' where Id="+ID;
@@ -155,6 +157,7 @@ namespace eX_Portal.Controllers
 
             try
             {
+                if (!exLogic.User.hasAccess("lOOKUP.EDIT")) return RedirectToAction("NoAccess", "Home");
 
                 String SQL = "";
                 Response.ContentType = "text/json";
