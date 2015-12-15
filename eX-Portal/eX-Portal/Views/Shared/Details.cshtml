@@ -6,7 +6,7 @@
            
             <th>Name</th>
             <th>Code</th>
-            <th>BinaryCode</th>
+         
         </tr>
 
         @foreach (var item in Model.NameList)
@@ -23,8 +23,7 @@
                     </td>
                     <td>
                         <span id="code_@item.Id">@Html.DisplayFor(modelItem => item.Code)</span></td>
-                    <td>
-                        <span id="binarycode_@item.Id">@Html.DisplayFor(modelItem => item.BinaryCode)</span></td>
+                    <td>                   
                     <td><a data-id="@item.Id" class="Edit" href="#">Edit</a></td>
                     <td>@Html.ActionLink("Delete", "Delete", new { ID = item.Id })</td>
 
@@ -63,11 +62,7 @@
 
 
             </td>
-            <td>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.BinaryCode)
-                </div>
-            </td>
+           
 
             <td>
                 <div class="form-toolbar">
