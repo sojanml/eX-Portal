@@ -9,11 +9,14 @@
     @using (Html.BeginForm())
     {
 
-   
-   
+  if(ViewBag.UserExists!=null)
+   {
+    <h3 style="color:red">@ViewBag.UserExists</h3>
+   }
+
        @Html.HiddenFor(model => model.User.UserId)
 
-
+       
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="editor-field">
@@ -23,7 +26,7 @@
                 @Html.ValidationMessageFor(model => model.User.UserName, "", new { @class = "text-danger" })
             </div>
         </div>
-
+       
         <div class="editor-field">
             @Html.LabelFor(model => model.User.Password)
             <div class="editor-field">
