@@ -49,6 +49,54 @@ namespace eX_Portal.exLogic
             return SelectList; //return the list objects
         }//function GetDropDownt
 
+     public   static string DecToBin(int dec)
+        {
+            if (dec < 0) return ""; // can't be negative
+            List<char> list = new List<char>();
+
+            do
+            {
+                int div = dec / 2;
+                int rem = dec % 2;
+                Console.WriteLine("{0} / 2 = {1} R {2}", dec, div, rem);
+                dec = div;
+                list.Add((char)(rem + 48));
+            }
+            while (dec > 0);
+
+            list.Reverse();
+            return new string(list.ToArray());
+        }
+        public static IEnumerable<SelectListItem> GetProfileList()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
+
+            String SQL = "SELECT 0 as Value, 'Not Available' as Name";
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+                   
+                            SQL = "SELECT [ProfileId] as Value  ,[ProfileName] as Name FROM [MSTR_Profile] ORDER BY [ProfileName]";
+                          
+                 
+                    cmd.CommandText = SQL;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Value"].ToString() });
+                        }
+                    }
+
+                    ctx.Database.Connection.Close();
+                } //using Database.Connection
+            }//using ExponentPortalEntities;
+            return SelectList; //return the list objects
+        }//function GetDropDowntList
+
 
         public static Int32 toInt(String sItem)
         {
@@ -200,6 +248,18 @@ namespace eX_Portal.exLogic
             return result;
         }
 
+        public static int GetTypeIdFromId(int ID)
+        {
+            int result = 0;
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL = "select TypeId from LUP_Drone where  Id=" + ID ;
+                int Id = cotx.Database.SqlQuery<int>(SQL).FirstOrDefault<int>();
+                result = Id;
+            }
+
+            return result;
+        }
         public static int GetTypeOfIdFromService(int ServiceId)
         {
             int result = 0;
