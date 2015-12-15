@@ -97,10 +97,10 @@ namespace eX_Portal.Controllers
                         int TypeId = Util.GetTypeId(ListView.TypeCopy);
 
                         string BinaryCode = Util.DecToBin(TypeId);
-                        string SQL = "INSERT INTO LUP_DRONE(Type,Code,TypeId,BinaryCode,Name,CreatedBy,CreatedOn)" +
+                        string SQL = "INSERT INTO LUP_DRONE(Type,Code,TypeId,BinaryCode,Name,CreatedBy,CreatedOn,IsActive)" +
                             "VALUES('" + ListView.TypeCopy + "','" + ListView.Code + "'," + TypeId +
                             ",'" + BinaryCode + "','" + ListView.Name + "',"
-                            + Session["UserId"] + ",'" + DateTime.Now.ToString("yyyy-MM-dd") + "')";
+                            + Session["UserId"] + ",'" + DateTime.Now.ToString("yyyy-MM-dd") + "' ," + "'True'" + ")";
 
                         int ListId = Util.InsertSQL(SQL);
                         return RedirectToAction("Create", "List");
