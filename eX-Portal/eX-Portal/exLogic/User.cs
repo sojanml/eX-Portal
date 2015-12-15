@@ -36,7 +36,9 @@ namespace eX_Portal.exLogic {
 
     public static int UserValidation(String UserName, String Password) {
       try {
-        int result = 0;
+                var Crypto = new SimpleCrypto.PBKDF2();
+                var PasswordCrypto = Crypto.Compute(Password, Crypto.Salt);
+                int result = 0;
         using (var ctx = new ExponentPortalEntities()) {
           var _objuserdetail = (from data in ctx.MSTR_User
                                 where data.UserName == UserName
@@ -62,6 +64,7 @@ namespace eX_Portal.exLogic {
         {
             try
             {
+               
                 int result = 0;
                 using (var ctx = new ExponentPortalEntities())
                 {
