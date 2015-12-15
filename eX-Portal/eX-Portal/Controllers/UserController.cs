@@ -7,7 +7,7 @@ using eX_Portal.Models;
 using eX_Portal.ViewModel;
 using eX_Portal.exLogic;
 using System.Data.Entity;
-
+using SimpleCrypto;
 namespace eX_Portal.Controllers {
 
   public class UserController : Controller {
@@ -50,15 +50,15 @@ namespace eX_Portal.Controllers {
 
         public ActionResult UserList()
         {
-          
+            if (!exLogic.User.hasAccess("USER.VIEW")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "User View";
             string SQL = "select a.UserName,a.FirstName,a.MobileNo,b.ProfileName, Count(*) Over() as _TotalRecords ,  a.UserId as _PKey " +
                 " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId ";
 
            
             qView nView = new qView(SQL);
-                 nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-                 nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
             if (Request.IsAjaxRequest())
             {
                 Response.ContentType = "text/javascript";
@@ -77,7 +77,9 @@ namespace eX_Portal.Controllers {
         public ActionResult Create()
 
         {
+
             ViewBag.Title = "Create User";
+            if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
 
             var viewModel = new ViewModel.UserViewModel.LoginViewModel.UserLogon
             {
@@ -115,25 +117,27 @@ namespace eX_Portal.Controllers {
 
         [HttpPost]
         public ActionResult Edit(MSTR_User User)
-        {
+        {         
+            if (!exLogic.User.hasAccess("USER.EDIT")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Edit Account";
             try
             {
                 if (ModelState.IsValid)
                 {
+                    var Crypto = new SimpleCrypto.PBKDF2();
 
 
-                  
-                        if (Session["UserId"] == null)
+                    if (Session["UserId"] == null)
                         {
                             Session["UserId"] = -1;
                         }
                         User.LastModifiedBy = Util.toInt(Session["UserID"].ToString());
                         User.LastModifiedOn = DateTime.Now;
-
-                        string SQL = "UPDATE MSTR_USER SET UserName='" + User.UserName +
+                    //password encryption
+                   // var Password = Crypto.Compute(User.Password);
+                    string SQL = "UPDATE MSTR_USER SET UserName='" + User.UserName +
                              "',Password='" + User.Password + "',UserProfileId=" + User.UserProfileId + ",FirstName='" + User.FirstName +
-                             "',UserProfileId=" + User.UserProfileId + ", Remarks='" +
+                             "', Remarks='" +
                              User.Remarks + "',MobileNo='" + User.MobileNo + "',EmailId='" +
                              User.EmailId + "' where UserId=" + User.UserId;
                         int id = Util.doSQL(SQL);
@@ -147,13 +151,26 @@ namespace eX_Portal.Controllers {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 return View("InternalError", ex);
             }
-            return View(User);
+            //if model not valid
+
+            var viewModel = new ViewModel.UserViewModel.LoginViewModel.UserLogon
+            {
+
+
+
+                User = db.MSTR_User.Find(User.UserId),
+
+                ProfileList = Util.GetProfileList(),
+            };
+            return View(viewModel);
+           
         }//ActionEdit()
 
 
         [HttpPost]
         public ActionResult Create(MSTR_User User)
         {
+            if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
             if (ModelState.IsValid)
             {
 
@@ -180,6 +197,11 @@ namespace eX_Portal.Controllers {
                     {
                         Session["UserId"] = -1;
                     }
+                    //password encryption
+                    var Crypto = new SimpleCrypto.PBKDF2();
+
+                   // User.Password = Crypto.Compute(User.Password);
+                    User.IsActive = true;
                     User.CreatedBy = Util.toInt(Session["UserID"].ToString());
                     User.CreatedOn = DateTime.Now;
                     db.MSTR_User.Add(User);
@@ -195,17 +217,28 @@ namespace eX_Portal.Controllers {
 
         public String Delete([Bind(Prefix = "ID")]int UserID = 0)
         {
+            if (!exLogic.User.hasAccess("USER.DELETE"))
+
+                return Util.jsonStat("ERROR", "Access Denied");
             String SQL = "";
             Response.ContentType = "text/json";
            // if (!exLogic.User.hasAccess("USER.DELETE"))
              //   return Util.jsonStat("ERROR", "Access Denied");
 
-            //Delete the drone from database if there is no flights are created
-           // SQL = "SELECT Count(*) FROM [DroneFlight] WHERE DroneID = " + DroneID;
-          //  if (Util.getDBInt(SQL) != 0)
-           //     return Util.jsonStat("ERROR", "You can not delete a drone with a flight attached");
+            //Delete the drone from database if there is no user createdby
+           SQL = "SELECT Count(*) FROM MSTR_User where CreatedBy = " + UserID;
 
-            SQL = "DELETE FROM [M2M_USER] WHERE UserId = " + UserID;
+          if (Util.getDBInt(SQL) != 0)
+            return Util.jsonStat("ERROR", "You can not delete a the User Attached to another user");
+
+            SQL = "select count(*) from Mstr_Drone where CreatedBy=" + UserID;
+            if (Util.getDBInt(SQL) != 0)
+                return Util.jsonStat("ERROR", "You can not delete a the User Attached to Drone Creation");
+            SQL = "select count(*) from Mstr_DroneService where CreatedBy=" + UserID;
+            if (Util.getDBInt(SQL) != 0)
+                return Util.jsonStat("ERROR", "You can not delete a the User Attached to DroneService Creation");
+
+            SQL = "DELETE FROM [MSTR_USER] WHERE UserId = " + UserID;
             Util.doSQL(SQL);           
 
             return Util.jsonStat("OK");
