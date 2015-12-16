@@ -33,12 +33,14 @@
             </tr>
         </tbody>
     </table>
+    <div>
+        <input id="clickReplay" type="button" value="Replay" onclick="Replay();" />
+    </div>
     <br />
 
     <div id="map_canvas" style="width: 100%; height: 480px;">
     </div>
-    <iframe src="http://testportal.sonraisystems.com/ViewMessage.aspx" width="100%" style=" margin-top:20px" height="480" frameborder="0"></iframe>
-
+    
     @section scripts{
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
         <script type="text/javascript" src="../Scripts/jsGoogleMapTools.js"></script>
@@ -58,7 +60,7 @@
             var _vigroupValue;
             var initLat = 24.9899106;
             var initLng = 55.0034188;
-            var defaultZoom = 6;
+            var defaultZoom = 15;
             var gpsGrpID;
             var timezone;
             var clientID;
@@ -78,9 +80,18 @@
             var truckStatus = false;
             var geocoder;
             var LastDroneDataID = 0;
-            var INTERVAL = 10000;
+            var INTERVAL = 100;
             var poly;
-
+            var TimerValue = 0;
+            var LastDatas = [];
+            var i = 0;
+            var myInterval;
+            var myLatLong = [];
+            var MyLastLatLong = null;
+            var MyLastMarker = null;
+            var mytimer = null;
+            var service = new google.maps.DirectionsService();
+            var path = new google.maps.MVCArray();
             $(document).ready(function () {
 
                 initialize();
@@ -92,20 +103,20 @@
                     zoom: defaultZoom,
                     center: new google.maps.LatLng(initLat, initLng),
                     panControl: false,
-                    mapTypeControl: false,
+                    mapTypeControl: true,
                     mapTypeControlOptions: {
                         position: google.maps.ControlPosition.RIGHT_TOP,
                     },
                     zoomControl: true,
                     zoomControlOptions: {
                         style: google.maps.ZoomControlStyle.LARGE,
-                        position: google.maps.ControlPosition.LEFT_TOP,
+                        position: google.maps.ControlPosition.LEFT_TOP,                        
                     },
                     scaleControl: false,
                     streetViewControl: true,
                     overviewMapControl: false,
 
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                    mapTypeId: google.maps.MapTypeId.HYBRID
                 };
                 map = new google.maps.Map(document.getElementById('map_canvas'),
                     mapOptions);
@@ -116,21 +127,28 @@
                     strokeWeight: 3
                 });
                 poly.setMap(map);
-                GetDrones();
-
+                var loctr = '<tr><th>Latitude</th><th>Longitude</th>' 
+                            + '<th>Altitude</th><th>Speed</th>' 
+                            +'<th>FixQuality</th><th>Satellite</th>' 
+                            +'<th>ReadTime</th><th>Pitch</th>' 
+                            +'<th>RollData</th><th>Heading</th>' 
+                            +'<th>Heading</th><th>Total Flight Time</th></tr>';
+                $('#MapData table').append(loctr);
+               GetDrones();
+                //  myInterval = setInterval(function () { }, 500);
+                
             };
-
 
             function GetDrones() {
                 var _locVal = [];
                 $.ajax({
                     type: "GET",
-                    url: '@Url.Action("GetFlightData")' + '?id=' + LastDroneDataID,
+                    url: '@Url.Action("GetFlightData")' + '?FlightID=' + @ViewBag.FlightID + "&LastFlightDataID=" + LastDroneDataID,
                     contentType: "application/json;charset=utf-8",
                     dataType: "json",
                     async: true,
                     success: function (msg) {
-                        try {
+                     //   try {
                             _Location = [];
                             msg = msg.hasOwnProperty('d') ? msg.d : msg;
                             $.each(msg, function (index, obj) {
@@ -139,28 +157,28 @@
                                 });
                                 _Location.push(_locVal);
                                 _locVal = [];
-                                
                             });
+                            LastDatas = _Location;
                             setMarker(map, _Location);
+                            //drawMarkers();
                             SetCurrentValues(_Location);
-                        }
-                        catch (err) {
-                            alert('Live Drone Position Error' + err);
-                        }
+                            //SetMapTable(_Location);
+                       // }
+                        //catch (err) {
+                        //    alert('Live Drone Position Error' + err);
+                        //}
                     },
                     failure: function (msg) {
                         alert('Live Drone Position Error' + msg);
-                    }
+                    },
+                    complete: function (msg) {mytimer= setTimeout(function () { GetDrones(); }, 1000); }
                 });
-                window.setTimeout(GetDrones, INTERVAL);
+              
             }
 
             function setMarker(map, location) {
                 for (var i = 0; i < location.length; i++) {
                     var loc = location[i];
-
-
-
                     var body = '' +
                         '<br/>Drone&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' + loc[1] +
                         '<br/>DroneID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' + loc[2] +
@@ -170,9 +188,48 @@
                 }
             }
 
+            function drawMarkers()
+            {
+                GetDrones();
+                if (i < LastDatas.length)
+                    {
+                var loc = LastDatas[i];
+                
+                var body = '' +
+                    '<br/>Drone&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' + loc[1] +
+                    '<br/>DroneID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' + loc[2] +
+                    '<br/>Address&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
+                var myLatLng = new google.maps.LatLng(loc[3], loc[4]);
+               
+                var marker = createMarker(map, myLatLng, loc[2], body, i);
+                if ((i + 1) < LastDatas.length) {
+                    var loc1 = LastDatas[1 + 1];
+                    var MynextLAtLong = new google.maps.LatLng(loc1[3], loc1[4]);
+                    var src = myLatLng;
+                    var des = MynextLAtLong[i + 1];
+                    path.push(src);
+                    poly.setPath(path);
+                    service.route({
+                        origin: src,
+                        destination: des,
+                        travelMode: google.maps.DirectionsTravelMode.DRIVING
+                    }, function (result, status) {
+                        if (status == google.maps.DirectionsStatus.OK) {
+                            for (var i = 0, len = result.routes[0].overview_path.length; i < len; i++) {
+                                path.push(result.routes[0].overview_path[i]);
+                            }
+                        }
+                    });
+                }
+                i++;
+                
+                }
+                myInterval = setInterval(function () { drawMarkers(); }, 500);
+            }
+
+          
             function createMarker(map, latlng, heading, body, zindex) {
                 var path = poly.getPath();
-
                 // Because path is an MVCArray, we can simply append a new coordinate
                 // and it will automatically appear.
                 path.push(latlng);
@@ -184,17 +241,59 @@
                     title: heading,
                     zIndex: 9999
                 });
+
+                if (MyLastMarker != null)
+                {
+                    MyLastMarker.setIcon('/bullet_blue.png');
+                }
+                MyLastMarker = marker;
+                // if (MyLastMarker!=n)
+                map.setCenter(latlng);
                 closeMargin = '120px';
                 livemarkers.push(marker);
                 google.maps.event.addListener(marker, 'click', function () { });
             }
 
+            function deleteMarkers() {
+                clearMarkers(null);
+                livemarkers = [];
+            }
+
+            function Replay()
+            {
+                //mytimer = null;
+                clearTimeout(mytimer);
+                MyLastLatLong = null;
+                MyLastMarker = null;
+                myLatLong = null;
+                LastDroneDataID = 0;
+                deleteMarkers();
+                removeLines();
+
+                GetDrones();
+                addLines();
+            }
+            function addLines() {
+                poly.setMap(map);
+            }
+
+            function clearMarkers(map) {
+                for (var i = 0; i < livemarkers.length; i++) {
+                    livemarkers[i].setMap(map);
+                }
+
+            }
+            function removeLines() {
+                poly.setMap(null);
+               // flightPath.setMap(null);
+            }
+
             function SetCurrentValues(location)
             {
-                var _LastValue = '';
+                var _LastValue = [];
                 var date;
                 if (location.length > 0) {
-                    _LastValue=location[length-1];
+                    _LastValue = location[location.length-1];
                     $('#Lat').html(_LastValue[3]);
                     $('#Lon').html(_LastValue[4] );
                     $('#Alt').html(_LastValue[13]);
@@ -208,9 +307,36 @@
                     $('#Head').html(_LastValue[19] );
                     $('#TotFlightTime').html(_LastValue[20]);
                     LastDroneDataID = _LastValue[0];
-                }               
+                    MyLastLatLong = new google.maps.LatLng(_LastValue[3], _LastValue[4]);
+                }
+
+                
+                   // var oCompaniesTable = $('#MapData Table')
+            }
+            function SetMapTable(location) {
+
+                for (var i = 0; i < 15; i++) {
+                    var _LastValue = location[i];
+                    var tLatData = '<td>' + _LastValue[3] + '</td>';
+                    var tLonData = '<td>' + _LastValue[4] + '</td>';
+                    var tAltData = '<td>' + _LastValue[13] + '</td>';
+                    var tSpeedData = '<td>' + _LastValue[3] + '</td>';
+                    var tFxQltyData = '<td>' + _LastValue[15] + '</td>';
+                    var tSatelliteData = '<td>' + _LastValue[16] + '</td>';
+                    var date = new Date(parseInt(_LastValue[8].substr(6)));
+                    var tDrTime = '<td>' + date.toDateString() + '</td>';
+                    var tPitchData = '<td>' + _LastValue[17] + '</td>';
+                    var tRollData = '<td>' + _LastValue[18] + '</td>';
+                    var tHeadData = '<td>' + _LastValue[19] + '</td>';
+                    var tTotFlightTimeData = '<td>' + _LastValue[20] + '</td>';
+                    var loctr = '<tr>' + tLatData + tLonData + tAltData + tSpeedData + tFxQltyData + tSatelliteData + tDrTime + tPitchData + tRollData + tHeadData + tTotFlightTimeData + '</tr>';
+                    $('#MapData table').append(loctr);
+                }
 
             }
         </script>
     }
+<div id="MapData">
+    <table></table>
+</div>
 
