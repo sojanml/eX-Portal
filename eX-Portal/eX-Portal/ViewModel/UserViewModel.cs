@@ -20,7 +20,9 @@ namespace eX_Portal.ViewModel
                 public string Password { get; set; }
                 public MSTR_User User { get; set; }
                 public IEnumerable<SelectListItem> ProfileList { get; set; }
-               
+                public IEnumerable<SelectListItem> CountryList { get; set; }
+                public IEnumerable<SelectListItem> AccountList { get; set; }
+
             }
 
 
