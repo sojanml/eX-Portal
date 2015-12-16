@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.Text.RegularExpressions;
 using eX_Portal.Models;
 using System.Web.Mvc;
+using System.Globalization;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
@@ -44,6 +45,27 @@ namespace eX_Portal.exLogic {
       return result;
     }
 
+    public static String getDBVal(String SQL, ExponentPortalEntities ctx) {
+      String Result = "";
+      using (var cmd = ctx.Database.Connection.CreateCommand()) {
+        cmd.CommandText = SQL;
+        var oResult = cmd.ExecuteScalar();
+        if (oResult != null) Result = oResult.ToString();
+      }
+      return Result;
+    }//getDBVal()
+
+    public static int getDBInt(String SQL, ExponentPortalEntities ctx) {
+      int Result = 0;
+      using (var cmd = ctx.Database.Connection.CreateCommand()) {
+        cmd.CommandText = SQL;
+        var oResult = cmd.ExecuteScalar();
+        if (oResult != null) Int32.TryParse(oResult.ToString(), out Result);
+      }
+      return Result;
+    }//getDBInt()
+
+
     public static String getDBVal(String SQL) {
       String Result = "";
       using (var ctx = new ExponentPortalEntities()) {
@@ -51,11 +73,28 @@ namespace eX_Portal.exLogic {
           ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
           var oResult = cmd.ExecuteScalar();
-          if (oResult != null)
+          if (oResult != null) 
             Result = oResult.ToString();
         }
       }
       return Result;
+    }//getDBVal()
+
+    public static DateTime toDate(String StrDate) {
+      DateTime dt = DateTime.Now;
+      try {
+        //10/12/2015 07:17:53
+        dt = DateTime.ParseExact(StrDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+      } catch  {
+        //nothing
+      }
+      return dt;
+    }
+
+    public static decimal toDecimal(String Num) {
+      Decimal theNum = 0;
+      Decimal.TryParse(Num, out theNum);
+      return theNum;
     }
 
     public static int getDBInt(String SQL) {
