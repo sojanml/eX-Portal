@@ -160,11 +160,12 @@ namespace eX_Portal.exLogic
 
         public static IList<DroneData> GetDroneData()
         {
+
             IList<DroneData> ddList = new List<DroneData>();
             SqlConnection con = new SqlConnection();
           //  Connection conSonrai = new Connection();
             con =Util.getSonraiSQLServer();
-            string query = "Select  TOP 30 WorkorderTempID as SNO,[Lat],[Lon] ,[Alt]  ,[Speed]  ,[FixQuality]  ,[Satellites] ,[Timstamp] ,[Pitch] ,[Roll] ,[Heading]  ,[TotalFlightTime]  FROM [sonrai001].[dbo].[WorkOrderTemp] order by  1 desc";
+            string query = "Select  TOP 30 DroneID,Latitude,[Longitude],[ReadTime],[Altitude],[Speed],[FixQuality],[Satellites],[Pitch] ,[Roll],[Heading],[TotalFlightTime],[FlightID],BBFlightID  FROM [sonrai001].[dbo].[WorkOrderTemp] order by  1 desc";
 
             DataSet ds = Util.ExecuteDataset(con, CommandType.Text, query);
             if(ds.Tables.Count>0)
@@ -195,6 +196,21 @@ namespace eX_Portal.exLogic
             return ddList;
 
         }
+        public static IList<FlightMapData> GetDroneData(int FlID,int LastFlightID)
+        {
+
+            IList<FlightMapData> FlightMapDataList;
+            using (ExponentPortalEntities ctx = new ExponentPortalEntities())
+            {
+                FlightMapDataList = (from FlightMapData in ctx.FlightMapDatas
+                             where FlightMapData.FlightID == FlID && FlightMapData.FlightMapDataID> LastFlightID
+                                     select FlightMapData ).OrderBy(x => x.FlightMapDataID).Take(1).ToList();
+               
+            }
+           
+
+            return FlightMapDataList; //return the list objects
+        }//function GetDropDowntList
 
         public static  bool IsDate(string Timestamp)
         {

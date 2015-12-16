@@ -39,9 +39,10 @@ namespace eX_Portal.Controllers {
     }
 
     [System.Web.Mvc.HttpGet]
-    public JsonResult GetFlightData(int id = 0) {
+    public JsonResult GetFlightData(int FlightID = 0,int LastFlightDataID=0) {
 
-      IList<DroneData> DroneDataList = Util.GetDroneData();
+            ViewBag.FlightID = FlightID;
+      IList<FlightMapData> DroneDataList = Util.GetDroneData(FlightID,LastFlightDataID);
       //  LiveDrones.SQL = ;
       //string JsonData=Json(LiveDrones)
       // return Json(JsonData);
