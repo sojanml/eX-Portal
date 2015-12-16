@@ -48,6 +48,7 @@ namespace eX_Portal.Controllers {
     [HttpPost]
     public ActionResult AccountCreate(MSTR_Account Account) {
       if (ModelState.IsValid) {
+        Account.IsActive = true;
         Account.CreatedBy = Util.toInt(Session["UserID"].ToString());
         Account.CreatedOn = DateTime.Now;
         db.MSTR_Account.Add(Account);
@@ -96,5 +97,31 @@ namespace eX_Portal.Controllers {
       return nView.getTable();
     }
 
-  }//class
+
+
+        public String Delete([Bind(Prefix = "ID")]int AccountID = 0)
+        {
+            if (!exLogic.User.hasAccess("ACCOUNT.DELETE"))
+
+                return Util.jsonStat("ERROR", "Access Denied");
+            String SQL = "";
+            Response.ContentType = "text/json";
+            // if (!exLogic.User.hasAccess("USER.DELETE"))
+            //   return Util.jsonStat("ERROR", "Access Denied");
+
+            //Delete the Account from database if there is no Drone createdby
+            SQL = "SELECT Count(*) FROM MSTR_Drone where OwnerId = " + AccountID;
+
+            if (Util.getDBInt(SQL) != 0)
+                return Util.jsonStat("ERROR", "You can not delete a the User Attached to another user");
+
+          
+
+            SQL = "DELETE FROM [MSTR_Account] WHERE   = " + AccountID;
+            Util.doSQL(SQL);
+
+            return Util.jsonStat("OK");
+        }
+
+    }//class
 }//namespace
