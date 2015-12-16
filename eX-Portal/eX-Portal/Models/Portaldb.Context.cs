@@ -55,6 +55,7 @@ namespace eX_Portal.Models
         public virtual DbSet<LiveDrone> LiveDrones { get; set; }
         public virtual DbSet<M2M_ProfileMenu> M2M_ProfileMenu { get; set; }
         public virtual DbSet<FlightMapData> FlightMapDatas { get; set; }
+        public virtual DbSet<BlackBoxData> BlackBoxDatas { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

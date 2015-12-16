@@ -22,7 +22,7 @@ namespace eX_Portal.Models
         public string ProductRFID { get; set; }
         public string ProductQrCode { get; set; }
         public string ProductRSSI { get; set; }
-        public Nullable<System.DateTime> ReadTime { get; set; }
+        public string ReadTime { get; set; }
         public Nullable<System.DateTime> CreatedTime { get; set; }
         public Nullable<int> RecordType { get; set; }
         public Nullable<bool> IsActive { get; set; }
@@ -35,5 +35,7 @@ namespace eX_Portal.Models
         public string Roll { get; set; }
         public string Heading { get; set; }
         public string TotalFlightTime { get; set; }
+        public string BBFlightID { get; set; }
+        public Nullable<int> IsProcessed { get; set; }
     }
 }

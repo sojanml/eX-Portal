@@ -36,5 +36,6 @@ namespace eX_Portal.Models
         public string Heading { get; set; }
         public string TotalFlightTime { get; set; }
         public Nullable<int> FlightID { get; set; }
+        public string BBFlightID { get; set; }
     }
 }
