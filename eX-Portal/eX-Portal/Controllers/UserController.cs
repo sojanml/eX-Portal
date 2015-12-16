@@ -7,7 +7,7 @@ using eX_Portal.Models;
 using eX_Portal.ViewModel;
 using eX_Portal.exLogic;
 using System.Data.Entity;
-using SimpleCrypto;
+
 namespace eX_Portal.Controllers {
 
   public class UserController : Controller {
@@ -124,8 +124,7 @@ namespace eX_Portal.Controllers {
             {
                 if (ModelState.IsValid)
                 {
-                    var Crypto = new SimpleCrypto.PBKDF2();
-
+                   
 
                     if (Session["UserId"] == null)
                         {
@@ -198,7 +197,7 @@ namespace eX_Portal.Controllers {
                         Session["UserId"] = -1;
                     }
                     //password encryption
-                    var Crypto = new SimpleCrypto.PBKDF2();
+                  
 
                    // User.Password = Crypto.Compute(User.Password);
                     User.IsActive = true;
