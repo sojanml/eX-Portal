@@ -111,6 +111,43 @@ namespace eX_Portal.exLogic
             }
         }
 
+
+
+        public static IEnumerable<SelectListItem> GetCountryLists(string TypeField, string NameField, string ValueField, string SPName)
+        {
+            //  ctx=new ExponentPortalEntities();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            using (var cotx = new ExponentPortalEntities())
+            {
+                using (var cmd = cotx.Database.Connection.CreateCommand())
+                {
+
+                    cotx.Database.Connection.Open();
+
+
+                    cmd.CommandText = "usp_Portal_GetDroneDropDown";
+                    DbParameter Param = cmd.CreateParameter();
+                    Param.ParameterName = "@Type";
+                    Param.Value = TypeField;
+                    cmd.Parameters.Add(Param);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+
+                            SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Code"].ToString() });
+
+                        }
+                    }
+                    DropDownList = SelectList.ToList();
+                    cotx.Database.Connection.Close();
+                    return DropDownList; //return the list objects
+
+                }
+            }
+        }
         public static IEnumerable<SelectListItem> GetDropDowntLists(string TypeField, string NameField, string ValueField, string SPName)
         {
             //  ctx=new ExponentPortalEntities();
