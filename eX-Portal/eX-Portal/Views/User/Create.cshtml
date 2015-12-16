@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_exPortal.cshtml";
 }
 
+
 <section class="general-form">
     @using (Html.BeginForm())
     {
@@ -43,6 +44,24 @@
             @Html.DropDownListFor(model => model.User.UserProfileId, Model.ProfileList)           
 
         </div>
+  
+    <div class="editor-label">
+        @Html.LabelFor(model => model.User.CountryId, "Country")
+    </div>
+    <div class="editor-field">
+
+        @Html.DropDownListFor(model => model.User.CountryId,Model.CountryList )
+
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.User.AccountId, "Account")
+    </div>
+    <div class="editor-field">
+
+        @Html.DropDownListFor(model => model.User.AccountId, Model.AccountList )
+
+    </div>
 
         <div class="editor-field">
             @Html.LabelFor(model => model.User.FirstName)
