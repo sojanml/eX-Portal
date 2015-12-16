@@ -1,0 +1,103 @@
+﻿@model eX_Portal.ViewModel.AccountViewModel
+
+@using (Html.BeginForm()) {
+  @Html.AntiForgeryToken()
+
+  <div class="form-horizontal">
+ 
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Account.AccountId)
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Account.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Account.Name, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Account.Name, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+
+      <div class="form-group">
+          @Html.LabelFor(model => model.Account.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+          <div class="col-md-10">
+              @Html.EditorFor(model => model.Account.Code, new { htmlAttributes = new { @class = "form-control" } })
+              @Html.ValidationMessageFor(model => model.Account.Code, "", new { @class = "text-danger" })
+          </div>
+      </div>
+    <div class="form-group">
+      @Html.LabelFor(model => model.Account.EmailId, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Account.EmailId, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Account.EmailId, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Account.MobileNo, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Account.MobileNo, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Account.MobileNo, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Account.OfficeNo, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Account.OfficeNo, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Account.OfficeNo, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Account.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        <div class="checkbox">
+          @Html.EditorFor(model => model.Account.IsActive)
+          @Html.ValidationMessageFor(model => model.Account.IsActive, "", new { @class = "text-danger" })
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Account.AccountDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.TextAreaFor(model => model.Account.AccountDescription, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Account.AccountDescription, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Account.Address1, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Account.Address1, new { htmlAttributes = new { @class = "form-control" } })
+      </div>
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Account.Address2, new { htmlAttributes = new { @class = "form-control" } })
+      </div>
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Account.Address3, new { htmlAttributes = new { @class = "form-control" } })
+      </div>
+      <div class="col-md-10">
+        @Html.ValidationMessageFor(model => model.Account.Address1, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(model => model.Account.Address2, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(model => model.Account.Address3, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+      <div class="form-group">
+          @Html.LabelFor(model => model.Account.CountryCode, htmlAttributes: new { @class = "control-label col-md-2" })
+          <div class="col-md-10">
+              @Html.DropDownListFor(model => model.Account.CountryCode, Model.CountryList)
+              @Html.ValidationMessageFor(model => model.Account.CountryCode, "", new { @class = "text-danger" })
+          </div>
+      </div>
+
+
+    
+
+    <div class="form-toolbar">
+      <input type="submit" value="Save" />
+    </div>
+  </div>
+}
+

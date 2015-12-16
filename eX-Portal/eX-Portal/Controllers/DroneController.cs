@@ -27,9 +27,8 @@ namespace eX_Portal.Controllers {
           "  D.[DroneId] as _PKey\n" +
           "FROM\n" +
           "  [ExponentPortal].[dbo].[MSTR_Drone] D\n" +
-          "inner join LUP_Drone  O on\n" +
-          "  OwnerID = O.TypeID and\n" +
-          "  O.Type = 'Owner' " +
+          "inner join MSTR_Account  O on\n" +
+          "  D.AccountID = O.AccountID " +
           "inner join LUP_Drone M on\n" +
           "  ManufactureID = M.TypeID and\n" +
           "  M.Type='Manufacturer' " +
@@ -93,10 +92,9 @@ namespace eX_Portal.Controllers {
           "  M.Name as ManufactureName,\n" +
           "  U.Name as UAVType\n" +
           "FROM\n" +
-          "  [ExponentPortal].[dbo].[MSTR_Drone] D\n" +
-          "inner join LUP_Drone  O on\n" +
-          "  OwnerID = O.TypeID and\n" +
-          "  O.Type = 'Owner' " +
+          "  [MSTR_Drone] D\n" +
+          "inner join MSTR_Account  O on\n" +
+          "  D.AccountID = O.AccountID\n" +
           "inner join LUP_Drone M on\n" +
           "  ManufactureID = M.TypeID and\n" +
           "  M.Type='Manufacturer' " +
@@ -112,9 +110,10 @@ namespace eX_Portal.Controllers {
     // GET: Drone/Create
     public ActionResult Create() {
       if (!exLogic.User.hasAccess("DRONE.CREATE")) return RedirectToAction("NoAccess", "Home");
+      String OwnerListSQL = "SELECT Name, AccountId FROM MSTR_Account ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
         Drone = new MSTR_Drone(),
-        OwnerList = Util.GetDropDowntList("Owner", "Name", "Code", "usp_Portal_GetDroneDropDown"),
+        OwnerList = Util.getListSQL(OwnerListSQL),
         UAVTypeList = Util.GetDropDowntList("UAV Type", "Name", "Code", "usp_Portal_GetDroneDropDown"),
         ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
         //PartsGroupList = Util.GetDropDowntList();
@@ -133,23 +132,45 @@ namespace eX_Portal.Controllers {
         // TODO: Add insert logic here
 
         MSTR_Drone Drone = DroneView.Drone;
-
-        int DroneId = Util.InsertSQL("INSERT INTO MSTR_DRONE(OWNERID,MANUFACTUREID,UAVTYPEID,COMMISSIONDATE,DRONEDEFINITIONID,ISACTIVE) VALUES('" + Drone.OwnerId + "','" + Drone.ManufactureId + "','" + Drone.UavTypeId + "','" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',11,'True');");
+        String SQL = "INSERT INTO MSTR_DRONE(\n" +
+          "  AccountID,\n" +
+          "  MANUFACTUREID,\n" +
+          "  UAVTYPEID,\n" +
+          "  COMMISSIONDATE,\n" +
+          "  DRONEDEFINITIONID,\n" +
+          "  ISACTIVE\n" +
+          ") VALUES(\n" +
+          "  '" + Drone.AccountID + "',\n" +
+          "  '" + Drone.ManufactureId + "',\n" +
+          "  '" + Drone.UavTypeId + "',\n" +
+          "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
+          "  11,\n" +
+          "  'True'\n" +
+          ");";
+        int DroneId = Util.InsertSQL(SQL);
 
         if (DroneView.SelectItemsForParts != null) {
           for (var count = 0; count < DroneView.SelectItemsForParts.Count(); count++) {
             string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
             int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
-            string SQL = "Insert into M2M_DroneParts (DroneId,PartsId,Quantity) values(" + DroneId + "," + PartsId + "," + Qty + ");";
+            SQL = "Insert into M2M_DroneParts (\n" +
+          "  DroneId,\n" +
+          "  PartsId,\n" +
+          "  Quantity\n" +
+          ") values(\n" +
+          "  " + DroneId + ",\n" +
+          "  " + PartsId + ",\n" +
+          "  " + Qty + "\n" +
+          ");";
             int ID = Util.doSQL(SQL);
           }
 
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Detail", new {ID = DroneId });
       } catch (Exception ex) {
         Util.ErrorHandler(ex);
-        return View(DroneView);
+        return View("InternalError", ex);
       }
     }
 
@@ -159,9 +180,10 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("DRONE.EDIT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.DroneId = id;
       ExponentPortalEntities db = new ExponentPortalEntities();
+      String OwnerListSQL = "SELECT Name, AccountId FROM MSTR_Account ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
         Drone = db.MSTR_Drone.Find(id),
-        OwnerList = Util.GetDropDowntList("Owner", "Name", "Code", "usp_Portal_GetDroneDropDown"),
+        OwnerList = Util.getListSQL(OwnerListSQL),
         UAVTypeList = Util.GetDropDowntList("UAV Type", "Name", "Code", "usp_Portal_GetDroneDropDown"),
         ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
         //PartsGroupList = Util.GetDropDowntList();
@@ -179,7 +201,7 @@ namespace eX_Portal.Controllers {
           MSTR_Drone Drone = DroneView.Drone;
           //master updating
 
-          string SQL = "UPDATE MSTR_DRONE SET OWNERID ='" + Drone.OwnerId + "'," +
+          string SQL = "UPDATE MSTR_DRONE SET AccountID ='" + Drone.AccountID + "'," +
                        "MANUFACTUREID ='" + Drone.ManufactureId + "',UAVTYPEID ='" + Drone.UavTypeId +
                        "',COMMISSIONDATE ='" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") +
                         "',DRONEDEFINITIONID = 11,ISACTIVE ='True' WHERE DroneId =" + Drone.DroneId;
@@ -200,9 +222,9 @@ namespace eX_Portal.Controllers {
           }
 
         }
-        return RedirectToAction("Index");
-      } catch {
-        return View();
+        return RedirectToAction("Detail", new { ID = DroneView.Drone.DroneId });
+      } catch(Exception ex) {
+        return View("InternalError", ex);
       }
     }
 
@@ -215,7 +237,7 @@ namespace eX_Portal.Controllers {
 
       //Delete the drone from database if there is no flights are created
       SQL = "SELECT Count(*) FROM [DroneFlight] WHERE DroneID = " + DroneID;
-      if(Util.getDBInt(SQL) != 0)
+      if (Util.getDBInt(SQL) != 0)
         return Util.jsonStat("ERROR", "You can not delete a drone with a flight attached");
 
       SQL = "DELETE FROM [M2M_DroneParts] WHERE DroneID = " + DroneID;
@@ -227,7 +249,7 @@ namespace eX_Portal.Controllers {
       return Util.jsonStat("OK");
     }
 
-    
+
     public ActionResult FillParts(int DroneId) {
       var DroneParts = (from MSTR_Parts in ctx.MSTR_Parts
                         select new {
