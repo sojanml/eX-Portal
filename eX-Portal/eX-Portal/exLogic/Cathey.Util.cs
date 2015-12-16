@@ -182,7 +182,7 @@ namespace eX_Portal.exLogic
                         dd.TotalFlightTime = dr["TotalFlightTime"].ToString();
                         dd.DroneDataId = Convert.ToInt32(dr["SNO"].ToString());
                         if(IsDate(dr["Timstamp"].ToString()))
-                        dd.ReadTime = Convert.ToDateTime(dr["Timstamp"].ToString());                        
+                      //  dd.ReadTime = Convert.ToDateTime(dr["Timstamp"].ToString());                        
                         dd.Satellites = dr["Satellites"].ToString();
                         dd.Speed = dr["Speed"].ToString();
                         dd.FixQuality = dr["FixQuality"].ToString();

@@ -11,12 +11,11 @@ namespace eX_Portal.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+    
     public partial class MSTR_User
     {
         public int UserId { get; set; }
         public string UserName { get; set; }
-        [Required(ErrorMessage ="Password Required")]
         public string Password { get; set; }
         public Nullable<bool> RememberMe { get; set; }
         public string PhotoUrl { get; set; }
@@ -39,5 +38,7 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> LastModifiedOn { get; set; }
         public Nullable<System.DateTime> ApprovedOn { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
+        public string PasswordSalt { get; set; }
+        public Nullable<int> AccountId { get; set; }
     }
 }
