@@ -58,7 +58,7 @@ namespace eX_Portal.exLogic
             {
                 int div = dec / 2;
                 int rem = dec % 2;
-                Console.WriteLine("{0} / 2 = {1} R {2}", dec, div, rem);
+               
                 dec = div;
                 list.Add((char)(rem + 48));
             }
@@ -67,6 +67,37 @@ namespace eX_Portal.exLogic
             list.Reverse();
             return new string(list.ToArray());
         }
+
+
+        public static IEnumerable<SelectListItem> GetAccountList()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
+
+            String SQL = "SELECT 0 as Value, 'Not Available' as Name";
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+
+                    SQL = "SELECT [AccountID] as Value  ,[Name] as Name FROM [MSTR_Account] ORDER BY [Name]";
+
+
+                    cmd.CommandText = SQL;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Value"].ToString() });
+                        }
+                    }
+
+                    ctx.Database.Connection.Close();
+                } //using Database.Connection
+            }//using ExponentPortalEntities;
+            return SelectList; //return the list objects
+        }//function GetDropDowntL
         public static IEnumerable<SelectListItem> GetProfileList()
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();
@@ -117,6 +148,8 @@ namespace eX_Portal.exLogic
         {
             //  ctx=new ExponentPortalEntities();
             List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
+
 
             using (var cotx = new ExponentPortalEntities())
             {
@@ -271,6 +304,23 @@ namespace eX_Portal.exLogic
             }
 
             return result;
+        }
+
+
+        public static String GetEncryptedPassword(String Password)
+        {
+            
+           String EncrptedPassword;
+            String SQL = "SELECT CONVERT(NVARCHAR(32), HASHBYTES('MD5', '" + Password + "'),2)";
+            using (var cotx = new ExponentPortalEntities())
+            {
+
+                // String SQL = "select Max(TypeId)+1 from LUP_Drone where  Type='" + TypeName + "'";
+                EncrptedPassword = cotx.Database.SqlQuery<String>(SQL).FirstOrDefault<String>();
+                
+            }
+
+            return EncrptedPassword; ;
         }
         public static int GetTypeId(String TypeName)
         {
