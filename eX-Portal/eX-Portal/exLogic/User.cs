@@ -36,14 +36,14 @@ namespace eX_Portal.exLogic {
 
     public static int UserValidation(String UserName, String Password) {
       try {
-              
-               // var PasswordCrypto = Crypto.Compute(Password, Crypto.Salt);
+
+                string PasswordCrypto = Util.GetEncryptedPassword(Password);
                 int result = 0;
         using (var ctx = new ExponentPortalEntities()) {
           var _objuserdetail = (from data in ctx.MSTR_User
                                 where data.UserName == UserName
-                                && data.Password == Password
-
+                                && data.Password == PasswordCrypto
+                              
                                 select data);
 
           result = _objuserdetail.Count();
