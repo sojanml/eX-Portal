@@ -53,12 +53,12 @@ namespace eX_Portal.Controllers {
             if (!exLogic.User.hasAccess("USER.VIEW")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "User View";
             string SQL = "select a.UserName,a.FirstName,a.MobileNo,b.ProfileName, Count(*) Over() as _TotalRecords ,  a.UserId as _PKey " +
-                " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId ";
+                " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId  ";
 
            
             qView nView = new qView(SQL);
             if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-            if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+             if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
             if (Request.IsAjaxRequest())
             {
                 Response.ContentType = "text/javascript";
@@ -86,8 +86,10 @@ namespace eX_Portal.Controllers {
                 User = new MSTR_User(),
 
                 ProfileList = Util.GetProfileList(),
-              
-                //   DronePartsList=Util1.DronePartsList("usp_Portal_GetDroneParts")
+                CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
+                AccountList = Util.GetAccountList()
+
+               
 
             };
             return View(viewModel);
@@ -100,7 +102,7 @@ namespace eX_Portal.Controllers {
         public ActionResult Edit(int id)
         {
 
-            
+            if (!exLogic.User.hasAccess("USER.EDIT")) return RedirectToAction("NoAccess", "Home");
             var viewModel = new ViewModel.UserViewModel.LoginViewModel.UserLogon
             {
 
@@ -109,6 +111,8 @@ namespace eX_Portal.Controllers {
                 User = db.MSTR_User.Find(id),
 
                 ProfileList = Util.GetProfileList(),
+                CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
+                AccountList = Util.GetAccountList()
             };
             return View(viewModel);
         }
@@ -125,20 +129,20 @@ namespace eX_Portal.Controllers {
                 if (ModelState.IsValid)
                 {
                    
-
+                  
                     if (Session["UserId"] == null)
                         {
                             Session["UserId"] = -1;
                         }
                         User.LastModifiedBy = Util.toInt(Session["UserID"].ToString());
                         User.LastModifiedOn = DateTime.Now;
-                    //password encryption
-                   // var Password = Crypto.Compute(User.Password);
+                   
+                    string Password = Util.GetEncryptedPassword(User.Password).ToString();
                     string SQL = "UPDATE MSTR_USER SET UserName='" + User.UserName +
-                             "',Password='" + User.Password + "',UserProfileId=" + User.UserProfileId + ",FirstName='" + User.FirstName +
+                             "',Password='" + Password + "',UserProfileId=" + User.UserProfileId + ",FirstName='" + User.FirstName +
                              "', Remarks='" +
                              User.Remarks + "',MobileNo='" + User.MobileNo + "',EmailId='" +
-                             User.EmailId + "' where UserId=" + User.UserId;
+                             User.EmailId + "', CountryId="+ User.CountryId + ",AccountId=" + User.AccountId +" where UserId=" + User.UserId;
                         int id = Util.doSQL(SQL);
 
                         return RedirectToAction("UserList");
@@ -160,6 +164,8 @@ namespace eX_Portal.Controllers {
                 User = db.MSTR_User.Find(User.UserId),
 
                 ProfileList = Util.GetProfileList(),
+                CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
+                AccountList = Util.GetAccountList()
             };
             return View(viewModel);
            
@@ -180,10 +186,9 @@ namespace eX_Portal.Controllers {
                     var viewModel = new ViewModel.UserViewModel.LoginViewModel.UserLogon
                     {
                        User = new MSTR_User(),
-
                         ProfileList = Util.GetProfileList(),
-                       
-                        
+                        CountryList= Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
+                        AccountList=Util.GetAccountList()
 
                     };
                     return View(viewModel);
@@ -196,15 +201,28 @@ namespace eX_Portal.Controllers {
                     {
                         Session["UserId"] = -1;
                     }
-                    //password encryption
-                  
+                               
 
-                   // User.Password = Crypto.Compute(User.Password);
+                  
                     User.IsActive = true;
                     User.CreatedBy = Util.toInt(Session["UserID"].ToString());
                     User.CreatedOn = DateTime.Now;
-                    db.MSTR_User.Add(User);
-                    db.SaveChanges();
+                  
+                    //  db.MSTR_User.Add(User);
+                    //  db.SaveChanges();
+
+                 
+                    string Password = Util.GetEncryptedPassword(User.Password).ToString();
+
+              String    SQL = "insert into MSTR_User(UserName, Password, FirstName, CreatedBy," +
+                         "UserProfileId, Remarks, MobileNo, EmailId, CountryId, IsActive, CreatedOn,AccountId)" +
+                         " values('" + User.UserName + "','" + Password + "','" + User.FirstName + "'," +
+                         Session["UserId"] + "," + User.UserProfileId + ",'" + User.Remarks + "','" + User.MobileNo +
+                         "','" + User.EmailId + "'," + User.CountryId + ",'" + User.IsActive + "','" + DateTime.Now.ToString("yyyy - MM - dd") +
+                         "'," + User.AccountId + ")";
+
+                    int id = Util.InsertSQL(SQL);
+
                     return RedirectToAction("UserList");
                 }
             }
@@ -218,11 +236,10 @@ namespace eX_Portal.Controllers {
         {
             if (!exLogic.User.hasAccess("USER.DELETE"))
 
-                return Util.jsonStat("ERROR", "Access Denied");
+              return Util.jsonStat("ERROR", "Access Denied");
             String SQL = "";
             Response.ContentType = "text/json";
-           // if (!exLogic.User.hasAccess("USER.DELETE"))
-             //   return Util.jsonStat("ERROR", "Access Denied");
+           
 
             //Delete the drone from database if there is no user createdby
            SQL = "SELECT Count(*) FROM MSTR_User where CreatedBy = " + UserID;
@@ -236,6 +253,8 @@ namespace eX_Portal.Controllers {
             SQL = "select count(*) from Mstr_DroneService where CreatedBy=" + UserID;
             if (Util.getDBInt(SQL) != 0)
                 return Util.jsonStat("ERROR", "You can not delete a the User Attached to DroneService Creation");
+
+
 
             SQL = "DELETE FROM [MSTR_USER] WHERE UserId = " + UserID;
             Util.doSQL(SQL);           
