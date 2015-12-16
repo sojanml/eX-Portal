@@ -1,0 +1,43 @@
+﻿
+
+
+<div id="UploadedDatabase">
+  <div class="simple-content">
+    <h2>Import the Uploaded File</h2>
+    <p class="info">
+      Bellow are the list of files that are already uploaded to the server. Select the option Import
+      to get the data for uploaded file.<br />
+      Please delete the file after Import to keep this option tidy.
+    </p>
+  </div>
+
+
+  <ul id="UploadedFilesList"></ul>
+
+</div>
+
+<div id="UploadNewDB">
+  <div class="simple-content">
+    <h2>Upload new File</h2>
+    <p class="info">
+      To start import of a new file, please upload it using the form bellow.
+    </p>
+  </div>
+
+
+  <form id="upload_form" enctype="multipart/form-data" method="post" action="wmfl-save.aspx">
+    <div>
+      <div><label for="image_file">Please select database file</label></div>
+      <div><input type="file" multiple name="fileinput" id="fileinput" /></div>
+    </div>
+  </form>
+
+  <ul id="FileUploadProgress"></ul>
+
+</div>
+@section header{
+  <link href="~/Content/black-box.css" rel="stylesheet" />
+}
+@section Scripts{
+<script type="text/javascript" src="~/Scripts/black-box.js"></script>  
+}

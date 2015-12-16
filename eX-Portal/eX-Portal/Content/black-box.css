@@ -1,0 +1,90 @@
+﻿
+div#UploadedDatabase {
+  margin-bottom: 20px;
+}
+
+UL#FileUploadProgress {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+
+  UL#FileUploadProgress LI {
+    padding: 5px 0px 5px 0px;
+  }
+
+UL#UploadedFilesList {
+  margin: 20px 20px 0px 0px;
+  padding: 0px;
+  list-style: none;
+  border-top: 1px silver solid;
+}
+
+  UL#UploadedFilesList LI {
+    padding: 5px 0px 5px 0px;
+    border-bottom: 1px silver solid;
+  }
+
+  UL#UploadedFilesList LI.processing{
+    color: green;
+  }
+  UL#UploadedFilesList LI.success{
+    color: green;
+    font-weight:bold;
+  }
+
+  UL#UploadedFilesList LI.error{
+    color: red;
+    font-weight:bold;
+  }
+    UL#UploadedFilesList LI.delete{
+    color: red;
+    font-weight:bold;
+    text-decoration:line-through !important;
+  }
+
+    UL#UploadedFilesList LI div.icon,
+    UL#UploadedFilesList LI div.info {
+      float: left;
+    }
+
+    UL#UploadedFilesList LI div.icon {
+      margin-right: 20px;
+    }
+
+    UL#UploadedFilesList LI div.info {
+      margin-top: 5px;
+    }
+
+    UL#UploadedFilesList LI div.right-section {
+      float: right;
+      margin-top:5px;
+    }
+    UL#UploadedFilesList LI div.toolbar {
+      text-align: right;
+    }
+
+div.recordinfo {
+  text-align: right;
+  padding-top: 10px;
+
+}
+
+UL#UploadedFilesList LI div.toolbar A {
+  color: white;
+  font-size: 16pt;
+  border-radius: 3px;
+  height: auto;
+  background-color: #484747;
+  padding: 5px 15px 5px 15px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Conv_DINNextLTPro-LightCondensed', Arial;
+  text-decoration: none;
+  margin:5px 0px 0px 10px;
+}
+
+  UL#UploadedFilesList LI div.toolbar A:hover {
+    background-color: #ea050e;
+  }
