@@ -185,11 +185,16 @@ namespace eX_Portal.Controllers {
             SQL = "SELECT Count(*) FROM MSTR_Drone where AccountId = " + AccountID;
 
             if (Util.getDBInt(SQL) != 0)
-                return Util.jsonStat("ERROR", "You can not delete a the User Attached Drone");
-
+                return Util.jsonStat("ERROR", "You can not delete a the Account Attached Drone");
+            //attached to parts
             SQL= "select Count(*) from MSTR_Parts where SupplierId =" + AccountID;
             if (Util.getDBInt(SQL) != 0)
-                return Util.jsonStat("ERROR", "You can not delete a the User Attached to Parts");
+                return Util.jsonStat("ERROR", "You can not delete a the the Account Attached to Parts");
+            //attached to user
+            SQL = "select Count(*) from MSTR_User where AccountId=" + AccountID;
+
+            if (Util.getDBInt(SQL) != 0)
+                return Util.jsonStat("ERROR", "You can not delete a the Account Attached to User");
 
             SQL = "DELETE FROM [MSTR_Account] WHERE  AccountId = " + AccountID;
             Util.doSQL(SQL);
