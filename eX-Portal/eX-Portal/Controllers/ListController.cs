@@ -60,7 +60,7 @@ namespace eX_Portal.Controllers
         public ActionResult Create()
 
         {
-            
+           // if (!exLogic.User.hasAccess("lOOKUP.CREATE")) return RedirectToAction("NoAccess", "Home");
             var viewModel = new ViewModel.ListViewModel
             {
                Typelist = Util.LUPTypeList()
@@ -78,6 +78,7 @@ namespace eX_Portal.Controllers
             {
 
                 // TODO: Add insert logic here
+            
                 if (ModelState.IsValid)
                 {
                     ExponentPortalEntities db = new ExponentPortalEntities();
@@ -91,15 +92,15 @@ namespace eX_Portal.Controllers
                     if (ID == 0)
                     {
 
-
+                        if (!exLogic.User.hasAccess("lOOKUP.CREATE")) return RedirectToAction("NoAccess", "Home");
 
                         int TypeId = Util.GetTypeId(ListView.TypeCopy);
-                       
 
-                        string SQL = "INSERT INTO LUP_DRONE(Type,Code,TypeId,BinaryCode,Name,CreatedBy,CreatedOn)" +
+                        string BinaryCode = Util.DecToBin(TypeId);
+                        string SQL = "INSERT INTO LUP_DRONE(Type,Code,TypeId,BinaryCode,Name,CreatedBy,CreatedOn,IsActive)" +
                             "VALUES('" + ListView.TypeCopy + "','" + ListView.Code + "'," + TypeId +
-                            ",'" + ListView.BinaryCode + "','" + ListView.Name + "',"
-                            + Session["UserId"] + ",'" + DateTime.Now.ToString("yyyy-MM-dd") + "')";
+                            ",'" + BinaryCode + "','" + ListView.Name + "',"
+                            + Session["UserId"] + ",'" + DateTime.Now.ToString("yyyy-MM-dd") + "' ," + "'True'" + ")";
 
                         int ListId = Util.InsertSQL(SQL);
                         return RedirectToAction("Create", "List");
@@ -107,8 +108,9 @@ namespace eX_Portal.Controllers
                     }
                     else
                     {
+                        if (!exLogic.User.hasAccess("lOOKUP.EDIT")) return RedirectToAction("NoAccess", "Home");
                         string SQL = "UPDATE LUP_DRONE SET Type='" + ListView.TypeCopy + "',Code='" + ListView.Code +
-                            "', BinaryCode='" + ListView.BinaryCode + "',Name='" + ListView.Name
+                            "',Name='" + ListView.Name
                             + "',ModifiedBy=" + Session["UserId"] + ",ModifiedOn='" + DateTime.Now.ToString("yyyy-MM-dd") + "' where Id="+ID;
                         int ListId = Util.doSQL(SQL);
                         return RedirectToAction("Create", "List");
@@ -155,13 +157,26 @@ namespace eX_Portal.Controllers
 
             try
             {
+                if (!exLogic.User.hasAccess("lOOKUP.DELETE")) return RedirectToAction("NoAccess", "Home");
 
                 String SQL = "";
                 Response.ContentType = "text/json";
-              
 
-              
 
+                //Delete the list from database if there is no DroneServiceParts are created
+                int TypeID= Util.GetTypeIdFromId(LupID);
+                SQL = "select COUNT(*) from M2M_DroneServiceParts where PartsId =" + TypeID;
+
+                 if (Util.getDBInt(SQL) != 0)
+                    return RedirectToAction("Create", "List");
+                //Delete the list from database if there is no DroneParts are created
+                SQL = "select COUNT(*) from M2M_DroneParts where PartsId =" + TypeID;
+                if (Util.getDBInt(SQL) != 0)
+                    return RedirectToAction("Create", "List");
+                //Delete the list from database if there is no TypeofService are Created
+                SQL = "select COUNT(*) from MSTR_DroneService where TypeOfServiceId =" + TypeID;
+                      if (Util.getDBInt(SQL) != 0)
+                    return RedirectToAction("Create", "List");
 
                 SQL = "DELETE FROM [LUP_Drone] WHERE Id = " + LupID;
                 Util.doSQL(SQL);

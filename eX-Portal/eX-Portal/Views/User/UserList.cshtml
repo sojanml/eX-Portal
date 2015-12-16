@@ -1,5 +1,10 @@
-﻿@model eX_Portal.exLogic.qView
+﻿
+@model eX_Portal.exLogic.qView
 
+@{
+    ViewBag.Title = "UAS Service Details";
+    Layout = "~/Views/Shared/_exPortal.cshtml";
+}
 @Html.Raw(Model.getDataTable())
 
 @section scripts {
@@ -7,3 +12,4 @@
 @Html.Raw(Model.getScripts())
     </script>
 }
+
