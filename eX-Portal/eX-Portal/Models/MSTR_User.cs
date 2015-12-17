@@ -14,8 +14,7 @@ namespace eX_Portal.Models
     using System.ComponentModel.DataAnnotations;
     public partial class MSTR_User
     {
-        public int UserId { get; set; }
-        [Required(ErrorMessage ="Please Enter The UserName")]
+        public int UserId { get; set; }       
         public string UserName { get; set; }
         public string Password { get; set; }
         public Nullable<bool> RememberMe { get; set; }
