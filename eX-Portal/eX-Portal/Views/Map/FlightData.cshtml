@@ -33,8 +33,8 @@
             </tr>
         </tbody>
     </table>
-    <div>
-        <input id="clickReplay" type="button" value="Replay" onclick="Replay();" />
+    <div class="form-toolbar">
+        <input id="clickReplay" type="button" value="Replay"  onclick="Replay();" />
     </div>
     <br />
 
@@ -127,13 +127,21 @@
                     strokeWeight: 3
                 });
                 poly.setMap(map);
-                var loctr = '<tr><th>Latitude</th><th>Longitude</th>' 
+                var loctr = '<thead><tr><th>Latitude</th><th>Longitude</th>' 
                             + '<th>Altitude</th><th>Speed</th>' 
                             +'<th>FixQuality</th><th>Satellite</th>' 
                             +'<th>ReadTime</th><th>Pitch</th>' 
                             +'<th>RollData</th><th>Heading</th>' 
-                            +'<th>Heading</th><th>Total Flight Time</th></tr>';
+                            + '<th>Heading</th><th>Total Flight Time</th></tr></thead>';
+                var firsttr = '<tr style="display:none"><td></td><td></td>'
+                           + '<td></td><td></td>'
+                           + '<td></td><td></td>'
+                           + '<td></td><td></td>'
+                           + '<td></td><td></td>'
+                           + '<td></td><td></td></tr>';
                 $('#MapData table').append(loctr);
+                $('#MapData table').append(firsttr);
+                $('#MapData table').addClass('report');
                GetDrones();
                 //  myInterval = setInterval(function () { }, 500);
                 
@@ -162,7 +170,7 @@
                             setMarker(map, _Location);
                             //drawMarkers();
                             SetCurrentValues(_Location);
-                            //SetMapTable(_Location);
+                            SetMapTable(_Location);
                        // }
                         //catch (err) {
                         //    alert('Live Drone Position Error' + err);
@@ -229,9 +237,12 @@
 
           
             function createMarker(map, latlng, heading, body, zindex) {
+                if (poly.map == null)
+                { addLines(); }
                 var path = poly.getPath();
                 // Because path is an MVCArray, we can simply append a new coordinate
                 // and it will automatically appear.
+               
                 path.push(latlng);
                 var image = '/red.png';
                 var marker = new google.maps.Marker({
@@ -241,13 +252,11 @@
                     title: heading,
                     zIndex: 9999
                 });
-
                 if (MyLastMarker != null)
                 {
                     MyLastMarker.setIcon('/bullet_blue.png');
                 }
                 MyLastMarker = marker;
-                // if (MyLastMarker!=n)
                 map.setCenter(latlng);
                 closeMargin = '120px';
                 livemarkers.push(marker);
@@ -269,11 +278,12 @@
                 LastDroneDataID = 0;
                 deleteMarkers();
                 removeLines();
-
                 GetDrones();
-                addLines();
+               // addLines();
             }
             function addLines() {
+                path = new google.maps.MVCArray();
+                poly.setPath(path);
                 poly.setMap(map);
             }
 
@@ -285,6 +295,9 @@
             }
             function removeLines() {
                 poly.setMap(null);
+                poly.latLngs.clear();
+               // path = [];
+            //    setTimeout()
                // flightPath.setMap(null);
             }
 
@@ -314,9 +327,11 @@
                    // var oCompaniesTable = $('#MapData Table')
             }
             function SetMapTable(location) {
-
+                if (location.length>0){
                 for (var i = 0; i < 15; i++) {
                     var _LastValue = location[i];
+                    if (_LastValue != null)
+                        {
                     var tLatData = '<td>' + _LastValue[3] + '</td>';
                     var tLonData = '<td>' + _LastValue[4] + '</td>';
                     var tAltData = '<td>' + _LastValue[13] + '</td>';
@@ -330,7 +345,14 @@
                     var tHeadData = '<td>' + _LastValue[19] + '</td>';
                     var tTotFlightTimeData = '<td>' + _LastValue[20] + '</td>';
                     var loctr = '<tr>' + tLatData + tLonData + tAltData + tSpeedData + tFxQltyData + tSatelliteData + tDrTime + tPitchData + tRollData + tHeadData + tTotFlightTimeData + '</tr>';
-                    $('#MapData table').append(loctr);
+                    $('#MapData table > tbody > tr:first').after(loctr);
+                        if ($("#MapData > table > tbody > tr").length > 20)
+                        $('#MapData > table > tbody > tr:last').remove();
+                    
+                    
+
+                    }
+                }
                 }
 
             }

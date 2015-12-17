@@ -206,6 +206,14 @@ namespace eX_Portal.exLogic {
       return getDBVal(SQL);
     }
 
+    public static int getLoginUserID() {
+      var UserID = 0;
+      if(HttpContext.Current.Session["UserID"] != null) {
+        UserID = toInt(HttpContext.Current.Session["UserID"].ToString());
+      }
+      return UserID;
+    }
+
     public static void ErrorHandler(Exception ex = null) {
       /*
       //Reference - http://stackoverflow.com/questions/3328990/c-sharp-get-line-number-which-threw-exception

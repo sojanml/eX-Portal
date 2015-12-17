@@ -152,7 +152,7 @@ function SubmitFile(file) {
       }
     },
     error: errorHandler = function (data) {
-      Elem.html(HTML + ' - error in uploading file');
+      Elem.html(HTML + ' - ' + data.message);
     },
     // Form data
     data: formData,

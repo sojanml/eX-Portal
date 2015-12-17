@@ -25,7 +25,7 @@ $(document).ready(function () {
     //alert('Key: ' + pKey)
   });
 
-  $('table.report').on('click', 'a._delete', function (e) {
+  $(document).on('click', 'a._delete', function (e) {
     e.stopPropagation();
     e.preventDefault();
     $('UL.qViewMenu').fadeOut();

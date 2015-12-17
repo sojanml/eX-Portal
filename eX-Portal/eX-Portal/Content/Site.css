@@ -404,12 +404,14 @@ ul.general-list li:hover a span.subtitles {
   color: white;
 }
 
+td.quick-menu,
 td.menu,
 th.menu{
   width:20px;
   position:relative;
 }
 
+td.quick-menu  UL.qViewMenu,
 td.menu UL.qViewMenu {
   position: absolute;
   right:0px;
@@ -422,10 +424,20 @@ td.menu UL.qViewMenu {
   z-index:10;
 }
 
+td.quick-menu  UL.qViewMenu {
+  display: none;
+}
+
+td.quick-menu.show UL.qViewMenu {
+  display: block !important;
+}
+
+td.quick-menu UL.qViewMenu li,
 td.menu UL.qViewMenu li {
   margin:5px;
 
 }
+td.quick-menu UL.qViewMenu li a,
 td.menu UL.qViewMenu li a {
   color:black;
   text-decoration:none;
@@ -433,11 +445,13 @@ td.menu UL.qViewMenu li a {
   min-width:120px;
   padding:5px 10px 5px 10px;
 }
+td.quick-menu UL.qViewMenu li:hover,
 td.menu UL.qViewMenu li:hover {
   background-color: #ea050e;
   
 }
 
+td.quick-menu UL.qViewMenu li:hover a,
   td.menu UL.qViewMenu li:hover a {
     color: white;
   }
@@ -504,8 +518,14 @@ ul.checkpoints li a {
   text-decoration: none;
   color: gray;
 }
+
+
 ul.checkpoints li a:hover {
-color: #ea050e;
+    color: #ea050e;
+}
+ul.checkpoints li.active a {
+  color: #ea050e;
+  font-weight:bold;
 }
 
 ul.checkpoints li span.slno {
@@ -515,6 +535,11 @@ span.info,
 span.slno {
   color: #ea050e;
 }
+div.error {
+  background-color: #ea050e;
+  color:white;
+  padding:5px;
+}
 
 #delete-confirm {
   width: 300px;
@@ -522,3 +547,17 @@ span.slno {
   font-size:10pt;
 }
 
+
+div.sidebar-left {
+  width:100%;
+}
+
+div.sidebar-left div.left-column {
+  float:left;
+  width:150px;
+}
+
+div.sidebar-left div.right-column {
+  margin-left: 150px;
+  max-width: 100%;
+}

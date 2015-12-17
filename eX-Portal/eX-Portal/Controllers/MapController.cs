@@ -70,7 +70,7 @@ namespace eX_Portal.Controllers {
           "  [Roll],\n" +                      // 11
           "  [Heading],\n" +                   // 12
           "  [TotalFlightTime],\n" +           // 13
-          "  [BB_FlightID]\n" +                // 14
+          "  [BBFlightID]\n" +                // 14
           ") VALUES (\n" +
           "  '" + reuestquery + "',\n" +       // 1
           "  '" + data[0] + "',\n" +           // 2

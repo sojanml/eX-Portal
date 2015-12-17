@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -22,7 +22,7 @@
       <nav>
         @Html.Action("SystemMenu", "Design")
       </nav>
-      
+
     </section>
   </header>
   <section class="sep"></section>
@@ -42,7 +42,15 @@
 
   <article>
     <section class="layout content">
-      <h1>@ViewBag.Title</h1>
+      <div class="header-bar">
+        <div class="form-toolbar" style="float:right;">
+          @RenderSection("toolbar", required: false)
+        </div>
+        <h1>@ViewBag.Title</h1>
+        <div style="clear:both"></div>
+      </div>
+
+
       @RenderBody()
     </section>
   </article>
@@ -54,8 +62,10 @@
   </footer>
 
   <div id="delete-confirm" title="Delete Permanently?" style="display:none;">
-    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Selected Records will be 
-    permanently deleted and cannot be recovered. Are you sure?</p>
+    <p>
+      <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Selected Records will be
+      permanently deleted and cannot be recovered. Are you sure?
+    </p>
   </div>
 
   <div id="alert-box" title="Notification" style="display:none;">
