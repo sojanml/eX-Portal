@@ -17,7 +17,7 @@ namespace eX_Portal.Models
     public partial class MSTR_Account
     {
         public int AccountId { get; set; }
-        [Required(ErrorMessage ="Name requird")]
+        [Required(ErrorMessage ="Please Enter The Company Name")]
         public string Name { get; set; }
         public string EmailId { get; set; }
         public string MobileNo { get; set; }
@@ -35,7 +35,7 @@ namespace eX_Portal.Models
         public string Address2 { get; set; }
         public string Address3 { get; set; }
         public Nullable<int> CountryCode { get; set; }
-       [Required(ErrorMessage = "Code Required")]
+       [Required(ErrorMessage = "Please Enter The Code")]
         public string Code { get; set; }
         public string BinaryCode { get; set; }
     }
