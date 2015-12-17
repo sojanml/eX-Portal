@@ -15,7 +15,7 @@ namespace eX_Portal.Models
     public partial class MSTR_User
     {
         public int UserId { get; set; }
-        [Required(ErrorMessage ="User Name Required")]
+        [Required(ErrorMessage ="Please Enter The UserName")]
         public string UserName { get; set; }
         public string Password { get; set; }
         public Nullable<bool> RememberMe { get; set; }
