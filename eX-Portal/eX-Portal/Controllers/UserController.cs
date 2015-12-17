@@ -226,19 +226,7 @@ namespace eX_Portal.Controllers {
                     return RedirectToAction("UserList");
                 }
             }
-
-            var viewModelUser = new ViewModel.UserViewModel.LoginViewModel.UserLogon
-            {
-                User = new MSTR_User(),
-                ProfileList = Util.GetProfileList(),
-                CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
-                AccountList = Util.GetAccountList()
-
-            };
-            return View(viewModelUser);
-
-           
-           
+            return View(User);
         }
 
 

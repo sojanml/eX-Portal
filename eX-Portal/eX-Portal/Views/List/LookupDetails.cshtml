@@ -1,0 +1,43 @@
+﻿<!--@@model IEnumerable<eX_Portal.Models.LUP_Drone>-->
+@model eX_Portal.ViewModel.ListViewModel
+@{
+  bool isOdd = false;
+}
+
+<div style="display:none" class="error" id="ErrorInfo"></div>
+
+<table id="List" class="report">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Code</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model.NameList) {
+        isOdd = !isOdd;
+        var Class = (isOdd ? "odd" : "even");
+      <tr class="@Class" id="row_@item.Id">
+        <td>
+          <span style="display:none;" id="ID_@item.Id"> @Html.DisplayFor(modelItem => item.Id)</span>
+          <span id="name_@item.Id">@Html.DisplayFor(modelItem => item.Name)</span>
+        </td>
+        <td>
+          <span id="code_@item.Id">@Html.DisplayFor(modelItem => item.Code)</span>
+        </td>
+
+        <td class="quick-menu">
+          <img class="quick-button" src="/images/drop-down.png">
+          <ul class="qViewMenu" style="display: none;">
+            <li><a data-id="@item.Id" class="edit" href="#">Edit</a></li>
+            <li><a class="_delete" href="@Url.Action("Delete", new { ID = item.Id })">Delete</a></li>
+          </ul>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+
+

@@ -75,6 +75,7 @@ namespace eX_Portal.exLogic {
       foreach (var col in DataColumns.aColumnInfoList.ColumnList) {
         String ColName = col.Alias;
         String FieldName = (col.TableAlias == "" ? "" : col.TableAlias + ".") + col.TableColumnName;
+        //if (FieldName == "") FieldName = ColName;
         ColumnMapping.Add(ColName, FieldName);
       }
     }
@@ -108,6 +109,14 @@ namespace eX_Portal.exLogic {
       
     }
 
+    private String getOrderByRow() {
+      foreach (KeyValuePair<string, string> entry in ColumnMapping) {
+        // do something with entry.Value or entry.Key
+        if (entry.Value != "") return entry.Value;
+      }
+      return "";
+    }
+
     private String setOrderFilterPaging(String SQL) {
       //http://www.codeproject.com/Articles/32524/SQL-Parser
 
@@ -136,8 +145,10 @@ namespace eX_Portal.exLogic {
       int RowLength = Util.toInt(Request["length"]);
       myParser.OrderByClause = "";
       SQL = myParser.ToText();
+      String OrderByField = getOrderByRow();
+
       String newSQL = "SELECT * FROM (\n" +
-        SQL.Replace("SELECT ", "SELECT ROW_NUMBER() OVER (ORDER BY " + ColumnMapping[OrderField] + ") AS _RowNumber,\n") +
+        SQL.Replace("SELECT ", "SELECT ROW_NUMBER() OVER (ORDER BY " + OrderByField + ") AS _RowNumber,\n") +
         ") as QueryTable\n" +
         "WHERE\n" +
         "  _RowNumber > " + StartAt + " AND _RowNumber <= " + (RowLength + StartAt) + "\n" +
