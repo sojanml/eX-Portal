@@ -48,7 +48,55 @@ namespace eX_Portal.Controllers {
       }//if(IsAjaxRequest)
     }//Index()
 
-    public ActionResult Detail([Bind(Prefix = "ID")] String DroneID_BBFlightID = "") {
+
+        public ActionResult Live()
+        {
+            //if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
+
+            ViewBag.Title = "Black Box Data";
+
+            string SQL = "SELECT [DroneDataId] " +
+     ", [DroneId]" +
+      ",[DroneRFID]" +
+      ",[Latitude]" +
+     " ,[Longitude]" +
+     " ,[ProductRFID]" +
+     " ,[ProductQrCode]" +
+     " ,[ProductRSSI]" +
+      ",[ReadTime]" +
+      ",[CreatedTime]" +
+      ",[RecordType]" +
+      ",[IsActive]" +
+      ",[ProductId]" +
+      ",[Altitude]" +
+      ",[Speed]" +
+     " ,[FixQuality]" +
+     " ,[Satellites]" +
+      ",[Pitch]" +
+      ",[Roll]" +
+     " ,[Heading]" +
+      ",[TotalFlightTime]" +
+     " ,[BBFlightID]" +
+      ",[IsProcessed]" +
+     " ,[QueueMessage],Count(*) Over() as _TotalRecords,[DroneDataId] as _PKey" +
+  " FROM  [DroneData]   ";
+
+          
+
+            qView nView = new qView(SQL);
+            //nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
+
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }//Index()
+        public ActionResult Detail([Bind(Prefix = "ID")] String DroneID_BBFlightID = "") {
       String[] SplitData = DroneID_BBFlightID.Split(',');
       if (SplitData.Length != 2) return RedirectToAction("Error");
       int DroneID = Util.toInt(SplitData[0]);
