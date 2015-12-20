@@ -13,13 +13,125 @@ namespace eX_Portal.Controllers {
     // GET: BlackBox
 
     public ActionResult Index() {
-      return View();
+      //if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
+
+      ViewBag.Title = "Black Box Data";
+
+      String SQL = "SELECT \n" +
+        "  MSTR_Drone.DroneName,\n" +
+        "  BBFlightID,\n" +
+        "  Min([BlackBoxData].ReadTime) as StartTime,\n" +
+        "  Max([BlackBoxData].ReadTime) as EndTime,\n" +
+        "  Max(Speed) as MaxSpeed,\n" +
+        "  Max(TotalFlightTime) as FlightTime,\n" +
+        "  Count(*) Over() as _TotalRecords,\n"+
+        "  Cast(MSTR_Drone.DroneId as varchar) + ',' + Cast(BBFlightID as varchar) as _Pkey\n" +
+        "FROM\n" +
+        "  [BlackBoxData]\n" +
+        "LEFT JOIN MSTR_Drone ON\n" +
+        "  MSTR_Drone.DroneId = [BlackBoxData].DroneId\n" +
+        "WHERE\n" +
+        "  Speed > 0.00\n" +
+        "GROUP BY\n" +
+        "  MSTR_Drone.DroneID,\n" +
+        "  MSTR_Drone.DroneName,\n" +
+        "  BBFlightID\n";
+
+      qView nView = new qView(SQL);
+      nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
+
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
     }//Index()
+
+
+        public ActionResult Live()
+        {
+            //if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
+
+            ViewBag.Title = "Black Box Data";
+
+            string SQL = "SELECT [DroneDataId] " +
+     ", [DroneId]" +
+      ",[ReadTime]" +
+     ",[Latitude]" +
+     " ,[Longitude]" +
+      ",[Altitude]" +
+      ",[Speed]" +
+     " ,[FixQuality]" +
+     " ,[Satellites]" +
+      ",[Pitch]" +
+      ",[Roll]" +
+     " ,[Heading]" +
+      ",[TotalFlightTime]" +
+     ",Count(*) Over() as _TotalRecords,[DroneDataId] as _PKey" +
+  " FROM  [DroneData]   ";
+
+          
+
+            qView nView = new qView(SQL);
+            //nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
+
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }//Index()
+        public ActionResult Detail([Bind(Prefix = "ID")] String DroneID_BBFlightID = "") {
+      String[] SplitData = DroneID_BBFlightID.Split(',');
+      if (SplitData.Length != 2) return RedirectToAction("Error");
+      int DroneID = Util.toInt(SplitData[0]);
+      int BBFlightID = Util.toInt(SplitData[1]);
+      if(DroneID < 1 || BBFlightID < 1) return RedirectToAction("Error");
+      ViewBag.Title = "Blackbox  Data";
+      ViewBag.DroneID = DroneID;
+
+      String SQL =
+       "SELECT \n" +
+       "  RecordNumber,\n"+
+       "  ReadTime,\n" +
+       "  Latitude,\n" +
+       "  Longitude,\n" +
+       "  Altitude,\n" +
+       "  Speed,\n" +
+       "  FixQuality,\n" +
+       "  Satellites,\n" +
+       "  Pitch,\n" +
+       "  Roll,\n" +
+       "  Heading,\n" +
+       "  TotalFlightTime,\n" +
+       "  Count(*) OVER() as _TotalRecords\n" +
+       "FROM\n" +
+       "  BlackBoxData\n" +
+       "WHERE\n" +
+       "  DroneID=" + DroneID + " AND\n" +
+       "  BBFlightID=" + BBFlightID;
+
+      qView nView = new qView(SQL);
+
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
+    }
 
     public ActionResult Upload() {
       ViewBag.Title = "Upload";
       return View();
     }//upload()
+
+
 
     public String Delete([Bind(Prefix = "file")] String FileName) {
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
@@ -53,6 +165,8 @@ namespace eX_Portal.Controllers {
       try {
         var TheFile = Request.Files[0];
         String FullName = UploadPath + TheFile.FileName;
+
+        if (!Directory.Exists(UploadPath)) Directory.CreateDirectory(UploadPath);
         TheFile.SaveAs(FullName);
         JsonText.Append("{");
         JsonText.Append(this.Pair("status", "success", true));
@@ -110,7 +224,7 @@ namespace eX_Portal.Controllers {
     }
 
     private string Pair(String Name, String Value, bool IsAddComma = false) {
-      Value = Util.toSQL(Value);
+      Value = Value.Replace("\\", "\\\\") ;
       Value = Value.Replace("\r\n", "\\n");
       return "\"" + Name + "\" : \"" + Value + "\"" + (IsAddComma ? "," : "") + "\n";
     }
