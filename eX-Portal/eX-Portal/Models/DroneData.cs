@@ -37,5 +37,6 @@ namespace eX_Portal.Models
         public string TotalFlightTime { get; set; }
         public string BBFlightID { get; set; }
         public Nullable<int> IsProcessed { get; set; }
+        public string QueueMessage { get; set; }
     }
 }

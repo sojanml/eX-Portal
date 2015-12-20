@@ -14,22 +14,30 @@ namespace eX_Portal.Models
     
     public partial class BlackBoxData
     {
-        public int ID { get; set; }
-        public Nullable<int> DroneID { get; set; }
-        public Nullable<int> FlightID { get; set; }
-        public Nullable<int> BBFlightID { get; set; }
-        public Nullable<int> Record_ { get; set; }
-        public Nullable<int> Drone_Serial { get; set; }
-        public Nullable<decimal> Lat { get; set; }
-        public Nullable<decimal> Lon { get; set; }
-        public Nullable<decimal> Alt { get; set; }
+        public int BlackBoxDataID { get; set; }
+        public Nullable<int> RecordNumber { get; set; }
+        public Nullable<int> DroneSerialID { get; set; }
+        public Nullable<int> DroneId { get; set; }
+        public string DroneRFID { get; set; }
+        public Nullable<decimal> Latitude { get; set; }
+        public Nullable<decimal> Longitude { get; set; }
+        public string ProductRFID { get; set; }
+        public string ProductQrCode { get; set; }
+        public string ProductRSSI { get; set; }
+        public Nullable<System.DateTime> ReadTime { get; set; }
+        public Nullable<System.DateTime> CreatedTime { get; set; }
+        public Nullable<int> RecordType { get; set; }
+        public Nullable<bool> IsActive { get; set; }
+        public Nullable<int> ProductId { get; set; }
+        public Nullable<decimal> Altitude { get; set; }
         public Nullable<decimal> Speed { get; set; }
-        public Nullable<int> FixQuality { get; set; }
-        public Nullable<int> Satellites { get; set; }
-        public string RecordTime { get; set; }
+        public Nullable<decimal> FixQuality { get; set; }
+        public Nullable<decimal> Satellites { get; set; }
         public Nullable<decimal> Pitch { get; set; }
         public Nullable<decimal> Roll { get; set; }
         public Nullable<decimal> Heading { get; set; }
         public Nullable<int> TotalFlightTime { get; set; }
+        public Nullable<int> FlightID { get; set; }
+        public Nullable<int> BBFlightID { get; set; }
     }
 }
