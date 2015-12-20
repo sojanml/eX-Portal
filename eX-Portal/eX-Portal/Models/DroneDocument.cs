@@ -12,17 +12,13 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DroneFlight
+    public partial class DroneDocument
     {
         public int ID { get; set; }
-        public Nullable<int> PilotID { get; set; }
-        public Nullable<int> GSCID { get; set; }
-        public Nullable<System.DateTime> FlightDate { get; set; }
-        public Nullable<System.DateTime> CreatedOn { get; set; }
-        public Nullable<int> CreatedBy { get; set; }
-        public Nullable<int> DroneID { get; set; }
-        public string BBFlightID { get; set; }
-        public Nullable<decimal> Latitude { get; set; }
-        public Nullable<decimal> Longitude { get; set; }
+        public int DroneID { get; set; }
+        public string DocumentType { get; set; }
+        public string DocumentName { get; set; }
+        public Nullable<System.DateTime> UploadedDate { get; set; }
+        public Nullable<int> UploadedBy { get; set; }
     }
 }

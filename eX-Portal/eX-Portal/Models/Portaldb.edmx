@@ -5,27 +5,37 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ExponentPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BlackBoxData">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="BlackBoxDataID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="DroneID" Type="int" />
+          <Property Name="BlackBoxDataID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RecordNumber" Type="int" />
+          <Property Name="DroneSerialID" Type="int" />
+          <Property Name="DroneId" Type="int" />
+          <Property Name="DroneRFID" Type="varchar" MaxLength="50" />
+          <Property Name="Latitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Longitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="ProductRFID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductQrCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductRSSI" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReadTime" Type="datetime" />
+          <Property Name="CreatedTime" Type="datetime" />
+          <Property Name="RecordType" Type="int" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="ProductId" Type="int" />
+          <Property Name="Altitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Speed" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="FixQuality" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Satellites" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Pitch" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Roll" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Heading" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="TotalFlightTime" Type="int" />
           <Property Name="FlightID" Type="int" />
           <Property Name="BBFlightID" Type="int" />
-          <Property Name="Record#" Type="int" />
-          <Property Name="Drone_Serial" Type="int" />
-          <Property Name="Lat" Type="numeric" Precision="12" Scale="8" />
-          <Property Name="Lon" Type="numeric" Precision="12" Scale="8" />
-          <Property Name="Alt" Type="numeric" Precision="12" Scale="8" />
-          <Property Name="Speed" Type="numeric" Precision="12" Scale="8" />
-          <Property Name="FixQuality" Type="int" />
-          <Property Name="Satellites" Type="int" />
-          <Property Name="RecordTime" Type="varchar" MaxLength="15" />
-          <Property Name="Pitch" Type="numeric" Precision="12" Scale="8" />
-          <Property Name="Roll" Type="numeric" Precision="12" Scale="8" />
-          <Property Name="Heading" Type="numeric" Precision="12" Scale="8" />
-          <Property Name="TotalFlightTime" Type="int" />
         </EntityType>
         <EntityType Name="DroneCheckList">
           <Key>
@@ -91,6 +101,7 @@
           <Property Name="TotalFlightTime" Type="nvarchar" MaxLength="50" />
           <Property Name="BBFlightID" Type="nvarchar" MaxLength="50" />
           <Property Name="IsProcessed" Type="int" />
+          <Property Name="QueueMessage" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -109,6 +120,17 @@
           <Property Name="DefaultValue" Type="nvarchar" MaxLength="50" />
           <Property Name="ParentID" Type="int" />
         </EntityType>
+        <EntityType Name="DroneDocuments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DroneID" Type="int" Nullable="false" />
+          <Property Name="DocumentType" Type="varchar" MaxLength="50" />
+          <Property Name="DocumentName" Type="nvarchar" MaxLength="500" />
+          <Property Name="UploadedDate" Type="datetime" />
+          <Property Name="UploadedBy" Type="int" />
+        </EntityType>
         <EntityType Name="DroneFlight">
           <Key>
             <PropertyRef Name="ID" />
@@ -121,6 +143,8 @@
           <Property Name="CreatedBy" Type="int" />
           <Property Name="DroneID" Type="int" />
           <Property Name="BBFlightID" Type="nvarchar" MaxLength="30" />
+          <Property Name="Latitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Longitude" Type="decimal" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="FlightMapData">
           <Key>
@@ -332,6 +356,14 @@
           <Property Name="CommissionDate" Type="datetime" />
           <Property Name="DroneSerialNo" Type="int" />
           <Property Name="DroneDefinitionID" Type="int" />
+          <Property Name="DecommissionDate" Type="datetime" />
+          <Property Name="DecommissionBy" Type="int" />
+          <Property Name="DecommissionNote" Type="nvarchar" MaxLength="255" />
+          <Property Name="ReAssignDate" Type="datetime" />
+          <Property Name="ReAssignBy" Type="int" />
+          <Property Name="ReAssignNote" Type="nvarchar" MaxLength="255" />
+          <Property Name="ReAssignTo" Type="int" />
+          <Property Name="ReAssignFrom" Type="int" />
         </EntityType>
         <EntityType Name="MSTR_DroneCheckList">
           <Key>
@@ -563,12 +595,12 @@
         </Function>
         <Function Name="usp_Portal_GetDroneParts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="ExponentPortalModelStoreContainer">
-          <EntitySet Name="BlackBoxData" EntityType="Self.BlackBoxData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckList" EntityType="Self.DroneCheckList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckListItem" EntityType="Self.DroneCheckListItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckListValidation" EntityType="Self.DroneCheckListValidation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneData" EntityType="Self.DroneData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneDefinition" EntityType="Self.DroneDefinition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DroneDocuments" EntityType="Self.DroneDocuments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneFlight" EntityType="Self.DroneFlight" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FlightMapData" EntityType="Self.FlightMapData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LiveDrone" EntityType="Self.LiveDrone" Schema="dbo" store:Type="Tables" />
@@ -592,6 +624,35 @@
           <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlackBoxData" EntityType="Self.BlackBoxData" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BlackBoxData].[BlackBoxDataID] AS [BlackBoxDataID], 
+    [BlackBoxData].[RecordNumber] AS [RecordNumber], 
+    [BlackBoxData].[DroneSerialID] AS [DroneSerialID], 
+    [BlackBoxData].[DroneId] AS [DroneId], 
+    [BlackBoxData].[DroneRFID] AS [DroneRFID], 
+    [BlackBoxData].[Latitude] AS [Latitude], 
+    [BlackBoxData].[Longitude] AS [Longitude], 
+    [BlackBoxData].[ProductRFID] AS [ProductRFID], 
+    [BlackBoxData].[ProductQrCode] AS [ProductQrCode], 
+    [BlackBoxData].[ProductRSSI] AS [ProductRSSI], 
+    [BlackBoxData].[ReadTime] AS [ReadTime], 
+    [BlackBoxData].[CreatedTime] AS [CreatedTime], 
+    [BlackBoxData].[RecordType] AS [RecordType], 
+    [BlackBoxData].[IsActive] AS [IsActive], 
+    [BlackBoxData].[ProductId] AS [ProductId], 
+    [BlackBoxData].[Altitude] AS [Altitude], 
+    [BlackBoxData].[Speed] AS [Speed], 
+    [BlackBoxData].[FixQuality] AS [FixQuality], 
+    [BlackBoxData].[Satellites] AS [Satellites], 
+    [BlackBoxData].[Pitch] AS [Pitch], 
+    [BlackBoxData].[Roll] AS [Roll], 
+    [BlackBoxData].[Heading] AS [Heading], 
+    [BlackBoxData].[TotalFlightTime] AS [TotalFlightTime], 
+    [BlackBoxData].[FlightID] AS [FlightID], 
+    [BlackBoxData].[BBFlightID] AS [BBFlightID]
+    FROM [dbo].[BlackBoxData] AS [BlackBoxData]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
             <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
             <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
@@ -613,7 +674,7 @@
           <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ProductRSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReadTime" Type="String" />
+          <Property Name="ReadTime" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="CreatedTime" Type="DateTime" Precision="3" />
           <Property Name="RecordType" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" />
@@ -628,6 +689,7 @@
           <Property Name="TotalFlightTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BBFlightID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsProcessed" Type="Int32" />
+          <Property Name="QueueMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -804,6 +866,14 @@
           <Property Name="DroneSerialNo" Type="Int32" />
           <Property Name="DroneDefinitionID" Type="Int32" />
           <Property Name="AccountID" Type="Int32" />
+          <Property Name="DecommissionDate" Type="DateTime" Precision="3" />
+          <Property Name="DecommissionBy" Type="Int32" />
+          <Property Name="DecommissionNote" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ReAssignDate" Type="DateTime" Precision="3" />
+          <Property Name="ReAssignBy" Type="Int32" />
+          <Property Name="ReAssignNote" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ReAssignTo" Type="Int32" />
+          <Property Name="ReAssignFrom" Type="Int32" />
         </EntityType>
         <EntityType Name="MSTR_DroneService">
           <Key>
@@ -1010,6 +1080,7 @@
           <FunctionImport Name="usp_Portal_GetDroneParts" ReturnType="Collection(ExponentPortalModel.usp_Portal_GetDroneParts_Result)" />
           <EntitySet Name="M2M_ProfileMenu" EntityType="ExponentPortalModel.M2M_ProfileMenu" />
           <EntitySet Name="FlightMapDatas" EntityType="ExponentPortalModel.FlightMapData" />
+          <EntitySet Name="DroneDocuments" EntityType="ExponentPortalModel.DroneDocument" />
           <EntitySet Name="BlackBoxDatas" EntityType="ExponentPortalModel.BlackBoxData" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
@@ -1105,6 +1176,8 @@
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="DroneID" Type="Int32" />
           <Property Name="BBFlightID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="DroneCheckListValidation">
           <Key>
@@ -1189,27 +1262,46 @@
           <Property Name="FlightID" Type="Int32" />
           <Property Name="BBFlightID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="BlackBoxData">
+        <EntityType Name="DroneDocument">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DroneID" Type="Int32" />
+          <Property Name="DroneID" Type="Int32" Nullable="false" />
+          <Property Name="DocumentType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DocumentName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="UploadedDate" Type="DateTime" Precision="3" />
+          <Property Name="UploadedBy" Type="Int32" />
+        </EntityType>
+        <EntityType Name="BlackBoxData">
+          <Key>
+            <PropertyRef Name="BlackBoxDataID" />
+          </Key>
+          <Property Name="BlackBoxDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RecordNumber" Type="Int32" />
+          <Property Name="DroneSerialID" Type="Int32" />
+          <Property Name="DroneId" Type="Int32" />
+          <Property Name="DroneRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductRSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReadTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="RecordType" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="Altitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Speed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="FixQuality" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Satellites" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Pitch" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Roll" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Heading" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="TotalFlightTime" Type="Int32" />
           <Property Name="FlightID" Type="Int32" />
           <Property Name="BBFlightID" Type="Int32" />
-          <Property Name="Record_" Type="Int32" />
-          <Property Name="Drone_Serial" Type="Int32" />
-          <Property Name="Lat" Type="Decimal" Precision="12" Scale="8" />
-          <Property Name="Lon" Type="Decimal" Precision="12" Scale="8" />
-          <Property Name="Alt" Type="Decimal" Precision="12" Scale="8" />
-          <Property Name="Speed" Type="Decimal" Precision="12" Scale="8" />
-          <Property Name="FixQuality" Type="Int32" />
-          <Property Name="Satellites" Type="Int32" />
-          <Property Name="RecordTime" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="Pitch" Type="Decimal" Precision="12" Scale="8" />
-          <Property Name="Roll" Type="Decimal" Precision="12" Scale="8" />
-          <Property Name="Heading" Type="Decimal" Precision="12" Scale="8" />
-          <Property Name="TotalFlightTime" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1220,6 +1312,7 @@
           <EntitySetMapping Name="DroneDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneData">
               <MappingFragment StoreEntitySet="DroneData">
+                <ScalarProperty Name="QueueMessage" ColumnName="QueueMessage" />
                 <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
                 <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
                 <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
@@ -1405,6 +1498,14 @@
           <EntitySetMapping Name="MSTR_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
               <MappingFragment StoreEntitySet="MSTR_Drone">
+                <ScalarProperty Name="ReAssignFrom" ColumnName="ReAssignFrom" />
+                <ScalarProperty Name="ReAssignTo" ColumnName="ReAssignTo" />
+                <ScalarProperty Name="ReAssignNote" ColumnName="ReAssignNote" />
+                <ScalarProperty Name="ReAssignBy" ColumnName="ReAssignBy" />
+                <ScalarProperty Name="ReAssignDate" ColumnName="ReAssignDate" />
+                <ScalarProperty Name="DecommissionNote" ColumnName="DecommissionNote" />
+                <ScalarProperty Name="DecommissionBy" ColumnName="DecommissionBy" />
+                <ScalarProperty Name="DecommissionDate" ColumnName="DecommissionDate" />
                 <ScalarProperty Name="AccountID" ColumnName="AccountID" />
                 <ScalarProperty Name="DroneDefinitionID" ColumnName="DroneDefinitionID" />
                 <ScalarProperty Name="DroneSerialNo" ColumnName="DroneSerialNo" />
@@ -1680,6 +1781,8 @@
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
                 <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
                 <ScalarProperty Name="DroneID" ColumnName="DroneID" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -1790,26 +1893,46 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="DroneDocuments">
+            <EntityTypeMapping TypeName="ExponentPortalModel.DroneDocument">
+              <MappingFragment StoreEntitySet="DroneDocuments">
+                <ScalarProperty Name="UploadedBy" ColumnName="UploadedBy" />
+                <ScalarProperty Name="UploadedDate" ColumnName="UploadedDate" />
+                <ScalarProperty Name="DocumentName" ColumnName="DocumentName" />
+                <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="BlackBoxDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxData">
               <MappingFragment StoreEntitySet="BlackBoxData">
+                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
                 <ScalarProperty Name="TotalFlightTime" ColumnName="TotalFlightTime" />
                 <ScalarProperty Name="Heading" ColumnName="Heading" />
                 <ScalarProperty Name="Roll" ColumnName="Roll" />
                 <ScalarProperty Name="Pitch" ColumnName="Pitch" />
-                <ScalarProperty Name="RecordTime" ColumnName="RecordTime" />
                 <ScalarProperty Name="Satellites" ColumnName="Satellites" />
                 <ScalarProperty Name="FixQuality" ColumnName="FixQuality" />
                 <ScalarProperty Name="Speed" ColumnName="Speed" />
-                <ScalarProperty Name="Alt" ColumnName="Alt" />
-                <ScalarProperty Name="Lon" ColumnName="Lon" />
-                <ScalarProperty Name="Lat" ColumnName="Lat" />
-                <ScalarProperty Name="Drone_Serial" ColumnName="Drone_Serial" />
-                <ScalarProperty Name="Record_" ColumnName="Record#" />
-                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
-                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
-                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+                <ScalarProperty Name="ProductRSSI" ColumnName="ProductRSSI" />
+                <ScalarProperty Name="ProductQrCode" ColumnName="ProductQrCode" />
+                <ScalarProperty Name="ProductRFID" ColumnName="ProductRFID" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="DroneRFID" ColumnName="DroneRFID" />
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+                <ScalarProperty Name="DroneSerialID" ColumnName="DroneSerialID" />
+                <ScalarProperty Name="RecordNumber" ColumnName="RecordNumber" />
+                <ScalarProperty Name="BlackBoxDataID" ColumnName="BlackBoxDataID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

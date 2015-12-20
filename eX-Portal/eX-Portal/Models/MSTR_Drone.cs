@@ -35,5 +35,13 @@ namespace eX_Portal.Models
         public Nullable<int> DroneSerialNo { get; set; }
         public Nullable<int> DroneDefinitionID { get; set; }
         public Nullable<int> AccountID { get; set; }
+        public Nullable<System.DateTime> DecommissionDate { get; set; }
+        public Nullable<int> DecommissionBy { get; set; }
+        public string DecommissionNote { get; set; }
+        public Nullable<System.DateTime> ReAssignDate { get; set; }
+        public Nullable<int> ReAssignBy { get; set; }
+        public string ReAssignNote { get; set; }
+        public Nullable<int> ReAssignTo { get; set; }
+        public Nullable<int> ReAssignFrom { get; set; }
     }
 }
