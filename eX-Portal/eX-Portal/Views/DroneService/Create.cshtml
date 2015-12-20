@@ -16,8 +16,7 @@
     </div>
     <div class="editor-field">
 
-      @Html.DropDownListFor(model => model.DroneID, Model.DroneList, "Select Item",
-            new { @class = "form-control", @onchange = "FillParts()" })
+      @Html.DropDownListFor(model => model.DroneID, Model.DroneList )
 
     </div>
 
@@ -124,6 +123,30 @@
       
 
     });
+
+
+
+
+    $(function () {
+        $('#DroneID').change(function () {
+           
+            var value = $(this).val();
+           
+            var url = "/DroneService/GetFlightHours/";
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: { ID: value },
+                success: function (result) {
+                                   
+                    $('#DroneService_FlightHour').val(result);
+                }
+            });
+        });
+    });
+
+   
 
     function AutoCompleteSelect(event, ui) {
       event.preventDefault();
