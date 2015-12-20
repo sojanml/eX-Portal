@@ -21,7 +21,7 @@ namespace eX_Portal.exLogic
         public static IEnumerable<SelectListItem>LUPTypeList()
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();
-           
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
 
             String SQL = "SELECT 0 as Value, 'Not Available' as Name";
             using (var ctx = new ExponentPortalEntities())
@@ -185,7 +185,7 @@ namespace eX_Portal.exLogic
         {
             //  ctx=new ExponentPortalEntities();
             List<SelectListItem> SelectList = new List<SelectListItem>();
-
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
             using (var cotx = new ExponentPortalEntities())
             {
                 using (var cmd = cotx.Database.Connection.CreateCommand())
@@ -224,6 +224,7 @@ namespace eX_Portal.exLogic
             //  ctx=new ExponentPortalEntities();
 
             List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
             using (var cotx = new ExponentPortalEntities())
             {
                 using (var cmd = cotx.Database.Connection.CreateCommand())
@@ -293,6 +294,21 @@ namespace eX_Portal.exLogic
             }
         }
 
+
+
+        public static int GetTotalFlightTime(int DronId)
+        {
+            int result = 0;
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL =" select Top 1 TotalFlightTime from FlightMapData \n" +
+                    "where DroneId ="+ DronId +   " order by ReadTime desc";
+                string Id = cotx.Database.SqlQuery<string>(SQL).FirstOrDefault<string>();
+                result =Util.toInt( Id);
+            }
+
+            return result;
+        }
         public static int GetDroneIdFromService(int ServiceId)
         {
             int result = 0;
