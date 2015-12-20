@@ -313,7 +313,7 @@ namespace eX_Portal.Controllers {
       SQL = "DELETE FROM [M2M_DroneParts] WHERE DroneID = " + DroneID;
       Util.doSQL(SQL);
 
-      SQL = "DELETE FROM [DroneFlight] WHERE DroneID = " + DroneID;
+      SQL = "DELETE FROM [Mstr_Drone] WHERE DroneID = " + DroneID;
       Util.doSQL(SQL);
 
       return Util.jsonStat("OK");

@@ -70,6 +70,16 @@ namespace eX_Portal.Controllers
 
         }
 
+
+        public int GetFlightHours(int ID = 0)
+        {
+            //finding the flight hours from the Flight map data table
+            int Flightours = Util.GetTotalFlightTime(ID);
+
+            return Flightours;
+           
+
+        }//
         public ActionResult ServicePartsReplaced(int ID = 0)
         {
             if (!exLogic.User.hasAccess("SERVICE.VIEW")) RedirectToAction("NoAccess", "Home");
@@ -167,14 +177,16 @@ namespace eX_Portal.Controllers
             if (!exLogic.User.hasAccess("SERVICE.CREATE")) return RedirectToAction("NoAccess", "Home");
             var viewModel = new ViewModel.DroneServiceViewModel
             {
+
                 DroneService = new MSTR_DroneService(),
 
                 ServiceType = Util.GetDropDowntLists("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
                 DroneList = Util.DroneList("usp_Portal_DroneNameList"),
+             
                 //   DronePartsList=Util1.DronePartsList("usp_Portal_GetDroneParts")
-
+                
             };
-
+            
             return View(viewModel);
         }
 
