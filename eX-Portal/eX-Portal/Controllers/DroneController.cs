@@ -141,7 +141,7 @@ namespace eX_Portal.Controllers {
       List<String> Parts = new List<String>();
       Parts = Listing.DroneListing(ID);
       return PartialView(Parts);
-    }
+    } 
 
     public ActionResult getDroneParts(int ID = 0) {
       if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
@@ -151,16 +151,16 @@ namespace eX_Portal.Controllers {
 
     // GET: Drone/Details/5
     public String DroneDetail([Bind(Prefix = "ID")]  int DroneID) {
+
       if (!exLogic.User.hasAccess("DRONE")) return "Access Denied";
       String SQL = "SELECT \n" +
-          "  D.[DroneId],\n" +
           "  D.[DroneName],\n" +
-          "  D.[DroneIdHexa],\n" +
-          "  D.[CommissionDate],\n" +
+          "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
           "  D.[DroneSerialNo],\n" +
           "  O.Name as OwnerName,\n" +
           "  M.Name as ManufactureName,\n" +
-          "  U.Name as UAVType\n" +
+          "  U.Name as UAVType,\n" +
+          "  D.[DroneIdHexa]\n" +
           "FROM\n" +
           "  [MSTR_Drone] D\n" +
           "Left join MSTR_Account  O on\n" +
@@ -170,12 +170,39 @@ namespace eX_Portal.Controllers {
           "  M.Type='Manufacturer' " +
           "Left join LUP_Drone U on\n" +
           "  UAVTypeID = U.TypeID and\n" +
-          "  U.Type= 'UAV Type'\n" +
+          "  U.Type= 'UAVType'\n" +
           "WHERE\n" +
           "  D.[DroneId]=" + DroneID;
+
       qDetailView nView = new qDetailView(SQL);
-      return nView.getTable();
+      return DecommissionDetail(DroneID) + nView.getTable();
     }
+
+    public String DecommissionDetail(int DroneID) {
+      StringBuilder Detail = new StringBuilder();
+       String SQL = "SELECT\n" +
+          "  ISNULL(Mstr_drone.isactive ,'True') as isactive,\n" +
+          "  Convert(varchar, [DecommissionDate], 9) as DecommissionDate,\n" +
+          "  DecommissionNote,\n" +
+          "  MSTR_User.FirstName as DecommissionBy\n" +
+          "from\n" +
+          "  Mstr_drone\n" +
+          "LEFT JOIN MSTR_User ON\n" +
+          "  MSTR_User.UserId = Mstr_drone.DecommissionBy\n" +
+          "where\n" +
+          "  Mstr_drone.DroneID=" + DroneID;
+        var Row = Util.getDBRow(SQL);
+      if (Row["isactive"].ToString() != "True") {
+        Detail.AppendLine("<div class=\"decommission-info\">");
+        Detail.AppendLine("Decommissioned on");
+        Detail.AppendLine("<span>" + Row["DecommissionDate"] + "</span>");
+        Detail.AppendLine("by");
+        Detail.AppendLine("<span>" + Row["DecommissionBy"] + "</span>");
+        Detail.AppendLine("<div>" + Row["DecommissionNote"] + "</div>");
+        Detail.AppendLine("</div>");
+      }
+      return Detail.ToString();
+    } //Decommission()
 
     // GET: Drone/Create
     public ActionResult Create() {
@@ -313,7 +340,7 @@ namespace eX_Portal.Controllers {
       SQL = "DELETE FROM [M2M_DroneParts] WHERE DroneID = " + DroneID;
       Util.doSQL(SQL);
 
-      SQL = "DELETE FROM [Mstr_Drone] WHERE DroneID = " + DroneID;
+      SQL = "DELETE FROM [DroneFlight] WHERE DroneID = " + DroneID;
       Util.doSQL(SQL);
 
       return Util.jsonStat("OK");

@@ -567,3 +567,19 @@ div.sidebar-left div.right-column {
   margin-left: 150px;
   max-width: 100%;
 }
+
+div.decommission-info {
+  background-color: #ea050e;
+  padding: 10px;
+  color: white;
+
+}
+
+div.decommission-info span {
+  font-weight:bold;
+}
+div.decommission-info > div {
+  padding-top:5px;
+  margin-top:5px;
+  border-top:1px white solid;
+} 
