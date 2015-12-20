@@ -21,7 +21,7 @@ namespace eX_Portal.exLogic
         public static IEnumerable<SelectListItem>LUPTypeList()
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();
-            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
+           
 
             String SQL = "SELECT 0 as Value, 'Not Available' as Name";
             using (var ctx = new ExponentPortalEntities())
