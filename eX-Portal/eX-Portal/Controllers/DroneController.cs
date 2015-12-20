@@ -5,10 +5,13 @@ using System.Web;
 using System.Web.Mvc;
 using eX_Portal.Models;
 using eX_Portal.exLogic;
+using System.Text;
+using System.IO;
 
 namespace eX_Portal.Controllers {
   public class DroneController : Controller {
     public ExponentPortalEntities ctx = new ExponentPortalEntities();
+    static String RootUploadDir = "~/Upload/Drone/";
     // GET: Drone
     public ActionResult Index() {
       if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
@@ -27,20 +30,23 @@ namespace eX_Portal.Controllers {
           "  D.[DroneId] as _PKey\n" +
           "FROM\n" +
           "  [ExponentPortal].[dbo].[MSTR_Drone] D\n" +
-          "inner join MSTR_Account  O on\n" +
+          "Left join MSTR_Account  O on\n" +
           "  D.AccountID = O.AccountID " +
-          "inner join LUP_Drone M on\n" +
+          "Left join LUP_Drone M on\n" +
           "  ManufactureID = M.TypeID and\n" +
           "  M.Type='Manufacturer' " +
-          "inner join LUP_Drone U on\n" +
+          "Left join LUP_Drone U on\n" +
           "  UAVTypeID = U.TypeID and\n" +
-          "  U.Type= 'UAV Type' ";
+          "  U.Type= 'UAVType' ";
       qView nView = new qView(SQL);
       nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("DRONE.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("FLIGHT.CREATE")) nView.addMenu("Create Flight", Url.Action("Create", "DroneFlight", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("FLIGHT")) nView.addMenu("Flights", Url.Action("Index", "DroneFlight", new { ID = "_Pkey" }));
+      if (exLogic.User.hasAccess("DRONE.MANAGE")) nView.addMenu("Manage", Url.Action("Manage", new { ID = "_Pkey" }));
+      if (exLogic.User.hasAccess("BLACKBOX")) nView.addMenu("Blackbox", Url.Action("Index", "BlackBox", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("DRONE.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_Pkey" }));
+      
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -51,20 +57,84 @@ namespace eX_Portal.Controllers {
 
     }
 
+    public ActionResult Manage([Bind(Prefix = "ID")] int DroneID = 0) {
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
+      ViewBag.Title = "Manage - " + Util.getDroneName(DroneID);
+      return View(DroneID);
+    }
+
+    public ActionResult Decommission([Bind(Prefix = "ID")] int DroneID) {
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
+      ViewBag.Title = "Decommission - " + Util.getDroneName(DroneID);
+      return View(DroneID);
+    }//Decommission()
+
+    [HttpPost]
+    public ActionResult Decommission([Bind(Prefix = "ID")] int DroneID, String DecommissionNote) {
+      String SQL = "UPDATE MSTR_DRONE SET\n" +
+        "  DecommissionNote='" + DecommissionNote + "',\n" +
+        "  DecommissionDate = GETDATE(), \n" +
+        "  DecommissionBy = " + Util.getLoginUserID() + ",\n" +
+        "  IsActive = 0\n" +
+        "WHERE\n" +
+        "  DroneID=" + DroneID;
+      Util.doSQL(SQL);
+      return RedirectToAction("Detail", new { ID = DroneID });
+    }//Decommission()
+
+
+    public String UploadFile([Bind(Prefix = "ID")] int DroneID, String DocumentType) {
+      String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+      //send information in JSON Format always
+      StringBuilder JsonText = new StringBuilder();
+      Response.ContentType = "text/json";
+
+      //when there are files in the request, save and return the file information
+      try {
+        var TheFile = Request.Files[0];
+        String FileName = System.Guid.NewGuid() + "~" + TheFile.FileName;
+        String UploadDir = UploadPath + Util.getDroneName(DroneID) + "\\" + DocumentType + "\\";
+        String FileURL = Util.getDroneName(DroneID) + "/" + DocumentType + "/" + FileName;
+        String FullName = UploadDir + FileName;
+
+        if (!Directory.Exists(UploadDir)) Directory.CreateDirectory(UploadDir);
+        TheFile.SaveAs(FullName);
+        JsonText.Append("{");
+        JsonText.Append(Util.Pair("status", "success", true));
+        JsonText.Append("\"addFile\":[");
+        JsonText.Append(Util.getFileInfo(FullName));
+        JsonText.Append("]}");
+
+        //now add the uploaded file to the database
+        String SQL = "INSERT INTO DroneDocuments(\n" +
+          " DroneID, DocumentType, DocumentName, UploadedDate, UploadedBy\n" +
+          ") VALUES (\n" +
+          "  '" + DroneID + "',\n" +
+          "  '" + DocumentType + "',\n" +
+          "  '" + FileURL + "',\n" +
+          "  GETDATE(),\n" +
+          "  " + Util.getLoginUserID() + "\n" +
+          ")";
+        Util.doSQL(SQL);
+
+      } catch (Exception ex) {
+        JsonText.Clear();
+        JsonText.Append("{");
+        JsonText.Append(Util.Pair("status", "error", true));
+        JsonText.Append(Util.Pair("message", ex.Message, false));
+        JsonText.Append("}");
+      }//catch
+      return JsonText.ToString();
+    }//Save()
+
+
     // GET: Drone/Details/5
     public ActionResult Detail([Bind(Prefix = "ID")] int DroneID) {
       if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
-      String SQL = "SELECT \n" +
-           "  D.[DroneName] + ' - ' +  DroneIdHexa as DroneName\n" +
-           "FROM\n" +
-           "  [ExponentPortal].[dbo].[MSTR_Drone] D\n" +
-           "WHERE\n" +
-           "  D.[DroneId]=" + DroneID;
-      ViewBag.Title = Util.getDBVal(SQL);
+      ViewBag.Title = Util.getDroneName(DroneID);
       ViewBag.DroneID = DroneID;
       return View();
     }
-
 
     public ActionResult DroneParts(int ID = 0) {
       if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
@@ -93,12 +163,12 @@ namespace eX_Portal.Controllers {
           "  U.Name as UAVType\n" +
           "FROM\n" +
           "  [MSTR_Drone] D\n" +
-          "inner join MSTR_Account  O on\n" +
+          "Left join MSTR_Account  O on\n" +
           "  D.AccountID = O.AccountID\n" +
-          "inner join LUP_Drone M on\n" +
+          "Left join LUP_Drone M on\n" +
           "  ManufactureID = M.TypeID and\n" +
           "  M.Type='Manufacturer' " +
-          "inner join LUP_Drone U on\n" +
+          "Left join LUP_Drone U on\n" +
           "  UAVTypeID = U.TypeID and\n" +
           "  U.Type= 'UAV Type'\n" +
           "WHERE\n" +
@@ -110,11 +180,11 @@ namespace eX_Portal.Controllers {
     // GET: Drone/Create
     public ActionResult Create() {
       if (!exLogic.User.hasAccess("DRONE.CREATE")) return RedirectToAction("NoAccess", "Home");
-      String OwnerListSQL = "SELECT Name, AccountId FROM MSTR_Account ORDER BY Name";
+      String OwnerListSQL = "SELECT Name + ' [' + Code + ']' as Name, ID FROM LUP_Drone WHERE IsActive = 1 AND Type='Owner' ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
         Drone = new MSTR_Drone(),
         OwnerList = Util.getListSQL(OwnerListSQL),
-        UAVTypeList = Util.GetDropDowntList("UAV Type", "Name", "Code", "usp_Portal_GetDroneDropDown"),
+        UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
         ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
         //PartsGroupList = Util.GetDropDowntList();
       };
@@ -184,7 +254,7 @@ namespace eX_Portal.Controllers {
       var viewModel = new ViewModel.DroneView {
         Drone = db.MSTR_Drone.Find(id),
         OwnerList = Util.getListSQL(OwnerListSQL),
-        UAVTypeList = Util.GetDropDowntList("UAV Type", "Name", "Code", "usp_Portal_GetDroneDropDown"),
+        UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
         ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
         //PartsGroupList = Util.GetDropDowntList();
       };

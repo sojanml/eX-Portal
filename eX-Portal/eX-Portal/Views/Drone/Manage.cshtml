@@ -1,0 +1,30 @@
+﻿@model int
+@{ 
+  int DroneID = Model;
+}
+@Html.Action("DroneDetail", new {ID = DroneID })
+
+<div class="row">
+  <div class="col-3">
+    <h2>Decommission</h2>
+    <div>
+      You can decommission this flight using the option bellow. Please note once decommissioed, the flight
+      will not appear in any of the list. We will keep all the history of the flight, including
+      FTR, Service History etc for reference. purpose.
+    </div>
+    <div>
+      <a href="@Url.Action("Decommission", "Drone", new  { ID = DroneID})">Decommission</a>
+    </div>
+    </div>
+  <div class="col-3">
+    <h2>Re-Assign</h2>
+    <div>
+      Use this option if you required to re-assign the flight to another company. This will generate
+      a new ID for the drone. We will keep the history of old drone (Drone ID), so Service History and
+      FTR data can be accessed.
+    </div>
+    <div>
+      <a href="@Url.Action("Reassign", "Drone", new  { ID = DroneID})">Re-Assign</a>
+    </div>
+    </div>
+  </div>

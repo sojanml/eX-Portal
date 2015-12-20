@@ -19,20 +19,6 @@
     <div class="editor-field">
 
       @Html.DropDownListFor(model => model.Drone.AccountID, Model.OwnerList)
-
-
-
-    </div>
-
-    <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.UavTypeId, "UAV Type")
-    </div>
-    <div class="editor-field">
-
-      @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)
-      @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
-
-
     </div>
 
     <div class="editor-label">
@@ -42,6 +28,16 @@
       @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList)
       @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
     </div>
+
+    <div class="editor-label">
+      @Html.LabelFor(model => model.Drone.UavTypeId, "UAV Type")
+    </div>
+    <div class="editor-field">
+      @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)
+      @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
+    </div>
+
+
     <div class="editor-label">
       @Html.LabelFor(model => model.Drone.CommissionDate, "Commission Date")
     </div>

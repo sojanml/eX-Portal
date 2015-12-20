@@ -1,0 +1,36 @@
+﻿@model int
+@{
+  int DroneID = Model;
+}
+@Html.Action("DroneDetail", new { ID = DroneID })
+
+<section class="general-form" id="loginForm">
+  @using (Html.BeginForm()) {
+    <div class="editor-label">
+      Enter the detail for Decommission
+    </div>
+    <div class="editor-field">
+      <textarea name="DecommissionNote"></textarea>
+    </div>
+    <div class="editor-label">
+      Upload the documents required to Decommission this drone.
+    </div>
+
+    <ul id="FileUploadProgress"></ul>
+    <div><input type="file" multiple name="fileinput" id="fileinput" /></div>
+
+    <div class="form-toolbar">
+      <input type="submit" value="Decommission" />
+    </div>
+  }
+</section>
+
+@section header{
+  <link href="~/Content/black-box.css" rel="stylesheet" />
+}
+@section Scripts{
+  <script type="text/javascript">    
+    var DroneUploadURL = '@Url.Action("UploadFile", new { ID = DroneID, DocumentType = "Decommission"})'; 
+  </script>
+  <script type="text/javascript" src="~/Scripts/drone.js"></script>
+}

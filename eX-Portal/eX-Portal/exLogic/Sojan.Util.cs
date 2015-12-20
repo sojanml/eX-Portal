@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using eX_Portal.Models;
 using System.Web.Mvc;
 using System.Globalization;
+using System.IO;
+using System.Web.SessionState;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
@@ -226,5 +228,40 @@ namespace eX_Portal.exLogic {
     }
 
 
+    public static String getFileInfo(String FileName) {
+
+      FileInfo oFileInfo = new FileInfo(FileName);
+      return "{" +
+        Pair("name", oFileInfo.Name, true) +
+        Pair("created", oFileInfo.CreationTime.ToString("dd-MMM-yyyy hh:mm:ss tt [zzz]"), true) +
+        Pair("ext", oFileInfo.Extension, true) +
+        Pair("records", getLineCount(FileName).ToString(), true) +
+        Pair("size", (oFileInfo.Length / 1024).ToString("N0"), false) +
+        "}";
+    }//getFileInfo()
+
+    public static string Pair(String Name, String Value, bool IsAddComma = false) {
+      Value = Value.Replace("\\", "\\\\");
+      Value = Value.Replace("\r\n", "\\n");
+      return "\"" + Name + "\" : \"" + Value + "\"" + (IsAddComma ? "," : "") + "\n";
+    }//Pair()
+
+    public static int getLineCount(String FileName) {
+      var lineCount = 0;
+      using (var reader = System.IO.File.OpenText(FileName)) {
+        while (reader.ReadLine() != null) {
+          lineCount++;
+        }//while
+      }//using
+      return lineCount;
+    }//getLineCount()
+
+
+    public static int getLoginUserID() {
+      HttpSessionState Session = HttpContext.Current.Session;
+      var UserID = 0;
+      if (Session["UserID"] != null) int.TryParse(Session["UserID"].ToString(), out UserID);
+      return UserID;
+    }
   }//class Util
 }

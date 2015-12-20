@@ -325,12 +325,11 @@ namespace eX_Portal.exLogic
         public static int GetTypeId(String TypeName)
         {
             int result = 0;
-            using (var cotx = new ExponentPortalEntities())
-            {
-                String SQL = "select Max(TypeId)+1 from LUP_Drone where  Type='" + TypeName +"'";
-                int Id = cotx.Database.SqlQuery<int>(SQL).FirstOrDefault<int>();
-                result = Id;
-            }
+
+              String SQL = "select Max(TypeId)+1 from LUP_Drone where  Type='" + TypeName +"'";
+              int Id = Util.getDBInt(SQL);
+            if (Id < 1) Id = 1;
+              result = Id;
 
             return result;
         }

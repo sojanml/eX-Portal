@@ -1,102 +1,182 @@
-﻿@model eX_Portal.ViewModel.ListViewModel
+﻿@using eX_Portal.exLogic
+@model eX_Portal.ViewModel.ListViewModel
 @{
-    ViewBag.Title = "Lookup Data ";
-    Layout = "~/Views/Shared/_exPortal.cshtml";
+  ViewBag.Title = "Master Dropdowns";
+  Layout = "~/Views/Shared/_exPortal.cshtml";
 }
 
-<section class="general-form">
-    @using (Html.BeginForm("Create", "List", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-
-        <div id="list" align="left">
-            <ul>
-                @foreach (var TypeList in Model.Typelist)
-                {
+@section toolbar {
+  <a style="display:none;" class="button" id="btn-create-list">Create</a>
+  }
 
 
-                    <li>
-
-                        @Ajax.ActionLink(TypeList.Text, // <-- Text to display
+<div class="sidebar-left">
+  <div id="list" class="left-column">
+    <ul class="checkpoints">
+      @foreach (var TypeList in Model.Typelist) {
+        <li>
+          @Ajax.ActionLink(Util.toCaption(TypeList.Text), // <-- Text to display
                 "ListNames", // <-- Action Method Name
-                new { TypeName = TypeList.Text },
-                 new AjaxOptions
-                 {
-                     UpdateTargetId = "ListOfItems", // <-- DOM element ID to update
-                     InsertionMode = InsertionMode.Replace, // <-- Replace the content of DOM element
-                     HttpMethod = "GET",
-                     // <-- HTTP method
+                new { TypeName = TypeList.Text},
+                 new AjaxOptions {
+                   UpdateTargetId = "ListOfItems", // <-- DOM element ID to update
+                   InsertionMode = InsertionMode.Replace, // <-- Replace the content of DOM element
+                   HttpMethod = "GET",
+                   // <-- HTTP method
                  })
-                    </li>
+        </li>
+      }
+    </ul>
+  </div>
 
-                    //   <li>@Html.ActionLink("Details", "Details", new  {Name=TypeList.Text})<a href="#"   >@TypeList.Text</a> </li>
+  <div id="ListOfItems" class="right-column">
+    <div class="editor-field">
+      Please select the item from left side listing to manage
+    </div>
+  </div>
+</div>
+<div style="clear:both"></div>
 
-
-
-                }
-            </ul>
-        </div>
-
-
-
-
-        <div id="ListOfItems" align="right">
-            <div class="editor-field">
-
-
-            </div>
-
-        </div>
-
-
-
-
-
-
-    }
-
+<section class="general-form" id="the-edit-form" style="display:none"  >
+  <form method="post" name="qForm" id="qForm">
+    <input type="hidden" name="id" value="0"/>
+    <input type="hidden" name="TypeCopy" value="" />
+    <h2 id="form-caption"><span id="action-method">Create</span> <span class="form-type"></span></h2>
+    <div class="editor-label">
+      <span class="form-type"></span> Name
+    </div>
+    <div class="editor-field">
+      <input name="name" type="text" />
+    </div>
+    <div class="editor-label">
+      <span class="form-type"></span> Code
+    </div>
+    <div class="editor-field">
+      <input name="code" type="text" />
+    </div>
+    <div class="form-toolbar">
+      <input id="submit-button" name="submit-button" type="submit" value="Create" />
+    </div>
+  </form>
 </section>
 
 
-@section Scripts{
+    @section Scripts{
+      <script type="text/javascript">
+      var LastClickObj = null;
+      $(document).ready(function () {
 
-
-
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-
-            $('#ListOfItems').on("click", "a.Edit", function (e) {
-                e.preventDefault();
-                var Link = $(this);
-                var ID = Link.attr("data-id");
-
-                TakeData(ID);
-            });
-
+        $('ul.checkpoints a').on("click", function (e) {
+          if (LastClickObj) LastClickObj.removeClass("active");
+          LastClickObj = $(this).closest("LI");
+          LastClickObj.addClass("active");
+          var TypeName = $(this).html();
+          $('#ListOfItems').html("Loading " + TypeName + ". Please Wait...");
+          $('#the-edit-form .form-type').html(TypeName);
+          document.forms['qForm']['TypeCopy'].value = TypeName;
+          ClearForm();
+          $('#btn-create-list').show();
         });
 
-        function TakeData(ID) {
-            document.getElementById("Id").value = ID;
-           // document.getElementById("Id").value = $('#ID_' + ID).html();
-            document.getElementById("Name").value = $('#name_' + ID).html();
+        $('#btn-create-list').on("click", function (e) {
+          e.preventDefault();
+          ClearForm();
+          $('#the-edit-form').slideDown();
+        })
 
-            document.getElementById("Code").value = $('#code_' + ID).html();
-            
-            document.getElementById("Save").value = "Save";
-           
+        $('#ListOfItems').on("click", "a.edit", function (e) {
+          e.preventDefault();
+          var Link = $(this);
+          var ID = Link.attr("data-id");
+          TakeData(ID);
+        });
+
+        $('form#qForm').on("submit", function (e) {
+          e.preventDefault();
+          var Form = $(this);
+          var formData = $(this).serialize();
+          var postURL = '/List/Update';
+          Form.find(":input").prop("disabled", true);
+          $.ajax({
+            method: "POST",
+            url: postURL,
+            data: formData,
+            dataType: "json"
+          })
+          .done(function (data) {
+            if (data.status == "error") {
+              $('#ErrorInfo').html(data.message).show();
+            } else {
+              $('#ErrorInfo').hide();
+              ShowInfoRow(data);
+            }
+            $('#the-edit-form').slideUp();
+            Form.find(":input").prop("disabled", false);
+          });/*
+          .always(function () {
+            $('#the-edit-form').slideUp();
+            Form.find(":input").prop("disabled", false);
+          });
+          */
+          return false;
+        });
+
+        $(document).on("click", "img.quick-button", function (e) {          
+          e.preventDefault();
+          e.stopPropagation();
+          $('UL.qViewMenu').hide();
+          $(this).siblings('UL.qViewMenu').show();
+        })
+      });
+
+
+
+      function ClearForm() {
+
+        var FORM = document.forms['qForm'];
+        FORM['id'].value = "0";
+        // document.getElementById("Id").value = $('#ID_' + ID).html();
+        FORM["name"].value = "";
+        FORM["code"].value = "";
+        FORM["submit-button"].value = "Create";
+        $('#action-method').text("Create");
+      }
+      function TakeData(ID) {
+        $('#the-edit-form').slideDown();
+        var FORM = document.forms['qForm'];
+        FORM['id'].value = ID;
+        // document.getElementById("Id").value = $('#ID_' + ID).html();
+        FORM["name"].value = $('#name_' + ID).html();
+        FORM["code"].value = $('#code_' + ID).html();
+        FORM["submit-button"].value = "Save";
+        $('#action-method').text("Update");
+        FORM["name"].focus();
+      }
+
+      function ShowInfoRow(data) {
+        var ID = data.id;
+        if ($('#name_' + ID).length) {
+        $('#name_' + ID).html(data.name);
+        $('#code_' + ID).html(data.code);
+        } else {
+          var FORM = document.forms['qForm'];
+          LoadForm(FORM['TypeCopy'].value);
         }
+      }
+
+      function LoadForm(TypeName) {
+        $('#ListOfItems').html("Loading " + TypeName + ". Please Wait...");
+        ClearForm();
+        var FormURL = '/List/ListNames?TypeName=' + TypeName.replace(/ /g, '');
 
 
-
-
-
-
-
-
-
-
-    </script>
-    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
-
-}
+        $.ajax({
+          method: "GET",
+          url: FormURL
+        }).done(function (data) {
+          $('#ListOfItems').html(data);
+        });
+      }
+      </script>
+      @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+    }

@@ -24,7 +24,7 @@ namespace eX_Portal.Controllers {
         "  Max([BlackBoxData].ReadTime) as EndTime,\n" +
         "  Max(Speed) as MaxSpeed,\n" +
         "  Max(TotalFlightTime) as FlightTime,\n" +
-        "  Count(*) Over() as _TotalRecords,\n"+
+        "  Count(*) Over() as _TotalRecords,\n" +
         "  Cast(MSTR_Drone.DroneId as varchar) + ',' + Cast(BBFlightID as varchar) as _Pkey\n" +
         "FROM\n" +
         "  [BlackBoxData]\n" +
@@ -49,55 +49,56 @@ namespace eX_Portal.Controllers {
     }//Index()
 
 
-        public ActionResult Live()
-        {
-            //if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
+    public ActionResult Live() {
+      if (!exLogic.User.hasAccess("BLACKBOX.LIVE")) return RedirectToAction("NoAccess", "Home");
 
-            ViewBag.Title = "Black Box Data";
+      ViewBag.Title = "Black Box Data";
 
-            string SQL = "SELECT [DroneDataId] " +
-     ", [DroneId]" +
-      ",[ReadTime]" +
-     ",[Latitude]" +
-     " ,[Longitude]" +
-      ",[Altitude]" +
-      ",[Speed]" +
-     " ,[FixQuality]" +
-     " ,[Satellites]" +
-      ",[Pitch]" +
-      ",[Roll]" +
-     " ,[Heading]" +
-      ",[TotalFlightTime]" +
-     ",Count(*) Over() as _TotalRecords,[DroneDataId] as _PKey" +
-  " FROM  [DroneData]   ";
+      string SQL = "SELECT [DroneDataId] " +
+        " [DroneId],\n" +
+        "[ReadTime],\n" +
+        "CASE ISNUMERIC([Latitude])\n" +
+        "		WHEN  1 THEN CONVERT(numeric(12, 3),[Latitude])\n" +
+        "		ELSE 0.00\n" +
+        "END as [Latitude] ,\n" +
+        "CASE ISNUMERIC([Longitude])\n" +
+        "    WHEN  1 THEN  CONVERT(numeric(12, 3),[Longitude])\n" +
+        "    ELSE 0.00\n" +
+        "END as [Longitude]\n" +
+        ",[Altitude]" +
+        ",[Speed]" +
+        " ,[FixQuality]" +
+        " ,[Satellites]" +
+        ",[Pitch]" +
+        ",[Roll]" +
+        " ,[Heading]" +
+        ",[TotalFlightTime]" +
+        ",Count(*) Over() as _TotalRecords,[DroneDataId] as _PKey" +
+        " FROM  [DroneData]   ";
 
-          
+      qView nView = new qView(SQL);
+      //nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
 
-            qView nView = new qView(SQL);
-            //nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
+    }//Index()
 
-            if (Request.IsAjaxRequest())
-            {
-                Response.ContentType = "text/javascript";
-                return PartialView("qViewData", nView);
-            }
-            else
-            {
-                return View(nView);
-            }//if(IsAjaxRequest)
-        }//Index()
-        public ActionResult Detail([Bind(Prefix = "ID")] String DroneID_BBFlightID = "") {
+    public ActionResult Detail([Bind(Prefix = "ID")] String DroneID_BBFlightID = "") {
       String[] SplitData = DroneID_BBFlightID.Split(',');
       if (SplitData.Length != 2) return RedirectToAction("Error");
       int DroneID = Util.toInt(SplitData[0]);
       int BBFlightID = Util.toInt(SplitData[1]);
-      if(DroneID < 1 || BBFlightID < 1) return RedirectToAction("Error");
+      if (DroneID < 1 || BBFlightID < 1) return RedirectToAction("Error");
       ViewBag.Title = "Blackbox  Data";
       ViewBag.DroneID = DroneID;
 
       String SQL =
        "SELECT \n" +
-       "  RecordNumber,\n"+
+       "  RecordNumber,\n" +
        "  ReadTime,\n" +
        "  Latitude,\n" +
        "  Longitude,\n" +
@@ -142,14 +143,14 @@ namespace eX_Portal.Controllers {
       try {
         System.IO.File.Delete(FullName);
         JsonText.Append("{");
-        JsonText.Append(this.Pair("status", "ok", true));
-        JsonText.Append(this.Pair("message", "Deleted", false));
+        JsonText.Append(Util.Pair("status", "ok", true));
+        JsonText.Append(Util.Pair("message", "Deleted", false));
         JsonText.Append("}");
       } catch (Exception ex) {
         JsonText.Clear();
         JsonText.Append("{");
-        JsonText.Append(this.Pair("status", "error", true));
-        JsonText.Append(this.Pair("message", ex.Message, false));
+        JsonText.Append(Util.Pair("status", "error", true));
+        JsonText.Append(Util.Pair("message", ex.Message, false));
         JsonText.Append("}");
       }//catch
       return JsonText.ToString();
@@ -169,15 +170,15 @@ namespace eX_Portal.Controllers {
         if (!Directory.Exists(UploadPath)) Directory.CreateDirectory(UploadPath);
         TheFile.SaveAs(FullName);
         JsonText.Append("{");
-        JsonText.Append(this.Pair("status", "success", true));
+        JsonText.Append(Util.Pair("status", "success", true));
         JsonText.Append("\"addFile\":[");
-        JsonText.Append(getFileInfo(FullName));
+        JsonText.Append(Util.getFileInfo(FullName));
         JsonText.Append("]}");
       } catch (Exception ex) {
         JsonText.Clear();
         JsonText.Append("{");
-        JsonText.Append(this.Pair("status", "error", true));
-        JsonText.Append(this.Pair("message", ex.Message, false));
+        JsonText.Append(Util.Pair("status", "error", true));
+        JsonText.Append(Util.Pair("message", ex.Message, false));
         JsonText.Append("}");
       }//catch
       return JsonText.ToString();
@@ -187,12 +188,12 @@ namespace eX_Portal.Controllers {
       StringBuilder JsonText = new StringBuilder();
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
       JsonText.Append("{");
-      JsonText.Append(this.Pair("status", "success", true));
+      JsonText.Append(Util.Pair("status", "success", true));
       JsonText.Append("\"addFile\":[");
       bool isAddComma = false;
       foreach (string file in Directory.EnumerateFiles(UploadPath, "*.*")) {
         if (isAddComma) JsonText.Append(",\n");
-        JsonText.Append(getFileInfo(file));
+        JsonText.Append(Util.getFileInfo(file));
         isAddComma = true;
       }
       JsonText.Append("]}");
@@ -210,46 +211,21 @@ namespace eX_Portal.Controllers {
       try {
         ImportedRows = Process.BulkInsert(UploadPath + file);
         StatusMessage = "Imported " + ImportedRows + " Rows";
-      } catch(Exception ex) {
+      } catch (Exception ex) {
         Status = "error";
         StatusMessage = ex.Message;
       }
 
       JsonText.AppendLine("{");
-      JsonText.AppendLine(Pair("status", Status, true));
-      JsonText.AppendLine(Pair("message", StatusMessage, false));
+      JsonText.AppendLine(Util.Pair("status", Status, true));
+      JsonText.AppendLine(Util.Pair("message", StatusMessage, false));
       JsonText.AppendLine("}");
 
       return JsonText.ToString();
     }
 
-    private string Pair(String Name, String Value, bool IsAddComma = false) {
-      Value = Value.Replace("\\", "\\\\") ;
-      Value = Value.Replace("\r\n", "\\n");
-      return "\"" + Name + "\" : \"" + Value + "\"" + (IsAddComma ? "," : "") + "\n";
-    }
 
-    private String getFileInfo(String FileName) {
 
-      FileInfo oFileInfo = new FileInfo(FileName);
-      return "{" +
-        Pair("name", oFileInfo.Name, true) +
-        Pair("created", oFileInfo.CreationTime.ToString("dd-MMM-yyyy hh:mm:ss tt [zzz]"), true) +
-        Pair("ext", oFileInfo.Extension, true) +
-        Pair("records", getLineCount(FileName).ToString(), true) +
-        Pair("size", (oFileInfo.Length / 1024).ToString("N0"), false) +
-        "}";
-    }//getFileInfo()
-
-    private int getLineCount(String FileName) {
-      var lineCount = 0;
-      using (var reader = System.IO.File.OpenText(FileName)) {
-        while (reader.ReadLine() != null) {
-          lineCount++;
-        }//while
-      }//using
-      return lineCount;
-    }//getLineCount()
 
   }//class
 }//namespace

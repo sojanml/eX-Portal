@@ -12,7 +12,18 @@ UL#FileUploadProgress {
 
   UL#FileUploadProgress LI {
     padding: 5px 0px 5px 0px;
+    border-bottom: 1px #ea050e solid;
+    margin: 5px 0px 5px 0px;
   }
+
+  UL#FileUploadProgress LI.success {
+    color: green;
+  }
+
+  UL#FileUploadProgress LI.error {
+    color: #ea050e;
+  }
+  
 
 UL#UploadedFilesList {
   margin: 20px 20px 0px 0px;

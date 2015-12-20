@@ -50,8 +50,6 @@ $(':file').change(function () {
 });
 
 function DeleteFile(Obj) {
-
-
   var LI = Obj.closest('LI');
   LI.attr("class", "delete");
   $("#delete-confirm").dialog({
