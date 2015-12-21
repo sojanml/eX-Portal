@@ -18,7 +18,7 @@
   @Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })
 }
 
-
+@Html.Action("FileDetail", "Drone", new { ID = DroneID , DocumentType = "Decommission" })
 
 @section scripts {
   <script type="text/javascript">
