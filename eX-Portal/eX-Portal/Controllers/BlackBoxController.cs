@@ -15,7 +15,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Index() {
       //if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
 
-      ViewBag.Title = "Black Box Data";
+      ViewBag.Title = "FDR Data";
 
       String SQL = "SELECT \n" +
         "  MSTR_Drone.DroneName,\n" +
@@ -52,7 +52,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Live() {
       if (!exLogic.User.hasAccess("BLACKBOX.LIVE")) return RedirectToAction("NoAccess", "Home");
 
-      ViewBag.Title = "Black Box Data";
+      ViewBag.Title = "FDR Live Data";
 
       string SQL = "SELECT [DroneDataId] " +
         " [DroneId],\n" +
@@ -93,7 +93,7 @@ namespace eX_Portal.Controllers {
       int DroneID = Util.toInt(SplitData[0]);
       int BBFlightID = Util.toInt(SplitData[1]);
       if (DroneID < 1 || BBFlightID < 1) return RedirectToAction("Error");
-      ViewBag.Title = "Blackbox  Data";
+      ViewBag.Title = "FDR  Data";
       ViewBag.DroneID = DroneID;
 
       String SQL =
