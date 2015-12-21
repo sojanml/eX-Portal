@@ -28,3 +28,36 @@
     </div>
     </div>
   </div>
+
+<div class="row">
+  <div class="col-3">
+    <h2>Commission report</h2>
+    <div>
+      Upload Commission report.
+    </div>
+    <div>
+      <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="Commission"})">Upload</a>
+    </div>
+  </div>
+
+  <div class="col-3">
+    <h2>UAT report</h2>
+    <div>
+      Upload UAT report.
+    </div>
+    <div>
+      <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="UAT"})">Upload</a>
+    </div>
+  </div>
+
+  <div class="col-3">
+    <h2>Incident report</h2>
+    <div>
+      Upload Incident report.
+    </div>
+    <div>
+      <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="Incident"})">Upload</a>
+    </div>
+  </div>
+
+</div>

@@ -82,6 +82,23 @@ namespace eX_Portal.Controllers {
       return RedirectToAction("Detail", new { ID = DroneID });
     }//Decommission()
 
+    public ActionResult UploadDocument([Bind(Prefix = "ID")] int DroneID, String Type) {
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
+      
+      switch (Type.ToLower()) {
+        case "commission":
+        case "uat":
+        case "incident":
+          ViewBag.DocumentType = Type;
+          break;
+        default:
+          ViewBag.DocumentType = "Commission";
+          break;
+      }
+      ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
+      return View(DroneID);
+    }//Decommission()
+
 
     public String UploadFile([Bind(Prefix = "ID")] int DroneID, String DocumentType) {
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
