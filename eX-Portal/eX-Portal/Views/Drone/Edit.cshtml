@@ -4,6 +4,8 @@
 @{
   ViewBag.Title = "UAS Registration";
   Layout = "~/Views/Shared/_exPortal.cshtml";
+  DateTime CommissionDate = Model.Drone.CommissionDate == null ? DateTime.Now : (DateTime)Model.Drone.CommissionDate;
+
 }
 
 <section class="general-form" id="loginForm">
@@ -39,8 +41,10 @@
           @Html.LabelFor(model => model.Drone.CommissionDate, "Commission Date")
         </div>
         <div class="editor-field">
-
-          @Html.EditorFor(model => model.Drone.CommissionDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
+          <input class="form-control date-picker text-box single-line"
+                 data-val="true" data-val-date="The field CommissionDate must be a date."
+                 id="Drone_CommissionDate" name="Drone.CommissionDate" type="datetime"
+                 value="@CommissionDate.ToString("dd-MMM-yyyy")">
           @Html.ValidationMessageFor(model => model.Drone.CommissionDate)
         </div>
         <div class="editor-label">

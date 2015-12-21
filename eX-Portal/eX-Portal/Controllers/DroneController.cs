@@ -207,7 +207,7 @@ namespace eX_Portal.Controllers {
     // GET: Drone/Create
     public ActionResult Create() {
       if (!exLogic.User.hasAccess("DRONE.CREATE")) return RedirectToAction("NoAccess", "Home");
-      String OwnerListSQL = "SELECT Name + ' [' + Code + ']' as Name, ID FROM LUP_Drone WHERE IsActive = 1 AND Type='Owner' ORDER BY Name";
+      String OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
         Drone = new MSTR_Drone(),
         OwnerList = Util.getListSQL(OwnerListSQL),
@@ -227,7 +227,8 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("DRONE.CREATE")) return RedirectToAction("NoAccess", "Home");
       try {
         // TODO: Add insert logic here
-
+        int DroneSerialNo = Util.getDBInt("SELECT Max(DroneSerialNo) + 1 FROM MSTR_DRONE");
+        if (DroneSerialNo < 1001) DroneSerialNo = 1001;
         MSTR_Drone Drone = DroneView.Drone;
         String SQL = "INSERT INTO MSTR_DRONE(\n" +
           "  AccountID,\n" +
@@ -235,14 +236,16 @@ namespace eX_Portal.Controllers {
           "  UAVTYPEID,\n" +
           "  COMMISSIONDATE,\n" +
           "  DRONEDEFINITIONID,\n" +
-          "  ISACTIVE\n" +
+          "  ISACTIVE,\n" +
+          "  DroneSerialNo\n" + 
           ") VALUES(\n" +
           "  '" + Drone.AccountID + "',\n" +
           "  '" + Drone.ManufactureId + "',\n" +
           "  '" + Drone.UavTypeId + "',\n" +
           "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
           "  11,\n" +
-          "  'True'\n" +
+          "  'True',\n" +
+          "  " + DroneSerialNo + 
           ");";
         int DroneId = Util.InsertSQL(SQL);
 
@@ -277,7 +280,7 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("DRONE.EDIT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.DroneId = id;
       ExponentPortalEntities db = new ExponentPortalEntities();
-      String OwnerListSQL = "SELECT Name, AccountId FROM MSTR_Account ORDER BY Name";
+      String OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
         Drone = db.MSTR_Drone.Find(id),
         OwnerList = Util.getListSQL(OwnerListSQL),
@@ -295,13 +298,19 @@ namespace eX_Portal.Controllers {
       try {
         // TODO: Add update logic here
         if (ModelState.IsValid) {
+          //int DroneSerialNo = Util.getDBInt("SELECT Max(DroneSerialNo) FROM MSTR_DRONE");
+          //if (DroneSerialNo < 1000) DroneSerialNo = 1001;
+
           MSTR_Drone Drone = DroneView.Drone;
           //master updating
 
-          string SQL = "UPDATE MSTR_DRONE SET AccountID ='" + Drone.AccountID + "'," +
-                       "MANUFACTUREID ='" + Drone.ManufactureId + "',UAVTYPEID ='" + Drone.UavTypeId +
-                       "',COMMISSIONDATE ='" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") +
-                        "',DRONEDEFINITIONID = 11,ISACTIVE ='True' WHERE DroneId =" + Drone.DroneId;
+          string SQL = "UPDATE MSTR_DRONE SET\n" +
+          "   AccountID ='" + Drone.AccountID + "'," +
+          "  MANUFACTUREID ='" + Drone.ManufactureId + "',\n" +
+          "  UAVTYPEID ='" + Drone.UavTypeId + "',\n" +
+          "  COMMISSIONDATE ='" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "'\n" +
+          "WHERE\n" +
+          "  DroneId =" + Drone.DroneId;
           int DroneId = Util.doSQL(SQL);
 
           //Parts updating
@@ -341,6 +350,10 @@ namespace eX_Portal.Controllers {
       Util.doSQL(SQL);
 
       SQL = "DELETE FROM [DroneFlight] WHERE DroneID = " + DroneID;
+      Util.doSQL(SQL);
+
+
+      SQL = "DELETE FROM [MSTR_DRONE] WHERE DroneID = " + DroneID;
       Util.doSQL(SQL);
 
       return Util.jsonStat("OK");

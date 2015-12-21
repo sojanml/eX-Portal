@@ -189,6 +189,7 @@ header nav ul li UL {
  white-space:nowrap;
  margin: 0px;
  padding: 0px; 
+ z-index:22;
 }
 
 header nav ul li:last-child UL {
