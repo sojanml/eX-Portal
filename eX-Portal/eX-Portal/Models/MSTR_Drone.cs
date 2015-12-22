@@ -43,5 +43,8 @@ namespace eX_Portal.Models
         public string ReAssignNote { get; set; }
         public Nullable<int> ReAssignTo { get; set; }
         public Nullable<int> ReAssignFrom { get; set; }
+        public string CommissionReportNote { get; set; }
+        public string UATReportNote { get; set; }
+        public string IncidentReportNote { get; set; }
     }
 }

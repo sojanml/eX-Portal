@@ -27,15 +27,26 @@ namespace eX_Portal.Models
         public Nullable<int> RecordType { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> ProductId { get; set; }
-        public string Altitude { get; set; }
-        public string Speed { get; set; }
-        public string FixQuality { get; set; }
-        public string Satellites { get; set; }
-        public string Pitch { get; set; }
-        public string Roll { get; set; }
-        public string Heading { get; set; }
-        public string TotalFlightTime { get; set; }
+        public Nullable<decimal> Altitude { get; set; }
+        public Nullable<decimal> Speed { get; set; }
+        public Nullable<decimal> FixQuality { get; set; }
+        public Nullable<int> Satellites { get; set; }
+        public Nullable<decimal> Pitch { get; set; }
+        public Nullable<decimal> Roll { get; set; }
+        public Nullable<decimal> Heading { get; set; }
+        public Nullable<int> TotalFlightTime { get; set; }
         public Nullable<int> FlightID { get; set; }
         public string BBFlightID { get; set; }
+        public Nullable<decimal> avg_Altitude { get; set; }
+        public Nullable<decimal> Min_Altitude { get; set; }
+        public Nullable<decimal> Max_Altitude { get; set; }
+        public Nullable<decimal> Avg_Speed { get; set; }
+        public Nullable<decimal> Min_Speed { get; set; }
+        public Nullable<decimal> Max_Speed { get; set; }
+        public Nullable<decimal> Avg_Satellites { get; set; }
+        public Nullable<decimal> Min_Satellites { get; set; }
+        public Nullable<decimal> Max_Satellites { get; set; }
+        public Nullable<decimal> PointDistance { get; set; }
+        public Nullable<decimal> Distance { get; set; }
     }
 }

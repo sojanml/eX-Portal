@@ -163,16 +163,27 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="RecordType" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="ProductId" Type="int" />
-          <Property Name="Altitude" Type="nvarchar" MaxLength="50" />
-          <Property Name="Speed" Type="nvarchar" MaxLength="50" />
-          <Property Name="FixQuality" Type="nvarchar" MaxLength="50" />
-          <Property Name="Satellites" Type="nvarchar" MaxLength="50" />
-          <Property Name="Pitch" Type="nvarchar" MaxLength="50" />
-          <Property Name="Roll" Type="nvarchar" MaxLength="50" />
-          <Property Name="Heading" Type="nvarchar" MaxLength="50" />
-          <Property Name="TotalFlightTime" Type="nvarchar" MaxLength="50" />
+          <Property Name="Altitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Speed" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="FixQuality" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Satellites" Type="int" />
+          <Property Name="Pitch" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Roll" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Heading" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="TotalFlightTime" Type="int" />
           <Property Name="FlightID" Type="int" />
           <Property Name="BBFlightID" Type="nvarchar" MaxLength="30" />
+          <Property Name="avg_Altitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Min_Altitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Max_Altitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Avg_Speed" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Min_Speed" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Max_Speed" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Avg_Satellites" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Min_Satellites" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Max_Satellites" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="PointDistance" Type="numeric" Precision="18" Scale="5" />
+          <Property Name="Distance" Type="numeric" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="LiveDrone">
           <Key>
@@ -364,6 +375,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="ReAssignNote" Type="nvarchar" MaxLength="255" />
           <Property Name="ReAssignTo" Type="int" />
           <Property Name="ReAssignFrom" Type="int" />
+          <Property Name="CommissionReportNote" Type="varchar(max)" />
+          <Property Name="UATReportNote" Type="varchar(max)" />
+          <Property Name="IncidentReportNote" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="MSTR_DroneCheckList">
           <Key>
@@ -874,6 +888,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="ReAssignNote" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ReAssignTo" Type="Int32" />
           <Property Name="ReAssignFrom" Type="Int32" />
+          <Property Name="CommissionReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UATReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IncidentReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_DroneService">
           <Key>
@@ -1079,9 +1096,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           </FunctionImport>
           <FunctionImport Name="usp_Portal_GetDroneParts" ReturnType="Collection(ExponentPortalModel.usp_Portal_GetDroneParts_Result)" />
           <EntitySet Name="M2M_ProfileMenu" EntityType="ExponentPortalModel.M2M_ProfileMenu" />
-          <EntitySet Name="FlightMapDatas" EntityType="ExponentPortalModel.FlightMapData" />
           <EntitySet Name="DroneDocuments" EntityType="ExponentPortalModel.DroneDocument" />
           <EntitySet Name="BlackBoxDatas" EntityType="ExponentPortalModel.BlackBoxData" />
+          <EntitySet Name="FlightMapDatas" EntityType="ExponentPortalModel.FlightMapData" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -1234,34 +1251,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="ModifiedBy" Type="DateTime" Precision="3" />
           <Property Name="ApprovedBy" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="FlightMapData">
-          <Key>
-            <PropertyRef Name="FlightMapDataID" />
-          </Key>
-          <Property Name="FlightMapDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DroneId" Type="Int32" />
-          <Property Name="DroneRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProductRSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReadTime" Type="DateTime" Precision="3" />
-          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
-          <Property Name="RecordType" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="ProductId" Type="Int32" />
-          <Property Name="Altitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Speed" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FixQuality" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Satellites" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Pitch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Roll" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Heading" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TotalFlightTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FlightID" Type="Int32" />
-          <Property Name="BBFlightID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="DroneDocument">
           <Key>
             <PropertyRef Name="ID" />
@@ -1302,6 +1291,45 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="TotalFlightTime" Type="Int32" />
           <Property Name="FlightID" Type="Int32" />
           <Property Name="BBFlightID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="FlightMapData">
+          <Key>
+            <PropertyRef Name="FlightMapDataID" />
+          </Key>
+          <Property Name="FlightMapDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DroneId" Type="Int32" />
+          <Property Name="DroneRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductRSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReadTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="RecordType" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="Altitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Speed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="FixQuality" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Satellites" Type="Int32" />
+          <Property Name="Pitch" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Roll" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Heading" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="TotalFlightTime" Type="Int32" />
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="BBFlightID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="avg_Altitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Min_Altitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Max_Altitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Avg_Speed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Min_Speed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Max_Speed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Avg_Satellites" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Min_Satellites" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Max_Satellites" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="PointDistance" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Distance" Type="Decimal" Precision="18" Scale="5" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1498,6 +1526,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySetMapping Name="MSTR_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
               <MappingFragment StoreEntitySet="MSTR_Drone">
+                <ScalarProperty Name="IncidentReportNote" ColumnName="IncidentReportNote" />
+                <ScalarProperty Name="UATReportNote" ColumnName="UATReportNote" />
+                <ScalarProperty Name="CommissionReportNote" ColumnName="CommissionReportNote" />
                 <ScalarProperty Name="ReAssignFrom" ColumnName="ReAssignFrom" />
                 <ScalarProperty Name="ReAssignTo" ColumnName="ReAssignTo" />
                 <ScalarProperty Name="ReAssignNote" ColumnName="ReAssignNote" />
@@ -1864,35 +1895,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="FlightMapDatas">
-            <EntityTypeMapping TypeName="ExponentPortalModel.FlightMapData">
-              <MappingFragment StoreEntitySet="FlightMapData">
-                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
-                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
-                <ScalarProperty Name="TotalFlightTime" ColumnName="TotalFlightTime" />
-                <ScalarProperty Name="Heading" ColumnName="Heading" />
-                <ScalarProperty Name="Roll" ColumnName="Roll" />
-                <ScalarProperty Name="Pitch" ColumnName="Pitch" />
-                <ScalarProperty Name="Satellites" ColumnName="Satellites" />
-                <ScalarProperty Name="FixQuality" ColumnName="FixQuality" />
-                <ScalarProperty Name="Speed" ColumnName="Speed" />
-                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
-                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
-                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
-                <ScalarProperty Name="ProductRSSI" ColumnName="ProductRSSI" />
-                <ScalarProperty Name="ProductQrCode" ColumnName="ProductQrCode" />
-                <ScalarProperty Name="ProductRFID" ColumnName="ProductRFID" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="DroneRFID" ColumnName="DroneRFID" />
-                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
-                <ScalarProperty Name="FlightMapDataID" ColumnName="FlightMapDataID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DroneDocuments">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneDocument">
               <MappingFragment StoreEntitySet="DroneDocuments">
@@ -1933,6 +1935,46 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
                 <ScalarProperty Name="DroneSerialID" ColumnName="DroneSerialID" />
                 <ScalarProperty Name="RecordNumber" ColumnName="RecordNumber" />
                 <ScalarProperty Name="BlackBoxDataID" ColumnName="BlackBoxDataID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FlightMapDatas">
+            <EntityTypeMapping TypeName="ExponentPortalModel.FlightMapData">
+              <MappingFragment StoreEntitySet="FlightMapData">
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="PointDistance" ColumnName="PointDistance" />
+                <ScalarProperty Name="Max_Satellites" ColumnName="Max_Satellites" />
+                <ScalarProperty Name="Min_Satellites" ColumnName="Min_Satellites" />
+                <ScalarProperty Name="Avg_Satellites" ColumnName="Avg_Satellites" />
+                <ScalarProperty Name="Max_Speed" ColumnName="Max_Speed" />
+                <ScalarProperty Name="Min_Speed" ColumnName="Min_Speed" />
+                <ScalarProperty Name="Avg_Speed" ColumnName="Avg_Speed" />
+                <ScalarProperty Name="Max_Altitude" ColumnName="Max_Altitude" />
+                <ScalarProperty Name="Min_Altitude" ColumnName="Min_Altitude" />
+                <ScalarProperty Name="avg_Altitude" ColumnName="avg_Altitude" />
+                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="TotalFlightTime" ColumnName="TotalFlightTime" />
+                <ScalarProperty Name="Heading" ColumnName="Heading" />
+                <ScalarProperty Name="Roll" ColumnName="Roll" />
+                <ScalarProperty Name="Pitch" ColumnName="Pitch" />
+                <ScalarProperty Name="Satellites" ColumnName="Satellites" />
+                <ScalarProperty Name="FixQuality" ColumnName="FixQuality" />
+                <ScalarProperty Name="Speed" ColumnName="Speed" />
+                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+                <ScalarProperty Name="ProductRSSI" ColumnName="ProductRSSI" />
+                <ScalarProperty Name="ProductQrCode" ColumnName="ProductQrCode" />
+                <ScalarProperty Name="ProductRFID" ColumnName="ProductRFID" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="DroneRFID" ColumnName="DroneRFID" />
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+                <ScalarProperty Name="FlightMapDataID" ColumnName="FlightMapDataID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

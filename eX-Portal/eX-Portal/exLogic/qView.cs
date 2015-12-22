@@ -131,13 +131,15 @@ namespace eX_Portal.exLogic {
 
       //Set Paging for SQL Query
       String OrderColumn = Request["order[0][column]"];
+      String OrderDir = Request["order[0][dir]"];
+      if (OrderDir != "asc") OrderDir = "desc";
       String OrderField = ColumDef.ElementAt(Util.toInt(OrderColumn));
       int StartAt = Util.toInt(Request["start"]);
       int RowLength = Util.toInt(Request["length"]);
       myParser.OrderByClause = "";
       SQL = myParser.ToText();
       String newSQL = "SELECT * FROM (\n" +
-        SQL.Replace("SELECT ", "SELECT ROW_NUMBER() OVER (ORDER BY " + ColumnMapping[OrderField] + ") AS _RowNumber,\n") +
+        SQL.Replace("SELECT ", "SELECT ROW_NUMBER() OVER (ORDER BY " + ColumnMapping[OrderField] + " " + OrderDir + ") AS _RowNumber,\n") +
         ") as QueryTable\n" +
         "WHERE\n" +
         "  _RowNumber > " + StartAt + " AND _RowNumber <= " + (RowLength + StartAt) + "\n" +
@@ -314,7 +316,9 @@ namespace eX_Portal.exLogic {
       Scripts.AppendLine("    \"processing\": true,");
       Scripts.AppendLine("    \"serverSide\": true, ");
       Scripts.AppendLine("    \"searchDelay\": 1000, ");
-      
+      Scripts.AppendLine("    \"iDisplayLength\": 50, ");
+      Scripts.AppendLine("    \"fnFooterCallback\": _fnFooterCallback, ");
+      Scripts.AppendLine("    \"fnDrawCallback\": _fnDrawCallback, "); 
       Scripts.AppendLine("    \"ajax\": \"" + HttpContext.Current.Request.RequestContext.HttpContext.Request.Url + "\",");
       Scripts.Append(ScriptColumns);
 

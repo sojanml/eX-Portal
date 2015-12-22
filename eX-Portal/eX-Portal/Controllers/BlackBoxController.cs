@@ -54,7 +54,7 @@ namespace eX_Portal.Controllers {
 
       ViewBag.Title = "FDR Live Data";
 
-      string SQL = "SELECT [DroneDataId] " +
+      string SQL = "SELECT [DroneDataId]," +
         " [DroneId],\n" +
         "[ReadTime],\n" +
         "CASE ISNUMERIC([Latitude])\n" +
