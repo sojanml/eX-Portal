@@ -1,85 +1,14 @@
 ﻿@model List<Dictionary<String, Object>>
-
-@if (Model.Any())
-{
-    <h2>Files</h2>
-    <table class="report" id="Table_SelectItemsForParts">
-       
-        <thead>
-            <tr>
-                <th>DocumentType</th>
-                <th>Notes</th>
-                <th>Name</th>
-                <th>Uploaded Date</th>
-               
-            </tr>
-        </thead>
-      
-   @{ int i = 0,j=0,k=0,l=0,m=0;
-       
-       foreach (var item in Model)
-       {
-
-           if (string.Equals(@item["DocumentType"], "Decommission") && i==0)
-           {
-               i = 2;
-                <tr>
-                 
-                 <td>@item["DocumentType"]</td>
-                    <td>@item["DecommissionNote"]</td>
-                </tr>
-
-
-           }
-           else if (string.Equals(@item["DocumentType"], "Incident") && j == 0)
-           {
-               j = 2;
-            <tr>
-                <td>@item["DocumentType"]</td>
-                <td>@item["IncidentReportNote"]</td>
-            </tr>
-
-           }
-           else if (string.Equals(@item["DocumentType"], "Commission") && k == 0)
-           {
-               k = 2;
-            <tr>
-                <td>@item["DocumentType"]</td>
-                <td>@item["CommissionReportNote"]</td>
-            </tr>
-
-           }
-           else if (string.Equals(@item["DocumentType"], "UAT") && l == 0)
-           {
-               j = 2;
-            <tr>
-                <td>@item["DocumentType"]</td>
-                <td>@item["UATReportNote"]</td>
-            </tr>
-
-           }
-           else if (string.Equals(@item["DocumentType"], "Reassign") && m == 0)
-           {
-               m = 2;
-            <tr>
-                <td>@item["DocumentType"]</td>
-                <td>@item["ReAssignNote"]</td>
-            </tr>
-
-           }
-
-            <tr>
-                <td></td>
-                <td></td>
-                <td><a href=@item["DocumentName"]>@item["Name"]</a></td>
-                <td>@item["UploadedDate"]</td>
-
-            </tr>
-
-
-        }
-        }
-    </table>
-
-
+@if (Model.Any()) {
+  <div class="col-3">
+    <h2>@ViewBag.DocumentType</h2>
+    <ul>
+      @foreach (var item in Model) {
+        <li>
+          <a href=@item["DocumentName"]>@item["Name"]</a><br />
+          @item["UploadedDate"]
+        </li>
+      }
+    </ul>
+  </div>
 }

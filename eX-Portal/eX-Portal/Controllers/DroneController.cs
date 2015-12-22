@@ -46,7 +46,7 @@ namespace eX_Portal.Controllers {
       if (exLogic.User.hasAccess("DRONE.MANAGE")) nView.addMenu("Manage", Url.Action("Manage", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("BLACKBOX")) nView.addMenu("Blackbox", Url.Action("Index", "BlackBox", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("DRONE.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_Pkey" }));
-      
+
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -81,17 +81,17 @@ namespace eX_Portal.Controllers {
       Util.doSQL(SQL);
       return RedirectToAction("Detail", new { ID = DroneID });
     }//Decommission()
-        //uploading documents for commission,UAT,incident
+     //uploading documents for commission,UAT,incident
     public ActionResult UploadDocument([Bind(Prefix = "ID")] int DroneID, String Type) {
       if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
-      
+
       switch (Type.ToLower()) {
         case "commission":
-                    ViewBag.DocumentType = Type;
-                    break;
+          ViewBag.DocumentType = Type;
+          break;
         case "uat":
-                    ViewBag.DocumentType = Type;
-                    break;
+          ViewBag.DocumentType = Type;
+          break;
         case "incident":
           ViewBag.DocumentType = Type;
           break;
@@ -99,55 +99,50 @@ namespace eX_Portal.Controllers {
           ViewBag.DocumentType = "Commission";
           break;
       }
-     ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
-            return View(DroneID);
-        }//Decommission()
+      ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
+      return View(DroneID);
+    }//Decommission()
 
-        //Saving notes to mstr_drone database for uat,commission,incident
+    //Saving notes to mstr_drone database for uat,commission,incident
 
-        [HttpPost]
-        public ActionResult UploadDocument([Bind(Prefix = "ID")] int DroneID, String Type, String Note)
-        {
-            String SQL = "";
-            if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
+    [HttpPost]
+    public ActionResult UploadDocument([Bind(Prefix = "ID")] int DroneID, String Type, String Note) {
+      String SQL = "";
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
 
-            switch (Type.ToLower())
-            {
-                case "commission":
-                    SQL = "UPDATE MSTR_DRONE SET\n" +
-      "  CommissionReportNote='" + Note + "'\n" +
-      "WHERE\n" +
-      "  DroneID=" + DroneID;
-                    ViewBag.DocumentType = Type;
-                    break;
-                case "uat":
-
-                    SQL = "UPDATE MSTR_DRONE SET\n" +
-     "  UATReportNote='" + Note + "'\n" +
-     "WHERE\n" +
-     "  DroneID=" + DroneID;
-                    ViewBag.DocumentType = Type;
-                    break;
-                case "incident":
-
-
-                    SQL = "UPDATE MSTR_DRONE SET\n" +
-  " IncidentReportNote='" + Note + "'\n" +
-  "WHERE\n" +
-  "  DroneID=" + DroneID;
-                    ViewBag.DocumentType = Type;
-                    break;
-                default:
-                    ViewBag.DocumentType = "Commission";
-                    break;
-            }
-            ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
-            Util.doSQL(SQL);
-            return RedirectToAction("Detail", new { ID = DroneID });
-        }//Decommission()
+      switch (Type.ToLower()) {
+        case "commission":
+          SQL = "UPDATE MSTR_DRONE SET\n" +
+            "  CommissionReportNote='" + Note + "'\n" +
+            "WHERE\n" +
+            "  DroneID=" + DroneID;
+          ViewBag.DocumentType = Type;
+          break;
+        case "uat":
+          SQL = "UPDATE MSTR_DRONE SET\n" +
+          "  UATReportNote='" + Note + "'\n" +
+          "WHERE\n" +
+          "  DroneID=" + DroneID;
+          ViewBag.DocumentType = Type;
+          break;
+        case "incident":
+          SQL = "UPDATE MSTR_DRONE SET\n" +
+          " IncidentReportNote='" + Note + "'\n" +
+          "WHERE\n" +
+          "  DroneID=" + DroneID;
+          ViewBag.DocumentType = Type;
+          break;
+        default:
+          ViewBag.DocumentType = "Commission";
+          break;
+      }
+      ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
+      Util.doSQL(SQL);
+      return RedirectToAction("Detail", new { ID = DroneID });
+    }//Decommission()
 
 
-        public String UploadFile([Bind(Prefix = "ID")] int DroneID, String DocumentType) {
+    public String UploadFile([Bind(Prefix = "ID")] int DroneID, String DocumentType) {
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
       //send information in JSON Format always
       StringBuilder JsonText = new StringBuilder();
@@ -199,27 +194,22 @@ namespace eX_Portal.Controllers {
       ViewBag.DroneID = DroneID;
       return View();
     }
-        //Partial view for Details of file uploaded for commission,decommission,uat,incident etc.
- public ActionResult FileDetail( int ID)
-        {
-           if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
-           
 
+    //Partial view for Details of file uploaded for commission,decommission,uat,incident etc.
+    public ActionResult FileDetail(int ID, String DocumentType) {
+      if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
+      ViewBag.DroneID = ID;
+      ViewBag.DocumentType = DocumentType;
+      var FileList = Listing.getFileNames(ID, DocumentType);
+      return PartialView(FileList);
+    }//FileDetail()
 
-            ViewBag.DroneID = ID;
-           
-
-            var FileList = Listing.getFileNames(ID);
-
-            return PartialView(FileList);
-        }
-
-        public ActionResult DroneParts(int ID = 0) {
+    public ActionResult DroneParts(int ID = 0) {
       if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
       List<String> Parts = new List<String>();
       Parts = Listing.DroneListing(ID);
       return PartialView(Parts);
-    } 
+    }
 
     public ActionResult getDroneParts(int ID = 0) {
       if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
@@ -253,52 +243,61 @@ namespace eX_Portal.Controllers {
           "  D.[DroneId]=" + DroneID;
 
       qDetailView nView = new qDetailView(SQL);
-      return ReassignDetail(DroneID)+ DecommissionDetail(DroneID) + nView.getTable();
+      return ReassignDetail(DroneID) + DecommissionDetail(DroneID) + nView.getTable();
+      //+
     }
 
 
 
-        public String ReassignDetail(int DroneID)
-        {
-            StringBuilder Detail = new StringBuilder();
-
-            string SQL = "select ISNULL(a.isactive, 'True') as isactive,\n" +
-                "  a.DroneId,a.ReAssignNote, a.DroneName,Convert(varchar, a.ReAssignDate, 9)\n" +
-                "  as ReAssignDate,c.UserName as ReAssignedBy from MSTR_Drone a left join MSTR_Drone\n" +
-                "  b on a.DroneId = b.ReAssignFrom  left join mstr_user c \n" +
-                "  on a.ReAssignBy = c.UserId  where b.DroneId =" + DroneID;
-
-            
-            var Row = Util.getDBRow(SQL);
-            if (Row["isactive"].ToString() != "True")
-            {
-                Detail.AppendLine("<div class=\"decommission-info\">");
-                Detail.AppendLine("ReAssigned For");               
-                Detail.AppendLine("<span>" + Row["DroneName"] + "</span>");
-                Detail.AppendLine("on");
-                Detail.AppendLine("<span>" + Row["ReAssignDate"] + "</span>");
-                Detail.AppendLine("by");
-                Detail.AppendLine("<span>" + Row["ReAssignedBy"] + "</span>");
-               
-                Detail.AppendLine("<div>" + Row["ReAssignNote"] + "</div>");
-                Detail.AppendLine("</div>");
-            }
-            return Detail.ToString();
-        } //Decommission()
-        public String DecommissionDetail(int DroneID) {
+    public String ReassignDetail(int DroneID) {
       StringBuilder Detail = new StringBuilder();
-       String SQL = "SELECT\n" +
-          "  ISNULL(Mstr_drone.isactive ,'True') as isactive,\n" +
-          "  Convert(varchar, [DecommissionDate], 9) as DecommissionDate,\n" +
-          "  DecommissionNote,\n" +
-          "  MSTR_User.FirstName as DecommissionBy\n" +
-          "from\n" +
-          "  Mstr_drone\n" +
-          "LEFT JOIN MSTR_User ON\n" +
-          "  MSTR_User.UserId = Mstr_drone.DecommissionBy\n" +
+
+      string SQL = "select\n" +
+          "  ISNULL(a.isactive, 'True') as IsActive,\n" +
+          "  a.DroneId,\n" +
+          "  a.ReAssignNote,\n" +
+          "  a.DroneName,\n" +
+          "  Convert(varchar, a.ReAssignDate, 9) as ReAssignDate,\n" +
+          "  c.UserName as ReAssignedBy \n" +
+          "from \n" +
+          "  MSTR_Drone a \n" +
+          "left join MSTR_Drone\n" +
+          "  b on a.DroneId = b.ReAssignFrom\n" +
+          "left join mstr_user c \n" +
+          "  on a.ReAssignBy = c.UserId\n" +
           "where\n" +
-          "  Mstr_drone.DroneID=" + DroneID;
-        var Row = Util.getDBRow(SQL);
+          "  b.DroneId =" + DroneID;
+
+
+      var Row = Util.getDBRow(SQL);
+      if ((bool)Row["hasRows"] && Row["IsActive"].ToString() != "True") {
+        Detail.AppendLine("<div class=\"decommission-info\">");
+        Detail.AppendLine("ReAssigned For");
+        Detail.AppendLine("<span>" + Row["DroneName"] + "</span>");
+        Detail.AppendLine("on");
+        Detail.AppendLine("<span>" + Row["ReAssignDate"] + "</span>");
+        Detail.AppendLine("by");
+        Detail.AppendLine("<span>" + Row["ReAssignedBy"] + "</span>");
+
+        Detail.AppendLine("<div>" + Row["ReAssignNote"] + "</div>");
+        Detail.AppendLine("</div>");
+      }
+      return Detail.ToString();
+    } //Decommission()
+    public String DecommissionDetail(int DroneID) {
+      StringBuilder Detail = new StringBuilder();
+      String SQL = "SELECT\n" +
+         "  ISNULL(Mstr_drone.isactive ,'True') as isactive,\n" +
+         "  Convert(varchar, [DecommissionDate], 9) as DecommissionDate,\n" +
+         "  DecommissionNote,\n" +
+         "  MSTR_User.FirstName as DecommissionBy\n" +
+         "from\n" +
+         "  Mstr_drone\n" +
+         "LEFT JOIN MSTR_User ON\n" +
+         "  MSTR_User.UserId = Mstr_drone.DecommissionBy\n" +
+         "where\n" +
+         "  Mstr_drone.DroneID=" + DroneID;
+      var Row = Util.getDBRow(SQL);
       if (Row["isactive"].ToString() != "True") {
         Detail.AppendLine("<div class=\"decommission-info\">");
         Detail.AppendLine("Decommissioned on");
@@ -344,7 +343,7 @@ namespace eX_Portal.Controllers {
           "  COMMISSIONDATE,\n" +
           "  DRONEDEFINITIONID,\n" +
           "  ISACTIVE,\n" +
-          "  DroneSerialNo\n" + 
+          "  DroneSerialNo\n" +
           ") VALUES(\n" +
           "  '" + Drone.AccountID + "',\n" +
           "  '" + Drone.ManufactureId + "',\n" +
@@ -352,7 +351,7 @@ namespace eX_Portal.Controllers {
           "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
           "  11,\n" +
           "  'True',\n" +
-          "  " + DroneSerialNo + 
+          "  " + DroneSerialNo +
           ");";
         int DroneId = Util.InsertSQL(SQL);
 
@@ -374,7 +373,7 @@ namespace eX_Portal.Controllers {
 
         }
 
-        return RedirectToAction("Detail", new {ID = DroneId });
+        return RedirectToAction("Detail", new { ID = DroneId });
       } catch (Exception ex) {
         Util.ErrorHandler(ex);
         return View("InternalError", ex);
@@ -386,112 +385,103 @@ namespace eX_Portal.Controllers {
 
 
 
-        public ActionResult ReAssign(int id)
-        {
-            if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
-            ViewBag.DroneId = id;
-            ExponentPortalEntities db = new ExponentPortalEntities();
-            String OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name";
-            var viewModel = new ViewModel.DroneView
-            {
-                Drone = db.MSTR_Drone.Find(id),
-                OwnerList = Util.getListSQL(OwnerListSQL),
-                UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
-                ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
-                //PartsGroupList = Util.GetDropDowntList();
-            };
-            return View(viewModel);
-        }
-        [HttpPost]
-        public ActionResult ReAssign(ViewModel.DroneView DroneView)
-        {
-            if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
-            try
-            {
-                int DroneId = 0;
-                // TODO: Add update logic here
-                if (ModelState.IsValid)
-                {
+    public ActionResult ReAssign(int id) {
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
+      ViewBag.DroneId = id;
+      ExponentPortalEntities db = new ExponentPortalEntities();
+      String OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name";
+      var viewModel = new ViewModel.DroneView {
+        Drone = db.MSTR_Drone.Find(id),
+        OwnerList = Util.getListSQL(OwnerListSQL),
+        UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
+        ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
+        //PartsGroupList = Util.GetDropDowntList();
+      };
+      return View(viewModel);
+    }
+    [HttpPost]
+    public ActionResult ReAssign(ViewModel.DroneView DroneView) {
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
+      try {
+        int DroneId = 0;
+        // TODO: Add update logic here
+        if (ModelState.IsValid) {
 
 
-                    MSTR_Drone Drone = DroneView.Drone;
-                    //Inserting the Reassigned Drone
-                    int DroneSerialNo = Util.getDBInt("SELECT Max(DroneSerialNo) + 1 FROM MSTR_DRONE");
-                    if (DroneSerialNo < 1001) DroneSerialNo = 1001;
+          MSTR_Drone Drone = DroneView.Drone;
+          //Inserting the Reassigned Drone
+          int DroneSerialNo = Util.getDBInt("SELECT Max(DroneSerialNo) + 1 FROM MSTR_DRONE");
+          if (DroneSerialNo < 1001) DroneSerialNo = 1001;
 
-                    int OldDroneId = Drone.DroneId;
-                    String SQL = "INSERT INTO MSTR_DRONE(\n" +
-         "  AccountID,\n" +
-         "  MANUFACTUREID,\n" +
-         "  UAVTYPEID,\n" +
-         "  COMMISSIONDATE,\n" +
-         "  DRONEDEFINITIONID,\n" +
-         "  ISACTIVE,\n" +
-         "  DroneSerialNo,\n" +
-         "  ReAssignFrom\n" +
-         ") VALUES(\n" +
-         "  '" + Drone.AccountID + "',\n" +
-         "  '" + Drone.ManufactureId + "',\n" +
-         "  '" + Drone.UavTypeId + "',\n" +
-         "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
-         "  11,\n" +
-         "  'True',\n" +
-         "  " + DroneSerialNo +
-         " ," + Drone.DroneId +
-         ");";
-                     DroneId = Util.InsertSQL(SQL);
+          int OldDroneId = Drone.DroneId;
+          String SQL = "INSERT INTO MSTR_DRONE(\n" +
+          "  AccountID,\n" +
+          "  MANUFACTUREID,\n" +
+          "  UAVTYPEID,\n" +
+          "  COMMISSIONDATE,\n" +
+          "  DRONEDEFINITIONID,\n" +
+          "  ISACTIVE,\n" +
+          "  DroneSerialNo,\n" +
+          "  ReAssignFrom\n" +
+          ") VALUES(\n" +
+          "  '" + Drone.AccountID + "',\n" +
+          "  '" + Drone.ManufactureId + "',\n" +
+          "  '" + Drone.UavTypeId + "',\n" +
+          "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
+          "  11,\n" +
+          "  'True',\n" +
+          "  " + DroneSerialNo +
+          " ," + Drone.DroneId +
+          ");";
+          DroneId = Util.InsertSQL(SQL);
 
+          SQL = "update MSTR_Drone set \n" +
+          "  ReAssignBy =" + Util.getLoginUserID() + ",\n" +
+          "  ReAssignDate = GETDATE(),\n" +
+          "  ReAssignNote ='" + Drone.ReAssignNote + "',\n" + 
+          "  ReAssignTo =" + DroneId + ",\n" +
+          "  IsActive = 'false'\n" +
+          "where \n" +
+          "  DroneId =" + OldDroneId;
+          int Id = Util.doSQL(SQL);
+          /* SQL = "UPDATE MSTR_DRONE SET\n" +
+            "   AccountID ='" + Drone.AccountID + "'," +
+            "  MANUFACTUREID ='" + Drone.ManufactureId + "',\n" +
+            "  UAVTYPEID ='" + Drone.UavTypeId + "',\n" +
+            "  COMMISSIONDATE ='" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "'\n" +
+            "WHERE\n" +
+            "  DroneId =" + Drone.DroneId;
+            int DroneId = Util.doSQL(SQL);*/
 
+          //Parts Inserting to New Drone
 
-                    SQL = "update MSTR_Drone set \n" +
-                        "ReAssignBy =" + Util.getLoginUserID() +
-                        ",ReAssignDate ='" + DateTime.Now.ToString("yyyy-MM-dd") +
-                        "',ReAssignNote ='" + Drone.ReAssignNote +
-                        "',ReAssignTo =" + DroneId + ",IsActive = 'false'" +
-                        " where DroneId =" + OldDroneId;
-                    int Id = Util.doSQL(SQL);
-                    /* SQL = "UPDATE MSTR_DRONE SET\n" +
-                      "   AccountID ='" + Drone.AccountID + "'," +
-                      "  MANUFACTUREID ='" + Drone.ManufactureId + "',\n" +
-                      "  UAVTYPEID ='" + Drone.UavTypeId + "',\n" +
-                      "  COMMISSIONDATE ='" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "'\n" +
-                      "WHERE\n" +
-                      "  DroneId =" + Drone.DroneId;
-                      int DroneId = Util.doSQL(SQL);*/
-
-                    //Parts Inserting to New Drone
-
-                    if (DroneView.SelectItemsForParts != null)
-                    {
-                        for (var count = 0; count < DroneView.SelectItemsForParts.Count(); count++)
-                        {
-                            string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
-                            int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
-                            SQL = "Insert into M2M_DroneParts (\n" +
-                          "  DroneId,\n" +
-                          "  PartsId,\n" +
-                          "  Quantity\n" +
-                          ") values(\n" +
-                          "  " + DroneId + ",\n" +
-                          "  " + PartsId + ",\n" +
-                          "  " + Qty + "\n" +
-                          ");";
-                            int ID = Util.doSQL(SQL);
-                        }
-
-                    }
-                }
-                    return RedirectToAction("Detail", new { ID = DroneId });
-                
+          if (DroneView.SelectItemsForParts != null) {
+            for (var count = 0; count < DroneView.SelectItemsForParts.Count(); count++) {
+              string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
+              int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
+              SQL = "Insert into M2M_DroneParts (\n" +
+            "  DroneId,\n" +
+            "  PartsId,\n" +
+            "  Quantity\n" +
+            ") values(\n" +
+            "  " + DroneId + ",\n" +
+            "  " + PartsId + ",\n" +
+            "  " + Qty + "\n" +
+            ");";
+              int ID = Util.doSQL(SQL);
             }
-            catch (Exception ex)
-            {
-                return View("InternalError", ex);
-            }
-        }
 
-        // GET: Drone/Edit/5
-        public ActionResult Edit(int id) {
+          }
+        }
+        return RedirectToAction("Detail", new { ID = DroneId });
+
+      } catch (Exception ex) {
+        return View("InternalError", ex);
+      }
+    }
+
+    // GET: Drone/Edit/5
+    public ActionResult Edit(int id) {
       if (!exLogic.User.hasAccess("DRONE.EDIT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.DroneId = id;
       ExponentPortalEntities db = new ExponentPortalEntities();
@@ -544,7 +534,7 @@ namespace eX_Portal.Controllers {
 
         }
         return RedirectToAction("Detail", new { ID = DroneView.Drone.DroneId });
-      } catch(Exception ex) {
+      } catch (Exception ex) {
         return View("InternalError", ex);
       }
     }
