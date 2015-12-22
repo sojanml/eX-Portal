@@ -15,7 +15,7 @@
             </tr>
         </thead>
       
-   @{ int i = 0,j=0,k=0,l=0;
+   @{ int i = 0,j=0,k=0,l=0,m=0;
        
        foreach (var item in Model)
        {
@@ -55,6 +55,15 @@
             <tr>
                 <td>@item["DocumentType"]</td>
                 <td>@item["UATReportNote"]</td>
+            </tr>
+
+           }
+           else if (string.Equals(@item["DocumentType"], "Reassign") && m == 0)
+           {
+               m = 2;
+            <tr>
+                <td>@item["DocumentType"]</td>
+                <td>@item["ReAssignNote"]</td>
             </tr>
 
            }
