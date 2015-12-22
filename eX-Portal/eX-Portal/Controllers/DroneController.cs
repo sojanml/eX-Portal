@@ -81,7 +81,7 @@ namespace eX_Portal.Controllers {
       Util.doSQL(SQL);
       return RedirectToAction("Detail", new { ID = DroneID });
     }//Decommission()
-
+        //uploading documents for commission,UAT,incident
     public ActionResult UploadDocument([Bind(Prefix = "ID")] int DroneID, String Type) {
       if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
       
@@ -102,8 +102,10 @@ namespace eX_Portal.Controllers {
      ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
             return View(DroneID);
         }//Decommission()
-        [HttpPost]
 
+        //Saving notes to mstr_drone database for uat,commission,incident
+
+        [HttpPost]
         public ActionResult UploadDocument([Bind(Prefix = "ID")] int DroneID, String Type, String Note)
         {
             String SQL = "";
@@ -197,11 +199,11 @@ namespace eX_Portal.Controllers {
       ViewBag.DroneID = DroneID;
       return View();
     }
-
+        //Partial view for Details of file uploaded for commission,decommission,uat,incident etc.
  public ActionResult FileDetail( int ID, String DocumentType)
         {
-           // if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
-           // ViewBag.Title = Util.getDroneName(DroneID);
+           if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
+           
 
 
             ViewBag.DroneID = ID;
