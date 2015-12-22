@@ -20,7 +20,7 @@ namespace eX_Portal.exLogic
                  "LEN(DocumentName)) as Name from DroneDocuments where DroneID = " + DroneID +
                  " Order by DocumentType ";*/
 
-            string SQL= "SELECT b.CommissionReportNote,b.UATReportNote,b.IncidentReportNote,\n" +
+            string SQL= "SELECT  b.ReAssignNote, b.CommissionReportNote,b.UATReportNote,b.IncidentReportNote,\n" +
                 "b.DecommissionNote, a.DroneID,a.DocumentType,a.UploadedDate,a.DocumentName,\n"+
                  "SUBSTRING(a.DocumentName, CHARINDEX('~', a.DocumentName) + 1," +
                  "LEN(a.DocumentName)) as Name from DroneDocuments a " +
