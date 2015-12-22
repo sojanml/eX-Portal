@@ -12,7 +12,26 @@ namespace eX_Portal.exLogic
     public class Listing
     {
 
-    public static List<Dictionary<String, Object>>getParts(int DroneID = 0) {
+        public static List<Dictionary<String, Object>> getFileNames(int DroneID = 0)
+        {
+
+           /* string SQL = "SELECT DroneID,DocumentType,UploadedDate,DocumentName,\n" +
+                 "SUBSTRING(DocumentName, CHARINDEX('~', DocumentName) + 1, \n" +
+                 "LEN(DocumentName)) as Name from DroneDocuments where DroneID = " + DroneID +
+                 " Order by DocumentType ";*/
+
+            string SQL= "SELECT b.CommissionReportNote,b.UATReportNote,b.IncidentReportNote,\n" +
+                "b.DecommissionNote, a.DroneID,a.DocumentType,a.UploadedDate,a.DocumentName,\n"+
+                 "SUBSTRING(a.DocumentName, CHARINDEX('~', a.DocumentName) + 1," +
+                 "LEN(a.DocumentName)) as Name from DroneDocuments a " +
+                 " join mstr_drone b  on a.DroneId = b.DroneId where a.DroneID ="+ DroneID +
+                  " Order by a.DocumentType";
+
+
+            return Util.getDBRows(SQL);
+        }
+
+        public static List<Dictionary<String, Object>>getParts(int DroneID = 0) {
       string SQL = "select\n" +
         "  PartsName,\n" +
         "  Model,\n" +

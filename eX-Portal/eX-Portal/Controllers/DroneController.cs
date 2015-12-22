@@ -81,13 +81,17 @@ namespace eX_Portal.Controllers {
       Util.doSQL(SQL);
       return RedirectToAction("Detail", new { ID = DroneID });
     }//Decommission()
-
+        //uploading documents for commission,UAT,incident
     public ActionResult UploadDocument([Bind(Prefix = "ID")] int DroneID, String Type) {
       if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
       
       switch (Type.ToLower()) {
         case "commission":
+                    ViewBag.DocumentType = Type;
+                    break;
         case "uat":
+                    ViewBag.DocumentType = Type;
+                    break;
         case "incident":
           ViewBag.DocumentType = Type;
           break;
@@ -95,12 +99,55 @@ namespace eX_Portal.Controllers {
           ViewBag.DocumentType = "Commission";
           break;
       }
-      ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
-      return View(DroneID);
-    }//Decommission()
+     ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
+            return View(DroneID);
+        }//Decommission()
+
+        //Saving notes to mstr_drone database for uat,commission,incident
+
+        [HttpPost]
+        public ActionResult UploadDocument([Bind(Prefix = "ID")] int DroneID, String Type, String Note)
+        {
+            String SQL = "";
+            if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
+
+            switch (Type.ToLower())
+            {
+                case "commission":
+                    SQL = "UPDATE MSTR_DRONE SET\n" +
+      "  CommissionReportNote='" + Note + "'\n" +
+      "WHERE\n" +
+      "  DroneID=" + DroneID;
+                    ViewBag.DocumentType = Type;
+                    break;
+                case "uat":
+
+                    SQL = "UPDATE MSTR_DRONE SET\n" +
+     "  UATReportNote='" + Note + "'\n" +
+     "WHERE\n" +
+     "  DroneID=" + DroneID;
+                    ViewBag.DocumentType = Type;
+                    break;
+                case "incident":
 
 
-    public String UploadFile([Bind(Prefix = "ID")] int DroneID, String DocumentType) {
+                    SQL = "UPDATE MSTR_DRONE SET\n" +
+  " IncidentReportNote='" + Note + "'\n" +
+  "WHERE\n" +
+  "  DroneID=" + DroneID;
+                    ViewBag.DocumentType = Type;
+                    break;
+                default:
+                    ViewBag.DocumentType = "Commission";
+                    break;
+            }
+            ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
+            Util.doSQL(SQL);
+            return RedirectToAction("Detail", new { ID = DroneID });
+        }//Decommission()
+
+
+        public String UploadFile([Bind(Prefix = "ID")] int DroneID, String DocumentType) {
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
       //send information in JSON Format always
       StringBuilder JsonText = new StringBuilder();
@@ -152,8 +199,22 @@ namespace eX_Portal.Controllers {
       ViewBag.DroneID = DroneID;
       return View();
     }
+        //Partial view for Details of file uploaded for commission,decommission,uat,incident etc.
+ public ActionResult FileDetail( int ID, String DocumentType)
+        {
+           if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
+           
 
-    public ActionResult DroneParts(int ID = 0) {
+
+            ViewBag.DroneID = ID;
+            ViewBag.DocumentType = DocumentType;
+
+            var FileList = Listing.getFileNames(ID);
+
+            return PartialView(FileList);
+        }
+
+        public ActionResult DroneParts(int ID = 0) {
       if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
       List<String> Parts = new List<String>();
       Parts = Listing.DroneListing(ID);
