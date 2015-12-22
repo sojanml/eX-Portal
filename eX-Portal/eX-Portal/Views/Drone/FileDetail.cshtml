@@ -8,6 +8,7 @@
         <thead>
             <tr>
                 <th>DocumentType</th>
+                <th>Notes</th>
                 <th>Name</th>
                 <th>Uploaded Date</th>
                
@@ -23,7 +24,9 @@
            {
                i = 2;
                 <tr>
+                 
                  <td>@item["DocumentType"]</td>
+                    <td>@item["DecommissionNote"]</td>
                 </tr>
 
 
@@ -33,6 +36,7 @@
                j = 2;
             <tr>
                 <td>@item["DocumentType"]</td>
+                <td>@item["IncidentReportNote"]</td>
             </tr>
 
            }
@@ -41,6 +45,7 @@
                k = 2;
             <tr>
                 <td>@item["DocumentType"]</td>
+                <td>@item["CommissionReportNote"]</td>
             </tr>
 
            }
@@ -49,11 +54,13 @@
                j = 2;
             <tr>
                 <td>@item["DocumentType"]</td>
+                <td>@item["UATReportNote"]</td>
             </tr>
 
            }
 
             <tr>
+                <td></td>
                 <td></td>
                 <td><a href=@item["DocumentName"]>@item["Name"]</a></td>
                 <td>@item["UploadedDate"]</td>
