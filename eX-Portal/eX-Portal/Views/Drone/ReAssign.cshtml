@@ -1,0 +1,143 @@
+﻿
+@model eX_Portal.ViewModel.DroneView
+
+@{
+    ViewBag.Title = "UAS Reassign";
+    Layout = "~/Views/Shared/_exPortal.cshtml";
+    DateTime CommissionDate = Model.Drone.CommissionDate == null ? DateTime.Now : (DateTime)Model.Drone.CommissionDate;
+    int DroneId = Model.Drone.DroneId;
+}
+
+<section class="general-form" id="loginForm">
+    @using (Html.BeginForm())
+    {
+
+
+
+        @Html.HiddenFor(model => model.Drone.DroneId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Drone.AccountID, "Owner")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Drone.AccountID, Model.OwnerList)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Drone.UavTypeId, "UAV Type")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)
+            @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Drone.ManufactureId, "Manufacturer")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList)
+            @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Drone.CommissionDate, "Commission Date")
+        </div>
+        <div class="editor-field">
+            <input class="form-control date-picker text-box single-line"
+                   data-val="true" data-val-date="The field CommissionDate must be a date."
+                   id="Drone_CommissionDate" name="Drone.CommissionDate" type="datetime"
+                   value="@CommissionDate.ToString("dd-MMM-yyyy")">
+            @Html.ValidationMessageFor(model => model.Drone.CommissionDate)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DroneParts.PartsName, "Parts")
+        </div>
+        <div class="editor-field">
+            <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="SelectItemsForParts" />
+            @Html.Action("DroneParts", "Drone", new { ID = ViewBag.DroneId })
+            <!-- <table class="report" id="Table_SelectItemsForParts" style="display:none;">
+                 <thead>
+                     <tr>
+                         <th>Parts Name</th>
+                         <th>Model</th>
+                         <th>Supplier</th>
+                         <th>Qty</th>
+                         <th>&nbsp;</th>
+                     </tr>
+                 </thead>
+             </table>-->
+        </div>
+
+
+
+        <div class="editor-label">
+            Enter the detail for Reassign
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Drone.ReAssignNote)
+          
+        </div>
+        <div class="editor-label">
+            Upload the documents required to Reassign this drone.
+        </div>
+
+        <ul id="FileUploadProgress"></ul>
+        <div><input type="file" multiple name="fileinput" id="fileinput" /></div>
+        <div class="form-toolbar">
+            <input type="submit" value="Save" />
+        </div>
+
+
+    }
+
+
+
+</section>
+
+@section Scripts {
+
+
+<script >
+   
+
+
+    
+    $(document).ready(function () {
+      $('#SelectItemsForParts').autocomplete({
+        source: "/AutoComplete/Parts/",
+        minLength: 2,
+        select: AutoCompleteSelect
+      });
+
+      $('#Table_SelectItemsForParts').on("click", "a.delete", function () {
+        $(this).parent().parent().remove();
+      })
+    });
+
+    function AutoCompleteSelect(event, ui) {
+      event.preventDefault();
+      var ID = $(event.target).prop("id");
+      $('#Table_' + ID).show();
+      $('#' + ID).val('');
+      var HTML = "<tr>" +
+        "<td>" + ui.item.PartsName +
+        '<input type="hidden" name="' + ID + '" value="' + ui.item.id + '">' +
+        "</td>\n" +
+        "<td>" + ui.item.Model + "</td>\n" +
+        "<td>" + ui.item.Supplier + "</td>\n" +
+        '<td><input style="width:40px;" type="text" name="' + ID + '_' + ui.item.id + '"></td>\n' +
+        '<td><a class="delete" href="#">x</a></td>\n' +
+        '</tr>';
+      $('#Table_' + ID).append(HTML);
+    }
+
+
+  </script>
+<script type="text/javascript">
+
+    var DroneUploadURL = '@Url.Action("UploadFile", new { ID = DroneId, DocumentType = "Reassign"})';
+</script>
+<script type="text/javascript" src="~/Scripts/drone.js"></script>
+
+}
+
+  
