@@ -1,326 +1,107 @@
 ﻿
 @{
-    ViewBag.Title = "FlightData";
-    Layout = "~/Views/Shared/_exPortal.cshtml";
+  ViewBag.Title = "FlightData";
+  Layout = "~/Views/Shared/_exPortal.cshtml";
 }
 
 
 
 
-@Html.Action("DroneFlightDetail","DroneFlight", new { ID = ViewBag.FlightID })
+@Html.Action("DroneFlightDetail", "DroneFlight", new { ID = ViewBag.FlightID })
 
-    <table class="qDetailView">
-        <tbody>
-            <tr>
-                <td>   <span class="caption"> Latitude</span>              <span class="value" id="Lat"></span>  </td>       
-                 <td><span class="caption"> Longitude</span>        <span class="value" id="Lon"></span></td>
-                <td><span class="caption">  Altitude</span><span class="value" id="Alt"></span></td>
-            </tr>
-            <tr>
-                <td><span class="caption">Speed</span><span class="value" id="Speed"></span></td>
-                <td><span class="caption"> Fix Quality</span><span class="value" id="FxQlty"></span></td>
-                <td><span class="caption">Satellites</span><span class="value" id="Satellite"></span></td>
-            </tr>
-            <tr>
-                <td><span class="caption"> Drone TimeStamp</span> <span class="value" id="DrTime"></span></td>
-                <td><span class="caption">Pitch</span><span class="value" id="Pitch"></span></td>
-                <td><span class="caption">Roll</span><span class="value" id="Roll"></span></td>
-            </tr>
-            <tr>
-                <td><span class="caption">   Heading</span><span class="value" id="Head"></span></td>
-                <td><span class="caption">Total FlightTime</span><span class="value" id="TotFlightTime"></span></td>
-                
-            </tr>
-        </tbody>
-    </table>
-    <div class="form-toolbar">
-        <input id="clickReplay" type="button" value="Replay"  onclick="Replay();" />
-    </div>
-    <br />
 
-    <div id="map_canvas" style="width: 100%; height: 480px;">
-    </div>
-    
-    @section scripts{
-        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-        <script type="text/javascript" src="../Scripts/jsGoogleMapTools.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+<table class="detail-info" style="width: 100%">
+  <thead>
+    <tr>
+      <th>Altitude</th>
+      <th>Speed</th>
+      <th colspan="3">Current Position</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Min: <span id="data_Min_Altitude">-</span></td>
+      <td>Min: <span id="data_Min_Speed">-</span></td>
+      <td>Date: <span id="data_ReadTime">-</span></td>
+      <td>Speed: <span id="data_Speed">-</span></td>
+      <td>Heading: <span id="data_Heading">-</span></td>
+      <td rowspan="3" valign="bottom"><div class="form-toolbar">
+        <input id="clickReplay" type="button" value="Replay" onclick="Replay();" />
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td>Max: <span id="data_Max_Altitude">-</span></td>
+      <td>Max: <span id="data_Max_Speed">-</span></td>
+      <td>Lat: <span id="data_Latitude">-</span></td>
+      <td>Alt: <span id="data_Altitude">-</span></td>
+      <td>Satalite: <span id="data_Satellites">-</span></td>
+    </tr>
+    <tr>
+      <td>Avg: <span id="data_avg_Altitude">-</span></td>
+      <td>Avg: <span id="data_Avg_Speed">-</span></td>
+      <td>Lng: <span id="data_Longitude">-</span></td>
+      <td>Distance: <span id="data_Distance">-</span></td>
+      <td>Flight Time: <span id="data_TotalFlightTime">-</span></td>
+    </tr>
+  </tbody>
+</table>
 
-        <script type="text/javascript">
-            var map;
-            var _Location = [];
-            var _truckName = [];
-            var _viGroupName = [];
-            var _truck;
-            var _vigroup;
-            var _truckIcon;
-            var _viGroupTruckArry = [];
-            var _viGroupTruckIconArry = [];
-            var _vigroupValue;
-            var initLat = 24.9899106;
-            var initLng = 55.0034188;
-            var defaultZoom = 15;
-            var gpsGrpID;
-            var timezone;
-            var clientID;
-            var programName;
+<div id="map-holder">
+  <div id="map_canvas" style="width: 100%; height: 480px;">
 
-            var livemarkers = [];
-            var datemarkers = [];
-            var secureDateMarker = [];
-            var historymarkers = [];
-            var allHistorymarkers = [];
-            var InfoMarker = null;
-            var trafficLayer = new google.maps.TrafficLayer();
-            var contentString;
-            var browser = false;
-            var enableRefreshIntervalID;
-            var pickupStatus = false;
-            var truckStatus = false;
-            var geocoder;
-            var LastDroneDataID = 0;
-            var INTERVAL = 100;
-            var poly;
-            var TimerValue = 0;
-            var LastDatas = [];
-            var i = 0;
-            var myInterval;
-            var myLatLong = [];
-            var MyLastLatLong = null;
-            var MyLastMarker = null;
-            var mytimer = null;
-            var service = new google.maps.DirectionsService();
-            var path = new google.maps.MVCArray();
-            $(document).ready(function () {
+  </div>
+  <div id="map-info">-</div>
+</div>
 
-                initialize();
-            });
-
-            function initialize() {
-                geocoder = new google.maps.Geocoder();
-                var mapOptions = {
-                    zoom: defaultZoom,
-                    center: new google.maps.LatLng(initLat, initLng),
-                    panControl: false,
-                    mapTypeControl: true,
-                    mapTypeControlOptions: {
-                        position: google.maps.ControlPosition.RIGHT_TOP,
-                    },
-                    zoomControl: true,
-                    zoomControlOptions: {
-                        style: google.maps.ZoomControlStyle.LARGE,
-                        position: google.maps.ControlPosition.LEFT_TOP,                        
-                    },
-                    scaleControl: false,
-                    streetViewControl: true,
-                    overviewMapControl: false,
-
-                    mapTypeId: google.maps.MapTypeId.HYBRID
-                };
-                map = new google.maps.Map(document.getElementById('map_canvas'),
-                    mapOptions);
-
-                poly = new google.maps.Polyline({
-                    strokeColor: '#000000',
-                    strokeOpacity: 1.0,
-                    strokeWeight: 3
-                });
-                poly.setMap(map);
-                var loctr = '<thead><tr><th>Latitude</th><th>Longitude</th>' 
-                            + '<th>Altitude</th><th>Speed</th>' 
-                            +'<th>FixQuality</th><th>Satellite</th>' 
-                            +'<th>ReadTime</th><th>Pitch</th>' 
-                            +'<th>RollData</th><th>Heading</th>' 
-                            + '<th>Total Flight Time</th></tr></thead>';
-                var firsttr = '<tr style="display:none"><td></td><td></td>'
-                           + '<td></td><td></td>'
-                           + '<td></td><td></td>'
-                           + '<td></td><td></td>'
-                           + '<td></td>'
-                           + '<td></td><td></td></tr>';
-                $('#MapData table').append(loctr);
-                $('#MapData table').append(firsttr);
-                $('#MapData table').addClass('report');
-               GetDrones();
-                //  myInterval = setInterval(function () { }, 500);
-                
-            };
-
-            function GetDrones() {
-                var _locVal = [];
-                $.ajax({
-                    type: "GET",
-                    url: '@Url.Action("GetFlightData")' + '?FlightID=' + @ViewBag.FlightID + "&LastFlightDataID=" + LastDroneDataID,
-                    contentType: "application/json;charset=utf-8",
-                    dataType: "json",
-                    async: true,
-                    success: function (msg) {
-                     //   try {
-                            _Location = [];
-                            msg = msg.hasOwnProperty('d') ? msg.d : msg;
-                            $.each(msg, function (index, obj) {
-                                $.each(obj, function (key, value) {
-                                    _locVal.push(value)
-                                });
-                                _Location.push(_locVal);
-                                _locVal = [];
-                            });
-                            LastDatas = _Location;
-                            setMarker(map, _Location);
-                            SetCurrentValues(_Location);
-                            SetMapTable(_Location);
-                       // }
-                        //catch (err) {
-                        //    alert('Live Drone Position Error' + err);
-                        //}
-                    },
-                    failure: function (msg) {
-                        alert('Live Drone Position Error' + msg);
-                    },
-                    complete: function (msg) {mytimer= setTimeout(function () { GetDrones(); }, 1000); }
-                });
-              
-            }
-
-            function setMarker(map, location) {
-                for (var i = 0; i < location.length; i++) {
-                    var loc = location[i];
-                    var body = '' +
-                        '<br/>Drone&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' + loc[1] +
-                        '<br/>DroneID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' + loc[2] +
-                        '<br/>Address&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
-                    var myLatLng = new google.maps.LatLng(loc[3], loc[4]);
-                    var marker = createMarker(map, myLatLng, loc[2], body, i);
-                }
-            }
-
-         
-            function createMarker(map, latlng, heading, body, zindex) {
-                if (poly.map == null)
-                { addLines(); }
-                var path = poly.getPath();
-               
-                path.push(latlng);
-                var image = '/red.png';
-                var marker = new google.maps.Marker({
-                    position: latlng,
-                    map: map,
-                    icon: image,
-                    title: heading,
-                    zIndex: 9999
-                });
-                if (MyLastMarker != null)
-                {
-                    MyLastMarker.setIcon('/bullet_blue.png');
-                }
-                MyLastMarker = marker;
-                map.setCenter(latlng);
-                closeMargin = '120px';
-                livemarkers.push(marker);
-                if (livemarkers[0]!=null)
-                livemarkers[0].setIcon('/bullet_green.png');
-                google.maps.event.addListener(marker, 'click', function () { });
-            }
-
-            function deleteMarkers() {
-                clearMarkers(null);
-                livemarkers = [];
-            }
-            
-            
-
-            function Replay()
-            {
-                //mytimer = null;
-                clearTimeout(mytimer);
-                MyLastLatLong = null;
-                MyLastMarker = null;
-                myLatLong = null;
-                LastDroneDataID = 0;
-                deleteMarkers();
-                removeLines();
-                GetDrones();
-               // addLines();
-            }
-            function addLines() {
-                path = new google.maps.MVCArray();
-                poly.setPath(path);
-                poly.setMap(map);
-            }
-
-            function clearMarkers(map) {
-                for (var i = 0; i < livemarkers.length; i++) {
-                    livemarkers[i].setMap(map);
-                }
-
-            }
-            function removeLines() {
-                poly.setMap(null);
-                poly.latLngs.clear();
-               // path = [];
-            //    setTimeout()
-               // flightPath.setMap(null);
-            }
-
-            function SetCurrentValues(location)
-            {
-                var _LastValue = [];
-                var date;
-                if (location.length > 0) {
-                    _LastValue = location[location.length-1];
-                    $('#Lat').html(_LastValue[3]);
-                    $('#Lon').html(_LastValue[4] );
-                    $('#Alt').html(_LastValue[13]);
-                    $('#Speed').html(_LastValue[14] );
-                    $('#FxQlty').html(_LastValue[15] );
-                    $('#Satellite').html(_LastValue[16]);
-                    date = new Date(parseInt(_LastValue[8].substr(6)));
-                    $('#DrTime').html(date.toDateString());
-                    $('#Pitch').html(_LastValue[17] );
-                    $('#Roll').html(_LastValue[18] );
-                    $('#Head').html(_LastValue[19] );
-                    $('#TotFlightTime').html(_LastValue[20]);
-                    LastDroneDataID = _LastValue[0];
-                    MyLastLatLong = new google.maps.LatLng(_LastValue[3], _LastValue[4]);
-                }
-
-                
-                   // var oCompaniesTable = $('#MapData Table')
-            }
-            function SetMapTable(location) {
-                if (location.length>0){
-                for (var i = 0; i < 15; i++) {
-                    var _LastValue = location[i];
-                    if (_LastValue != null)
-                        {
-                    var tLatData = '<td>' + _LastValue[3] + '</td>';
-                    var tLonData = '<td>' + _LastValue[4] + '</td>';
-                    var tAltData = '<td>' + _LastValue[13] + '</td>';
-                    var tSpeedData = '<td>' + _LastValue[14] + '</td>';
-                    var tFxQltyData = '<td>' + _LastValue[15] + '</td>';
-                    var tSatelliteData = '<td>' + _LastValue[16] + '</td>';
-                    var date = new Date(parseInt(_LastValue[8].substr(6)));
-                    var tDrTime = '<td>' + date.toDateString() + '</td>';
-                    var tPitchData = '<td>' + _LastValue[17] + '</td>';
-                    var tRollData = '<td>' + _LastValue[18] + '</td>';
-                    var tHeadData = '<td>' + _LastValue[19] + '</td>';
-                    var tTotFlightTimeData = '<td>' + _LastValue[20] + '</td>';
-                    var loctr = '<tr>' + tLatData + tLonData + tAltData + tSpeedData + tFxQltyData + tSatelliteData + tDrTime + tPitchData + tRollData + tHeadData + tTotFlightTimeData + '</tr>';
-                    $('#MapData table > tbody > tr:first').after(loctr);
-                        if ($("#MapData > table > tbody > tr").length > 20)
-                        $('#MapData > table > tbody > tr:last').remove();
-                    
-                    
-
-                    }
-                }
-                }
-
-            }
-        </script>
+@section header{
+  <style type="text/css">
+    #map-holder {
+      position: relative;
     }
+
+    #map-info {
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
+      height: auto;
+      width: auto;
+      padding: 5px 10px 5px 10px;
+      background-color: #ea050e;
+      font-weight: bold;
+      color: white;
+    }
+
+    table.detail-info {
+      border-bottom: 1px #ea050e solid;
+    }
+    table.detail-info TH {
+      border-bottom:1px #ea050e solid;
+      color: #ea050e;
+      text-align:left;
+      font-family: Conv_DINNextLTPro-LightCondensed,Arial;
+      font-size: 20px;
+    }
+    table.detail-info td span {
+      color: gray;
+    }
+    table.detail-info TH,
+    table.detail-info td {
+      padding: 1px 3px 1px 0px;
+      width:16.666%
+    }
+  </style>
+}
+
+@section scripts{
+<script type="text/javascript">
+  var MapDataURL = '@Url.Action("GetFlightData", new {FlightID = ViewBag.FlightID})';
+</script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="~/Scripts/map.js"></script>
+}
 <div id="MapData">
-    <table></table>
+  <table></table>
 </div>
 

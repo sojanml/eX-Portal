@@ -12,6 +12,11 @@ $(document).ready(function () {
     $('UL.qViewMenu').fadeOut();
   });
 
+  $(document).on('click', 'span.refresh', function (e) {
+    e.stopPropagation();
+    qViewDataTable.ajax.reload(null, false);
+  });
+
   var LastButton = null;
   $('table.report').on('click', 'img.button', function (e) {
     e.stopPropagation();
@@ -109,4 +114,15 @@ function getqViewMenu(data) {
     List.append(LI);
   };
   return List;
+}
+
+function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
+ 
+}
+
+function _fnDrawCallback() {
+  $('#qViewTable_paginate').append('<span class="refresh">&#xf021;</span>');
+  if($('#qViewTable_filter').find('.refresh').length <= 0) 
+    $('#qViewTable_filter').append('<span class="refresh">&#xf021;</span>');
+
 }
