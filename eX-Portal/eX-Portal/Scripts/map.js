@@ -257,22 +257,9 @@ function SetCurrentValues(location) {
   if (location.length > 0) {
     _LastValue = location[location.length - 1];
     LastDroneDataID = _LastValue['FlightMapDataID'];
-    /*
-    $('#Lat').html(_LastValue['Latitude']);
-    $('#Lon').html(_LastValue['Longitude']);
-    $('#Alt').html(_LastValue['Altitude']);
-    $('#Speed').html(_LastValue['Speed']);
-    $('#FxQlty').html(_LastValue['FixQuality']);
-    $('#Satellite').html(_LastValue['Satellites']);
-    date = new Date(parseInt(_LastValue['ReadTime'].substr(6)));
-    $('#DrTime').html(date.toDateString());
-    $('#Pitch').html(_LastValue['Pitch']);
-    $('#Roll').html(_LastValue['Roll']);
-    $('#Head').html(_LastValue['Heading']);
-    $('#TotFlightTime').html(_LastValue['TotalFlightTime']);
-    */
 
     $.each(_LastValue, function (key, value) {
+      if (value == null) value = '';
       if (key == "ReadTime") {
         var theDate = new Date(parseInt(value.substr(6)));
         value = theDate.toDateString();
