@@ -263,5 +263,11 @@ namespace eX_Portal.exLogic {
       if (Session["UserID"] != null) int.TryParse(Session["UserID"].ToString(), out UserID);
       return UserID;
     }
+
+    public static String fmtDt(String theDt) {
+      DateTime dt;
+      DateTime.TryParse(theDt, out dt);
+      return dt.ToString("dd-MMM-yyyy hh:mm tt");
+    }//fmtDt()
   }//class Util
 }

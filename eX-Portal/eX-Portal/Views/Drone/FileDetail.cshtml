@@ -1,12 +1,14 @@
-﻿@model List<Dictionary<String, Object>>
+﻿@using eX_Portal.exLogic;
+@model List<Dictionary<String, Object>>
+
 @if (Model.Any()) {
   <div class="col-3">
     <h2>@ViewBag.DocumentType</h2>
-    <ul>
+    <ul class="documents">
       @foreach (var item in Model) {
         <li>
-          <a href=@item["DocumentName"]>@item["Name"]</a><br />
-          @item["UploadedDate"]
+          <a href="~/Upload/Drone/@item["DocumentName"]">@item["Name"]</a><br />
+          <span class="small">@Util.fmtDt(item["UploadedDate"].ToString())</span>
         </li>
       }
     </ul>

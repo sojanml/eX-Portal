@@ -618,3 +618,46 @@ div#qViewTable_processing {
     margin: 0;
     background: rgba(120,120,120,0.5);
 }
+
+div.col-3-in-row {
+  width:100%;
+  height: auto;
+}
+div.col-3-in-row > div {
+  width:30%;
+  float:left;
+}
+
+div.col-3-in-row > div:nth-child(4n+2),
+div.col-3-in-row > div:nth-child(4n+3) {
+  margin-left:5%;
+}
+
+div.col-3-in-row a {
+  font-family: Conv_DINNextLTPro-LightCondensed,Arial;
+  color: #ea050e;
+  font-weight:bold;
+  text-decoration: none;
+  font-size:15pt;
+}
+div.col-3-in-row a:hover {
+  color: black;
+}
+div.col-3-in-row span.small {
+  font-size:10pt;
+  color:gray;
+}
+
+ul.documents {
+  margin:0px;
+  padding:0px;
+  list-style:none;
+  width:100%;
+}
+
+ul.documents li {
+  padding:0px 0px 10px 0px;
+  margin:0px 0px 10px 0px;
+  border-bottom:1px solid #a8a8a8;
+}
+

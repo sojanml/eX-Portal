@@ -17,14 +17,17 @@
   <h2>Checklist Set-Up</h2>
   @Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })
 }
-<div class="row">
+<div class="col-3-in-row">
   @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "Decommission" })
+  @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "Reassign" })
+</div>
+<div style="clear:both"></div>
+<div class="col-3-in-row">
   @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "Incident" })
   @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "UAT" })
-  @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "Reassign" })
   @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "Commission" })
 </div>
-
+  <div style="clear:both"></div>
   @section scripts {
     <script type="text/javascript">
 
