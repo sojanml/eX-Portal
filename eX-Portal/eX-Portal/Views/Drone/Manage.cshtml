@@ -72,7 +72,7 @@
 
         </div>
         <div>
-            @if (!exLogic.User.hasAccess("DRONE")) return "Access Denied";
+            
             <a href="@Url.Action("Create", "DroneFlight", new  { ID = DroneID})">Flight Creation</a>
         </div>
     </div>
