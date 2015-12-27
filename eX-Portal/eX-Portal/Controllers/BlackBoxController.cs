@@ -22,11 +22,12 @@ namespace eX_Portal.Controllers {
         "  BBFlightID,\n" +
         "  Min([BlackBoxData].ReadTime) as StartTime,\n" +
         "  Max([BlackBoxData].ReadTime) as EndTime,\n" +
+        "  Max(Altitude) as Altitude,\n" +
         "  Max(Speed) as MaxSpeed,\n" +
-        "CASE isnumeric(Max(TotalFlightTime))\n" +
-        "   WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), Max(TotalFlightTime)) / 60.0, 2) as numeric(36, 2))\n" +
-        "   ELSE 0.00\n" +
-        " END as TotalFlightTime, \n " +       
+        "  CASE isnumeric(Max(TotalFlightTime))\n" +
+        "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), Max(TotalFlightTime)) / 60.0, 2) as numeric(36, 2))\n" +
+        "    ELSE 0.00\n" +
+        "  END as TotalFlightTime, \n " +       
         "  Max(Altitude) as MaxAltitude,\n" +
         "  Count(*) Over() as _TotalRecords,\n" +
         "  Cast(MSTR_Drone.DroneId as varchar) + ',' + Cast(BBFlightID as varchar) as _Pkey\n" +
@@ -35,7 +36,12 @@ namespace eX_Portal.Controllers {
         "LEFT JOIN MSTR_Drone ON\n" +
         "  MSTR_Drone.DroneId = [BlackBoxData].DroneId\n" +
         "WHERE\n" +
-        "  Speed > 0.00\n" +
+        "  Speed > 0.00";
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+        SQL += " AND\n" +
+          "  MSTR_Drone.AccountID=" + Util.getAccountID();
+      }
+      SQL = SQL + "\n" +
         "GROUP BY\n" +
         "  MSTR_Drone.DroneID,\n" +
         "  MSTR_Drone.DroneName,\n" +
@@ -57,35 +63,41 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("BLACKBOX.LIVE")) return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "FDR Live Data";
-
-      string SQL = "SELECT \n" +        
-        " a.DroneDataId," +
-        "  a.DroneId,\n" +
-        "  b.DroneName as RegNo,\n" +
-        "  a.ReadTime,\n" +
-        "CASE ISNUMERIC(a.Latitude)\n" +
-        "		WHEN  1 THEN CONVERT(numeric(12, 3),a.Latitude)\n" +
-        "		ELSE 0.00\n" +
-        "END as Latitude ,\n" +
-        "CASE ISNUMERIC(a.Longitude)\n" +
-        "    WHEN  1 THEN  CONVERT(numeric(12, 3),a.Longitude)\n" +
+      string SQL =
+        "SELECT\n" +
+        "  [DroneDataId]," +
+        "  MSTR_Drone.DroneName,\n" +
+        "  [ReadTime],\n" +
+        "  CASE ISNUMERIC([Latitude])\n" +
+        "		 WHEN  1 THEN CONVERT(numeric(12, 3),[Latitude])\n" +
+        "		 ELSE 0.00\n" +
+        "   END as [Latitude] ,\n" +
+        "  CASE ISNUMERIC([Longitude])\n" +
+        "    WHEN  1 THEN  CONVERT(numeric(12, 3),[Longitude])\n" +
         "    ELSE 0.00\n" +
-        "END as Longitude\n" +
-        ",a.Altitude\n" +
-        ",a.Speed \n" +
-        " ,a.FixQuality \n" +
-        " ,a.Satellites \n" +
-        ",a.Pitch \n" +
-        ",a.Roll\n" +
-        " ,a.Heading \n" +
-        ", CASE isnumeric(a.TotalFlightTime)\n" +
-        "   WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), a.TotalFlightTime) / 60.0, 2) as numeric(36, 2))\n" +
-        "   ELSE 0.00\n"+
-        " END as TotalFlightTime \n " +      
-        ",Count(*) Over() as _TotalRecords,a.DroneDataId as _PKey \n" +
-        " FROM  DroneData  a \n" +
-        " left join \n" +
-        " MSTR_Drone b on a.DroneId=b.DroneId  ";
+        "  END as [Longitude],\n" +
+        "  [Altitude],\n" +
+        "  [Speed],\n" +
+        "  [FixQuality],\n" +
+        "  [Satellites],\n" +
+        "  [Pitch],\n" +
+        "  [Roll],\n" +
+        "  [Heading],\n" +
+        "  CASE isnumeric(TotalFlightTime)\n" +
+        "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), TotalFlightTime) / 60.0, 2) as numeric(36, 2))\n" +
+        "    ELSE 0.00\n" +
+        "  END as TotalFlightTime, \n " +
+        "  Count(*) Over() as _TotalRecords,[DroneDataId] as _PKey\n" +
+        "FROM\n" +
+        "  [DroneData]\n" +
+        "LEFT JOIN MSTR_Drone ON\n" +
+        "  MSTR_Drone.DroneID = [DroneData].DroneID";
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+        SQL += " AND\n" +
+          "  MSTR_Drone.AccountID=" + Util.getAccountID() + "\n" +
+          "WHERE\n" +
+          "  MSTR_Drone.DroneID IS NOT NULL";
+      }
 
       qView nView = new qView(SQL);
       //nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));

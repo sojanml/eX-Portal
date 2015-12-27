@@ -14,7 +14,7 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("FLIGHT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Drone Flights";
       ViewBag.DroneID = DroneID;
-
+      String SQLFilter = "";
       String SQL =
       "SELECT\n" +
       "  DroneFlight.ID,\n" +
@@ -37,11 +37,20 @@ namespace eX_Portal.Controllers {
       "  tblCreated.UserID = DroneFlight.CreatedBy";
 
       if (DroneID > 0) {
-        SQL = SQL + "\n" +
-        "WHERE\n" +
+        if (SQLFilter != "") SQLFilter += " AND";
+        SQLFilter += "\n" +
         "  DroneFlight.DroneID=" + DroneID;
-
         ViewBag.Title += " [" + Util.getDroneName(DroneID) + "]";
+      }
+
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+        if (SQLFilter != "") SQLFilter += " AND";
+        SQLFilter += " \n" +
+          "  MSTR_Drone.AccountID=" + Util.getAccountID();
+      }
+
+      if (SQLFilter != "" ) {
+        SQL += "\n WHERE\n" + SQLFilter;
       }
 
       qView nView = new qView(SQL);

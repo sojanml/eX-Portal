@@ -23,6 +23,12 @@ namespace eX_Portal.Controllers {
       return View(MenuList);
     }
 
+    /*[OutputCache(Duration = 3600, VaryByCustom = "User")]*/
+    public ActionResult CustomCss() {
+      Response.ContentType = "text/css";
+      return PartialView();
+    }//CustomCss()
+
 
   }
 }

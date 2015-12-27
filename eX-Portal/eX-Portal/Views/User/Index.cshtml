@@ -1,5 +1,7 @@
 ﻿@model eX_Portal.ViewModel.UserLogin
-
+@{
+  Layout = "~/Views/Shared/_eXPortalBeforeLogin.cshtml";
+}
 
 <section class="general-form" id="loginForm">
   @using (Html.BeginForm("Index", "User", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {

@@ -264,6 +264,13 @@ namespace eX_Portal.exLogic {
       return UserID;
     }
 
+    public static int getAccountID() {
+      HttpSessionState Session = HttpContext.Current.Session;
+      int AccountID = 0;
+      if (Session["AccountID"] != null) int.TryParse(Session["AccountID"].ToString(), out AccountID);
+      return AccountID;
+    }
+
     public static String fmtDt(String theDt) {
       DateTime dt;
       DateTime.TryParse(theDt, out dt);

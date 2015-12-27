@@ -19,7 +19,7 @@ namespace eX_Portal {
 
     public override string GetVaryByCustomString(HttpContext context, string arg) {
       if (arg.Equals("User", StringComparison.InvariantCultureIgnoreCase)) {
-        return context.Session["UserID"] == null ? "" : context.Session["UserID"].ToString();
+        return context.Session["UserName"] == null ? "" : context.Session["UserName"].ToString();
       }
       return base.GetVaryByCustomString(context, arg);
     }

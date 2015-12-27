@@ -1,0 +1,56 @@
+﻿@using System.Drawing;
+@{ 
+  String BrandColor = Session["BrandColor"] == null ? "#ea050e" : Session["BrandColor"].ToString();
+  Color _color = ColorTranslator.FromHtml(BrandColor);
+}
+span.refresh:hover,
+div.row div.col-3 a ,
+h1,
+nav.user-management ul li A:hover,
+nav.breadcrumbs UL LI A:hover,
+table.report thead tr th,
+table.report tfoot tr th,
+table.cheklist thead tr th,
+table.cheklist tfoot tr th,
+ul.general-list li a,
+ul.checkpoints li a:hover,
+ul.checkpoints li.active a,
+span.info,
+span.slno,
+div.col-3-in-row a  {
+  color: @BrandColor;
+}
+
+
+section.sep,
+header nav ul li:hover,
+ul.general-list li:hover,
+td.quick-menu UL.qViewMenu li:hover,
+td.menu UL.qViewMenu li:hover,
+div.error,
+div.decommission-info  {
+ background-color: @BrandColor;
+}
+
+header {
+ border-top: 10px @BrandColor solid;
+}
+
+header nav ul li UL,
+td.quick-menu  UL.qViewMenu,
+td.menu UL.qViewMenu  {
+  border:1px @BrandColor solid;
+}
+
+nav.user-management ul li {
+  border-left: 1px @BrandColor solid;
+}
+
+
+
+table.report tr.even td {
+  background-color: rgba(@_color.R, @_color.G, @_color.B, 0.15);
+}
+table.report tbody tr:hover td {
+  background-color: rgba(@_color.R, @_color.G, @_color.B, 0.3);
+}  
