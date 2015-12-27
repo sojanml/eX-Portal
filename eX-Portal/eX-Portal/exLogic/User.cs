@@ -34,6 +34,20 @@ namespace eX_Portal.exLogic {
       return (PermissionCount == "1");
     }
 
+    public static bool hasDrone(int DroneID) {
+      if (exLogic.User.hasAccess("DRONE.MANAGE")) return true;
+
+      String SQL = "SELECT Count(*) FROM\n" +
+        "MSTR_Drone\n" +
+        "WHERE\n" +
+        "  DroneID=" + DroneID + " AND\n" +
+        "  AccountID=" + Util.getAccountID();
+      int Count = Util.getDBInt(SQL);
+      if (Count > 0 )  return true;
+      return false;
+
+    }
+
     public static int UserValidation(String UserName, String Password) {
       try {
 

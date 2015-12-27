@@ -77,6 +77,7 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public ActionResult Decommission([Bind(Prefix = "ID")] int DroneID, String DecommissionNote) {
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("NoAccess", "Home");
       String SQL = "UPDATE MSTR_DRONE SET\n" +
         "  DecommissionNote='" + DecommissionNote + "',\n" +
         "  DecommissionDate = GETDATE(), \n" +
@@ -196,8 +197,11 @@ namespace eX_Portal.Controllers {
     // GET: Drone/Details/5
     public ActionResult Detail([Bind(Prefix = "ID")] int DroneID) {
       if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
+      if(!exLogic.User.hasDrone(DroneID)) return RedirectToAction("NoAccess", "Home");
+
       ViewBag.Title = Util.getDroneName(DroneID);
       ViewBag.DroneID = DroneID;
+
       return View();
     }
 
