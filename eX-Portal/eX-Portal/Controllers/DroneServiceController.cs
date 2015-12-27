@@ -53,18 +53,18 @@ namespace eX_Portal.Controllers {
 
     // GET: DroneService/Details/5
     public ActionResult Details(int id) {
+            int DroneId = Util.GetDroneIdFromService(id);
       if (!exLogic.User.hasAccess("SERVICE.VIEW")) return RedirectToAction("NoAccess", "Home");
-           
-            String SQL = "select DroneId from MSTR_DroneService where  ServiceId=" + id;
-          int  DroneId = Util.toInt(Util.getDBVal(SQL));
+            if (!exLogic.User.hasDrone(DroneId)) return RedirectToAction("NoAccess", "Home");
+        
             ViewBag.FlightID = DroneId;
            //  customer has the access only access there on drones service
-            if (!exLogic.User.hasDrone(DroneId)) return RedirectToAction("NoAccess", "Home");
+         
             ViewBag.ServiceId = id;
       ViewBag.Title = "View Checklist";
       ViewBag.Title = "Drone Service Details";
 
-      SQL = "select b.PartsName,a.ServicePartsType as Info,b.Model as ModelType,a.QtyCount as Qty, Count(*) Over() as _TotalRecords from M2M_DroneServiceParts" +
+     string SQL = "select b.PartsName,a.ServicePartsType as Info,b.Model as ModelType,a.QtyCount as Qty, Count(*) Over() as _TotalRecords from M2M_DroneServiceParts" +
           " a left join MSTR_Parts b on a.PartsId=b.PartsId where a.ServiceId=" + id +
           " group by a.ServicePartsType,b.PartsName,b.Model,a.QtyCount";
 
