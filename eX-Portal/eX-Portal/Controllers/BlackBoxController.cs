@@ -24,7 +24,11 @@ namespace eX_Portal.Controllers {
         "  Max([BlackBoxData].ReadTime) as EndTime,\n" +
         "  Max(Altitude) as Altitude,\n" +
         "  Max(Speed) as MaxSpeed,\n" +
-        "  Max(TotalFlightTime) as FlightTime,\n" +
+        "  CASE isnumeric(Max(TotalFlightTime))\n" +
+        "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), Max(TotalFlightTime)) / 60.0, 2) as numeric(36, 2))\n" +
+        "    ELSE 0.00\n" +
+        "  END as TotalFlightTime, \n " +       
+        "  Max(Altitude) as MaxAltitude,\n" +
         "  Count(*) Over() as _TotalRecords,\n" +
         "  Cast(MSTR_Drone.DroneId as varchar) + ',' + Cast(BBFlightID as varchar) as _Pkey\n" +
         "FROM\n" +
@@ -38,7 +42,7 @@ namespace eX_Portal.Controllers {
           "  MSTR_Drone.AccountID=" + Util.getAccountID();
       }
       SQL = SQL + "\n" +
-      "GROUP BY\n" +
+        "GROUP BY\n" +
         "  MSTR_Drone.DroneID,\n" +
         "  MSTR_Drone.DroneName,\n" +
         "  BBFlightID\n";
@@ -79,7 +83,10 @@ namespace eX_Portal.Controllers {
         "  [Pitch],\n" +
         "  [Roll],\n" +
         "  [Heading],\n" +
-        "  [TotalFlightTime],\n" +
+        "  CASE isnumeric(TotalFlightTime)\n" +
+        "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), TotalFlightTime) / 60.0, 2) as numeric(36, 2))\n" +
+        "    ELSE 0.00\n" +
+        "  END as TotalFlightTime, \n " +
         "  Count(*) Over() as _TotalRecords,[DroneDataId] as _PKey\n" +
         "FROM\n" +
         "  [DroneData]\n" +
