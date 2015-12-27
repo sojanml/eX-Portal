@@ -143,7 +143,8 @@ namespace eX_Portal.Controllers {
 
     public ActionResult Detail(int ID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.VIEW")) return RedirectToAction("NoAccess", "Home");
-      ViewBag.Title = "Drone Flight Details";
+            if (!exLogic.User.hasDrone(Util.GetDroneIdFromFlight(ID))) return RedirectToAction("NoAccess", "Home");
+            ViewBag.Title = "Drone Flight Details";
       ViewBag.FlightID = ID;
 
       String SQL =
