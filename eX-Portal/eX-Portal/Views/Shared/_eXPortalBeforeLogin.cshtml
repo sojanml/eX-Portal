@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@ViewBag.Title - Exponent</title>
+  @Styles.Render("~/Content/css")
+  @Styles.Render("~/bundles/dataTableCss")
+  @Scripts.Render("~/bundles/modernizr")
+  @RenderSection("header", required: false)
+</head>
+
+<body>
+
+  <header class="clearfix">
+    <section class="layout">
+      &nbsp;
+    </section>
+  </header>
+  <section class="sep"></section>
+
+  <article>
+    <section class="layout content">
+      <div class="header-bar">
+        <div class="form-toolbar" style="float:right;">
+          @RenderSection("toolbar", required: false)
+        </div>
+        <h1>@ViewBag.Title</h1>
+        <div style="clear:both"></div>
+      </div>
+      <div style="min-height:400px;">
+        @RenderBody()
+      </div>
+    </section>
+  </article>
+  <section class="sep"></section>
+  <footer>
+    <section class="layout">
+      <P>&copy; @DateTime.Now.Year -  Exponent TS All rights reserved.</P>
+    </section>
+  </footer>
+
+
+  @Scripts.Render("~/bundles/jquery")
+  @RenderSection("scripts", required: false)
+
+</body>
+
+</html>
+
+

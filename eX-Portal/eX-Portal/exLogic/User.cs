@@ -113,6 +113,34 @@ namespace eX_Portal.exLogic {
       return result;
     }
 
+    public static UserInfo getInfo(String UserName) {
+      UserInfo thisUser = new UserInfo();
+      String SQL = "select\n" +
+      "  MSTR_User.UserID," +
+      "  FirstName + ISNull(' ' + MiddleName, '') + ISNull(' ' +LastName, '') as FullName,\n" +
+      "  MSTR_Account.AccountID,\n" +
+      "  MSTR_Account.BrandColor,\n" +
+      "  MSTR_Account.BrandLogo\n" +
+      "from\n" +
+      "  MSTR_User\n" +
+      "Inner Join MSTR_Account On\n" +
+      "  MSTR_Account.AccountId = MSTR_User.AccountId\n" +
+      "where\n" +
+      "  MSTR_User.UserName = '" + UserName + "'\n";
+      var Result = Util.getDBRow(SQL);
+      thisUser.UserID = int.Parse(Result["UserID"].ToString());
+      thisUser.AccountID = int.Parse(Result["AccountID"].ToString());
+      thisUser.FullName = Result["FullName"].ToString();
+      thisUser.BrandColor = Result["BrandColor"].ToString();
+      thisUser.BrandLogo = Result["BrandLogo"].ToString();
+      thisUser.UserName = UserName;
+      if (thisUser.BrandColor == "") thisUser.BrandColor = "#ea050e";
+      if (thisUser.BrandLogo == "") thisUser.BrandLogo = "exponent-logo.png";
+      return thisUser;
+    }
+
+
+
 
     public static IList<MenuModel> BuildMenu() {
 
@@ -149,4 +177,13 @@ namespace eX_Portal.exLogic {
       return mmList;
     }
   }//class
+
+  public class UserInfo {
+    public int UserID { get; set; }
+    public String FullName { get; set; }
+    public String BrandLogo { get; set; }
+    public String BrandColor { get; set; }
+    public String UserName { get; set; }
+    public int AccountID { get; set; }
+  }
 }//namespace

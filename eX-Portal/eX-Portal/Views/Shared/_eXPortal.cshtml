@@ -9,6 +9,8 @@
   @Styles.Render("~/bundles/dataTableCss")
   @Scripts.Render("~/bundles/modernizr")
   @RenderSection("header", required: false)
+  <link href="@Url.Action("CustomCss", "Design")" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -16,7 +18,7 @@
   <header class="clearfix">
     <section class="layout">
       <div class="logo">
-        <img alt="" height="62" src="~/images/logo.png" width="300">
+        <img alt="" src="~/Upload/Brand-Logo/@Session["BrandLogo"]" width="300">
       </div>
 
       <nav>

@@ -203,7 +203,7 @@ header nav ul li:hover UL {
 header nav ul li UL {
   display:none;
  background-color: white;
- border:1px red solid;
+ border:1px #ea050e solid;
  position:absolute;
  top:60px;
  left: 0px;

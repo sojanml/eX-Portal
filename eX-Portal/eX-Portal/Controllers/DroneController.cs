@@ -29,7 +29,7 @@ namespace eX_Portal.Controllers {
           "  Count(*) Over() as _TotalRecords,\n" +
           "  D.[DroneId] as _PKey\n" +
           "FROM\n" +
-          "  [ExponentPortal].[dbo].[MSTR_Drone] D\n" +
+          "  [MSTR_Drone] D\n" +
           "Left join MSTR_Account  O on\n" +
           "  D.AccountID = O.AccountID " +
           "Left join LUP_Drone M on\n" +
@@ -37,7 +37,13 @@ namespace eX_Portal.Controllers {
           "  M.Type='Manufacturer' " +
           "Left join LUP_Drone U on\n" +
           "  UAVTypeID = U.TypeID and\n" +
-          "  U.Type= 'UAVType' ";
+          "  U.Type= 'UAVType'\n";
+
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+        SQL +=
+          "WHERE\n" +
+          "  D.AccountID=" + Util.getAccountID();
+      }
       qView nView = new qView(SQL);
       nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("DRONE.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_Pkey" }));
