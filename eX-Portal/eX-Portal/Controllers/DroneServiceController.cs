@@ -54,11 +54,13 @@ namespace eX_Portal.Controllers {
     // GET: DroneService/Details/5
     public ActionResult Details(int id) {
       if (!exLogic.User.hasAccess("SERVICE.VIEW")) return RedirectToAction("NoAccess", "Home");
-
-      String SQL = "select DroneId from MSTR_DroneService where  ServiceId=" + id;
-
-      ViewBag.FlightID = Util.getDBVal(SQL);
-      ViewBag.ServiceId = id;
+           
+            String SQL = "select DroneId from MSTR_DroneService where  ServiceId=" + id;
+          int  DroneId = Util.toInt(Util.getDBVal(SQL));
+            ViewBag.FlightID = DroneId;
+           //  customer has the access only access there on drones service
+            if (!exLogic.User.hasDrone(DroneId)) return RedirectToAction("NoAccess", "Home");
+            ViewBag.ServiceId = id;
       ViewBag.Title = "View Checklist";
       ViewBag.Title = "Drone Service Details";
 
@@ -144,7 +146,8 @@ namespace eX_Portal.Controllers {
     }
     public String DroneDetail(int ID = 0) {
       if (!exLogic.User.hasAccess("SERVICE.VIEW")) return "Access Denied";
-      String SQL =
+           
+            String SQL =
       "SELECT \n" +
       "  D.[DroneId] , \n" +
       "  D.[DroneName], \n" +
