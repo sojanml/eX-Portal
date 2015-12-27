@@ -23,7 +23,11 @@ namespace eX_Portal.Controllers {
         "  Min([BlackBoxData].ReadTime) as StartTime,\n" +
         "  Max([BlackBoxData].ReadTime) as EndTime,\n" +
         "  Max(Speed) as MaxSpeed,\n" +
-        "  Max(TotalFlightTime) as FlightTime,\n" +
+        "CASE isnumeric(Max(TotalFlightTime))\n" +
+        "   WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), Max(TotalFlightTime)) / 60.0, 2) as numeric(36, 2))\n" +
+        "   ELSE 0.00\n" +
+        " END as TotalFlightTime, \n " +       
+        "  Max(Altitude) as MaxAltitude,\n" +
         "  Count(*) Over() as _TotalRecords,\n" +
         "  Cast(MSTR_Drone.DroneId as varchar) + ',' + Cast(BBFlightID as varchar) as _Pkey\n" +
         "FROM\n" +
@@ -54,27 +58,34 @@ namespace eX_Portal.Controllers {
 
       ViewBag.Title = "FDR Live Data";
 
-      string SQL = "SELECT [DroneDataId]," +
-        " [DroneId],\n" +
-        "[ReadTime],\n" +
-        "CASE ISNUMERIC([Latitude])\n" +
-        "		WHEN  1 THEN CONVERT(numeric(12, 3),[Latitude])\n" +
+      string SQL = "SELECT \n" +        
+        " a.DroneDataId," +
+        "  a.DroneId,\n" +
+        "  b.DroneName as RegNo,\n" +
+        "  a.ReadTime,\n" +
+        "CASE ISNUMERIC(a.Latitude)\n" +
+        "		WHEN  1 THEN CONVERT(numeric(12, 3),a.Latitude)\n" +
         "		ELSE 0.00\n" +
-        "END as [Latitude] ,\n" +
-        "CASE ISNUMERIC([Longitude])\n" +
-        "    WHEN  1 THEN  CONVERT(numeric(12, 3),[Longitude])\n" +
+        "END as Latitude ,\n" +
+        "CASE ISNUMERIC(a.Longitude)\n" +
+        "    WHEN  1 THEN  CONVERT(numeric(12, 3),a.Longitude)\n" +
         "    ELSE 0.00\n" +
-        "END as [Longitude]\n" +
-        ",[Altitude]" +
-        ",[Speed]" +
-        " ,[FixQuality]" +
-        " ,[Satellites]" +
-        ",[Pitch]" +
-        ",[Roll]" +
-        " ,[Heading]" +
-        ",[TotalFlightTime]" +
-        ",Count(*) Over() as _TotalRecords,[DroneDataId] as _PKey" +
-        " FROM  [DroneData]   ";
+        "END as Longitude\n" +
+        ",a.Altitude\n" +
+        ",a.Speed \n" +
+        " ,a.FixQuality \n" +
+        " ,a.Satellites \n" +
+        ",a.Pitch \n" +
+        ",a.Roll\n" +
+        " ,a.Heading \n" +
+        ", CASE isnumeric(a.TotalFlightTime)\n" +
+        "   WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), a.TotalFlightTime) / 60.0, 2) as numeric(36, 2))\n" +
+        "   ELSE 0.00\n"+
+        " END as TotalFlightTime \n " +      
+        ",Count(*) Over() as _TotalRecords,a.DroneDataId as _PKey \n" +
+        " FROM  DroneData  a \n" +
+        " left join \n" +
+        " MSTR_Drone b on a.DroneId=b.DroneId  ";
 
       qView nView = new qView(SQL);
       //nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
