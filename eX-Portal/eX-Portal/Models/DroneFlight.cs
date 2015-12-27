@@ -21,7 +21,7 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<int> DroneID { get; set; }
-        public string BBFlightID { get; set; }
+        public Nullable<int> BBFlightID { get; set; }
         public Nullable<decimal> Latitude { get; set; }
         public Nullable<decimal> Longitude { get; set; }
     }

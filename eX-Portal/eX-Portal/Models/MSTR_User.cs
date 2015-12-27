@@ -26,7 +26,6 @@ namespace eX_Portal.Models
         public Nullable<int> LastModifiedBy { get; set; }
         public Nullable<int> ApprovedBy { get; set; }
         public Nullable<int> UserProfileId { get; set; }
-        public Nullable<int> UserAccountId { get; set; }
         public string Remarks { get; set; }
         public string MobileNo { get; set; }
         public string OfficeNo { get; set; }
