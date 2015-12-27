@@ -303,7 +303,7 @@ namespace eX_Portal.exLogic
             {
                 String SQL =" select Top 1 TotalFlightTime from FlightMapData \n" +
                     "where DroneId ="+ DronId +   " order by ReadTime desc";
-                string Id = cotx.Database.SqlQuery<string>(SQL).FirstOrDefault<string>();
+             string Id = cotx.Database.SqlQuery<int>(SQL).FirstOrDefault<int>().ToString();
                 result =Util.toInt( Id);
             }
 
