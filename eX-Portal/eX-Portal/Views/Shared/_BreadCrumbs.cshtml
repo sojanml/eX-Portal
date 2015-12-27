@@ -7,10 +7,16 @@
   <li><a href="@Url.Action("Index", "Home")">Dashboard</a></li>
   @switch (ControllerName) {
     case "DroneCheckList":
-      var DroneID = Request["DroneID"].ToString();
+
+      var DroneID = Request["DroneID"] != null ? Request["DroneID"].ToString() : "";
+      var FlightID = Request["FlightID"] != null ? Request["FlightID"].ToString() : "";
       if (DroneID != "") {
         <li><a href="@Url.Action("Index", "Drone")">Drone</a></li>
         <li><a href="@Url.Action("Detail", "Drone", new { ID = DroneID })">Details</a></li>
+      }
+      if (FlightID != "") {
+        <li><a href="@Url.Action("Index", "DroneFlight")">Drone Flight</a></li>
+        <li><a href="@Url.Action("Detail", "DroneFlight", new { ID = FlightID })">Details</a></li>
       }
       break;
     default:
