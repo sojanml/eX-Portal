@@ -22,9 +22,9 @@ namespace eX_Portal.Models
     {
         [Display(Name = "Email Address")]
         public string EmailId { get; set; }
-        [Display(Name = "Mobile Number")]
+        [Display(Name = "Contact Mobile Number")]
         public string MobileNo { get; set; }
-        [Display(Name = "Office Number")]
+        [Display(Name = "Contact Office Number")]
         public string OfficeNo { get; set; }
         [Display(Name = "Active?")]
         public Nullable<bool> IsActive { get; set; }
@@ -35,7 +35,9 @@ namespace eX_Portal.Models
         [Display(Name = "Country")]
         public Nullable<int> CountryCode { get; set; }
         [Display(Name = "Internal Reference Code")]
+       
         [Required(ErrorMessage = "Please Enter the Company Code.")]
+        [StringLength(4, MinimumLength = 4,ErrorMessage = "The field Internal Reference Code must be a string with a  length of 4"  )]
         public string Code { get; set; }
         [Required(ErrorMessage = "Please Enter The Company Name.")]
         public string Name { get; set; }
