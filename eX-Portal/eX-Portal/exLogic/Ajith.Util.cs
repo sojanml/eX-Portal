@@ -294,7 +294,19 @@ namespace eX_Portal.exLogic
             }
         }
 
+       
+        public static int GetDroneIdFromFlight(int FlightId)
+        {
+            int result = 0;
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL = "select DroneId from DroneFlight where  ID=" + FlightId;
+             result = Util.toInt(Util.getDBVal(SQL));
+               
+            }
 
+            return result;
+        }
 
         public static int GetTotalFlightTime(int DronId)
         {

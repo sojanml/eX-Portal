@@ -18,7 +18,7 @@
         </div>
         <div class="editor-field">
 
-            @Html.DropDownListFor(model => model.DroneService.DroneId, Model.DroneList, "Please Select Item")
+            @Html.DropDownListFor(model => model.DroneService.DroneId, Model.DroneList)
 
         </div>
 
@@ -27,7 +27,7 @@
         </div>
         <div class="editor-field">
 
-            @Html.DropDownListFor(model => model.DroneService.TypeOfService, Model.ServiceType,"Please Selected Item")
+            @Html.DropDownListFor(model => model.DroneService.TypeOfService, Model.ServiceType)
            
         </div>
 

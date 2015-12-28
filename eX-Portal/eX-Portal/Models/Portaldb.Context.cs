@@ -42,7 +42,6 @@ namespace eX_Portal.Models
         public virtual DbSet<MSTR_Parts> MSTR_Parts { get; set; }
         public virtual DbSet<MSTR_Product> MSTR_Product { get; set; }
         public virtual DbSet<MSTR_Profile> MSTR_Profile { get; set; }
-        public virtual DbSet<MSTR_User> MSTR_User { get; set; }
         public virtual DbSet<ProductDefinition> ProductDefinitions { get; set; }
         public virtual DbSet<ProductTransaction> ProductTransactions { get; set; }
         public virtual DbSet<ProductHistory> ProductHistories { get; set; }
@@ -50,13 +49,14 @@ namespace eX_Portal.Models
         public virtual DbSet<MSTR_DroneCheckList> MSTR_DroneCheckList { get; set; }
         public virtual DbSet<MSTR_DroneCheckListItems> MSTR_DroneCheckListItems { get; set; }
         public virtual DbSet<DroneCheckListItem> DroneCheckListItems { get; set; }
-        public virtual DbSet<DroneFlight> DroneFlights { get; set; }
         public virtual DbSet<DroneCheckListValidation> DroneCheckListValidations { get; set; }
         public virtual DbSet<LiveDrone> LiveDrones { get; set; }
         public virtual DbSet<M2M_ProfileMenu> M2M_ProfileMenu { get; set; }
         public virtual DbSet<DroneDocument> DroneDocuments { get; set; }
         public virtual DbSet<BlackBoxData> BlackBoxDatas { get; set; }
         public virtual DbSet<FlightMapData> FlightMapDatas { get; set; }
+        public virtual DbSet<MSTR_User> MSTR_User { get; set; }
+        public virtual DbSet<DroneFlight> DroneFlights { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

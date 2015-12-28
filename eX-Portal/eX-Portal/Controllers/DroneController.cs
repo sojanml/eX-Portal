@@ -19,12 +19,11 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "Drone Listing";
 
       String SQL = "SELECT \n" +
-          "  D.[DroneId],\n" +
           "  D.[DroneName],\n" +
-          "  D.[CommissionDate],\n" +
-          "  D.[DroneSerialNo],\n" +
+          "  D.[ModelName] as Model,\n" +
+          "  D.[CommissionDate],\n" +         
           "  O.Name as OwnerName,\n" +
-          "  M.Name as ManufactureName,\n" +
+          "  M.Name as Manufacture,\n" +
           "  U.Name as UAVType,\n" +
           "  Count(*) Over() as _TotalRecords,\n" +
           "  D.[DroneId] as _PKey\n" +
@@ -238,7 +237,8 @@ namespace eX_Portal.Controllers {
           "  O.Name as OwnerName,\n" +
           "  M.Name as ManufactureName,\n" +
           "  U.Name as UAVType,\n" +
-          "  D.[DroneIdHexa]\n" +
+          "  D.[DroneIdHexa],\n" +
+          "  D.[ModelName]\n" +
           "FROM\n" +
           "  [MSTR_Drone] D\n" +
           "Left join MSTR_Account  O on\n" +
@@ -346,6 +346,7 @@ namespace eX_Portal.Controllers {
         int DroneSerialNo = Util.getDBInt("SELECT Max(DroneSerialNo) + 1 FROM MSTR_DRONE");
         if (DroneSerialNo < 1001) DroneSerialNo = 1001;
         MSTR_Drone Drone = DroneView.Drone;
+              
         String SQL = "INSERT INTO MSTR_DRONE(\n" +
           "  AccountID,\n" +
           "  MANUFACTUREID,\n" +
@@ -353,7 +354,8 @@ namespace eX_Portal.Controllers {
           "  COMMISSIONDATE,\n" +
           "  DRONEDEFINITIONID,\n" +
           "  ISACTIVE,\n" +
-          "  DroneSerialNo\n" +
+          "  DroneSerialNo,\n" +
+          "  ModelName\n" +
           ") VALUES(\n" +
           "  '" + Drone.AccountID + "',\n" +
           "  '" + Drone.ManufactureId + "',\n" +
@@ -362,7 +364,8 @@ namespace eX_Portal.Controllers {
           "  11,\n" +
           "  'True',\n" +
           "  " + DroneSerialNo +
-          ");";
+          "  ,'" +  Drone.ModelName +
+          "');";
         int DroneId = Util.InsertSQL(SQL);
 
         if (DroneView.SelectItemsForParts != null) {
@@ -523,7 +526,8 @@ namespace eX_Portal.Controllers {
           "   AccountID ='" + Drone.AccountID + "'," +
           "  MANUFACTUREID ='" + Drone.ManufactureId + "',\n" +
           "  UAVTYPEID ='" + Drone.UavTypeId + "',\n" +
-          "  COMMISSIONDATE ='" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "'\n" +
+          "  COMMISSIONDATE ='" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
+           "  MODELNAME ='" + Drone.ModelName + "'\n" +
           "WHERE\n" +
           "  DroneId =" + Drone.DroneId;
           int DroneId = Util.doSQL(SQL);

@@ -34,5 +34,7 @@ namespace eX_Portal.Models
         public Nullable<int> CountryCode { get; set; }
         public string Code { get; set; }
         public string BinaryCode { get; set; }
+        public string BrandLogo { get; set; }
+        public string BrandColor { get; set; }
     }
 }
