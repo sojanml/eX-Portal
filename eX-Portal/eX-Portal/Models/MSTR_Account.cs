@@ -36,5 +36,7 @@ namespace eX_Portal.Models
         public string BinaryCode { get; set; }
         public string BrandLogo { get; set; }
         public string BrandColor { get; set; }
+        public string ContactName { get; set; }
+        public string ContactTitle { get; set; }
     }
 }
