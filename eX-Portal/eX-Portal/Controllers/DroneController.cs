@@ -19,13 +19,11 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "Drone Listing";
 
       String SQL = "SELECT \n" +
-          "  D.[DroneId],\n" +
           "  D.[DroneName],\n" +
-          "  D.[ModelName],\n" +
-          "  D.[CommissionDate],\n" +
-          "  D.[DroneSerialNo],\n" +
+          "  D.[ModelName] as Model,\n" +
+          "  D.[CommissionDate],\n" +         
           "  O.Name as OwnerName,\n" +
-          "  M.Name as ManufactureName,\n" +
+          "  M.Name as Manufacture,\n" +
           "  U.Name as UAVType,\n" +
           "  Count(*) Over() as _TotalRecords,\n" +
           "  D.[DroneId] as _PKey\n" +
