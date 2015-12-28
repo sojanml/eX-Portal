@@ -261,8 +261,9 @@ function SetCurrentValues(location) {
     $.each(_LastValue, function (key, value) {
       if (value == null) value = '';
       if (key == "ReadTime") {
-        var theDate = new Date(parseInt(value.substr(6)));
-        value = theDate.toDateString();
+        var iDt = parseInt(_LastValue['ReadTime'].substr(6));
+        var theDate = new Date(iDt);
+        value = fmtDt(theDate);
       }
       $('#data_' + key).html(value);
     });
@@ -278,14 +279,15 @@ function SetMapTable(location) {
     for (var i = 0; i < 15; i++) {
       var _LastValue = location[i];
       if (_LastValue != null) {
+        var date = new Date(parseInt(_LastValue['ReadTime'].substr(6)));
+        var theDate = fmtDt(date)
         var tLatData = '<td>' + _LastValue['Latitude'] + '</td>';
         var tLonData = '<td>' + _LastValue['Longitude'] + '</td>';
         var tAltData = '<td>' + _LastValue['Altitude'] + '</td>';
         var tSpeedData = '<td>' + _LastValue['Speed'] + '</td>';
         var tFxQltyData = '<td>' + _LastValue['FixQuality'] + '</td>';
         var tSatelliteData = '<td>' + _LastValue['Satellites'] + '</td>';
-        var date = new Date(parseInt(_LastValue['ReadTime'].substr(6)));
-        var tDrTime = '<td>' + date.toDateString() + '</td>';
+        var tDrTime = '<td>' + theDate + '</td>';
         var tPitchData = '<td>' + _LastValue['Pitch'] + '</td>';
         var tRollData = '<td>' + _LastValue['Roll'] + '</td>';
         var tHeadData = '<td>' + _LastValue['Heading'] + '</td>';
@@ -298,9 +300,28 @@ function SetMapTable(location) {
     }
     //get the last item
     var _LastValue = location[location.length - 1];
-    $('#map-info').html('Lat: ' + _LastValue['Latitude'] + ', Lon: ' + _LastValue['Longitude']);
+    $('#map-info').html(
+      theDate + ', ' +
+      'Lat: ' + _LastValue['Latitude'] + ', Lon: ' + _LastValue['Longitude']);
 
 
   }//if (location.length > 0)
 
+}
+
+function fmtDt(date) {
+  if (date instanceof Date) {
+
+  } else {
+    return 'Invalid';
+  }
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  //var ampm = hours >= 12 ? 'pm' : 'am';
+  //hours = hours % 12;
+  //hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  var strTime = hours + ':' + minutes + ':' + date.getSeconds();
+  return date.getDate() + "-" + Months[date.getMonth()] + "-" + date.getFullYear() + "  " + strTime;
 }

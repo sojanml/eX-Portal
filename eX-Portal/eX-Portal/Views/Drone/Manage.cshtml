@@ -1,14 +1,14 @@
 ﻿@model int
-@{ 
+@{
   int DroneID = Model;
 }
-@Html.Action("DroneDetail", new {ID = DroneID })
-
-    
-<div class="row">
+@Html.Action("DroneDetail", new { ID = DroneID })
 
 
-   
+<div class="row multi-row">
+
+
+
   <div class="col-3">
     <h2>Decommission</h2>
     <div>
@@ -16,10 +16,11 @@
       will not appear in any of the list. We will keep all the history of the flight, including
       FTR, Service History etc for reference. purpose.
     </div>
-    <div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
       <a href="@Url.Action("Decommission", "Drone", new  { ID = DroneID})">Decommission</a>
     </div>
-    </div>
+  </div>
   <div class="col-3">
     <h2>Re-Assign</h2>
     <div>
@@ -27,105 +28,109 @@
       a new ID for the drone. We will keep the history of old drone (Drone ID), so Service History and
       FTR data can be accessed.
     </div>
-    <div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
       <a href="@Url.Action("ReAssign", "Drone", new  { ID = DroneID})">Re-Assign</a>
     </div>
+  </div>
+
+  <div class="col-3">
+    <h2>Servicing</h2>
+    <div>
+      You can Service UAS  using the option below.
+      Proper UAV maintenance and inspections can avoid costly, or even total airframe losses,
+      in the field.
+
     </div>
-  
-    <div class="col-3">
-        <h2>Servicing</h2>
-        <div>
-            You can Service UAS  using the option below.
-            Proper UAV maintenance and inspections can avoid costly, or even total airframe losses,
-            in the field. 
-
-        </div>
-        <div>
-            <a href="@Url.Action("Create", "DroneService", new  { ID = DroneID})">Servicing</a>
-        </div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("Create", "DroneService", new  { ID = DroneID})">Servicing</a>
     </div>
-    
-</div>
-
-
-<div class="row">
-
-    
-    <div class="col-3">
-        <h2>Service History</h2>
-        <div>
-            This option is used to view  all the Services .
-          
-
-
-        </div>
-        <div>
-            <a href="@Url.Action("Index", "DroneService", new  { ID = DroneID})">Service History</a>
-        </div>
-    </div>
-
-    <div class="col-3">
-        <h2>Flight Creation</h2>
-        <div>
-            This option is used to Create the flight.
-           
-
-        </div>
-        <div>
-            
-            <a href="@Url.Action("Create", "DroneFlight", new  { ID = DroneID})">Flight Creation</a>
-        </div>
-    </div>
-
-   
-    <div class="col-3">
-        <h2>Flight History</h2>
-        <div>
-            This option is used to View all the flights.
-
-
-        </div>
-        <div>
-            <a href="@Url.Action("Index", "DroneFlight", new  { ID = DroneID})">Flight History</a>
-        </div>
-    </div>
+  </div>
 
 </div>
 
 
+<div class="row multi-row">
 
 
-    <div class="row">
-        <div class="col-3">
-            <h2>Commission report</h2>
-            <div>
-                This option is used to upload multiple Commission Reports.
-               
-            </div>
-            <div>
-                <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="Commission"})">Upload</a>
-            </div>
-        </div>
+  <div class="col-3">
+    <h2>Service History</h2>
+    <div>
+      This option is used to view  all the Services .
+    </div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("Index", "DroneService", new  { ID = DroneID})">Service History</a>
+    </div>
+  </div>
 
-        <div class="col-3">
-            <h2>UAT report</h2>
-            <div>
-                This option is used to upload multiple UAT Reports.
-               
-            </div>
-            <div>
-                <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="UAT"})">Upload</a>
-            </div>
-        </div>
+  <div class="col-3">
+    <h2>Flight Creation</h2>
+    <div>
+      This option is used to Create the flight.
 
-        <div class="col-3">
-            <h2>Incident report</h2>
-            <div>
-                This option is used to upload multiple Incident Reports.                
-            </div>
-            <div>
-                <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="Incident"})">Upload</a>
-            </div>
-        </div>
 
     </div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("Create", "DroneFlight", new  { ID = DroneID})">Flight Creation</a>
+    </div>
+  </div>
+
+
+  <div class="col-3">
+    <h2>Flight History</h2>
+    <div>
+      This option is used to View all the flights.
+
+
+    </div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("Index", "DroneFlight", new  { ID = DroneID})">Flight History</a>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+<div class="row multi-row">
+  <div class="col-3">
+    <h2>Commission report</h2>
+    <div>
+      This option is used to upload multiple Commission Reports.
+
+    </div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="Commission"})">Upload</a>
+    </div>
+  </div>
+
+  <div class="col-3">
+    <h2>UAT report</h2>
+    <div>
+      This option is used to upload multiple UAT Reports.
+
+    </div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="UAT"})">Upload</a>
+    </div>
+  </div>
+
+  <div class="col-3">
+    <h2>Incident report</h2>
+    <div>
+      This option is used to upload multiple Incident Reports.
+    </div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="Incident"})">Upload</a>
+    </div>
+  </div>
+
+</div>

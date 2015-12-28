@@ -3,12 +3,7 @@
   ViewBag.Title = "FlightData";
   Layout = "~/Views/Shared/_exPortal.cshtml";
 }
-
-
-
-
 @Html.Action("DroneFlightDetail", "DroneFlight", new { ID = ViewBag.FlightID })
-
 
 <table class="detail-info" style="width: 100%">
   <thead>
@@ -26,9 +21,10 @@
       <td>Date: <span id="data_ReadTime">-</span></td>
       <td>Speed: <span id="data_Speed">-</span></td>
       <td>Heading: <span id="data_Heading">-</span></td>
-      <td rowspan="3" valign="bottom"><div class="form-toolbar">
-        <input id="clickReplay" type="button" value="Replay" onclick="Replay();" />
-      </div>
+      <td rowspan="3" valign="bottom">
+        <div class="form-toolbar">
+          <input id="clickReplay" type="button" value="Replay" onclick="Replay();" />
+        </div>
       </td>
     </tr>
     <tr>
@@ -76,30 +72,35 @@
     table.detail-info {
       border-bottom: 1px #ea050e solid;
     }
-    table.detail-info TH {
-      border-bottom:1px #ea050e solid;
-      color: #ea050e;
-      text-align:left;
-      font-family: Conv_DINNextLTPro-LightCondensed,Arial;
-      font-size: 20px;
-    }
-    table.detail-info td span {
-      color: gray;
-    }
-    table.detail-info TH,
-    table.detail-info td {
-      padding: 1px 3px 1px 0px;
-      width:16.666%
-    }
+
+      table.detail-info TH {
+        border-bottom: 1px #ea050e solid;
+        color: #ea050e;
+        text-align: left;
+        font-family: Conv_DINNextLTPro-LightCondensed,Arial;
+        font-size: 20px;
+      }
+      table.detail-info td {
+        white-space: nowrap;
+      }
+      table.detail-info td span {
+        color: gray;
+      }
+
+      table.detail-info TH,
+      table.detail-info td {
+        padding: 1px 3px 1px 0px;
+        width: 16.666%;
+      }
   </style>
 }
 
 @section scripts{
-<script type="text/javascript">
-  var MapDataURL = '@Url.Action("GetFlightData", new {FlightID = ViewBag.FlightID})';
-</script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="~/Scripts/map.js"></script>
+  <script type="text/javascript">
+    var MapDataURL = '@Url.Action("GetFlightData", new {FlightID = ViewBag.FlightID})';
+  </script>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+  <script type="text/javascript" src="~/Scripts/map.js"></script>
 }
 <div id="MapData">
   <table></table>
