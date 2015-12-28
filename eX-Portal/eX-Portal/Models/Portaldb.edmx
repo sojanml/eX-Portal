@@ -343,6 +343,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="CountryCode" Type="int" />
           <Property Name="BrandLogo" Type="varchar" MaxLength="50" />
           <Property Name="BrandColor" Type="varchar" MaxLength="20" />
+          <Property Name="ContactName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactTitle" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MSTR_Drone">
           <Key>
@@ -858,6 +860,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="BinaryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BrandLogo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="BrandColor" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ContactName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_Drone">
           <Key>
@@ -1504,6 +1508,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySetMapping Name="MSTR_Account">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Account">
               <MappingFragment StoreEntitySet="MSTR_Account">
+                <ScalarProperty Name="ContactTitle" ColumnName="ContactTitle" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
                 <ScalarProperty Name="BrandColor" ColumnName="BrandColor" />
                 <ScalarProperty Name="BrandLogo" ColumnName="BrandLogo" />
                 <ScalarProperty Name="BinaryCode" ColumnName="BinaryCode" />
