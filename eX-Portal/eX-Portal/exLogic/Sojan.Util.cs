@@ -177,20 +177,34 @@ namespace eX_Portal.exLogic {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           switch (TypeOfList.ToLower()) {
-            case "drone":
-              SQL = "SELECT [DroneId] as Value  ,[DroneName] as Name FROM [MSTR_Drone] ORDER BY [DroneName]";
+            case "drone":              
+              SQL = "SELECT [DroneId] as Value, [DroneName] as Name FROM [MSTR_Drone]";
+              if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+                SQL += "\n" +
+                  "WHERE\n" +
+                  "  MSTR_Drone.AccountID=" + Util.getAccountID();
+              }
+              SQL += "\n ORDER BY [DroneName]";
               break;
             case "pilot":
             case "gsc":
-              SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User ORDER BY FirstName";
+              SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User";
+              if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+                SQL += "\n" +
+                  "WHERE\n" +
+                  "  MSTR_User.AccountID=" + Util.getAccountID();
+              }
+              SQL += "\nORDER BY FirstName";
               break;
           }
           cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
-              SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Value"].ToString() });
-            }
-          }
+              SelectList.Add(new SelectListItem {
+                Text = reader["Name"].ToString(),
+                Value = reader["Value"].ToString() });
+            }//while
+          }//using
 
           ctx.Database.Connection.Close();
         } //using Database.Connection
