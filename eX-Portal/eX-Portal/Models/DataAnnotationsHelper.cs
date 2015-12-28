@@ -41,6 +41,10 @@ namespace eX_Portal.Models
         public string Code { get; set; }
         [Required(ErrorMessage = "Please Enter The Company Name.")]
         public string Name { get; set; }
+        [Display(Name = "Contact Name")]
+        public string ContactName { get; set; }
+        [Display(Name = "Contact Title")]
+        public string ContactTitle { get; set; }
     }
 
 
