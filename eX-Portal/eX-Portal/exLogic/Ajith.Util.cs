@@ -337,9 +337,9 @@ namespace eX_Portal.exLogic
 
         public static String GetEncryptedPassword(String Password)
         {
-            
+           
            String EncrptedPassword;
-            String SQL = "SELECT CONVERT(NVARCHAR(32), HASHBYTES('MD5', '" + Password + "'),2)";
+            String SQL = "SELECT CONVERT(NVARCHAR(32), HASHBYTES('MD5', '" + Password.ToLower() + "'),2)";
             using (var cotx = new ExponentPortalEntities())
             {
 
