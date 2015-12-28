@@ -30,7 +30,8 @@ namespace eX_Portal.Controllers {
         "  [MSTR_Account]";
 
       qView nView = new qView(SQL);
-      if (exLogic.User.hasAccess("ACCOUNT.EDIT")) nView.addMenu("Edit", Url.Action("AccountEdit", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("ACCOUNT.VIEW")) nView.addMenu("Detail", Url.Action("AccountDetail", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("ACCOUNT.EDIT")) nView.addMenu("Edit", Url.Action("AccountEdit", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("ACCOUNT.DELETE")) nView.addMenu("Delete", Url.Action("AccountDelete", new { ID = "_PKey" }));
 
       if (Request.IsAjaxRequest()) {
@@ -122,13 +123,14 @@ namespace eX_Portal.Controllers {
                     }
                     Account.ModifiedBy = Util.toInt(Session["UserID"].ToString());
           Account.ModifiedOn = DateTime.Now;
-
+                   
                 string    SQL = "Update Mstr_Account set Name='" + Account.Name + "',Code='"
                                    + Account.Code + "',EmailId='" + Account.EmailId + "',MobileNo='"
                                    + Account.MobileNo + "',OfficeNo='" + Account.OfficeNo + "',IsActive='" + Account.IsActive + "',ModifiedBy=" + Session["UserId"] +
                                    ",ModifiedOn='"+ DateTime.Now.ToString("yyyy - MM - dd")+ "', AccountDescription='"+ Account.AccountDescription +
                                    "',Address1='"+Account.Address1  +"', Address2='"+Account.Address2 + "' ,Address3='"+ Account.Address3 + 
-                                   "',CountryCode="+ Account.CountryCode +" where AccountId=" + Account.AccountId;
+                                   "',CountryCode="+ Account.CountryCode +",ContactName='"+ Account.ContactName +"',ContactTitle='"+
+                                   Account.ContactTitle +"' where AccountId=" + Account.AccountId;
 
                     int id = Util.doSQL(SQL);
 
@@ -157,16 +159,20 @@ namespace eX_Portal.Controllers {
           
     }//ActionEdit()
 
-    public ActionResult AccountDetail([Bind(Prefix = "ID")] int AccountID) {
-      Models.MSTR_Account Account = db.MSTR_Account.Find(AccountID);
+    public ActionResult AccountDetail([Bind(Prefix = "ID")] int AccountID)
+        {
+            if (!exLogic.User.hasAccess("ACCOUNT.VIEW")) return RedirectToAction("NoAccess", "Home");
+            Models.MSTR_Account Account = db.MSTR_Account.Find(AccountID);
       if(Account == null) return RedirectToAction("Error", "Home");
       ViewBag.Title = Account.Name;
       return View(Account);
     }//AccountDetail()
 
     [ChildActionOnly]
-    public String AccountDetailView([Bind(Prefix = "ID")] int AccountID = 0) {
-      String SQL = "SELECT * FROM MSTR_Account WHERE AccountID=" + AccountID;
+    public String AccountDetailView([Bind(Prefix = "ID")] int AccountID = 0)
+        {
+            if (!exLogic.User.hasAccess("ACCOUNT.VIEW")) return "Access Denied";
+            String SQL = "SELECT * FROM MSTR_Account WHERE AccountID=" + AccountID;
       qDetailView nView = new qDetailView(SQL);
       return nView.getTable();
     }
