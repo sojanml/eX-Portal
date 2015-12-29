@@ -251,6 +251,10 @@ namespace eX_Portal.Controllers {
           "  U.Type= 'UAVType'\n" +
           "WHERE\n" +
           "  D.[DroneId]=" + DroneID;
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+        SQL += " AND\n" +
+          "  D.AccountID=" + Util.getAccountID();
+      }
 
       qDetailView nView = new qDetailView(SQL);
       return ReassignDetail(DroneID) + DecommissionDetail(DroneID) + nView.getTable();
@@ -308,7 +312,7 @@ namespace eX_Portal.Controllers {
          "where\n" +
          "  Mstr_drone.DroneID=" + DroneID;
       var Row = Util.getDBRow(SQL);
-      if (Row["isactive"].ToString() != "True") {
+      if ((bool)Row["hasRows"] && Row["isactive"].ToString() != "True") {
         Detail.AppendLine("<div class=\"decommission-info\">");
         Detail.AppendLine("Decommissioned on");
         Detail.AppendLine("<span>" + Row["DecommissionDate"] + "</span>");

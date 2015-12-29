@@ -57,6 +57,7 @@ namespace eX_Portal.Controllers {
       string[] data = reuestquery.Split('|');
       try {
         string SQL = "INSERT INTO [DroneData] (\n" +
+          "  [CreatedDate], \n" +
           "  [QueueMessage],\n" +              // 1
           "  [DroneId],\n" +                   // 2
           "  [Latitude],\n" +                  // 3
@@ -72,6 +73,7 @@ namespace eX_Portal.Controllers {
           "  [TotalFlightTime],\n" +           // 13
           "  [BBFlightID]\n" +                 // 14
           ") VALUES (\n" +
+          "  GETDATE(),\n" +       // 1
           "  '" + reuestquery + "',\n" +       // 1
           "  '" + data[0] + "',\n" +           // 2
           "  '" + data[1] + "',\n" +           // 3

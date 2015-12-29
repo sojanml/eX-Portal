@@ -29,7 +29,7 @@ namespace eX_Portal.Controllers {
         "  END as TotalFlightTime, \n " +       
         "  Max(Altitude) as MaxAltitude,\n" +
         "  Count(*) Over() as _TotalRecords,\n" +
-        "  Cast(MSTR_Drone.DroneId as varchar) + ',' + Cast(BBFlightID as varchar) as _Pkey\n" +
+        "  Cast([BlackBoxData].DroneId as varchar) + ',' + Cast(BBFlightID as varchar) as _Pkey\n" +
         "FROM\n" +
         "  [BlackBoxData]\n" +
         "LEFT JOIN MSTR_Drone ON\n" +
@@ -42,7 +42,7 @@ namespace eX_Portal.Controllers {
       }
       SQL = SQL + "\n" +
         "GROUP BY\n" +
-        "  MSTR_Drone.DroneID,\n" +
+        "  [BlackBoxData].DroneId,\n" +
         "  MSTR_Drone.DroneName,\n" +
         "  BBFlightID\n";
 
