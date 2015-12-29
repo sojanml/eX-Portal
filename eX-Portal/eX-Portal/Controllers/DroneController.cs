@@ -20,7 +20,7 @@ namespace eX_Portal.Controllers {
 
       String SQL = "SELECT \n" +
           "  D.[DroneName],\n" +
-          "  D.[ModelName] as Model,\n" +
+          "  D.[ModelName] as Description,\n" +
           "  D.[CommissionDate],\n" +         
           "  O.Name as OwnerName,\n" +
           "  M.Name as Manufacture,\n" +
@@ -238,7 +238,7 @@ namespace eX_Portal.Controllers {
           "  M.Name as ManufactureName,\n" +
           "  U.Name as UAVType,\n" +
           "  D.[DroneIdHexa],\n" +
-          "  D.[ModelName]\n" +
+          "  D.[ModelName] as Description\n" +
           "FROM\n" +
           "  [MSTR_Drone] D\n" +
           "Left join MSTR_Account  O on\n" +
