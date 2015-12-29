@@ -178,7 +178,7 @@ namespace eX_Portal.exLogic {
           ctx.Database.Connection.Open();
           switch (TypeOfList.ToLower()) {
             case "drone":              
-              SQL = "SELECT [DroneId] as Value, [DroneName] as Name FROM [MSTR_Drone]";
+              SQL = "SELECT [DroneId] as Value, [DroneName] as Name FROM [MSTR_Drone] where IsActive=1";
               if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
                 SQL += "\n" +
                   "WHERE\n" +

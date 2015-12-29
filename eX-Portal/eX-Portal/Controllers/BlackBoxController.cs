@@ -21,8 +21,7 @@ namespace eX_Portal.Controllers {
         "  MSTR_Drone.DroneName,\n" +
         "  BBFlightID,\n" +
         "  Min([BlackBoxData].ReadTime) as StartTime,\n" +
-        "  Max([BlackBoxData].ReadTime) as EndTime,\n" +
-        "  Max(Altitude) as Altitude,\n" +
+        "  Max([BlackBoxData].ReadTime) as EndTime,\n" +       
         "  Max(Speed) as MaxSpeed,\n" +
         "  CASE isnumeric(Max(TotalFlightTime))\n" +
         "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), Max(TotalFlightTime)) / 60.0, 2) as numeric(36, 2))\n" +

@@ -30,7 +30,8 @@ namespace eX_Portal.Models {
     [Display(Name = "Address")]
     public string Address1 { get; set; }
     [Display(Name = "Country")]
-    public Nullable<int> CountryCode { get; set; }
+    [Required(ErrorMessage = "Please Enter The Country Name.")]
+        public Nullable<int> CountryCode { get; set; }
     [Display(Name = "Internal Reference Code")]
 
     [Required(ErrorMessage = "Please Enter the Company Code.")]
