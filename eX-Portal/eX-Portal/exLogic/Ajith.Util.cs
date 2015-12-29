@@ -101,7 +101,7 @@ namespace eX_Portal.exLogic
         public static IEnumerable<SelectListItem> GetProfileList()
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();
-            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
 
             String SQL = "SELECT 0 as Value, 'Not Available' as Name";
             using (var ctx = new ExponentPortalEntities())
@@ -148,7 +148,7 @@ namespace eX_Portal.exLogic
         {
             //  ctx=new ExponentPortalEntities();
             List<SelectListItem> SelectList = new List<SelectListItem>();
-            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
 
 
             using (var cotx = new ExponentPortalEntities())
@@ -185,7 +185,7 @@ namespace eX_Portal.exLogic
         {
             //  ctx=new ExponentPortalEntities();
             List<SelectListItem> SelectList = new List<SelectListItem>();
-            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
             using (var cotx = new ExponentPortalEntities())
             {
                 using (var cmd = cotx.Database.Connection.CreateCommand())

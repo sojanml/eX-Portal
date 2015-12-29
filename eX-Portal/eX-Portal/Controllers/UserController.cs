@@ -82,7 +82,7 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "Create User";
       if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
 
-      var viewModel = new ViewModel.UserViewModel.LoginViewModel.UserLogon {
+      var viewModel = new ViewModel.UserViewModel {
         User = new MSTR_User(),
 
         ProfileList = Util.GetProfileList(),
@@ -100,12 +100,8 @@ namespace eX_Portal.Controllers {
     public ActionResult Edit(int id) {
 
       if (!exLogic.User.hasAccess("USER.EDIT")) return RedirectToAction("NoAccess", "Home");
-      var viewModel = new ViewModel.UserViewModel.LoginViewModel.UserLogon {
-
-
-
+      var viewModel = new ViewModel.UserViewModel {
         User = db.MSTR_User.Find(id),
-
         ProfileList = Util.GetProfileList(),
         CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
         AccountList = Util.GetAccountList()
@@ -117,41 +113,40 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public ActionResult Edit(MSTR_User User) {
+      String Pass_SQL = "\n";
       if (!exLogic.User.hasAccess("USER.EDIT")) return RedirectToAction("NoAccess", "Home");
-      ViewBag.Title = "Edit Account";
-      try {
-        if (ModelState.IsValid) {
-
-
-          if (Session["UserId"] == null) {
-            Session["UserId"] = -1;
+      if (ModelState.IsValid) {
+        if (!String.IsNullOrEmpty(User.Password) && !String.IsNullOrEmpty(User.ConfirmPassword)) {
+          if (User.Password != User.ConfirmPassword) {
+            ModelState.AddModelError("User.Password", "Password doesn't match.");
+          } else {
+            Pass_SQL = ",\n  Password='" + Util.GetEncryptedPassword(User.Password).ToString() + "'\n";
           }
-          User.LastModifiedBy = Util.toInt(Session["UserID"].ToString());
-          User.LastModifiedOn = DateTime.Now;
-
-          string Password = Util.GetEncryptedPassword(User.Password).ToString();
-          string SQL = "UPDATE MSTR_USER SET UserName='" + User.UserName +
-                   "',Password='" + Password + "',UserProfileId=" + User.UserProfileId + ",FirstName='" + User.FirstName +
-                   "', Remarks='" +
-                   User.Remarks + "',MobileNo='" + User.MobileNo + "',EmailId='" +
-                   User.EmailId + "', CountryId=" + User.CountryId + ",AccountId=" + User.AccountId + " where UserId=" + User.UserId;
-          int id = Util.doSQL(SQL);
-
-          return RedirectToAction("UserList");
         }
-
-      } catch (Exception ex) {
-        //Log the error (uncomment dex variable name and add a line here to write a log.
-        return View("InternalError", ex);
       }
-      //if model not valid
 
-      var viewModel = new ViewModel.UserViewModel.LoginViewModel.UserLogon {
+      if (ModelState.IsValid) {
+        string SQL = "UPDATE MSTR_USER SET\n"+
+          "  UserProfileId=" + User.UserProfileId + ",\n" +
+          "  FirstName='" + User.FirstName + "',\n" +
+          "  LastName='" + User.LastName + "',\n" +
+          "  Remarks='" + User.Remarks + "',\n" +
+          "  MobileNo='" + User.MobileNo + "',\n" +
+          "  EmailId='" + User.EmailId + "',\n" +
+          "  CountryId=" + User.CountryId + ",\n" +
+          "  AccountId=" + User.AccountId + ",\n" +
+          "  OfficeNo='" + User.OfficeNo + "',\n" +
+          "  HomeNo='" + User.HomeNo + "',\n" +
+          "  IsActive='" + User.IsActive + "'\n" +
+          Pass_SQL + 
+          "where\n" +
+          "  UserId=" + User.UserId;
+    int id = Util.doSQL(SQL);
+      return RedirectToAction("UserList");
+      }
 
-
-
-        User = db.MSTR_User.Find(User.UserId),
-
+      var viewModel = new ViewModel.UserViewModel {
+        User = User,
         ProfileList = Util.GetProfileList(),
         CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
         AccountList = Util.GetAccountList()
@@ -165,65 +160,64 @@ namespace eX_Portal.Controllers {
     public ActionResult Create(MSTR_User User) {
       if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
       if (ModelState.IsValid) {
-
         if (exLogic.User.UserExist(User.UserName) > 0) {
-          ViewBag.UserExists = "User Exist Please Try Another !";
-
-          var viewModel = new ViewModel.UserViewModel.LoginViewModel.UserLogon {
-            User = new MSTR_User(),
-            ProfileList = Util.GetProfileList(),
-            CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
-            AccountList = Util.GetAccountList()
-
-          };
-          return View(viewModel);
-
-        } else {
-
-          if (Session["UserId"] == null) {
-            Session["UserId"] = -1;
-          }
-
-
-
-          User.IsActive = true;
-          User.CreatedBy = Util.toInt(Session["UserID"].ToString());
-          User.CreatedOn = DateTime.Now;
-
-          //  db.MSTR_User.Add(User);
-          //  db.SaveChanges();
-
-
-          string Password = Util.GetEncryptedPassword(User.Password).ToString();
-
-          String SQL = "insert into MSTR_User(UserName, Password, FirstName, CreatedBy," +
-                     "UserProfileId, Remarks, MobileNo, EmailId, CountryId, IsActive, CreatedOn,AccountId)" +
-                     " values('" + User.UserName + "','" + Password + "','" + User.FirstName + "'," +
-                     Session["UserId"] + "," + User.UserProfileId + ",'" + User.Remarks + "','" + User.MobileNo +
-                     "','" + User.EmailId + "'," + User.CountryId + ",'" + User.IsActive + "','" + DateTime.Now.ToString("yyyy - MM - dd") +
-                     "'," + User.AccountId + ")";
-
-          int id = Util.InsertSQL(SQL);
-
-          return RedirectToAction("UserList");
+          ModelState.AddModelError("User.UserName", "This username already exists.");
         }
+
+        if (String.IsNullOrEmpty(User.Password)) {
+          ModelState.AddModelError("User.Password", "Invalid Password. Please enter again.");
+        }
+
+
       }
 
-      //if model not valid goto view again  for validation
+      if (ModelState.IsValid) {
+        string Password = Util.GetEncryptedPassword(User.Password).ToString();
+        String SQL = "insert into MSTR_User(\n" +
+          "  UserName,\n" +
+          "  Password,\n" +
+          "  FirstName,\n" +
+          "  CreatedBy,\n" +
+          "  UserProfileId,\n" +
+          "  Remarks,\n" +
+          "  MobileNo,\n" +
+          "  OfficeNo,\n" +
+          "  HomeNo,\n" +
+          "  EmailId,\n" +
+          "  CountryId,\n" +
+          "  IsActive,\n" +
+          "  CreatedOn,\n" +
+          "  AccountId\n" +
+          ") values(\n" +
+          "  '" + User.UserName + "',\n" +
+          "  '" + Password + "',\n" +
+          "  '" + User.FirstName + "',\n" +
+          "  " + Util.getLoginUserID() + ",\n" +
+          "  " + User.UserProfileId + ",\n" +
+          "  '" + User.Remarks + "',\n" +
+          "  '" + User.MobileNo + "',\n" +
+          "  '" + User.OfficeNo + "',\n" +
+          "  '" + User.HomeNo + "',\n" +
+          "  '" + User.EmailId + "',\n" +
+          "  " + User.CountryId + ",\n" +
+          "  '" + User.IsActive + "',\n" +
+          "  GETDATE(),\n" +
+          "  " + User.AccountId + "\n" +
+          ")";
 
-      var viewModelUser = new ViewModel.UserViewModel.LoginViewModel.UserLogon {
-        User = new MSTR_User(),
+        int id = Util.InsertSQL(SQL);
+        return RedirectToAction("UserList");
+      }
 
+      var viewModel = new ViewModel.UserViewModel {
+        User = User,
         ProfileList = Util.GetProfileList(),
         CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
         AccountList = Util.GetAccountList()
 
-
-
       };
-      return View(viewModelUser);
-
-    }
+      return View(viewModel);
+    }//Create() HTTPPost
 
 
 
