@@ -177,12 +177,12 @@ namespace eX_Portal.Controllers {
     }//DroneFlightDeta
 
     // GET: DroneService/Create
-    public ActionResult Create() {
+    public ActionResult Create([Bind(Prefix = "ID")] int DroneID = 0) {
       if (!exLogic.User.hasAccess("SERVICE.CREATE")) return RedirectToAction("NoAccess", "Home");
-      var viewModel = new ViewModel.DroneServiceViewModel {
+            var viewModel = new ViewModel.DroneServiceViewModel {
 
-        DroneService = new MSTR_DroneService(),
-
+                DroneService = new MSTR_DroneService(),
+                DroneID = DroneID.ToString(),
         ServiceType = Util.GetDropDowntLists("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
         DroneList = Util.DroneList("usp_Portal_DroneNameList"),
 
@@ -200,14 +200,18 @@ namespace eX_Portal.Controllers {
     public ActionResult Create(ViewModel.DroneServiceViewModel DroneServiceView) {
       try {
         if (!exLogic.User.hasAccess("SERVICE.CREATE")) return RedirectToAction("NoAccess", "Home");
-        // TODO: Add insert logic here
-        if (ModelState.IsValid) {
+                // TODO: Add insert logic here
+                if (ModelState.IsValid) {
 
-          MSTR_DroneService DroneService = DroneServiceView.DroneService;
+                    MSTR_DroneService DroneService = DroneServiceView.DroneService;
 
-          if (Session["UserId"] == null) {
-            Session["UserId"] = -1;
-          }
+                    if (Session["UserId"] == null) {
+                        Session["UserId"] = -1;
+                    }
+                    if (DroneService.FlightHour == null)
+                    {
+                        DroneService.FlightHour = 0;
+                    }
           string SQL = "INSERT INTO MSTR_DRONESERVICE(Description,CreatedBy,CreatedOn,DroneId,TypeOfServiceId,TypeOfService,DateOfService,FlightHour) VALUES('"
                     + DroneService.Description + "'," + Session["UserId"] + ",'" +
                      DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "','"
