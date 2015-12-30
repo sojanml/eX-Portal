@@ -1,6 +1,7 @@
 ﻿@model eX_Portal.ViewModel.UserViewModel
 @using eX_Portal.Models;
 @{
+    
   ViewBag.Title = "Create";
 }
 
@@ -48,6 +49,14 @@
       </div>
     </div>
 
+      <div class="form-group">
+          @Html.LabelFor(model => model.User.MiddleName, htmlAttributes: new { @class = "control-label col-md-2" })
+          <div class="col-md-10">
+              @Html.EditorFor(model => model.User.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
+              @Html.ValidationMessageFor(model => model.User.MiddleName, "", new { @class = "text-danger" })
+          </div>
+      </div>
+
     <div class="form-group">
       @Html.LabelFor(model => model.User.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
       <div class="col-md-10">
@@ -89,7 +98,8 @@
         @Html.ValidationMessageFor(model => model.User.HomeNo, "", new { @class = "text-danger" })
       </div>
     </div>
-
+      <ul id="FileUploadProgress"></ul>
+      <div><input type="file"  name="fileinput" id="fileinput" /></div>
     <h2>Settings</h2>
 
     <div class="form-group">
@@ -136,6 +146,48 @@
     </div>
 
 
+
+      <h2>Pilot Information</h2>
+
+
+      <div class="form-group">
+          @Html.LabelFor(model => model.Pilot.EmiratesId, htmlAttributes: new { @class = "control-label col-md-2" })
+          <div class="col-md-10">
+              @Html.EditorFor(model => model.Pilot.EmiratesId, new { htmlAttributes = new { @class = "form-control" } })
+              @Html.ValidationMessageFor(model => model.Pilot.EmiratesId, "", new { @class = "text-danger" })
+          </div>
+      </div>
+
+      <div class="form-group">
+          @Html.LabelFor(model => model.Pilot.PassportNo, htmlAttributes: new { @class = "control-label col-md-2" })
+          <div class="col-md-10">
+              @Html.EditorFor(model => model.Pilot.PassportNo, new { htmlAttributes = new { @class = "form-control" } })
+              @Html.ValidationMessageFor(model => model.Pilot.PassportNo, "", new { @class = "text-danger" })
+          </div>
+      </div>
+
+      <div class="form-group">
+          @Html.LabelFor(model => model.Pilot.DateOfExpiry, htmlAttributes: new { @class = "control-label col-md-2" })
+          <div class="col-md-10">
+              @Html.EditorFor(model => model.Pilot.DateOfExpiry, new { htmlAttributes = new { @class = "date-picker" } })
+              @Html.ValidationMessageFor(model => model.Pilot.DateOfExpiry, "", new { @class = "text-danger" })
+          </div>
+      </div>
+      <div class="form-group">
+          @Html.LabelFor(model => model.Pilot.Department, htmlAttributes: new { @class = "control-label col-md-2" })
+          <div class="col-md-10">
+              @Html.EditorFor(model => model.Pilot.Department, new { htmlAttributes = new { @class = "form-control" } })
+              @Html.ValidationMessageFor(model => model.Pilot.Department, "", new { @class = "text-danger" })
+          </div>
+      </div>
+      <div class="form-group">
+          @Html.LabelFor(model => model.Pilot.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+          <div class="col-md-10">
+              @Html.EditorFor(model => model.Pilot.Title, new { htmlAttributes = new { @class = "form-control" } })
+              @Html.ValidationMessageFor(model => model.Pilot.Title, "", new { @class = "text-danger" })
+          </div>
+      </div>
+
     <div class="form-toolbar">
       <input type="submit" value="Create" />
     </div>
@@ -146,4 +198,13 @@
 
 @section Scripts {
   @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+    var DroneUploadURL = '@Url.Action("UploadFile", new { ID =12})';
+    </script>
+    <script type="text/javascript" src="~/Scripts/drone.js"></script>
+
+
+
 }
