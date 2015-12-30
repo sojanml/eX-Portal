@@ -7,14 +7,16 @@ using eX_Portal.Models;
 using eX_Portal.ViewModel;
 using eX_Portal.exLogic;
 using System.Data.Entity;
+using System.Text;
+using System.IO;
 
 namespace eX_Portal.Controllers {
 
   public class UserController : Controller {
     // GET: UserLogin
     public ExponentPortalEntities db = new ExponentPortalEntities();
-
-    public object EntityState { get; private set; }
+    static String RootUploadDir = "~/Upload/User/";
+        public object EntityState { get; private set; }
 
     public ActionResult Index() {
       ViewBag.Title = "Login";
@@ -63,7 +65,8 @@ namespace eX_Portal.Controllers {
 
 
       qView nView = new qView(SQL);
-      if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -84,6 +87,7 @@ namespace eX_Portal.Controllers {
 
       var viewModel = new ViewModel.UserViewModel {
         User = new MSTR_User(),
+        Pilot=new MSTR_User_Pilot(),
 
         ProfileList = Util.GetProfileList(),
         CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
@@ -93,15 +97,100 @@ namespace eX_Portal.Controllers {
       return View(viewModel);
     }
 
+        public ActionResult UserDetail([Bind(Prefix = "ID")] int UserID)
+        {
+            if (!exLogic.User.hasAccess("USER.VIEW")) return RedirectToAction("NoAccess", "Home");
+
+        
+            Models.MSTR_User User = db.MSTR_User.Find(UserID);
+            if (User == null) return RedirectToAction("Error", "Home");
+            ViewBag.Title = User.FirstName;
+            return View(User);
+
+        }//UserDetail()
+
+        [ChildActionOnly]
+        public String UserDetailView([Bind(Prefix = "ID")] int UserID = 0)
+        {
+            if (!exLogic.User.hasAccess("USER.VIEW")) return "Access Denied";
 
 
+            string SQL = "SELECT a.[UserName]\n" +             
+                       
+                        " ,a.[FirstName] \n " +
+                        ",a.[MiddleName]\n " +
+                        ",a.[LastName]\n  " +
+                        ",a.[Remarks]\n   " +
+                        ",a.[MobileNo]\n  " +
+                        ",a.[OfficeNo]\n  " +
+                        ",a.[HomeNo]\n" +
+                        " ,a.[EmailId]\n  " +
+                        ",b.[PassportNo]" +
+                        " ,b.[DateOfExpiry]\n   " +
+                        ",b.[Department]\n  " +
+                        " ,b.[EmiratesId] \n   " +
+                        ",b.[Title] as JobTitle\n   " +
+                        ",c.[Name] as OrganizationName\n   " +
+                        ",d.[ProfileName]\n   " +
+                        " FROM[MSTR_User] a\n   " +
+                        " left join mstr_user_pilot b\n  " +
+                        "on a.UserId=b.UserId\n   " +
+                        "left join MSTR_Account c\n  " +
+                        "on a.AccountId=c.AccountId\n  " +
+                        "left join MSTR_Profile d " +
+                        "on a.UserProfileId=d.ProfileId" +
+                        " where a.userid=" + UserID;
+    
+            qDetailView nView = new qDetailView(SQL);
+            return nView.getTable();
+        }
 
-    // GET: DroneService/Edit/5
-    public ActionResult Edit(int id) {
+
+        public String UploadFile([Bind(Prefix = "ID")] int UserID)
+        {
+            String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+            //send information in JSON Format always
+            StringBuilder JsonText = new StringBuilder();
+            Response.ContentType = "text/json";
+
+            //when there are files in the request, save and return the file information
+            try
+            {
+                var TheFile = Request.Files[0];
+                String FileName = System.Guid.NewGuid() + "~" + TheFile.FileName;
+                String UploadDir = UploadPath + Util.getDroneName(UserID) + "\\" ;
+                String FileURL = Util.getDroneName(UserID) + "/" + FileName;
+                String FullName = UploadDir + FileName;
+
+                if (!Directory.Exists(UploadDir)) Directory.CreateDirectory(UploadDir);
+                TheFile.SaveAs(FullName);
+                JsonText.Append("{");
+                JsonText.Append(Util.Pair("status", "success", true));
+                JsonText.Append("\"addFile\":[");
+                JsonText.Append(Util.getFileInfo(FullName));
+                JsonText.Append("]}");
+
+               
+
+            }
+            catch (Exception ex)
+            {
+                JsonText.Clear();
+                JsonText.Append("{");
+                JsonText.Append(Util.Pair("status", "error", true));
+                JsonText.Append(Util.Pair("message", ex.Message, false));
+                JsonText.Append("}");
+            }//catch
+            return JsonText.ToString();
+        }//Save()
+
+        // GET: DroneService/Edit/5
+        public ActionResult Edit(int id) {
 
       if (!exLogic.User.hasAccess("USER.EDIT")) return RedirectToAction("NoAccess", "Home");
       var viewModel = new ViewModel.UserViewModel {
         User = db.MSTR_User.Find(id),
+        Pilot=db.MSTR_User_Pilot.Find(id),
         ProfileList = Util.GetProfileList(),
         CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
         AccountList = Util.GetAccountList()
@@ -112,41 +201,57 @@ namespace eX_Portal.Controllers {
 
 
     [HttpPost]
-    public ActionResult Edit(MSTR_User User) {
+    public ActionResult Edit(ViewModel.UserViewModel UserModel) {
       String Pass_SQL = "\n";
       if (!exLogic.User.hasAccess("USER.EDIT")) return RedirectToAction("NoAccess", "Home");
       if (ModelState.IsValid) {
-        if (!String.IsNullOrEmpty(User.Password) && !String.IsNullOrEmpty(User.ConfirmPassword)) {
-          if (User.Password != User.ConfirmPassword) {
+        if (!String.IsNullOrEmpty(UserModel.User.Password) && !String.IsNullOrEmpty(UserModel.User.ConfirmPassword)) {
+          if (UserModel.User.Password != UserModel.User.ConfirmPassword) {
             ModelState.AddModelError("User.Password", "Password doesn't match.");
           } else {
-            Pass_SQL = ",\n  Password='" + Util.GetEncryptedPassword(User.Password).ToString() + "'\n";
+            Pass_SQL = ",\n  Password='" + Util.GetEncryptedPassword(UserModel.User.Password).ToString() + "'\n";
           }
         }
       }
 
       if (ModelState.IsValid) {
         string SQL = "UPDATE MSTR_USER SET\n"+
-          "  UserProfileId=" + User.UserProfileId + ",\n" +
-          "  FirstName='" + User.FirstName + "',\n" +
-          "  LastName='" + User.LastName + "',\n" +
-          "  Remarks='" + User.Remarks + "',\n" +
-          "  MobileNo='" + User.MobileNo + "',\n" +
-          "  EmailId='" + User.EmailId + "',\n" +
-          "  CountryId=" + User.CountryId + ",\n" +
-          "  AccountId=" + User.AccountId + ",\n" +
-          "  OfficeNo='" + User.OfficeNo + "',\n" +
-          "  HomeNo='" + User.HomeNo + "',\n" +
-          "  IsActive='" + User.IsActive + "'\n" +
+          "  UserProfileId=" + UserModel.User.UserProfileId + ",\n" +
+          "  FirstName='" + UserModel.User.FirstName + "',\n" +
+          "  MiddleName='" + UserModel.User.MiddleName + "',\n" +
+          "  LastName='" + UserModel.User.LastName + "',\n" +
+          "  Remarks='" + UserModel.User.Remarks + "',\n" +
+          "  MobileNo='" + UserModel.User.MobileNo + "',\n" +
+          "  EmailId='" + UserModel.User.EmailId + "',\n" +
+          "  CountryId=" + UserModel.User.CountryId + ",\n" +
+          "  AccountId=" + UserModel.User.AccountId + ",\n" +
+          "  OfficeNo='" + UserModel.User.OfficeNo + "',\n" +
+          "  HomeNo='" + UserModel.User.HomeNo + "',\n" +
+          "  IsActive='" + UserModel.User.IsActive + "'\n" +
           Pass_SQL + 
           "where\n" +
-          "  UserId=" + User.UserId;
+          "  UserId=" + UserModel.User.UserId;
+
+
+
     int id = Util.doSQL(SQL);
-      return RedirectToAction("UserList");
+
+                //updating pilot information to pilot table
+
+               SQL = "UPDATE MSTR_USER_PILOT SET\n"+
+          "  DateOfExpiry='" + UserModel.Pilot.DateOfExpiry + "',\n" +
+          "  Department='" + UserModel.Pilot.Department + "',\n" +
+          "  EmiratesId='" + UserModel.Pilot.EmiratesId + "',\n" +
+          "  Title='" + UserModel.Pilot.Title + "'\n" +
+           "where\n" +
+          "  UserId=" + UserModel.User.UserId; ;
+    int idPilot = Util.doSQL(SQL);
+
+                return RedirectToAction("UserList");
       }
 
       var viewModel = new ViewModel.UserViewModel {
-        User = User,
+      
         ProfileList = Util.GetProfileList(),
         CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
         AccountList = Util.GetAccountList()
@@ -157,26 +262,28 @@ namespace eX_Portal.Controllers {
 
 
     [HttpPost]
-    public ActionResult Create(MSTR_User User) {
+    public ActionResult Create(ViewModel.UserViewModel UserModel) {
       if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
       if (ModelState.IsValid) {
-        if (exLogic.User.UserExist(User.UserName) > 0) {
-          ModelState.AddModelError("User.UserName", "This username already exists.");
+        if (exLogic.User.UserExist(UserModel.User.UserName) > 0) {
+          ModelState.AddModelError("UserModel.User.UserName", "This username already exists.");
         }
 
-        if (String.IsNullOrEmpty(User.Password)) {
-          ModelState.AddModelError("User.Password", "Invalid Password. Please enter again.");
+        if (String.IsNullOrEmpty(UserModel.User.Password)) {
+          ModelState.AddModelError("UserModel.User.Password", "Invalid Password. Please enter again.");
         }
 
 
       }
 
       if (ModelState.IsValid) {
-        string Password = Util.GetEncryptedPassword(User.Password).ToString();
+        string Password = Util.GetEncryptedPassword(UserModel.User.Password).ToString();
         String SQL = "insert into MSTR_User(\n" +
           "  UserName,\n" +
           "  Password,\n" +
           "  FirstName,\n" +
+          "  MiddleName,\n" +
+          "  LastName,\n" +
           "  CreatedBy,\n" +
           "  UserProfileId,\n" +
           "  Remarks,\n" +
@@ -189,28 +296,47 @@ namespace eX_Portal.Controllers {
           "  CreatedOn,\n" +
           "  AccountId\n" +
           ") values(\n" +
-          "  '" + User.UserName + "',\n" +
+          "  '" + UserModel.User.UserName + "',\n" +
           "  '" + Password + "',\n" +
-          "  '" + User.FirstName + "',\n" +
+          "  '" + UserModel.User.FirstName + "',\n" +
+          "  '" + UserModel.User.MiddleName + "',\n" +
+            "  '" + UserModel.User.LastName + "',\n" +
           "  " + Util.getLoginUserID() + ",\n" +
-          "  " + User.UserProfileId + ",\n" +
-          "  '" + User.Remarks + "',\n" +
-          "  '" + User.MobileNo + "',\n" +
-          "  '" + User.OfficeNo + "',\n" +
-          "  '" + User.HomeNo + "',\n" +
-          "  '" + User.EmailId + "',\n" +
-          "  " + User.CountryId + ",\n" +
-          "  '" + User.IsActive + "',\n" +
+          "  " + UserModel.User.UserProfileId + ",\n" +
+          "  '" + UserModel.User.Remarks + "',\n" +
+          "  '" + UserModel.User.MobileNo + "',\n" +
+          "  '" + UserModel.User.OfficeNo + "',\n" +
+          "  '" + UserModel.User.HomeNo + "',\n" +
+          "  '" + UserModel.User.EmailId + "',\n" +
+          "  " + UserModel.User.CountryId + ",\n" +
+          "  '" + UserModel.User.IsActive + "',\n" +
           "  GETDATE(),\n" +
-          "  " + User.AccountId + "\n" +
+          "  " + UserModel.User.AccountId + "\n" +
           ")";
-
+//inserting pilot information to the pilot table
         int id = Util.InsertSQL(SQL);
-        return RedirectToAction("UserList");
+
+                SQL = "insert into MSTR_User_Pilot(\n" +
+               "  UserId,\n" +
+               "  PassportNo,\n" +
+               "  DateOfExpiry,\n" +
+               "  Department,\n" +
+               "  EmiratesId,\n" +
+               "  Title\n" +
+               ") values(\n" +
+               "  '" + id + "',\n" +
+               "  '" + UserModel.Pilot.PassportNo + "',\n" +
+               "  '" + UserModel.Pilot.DateOfExpiry + "',\n" +
+               "  '" + UserModel.Pilot.Department + "',\n" +
+                 "  '" + UserModel.Pilot.EmiratesId + "',\n" +
+               "  '" + UserModel.Pilot.Title + "'\n)";
+           int Pid = Util.InsertSQL(SQL);
+                return RedirectToAction("UserDetail", new { ID = id });
+               
       }
 
       var viewModel = new ViewModel.UserViewModel {
-        User = User,
+         
         ProfileList = Util.GetProfileList(),
         CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
         AccountList = Util.GetAccountList()
@@ -247,8 +373,10 @@ namespace eX_Portal.Controllers {
 
       SQL = "DELETE FROM [MSTR_USER] WHERE UserId = " + UserID;
       Util.doSQL(SQL);
+      SQL = "DELETE FROM [MSTR_USER_PILOT] WHERE UserId = " + UserID;
+      Util.doSQL(SQL);
 
-      return Util.jsonStat("OK");
+            return Util.jsonStat("OK");
     }
 
 
