@@ -174,14 +174,14 @@ namespace eX_Portal.exLogic {
       return ddList;
 
     }
-    public static IList<FlightMapData> GetDroneData(int FlID, int LastFlightID) {
+    public static IList<FlightMapData> GetDroneData(int FlID, int LastFlightID, int MaxRecords = 1) {
 
       IList<FlightMapData> FlightMapDataList;
       using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
         FlightMapDataList = (from FlightMapData in ctx.FlightMapDatas
                              where FlightMapData.FlightID == FlID && 
                                    FlightMapData.FlightMapDataID > LastFlightID
-                             select FlightMapData).OrderBy(x => x.FlightMapDataID).Take(1).ToList();
+                             select FlightMapData).OrderBy(x => x.FlightMapDataID).Take(MaxRecords).ToList();
 
       }
 

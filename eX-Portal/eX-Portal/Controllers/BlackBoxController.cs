@@ -79,9 +79,10 @@ namespace eX_Portal.Controllers {
         "  [Speed],\n" +
         "  [FixQuality],\n" +
         "  [Satellites],\n" +
-        "  [Pitch],\n" +
-        "  [Roll],\n" +
-        "  [Heading],\n" +
+        "  CASE ISNUMERIC([BBFlightID])\n" +
+        "    WHEN  1 THEN  CONVERT(numeric(12, 0),[BBFlightID])\n" +
+        "    ELSE 0.00\n" +
+        "  END as [BBFlightID],\n" + 
         "  CASE isnumeric(TotalFlightTime)\n" +
         "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), TotalFlightTime) / 60.0, 2) as numeric(36, 2))\n" +
         "    ELSE 0.00\n" +
