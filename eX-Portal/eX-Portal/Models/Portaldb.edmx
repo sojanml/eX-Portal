@@ -530,6 +530,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="PasswordSalt" Type="nvarchar" MaxLength="200" />
           <Property Name="AccountId" Type="int" />
+          <Property Name="IsPilot" Type="bit" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -1375,6 +1376,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="PasswordSalt" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AccountId" Type="Int32" />
+          <Property Name="IsPilot" Type="Boolean" />
         </EntityType>
         <EntityType Name="DroneFlight">
           <Key>
@@ -2043,6 +2045,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySetMapping Name="MSTR_User">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
               <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="IsPilot" ColumnName="IsPilot" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
                 <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
