@@ -1,0 +1,10 @@
+﻿@model eX_Portal.Models.MSTR_User
+@Html.Action("UserDetailView", new { ID = Model.UserId})
+@Html.ActionLink("Pilot Certification", "PilotCertificationCreate", "User" ,new { ID = Model.UserId }, null )<br>
+@Html.ActionLink("Exponent Certification", "ExponentCertificationCreate", "User", new { ID = Model.UserId }, null)
+
+@Html.Action("PilotCertificateDetails", new { ID = Model.UserId })
+
+@Html.Action("ExponentCertificateDetails", new { ID = Model.UserId })
+
+

@@ -102,6 +102,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="BBFlightID" Type="nvarchar" MaxLength="50" />
           <Property Name="IsProcessed" Type="int" />
           <Property Name="QueueMessage" Type="nvarchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -530,6 +531,50 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="PasswordSalt" Type="nvarchar" MaxLength="200" />
           <Property Name="AccountId" Type="int" />
         </EntityType>
+        <EntityType Name="MSTR_User_Pilot">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="PassportNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="DateOfExpiry" Type="date" />
+          <Property Name="Department" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmiratesId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="MSTR_User_Pilot_Certification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="CertificateId" Type="int" />
+          <Property Name="IssuingAuthorityId" Type="int" />
+          <Property Name="DateOfIssue" Type="date" />
+          <Property Name="DateOfExpiry" Type="date" />
+          <Property Name="NextRenewal" Type="date" />
+          <Property Name="Score" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MSTR_User_Pilot_ExponentUAS">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="CertificateId" Type="int" />
+          <Property Name="DateOfEnrollement" Type="date" />
+          <Property Name="DateOfCertification" Type="date" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Score" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
         <EntityType Name="ProductDefinition">
           <Key>
             <PropertyRef Name="Id" />
@@ -639,6 +684,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySet Name="MSTR_Product" EntityType="Self.MSTR_Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Profile" EntityType="Self.MSTR_Profile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User" EntityType="Self.MSTR_User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MSTR_User_Pilot" EntityType="Self.MSTR_User_Pilot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="Self.MSTR_User_Pilot_Certification" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MSTR_User_Pilot_ExponentUAS" EntityType="Self.MSTR_User_Pilot_ExponentUAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
@@ -708,6 +756,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="BBFlightID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsProcessed" Type="Int32" />
           <Property Name="QueueMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -1077,6 +1126,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySet Name="FlightMapDatas" EntityType="ExponentPortalModel.FlightMapData" />
           <EntitySet Name="MSTR_User" EntityType="ExponentPortalModel.MSTR_User" />
           <EntitySet Name="DroneFlights" EntityType="ExponentPortalModel.DroneFlight" />
+          <EntitySet Name="MSTR_User_Pilot" EntityType="ExponentPortalModel.MSTR_User_Pilot" />
+          <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="ExponentPortalModel.MSTR_User_Pilot_Certification" />
+          <EntitySet Name="MSTR_User_Pilot_ExponentUAS" EntityType="ExponentPortalModel.MSTR_User_Pilot_ExponentUAS" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -1339,6 +1391,50 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
         </EntityType>
+        <EntityType Name="MSTR_User_Pilot">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="PassportNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="DateOfExpiry" Type="DateTime" Precision="0" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmiratesId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MSTR_User_Pilot_Certification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="CertificateId" Type="Int32" />
+          <Property Name="IssuingAuthorityId" Type="Int32" />
+          <Property Name="DateOfIssue" Type="DateTime" Precision="0" />
+          <Property Name="DateOfExpiry" Type="DateTime" Precision="0" />
+          <Property Name="NextRenewal" Type="DateTime" Precision="0" />
+          <Property Name="Score" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MSTR_User_Pilot_ExponentUAS">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="CertificateId" Type="Int32" />
+          <Property Name="DateOfEnrollement" Type="DateTime" Precision="0" />
+          <Property Name="DateOfCertification" Type="DateTime" Precision="0" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Score" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1348,6 +1444,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySetMapping Name="DroneDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneData">
               <MappingFragment StoreEntitySet="DroneData">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="QueueMessage" ColumnName="QueueMessage" />
                 <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
                 <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
@@ -1987,6 +2084,53 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
                 <ScalarProperty Name="GSCID" ColumnName="GSCID" />
                 <ScalarProperty Name="PilotID" ColumnName="PilotID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_User_Pilot">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User_Pilot">
+              <MappingFragment StoreEntitySet="MSTR_User_Pilot">
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EmiratesId" ColumnName="EmiratesId" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="DateOfExpiry" ColumnName="DateOfExpiry" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PassportNo" ColumnName="PassportNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_User_Pilot_Certification">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User_Pilot_Certification">
+              <MappingFragment StoreEntitySet="MSTR_User_Pilot_Certification">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="NextRenewal" ColumnName="NextRenewal" />
+                <ScalarProperty Name="DateOfExpiry" ColumnName="DateOfExpiry" />
+                <ScalarProperty Name="DateOfIssue" ColumnName="DateOfIssue" />
+                <ScalarProperty Name="IssuingAuthorityId" ColumnName="IssuingAuthorityId" />
+                <ScalarProperty Name="CertificateId" ColumnName="CertificateId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_User_Pilot_ExponentUAS">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User_Pilot_ExponentUAS">
+              <MappingFragment StoreEntitySet="MSTR_User_Pilot_ExponentUAS">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DateOfCertification" ColumnName="DateOfCertification" />
+                <ScalarProperty Name="DateOfEnrollement" ColumnName="DateOfEnrollement" />
+                <ScalarProperty Name="CertificateId" ColumnName="CertificateId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -68,7 +68,35 @@ namespace eX_Portal.exLogic
             return new string(list.ToArray());
         }
 
+        public static IEnumerable<SelectListItem> GetLookup(string type)
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
 
+            String SQL = "SELECT 0 as Value, 'Not Available' as Name";
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+
+                    SQL = "SELECT Type,TypeID,Code,Name from dbo.LUP_Drone where IsActive = 1 and Type ='" + type + "'";
+
+
+                    cmd.CommandText = SQL;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["TypeID"].ToString() });
+                        }
+                    }
+
+                    ctx.Database.Connection.Close();
+                } //using Database.Connection
+            }//using ExponentPortalEntities;
+            return SelectList; //return the list objects
+        }//function GetDropDowntL
         public static IEnumerable<SelectListItem> GetAccountList()
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();
