@@ -10,6 +10,7 @@ using System.Data.Entity;
 using System.Text;
 using System.IO;
 
+
 namespace eX_Portal.Controllers {
 
   public class UserController : Controller {
@@ -23,6 +24,72 @@ namespace eX_Portal.Controllers {
       UserLogin _objuserlogin = new UserLogin();
       return View(_objuserlogin);
     }//Login()
+
+
+        public string ExponentCertificateDetails([Bind(Prefix = "ID")] int PilotID)
+        {
+
+            string SQL =" select b.name as Certification,\n " +
+                        " a.score as Score,a.DateOfEnrollement,\n" +
+                        " a.DateOfCertification ,\n" +
+                        "  Count(*) Over() as _TotalRecords ," +
+                        "  a.Id as _PKey" +
+                        " from mstr_user_pilot_ExponentUAS a \n " +
+                        " left join LUP_Drone b \n " +
+                        " on \n" +
+                        " a.CertificateId = b.TypeId\n " +
+                        " where \n" +
+                        "  b.Type = 'Certificate' \n" +
+                        "  and \n" +
+                        "  a.UserId ="+ PilotID;
+            qView nView = new qView(SQL);
+            if (nView.HasRows)
+            {
+                nView.isFilterByTop = false;
+                return
+                  "<h2>Exponent Certification Details</h2>\n" +
+                  nView.getDataTable(true, false);
+            }
+
+            return "";
+
+
+
+        }
+        public String PilotCertificateDetails([Bind(Prefix = "ID")] int PilotID)
+        {
+
+         String   SQL = "  select b.name as Certification, \n" +
+                "  a.score as Score,c.Name as IssuingAuthority ,\n" +
+                "  a.DateOfIssue, \n" +
+                "  a.DateOfExpiry, \n" +
+                "  a.NextRenewal ,\n" +
+                "  Count(*) Over() as _TotalRecords ," +
+                "  a.Id as _PKey" +
+                "  from \n" +
+                "  mstr_user_pilot_Certification a \n" +
+                "  left join LUP_Drone b \n" +
+                "  on a.CertificateId = b.TypeId \n" +
+                "  left join LUP_Drone c \n" +
+                "  on a.IssuingAuthorityId = c.typeId \n" +
+                "  where \n" +
+                "  b.Type = 'Certificate'\n " +
+                "  and c.Type = 'IssueAuthority' \n" +
+                "  and a.UserId ="+ PilotID;
+            qView nView = new qView(SQL);
+
+            if (nView.HasRows)
+            {
+                nView.isFilterByTop = false;
+                return
+                  "<h2>Pilot Certification Details</h2>\n" +
+                  nView.getDataTable(true, false);
+            }
+
+            return "";
+
+        
+    }
 
 
     [HttpPost]
@@ -381,8 +448,167 @@ namespace eX_Portal.Controllers {
 
 
 
+        public ActionResult PilotCertificationCreate([Bind(Prefix = "ID")] int PilotID = 0)
+        {
+
+            ViewBag.Title = "Create Pilot Certificate";
+            MSTR_User_Pilot_Certification PCertification = new MSTR_User_Pilot_Certification();
+            PCertification.UserId = PilotID;
+            return View(PCertification);
+        }
+
+        // POST: user/PilotCertificationCreate
+        [HttpPost]
+        public ActionResult PilotCertificationCreate(MSTR_User_Pilot_Certification PCertificate)
+        {
+           
+            if (PCertificate.CertificateId < 1 || PCertificate.CertificateId == null) ModelState.AddModelError("CertificateId", "You must select a Certificate.");
+            if (PCertificate.IssuingAuthorityId < 1 || PCertificate.IssuingAuthorityId == null) ModelState.AddModelError("IssuingAuthorityId", "Please Select Issuing Authority.");
+           
+            if (ModelState.IsValid)
+            {
+                int ID = 0;
 
 
-  } //class
+                ExponentPortalEntities db = new ExponentPortalEntities();
+                PCertificate.CreatedBy = Util.getLoginUserID();
+                PCertificate.CreatedOn = DateTime.Now;
+                db.MSTR_User_Pilot_Certification.Add(PCertificate);
+              
+                db.SaveChanges();
+                ID = PCertificate.Id;
+                db.Dispose();
+               
+            return RedirectToAction("UserDetail", new { ID = PCertificate.UserId });
+            }
+            else
+            {
+                ViewBag.Title = "Create Pilot Certification";
+                return View(PCertificate);
+            }
+        }
+
+
+        public ActionResult PilotCertificationEdit([Bind(Prefix = "ID")] int PCertId = 0)
+        {
+           
+            ViewBag.Title = "Edit Pilot Certificate";
+            ExponentPortalEntities db = new ExponentPortalEntities();
+            MSTR_User_Pilot_Certification PCertificate = db.MSTR_User_Pilot_Certification.Find(PCertId);
+            return View(PCertificate);
+        }
+
+        [HttpPost]
+        public ActionResult PilotCertificationEdit(MSTR_User_Pilot_Certification PCertificate)
+        {
+          
+
+            ViewBag.Title = "Edit Piltot Certificate";
+            ExponentPortalEntities db = new ExponentPortalEntities();
+            PCertificate.ModifiedBy = Util.getLoginUserID();
+            PCertificate.ModifiedOn = DateTime.Now;
+            db.Entry(PCertificate).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("UserList");
+            //return RedirectToAction("Detail", new { ID = InitialData.ID });
+        }
+
+
+        public String PilotCertificationDelete([Bind(Prefix = "ID")]int PCertId = 0)
+        {
+           
+
+           string SQL = "DELETE FROM MSTR_User_Pilot_Certification WHERE Id = " + PCertId;
+            Util.doSQL(SQL);
+
+
+            return Util.jsonStat("OK");
+        }
+
+
+        public ActionResult ExponentCertificationCreate([Bind(Prefix = "ID")] int PilotID = 0)
+        {
+
+            ViewBag.Title = "Create Exponent Certificate";
+            MSTR_User_Pilot_ExponentUAS ExpCertification = new MSTR_User_Pilot_ExponentUAS();
+            ExpCertification.UserId = PilotID;
+            return View(ExpCertification);
+        }
+
+        // POST: user/PilotCertificationCreate
+        [HttpPost]
+        public ActionResult ExponentCertificationCreate(MSTR_User_Pilot_ExponentUAS ExpCertificate)
+        {
+
+            if (ExpCertificate.CertificateId < 1 || ExpCertificate.CertificateId == null) ModelState.AddModelError("CertificateId", "You must select a Certificate.");
+           
+
+            if (ModelState.IsValid)
+            {
+                int ID = 0;
+
+
+                ExponentPortalEntities db = new ExponentPortalEntities();
+
+                ExpCertificate.CreatedBy = Util.getLoginUserID();
+                ExpCertificate.CreatedOn = DateTime.Now;
+                db.MSTR_User_Pilot_ExponentUAS.Add(ExpCertificate);
+
+                db.SaveChanges();
+                ID = ExpCertificate.Id;
+                db.Dispose();
+                
+                return RedirectToAction("UserDetail", new { ID = ExpCertificate.UserId});
+            }
+            else
+            {
+                ViewBag.Title = "Create Exponent Certification";
+                return View(ExpCertificate);
+            }
+        }
+
+
+        public ActionResult ExponentCertificationEdit([Bind(Prefix = "ID")] int ExpCertId = 0)
+        {
+
+            ViewBag.Title = "Edit Exponent Certificate";
+            ExponentPortalEntities db = new ExponentPortalEntities();
+            
+            MSTR_User_Pilot_ExponentUAS ExpCertificate = db.MSTR_User_Pilot_ExponentUAS.Find(ExpCertId);
+            return View(ExpCertificate);
+        }
+
+        [HttpPost]
+        public ActionResult ExponentCertificationEdit(MSTR_User_Pilot_Certification ExpCertificate)
+        {
+
+
+            ViewBag.Title = "Edit Exponent Certificate";
+            ExponentPortalEntities db = new ExponentPortalEntities();
+            ExpCertificate.ModifiedBy = Util.getLoginUserID();
+            ExpCertificate.ModifiedOn = DateTime.Now;
+            db.Entry(ExpCertificate).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("UserList");
+            //return RedirectToAction("Detail", new { ID = InitialData.ID });
+        }
+
+
+        public String ExponentCertificationDelete([Bind(Prefix = "ID")]int ExpCertId = 0)
+        {
+
+
+            string SQL = "DELETE FROM  MSTR_User_Pilot_ExponentUAS WHERE Id = " + ExpCertId;
+            Util.doSQL(SQL);
+
+
+            return Util.jsonStat("OK");
+        }
+
+
+
+
+
+    } //class
 }//namespace
 
