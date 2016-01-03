@@ -1,16 +1,18 @@
 ﻿@{
-    ViewBag.Title = "Dashboard";
+  ViewBag.Title = "Dashboard";
 }
 
 
 <div class="row">
 
-    <div class="col-3">
-        <h2>Drones</h2>
-        <p>This feature allow you to view all the drones registered. From the
-      drones, you will be able to see the service history and flight details.</p>
-        <p><a class="btn btn-default" href="/Drone/">Click Here...</a></p>
-    </div>
+  <div class="col-3">
+    <h2>Drones</h2>
+    <p>
+      This feature allow you to view all the drones registered. From the
+      drones, you will be able to see the service history and flight details.
+    </p>
+    <p><a class="btn btn-default" href="/Drone/">Click Here...</a></p>
+  </div>
 
   <div class="col-3">
     <h2>Drone Flight</h2>
@@ -19,148 +21,144 @@
     <p><a class="btn btn-default" href="/DroneFlight/">Click Here...</a></p>
   </div>
 
-    <div class="col-3">
-        <h2>UAS Service Details</h2>
-        <p>Create and manage Drone Services and History.</p>
-        <p><a class="btn btn-default" href="/DroneService/">Click Here...</a></p>
-    </div>
+  <div class="col-3">
+    <h2>UAS Service Details</h2>
+    <p>Create and manage Drone Services and History.</p>
+    <p><a class="btn btn-default" href="/DroneService/">Click Here...</a></p>
+  </div>
 </div>
 <div id="map_canvas" style="width: 100%; height: 480px;">
 
-    <div style="height:150px;">&nbsp;</div>
+  <div style="height:150px;">&nbsp;</div>
 </div>
 
 @section scripts{
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-       
+<script type="text/javascript" src="~/Scripts/infobox.js"></script>
 
   <script type="text/javascript">
-      var map;
-      var _Location = [];
-      var _truckName = [];
-      var _viGroupName = [];
-      var _truck;
-      var _vigroup;
-      var _truckIcon;
-      var _viGroupTruckArry = [];
-      var _viGroupTruckIconArry = [];
-      var _vigroupValue;
-      var initLat = 24.9899106;
-      var initLng = 55.0034188;
-      var defaultZoom = 6;
-      var gpsGrpID;
-      var timezone;
-      var clientID;
-      var programName;
+    var map;
+    var _Location = [];
+    var livemarkers = [];
 
-      var livemarkers = [];
-      var datemarkers = [];
-      var secureDateMarker = [];
-      var historymarkers = [];
-      var allHistorymarkers = [];
-      var InfoMarker = null;
-      var trafficLayer = new google.maps.TrafficLayer();
-      var contentString;
-      var browser = false;
-      var enableRefreshIntervalID;
-      var pickupStatus = false;
-      var truckStatus = false;
-      var geocoder;
+    var initLat = 24.9899106;
+    var initLng = 55.0034188;
+    var defaultZoom = 10;
+
+
+    var bounds = new google.maps.LatLngBounds();
+    var infowindow = new google.maps.InfoWindow();
 
 
 
-      $(document).ready(function () {
+    $(document).ready(function () {
 
-          initialize();
+      initialize();
+    });
+
+    function initialize() {
+      geocoder = new google.maps.Geocoder();
+      var mapOptions = {
+        zoom: defaultZoom,
+        center: new google.maps.LatLng(initLat, initLng),
+        panControl: false,
+        mapTypeControl: false,
+        mapTypeControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_TOP,
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+          style: google.maps.ZoomControlStyle.LARGE,
+          position: google.maps.ControlPosition.LEFT_TOP,
+        },
+        scaleControl: false,
+        streetViewControl: true,
+        overviewMapControl: false,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+      map = new google.maps.Map(document.getElementById('map_canvas'),
+          mapOptions);
+
+      GetDrones();
+    };
+
+
+    function GetDrones() {
+      var _locVal = [];
+      $.ajax({
+        type: "GET",
+        url: '@Url.Action("GetDrones", "Map")',
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        async: true,
+        success: function (_Location) {
+          setMarker(map, _Location)
+        },
+        failure: function (msg) {
+          alert('Live Drone ' + msg);
+        }
+      });
+    }
+
+    function setMarker(map, _Location) {
+      $.each(_Location, function (index, location) {
+        var body = '' +
+            '<b>' + location['DroneName'] + '</b><br>\n' +
+            'Owner: ' + location['OwnerName'] + '<br>\n' +
+            'Manufacture: ' + location['Manufacture'] + '<br>\n' +
+            'UAV Type: ' + location['UAVType'];
+
+        var myLatLng = new google.maps.LatLng(location['LastLatitude'], location['LastLongitude']);
+        var marker = createMarker(map, myLatLng, location['DroneName'], body);
+
+      });
+      map.fitBounds(bounds);
+    }
+
+    function createMarker(map, latlng, heading, body) {
+      var image = '/Blue.png';
+      var marker = new google.maps.Marker({
+        position: latlng,
+        map: map,
+        icon: image,
+        title: heading
       });
 
-      function initialize() {
-          geocoder = new google.maps.Geocoder();
-          var mapOptions = {
-              zoom: defaultZoom,
-              center: new google.maps.LatLng(initLat, initLng),
-              panControl: false,
-              mapTypeControl: false,
-              mapTypeControlOptions: {
-                  position: google.maps.ControlPosition.RIGHT_TOP,
-              },
-              zoomControl: true,
-              zoomControlOptions: {
-                  style: google.maps.ZoomControlStyle.LARGE,
-                  position: google.maps.ControlPosition.LEFT_TOP,
-              },
-              scaleControl: false,
-              streetViewControl: true,
-              overviewMapControl: false,
-              mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
-          map = new google.maps.Map(document.getElementById('map_canvas'),
-              mapOptions);
-
-
-          GetDrones();
+      var myOptions = {
+        content: heading,
+        boxStyle: {
+          textAlign: "center",
+          color: 'red',
+          fontSize: "8pt",
+          width: "auto"
+        },
+        disableAutoPan: true,
+        pixelOffset: new google.maps.Size(-25, 0),
+        position: latlng,
+        closeBoxURL: "",
+        isHidden: false,
+        pane: "mapPane",
+        enableEventPropagation: true
       };
 
+      var ibLabel = new InfoBox(myOptions);
+      ibLabel.open(map);
 
-      function GetDrones() {
-          var _locVal = [];
-          $.ajax({
-              type: "GET",
-              url: '@Url.Action("GetDrones", "Map")',
-              contentType: "application/json;charset=utf-8",
-              dataType: "json",
-              async: true,
-              success: function (msg) {
-                  try {
-                      _Location = [];
-                      msg = msg.hasOwnProperty('d') ? msg.d : msg;
-                      $.each(msg, function (index, obj) {
-                          $.each(obj, function (key, value) {
-                              _locVal.push(value)
-                          });
-                          _Location.push(_locVal);
-                          _locVal = [];
-                      });
-                      setMarker(map, _Location);
-                  }
-                  catch (err) {
-                      alert('Live Trucks ' + err);
-                  }
-              },
-              failure: function (msg) {
-                  alert('Live Trucks ' + msg);
-              }
-          });
+      marker.addListener('click', function () {
+        var infowindow = new google.maps.InfoWindow({
+          content: body
+        });
+        infowindow.open(map, marker);
+      });
+
+      bounds.extend(marker.position);
+    }
+
+    function ShowInfo(marker, i) {
+      return function() {
+        infowindow.open(map, marker);
       }
-
-      function setMarker(map, location) {
-          for (var i = 0; i < location.length; i++) {
-              var loc = location[i];
-
-
-
-              var body = '' +
-                  '<br/>Drone&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' + loc[1] +
-                  '<br/>DroneID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' + loc[2] +
-                  '<br/>Address&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
-              var myLatLng = new google.maps.LatLng(loc[3], loc[4]);
-              var marker = createMarker(map, myLatLng, loc[2], body, i);
-          }
-      }
-
-      function createMarker(map, latlng, heading, body, zindex) {
-          var image = '/Blue.png';
-          var marker = new google.maps.Marker({
-              position: latlng,
-              map: map,
-              icon: image,
-              title: heading,
-              zIndex: 9999
-          });
-          closeMargin = '120px';
-          livemarkers.push(marker);
-          google.maps.event.addListener(marker, 'click', function () { });
-      }
+    }
 
   </script>
 }

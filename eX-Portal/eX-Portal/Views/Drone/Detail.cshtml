@@ -10,7 +10,6 @@
 <!-- Recent Service -->
 @Html.Action("ByDrone", "DroneService", new { ID = DroneID })
 
-
 @Html.Action("getDroneParts", "Drone", new { ID = DroneID })
 
 @if (eX_Portal.exLogic.User.hasAccess("CHECKLIST.SETUP")) { 
