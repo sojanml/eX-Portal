@@ -227,7 +227,10 @@ namespace eX_Portal.exLogic {
     }
 
 
-    public String getDataTable(bool isIncludeData = false, bool isIncludeFooter = true) {
+    public String getDataTable(
+      bool isIncludeData = false, 
+      bool isIncludeFooter = true,
+      String qDataTableID = "qViewTable") {
       StringBuilder Table = new StringBuilder();
       StringBuilder THead = new StringBuilder();
 
@@ -240,7 +243,7 @@ namespace eX_Portal.exLogic {
       if(IsPrimaryKey) THead.Append("<th class=\"menu\">&nbsp;</th>");
       THead.AppendLine("</tr>");
 
-      Table.AppendLine("<table id=\"qViewTable\" class=\"report\">");
+      Table.AppendLine("<table id=\"" + qDataTableID + "\" class=\"report\">");
       Table.AppendLine("<thead>");
       Table.Append(THead);
 
@@ -275,17 +278,23 @@ namespace eX_Portal.exLogic {
         using (var reader = cmd.ExecuteReader()) {
           //For each row
           while (reader.Read()) {
-            Rows.AppendLine("<tr class=\"" + (isEven ? "even" :"odd") +  "\">");
+            Rows.AppendLine("<tr class=\"" + (isEven ? "even" : "odd") + "\">");
             for (int i = 0; i < reader.FieldCount; i++) {
               String DisplayValue = getFieldVal(reader, i);
-              Rows.AppendLine("<td>" + DisplayValue + "</td>");
-            }
+              switch (reader.GetName(i).ToLower()) {
+                case "_pkey":
+                  Rows.AppendLine("<td class=\"menu\"><img data-pkey=\"" + DisplayValue + "\" class=\"row-button\" src=\"/images/drop-down.png\"></td>");
+                  break;
+                default:
+                  Rows.AppendLine("<td>" + DisplayValue + "</td>");
+                  break;
+              }//switch
+            }//for
             Rows.AppendLine("</tr>");
             isEven = !isEven;
           } //while
         }
       }
-
       return Rows;
     }
 

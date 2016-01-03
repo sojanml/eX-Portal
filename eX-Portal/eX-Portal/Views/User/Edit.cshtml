@@ -92,6 +92,7 @@
       </div>
     </div>
 
+
     <div class="form-group">
       @Html.LabelFor(model => model.User.CountryId, htmlAttributes: new { @class = "control-label col-md-2" })
       <div class="col-md-10">
@@ -107,6 +108,14 @@
           @Html.EditorFor(model => model.User.IsActive)
           @Html.ValidationMessageFor(model => model.User.IsActive, "", new { @class = "text-danger" })
         </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.User.IsPilot, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.User.IsPilot)
+        @Html.ValidationMessageFor(model => model.User.IsPilot, "", new { @class = "text-danger" })
       </div>
     </div>
 

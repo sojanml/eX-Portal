@@ -400,8 +400,29 @@ div.form-toolbar a.button {
 }
 
 
+div.form-toolbar ul {
+  margin:0px;
+  padding:0px;
+  list-style:none;
+}
+div.form-toolbar ul li {
+  display:inline-block;
+  margin-left: 5px;
+  padding-left: 5px;
+  border-left:1px #ea050e solid;  
+}
+div.form-toolbar ul li:first-child {
+  border-left: none;
+}
 
+div.form-toolbar ul li a {
+  text-decoration: none;
+  color:black;
+}
 
+div.form-toolbar ul li a:hover {
+  color:#ea050e;
+}
 footer {
  border-bottom: 10px gray solid;
  padding-bottom: 10px;

@@ -92,6 +92,10 @@ namespace eX_Portal.Models
         [Display(Name = "Is Active?")]
         public string IsActive { get; set; }
 
+        [Display(Name = "Is Pilot?")]
+        public string IsPilot { get; set; }
+    
+
         [Display(Name = "Mobile Number")]
         public string MobileNo { get; set; }
         [Display(Name = "Office Number")]
