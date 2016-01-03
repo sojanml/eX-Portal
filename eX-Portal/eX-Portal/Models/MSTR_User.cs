@@ -39,5 +39,6 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public string PasswordSalt { get; set; }
         public Nullable<int> AccountId { get; set; }
+        public Nullable<bool> IsPilot { get; set; }
     }
 }
