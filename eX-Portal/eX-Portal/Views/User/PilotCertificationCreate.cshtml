@@ -1,5 +1,7 @@
 ﻿@model eX_Portal.Models.MSTR_User_Pilot_Certification
 @using eX_Portal.exLogic
+@Html.Action("UserDetailView", new { ID = Model.UserId })
+
 
 <div class="form-horizontal">
     @using (Html.BeginForm())
@@ -10,8 +12,7 @@
 
 
 
-
-      
+       
 
         <div class="form-group">
 
