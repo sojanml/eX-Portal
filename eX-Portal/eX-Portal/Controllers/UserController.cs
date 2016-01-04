@@ -354,7 +354,8 @@ namespace eX_Portal.Controllers {
           "  CountryId,\n" +
           "  IsActive,\n" +
           "  CreatedOn,\n" +
-          "  AccountId\n" +
+          "  AccountId,\n" +
+          "  IsPilot \n"+
           ") values(\n" +
           "  '" + UserModel.User.UserName + "',\n" +
           "  '" + Password + "',\n" +
@@ -371,7 +372,8 @@ namespace eX_Portal.Controllers {
           "  " + UserModel.User.CountryId + ",\n" +
           "  '" + UserModel.User.IsActive + "',\n" +
           "  GETDATE(),\n" +
-          "  " + UserModel.User.AccountId + "\n" +
+          "  " + UserModel.User.AccountId + ",\n" +
+          "  '" + UserModel.User.IsPilot + "'\n" +
           ")";
         //inserting pilot information to the pilot table
         int id = Util.InsertSQL(SQL);
