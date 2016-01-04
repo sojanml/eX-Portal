@@ -27,10 +27,12 @@ namespace eX_Portal.Controllers {
 
 
     public string ExponentCertificateDetails([Bind(Prefix = "ID")] int PilotID) {
+            if (!exLogic.User.hasAccess("EXPCERT.VIEW")) return "Access Denied";
 
-      string SQL = " select b.name as Certification,\n " +
-                  " a.score as Score,a.DateOfEnrollement,\n" +
-                  " a.DateOfCertification ,\n" +
+            string SQL = " select b.name as Certification,\n " +
+                  " a.score as Score,\n"+
+                 "CONVERT(NVARCHAR, a.DateOfEnrollement, 106) AS DateOfEnrollement  ,\n" +
+                  "CONVERT(NVARCHAR, a.DateOfCertification, 106) AS DateOfCertification  ,\n" + 
                   "  a.Id as _PKey" +
                   " from mstr_user_pilot_ExponentUAS a \n " +
                   " left join LUP_Drone b \n " +
@@ -52,12 +54,13 @@ namespace eX_Portal.Controllers {
 
     }
     public String PilotCertificateDetails([Bind(Prefix = "ID")] int PilotID) {
+            if (!exLogic.User.hasAccess("PILOTCERT.VIEW")) return "Access Denied";
 
-      String SQL = "  select b.name as Certification, \n" +
+            String SQL = "  select b.name as Certification, \n" +
              "  a.score as Score,c.Name as IssuingAuthority ,\n" +
-             "  a.DateOfIssue, \n" +
-             "  a.DateOfExpiry, \n" +
-             "  a.NextRenewal ,\n" +
+             "CONVERT(NVARCHAR, a.DateOfIssue, 106) AS DateOfIssue , \n" +
+             " CONVERT(NVARCHAR, a.DateOfExpiry, 106) AS DateOfExpiry  , \n" +
+             "  CONVERT(NVARCHAR, a.NextRenewal, 106) AS NextRenewal  ,\n" +
              "  a.Id as _PKey" +
              "  from \n" +
              "  mstr_user_pilot_Certification a \n" +
@@ -184,7 +187,7 @@ namespace eX_Portal.Controllers {
                   ",a.[HomeNo]\n" +
                   " ,a.[EmailId]\n  " +
                   ",b.[PassportNo]" +
-                  " ,b.[DateOfExpiry]\n   " +
+                  " ,CONVERT(NVARCHAR, b.[DateOfExpiry], 106) AS DateOfExpiry\n   " + 
                   ",b.[Department]\n  " +
                   " ,b.[EmiratesId] \n   " +
                   ",b.[Title] as JobTitle\n   " +
@@ -333,6 +336,7 @@ namespace eX_Portal.Controllers {
       }
 
       if (ModelState.IsValid) {
+                
         string Password = Util.GetEncryptedPassword(UserModel.User.Password).ToString();
         String SQL = "insert into MSTR_User(\n" +
           "  UserName,\n" +
@@ -439,7 +443,9 @@ namespace eX_Portal.Controllers {
 
     public ActionResult PilotCertificationCreate([Bind(Prefix = "ID")] int PilotID = 0) {
 
-      ViewBag.Title = "Create Pilot Certificate";
+            if (!exLogic.User.hasAccess("PILOTCERT.CREATE")) return RedirectToAction("NoAccess", "Home");
+
+            ViewBag.Title = "Create Pilot Certificate";
       MSTR_User_Pilot_Certification PCertification = new MSTR_User_Pilot_Certification();
       PCertification.UserId = PilotID;
       return View(PCertification);
@@ -448,8 +454,9 @@ namespace eX_Portal.Controllers {
     // POST: user/PilotCertificationCreate
     [HttpPost]
     public ActionResult PilotCertificationCreate(MSTR_User_Pilot_Certification PCertificate) {
+            if (!exLogic.User.hasAccess("PILOTCERT.CREATE")) return RedirectToAction("NoAccess", "Home");
 
-      if (PCertificate.CertificateId < 1 || PCertificate.CertificateId == null) ModelState.AddModelError("CertificateId", "You must select a Certificate.");
+            if (PCertificate.CertificateId < 1 || PCertificate.CertificateId == null) ModelState.AddModelError("CertificateId", "You must select a Certificate.");
       if (PCertificate.IssuingAuthorityId < 1 || PCertificate.IssuingAuthorityId == null) ModelState.AddModelError("IssuingAuthorityId", "Please Select Issuing Authority.");
 
       if (ModelState.IsValid) {
@@ -474,8 +481,9 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult PilotCertificationEdit([Bind(Prefix = "ID")] int PCertId = 0) {
+            if (!exLogic.User.hasAccess("PILOTCERT.EDIT")) return RedirectToAction("NoAccess", "Home");
 
-      ViewBag.Title = "Edit Pilot Certificate";
+            ViewBag.Title = "Edit Pilot Certificate";
       ExponentPortalEntities db = new ExponentPortalEntities();
       MSTR_User_Pilot_Certification PCertificate = db.MSTR_User_Pilot_Certification.Find(PCertId);
       return View(PCertificate);
@@ -483,33 +491,36 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public ActionResult PilotCertificationEdit(MSTR_User_Pilot_Certification PCertificate) {
+            if (!exLogic.User.hasAccess("PILOTCERT.EDIT")) return RedirectToAction("NoAccess", "Home");
 
-
-      ViewBag.Title = "Edit Piltot Certificate";
+            ViewBag.Title = "Edit Piltot Certificate";
       ExponentPortalEntities db = new ExponentPortalEntities();
       PCertificate.ModifiedBy = Util.getLoginUserID();
       PCertificate.ModifiedOn = DateTime.Now;
       db.Entry(PCertificate).State = System.Data.Entity.EntityState.Modified;
       db.SaveChanges();
-      return RedirectToAction("UserList");
-      //return RedirectToAction("Detail", new { ID = InitialData.ID });
-    }
+     
+      return RedirectToAction("UserDetail", new { ID = PCertificate.UserId });
+        
+        }
 
 
     public String PilotCertificationDelete([Bind(Prefix = "ID")]int PCertId = 0) {
+            if (!exLogic.User.hasAccess("PILOTCERT.DELETE")) return   Util.jsonStat("ERROR", "Access Denied");
 
-
-      string SQL = "DELETE FROM MSTR_User_Pilot_Certification WHERE Id = " + PCertId;
+            string SQL = "DELETE FROM MSTR_User_Pilot_Certification WHERE Id = " + PCertId;
       Util.doSQL(SQL);
 
 
-      return Util.jsonStat("OK");
-    }
+            return Util.jsonStat("OK");
+
+        }
 
 
     public ActionResult ExponentCertificationCreate([Bind(Prefix = "ID")] int PilotID = 0) {
+            if (!exLogic.User.hasAccess("EXPCERT.CREATE")) return RedirectToAction("NoAccess", "Home");
 
-      ViewBag.Title = "Create Exponent Certificate";
+            ViewBag.Title = "Create Exponent Certificate";
       MSTR_User_Pilot_ExponentUAS ExpCertification = new MSTR_User_Pilot_ExponentUAS();
       ExpCertification.UserId = PilotID;
       return View(ExpCertification);
@@ -518,8 +529,9 @@ namespace eX_Portal.Controllers {
     // POST: user/PilotCertificationCreate
     [HttpPost]
     public ActionResult ExponentCertificationCreate(MSTR_User_Pilot_ExponentUAS ExpCertificate) {
+            if (!exLogic.User.hasAccess("EXPCERT.CREATE")) return RedirectToAction("NoAccess", "Home");
 
-      if (ExpCertificate.CertificateId < 1 || ExpCertificate.CertificateId == null) ModelState.AddModelError("CertificateId", "You must select a Certificate.");
+            if (ExpCertificate.CertificateId < 1 || ExpCertificate.CertificateId == null) ModelState.AddModelError("CertificateId", "You must select a Certificate.");
 
 
       if (ModelState.IsValid) {
@@ -545,8 +557,9 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult ExponentCertificationEdit([Bind(Prefix = "ID")] int ExpCertId = 0) {
+            if (!exLogic.User.hasAccess("EXPCERT.EDIT")) return RedirectToAction("NoAccess", "Home");
 
-      ViewBag.Title = "Edit Exponent Certificate";
+            ViewBag.Title = "Edit Exponent Certificate";
       ExponentPortalEntities db = new ExponentPortalEntities();
 
       MSTR_User_Pilot_ExponentUAS ExpCertificate = db.MSTR_User_Pilot_ExponentUAS.Find(ExpCertId);
@@ -554,24 +567,25 @@ namespace eX_Portal.Controllers {
     }
 
     [HttpPost]
-    public ActionResult ExponentCertificationEdit(MSTR_User_Pilot_Certification ExpCertificate) {
+    public ActionResult ExponentCertificationEdit(MSTR_User_Pilot_ExponentUAS ExpCertificate) {
+            if (!exLogic.User.hasAccess("EXPCERT.EDIT")) return RedirectToAction("NoAccess", "Home");
 
-
-      ViewBag.Title = "Edit Exponent Certificate";
+            ViewBag.Title = "Edit Exponent Certificate";
       ExponentPortalEntities db = new ExponentPortalEntities();
       ExpCertificate.ModifiedBy = Util.getLoginUserID();
       ExpCertificate.ModifiedOn = DateTime.Now;
       db.Entry(ExpCertificate).State = System.Data.Entity.EntityState.Modified;
       db.SaveChanges();
-      return RedirectToAction("UserList");
-      //return RedirectToAction("Detail", new { ID = InitialData.ID });
-    }
+
+      return RedirectToAction("UserDetail", new { ID = ExpCertificate.UserId });
+         
+        }
 
 
     public String ExponentCertificationDelete([Bind(Prefix = "ID")]int ExpCertId = 0) {
 
-
-      string SQL = "DELETE FROM  MSTR_User_Pilot_ExponentUAS WHERE Id = " + ExpCertId;
+            if (!exLogic.User.hasAccess("EXPCERT.DELETE")) return Util.jsonStat("ERROR", "Access Denied");
+            string SQL = "DELETE FROM  MSTR_User_Pilot_ExponentUAS WHERE Id = " + ExpCertId;
       Util.doSQL(SQL);
 
 
