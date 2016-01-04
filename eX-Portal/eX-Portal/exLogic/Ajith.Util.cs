@@ -415,6 +415,18 @@ namespace eX_Portal.exLogic
             return result;
         }
 
+        public static int GetUserIdCertificate(int CertID,string TableName)
+        {
+            int result = 0;
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL = "select UserId from " + TableName + " where Id='" + CertID + "'";
+                int UserId = cotx.Database.SqlQuery<int>(SQL).FirstOrDefault<int>();
+                result = UserId;
+            }
+
+            return result;
+        }
 
 
         public static int GetServiceId()
