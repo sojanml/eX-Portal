@@ -44,12 +44,10 @@ namespace eX_Portal.Controllers {
       "    AND M.Type = 'Manufacturer'\n" +
       "LEFT JOIN LUP_Drone U\n" +
       "  ON [MSTR_Drone].UAVTypeID = U.TypeID\n" +
-      "    AND U.Type = 'UAVType'\n";
-      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        SQL +=
-          "WHERE\n" +
-          "  [MSTR_Drone].AccountID=" + Util.getAccountID();
-      }
+      "    AND U.Type = 'UAVType'\n" +
+      "WHERE\n" +
+      "  [MSTR_Drone].AccountID=" + Util.getAccountID();
+
 
       var LiveDrones = Util.getDBRows(SQL);
       //  LiveDrones.SQL = ;

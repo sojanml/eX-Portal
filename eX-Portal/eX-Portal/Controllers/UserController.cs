@@ -148,7 +148,6 @@ namespace eX_Portal.Controllers {
       var viewModel = new ViewModel.UserViewModel {
         User = new MSTR_User(),
         Pilot = new MSTR_User_Pilot(),
-
         ProfileList = Util.GetProfileList(),
         CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
         AccountList = Util.GetAccountList()

@@ -3,6 +3,7 @@ var map;
 var _Location = [];
 var PlotTimer = null;
 var PlotTimerDelay = 100;
+var isReplayMode = false;
 
 var _truckName = [];
 var _viGroupName = [];
@@ -93,6 +94,7 @@ $(document).ready(function () {
 
 function initialize() {
   geocoder = new google.maps.Geocoder();
+
   var mapOptions = {
     zoom: defaultZoom,
     center: new google.maps.LatLng(initLat, initLng),
@@ -136,12 +138,36 @@ function initialize() {
   $('#MapData table').append(loctr);
   $('#MapData table').append(firsttr);
   $('#MapData table').addClass('report');
+  setLocation();
   GetDrones();
   //  myInterval = setInterval(function () { }, 500);
 
 };
 
+function setLocation() {
+  if (navigator.geolocation) {
+    browserSupportFlag = true;
+    navigator.geolocation.getCurrentPosition(function (position) {
+      initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      map.setCenter(initialLocation);
+    }, function () {
+      //initialLocation = new google.maps.LatLng(initLat, initLng),
+      //map.setCenter(initialLocation);
+    });
+  }
 
+}
+
+function getDelay(TheObj) {
+  if (TheObj == null) return PlotTimerDelay;
+  if (isReplayMode) {
+    var delay = TheObj['Speed'] * 2000;
+    if (delay < PlotTimerDelay) delay = PlotTimerDelay;
+    return delay;
+  } else {
+    return PlotTimerDelay
+  }
+}
 
 
 function GetDrones() {
@@ -160,7 +186,7 @@ function GetDrones() {
         _Location.push(obj);
         LastDroneDataID = obj['FlightMapDataID'];
       });
-      PlotTimer = window.setTimeout(plotPoints, PlotTimerDelay);
+      plotPoints();
       //LastDatas = _Location;
 
       // }
@@ -177,10 +203,8 @@ function GetDrones() {
 }
 
 function plotPoints() {
-  if (_Location.length < 1) {
-    if (PlotTimer) window.clearTimeout(PlotTimer);
-    PlotTimer = null;
-  }
+  if (PlotTimer) window.clearTimeout(PlotTimer);
+  if (_Location.length < 1) return;
 
   var thisPoint = _Location.shift();
 
@@ -188,7 +212,8 @@ function plotPoints() {
   SetCurrentValues(thisPoint);
   SetMapTable(thisPoint);
 
-  PlotTimer = window.setTimeout(plotPoints, PlotTimerDelay);
+  var delay = getDelay(thisPoint);
+  PlotTimer = window.setTimeout(plotPoints, delay);
 
 }
 
@@ -241,7 +266,7 @@ function Replay() {
   _Location = [];
   if (PlotTimer) window.clearTimeout(PlotTimer);
   PlotTimer = null;
-  PlotTimerDelay = 3000;
+  isReplayMode = true;
 
   clearTimeout(mytimer);
   MyLastLatLong = null;
@@ -286,7 +311,7 @@ function SetCurrentValues(_LastValue) {
     $('#data_' + key).html(value);
   });
 
-  MyLastLatLong = new google.maps.LatLng(_LastValue['Latitude'], _LastValue['Longitude']);  
+  MyLastLatLong = new google.maps.LatLng(_LastValue['Latitude'], _LastValue['Longitude']);
   // var oCompaniesTable = $('#MapData Table')
 }
 
