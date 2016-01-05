@@ -60,6 +60,9 @@ namespace eX_Portal.Models
         public virtual DbSet<MSTR_User_Pilot> MSTR_User_Pilot { get; set; }
         public virtual DbSet<MSTR_User_Pilot_Certification> MSTR_User_Pilot_Certification { get; set; }
         public virtual DbSet<MSTR_User_Pilot_ExponentUAS> MSTR_User_Pilot_ExponentUAS { get; set; }
+        public virtual DbSet<MSTR_Drone_TechnicalLog> MSTR_Drone_TechnicalLog { get; set; }
+        public virtual DbSet<MSTR_Drone_TechnicalLogDetails> MSTR_Drone_TechnicalLogDetails { get; set; }
+        public virtual DbSet<MSTR_Pilot_Log> MSTR_Pilot_Log { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {
