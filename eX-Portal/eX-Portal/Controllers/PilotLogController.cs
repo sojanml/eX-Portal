@@ -21,29 +21,38 @@ namespace eX_Portal.Controllers
         }
 
         // GET: PilotLog/Create
-        public ActionResult Create([Bind(Prefix = "ID")] int DroneID = 0)
+        public ActionResult Create([Bind(Prefix = "ID")] int PilotID = 0)
         {
             ViewBag.Title = "Create Pilot Log";
-            // InitialData = new DroneFlight();
-          //  InitialData.DroneID = DroneID;
-           // return View(InitialData);
-            return View();
+            MSTR_Pilot_Log PilotLog = new MSTR_Pilot_Log();
+          PilotLog.PilotId = PilotID;
+            return View(PilotLog);
+         
         }
 
         // POST: PilotLog/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(MSTR_Pilot_Log PilotLog)
         {
-            try
-            {
-                // TODO: Add insert logic here
+            if (PilotLog.DroneId < 1 || PilotLog.DroneId == null) ModelState.AddModelError("DroneID", "You must select a Drone.");
+          
 
-                return RedirectToAction("Index");
-            }
-            catch
+            if (ModelState.IsValid)
             {
-                return View();
+                int ID = 0;
+                ExponentPortalEntities db = new ExponentPortalEntities();
+                db.MSTR_Pilot_Log.Add(PilotLog);
+                db.SaveChanges();
+                ID = PilotLog.Id;
+                db.Dispose();
+                return RedirectToAction("Detail", new { ID = ID });
             }
+            else
+            {
+                ViewBag.Title = "Create Drone Flight";
+                return View(PilotLog);
+            }
+
         }
 
         // GET: PilotLog/Edit/5
