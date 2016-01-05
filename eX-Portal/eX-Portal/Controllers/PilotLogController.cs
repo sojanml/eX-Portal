@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using eX_Portal.Models;
 using System.Data.Entity;
 using eX_Portal.exLogic;
+using System.Text;
+
 namespace eX_Portal.Controllers
 {
     public class PilotLogController : Controller
@@ -88,25 +90,25 @@ namespace eX_Portal.Controllers
             }
         }
 
-        // GET: PilotLog/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+    
 
         // POST: PilotLog/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public string Delete([Bind(Prefix = "ID")]int LogId = 0)
         {
             try
             {
                 // TODO: Add delete logic here
 
-                return RedirectToAction("Index");
+
+                string SQL = "DELETE FROM MSTR_PILOT_LOG WHERE ID=" + LogId;
+                Util.doSQL(SQL);
+
+                return Util.jsonStat("OK");
             }
             catch
             {
-                return View();
+                return Util.jsonStat("Error");
             }
         }
 
@@ -122,13 +124,88 @@ namespace eX_Portal.Controllers
             return View(User);
 
         }//UserDetail()
+        public string PilotLogTotal([Bind(Prefix = "ID")] int PilotID)
+        {
+
+
+            string SQL= "SELECT \n" +
+      " sum(EngineLand) as EngineLand \n" +
+      "  ,sum(Night) as Night \n" +
+      "  ,sum(ActualInstrument) as ActualInstrument \n" +
+      "  ,sum(SimulatedInstrument) as SimulatedInstrument \n" +
+      "  ,sum(AsflightInstructor) as AsflightInstructor \n" +
+      "  ,sum(DualRecieved) as DualRecieved \n" +
+      "  ,sum(FloatingCommand) as FloatingCommand \n" +
+      " ,SUM( DualRecieved + FloatingCommand) as total \n" +
+      " FROM[MSTR_Pilot_Log] \n" +
+                "where PilotId=" + PilotID;
+          
+            StringBuilder Table = new StringBuilder();
+            StringBuilder TFooter = new StringBuilder();
+            String qDataTableID = "qViewTable";
+            ExponentPortalEntities ctx = new ExponentPortalEntities();
+            using (var cmd = ctx.Database.Connection.CreateCommand())
+            {
+                ctx.Database.Connection.Open();
+                cmd.CommandText = SQL;
+                TFooter.AppendLine("<td>");
+                TFooter.AppendLine("---------Total---------");
+                TFooter.AppendLine("</td>");
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        TFooter.AppendLine("<td>");
+                        TFooter.AppendLine(reader["EngineLand"].ToString());
+                        TFooter.AppendLine("</td>");
+                        TFooter.AppendLine("<td>");
+                        TFooter.AppendLine(reader["Night"].ToString());
+                        TFooter.AppendLine("</td>");
+
+                        TFooter.AppendLine("<td>");
+                        TFooter.AppendLine(reader["ActualInstrument"].ToString());
+                        TFooter.AppendLine("</td>");
+                        TFooter.AppendLine("<td>");
+                        TFooter.AppendLine(reader["SimulatedInstrument"].ToString());
+                        TFooter.AppendLine("</td>");
+                        TFooter.AppendLine("<td>");
+                        TFooter.AppendLine(reader["AsflightInstructor"].ToString());
+                        TFooter.AppendLine("</td>");
+                        TFooter.AppendLine("<td>");
+                        TFooter.AppendLine(reader["DualRecieved"].ToString());
+                        TFooter.AppendLine("</td>");
+                        TFooter.AppendLine("<td>");
+                        TFooter.AppendLine(reader["FloatingCommand"].ToString());
+                        TFooter.AppendLine("</td>");                       
+                        TFooter.AppendLine("<td>");
+                        TFooter.AppendLine(reader["Total"].ToString());
+                        TFooter.AppendLine("</td>");
+                    }
+
+
+
+                }
+
+
+            }
+           
+
+            Table.AppendLine("<table id=\"" + qDataTableID + "\" class=\"report\">");
+            
+            Table.AppendLine("<tfoot>");
+            Table.Append(TFooter);
+            Table.AppendLine("</tfoot>");
+            Table.AppendLine("</table>");
+            return Table.ToString();
+        }
         public string PilotLogDetails([Bind(Prefix = "ID")] int PilotID)
         {
 
 
             string SQL = "SELECT \n" +
                         " CONVERT(NVARCHAR, a.Date, 103) AS Date\n   " +   
-                        " ,b.DroneName " +
+                        " ,b.DroneName as UASName " +
                         " ,a.RouteFrom " +
                         ",a.RouteTo    " +
                         " ,a.Remarks   " +
