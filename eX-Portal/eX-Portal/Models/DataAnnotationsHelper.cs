@@ -4,22 +4,19 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace eX_Portal.Models
-{
+namespace eX_Portal.Models {
     /*
       Reference
       http://stackoverflow.com/questions/12610319/mvc-db-first-fix-display-name
     */
 
-    public class DataAnnotationsHelper
-    {
+  public class DataAnnotationsHelper {
     }
 
     [MetadataType(typeof(MSTR_AccountHelper))]
     public partial class MSTR_Account { }
 
-    public class MSTR_AccountHelper
-    {
+  public class MSTR_AccountHelper {
         [Display(Name = "Email Address")]
         public string EmailId { get; set; }
         [Display(Name = "Contact Mobile Number")]
@@ -54,13 +51,11 @@ namespace eX_Portal.Models
     //user helper class
 
     [MetadataType(typeof(MSTR_UserHelper))]
-    public partial class MSTR_User
-    {
+  public partial class MSTR_User {
         public string ConfirmPassword { get; set; }
     }
 
-    public class MSTR_UserHelper
-    {
+  public class MSTR_UserHelper {
         [Required(ErrorMessage = "Please Enter the User Name")]
         [Display(Name = "User Name")]
         public string UserName { get; set; }
@@ -70,9 +65,11 @@ namespace eX_Portal.Models
         public string ConfirmPassword { get; set; }
 
         [Display(Name = "First Name")]
+    [Required]
         public string FirstName { get; set; }
 
         [Display(Name = "Last Name")]
+    [Required]
         public string LastName { get; set; }
 
 
@@ -90,9 +87,11 @@ namespace eX_Portal.Models
         public string UserProfileId { get; set; }
 
         [Display(Name = "Is Active?")]
+    [Required]
         public string IsActive { get; set; }
 
         [Display(Name = "Is Pilot?")]
+    [Required]
         public string IsPilot { get; set; }
     
 
@@ -112,13 +111,11 @@ namespace eX_Portal.Models
     //MSTR_User_Pilot_Certification helper class
 
     [MetadataType(typeof(MSTR_User_Pilot_CertificationHelper))]
-    public partial class MSTR_User_Pilot_Certification
-    {
+  public partial class MSTR_User_Pilot_Certification {
 
     }
 
-    public class MSTR_User_Pilot_CertificationHelper
-    {
+  public class MSTR_User_Pilot_CertificationHelper {
         public int Id { get; set; }
         public Nullable<int> UserId { get; set; }
         [Display(Name = "Certificate Name")]
@@ -143,13 +140,11 @@ namespace eX_Portal.Models
     //MSTR_User_Pilot_ExponentUAS helper class
 
     [MetadataType(typeof(MSTR_User_Pilot_ExponentUASHelper))]
-    public partial class MSTR_User_Pilot_ExponentUAS
-    {
+  public partial class MSTR_User_Pilot_ExponentUAS {
 
     }
 
-    public class MSTR_User_Pilot_ExponentUASHelper
-    {
+  public class MSTR_User_Pilot_ExponentUASHelper {
         [Display(Name = "Certificate Name")]
         public Nullable<int> CertificateId { get; set; }
         [Display(Name = "Date Of Enrollement")]
@@ -168,15 +163,13 @@ namespace eX_Portal.Models
 
 
     //MSTR_User_Pilot_ExponentUAS helper class
-    
+
     [MetadataType(typeof(MSTR_User_PilotHelper))]
-    public partial class MSTR_User_Pilot
-    {
+  public partial class MSTR_User_Pilot {
 
     }
 
-    public class MSTR_User_PilotHelper
-    {
+  public class MSTR_User_PilotHelper {
 
         [Display(Name = "Passport No")]
         public string PassportNo { get; set; }
@@ -229,4 +222,4 @@ namespace eX_Portal.Models
     }
 
 
-}
+    }
