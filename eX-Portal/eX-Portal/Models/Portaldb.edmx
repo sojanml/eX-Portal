@@ -385,6 +385,31 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="IncidentReportNote" Type="nvarchar(max)" />
           <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="MSTR_Drone_TechnicalLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Date" Type="date" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+        </EntityType>
+        <EntityType Name="MSTR_Drone_TechnicalLogDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="PlaceFrom" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlaceTo" Type="nvarchar" MaxLength="50" />
+          <Property Name="TakeOffTime" Type="time" Precision="7" />
+          <Property Name="LandingTime" Type="time" Precision="7" />
+          <Property Name="FlightTime" Type="time" Precision="7" />
+          <Property Name="Battery1ID" Type="nvarchar" MaxLength="50" />
+          <Property Name="B1StartingVoltage" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="B1EndingVoltage" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Battery2ID" Type="nvarchar" MaxLength="50" />
+          <Property Name="B2StartingVoltage" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="B2EndingVoltage" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
         <EntityType Name="MSTR_DroneCheckList">
           <Key>
             <PropertyRef Name="ID" />
@@ -463,6 +488,25 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="PartsName" Type="nvarchar" MaxLength="50" />
           <Property Name="SupplierId" Type="int" />
           <Property Name="Model" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="MSTR_Pilot_Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DroneId" Type="int" />
+          <Property Name="Date" Type="date" />
+          <Property Name="RouteFrom" Type="nvarchar" MaxLength="50" />
+          <Property Name="RouteTo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+          <Property Name="EngineLand" Type="int" />
+          <Property Name="Night" Type="int" />
+          <Property Name="ActualInstrument" Type="int" />
+          <Property Name="SimulatedInstrument" Type="int" />
+          <Property Name="AsflightInstructor" Type="int" />
+          <Property Name="DualRecieved" Type="int" />
+          <Property Name="FloatingCommand" Type="int" />
+          <Property Name="PilotId" Type="int" />
         </EntityType>
         <EntityType Name="MSTR_Product">
           <Key>
@@ -677,11 +721,14 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySet Name="M2M_UserAccount" EntityType="Self.M2M_UserAccount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Account" EntityType="Self.MSTR_Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Drone" EntityType="Self.MSTR_Drone" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MSTR_Drone_TechnicalLog" EntityType="Self.MSTR_Drone_TechnicalLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MSTR_Drone_TechnicalLogDetails" EntityType="Self.MSTR_Drone_TechnicalLogDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_DroneCheckList" EntityType="Self.MSTR_DroneCheckList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_DroneCheckListItems" EntityType="Self.MSTR_DroneCheckListItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_DroneService" EntityType="Self.MSTR_DroneService" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Menu" EntityType="Self.MSTR_Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Parts" EntityType="Self.MSTR_Parts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MSTR_Pilot_Log" EntityType="Self.MSTR_Pilot_Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Product" EntityType="Self.MSTR_Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Profile" EntityType="Self.MSTR_Profile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User" EntityType="Self.MSTR_User" Schema="dbo" store:Type="Tables" />
@@ -1130,6 +1177,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySet Name="MSTR_User_Pilot" EntityType="ExponentPortalModel.MSTR_User_Pilot" />
           <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="ExponentPortalModel.MSTR_User_Pilot_Certification" />
           <EntitySet Name="MSTR_User_Pilot_ExponentUAS" EntityType="ExponentPortalModel.MSTR_User_Pilot_ExponentUAS" />
+          <EntitySet Name="MSTR_Drone_TechnicalLog" EntityType="ExponentPortalModel.MSTR_Drone_TechnicalLog" />
+          <EntitySet Name="MSTR_Drone_TechnicalLogDetails" EntityType="ExponentPortalModel.MSTR_Drone_TechnicalLogDetails" />
+          <EntitySet Name="MSTR_Pilot_Log" EntityType="ExponentPortalModel.MSTR_Pilot_Log" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -1436,6 +1486,50 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MSTR_Drone_TechnicalLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="MSTR_Drone_TechnicalLogDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="PlaceFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlaceTo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TakeOffTime" Type="Time" Precision="7" />
+          <Property Name="LandingTime" Type="Time" Precision="7" />
+          <Property Name="FlightTime" Type="Time" Precision="7" />
+          <Property Name="Battery1ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="B1StartingVoltage" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="B1EndingVoltage" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Battery2ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="B2StartingVoltage" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="B2EndingVoltage" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="MSTR_Pilot_Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DroneId" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="RouteFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RouteTo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EngineLand" Type="Int32" />
+          <Property Name="Night" Type="Int32" />
+          <Property Name="ActualInstrument" Type="Int32" />
+          <Property Name="SimulatedInstrument" Type="Int32" />
+          <Property Name="AsflightInstructor" Type="Int32" />
+          <Property Name="DualRecieved" Type="Int32" />
+          <Property Name="FloatingCommand" Type="Int32" />
+          <Property Name="PilotId" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2134,6 +2228,53 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
                 <ScalarProperty Name="DateOfCertification" ColumnName="DateOfCertification" />
                 <ScalarProperty Name="DateOfEnrollement" ColumnName="DateOfEnrollement" />
                 <ScalarProperty Name="CertificateId" ColumnName="CertificateId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_Drone_TechnicalLog">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone_TechnicalLog">
+              <MappingFragment StoreEntitySet="MSTR_Drone_TechnicalLog">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_Drone_TechnicalLogDetails">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone_TechnicalLogDetails">
+              <MappingFragment StoreEntitySet="MSTR_Drone_TechnicalLogDetails">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="B2EndingVoltage" ColumnName="B2EndingVoltage" />
+                <ScalarProperty Name="B2StartingVoltage" ColumnName="B2StartingVoltage" />
+                <ScalarProperty Name="Battery2ID" ColumnName="Battery2ID" />
+                <ScalarProperty Name="B1EndingVoltage" ColumnName="B1EndingVoltage" />
+                <ScalarProperty Name="B1StartingVoltage" ColumnName="B1StartingVoltage" />
+                <ScalarProperty Name="Battery1ID" ColumnName="Battery1ID" />
+                <ScalarProperty Name="FlightTime" ColumnName="FlightTime" />
+                <ScalarProperty Name="LandingTime" ColumnName="LandingTime" />
+                <ScalarProperty Name="TakeOffTime" ColumnName="TakeOffTime" />
+                <ScalarProperty Name="PlaceTo" ColumnName="PlaceTo" />
+                <ScalarProperty Name="PlaceFrom" ColumnName="PlaceFrom" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_Pilot_Log">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Pilot_Log">
+              <MappingFragment StoreEntitySet="MSTR_Pilot_Log">
+                <ScalarProperty Name="PilotId" ColumnName="PilotId" />
+                <ScalarProperty Name="FloatingCommand" ColumnName="FloatingCommand" />
+                <ScalarProperty Name="DualRecieved" ColumnName="DualRecieved" />
+                <ScalarProperty Name="AsflightInstructor" ColumnName="AsflightInstructor" />
+                <ScalarProperty Name="SimulatedInstrument" ColumnName="SimulatedInstrument" />
+                <ScalarProperty Name="ActualInstrument" ColumnName="ActualInstrument" />
+                <ScalarProperty Name="Night" ColumnName="Night" />
+                <ScalarProperty Name="EngineLand" ColumnName="EngineLand" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="RouteTo" ColumnName="RouteTo" />
+                <ScalarProperty Name="RouteFrom" ColumnName="RouteFrom" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
