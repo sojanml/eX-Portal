@@ -285,6 +285,18 @@ namespace eX_Portal.exLogic {
       return AccountID;
     }
 
+    public static String getProfileImage(int UserID = 0) {
+      if (UserID == 0) UserID = getLoginUserID();
+      String SQL = "SELECT PhotoUrl From MSTR_User WHERE UserID=" + UserID;
+      String ProfileImage = Util.getDBVal(SQL).ToString();
+      if(ProfileImage == "") {
+        return "/Upload/User/none.png";
+      } else {
+        return "/Upload/User/" + UserID + "/" + ProfileImage;
+      }
+
+    }
+
     public static String fmtDt(String theDt) {
       DateTime dt;
       DateTime.TryParse(theDt, out dt);

@@ -1,18 +1,24 @@
 ﻿@model eX_Portal.ViewModel.UserViewModel
 @using eX_Portal.Models;
 @{
-    
+
   ViewBag.Title = "Create";
 }
 
 
-@using (Html.BeginForm())
-{
+@using (Html.BeginForm()) {
   @Html.AntiForgeryToken()
+  @Html.HiddenFor(model => model.User.PhotoUrl)
 
-  <div style="float:right">
-    <ul id="FileUploadProgress"></ul>
-    <div><input type="file" name="fileinput" id="fileinput" /></div>
+  <div class="photo-upload">
+    <div class="user-photo">
+      <img id="img-user-photo" src="~/Upload/User/@(!String.IsNullOrEmpty(Model.User.PhotoUrl) ? "0/" + Model.User.PhotoUrl : "none.png")"/>
+    </div>
+    <div style="display:none" id="photo-upload-msg"></div>
+    <div class="upload-btn">
+      <a onclick="return false;" href="#" class="button">Upload Photo</a>
+      <input type="file" name="fileinput" id="fileinput" />
+    </div>
   </div>
 
   <div class="form-horizontal">
@@ -55,13 +61,13 @@
       </div>
     </div>
 
-      <div class="form-group">
-          @Html.LabelFor(model => model.User.MiddleName, htmlAttributes: new { @class = "control-label col-md-2" })
-          <div class="col-md-10">
-              @Html.EditorFor(model => model.User.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
-              @Html.ValidationMessageFor(model => model.User.MiddleName, "", new { @class = "text-danger" })
-          </div>
+    <div class="form-group">
+      @Html.LabelFor(model => model.User.MiddleName, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.User.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.User.MiddleName, "", new { @class = "text-danger" })
       </div>
+    </div>
 
     <div class="form-group">
       @Html.LabelFor(model => model.User.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -111,7 +117,7 @@
       @Html.LabelFor(model => model.User.AccountId, htmlAttributes: new { @class = "control-label col-md-2" })
       <div class="col-md-10">
         @Html.DropDownListFor(model => model.User.AccountId, Model.AccountList)
-        @Html.ValidationMessageFor(model => model.User.AccountId, "", new { @class = "text-danger" })        
+        @Html.ValidationMessageFor(model => model.User.AccountId, "", new { @class = "text-danger" })
       </div>
     </div>
 
@@ -133,12 +139,12 @@
     </div>
 
     <div class="form-group">
-          @Html.LabelFor(model => model.User.IsPilot, htmlAttributes: new { @class = "control-label col-md-2" })
-          <div class="col-md-10">
-              @Html.EditorFor(model => model.User.IsPilot)
-              @Html.ValidationMessageFor(model => model.User.IsPilot, "", new { @class = "text-danger" })
-          </div>
+      @Html.LabelFor(model => model.User.IsPilot, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.User.IsPilot)
+        @Html.ValidationMessageFor(model => model.User.IsPilot, "", new { @class = "text-danger" })
       </div>
+    </div>
 
     <div class="form-group">
       @Html.LabelFor(model => model.User.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -150,7 +156,7 @@
       </div>
     </div>
 
-   
+
 
     <div class="form-group">
       @Html.LabelFor(model => model.User.Remarks, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -161,71 +167,61 @@
     </div>
 
 
-
+    <div id="PilotInfo" style="display:@(Model.User.IsPilot == true ? "block": "none")">
       <h2>Pilot Information</h2>
 
       <div class="form-group">
-          @Html.LabelFor(model => model.Pilot.EmiratesId, htmlAttributes: new { @class = "control-label col-md-2" })
-          <div class="col-md-10">
-              @Html.EditorFor(model => model.Pilot.EmiratesId, new { htmlAttributes = new { @class = "form-control" } })
-              @Html.ValidationMessageFor(model => model.Pilot.EmiratesId, "", new { @class = "text-danger" })
-          </div>
+        @Html.LabelFor(model => model.Pilot.EmiratesId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+          @Html.EditorFor(model => model.Pilot.EmiratesId, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => model.Pilot.EmiratesId, "", new { @class = "text-danger" })
+        </div>
       </div>
 
       <div class="form-group">
-          @Html.LabelFor(model => model.Pilot.PassportNo, htmlAttributes: new { @class = "control-label col-md-2" })
-          <div class="col-md-10">
-              @Html.EditorFor(model => model.Pilot.PassportNo, new { htmlAttributes = new { @class = "form-control" } })
-              @Html.ValidationMessageFor(model => model.Pilot.PassportNo, "", new { @class = "text-danger" })
-          </div>
+        @Html.LabelFor(model => model.Pilot.PassportNo, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+          @Html.EditorFor(model => model.Pilot.PassportNo, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => model.Pilot.PassportNo, "", new { @class = "text-danger" })
+        </div>
       </div>
 
       <div class="form-group">
-          @Html.LabelFor(model => model.Pilot.DateOfExpiry, htmlAttributes: new { @class = "control-label col-md-2" })
-          <div class="col-md-10">
-              @Html.EditorFor(model => model.Pilot.DateOfExpiry, new { htmlAttributes = new { @class = "date-picker" } })
-              @Html.ValidationMessageFor(model => model.Pilot.DateOfExpiry, "", new { @class = "text-danger" })
-          </div>
+        @Html.LabelFor(model => model.Pilot.DateOfExpiry, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+          @Html.EditorFor(model => model.Pilot.DateOfExpiry, new { htmlAttributes = new { @class = "date-picker" } })
+          @Html.ValidationMessageFor(model => model.Pilot.DateOfExpiry, "", new { @class = "text-danger" })
+        </div>
       </div>
       <div class="form-group">
-          @Html.LabelFor(model => model.Pilot.Department, htmlAttributes: new { @class = "control-label col-md-2" })
-          <div class="col-md-10">
-              @Html.EditorFor(model => model.Pilot.Department, new { htmlAttributes = new { @class = "form-control" } })
-              @Html.ValidationMessageFor(model => model.Pilot.Department, "", new { @class = "text-danger" })
-          </div>
+        @Html.LabelFor(model => model.Pilot.Department, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+          @Html.EditorFor(model => model.Pilot.Department, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => model.Pilot.Department, "", new { @class = "text-danger" })
+        </div>
       </div>
       <div class="form-group">
-          @Html.LabelFor(model => model.Pilot.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-          <div class="col-md-10">
-              @Html.EditorFor(model => model.Pilot.Title, new { htmlAttributes = new { @class = "form-control" } })
-              @Html.ValidationMessageFor(model => model.Pilot.Title, "", new { @class = "text-danger" })
-          </div>
+        @Html.LabelFor(model => model.Pilot.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+          @Html.EditorFor(model => model.Pilot.Title, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => model.Pilot.Title, "", new { @class = "text-danger" })
+        </div>
       </div>
-
-      </div>
+    </div>
     <div class="form-toolbar">
       <input type="submit" value="Create" />
     </div>
 
   </div>
+
+
+
 }
-
-
 
 @section Scripts {
   @Scripts.Render("~/bundles/jqueryval")
-
-    <script type="text/javascript">
-
-        $("#User_IsPilot_Value").change(function() {
-            $('#PilotInfo')[$('#User_IsPilot_Value:checked').length ? 'slideDown' : 'slideUp']('slow');
-        });
-       
-
-    var DroneUploadURL = '@Url.Action("UploadFile", new { ID =12})';
-    </script>
-    <script type="text/javascript" src="~/Scripts/drone.js"></script>
-
-
-
+  <script type="text/javascript">
+    var PhotoUploadURL = '@Url.Action("UploadFile", new { ID = 0})';
+  </script>
+  <script type="text/javascript" src="~/Scripts/user.js"></script>
 }

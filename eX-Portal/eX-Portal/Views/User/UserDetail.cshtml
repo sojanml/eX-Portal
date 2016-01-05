@@ -1,77 +1,70 @@
 ﻿@model eX_Portal.Models.MSTR_User
-@Html.Action("UserDetailView", new { ID = Model.UserId})
 
-@if (eX_Portal.exLogic.User.hasAccess("PILOTCERT.VIEW"))
+@Html.Action("UserDetailView", new { ID = Model.UserId })
 
-    {
-        @Html.Action("PilotCertificateDetails", new { ID = Model.UserId })
-    }
-@if (eX_Portal.exLogic.User.hasAccess("EXPCERT.VIEW"))
-    {
-        @Html.Action("ExponentCertificateDetails", new { ID = Model.UserId })
-    }
+@if (eX_Portal.exLogic.User.hasAccess("PILOTCERT.VIEW")) {
+  @Html.Action("PilotCertificateDetails", new { ID = Model.UserId })
+}
+@if (eX_Portal.exLogic.User.hasAccess("EXPCERT.VIEW")) {
+  @Html.Action("ExponentCertificateDetails", new { ID = Model.UserId })
+}
 
 @section toolbar {
 
-  @if (Model.IsPilot == true)
-  {
+  @if (Model.IsPilot == true) {
     <ul>
-        
-            @if (eX_Portal.exLogic.User.hasAccess("PILOTCERT.CREATE"))
-            {
 
-                <li> @Html.ActionLink("Pilot Certification", "PilotCertificationCreate", "User", new { ID = Model.UserId }, null)  </li>
+      @if (eX_Portal.exLogic.User.hasAccess("PILOTCERT.CREATE")) {
+        <li> @Html.ActionLink("Pilot Certification", "PilotCertificationCreate", "User", new { ID = Model.UserId }, null)  </li>
+      }
 
-            }
-              
-        @if (eX_Portal.exLogic.User.hasAccess("EXPCERT.CREATE"))
-        {
-            <li>@Html.ActionLink("Exponent Certification", "ExponentCertificationCreate", "User", new { ID = Model.UserId }, null)</li>
-        }
+      @if (eX_Portal.exLogic.User.hasAccess("EXPCERT.CREATE")) {
+        <li>@Html.ActionLink("Exponent Certification", "ExponentCertificationCreate", "User", new { ID = Model.UserId }, null)</li>
+      }
     </ul>
   }
 
-  }
+}
 
 @section scripts {
-<script type="text/javascript">
+  <script type="text/javascript">
 
-  var LastButton = null;
-  $('table#PilotCertificateDetails').on('click', 'img.row-button', function (e) {
-    e.stopPropagation();
-    if (LastButton) LastButton.parent().find('UL').remove();
-    var Btn = $(this);
-    LastButton = Btn;
-    var data = Btn.attr("data-pkey");
-    //var pKey = data['_PKey'];
-    //Btn.parent().find('UL').remove();
-    Btn.parent().append(
-      '<ul class="qViewMenu">\n' +
-      '<li><a href="/User/PilotCertificationEdit/' + data + '">Edit</a></li>\n' +
-      '<li><a class="_delete" href="/User/PilotCertificationDelete/' + data + '">Delete</a></li>\n' +
-      '</ul>'
-      );
-    //alert('Key: ' + pKey)
-  });
+    var LastButton = null;
+    $('table#PilotCertificateDetails').on('click', 'img.row-button', function (e) {
+      e.stopPropagation();
+      if (LastButton) LastButton.parent().find('UL').remove();
+      var Btn = $(this);
+      LastButton = Btn;
+      var data = Btn.attr("data-pkey");
+      //var pKey = data['_PKey'];
+      //Btn.parent().find('UL').remove();
+      Btn.parent().append(
+        '<ul class="qViewMenu">\n' +
+        '<li><a href="/User/PilotCertificationEdit/' + data + '">Edit</a></li>\n' +
+        '<li><a class="_delete" href="/User/PilotCertificationDelete/' + data + '">Delete</a></li>\n' +
+        '</ul>'
+        );
+      //alert('Key: ' + pKey)
+    });
 
-  $('table#ExponentCertificateDetails').on('click', 'img.row-button', function (e) {
-    e.stopPropagation();
-    if (LastButton) LastButton.parent().find('UL').remove();
-    var Btn = $(this);
-    LastButton = Btn;
-    var data = Btn.attr("data-pkey");
-    //var pKey = data['_PKey'];
-    //Btn.parent().find('UL').remove();
-    Btn.parent().append(
-      '<ul class="qViewMenu">\n' +
-      '<li><a href="/User/ExponentCertificationEdit/' + data + '">Edit</a></li>\n' +
-      '<li><a class="_delete" href="/User/ExponentCertificationDelete/' + data + '">Delete</a></li>\n' +
-      '</ul>'
-      );
-    //alert('Key: ' + pKey)
-  });
+    $('table#ExponentCertificateDetails').on('click', 'img.row-button', function (e) {
+      e.stopPropagation();
+      if (LastButton) LastButton.parent().find('UL').remove();
+      var Btn = $(this);
+      LastButton = Btn;
+      var data = Btn.attr("data-pkey");
+      //var pKey = data['_PKey'];
+      //Btn.parent().find('UL').remove();
+      Btn.parent().append(
+        '<ul class="qViewMenu">\n' +
+        '<li><a href="/User/ExponentCertificationEdit/' + data + '">Edit</a></li>\n' +
+        '<li><a class="_delete" href="/User/ExponentCertificationDelete/' + data + '">Delete</a></li>\n' +
+        '</ul>'
+        );
+      //alert('Key: ' + pKey)
+    });
 
- </script>
+  </script>
 
-  
+
 }
