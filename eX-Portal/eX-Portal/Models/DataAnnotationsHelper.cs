@@ -168,7 +168,7 @@ namespace eX_Portal.Models
 
 
     //MSTR_User_Pilot_ExponentUAS helper class
-
+    
     [MetadataType(typeof(MSTR_User_PilotHelper))]
     public partial class MSTR_User_Pilot
     {
@@ -189,4 +189,44 @@ namespace eX_Portal.Models
         public int Id { get; set; }
         public string Title { get; set; }
     }
+
+
+   
+
+    [MetadataType(typeof(MSTR_Pilot_LogHelper))]
+    public partial class MSTR_Pilot_Log
+    {
+
     }
+
+    public class MSTR_Pilot_LogHelper
+    {
+
+        
+        public int Id { get; set; }
+        [Display(Name = "UAS Name")]
+        public Nullable<int> DroneId { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
+        [Display(Name = "From")]
+        public string RouteFrom { get; set; }
+        [Display(Name = "To")]
+        public string RouteTo { get; set; }
+        public string Remarks { get; set; }
+        [Display(Name = "Engine Land")]
+        public Nullable<int> EngineLand { get; set; }
+        public Nullable<int> Night { get; set; }
+        [Display(Name = "Actual Instrument")]
+        public Nullable<int> ActualInstrument { get; set; }
+        [Display(Name = "Simulated Instrument")]
+        public Nullable<int> SimulatedInstrument { get; set; }
+        [Display(Name = "As Flight Instructor")]
+        public Nullable<int> AsflightInstructor { get; set; }
+        [Display(Name = "Dual Recieved")]
+        public Nullable<int> DualRecieved { get; set; }
+        [Display(Name = "Floating Command")]
+        public Nullable<int> FloatingCommand { get; set; }
+        public Nullable<int> PilotId { get; set; }
+    }
+
+
+}
