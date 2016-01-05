@@ -1,0 +1,89 @@
+﻿@using eX_Portal.Models;
+@model List<DroneFlight>
+
+@{
+  ViewBag.Title = "TechnicalLogAdd";
+  int RowID = -1;
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Get, new { name = "qEditForm", id = "qEditForm" }) ) {
+  @Html.AntiForgeryToken()
+  <ul id="log-rows">
+
+    @foreach (DroneFlight thisModel in Model) {
+      RowID++;
+      int ID = thisModel.ID;
+      String RefID = "_" + (RowID == 0 ? "SLNO" : RowID.ToString());
+
+      <li id="log-row-@thisModel.ID" style="display:@(RowID == 0 ? "none" : "block")">
+        <input type="hidden" name="ID_@(RefID)" value="@ID"/>
+        <table class="report repeat-report">
+          <thead>
+            <tr>
+              <th colspan="2">Log</th>
+              <th colspan="2">Flying Information</th>
+              <th colspan="2">Battery 1</th>
+              <th colspan="2">Battery 2</th>
+            </tr>
+          </thead>
+          <tr>
+            <td>From:</td>
+            <td><input id="LogFrom@(RefID)" name="thisModel.LogFrom@(RefID)" type="text" value="@thisModel.LogFrom" /></td>
+            <td>Take Off:</td>
+            <td><input id="LogTakeOffTime@(RefID)" name="thisModel.LogTakeOffTime@(RefID)" type="text" value="@thisModel.LogTakeOffTime" /></td>
+            <td>ID</td>
+            <td><input id="LogBattery1ID@(RefID)" name="thisModel.LogBattery1ID@(RefID)" type="text" value="@thisModel.LogBattery1ID" /></td>
+            <td>ID</td>
+            <td><input id="LogBattery2ID@(RefID)" name="thisModel.LogBattery2ID@(RefID)" type="text" value="@thisModel.LogBattery2ID" /></td>
+          </tr>
+          <tr>
+            <td>To:</td>
+            <td><input id="LogTo@(RefID)" name="thisModel.LogTo@(RefID)" type="text" value="@thisModel.LogTo" /></td>
+            <td>Landing</td>
+            <td><input id="LogLandingTime@(RefID)" name="thisModel.LogLandingTime@(RefID)" type="text" value="@thisModel.LogLandingTime" /></td>
+            <td>Start Volt</td>
+            <td><input id="LogBattery1StartV@(RefID)" name="thisModel.LogBattery1StartV@(RefID)" type="text" value="@thisModel.LogBattery1StartV" /></td>
+            <td>Start Volt</td>
+            <td><input id="LogBattery2StartV@(RefID)" name="thisModel.LogBattery2StartV@(RefID)" type="text" value="@thisModel.LogBattery2StartV" /></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>Duration: </td>
+            <td>@(thisModel.LogLandingTime - thisModel.LogTakeOffTime)</td>
+            <td>End Volt</td>
+            <td><input id="LogBattery1EndV@(RefID)" name="thisModel.LogBattery1EndV@(RefID)" type="text" value="@thisModel.LogBattery1EndV" /></td>
+            <td>End Volt</td>
+            <td><input id="LogBattery2EndV@(RefID)" name="thisModel.LogBattery2EndV@(RefID)" type="text" value="@thisModel.LogBattery2EndV" /></td>
+          </tr>
+        </table>
+      </li>
+
+    }
+  </ul>
+
+    <div class="form-toolbar">
+      <div class="col-md-offset-2 col-md-10">
+        <input id="add-new-entry" type="button" value="Add new log entry" class="btn btn-default" />
+        <input type="submit" value="Submit" class="btn btn-default" />
+      </div>
+    </div>
+    <input type="hidden" name="RowID" value="@RowID" />
+}
+
+@section scripts {
+  <script type="text/javascript">
+    var RowID = @RowID;
+    $(document).ready(function () {
+      $('#add-new-entry').on("click", function () {
+        RowID++;
+        document.forms['qEditForm']['RowID'].value = RowID;
+        var HTML = $('#log-row-0').html();
+        HTML = HTML.replace(/SLNO/g,RowID );
+        var nElem = $('<li></li>').html(HTML);
+        $('#log-rows').append(nElem);
+      })
+    });
+
+  </script>
+}

@@ -327,7 +327,12 @@ table.report tr.to-delete td {
   color:red !important;
   text-decoration:line-through
 }
-
+table.repeat-report  td {
+  white-space: nowrap
+}
+table.repeat-report input[type=text] {
+  width: 100%;
+}
 
 table.report tr td,
 table.cheklist tr td
@@ -750,4 +755,10 @@ div.photo-upload div.upload-btn input {
     margin: 0px;
     opacity:0;
     cursor: pointer;
+}
+
+ul#log-rows {
+  list-style: none;
+  margin:0px;
+  padding:0px;
 }

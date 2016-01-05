@@ -146,6 +146,16 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="BBFlightID" Type="int" />
           <Property Name="Latitude" Type="decimal" Precision="18" Scale="5" />
           <Property Name="Longitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="LogFrom" Type="varchar" MaxLength="50" />
+          <Property Name="LogTo" Type="varchar" MaxLength="50" />
+          <Property Name="LogTakeOffTime" Type="time" Precision="7" />
+          <Property Name="LogLandingTime" Type="time" Precision="7" />
+          <Property Name="LogBattery1ID" Type="varchar" MaxLength="50" />
+          <Property Name="LogBattery1StartV" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery1EndV" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery2ID" Type="varchar" MaxLength="50" />
+          <Property Name="LogBattery2StartV" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery2EndV" Type="decimal" Precision="5" Scale="2" />
         </EntityType>
         <EntityType Name="FlightMapData">
           <Key>
@@ -1442,6 +1452,16 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="BBFlightID" Type="Int32" />
           <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="LogFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogTakeOffTime" Type="Time" Precision="7" />
+          <Property Name="LogLandingTime" Type="Time" Precision="7" />
+          <Property Name="LogBattery1ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogBattery1StartV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery1EndV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery2ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogBattery2StartV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery2EndV" Type="Decimal" Precision="5" Scale="2" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -2171,6 +2191,16 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="LogBattery2EndV" ColumnName="LogBattery2EndV" />
+                <ScalarProperty Name="LogBattery2StartV" ColumnName="LogBattery2StartV" />
+                <ScalarProperty Name="LogBattery2ID" ColumnName="LogBattery2ID" />
+                <ScalarProperty Name="LogBattery1EndV" ColumnName="LogBattery1EndV" />
+                <ScalarProperty Name="LogBattery1StartV" ColumnName="LogBattery1StartV" />
+                <ScalarProperty Name="LogBattery1ID" ColumnName="LogBattery1ID" />
+                <ScalarProperty Name="LogLandingTime" ColumnName="LogLandingTime" />
+                <ScalarProperty Name="LogTakeOffTime" ColumnName="LogTakeOffTime" />
+                <ScalarProperty Name="LogTo" ColumnName="LogTo" />
+                <ScalarProperty Name="LogFrom" ColumnName="LogFrom" />
                 <ScalarProperty Name="Longitude" ColumnName="Longitude" />
                 <ScalarProperty Name="Latitude" ColumnName="Latitude" />
                 <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />

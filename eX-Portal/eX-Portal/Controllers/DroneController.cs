@@ -598,5 +598,14 @@ namespace eX_Portal.Controllers {
       throw new NotImplementedException();
     }
 
+    public ActionResult TechnicalLogAdd([Bind(Prefix = "ID")] int DroneID) {
+      Drones theDrone = new Drones(){ DroneID = DroneID };
+      List<DroneFlight> Flights = new List<DroneFlight>() {
+        new DroneFlight{ ID = 0, DroneID = 0 }
+      };
+      theDrone.getLogFlights(Flights, true);
+      return View(Flights);
+    }
+
   }
 }

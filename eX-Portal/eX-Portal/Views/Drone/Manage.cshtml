@@ -1,6 +1,6 @@
-﻿@model int
+﻿@model int?
 @{
-  int DroneID = Model;
+  int DroneID = (int)Model;
 }
 @Html.Action("DroneDetail", new { ID = DroneID })
 
@@ -135,7 +135,22 @@
 
 </div>
 
+<div class="row multi-row">
 @if (eX_Portal.exLogic.User.hasAccess("CHECKLIST.SETUP")) {
-  <h2>Checklist Set-Up</h2>
-  @Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })
+  <div class="col-3">
+      <h2>Checklist Set-Up</h2>
+      @Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })    
+    </div>
 }
+  <div class="col-3">
+    <h2>UAS Technical &amp; Journey Log</h2>
+    <div>
+      This option allow you to add a new Technical Log
+      to the UAS.
+    </div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("TechnicalLogAdd", "Drone", new  { ID = DroneID})">Add Technical Log</a>
+    </div>
+  </div>
+</div>
