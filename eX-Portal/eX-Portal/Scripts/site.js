@@ -69,7 +69,8 @@ function processDelete(Link) {
 
   var Request = $.ajax({
     method: "GET",
-    url: Link.attr("href")
+    url: Link.attr("href"),
+    dataType: 'json'
   });
   Request.done(function (data) {
     if (data.status == "OK") {
