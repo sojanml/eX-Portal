@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MaxMind.Db;
 
 namespace eX_Portal.Controllers {
   public class HomeController : Controller {
@@ -14,18 +13,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult About() {
       ViewBag.Message = "Your application description page.";
-
-      // This creates the DatabaseReader object, which should be reused across
-      // lookups.
-      String Path = @"C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\Upload\MaxIP\GeoLite2-City.mmdb";
-      using (var reader = new MaxMind.Db.Reader(Path)) {
-        // Replace "City" with the appropriate method for your database, e.g.,
-        // "Country".
-        Newtonsoft.Json.Linq.JToken city = reader.Find("128.101.101.101");
-        return View(city);
-
-      }
-      
+      return View();
     }
 
     public ActionResult Contact() {

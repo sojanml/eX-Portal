@@ -34,5 +34,7 @@ namespace eX_Portal.Models
         public string LogBattery2ID { get; set; }
         public Nullable<decimal> LogBattery2StartV { get; set; }
         public Nullable<decimal> LogBattery2EndV { get; set; }
+        public Nullable<byte> isLogged { get; set; }
+        public Nullable<System.DateTime> LogDateTime { get; set; }
     }
 }

@@ -49,7 +49,7 @@ namespace eX_Portal.exLogic {
     }
 
     public static int UserValidation(String UserName, String Password) {
-      try {
+
 
                 string PasswordCrypto = Util.GetEncryptedPassword(Password);
                 int result = 0;
@@ -65,11 +65,7 @@ namespace eX_Portal.exLogic {
 
         return result;
 
-      } catch (Exception ex) {
-        Util.ErrorHandler(ex);
-        System.Web.HttpContext.Current.Response.Write("<script>alert('Please Check Database Connection');</script>");
-        return -1;
-      }
+
     }
 
 

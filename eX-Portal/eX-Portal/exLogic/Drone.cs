@@ -22,6 +22,7 @@ namespace eX_Portal.exLogic {
         "  droneflight.ID,\n" + 
         "  LogFrom,\n" +
         "  LogTo,\n" +
+        "  Convert(Varchar, Min(FlightMapData.ReadTime), 111) as LogDate,\n" + 
         "  Convert(Varchar, Min(FlightMapData.ReadTime), 108) as LogTakeOffTime,\n" +
         "  Convert(Varchar, Max(FlightMapData.ReadTime), 108) as LogLandingTime,\n" +
         "  Convert(Varchar, DATEADD(\n" +
@@ -32,7 +33,7 @@ namespace eX_Portal.exLogic {
         "From\n" +
         "  droneflight\n" +
         "LEFT JOIN FlightMapData On\n" +
-        "  FlightMapData.DroneId = droneflight.DroneID\n" +
+        "  FlightMapData.FlightID = droneflight.ID\n" +
         "WHERE\n" +
         "  droneflight.DroneID = " + DroneID.ToString() + " AND\n" +
         "    (isLogged IS NULL OR isLogged = 0)\n" +
@@ -64,8 +65,8 @@ namespace eX_Portal.exLogic {
           ID = Util.toInt(Row["ID"].ToString()),
           LogFrom = Row["LogFrom"].ToString(),
           LogTo = Row["LogFrom"].ToString(),
-          LogTakeOffTime = TimeSpan.Parse(Row["LogTakeOffTime"].ToString()),
-          LogLandingTime = TimeSpan.Parse(Row["LogLandingTime"].ToString())
+          LogTakeOffTime = Util.toTime(Row["LogTakeOffTime"].ToString()),
+          LogLandingTime = Util.toTime(Row["LogLandingTime"].ToString())
         };
         Flights.Add(Flight);
       }

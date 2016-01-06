@@ -327,8 +327,9 @@ table.report tr.to-delete td {
   color:red !important;
   text-decoration:line-through
 }
-table.repeat-report  td {
-  white-space: nowrap
+table.report.repeat-report  td {
+  white-space: nowrap;
+  padding-right:15px;
 }
 table.repeat-report input[type=text] {
   width: 100%;
@@ -391,8 +392,7 @@ div.form-toolbar {
 }
 div.form-toolbar input,
 div.form-toolbar button,
-div.form-toolbar a.button,
-div.photo-upload div.upload-btn a {
+div.form-toolbar a.button {
     color: white;
     font-size: 16pt;
     border-radius: 3px;

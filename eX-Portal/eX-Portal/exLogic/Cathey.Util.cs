@@ -64,6 +64,7 @@ namespace eX_Portal.exLogic {
         }
       }
     }
+
     public static int InsertSQL(String SQL, string[] Parameter) {
       int result = 0;
       using (var ctx = new ExponentPortalEntities()) {

@@ -1,0 +1,116 @@
+﻿
+@model eX_Portal.Models.MSTR_Pilot_Log
+@using eX_Portal.exLogic
+
+<div class="form-horizontal">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.PilotId)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "date-picker" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DroneId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DroneId, Util.GetDropDowntList("Drone"))
+                @Html.ValidationMessageFor(model => model.DroneId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <h1>Route Of Flight</h1>
+        <div class="form-group">
+            @Html.LabelFor(model => model.RouteFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.RouteFrom)
+                @Html.ValidationMessageFor(model => model.RouteFrom, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.RouteTo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.RouteTo)
+                @Html.ValidationMessageFor(model => model.RouteTo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <h1>Remarks and Endorsements</h1>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Remarks)
+                @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <h1>Air Craft Category</h1>
+        <div class="form-group">
+            @Html.LabelFor(model => model.EngineLand, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EngineLand)
+                @Html.ValidationMessageFor(model => model.EngineLand, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <h1>Conditions Of Flight</h1>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Night, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Night)
+                @Html.ValidationMessageFor(model => model.Night, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ActualInstrument, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ActualInstrument)
+                @Html.ValidationMessageFor(model => model.ActualInstrument, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.SimulatedInstrument, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SimulatedInstrument)
+                @Html.ValidationMessageFor(model => model.SimulatedInstrument, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <h1>Type Of  Piloting Time</h1>
+        <div class="form-group">
+            @Html.LabelFor(model => model.AsflightInstructor, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AsflightInstructor)
+                @Html.ValidationMessageFor(model => model.AsflightInstructor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.DualRecieved, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DualRecieved)
+                @Html.ValidationMessageFor(model => model.DualRecieved, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FloatingCommand, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FloatingCommand)
+                @Html.ValidationMessageFor(model => model.FloatingCommand, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-toolbar">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    }
+
+</div>

@@ -1,5 +1,5 @@
 ﻿
-$(document).ready(function () {
+$(document).ready(function () {  
 
   // $('Table.report tbody').on("click", 'tr', function () {
   //   var data = qViewDataTable.row(this).data();

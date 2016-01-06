@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using eX_Portal.Models;
-
+ 
 namespace eX_Portal.Controllers
 {
     [Authorize]

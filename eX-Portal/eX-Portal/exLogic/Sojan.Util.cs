@@ -302,5 +302,13 @@ namespace eX_Portal.exLogic {
       DateTime.TryParse(theDt, out dt);
       return dt.ToString("dd-MMM-yyyy hh:mm tt");
     }//fmtDt()
+
+    public static TimeSpan toTime(Object strTime) {
+      TimeSpan theTime = new TimeSpan(0);
+      String sTime = strTime.ToString();
+      TimeSpan.TryParse(sTime, out theTime);
+      return theTime;
+    }
+
   }//class Util
 }

@@ -156,6 +156,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="LogBattery2ID" Type="varchar" MaxLength="50" />
           <Property Name="LogBattery2StartV" Type="decimal" Precision="5" Scale="2" />
           <Property Name="LogBattery2EndV" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="isLogged" Type="tinyint" />
+          <Property Name="LogDateTime" Type="datetime" />
         </EntityType>
         <EntityType Name="FlightMapData">
           <Key>
@@ -1462,6 +1464,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="LogBattery2ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LogBattery2StartV" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="LogBattery2EndV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="isLogged" Type="Byte" />
+          <Property Name="LogDateTime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -2191,6 +2195,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="LogDateTime" ColumnName="LogDateTime" />
+                <ScalarProperty Name="isLogged" ColumnName="isLogged" />
                 <ScalarProperty Name="LogBattery2EndV" ColumnName="LogBattery2EndV" />
                 <ScalarProperty Name="LogBattery2StartV" ColumnName="LogBattery2StartV" />
                 <ScalarProperty Name="LogBattery2ID" ColumnName="LogBattery2ID" />
