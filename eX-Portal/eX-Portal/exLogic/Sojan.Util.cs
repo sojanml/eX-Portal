@@ -297,10 +297,14 @@ namespace eX_Portal.exLogic {
 
     }
 
-    public static String fmtDt(String theDt) {
+    public static String fmtDt(String theDt, bool isAddTime = true) {
       DateTime dt;
       DateTime.TryParse(theDt, out dt);
+      if(isAddTime) { 
       return dt.ToString("dd-MMM-yyyy hh:mm tt");
+      } else {
+        return dt.ToString("dd-MMM-yyyy");
+      }
     }//fmtDt()
 
     public static TimeSpan toTime(Object strTime) {
@@ -308,6 +312,11 @@ namespace eX_Portal.exLogic {
       String sTime = strTime.ToString();
       TimeSpan.TryParse(sTime, out theTime);
       return theTime;
+    }
+
+    public static String toSQLDate(String sDate) {
+      DateTime theDate = DateTime.ParseExact(sDate, "dd-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+      return theDate.ToString("yyyy-MM-dd HH:mm:ss");
     }
 
   }//class Util
