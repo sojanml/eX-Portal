@@ -30,7 +30,9 @@ namespace eX_Portal.Controllers
             if (!exLogic.User.hasAccess("PILOTLOG.CREATE")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Create Pilot Log";
             MSTR_Pilot_Log PilotLog = new MSTR_Pilot_Log();
-            PilotLog.PilotId = PilotID;
+            PilotLog.PilotId = PilotID;          
+            PilotLog.Date = DateTime.Now;
+             
             return View(PilotLog);
 
         }
