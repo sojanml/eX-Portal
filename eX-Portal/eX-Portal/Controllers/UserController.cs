@@ -405,9 +405,12 @@ namespace eX_Portal.Controllers {
         //move the image to correct path
         String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
         String newPath = UploadPath + id + "/";
+        String PhotoURL = UploadPath + "0/" + UserModel.User.PhotoUrl;
         if (!System.IO.Directory.Exists(newPath)) Directory.CreateDirectory(newPath);
-        System.IO.File.Move(UploadPath + "0/" + UserModel.User.PhotoUrl, newPath + UserModel.User.PhotoUrl);
-
+        if(!String.IsNullOrEmpty(UserModel.User.PhotoUrl) && 
+            System.IO.File.Exists(PhotoURL)) { 
+          System.IO.File.Move(PhotoURL, newPath + UserModel.User.PhotoUrl);
+        }
         return RedirectToAction("UserDetail", new { ID = id });
 
       }

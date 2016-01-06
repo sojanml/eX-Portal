@@ -398,7 +398,8 @@ div.form-toolbar {
 }
 div.form-toolbar input,
 div.form-toolbar button,
-div.form-toolbar a.button {
+div.form-toolbar a.button,
+div.photo-upload div.upload-btn a {
     color: white;
     font-size: 16pt;
     border-radius: 3px;
