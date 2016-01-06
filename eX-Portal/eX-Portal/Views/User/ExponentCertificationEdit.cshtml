@@ -21,7 +21,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CertificateId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.CertificateId, Util.GetLookup("Exponent Certificate"))
+                @Html.DropDownListFor(model => model.CertificateId, Util.GetLookup("ExponentCertificate"))
                 @Html.ValidationMessageFor(model => model.CertificateId, "", new { @class = "text-danger" })
             </div>
         </div>

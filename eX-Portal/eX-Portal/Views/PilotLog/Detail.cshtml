@@ -1,9 +1,11 @@
 ﻿@model eX_Portal.Models.MSTR_User
 @Html.Action("UserDetailView","User", new { ID = Model.UserId })
-<ul>
-    <li> @Html.ActionLink("Pilot Log Create", "Create", "PilotLog", new { ID = Model.UserId }, null)  </li>
-</ul>
 
+@section toolbar {
+<ul>
+    <li> @Html.ActionLink("Create Pilot Log ", "Create", "PilotLog", new { ID = Model.UserId }, null)  </li>
+</ul>
+    }
 @Html.Action("PilotLogDetails", new { ID = Model.UserId })
 @Html.Action("PilotLogTotal", new { ID = Model.UserId })
 

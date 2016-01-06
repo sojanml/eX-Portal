@@ -1,6 +1,7 @@
 ﻿
 @model eX_Portal.Models.MSTR_Pilot_Log
 @using eX_Portal.exLogic
+@Html.Action("UserDetailView", "User", new { ID = Model.PilotId })
 
 <div class="form-horizontal">
     @using (Html.BeginForm())

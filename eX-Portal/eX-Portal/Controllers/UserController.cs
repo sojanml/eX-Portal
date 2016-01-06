@@ -39,7 +39,7 @@ namespace eX_Portal.Controllers {
             " on \n" +
             " a.CertificateId = b.TypeId\n " +
             " where \n" +
-            "  b.Type = 'Certificate' \n" +
+            "  b.Type = 'ExponentCertificate' \n" +
             "  and \n" +
             "  a.UserId =" + PilotID;
       qView nView = new qView(SQL);
