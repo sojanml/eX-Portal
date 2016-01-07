@@ -10,8 +10,10 @@
 }
 
 @Html.Action("PilotLogDetails","PilotLog", new { ID = Model.UserId })
+@if (Model.IsPilot == true)
+{
 @Html.Action("PilotLogTotal", "PilotLog", new { ID = Model.UserId })
-
+}
 @section toolbar {
 
   @if (Model.IsPilot == true) {
