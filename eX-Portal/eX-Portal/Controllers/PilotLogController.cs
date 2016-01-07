@@ -53,7 +53,7 @@ namespace eX_Portal.Controllers
                 db.SaveChanges();
               
                 db.Dispose();
-                return RedirectToAction("Detail", new { ID = PilotLog.PilotId });
+                return RedirectToAction("UserDetail","User", new { ID = PilotLog.PilotId });
             }
             else
             {
@@ -85,7 +85,7 @@ namespace eX_Portal.Controllers
                 ExponentPortalEntities db = new ExponentPortalEntities();
                 db.Entry(PilotLog).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Detail", new { ID = PilotLog.PilotId });
+                return RedirectToAction("UserDetail","User", new { ID = PilotLog.PilotId });
 
 
             }
@@ -134,13 +134,12 @@ namespace eX_Portal.Controllers
             if (!exLogic.User.hasAccess("PILOTLOG.VIEW")) return "Access Denied";
 
             string SQL= "SELECT \n" +
-      " sum(EngineLand) as EngineLand \n" +
-      "  ,sum(Night) as Night \n" +
-      "  ,sum(ActualInstrument) as ActualInstrument \n" +
-      "  ,sum(SimulatedInstrument) as SimulatedInstrument \n" +
+      " sum(FixedWing) as FixedWing \n" +
+      "  ,sum(MultiDashRotor) as MultiDashRotor \n" +      
+      "  ,sum(SimulatedInstrument) as Simulator \n" +
       "  ,sum(AsflightInstructor) as AsflightInstructor \n" +
       "  ,sum(DualRecieved) as DualRecieved \n" +
-      "  ,sum(FloatingCommand) as FloatingCommand \n" +
+      "  ,sum(FloatingCommand) as FloatInCommand \n" +
       " ,SUM( DualRecieved + FloatingCommand) as total \n" +
       " FROM[MSTR_Pilot_Log] \n" +
                 "where PilotId=" + PilotID;
@@ -162,17 +161,15 @@ namespace eX_Portal.Controllers
                     while (reader.Read())
                     {
                         TFooter.AppendLine("<td>");
-                        TFooter.AppendLine(reader["EngineLand"].ToString());
+                        TFooter.AppendLine(reader["FixedWing"].ToString());
                         TFooter.AppendLine("</td>");
                         TFooter.AppendLine("<td>");
-                        TFooter.AppendLine(reader["Night"].ToString());
+                        TFooter.AppendLine(reader["MultiDashRotor"].ToString());
                         TFooter.AppendLine("</td>");
 
+                       
                         TFooter.AppendLine("<td>");
-                        TFooter.AppendLine(reader["ActualInstrument"].ToString());
-                        TFooter.AppendLine("</td>");
-                        TFooter.AppendLine("<td>");
-                        TFooter.AppendLine(reader["SimulatedInstrument"].ToString());
+                        TFooter.AppendLine(reader["Simulator"].ToString());
                         TFooter.AppendLine("</td>");
                         TFooter.AppendLine("<td>");
                         TFooter.AppendLine(reader["AsflightInstructor"].ToString());
@@ -181,7 +178,7 @@ namespace eX_Portal.Controllers
                         TFooter.AppendLine(reader["DualRecieved"].ToString());
                         TFooter.AppendLine("</td>");
                         TFooter.AppendLine("<td>");
-                        TFooter.AppendLine(reader["FloatingCommand"].ToString());
+                        TFooter.AppendLine(reader["FloatInCommand"].ToString());
                         TFooter.AppendLine("</td>");                       
                         TFooter.AppendLine("<td>");
                         TFooter.AppendLine(reader["Total"].ToString());
@@ -214,13 +211,12 @@ namespace eX_Portal.Controllers
                         " ,a.RouteFrom " +
                         ",a.RouteTo    " +
                         " ,a.Remarks   " +
-                        " ,a.EngineLand " +
-                        ",a.Night" +
-                        " ,a.ActualInstrument " +
-                        " ,a.SimulatedInstrument " +
+                        " ,a.FixedWing " +
+                        ",a.MultiDashRotor" +                      
+                        " ,a.SimulatedInstrument as Simulator" +
                         " ,a.AsflightInstructor " +
                         " ,a.DualRecieved  " +
-                        " ,a.FloatingCommand " +                      
+                        " ,a.FloatingCommand as FloatInCommand " +                      
                         " , a.DualRecieved + a.FloatingCommand as TotalDuration " +
                         " , a.Id as _PKey" +
                         " FROM MSTR_Pilot_Log  " +

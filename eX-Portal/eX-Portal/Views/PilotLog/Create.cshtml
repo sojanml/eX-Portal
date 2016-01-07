@@ -13,6 +13,7 @@
         <div class="form-group">
            
             <div class="col-md-10">
+               
                 @Html.HiddenFor(model => model.PilotId)               
             </div>
         </div>
@@ -62,7 +63,7 @@
                 @Html.ValidationMessageFor(model => model.FixedWing, "", new { @class = "text-danger" })
             </div>
         </div>
-        <h2>Conditions Of Flight</h2>
+       
         <div class="form-group">
             @Html.LabelFor(model => model.MultiDashRotor, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -70,7 +71,7 @@
                 @Html.ValidationMessageFor(model => model.MultiDashRotor, "", new { @class = "text-danger" })
             </div>
         </div>
-        
+        <h2>Conditions Of Flight</h2>
         <div class="form-group">
             @Html.LabelFor(model => model.SimulatedInstrument, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
