@@ -143,9 +143,36 @@ namespace eX_Portal.Controllers {
 
 
     }
+        public ActionResult PilotList()
+        {
+            if (!exLogic.User.hasAccess("USER.VIEW")) return RedirectToAction("NoAccess", "Home");
+            ViewBag.Title = "User View";
+            string SQL = "select a.UserName,a.FirstName,a.MobileNo,b.ProfileName, Count(*) Over() as _TotalRecords ,  a.UserId as _PKey " +
+                " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId where a.ispilot=1 ";
 
 
-    public ActionResult Create() {
+            qView nView = new qView(SQL);
+
+            if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("PILOTLOG.VIEW")) nView.addMenu("Pilot Log", Url.Action("Detail", "PilotLog", new { ID = "_PKey" }));
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+
+
+
+        }
+
+
+        public ActionResult Create() {
 
       ViewBag.Title = "Create User";
       if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
