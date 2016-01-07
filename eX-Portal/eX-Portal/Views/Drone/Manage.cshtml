@@ -4,37 +4,79 @@
 }
 @Html.Action("DroneDetail", new { ID = DroneID })
 
-
-<div class="row multi-row">
-
-
-
-  <div class="col-3">
-    <h2>Decommission</h2>
+<div class="row manage-row">
+  <div class="col-2">
+    <h2>Flights</h2>
     <div>
-      You can decommission this flight using the option below. Please note once decommissioed, the flight
+      This option is used to Create the flight or view the 
+      flight history.
+    </div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("Create", "DroneFlight", new  { ID = DroneID})">Flight Creation</a><br />
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("Index", "DroneFlight", new  { ID = DroneID})">Flight History</a>
+    </div>
+  </div>
+
+  <div class="col-2">
+    <h2>Testing report</h2>
+    <div>
+      You can upload new report to the UAS using the options bellow
+
+    </div>
+    <div class="the-link">
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="UAT"})">Internal</a><br />
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="UAT"})">UAT</a><br />
+    </div>
+
+  </div>
+</div>
+
+
+<div class="row manage-row">
+  <div class="col-2">
+    <h2>Checklist Set-Up</h2>
+    <div class="the-link">
+      @Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })
+    </div>
+  </div>
+
+  <div class="col-2">
+    <h2>Commission/Decommission</h2>
+    <div>
+      You can Commission/Decommission this flight using the option below. Please note once decommissioed, the flight
       will not appear in any of the list. We will keep all the history of the flight, including
       FTR, Service History etc for reference. purpose.
     </div>
     <div class="the-link">
       <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="Commission"})">Commission</a><br />
+      <span class="icon">&#xf0a9;</span>
       <a href="@Url.Action("Decommission", "Drone", new  { ID = DroneID})">Decommission</a>
     </div>
   </div>
-  <div class="col-3">
-    <h2>Re-Assign</h2>
+</div>
+
+<div class="row manage-row">
+  <div class="col-2">
+    <h2>UAS Technical &amp; Journey Log</h2>
     <div>
-      Use this option if you required to re-assign the flight to another company. This will generate
-      a new ID for the drone. We will keep the history of old drone (Drone ID), so Service History and
-      FTR data can be accessed.
+      This option allow you to add a new Technical Log
+      to the UAS.
     </div>
     <div class="the-link">
       <span class="icon">&#xf0a9;</span>
-      <a href="@Url.Action("ReAssign", "Drone", new  { ID = DroneID})">Re-Assign</a>
+      <a href="@Url.Action("TechnicalLogAdd", "Drone", new  { ID = DroneID})">Add Technical Log</a><br />
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("TechnicalLog", "Drone", new  { ID = DroneID})">View Technical Log</a>
     </div>
+
   </div>
 
-  <div class="col-3">
+  <div class="col-2">
     <h2>Servicing</h2>
     <div>
       You can Service UAS  using the option below.
@@ -44,85 +86,17 @@
     </div>
     <div class="the-link">
       <span class="icon">&#xf0a9;</span>
-      <a href="@Url.Action("Create", "DroneService", new  { ID = DroneID})">Servicing</a>
-    </div>
-  </div>
-
-</div>
-
-
-<div class="row multi-row">
-
-
-  <div class="col-3">
-    <h2>Service History</h2>
-    <div>
-      This option is used to view  all the Services .
-    </div>
-    <div class="the-link">
+      <a href="@Url.Action("Create", "DroneService", new  { ID = DroneID})">Servicing</a><br />
       <span class="icon">&#xf0a9;</span>
       <a href="@Url.Action("Index", "DroneService", new  { ID = DroneID})">Service History</a>
     </div>
   </div>
 
-  <div class="col-3">
-    <h2>Flight Creation</h2>
-    <div>
-      This option is used to Create the flight.
-
-
-    </div>
-    <div class="the-link">
-      <span class="icon">&#xf0a9;</span>
-      <a href="@Url.Action("Create", "DroneFlight", new  { ID = DroneID})">Flight Creation</a>
-    </div>
-  </div>
-
-
-  <div class="col-3">
-    <h2>Flight History</h2>
-    <div>
-      This option is used to View all the flights.
-
-
-    </div>
-    <div class="the-link">
-      <span class="icon">&#xf0a9;</span>
-      <a href="@Url.Action("Index", "DroneFlight", new  { ID = DroneID})">Flight History</a>
-    </div>
-  </div>
 
 </div>
 
-
-
-
-<div class="row multi-row">
-  <div class="col-3">
-    <h2>Commission report</h2>
-    <div>
-      This option is used to upload multiple Commission Reports.
-
-    </div>
-    <div class="the-link">
-      <span class="icon">&#xf0a9;</span>
-      <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="Commission"})">Upload</a>
-    </div>
-  </div>
-
-  <div class="col-3">
-    <h2>UAT report</h2>
-    <div>
-      This option is used to upload multiple UAT Reports.
-
-    </div>
-    <div class="the-link">
-      <span class="icon">&#xf0a9;</span>
-      <a href="@Url.Action("UploadDocument", "Drone", new  { ID = DroneID, Type="UAT"})">Upload</a>
-    </div>
-  </div>
-
-  <div class="col-3">
+<div class="row manage-row">
+  <div class="col-2">
     <h2>Incident report</h2>
     <div>
       This option is used to upload multiple Incident Reports.
@@ -133,35 +107,18 @@
     </div>
   </div>
 
-</div>
-
-<div class="row multi-row">
-@if (eX_Portal.exLogic.User.hasAccess("CHECKLIST.SETUP")) {
-  <div class="col-3">
-      <h2>Checklist Set-Up</h2>
-      @Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })    
-    </div>
-}
-  <div class="col-3">
-    <h2>UAS Technical &amp; Journey Log</h2>
+  <div class="col-2">
+    <h2>Re-Assign</h2>
     <div>
-      This option allow you to add a new Technical Log
-      to the UAS.
+      Use this option if you required to re-assign the flight to another company. This will generate
+      a new ID for the drone. We will keep the history of old drone (Drone ID), so Service History and
+      FTR data can be accessed.
     </div>
     <div class="the-link">
       <span class="icon">&#xf0a9;</span>
-      <a href="@Url.Action("TechnicalLogAdd", "Drone", new  { ID = DroneID})">Add Technical Log</a>
+      <a href="@Url.Action("ReAssign", "Drone", new  { ID = DroneID})">Re-Assign</a>
     </div>
-  </div>
 
-  <div class="col-3">
-    <h2>UAS Technical &amp; Journey Log</h2>
-    <div>
-      To view all technical log created for this UAS, Please use this option.
-    </div>
-    <div class="the-link">
-      <span class="icon">&#xf0a9;</span>
-      <a href="@Url.Action("TechnicalLog", "Drone", new  { ID = DroneID})">View Technical Log</a>
-    </div>
   </div>
 </div>
+

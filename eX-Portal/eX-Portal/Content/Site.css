@@ -59,8 +59,17 @@ div.row{
   display: table-row;
 }
 
-div.row.multi-row div.col-3 {
+div.row.multi-row div.col-3,
+div.row.multi-row div.col-2 {
   padding-bottom:30px;
+}
+
+
+div.row.multi-row div.col-2 {
+  display: block;
+  float:left;
+  width:49%;
+  margin-left: 2%;
 }
 
 div.row div.col-3 {
@@ -75,25 +84,37 @@ div.row div.col-3 div.the-link {
   padding-top:10px;
   border-bottom: 1px rgba(234, 5, 14, 0.5) solid;
   padding-bottom:10px;
-
 }
-div.row div.col-3 div.the-link a {
+
+div.row div.col-2 div.the-link  {
+  text-align: left;
+  padding-top:10px;
+  padding-bottom:10px;
+  line-height:150%;
+}
+
+
+div.row div.col-3 div.the-link a,
+div.col-2 div.the-link a{
   font-family: 'Conv_DINNextLTPro-LightCondensed';
   font-size:18px;
 }
 
-div.row div.col-3:first-child {
+div.row div.col-3:first-child,
+div.row div.col-2:first-child  {
   margin-left: 0px;
 }
 
-div.row div.col-3 a {
+div.row div.col-3 a,
+div.col-2 a {
   font-family: Conv_DINNextLTPro-LightCondensed,Arial;
   color: #ea050e;
   font-weight:bold;
   text-decoration: none;
   font-size:15pt;
 }
-div.row div.col-3 a:hover {
+div.row div.col-3 a:hover,
+div.col-2  a:hover{
   color: black;
 }
 /* Set width on the form input elements since they're 100% wide by default */
@@ -768,4 +789,17 @@ ul#log-rows {
   list-style: none;
   margin:0px;
   padding:0px;
+}
+
+div.manage-row {
+  display: table-row;
+  
+}
+
+div.manage-row div.col-2 {
+  width:50%;
+  display: table-cell;
+  border-bottom: 1px rgba(234, 5, 14, 0.5) solid;
+  padding-bottom:20px;
+  padding-top:20px;
 }

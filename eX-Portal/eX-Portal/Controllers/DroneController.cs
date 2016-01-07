@@ -599,7 +599,7 @@ namespace eX_Portal.Controllers {
     }
 
     
-    public ActionResult TechnicalLogAdd([Bind(Prefix = "ID")] int DroneID = 0) {
+    public ActionResult TechnicalLogAdd([Bind(Prefix = "ID")] int DroneID = 0, int FlightID = 0) {
       ViewBag.Title = "Technical Log";
       Drones theDrone = new Drones(){ DroneID = DroneID };
       List<DroneFlight> Flights = new List<DroneFlight>() {
@@ -610,14 +610,14 @@ namespace eX_Portal.Controllers {
         }
       };
       ViewBag.DroneID = DroneID;
-      theDrone.getLogFlights(Flights, true);
+      theDrone.getLogFlights(Flights, FlightID);
       return View(Flights);
     }//TechnicalLogAdd
 
 
     [HttpPost]
     [ActionName("TechnicalLogAdd")]
-    public ActionResult PostTechnicalLogAdd([Bind(Prefix = "ID")] int DroneID = 0) {
+    public ActionResult PostTechnicalLogAdd(List<DroneFlight> theFlight, [Bind(Prefix = "ID")] int DroneID = 0) {
       Drones theDrone = new Drones() { DroneID = DroneID };
       theDrone.saveTechnicalLog(Request);
       return RedirectToAction("Manage", new { ID = DroneID });
@@ -632,9 +632,9 @@ namespace eX_Portal.Controllers {
       "  Convert(Varchar, LogTakeOffTime, 108) as TakeOff,\n" +
       "  Convert(Varchar, LogLandingTime, 108) as Landing,\n" +
       "  Convert(Varchar, DATEADD(\n" +
-      "             Minute,\n" +
-      "             DATEDIFF(MINUTE, LogTakeOffTime, LogLandingTime),\n" +
-      "             '2000-01-01 00:00:00'), 108) as Duration,\n" +
+      "    Minute,\n" +
+      "    DATEDIFF(MINUTE, LogTakeOffTime, LogLandingTime),\n" +
+      "    '2000-01-01 00:00:00'), 108) as Duration,\n" +
       "  LogBattery1ID as BatteryID1,\n" +
       "  LogBattery2ID as BatteryID2,\n" +
       "  ID as _Pkey,\n" +
@@ -648,7 +648,8 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "Technical Log";
       ViewBag.DroneID = DroneID;
       qView nView = new qView(SQL);
-      if (exLogic.User.hasAccess("DRONE.EDIT")) nView.addMenu("Edit", Url.Action("PostTechnicalLogAdd", new { ID = "_Pkey" }));
+      if (exLogic.User.hasAccess("DRONE.EDIT")) nView.addMenu("Edit", Url.Action("TechnicalLogAdd", 
+         new { ID = DroneID, FlightID = "_Pkey" }));
 
 
       if (Request.IsAjaxRequest()) {
