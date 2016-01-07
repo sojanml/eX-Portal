@@ -84,12 +84,36 @@ namespace eX_Portal.exLogic {
 
     public static DateTime toDate(String StrDate) {
       DateTime dt = DateTime.Now;
+      bool isSuccess = false;
+      try {
+        //10/12/2015 07:17:53
+        dt = DateTime.ParseExact(StrDate, "yyyy/M/dd HH:mm:ss", CultureInfo.InvariantCulture);
+        isSuccess = true;
+      } catch {
+        //nothing
+      }
       try {
         //10/12/2015 07:17:53
         dt = DateTime.ParseExact(StrDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+        isSuccess = true;
       } catch  {
         //nothing
       }
+      if(!isSuccess)
+        try {
+          dt = DateTime.ParseExact(StrDate, "dd MM yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+          isSuccess = true;
+        } catch {
+
+        }
+      if (!isSuccess)
+        try {
+          dt = DateTime.ParseExact(StrDate, "MM dd yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+          isSuccess = true;
+        } catch {
+
+        }
+
       return dt;
     }
 

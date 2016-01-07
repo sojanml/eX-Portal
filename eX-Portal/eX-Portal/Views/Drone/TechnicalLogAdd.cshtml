@@ -22,12 +22,20 @@
       } else {
         RefID = "[" + RowID.ToString() + "]";
       }
+      String TakeOffTime = "00:00:00";
+      String LandingTime = "00:00:00";
+      try {
+        TakeOffTime = ((DateTime)thisModel.LogTakeOffTime).ToString("HH:mm:ss");
+      } catch { }
+      try {
+        LandingTime = ((DateTime)thisModel.LogLandingTime).ToString("HH:mm:ss");
+      } catch { }
       <li id="log-row-@thisModel.ID" style="display:@(RowID == 0 ? "none" : "block")">
-        <input type="hidden" name="DroneFlight@(RefID).ID" value="@ID"/>
+        <input type="hidden" name="theFlight@(RefID).ID" value="@ID"/>
         @if(RowID == 0) { 
-          <input type="hidden" name="DroneFlight.Index" value="SLNO" />
+          <input type="hidden" name="theFlight.Index" value="SLNO" />
         } else {
-          <input type="hidden" name="DroneFlight.Index" value="@RowID" />
+          <input type="hidden" name="theFlight.Index" value="@RowID" />
         }
         <table class="report repeat-report">
           <thead>
@@ -42,33 +50,43 @@
           </thead>
           <tr>
             <td>From:</td>
-            <td><input id="LogFrom@(RefID)" name="DroneFlight@(RefID).LogFrom" type="text" value="@thisModel.LogFrom" /></td>
+            <td><input id="LogFrom@(RefID)" name="theFlight@(RefID).LogFrom" type="text" value="@thisModel.LogFrom" /></td>
             <td>Take Off:</td>
-            <td><input id="LogTakeOffTime@(RefID)" name="DroneFlight@(RefID).LogTakeOffTime" placeholder="00:00:00" type="text" value="@thisModel.LogTakeOffTime" /></td>
+            <td><input id="LogTakeOffTime@(RefID)" name="theFlight@(RefID).LogTakeOffTime" placeholder="00:00:00" type="text" value="@TakeOffTime" /></td>
             <td>ID</td>
-            <td><input id="LogBattery1ID@(RefID)" name="DroneFlight@(RefID).LogBattery1ID" type="text" value="@thisModel.LogBattery1ID" /></td>
+            <td><input id="LogBattery1ID@(RefID)" name="theFlight@(RefID).LogBattery1ID" type="text" value="@thisModel.LogBattery1ID" /></td>
             <td>ID</td>
-            <td><input id="LogBattery2ID@(RefID)" name="DroneFlight@(RefID).LogBattery2ID" type="text" value="@thisModel.LogBattery2ID" /></td>
+            <td><input id="LogBattery2ID@(RefID)" name="theFlight@(RefID).LogBattery2ID" type="text" value="@thisModel.LogBattery2ID" /></td>
           </tr>
           <tr>
             <td>To:</td>
-            <td><input id="LogTo@(RefID)" name="DroneFlight@(RefID).LogTo" type="text" value="@thisModel.LogTo" /></td>
+            <td><input id="LogTo@(RefID)" name="theFlight@(RefID).LogTo" type="text" value="@thisModel.LogTo" /></td>
             <td>Landing</td>
-            <td><input id="LogLandingTime@(RefID)" name="DroneFlight@(RefID).LogLandingTime"  placeholder="00:00:00" type="text" value="@thisModel.LogLandingTime" /></td>
+            <td><input id="LogLandingTime@(RefID)" name="theFlight@(RefID).LogLandingTime"  placeholder="00:00:00" type="text" value="@LandingTime" /></td>
             <td>Start Volt</td>
-            <td><input id="LogBattery1StartV@(RefID)" name="DroneFlight@(RefID).LogBattery1StartV" type="text" value="@thisModel.LogBattery1StartV" /></td>
+            <td><input id="LogBattery1StartV@(RefID)" name="theFlight@(RefID).LogBattery1StartV" type="text" value="@thisModel.LogBattery1StartV" /></td>
             <td>Start Volt</td>
-            <td><input id="LogBattery2StartV@(RefID)" name="DroneFlight@(RefID).LogBattery2StartV" type="text" value="@thisModel.LogBattery2StartV" /></td>
+            <td><input id="LogBattery2StartV@(RefID)" name="theFlight@(RefID).LogBattery2StartV" type="text" value="@thisModel.LogBattery2StartV" /></td>
           </tr>
           <tr>
             <td>Date:</td>
-            <td><input class="date-picker" id="FlightDate@(RefID)" name="DroneFlight@(RefID).FlightDate" type="text" value="@Util.fmtDt(thisModel.FlightDate.ToString(), false)" /></td>
+            <td><input class="date-picker" id="FlightDate@(RefID)" name="theFlight@(RefID).FlightDate" type="text" value="@Util.fmtDt(thisModel.FlightDate.ToString(), false)" /></td>
             <td>Duration: </td>
             <td>@(thisModel.LogLandingTime - thisModel.LogTakeOffTime)</td>
             <td>End Volt</td>
-            <td><input id="LogBattery1EndV@(RefID)" name="DroneFlight@(RefID).LogBattery1EndV" type="text" value="@thisModel.LogBattery1EndV" /></td>
+            <td><input id="LogBattery1EndV@(RefID)" name="theFlight@(RefID).LogBattery1EndV" type="text" value="@thisModel.LogBattery1EndV" /></td>
             <td>End Volt</td>
-            <td><input id="LogBattery2EndV@(RefID)" name="DroneFlight@(RefID).LogBattery2EndV" type="text" value="@thisModel.LogBattery2EndV" /></td>
+            <td><input id="LogBattery2EndV@(RefID)" name="theFlight@(RefID).LogBattery2EndV" type="text" value="@thisModel.LogBattery2EndV" /></td>
+          </tr>
+          <tr>
+            <td>Descrepency:</td>
+            <td colspan="3">
+              <textarea style="width:100%; max-width:100%; height:120px;" name="theFlight@(RefID).Descrepency">@thisModel.Descrepency</textarea>
+            </td>
+            <td>Action Taken:</td>
+            <td colspan="3">
+              <textarea style="width:100%; max-width:100%; height:120px;" name="theFlight@(RefID).ActionTaken">@thisModel.ActionTaken</textarea>
+            </td>
           </tr>
         </table>
       </li>
