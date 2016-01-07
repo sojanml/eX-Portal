@@ -152,14 +152,19 @@ namespace eX_Portal.Controllers
             {
                 ctx.Database.Connection.Open();
                 cmd.CommandText = SQL;
-                TFooter.AppendLine("<td>");
-                TFooter.AppendLine("---------Total-----------");
-                TFooter.AppendLine("</td>");
+               
 
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
+                      if (reader["Total"] != DBNull.Value)
+                        {
+                            TFooter.AppendLine("<td>");
+                            TFooter.AppendLine("---------Total-----------");
+                            TFooter.AppendLine("</td>");
+
+                        }
                         TFooter.AppendLine("<td>");
                         TFooter.AppendLine(reader["FixedWing"].ToString());
                         TFooter.AppendLine("</td>");
