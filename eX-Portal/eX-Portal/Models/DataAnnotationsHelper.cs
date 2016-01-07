@@ -206,18 +206,17 @@ namespace eX_Portal.Models {
         [Display(Name = "To")]
         public string RouteTo { get; set; }
         public string Remarks { get; set; }
-        [Display(Name = "Engine Land")]
-        public Nullable<int> EngineLand { get; set; }
-        public Nullable<int> Night { get; set; }
-        [Display(Name = "Actual Instrument")]
-        public Nullable<int> ActualInstrument { get; set; }
-        [Display(Name = "Simulated Instrument")]
+        [Display(Name = "Fixed Wing")]
+        public Nullable<int> FixedWing { get; set; }
+        [Display(Name = "Multi Dash Rotor")]
+        public Nullable<int> MultiDashRotor { get; set; }     
+        [Display(Name = "Simulaor")]
         public Nullable<int> SimulatedInstrument { get; set; }
         [Display(Name = "As Flight Instructor")]
         public Nullable<int> AsflightInstructor { get; set; }
         [Display(Name = "Dual Recieved")]
         public Nullable<int> DualRecieved { get; set; }
-        [Display(Name = "Floating Command")]
+        [Display(Name = "Float In Command")]
         public Nullable<int> FloatingCommand { get; set; }
         public Nullable<int> PilotId { get; set; }
     }
