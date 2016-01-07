@@ -9,6 +9,9 @@
   @Html.Action("ExponentCertificateDetails", new { ID = Model.UserId })
 }
 
+@Html.Action("PilotLogDetails","PilotLog", new { ID = Model.UserId })
+@Html.Action("PilotLogTotal", "PilotLog", new { ID = Model.UserId })
+
 @section toolbar {
 
   @if (Model.IsPilot == true) {
@@ -21,6 +24,9 @@
       @if (eX_Portal.exLogic.User.hasAccess("EXPCERT.CREATE")) {
         <li>@Html.ActionLink("Exponent Certification", "ExponentCertificationCreate", "User", new { ID = Model.UserId }, null)</li>
       }
+        
+        <li> @Html.ActionLink("Pilot Log", "Create", "PilotLog", new { ID = Model.UserId }, null)  </li>
+
     </ul>
   }
 
@@ -64,6 +70,25 @@
       //alert('Key: ' + pKey)
     });
 
+
+
+   
+    $('table#PilotLogDetails').on('click', 'img.row-button', function (e) {
+        e.stopPropagation();
+        if (LastButton) LastButton.parent().find('UL').remove();
+        var Btn = $(this);
+        LastButton = Btn;
+        var data = Btn.attr("data-pkey");
+        //var pKey = data['_PKey'];
+        //Btn.parent().find('UL').remove();
+        Btn.parent().append(
+          '<ul class="qViewMenu">\n' +
+          '<li><a href="/PilotLog/Edit/' + data + '">Edit</a></li>\n' +
+          '<li><a class="_delete" href="/PilotLog/Delete/' + data + '">Delete</a></li>\n' +
+          '</ul>'
+          );
+        //alert('Key: ' + pKey)
+    });
   </script>
 
 
