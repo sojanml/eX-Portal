@@ -148,8 +148,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="Longitude" Type="decimal" Precision="18" Scale="5" />
           <Property Name="LogFrom" Type="varchar" MaxLength="50" />
           <Property Name="LogTo" Type="varchar" MaxLength="50" />
-          <Property Name="LogTakeOffTime" Type="time" Precision="7" />
-          <Property Name="LogLandingTime" Type="time" Precision="7" />
+          <Property Name="LogTakeOffTime" Type="datetime" />
+          <Property Name="LogLandingTime" Type="datetime" />
           <Property Name="LogBattery1ID" Type="varchar" MaxLength="50" />
           <Property Name="LogBattery1StartV" Type="decimal" Precision="5" Scale="2" />
           <Property Name="LogBattery1EndV" Type="decimal" Precision="5" Scale="2" />
@@ -158,6 +158,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="LogBattery2EndV" Type="decimal" Precision="5" Scale="2" />
           <Property Name="isLogged" Type="tinyint" />
           <Property Name="LogDateTime" Type="datetime" />
+          <Property Name="LogCreatedBy" Type="int" />
+          <Property Name="Descrepency" Type="nvarchar" MaxLength="500" />
+          <Property Name="ActionTaken" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="FlightMapData">
           <Key>
@@ -339,8 +342,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="Code" Type="nvarchar" MaxLength="25" />
           <Property Name="BinaryCode" Type="nvarchar" MaxLength="50" />
           <Property Name="EmailId" Type="nvarchar" MaxLength="50" />
-          <Property Name="MobileNo" Type="nvarchar" MaxLength="12" />
-          <Property Name="OfficeNo" Type="nvarchar" MaxLength="12" />
+          <Property Name="MobileNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="OfficeNo" Type="nvarchar" MaxLength="20" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="RecordType" Type="int" />
           <Property Name="CreatedBy" Type="int" />
@@ -511,14 +514,13 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="RouteFrom" Type="nvarchar" MaxLength="50" />
           <Property Name="RouteTo" Type="nvarchar" MaxLength="50" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
-          <Property Name="EngineLand" Type="int" />
-          <Property Name="Night" Type="int" />
-          <Property Name="ActualInstrument" Type="int" />
           <Property Name="SimulatedInstrument" Type="int" />
           <Property Name="AsflightInstructor" Type="int" />
           <Property Name="DualRecieved" Type="int" />
           <Property Name="FloatingCommand" Type="int" />
           <Property Name="PilotId" Type="int" />
+          <Property Name="FixedWing" Type="int" />
+          <Property Name="MultiDashRotor" Type="int" />
         </EntityType>
         <EntityType Name="MSTR_Product">
           <Key>
@@ -574,9 +576,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="ApprovedBy" Type="int" />
           <Property Name="UserProfileId" Type="int" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
-          <Property Name="MobileNo" Type="nvarchar" MaxLength="12" />
-          <Property Name="OfficeNo" Type="nvarchar" MaxLength="12" />
-          <Property Name="HomeNo" Type="nvarchar" MaxLength="12" />
+          <Property Name="MobileNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="OfficeNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="HomeNo" Type="nvarchar" MaxLength="20" />
           <Property Name="EmailId" Type="nvarchar" MaxLength="50" />
           <Property Name="CountryId" Type="int" />
           <Property Name="RecordType" Type="int" />
@@ -943,35 +945,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="IsAcitive" Type="Boolean" />
           <Property Name="RecordType" Type="Int32" />
         </EntityType>
-        <EntityType Name="MSTR_Account">
-          <Key>
-            <PropertyRef Name="AccountId" />
-          </Key>
-          <Property Name="AccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmailId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MobileNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
-          <Property Name="OfficeNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="RecordType" Type="Int32" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="ModifiedBy" Type="Int32" />
-          <Property Name="ApprovedBy" Type="Int32" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
-          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
-          <Property Name="AccountDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CountryCode" Type="Int32" />
-          <Property Name="Code" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="BinaryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BrandLogo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="BrandColor" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="ContactName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ContactTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="MSTR_Drone">
           <Key>
             <PropertyRef Name="DroneId" />
@@ -1146,7 +1119,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySet Name="M2M_DroneParts" EntityType="Self.M2M_DroneParts" />
           <EntitySet Name="M2M_DroneServiceParts" EntityType="Self.M2M_DroneServiceParts" />
           <EntitySet Name="M2M_UserAccount" EntityType="Self.M2M_UserAccount" />
-          <EntitySet Name="MSTR_Account" EntityType="Self.MSTR_Account" />
           <EntitySet Name="MSTR_Drone" EntityType="Self.MSTR_Drone" />
           <EntitySet Name="MSTR_DroneService" EntityType="Self.MSTR_DroneService" />
           <EntitySet Name="MSTR_Menu" EntityType="Self.MSTR_Menu" />
@@ -1184,14 +1156,15 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySet Name="DroneDocuments" EntityType="ExponentPortalModel.DroneDocument" />
           <EntitySet Name="BlackBoxDatas" EntityType="ExponentPortalModel.BlackBoxData" />
           <EntitySet Name="FlightMapDatas" EntityType="ExponentPortalModel.FlightMapData" />
-          <EntitySet Name="MSTR_User" EntityType="ExponentPortalModel.MSTR_User" />
-          <EntitySet Name="DroneFlights" EntityType="ExponentPortalModel.DroneFlight" />
           <EntitySet Name="MSTR_User_Pilot" EntityType="ExponentPortalModel.MSTR_User_Pilot" />
           <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="ExponentPortalModel.MSTR_User_Pilot_Certification" />
           <EntitySet Name="MSTR_User_Pilot_ExponentUAS" EntityType="ExponentPortalModel.MSTR_User_Pilot_ExponentUAS" />
           <EntitySet Name="MSTR_Drone_TechnicalLog" EntityType="ExponentPortalModel.MSTR_Drone_TechnicalLog" />
           <EntitySet Name="MSTR_Drone_TechnicalLogDetails" EntityType="ExponentPortalModel.MSTR_Drone_TechnicalLogDetails" />
           <EntitySet Name="MSTR_Pilot_Log" EntityType="ExponentPortalModel.MSTR_Pilot_Log" />
+          <EntitySet Name="DroneFlights" EntityType="ExponentPortalModel.DroneFlight" />
+          <EntitySet Name="MSTR_Account" EntityType="ExponentPortalModel.MSTR_Account" />
+          <EntitySet Name="MSTR_User" EntityType="ExponentPortalModel.MSTR_User" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -1409,64 +1382,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="PointDistance" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="Distance" Type="Decimal" Precision="18" Scale="5" />
         </EntityType>
-        <EntityType Name="MSTR_User">
-          <Key>
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="RememberMe" Type="Boolean" />
-          <Property Name="PhotoUrl" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="LastModifiedBy" Type="Int32" />
-          <Property Name="ApprovedBy" Type="Int32" />
-          <Property Name="UserProfileId" Type="Int32" />
-          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="MobileNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
-          <Property Name="OfficeNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
-          <Property Name="HomeNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
-          <Property Name="EmailId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CountryId" Type="Int32" />
-          <Property Name="RecordType" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="LastModifiedOn" Type="DateTime" Precision="3" />
-          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="PasswordSalt" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AccountId" Type="Int32" />
-          <Property Name="IsPilot" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="DroneFlight">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PilotID" Type="Int32" />
-          <Property Name="GSCID" Type="Int32" />
-          <Property Name="FlightDate" Type="DateTime" Precision="3" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="DroneID" Type="Int32" />
-          <Property Name="BBFlightID" Type="Int32" />
-          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="LogFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LogTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LogTakeOffTime" Type="Time" Precision="7" />
-          <Property Name="LogLandingTime" Type="Time" Precision="7" />
-          <Property Name="LogBattery1ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LogBattery1StartV" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="LogBattery1EndV" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="LogBattery2ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LogBattery2StartV" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="LogBattery2EndV" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="isLogged" Type="Byte" />
-          <Property Name="LogDateTime" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
             <PropertyRef Name="UserId" />
@@ -1546,14 +1461,103 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="RouteFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RouteTo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="EngineLand" Type="Int32" />
-          <Property Name="Night" Type="Int32" />
-          <Property Name="ActualInstrument" Type="Int32" />
           <Property Name="SimulatedInstrument" Type="Int32" />
           <Property Name="AsflightInstructor" Type="Int32" />
           <Property Name="DualRecieved" Type="Int32" />
           <Property Name="FloatingCommand" Type="Int32" />
           <Property Name="PilotId" Type="Int32" />
+          <Property Name="FixedWing" Type="Int32" />
+          <Property Name="MultiDashRotor" Type="Int32" />
+        </EntityType>
+        <EntityType Name="DroneFlight">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PilotID" Type="Int32" />
+          <Property Name="GSCID" Type="Int32" />
+          <Property Name="FlightDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="DroneID" Type="Int32" />
+          <Property Name="BBFlightID" Type="Int32" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="LogFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogTakeOffTime" Type="DateTime" Precision="3" />
+          <Property Name="LogLandingTime" Type="DateTime" Precision="3" />
+          <Property Name="LogBattery1ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogBattery1StartV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery1EndV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery2ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogBattery2StartV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery2EndV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="isLogged" Type="Byte" />
+          <Property Name="LogDateTime" Type="DateTime" Precision="3" />
+          <Property Name="LogCreatedBy" Type="Int32" />
+          <Property Name="Descrepency" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTaken" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MSTR_Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="BinaryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmailId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="OfficeNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="RecordType" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ApprovedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+          <Property Name="AccountDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryCode" Type="Int32" />
+          <Property Name="BrandLogo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BrandColor" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ContactName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MSTR_User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RememberMe" Type="Boolean" />
+          <Property Name="PhotoUrl" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="LastModifiedBy" Type="Int32" />
+          <Property Name="ApprovedBy" Type="Int32" />
+          <Property Name="UserProfileId" Type="Int32" />
+          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="OfficeNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HomeNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EmailId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryId" Type="Int32" />
+          <Property Name="RecordType" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="LastModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="PasswordSalt" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountId" Type="Int32" />
+          <Property Name="IsPilot" Type="Boolean" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1719,36 +1723,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
                 <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
                 <ScalarProperty Name="IsAcitive" ColumnName="IsAcitive" />
                 <ScalarProperty Name="RecordType" ColumnName="RecordType" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MSTR_Account">
-            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Account">
-              <MappingFragment StoreEntitySet="MSTR_Account">
-                <ScalarProperty Name="ContactTitle" ColumnName="ContactTitle" />
-                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
-                <ScalarProperty Name="BrandColor" ColumnName="BrandColor" />
-                <ScalarProperty Name="BrandLogo" ColumnName="BrandLogo" />
-                <ScalarProperty Name="BinaryCode" ColumnName="BinaryCode" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
-                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
-                <ScalarProperty Name="OfficeNo" ColumnName="OfficeNo" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
-                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
-                <ScalarProperty Name="AccountDescription" ColumnName="AccountDescription" />
-                <ScalarProperty Name="Address1" ColumnName="Address1" />
-                <ScalarProperty Name="Address2" ColumnName="Address2" />
-                <ScalarProperty Name="Address3" ColumnName="Address3" />
-                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2160,66 +2134,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MSTR_User">
-            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
-              <MappingFragment StoreEntitySet="MSTR_User">
-                <ScalarProperty Name="IsPilot" ColumnName="IsPilot" />
-                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-                <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
-                <ScalarProperty Name="LastModifiedOn" ColumnName="LastModifiedOn" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
-                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
-                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
-                <ScalarProperty Name="HomeNo" ColumnName="HomeNo" />
-                <ScalarProperty Name="OfficeNo" ColumnName="OfficeNo" />
-                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
-                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
-                <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="PhotoUrl" ColumnName="PhotoUrl" />
-                <ScalarProperty Name="RememberMe" ColumnName="RememberMe" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DroneFlights">
-            <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
-              <MappingFragment StoreEntitySet="DroneFlight">
-                <ScalarProperty Name="LogDateTime" ColumnName="LogDateTime" />
-                <ScalarProperty Name="isLogged" ColumnName="isLogged" />
-                <ScalarProperty Name="LogBattery2EndV" ColumnName="LogBattery2EndV" />
-                <ScalarProperty Name="LogBattery2StartV" ColumnName="LogBattery2StartV" />
-                <ScalarProperty Name="LogBattery2ID" ColumnName="LogBattery2ID" />
-                <ScalarProperty Name="LogBattery1EndV" ColumnName="LogBattery1EndV" />
-                <ScalarProperty Name="LogBattery1StartV" ColumnName="LogBattery1StartV" />
-                <ScalarProperty Name="LogBattery1ID" ColumnName="LogBattery1ID" />
-                <ScalarProperty Name="LogLandingTime" ColumnName="LogLandingTime" />
-                <ScalarProperty Name="LogTakeOffTime" ColumnName="LogTakeOffTime" />
-                <ScalarProperty Name="LogTo" ColumnName="LogTo" />
-                <ScalarProperty Name="LogFrom" ColumnName="LogFrom" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
-                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />
-                <ScalarProperty Name="GSCID" ColumnName="GSCID" />
-                <ScalarProperty Name="PilotID" ColumnName="PilotID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MSTR_User_Pilot">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User_Pilot">
               <MappingFragment StoreEntitySet="MSTR_User_Pilot">
@@ -2297,20 +2211,112 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySetMapping Name="MSTR_Pilot_Log">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Pilot_Log">
               <MappingFragment StoreEntitySet="MSTR_Pilot_Log">
+                <ScalarProperty Name="MultiDashRotor" ColumnName="MultiDashRotor" />
+                <ScalarProperty Name="FixedWing" ColumnName="FixedWing" />
                 <ScalarProperty Name="PilotId" ColumnName="PilotId" />
                 <ScalarProperty Name="FloatingCommand" ColumnName="FloatingCommand" />
                 <ScalarProperty Name="DualRecieved" ColumnName="DualRecieved" />
                 <ScalarProperty Name="AsflightInstructor" ColumnName="AsflightInstructor" />
                 <ScalarProperty Name="SimulatedInstrument" ColumnName="SimulatedInstrument" />
-                <ScalarProperty Name="ActualInstrument" ColumnName="ActualInstrument" />
-                <ScalarProperty Name="Night" ColumnName="Night" />
-                <ScalarProperty Name="EngineLand" ColumnName="EngineLand" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="RouteTo" ColumnName="RouteTo" />
                 <ScalarProperty Name="RouteFrom" ColumnName="RouteFrom" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="DroneId" ColumnName="DroneId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DroneFlights">
+            <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
+              <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="ActionTaken" ColumnName="ActionTaken" />
+                <ScalarProperty Name="Descrepency" ColumnName="Descrepency" />
+                <ScalarProperty Name="LogCreatedBy" ColumnName="LogCreatedBy" />
+                <ScalarProperty Name="LogDateTime" ColumnName="LogDateTime" />
+                <ScalarProperty Name="isLogged" ColumnName="isLogged" />
+                <ScalarProperty Name="LogBattery2EndV" ColumnName="LogBattery2EndV" />
+                <ScalarProperty Name="LogBattery2StartV" ColumnName="LogBattery2StartV" />
+                <ScalarProperty Name="LogBattery2ID" ColumnName="LogBattery2ID" />
+                <ScalarProperty Name="LogBattery1EndV" ColumnName="LogBattery1EndV" />
+                <ScalarProperty Name="LogBattery1StartV" ColumnName="LogBattery1StartV" />
+                <ScalarProperty Name="LogBattery1ID" ColumnName="LogBattery1ID" />
+                <ScalarProperty Name="LogLandingTime" ColumnName="LogLandingTime" />
+                <ScalarProperty Name="LogTakeOffTime" ColumnName="LogTakeOffTime" />
+                <ScalarProperty Name="LogTo" ColumnName="LogTo" />
+                <ScalarProperty Name="LogFrom" ColumnName="LogFrom" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />
+                <ScalarProperty Name="GSCID" ColumnName="GSCID" />
+                <ScalarProperty Name="PilotID" ColumnName="PilotID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_Account">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Account">
+              <MappingFragment StoreEntitySet="MSTR_Account">
+                <ScalarProperty Name="ContactTitle" ColumnName="ContactTitle" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="BrandColor" ColumnName="BrandColor" />
+                <ScalarProperty Name="BrandLogo" ColumnName="BrandLogo" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="Address3" ColumnName="Address3" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="AccountDescription" ColumnName="AccountDescription" />
+                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="OfficeNo" ColumnName="OfficeNo" />
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="BinaryCode" ColumnName="BinaryCode" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_User">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
+              <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="IsPilot" ColumnName="IsPilot" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+                <ScalarProperty Name="LastModifiedOn" ColumnName="LastModifiedOn" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="HomeNo" ColumnName="HomeNo" />
+                <ScalarProperty Name="OfficeNo" ColumnName="OfficeNo" />
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="PhotoUrl" ColumnName="PhotoUrl" />
+                <ScalarProperty Name="RememberMe" ColumnName="RememberMe" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

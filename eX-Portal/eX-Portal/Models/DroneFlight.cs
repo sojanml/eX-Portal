@@ -26,8 +26,8 @@ namespace eX_Portal.Models
         public Nullable<decimal> Longitude { get; set; }
         public string LogFrom { get; set; }
         public string LogTo { get; set; }
-        public Nullable<System.TimeSpan> LogTakeOffTime { get; set; }
-        public Nullable<System.TimeSpan> LogLandingTime { get; set; }
+        public Nullable<System.DateTime> LogTakeOffTime { get; set; }
+        public Nullable<System.DateTime> LogLandingTime { get; set; }
         public string LogBattery1ID { get; set; }
         public Nullable<decimal> LogBattery1StartV { get; set; }
         public Nullable<decimal> LogBattery1EndV { get; set; }
@@ -36,5 +36,8 @@ namespace eX_Portal.Models
         public Nullable<decimal> LogBattery2EndV { get; set; }
         public Nullable<byte> isLogged { get; set; }
         public Nullable<System.DateTime> LogDateTime { get; set; }
+        public Nullable<int> LogCreatedBy { get; set; }
+        public string Descrepency { get; set; }
+        public string ActionTaken { get; set; }
     }
 }

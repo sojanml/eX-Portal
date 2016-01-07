@@ -35,7 +35,6 @@ namespace eX_Portal.Models
         public virtual DbSet<M2M_DroneParts> M2M_DroneParts { get; set; }
         public virtual DbSet<M2M_DroneServiceParts> M2M_DroneServiceParts { get; set; }
         public virtual DbSet<M2M_UserAccount> M2M_UserAccount { get; set; }
-        public virtual DbSet<MSTR_Account> MSTR_Account { get; set; }
         public virtual DbSet<MSTR_Drone> MSTR_Drone { get; set; }
         public virtual DbSet<MSTR_DroneService> MSTR_DroneService { get; set; }
         public virtual DbSet<MSTR_Menu> MSTR_Menu { get; set; }
@@ -55,14 +54,15 @@ namespace eX_Portal.Models
         public virtual DbSet<DroneDocument> DroneDocuments { get; set; }
         public virtual DbSet<BlackBoxData> BlackBoxDatas { get; set; }
         public virtual DbSet<FlightMapData> FlightMapDatas { get; set; }
-        public virtual DbSet<MSTR_User> MSTR_User { get; set; }
-        public virtual DbSet<DroneFlight> DroneFlights { get; set; }
         public virtual DbSet<MSTR_User_Pilot> MSTR_User_Pilot { get; set; }
         public virtual DbSet<MSTR_User_Pilot_Certification> MSTR_User_Pilot_Certification { get; set; }
         public virtual DbSet<MSTR_User_Pilot_ExponentUAS> MSTR_User_Pilot_ExponentUAS { get; set; }
         public virtual DbSet<MSTR_Drone_TechnicalLog> MSTR_Drone_TechnicalLog { get; set; }
         public virtual DbSet<MSTR_Drone_TechnicalLogDetails> MSTR_Drone_TechnicalLogDetails { get; set; }
         public virtual DbSet<MSTR_Pilot_Log> MSTR_Pilot_Log { get; set; }
+        public virtual DbSet<DroneFlight> DroneFlights { get; set; }
+        public virtual DbSet<MSTR_Account> MSTR_Account { get; set; }
+        public virtual DbSet<MSTR_User> MSTR_User { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

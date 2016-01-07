@@ -20,13 +20,12 @@ namespace eX_Portal.Models
         public string RouteFrom { get; set; }
         public string RouteTo { get; set; }
         public string Remarks { get; set; }
-        public Nullable<int> EngineLand { get; set; }
-        public Nullable<int> Night { get; set; }
-        public Nullable<int> ActualInstrument { get; set; }
         public Nullable<int> SimulatedInstrument { get; set; }
         public Nullable<int> AsflightInstructor { get; set; }
         public Nullable<int> DualRecieved { get; set; }
         public Nullable<int> FloatingCommand { get; set; }
         public Nullable<int> PilotId { get; set; }
+        public Nullable<int> FixedWing { get; set; }
+        public Nullable<int> MultiDashRotor { get; set; }
     }
 }

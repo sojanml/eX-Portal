@@ -16,6 +16,8 @@ namespace eX_Portal.Models
     {
         public int AccountId { get; set; }
         public string Name { get; set; }
+        public string Code { get; set; }
+        public string BinaryCode { get; set; }
         public string EmailId { get; set; }
         public string MobileNo { get; set; }
         public string OfficeNo { get; set; }
@@ -32,8 +34,6 @@ namespace eX_Portal.Models
         public string Address2 { get; set; }
         public string Address3 { get; set; }
         public Nullable<int> CountryCode { get; set; }
-        public string Code { get; set; }
-        public string BinaryCode { get; set; }
         public string BrandLogo { get; set; }
         public string BrandColor { get; set; }
         public string ContactName { get; set; }
