@@ -65,8 +65,8 @@ namespace eX_Portal.exLogic {
           ID = Util.toInt(Row["ID"].ToString()),
           LogFrom = Row["LogFrom"].ToString(),
           LogTo = Row["LogFrom"].ToString(),
-          LogTakeOffTime = Util.toTime(Row["LogTakeOffTime"].ToString()),
-          LogLandingTime = Util.toTime(Row["LogLandingTime"].ToString()),
+          LogTakeOffTime = Util.toDate(Row["FlightDate"].ToString() + " " + Row["LogTakeOffTime"].ToString()),
+          LogLandingTime = Util.toDate(Row["FlightDate"].ToString() + " " + Row["LogLandingTime"].ToString()),
           FlightDate = Util.toDate(Row["FlightDate"].ToString())
         };
         Flights.Add(Flight);

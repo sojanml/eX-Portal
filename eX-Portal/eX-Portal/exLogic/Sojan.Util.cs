@@ -307,16 +307,16 @@ namespace eX_Portal.exLogic {
       }
     }//fmtDt()
 
-    public static TimeSpan toTime(Object strTime) {
-      TimeSpan theTime = new TimeSpan(0);
-      String sTime = strTime.ToString();
-      TimeSpan.TryParse(sTime, out theTime);
-      return theTime;
-    }
 
     public static String toSQLDate(String sDate) {
-      DateTime theDate = DateTime.ParseExact(sDate, "dd-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-      return theDate.ToString("yyyy-MM-dd HH:mm:ss");
+      String sTheDate = "2001-01-01 00:00:01";
+      try {
+        DateTime theDate = DateTime.ParseExact(sDate, "dd-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+        sTheDate  = theDate.ToString("yyyy-MM-dd HH:mm:ss");
+      } catch {
+        //nothing
+      }       
+      return sTheDate;
     }
 
   }//class Util
