@@ -55,27 +55,22 @@
         </div>
         <h2>Air Craft Category</h2>
         <div class="form-group">
-            @Html.LabelFor(model => model.EngineLand, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.FixedWing, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EngineLand)
-                @Html.ValidationMessageFor(model => model.EngineLand, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.FixedWing)
+                @Html.ValidationMessageFor(model => model.FixedWing, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.MultiDashRotor, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MultiDashRotor)
+                @Html.ValidationMessageFor(model => model.MultiDashRotor, "", new { @class = "text-danger" })
             </div>
         </div>
         <h2>Conditions Of Flight</h2>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Night, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Night)
-                @Html.ValidationMessageFor(model => model.Night, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.ActualInstrument, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ActualInstrument)
-                @Html.ValidationMessageFor(model => model.ActualInstrument, "", new { @class = "text-danger" })
-            </div>
-        </div>
+       
         <div class="form-group">
             @Html.LabelFor(model => model.SimulatedInstrument, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
