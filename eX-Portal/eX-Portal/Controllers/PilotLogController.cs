@@ -47,7 +47,6 @@ namespace eX_Portal.Controllers
 
             if (ModelState.IsValid)
             {
-                int ID = 0;
                 ExponentPortalEntities db = new ExponentPortalEntities();
                 db.MSTR_Pilot_Log.Add(PilotLog);
                 db.SaveChanges();
@@ -134,7 +133,7 @@ namespace eX_Portal.Controllers
       /*
             if (!exLogic.User.hasAccess("PILOTLOG.VIEW")) return "Access Denied";
 
-      string SQL = "SELECT \n" +
+            string SQL= "SELECT \n" +
       " sum(FixedWing) as FixedWing \n" +
       "  ,sum(MultiDashRotor) as MultiDashRotor \n" +      
       "  ,sum(SimulatedInstrument) as Simulator \n" +
@@ -153,19 +152,14 @@ namespace eX_Portal.Controllers
             {
                 ctx.Database.Connection.Open();
                 cmd.CommandText = SQL;
-               
+                TFooter.AppendLine("<td>");
+                TFooter.AppendLine("---------Total-----------");
+                TFooter.AppendLine("</td>");
 
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                      if (reader["Total"] != DBNull.Value)
-                        {
-                        TFooter.AppendLine("<td>");
-                            TFooter.AppendLine("---------Total-----------");
-                            TFooter.AppendLine("</td>");
-
-                        }
                         TFooter.AppendLine("<td>");
                         TFooter.AppendLine(reader["FixedWing"].ToString());
                         TFooter.AppendLine("</td>");
