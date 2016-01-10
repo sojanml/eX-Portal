@@ -33,6 +33,8 @@ namespace eX_Portal.exLogic {
     }
 
     public bool HasRows { get; set; }
+    public string TotalSQL { get; internal set; }
+
     private List<qViewMenu> qViewMenus = new List<qViewMenu>();
     private bool IsPrimaryKey = false;
 
@@ -254,6 +256,28 @@ namespace eX_Portal.exLogic {
         Table.Append(getTableRows());
         Table.AppendLine("</tbody>");
       }
+
+      //add total row to the sql
+      if(!String.IsNullOrEmpty(TotalSQL)) {
+        Dictionary<String, Object> Row = Util.getDBRow(TotalSQL);
+        StringBuilder TotalRow = new StringBuilder();
+        TotalRow.AppendLine("<tfoot>");
+        TotalRow.AppendLine("<tr>");
+        foreach (var Column in Row) {
+          switch(Column.Key.ToLower()) {
+            case "hasrows":
+              break;
+            default:
+              TotalRow.AppendLine("<th>" + Column.Value.ToString() + "</th>");
+              break;
+          }          
+        }
+        if(IsPrimaryKey) TotalRow.AppendLine("<th></th>");
+        TotalRow.AppendLine("</tr>");
+        TotalRow.AppendLine("</tfoot>");
+        Table.Append(TotalRow);
+      }
+
 
       if(isIncludeFooter) { 
         Table.AppendLine("<tfoot>");
