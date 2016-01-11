@@ -1,4 +1,5 @@
-﻿
+﻿@using eX_Portal.exLogic;
+
 @{
   int DroneID = ViewBag.DroneID;
 }
@@ -13,7 +14,7 @@
 @Html.Action("getDroneParts", "Drone", new { ID = DroneID })
 
 <!--
-@if (exLogic.User.hasAccess("CHECKLIST.SETUP")) { 
+@if (eX_Portal.exLogic.User.hasAccess("CHECKLIST.SETUP")) { 
   <h2>Checklist Set-Up</h2>
   @Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })
 }

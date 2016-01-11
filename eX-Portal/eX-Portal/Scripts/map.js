@@ -1,9 +1,10 @@
-﻿var MaxRecords = 20;
+﻿var MaxRecords = 2000;
 var map;
 var _Location = [];
 var PlotTimer = null;
 var PlotTimerDelay = 100;
 var isReplayMode = false;
+var mytimer = null;
 
 var _truckName = [];
 var _viGroupName = [];
@@ -15,7 +16,7 @@ var _viGroupTruckIconArry = [];
 var _vigroupValue;
 var initLat = 24.9899106;
 var initLng = 55.0034188;
-var defaultZoom = 20;
+var defaultZoom = 18;
 var gpsGrpID;
 var timezone;
 var clientID;
@@ -44,7 +45,6 @@ var myInterval;
 var myLatLong = [];
 var MyLastLatLong = null;
 var MyLastMarker = null;
-var mytimer = null;
 var service = new google.maps.DirectionsService();
 var path = new google.maps.MVCArray();
 $(document).ready(function () {
@@ -124,16 +124,15 @@ function initialize() {
   });
   poly.setMap(map);
   var loctr = '<thead><tr><th>Latitude</th><th>Longitude</th>'
-              + '<th>Altitude</th><th>Speed</th>'
+              + '<th>Altitude (m)</th><th>Speed (m/s)</th>'
               + '<th>FixQuality</th><th>Satellite</th>'
-              + '<th>ReadTime</th><th>Pitch</th>'
+              + '<th>ReadTime (UTC)</th><th>Pitch</th>'
               + '<th>RollData</th><th>Heading</th>'
-              + '<th>Total Flight Time</th></tr></thead>';
+              + '</tr></thead>';
   var firsttr = '<tr style="display:none"><td></td><td></td>'
              + '<td></td><td></td>'
              + '<td></td><td></td>'
              + '<td></td><td></td>'
-             + '<td></td>'
              + '<td></td><td></td></tr>';
   $('#MapData table').append(loctr);
   $('#MapData table').append(firsttr);
@@ -186,7 +185,13 @@ function GetDrones() {
         _Location.push(obj);
         LastDroneDataID = obj['FlightMapDataID'];
       });
-      plotPoints();
+
+
+      if (isReplayMode) {
+        plotPoints();
+      } else {
+        directPlotPoints();
+      }
       //LastDatas = _Location;
 
       // }
@@ -197,9 +202,25 @@ function GetDrones() {
     failure: function (msg) {
       alert('Live Drone Position Error' + msg);
     },
-    complete: function (msg) { mytimer = setTimeout(function () { GetDrones(); }, 1000); }
+    complete: function (msg) {
+      if (mytimer) window.clearTimeout(mytimer);
+      mytimer = window.setTimeout(GetDrones, 1000);
+    }
   });
 
+}
+
+
+function directPlotPoints() {
+  while (1) {
+    if (_Location.length < 1) return;
+    var thisPoint = _Location.shift();
+
+    setMarker(map, thisPoint);
+    SetCurrentValues(thisPoint);
+    SetMapTable(thisPoint);
+
+  }
 }
 
 function plotPoints() {
@@ -207,6 +228,7 @@ function plotPoints() {
   if (_Location.length < 1) return;
 
   var thisPoint = _Location.shift();
+
 
   setMarker(map, thisPoint);
   SetCurrentValues(thisPoint);
@@ -267,6 +289,7 @@ function Replay() {
   if (PlotTimer) window.clearTimeout(PlotTimer);
   PlotTimer = null;
   isReplayMode = true;
+  MaxRecords = 20;
 
   clearTimeout(mytimer);
   MyLastLatLong = null;
@@ -330,7 +353,7 @@ function SetMapTable(_LastValue) {
     var tPitchData = '<td>' + _LastValue['Pitch'] + '</td>';
     var tRollData = '<td>' + _LastValue['Roll'] + '</td>';
     var tHeadData = '<td>' + _LastValue['Heading'] + '</td>';
-    var tTotFlightTimeData = '<td>' + _LastValue['TotalFlightTime'] + '</td>';
+    var tTotFlightTimeData = '';// '<td>' + _LastValue['TotalFlightTime'] + '</td>';
     var loctr = '<tr>' + tLatData + tLonData + tAltData + tSpeedData + tFxQltyData + tSatelliteData + tDrTime + tPitchData + tRollData + tHeadData + tTotFlightTimeData + '</tr>';
     $('#MapData table > tbody > tr:first').after(loctr);
     if ($("#MapData > table > tbody > tr").length > 20)
