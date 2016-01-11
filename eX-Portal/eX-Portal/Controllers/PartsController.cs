@@ -92,8 +92,8 @@ namespace eX_Portal.Controllers
         {
             if (!exLogic.User.hasAccess("PARTS.CREATE")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Create Parts";
-            MSTR_Parts Parts = new MSTR_Parts();  
-
+            MSTR_Parts Parts = new MSTR_Parts();
+         
             return View(Parts);
            
         }
@@ -111,7 +111,8 @@ namespace eX_Portal.Controllers
                 if (ModelState.IsValid)
                 {
                     int ID = 0;
-                  
+                    Parts.CreatedBy = Util.getLoginUserID();
+                    Parts.CreatedOn = DateTime.Now;
                     db.MSTR_Parts.Add(Parts);
 
                     db.SaveChanges();
@@ -138,8 +139,9 @@ namespace eX_Portal.Controllers
             if (!exLogic.User.hasAccess("PARTS.EDIT")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Edit Parts";
             ExponentPortalEntities db = new ExponentPortalEntities();
-          MSTR_Parts PilotLog = db.MSTR_Parts.Find(id);
-            return View(PilotLog);
+          MSTR_Parts Parts = db.MSTR_Parts.Find(id);
+           
+            return View(Parts);
                        
         }
 
@@ -154,7 +156,8 @@ namespace eX_Portal.Controllers
                 if (!exLogic.User.hasAccess("PARTS.EDIT")) return RedirectToAction("NoAccess", "Home");
 
                 ViewBag.Title = "Edit Parts";
-               
+                Parts.ModifiedBy = Util.getLoginUserID();
+                Parts.ModifiedOn = DateTime.Now;
                 db.Entry(Parts).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("PartsList", "Parts");
