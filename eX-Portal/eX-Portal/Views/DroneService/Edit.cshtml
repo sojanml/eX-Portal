@@ -1,7 +1,7 @@
 ﻿
 @model eX_Portal.ViewModel.DroneServiceViewModel
 @{
-    ViewBag.Title = "UAS Service";
+    ViewBag.Title = "UAS Service Edit";
     Layout = "~/Views/Shared/_exPortal.cshtml";
 }
 
@@ -14,7 +14,7 @@
         @Html.HiddenFor(model => model.DroneService.ServiceId)
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.DroneService.DroneId, "UAV Name")
+            @Html.LabelFor(model => model.DroneService.DroneId, "UAS Name")
         </div>
         <div class="editor-field">
 
