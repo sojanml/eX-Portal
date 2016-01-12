@@ -16,15 +16,15 @@ namespace eX_Portal.Controllers {
     public ActionResult Index() {
       if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
 
-      ViewBag.Title = "Drone Listing";
+      ViewBag.Title = "UAS Listing";
 
       String SQL = "SELECT \n" +
-          "  D.[DroneName],\n" +
+          "  D.[DroneName] as UAS,\n" +
           "  D.[ModelName] as Description,\n" +
           "  D.[CommissionDate],\n" +         
           "  O.Name as OwnerName,\n" +
           "  M.Name as Manufacture,\n" +
-          "  U.Name as UAVType,\n" +
+          "  U.Name as UASType,\n" +
           "  Count(*) Over() as _TotalRecords,\n" +
           "  D.[DroneId] as _PKey\n" +
           "FROM\n" +
@@ -49,7 +49,7 @@ namespace eX_Portal.Controllers {
       if (exLogic.User.hasAccess("FLIGHT.CREATE")) nView.addMenu("Create Flight", Url.Action("Create", "DroneFlight", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("FLIGHT")) nView.addMenu("Flights", Url.Action("Index", "DroneFlight", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("DRONE.MANAGE")) nView.addMenu("Manage", Url.Action("Manage", new { ID = "_Pkey" }));
-      if (exLogic.User.hasAccess("BLACKBOX")) nView.addMenu("Blackbox", Url.Action("Index", "BlackBox", new { ID = "_Pkey" }));
+      if (exLogic.User.hasAccess("BLACKBOX")) nView.addMenu("FDR Data", Url.Action("Index", "BlackBox", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("DRONE.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_Pkey" }));
 
 
@@ -231,13 +231,13 @@ namespace eX_Portal.Controllers {
 
       if (!exLogic.User.hasAccess("DRONE")) return "Access Denied";
       String SQL = "SELECT \n" +
-          "  D.[DroneName],\n" +
+          "  D.[DroneName] as UAS,\n" +
           "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
-          "  D.[DroneSerialNo],\n" +
+          "  D.[DroneSerialNo] as UASSno,\n" +
           "  O.Name as OwnerName,\n" +
           "  M.Name as ManufactureName,\n" +
-          "  U.Name as UAVType,\n" +
-          "  D.[DroneIdHexa],\n" +
+          "  U.Name as UASType,\n" +
+          "  D.[DroneIdHexa] as UASHexaId,\n" +
           "  D.[ModelName] as Description\n" +
           "FROM\n" +
           "  [MSTR_Drone] D\n" +
@@ -268,9 +268,9 @@ namespace eX_Portal.Controllers {
 
       string SQL = "select\n" +
           "  ISNULL(a.isactive, 'True') as IsActive,\n" +
-          "  a.DroneId,\n" +
+          "  a.DroneId as UASSno,\n" +
           "  a.ReAssignNote,\n" +
-          "  a.DroneName,\n" +
+          "  a.DroneName as UAS,\n" +
           "  Convert(varchar, a.ReAssignDate, 9) as ReAssignDate,\n" +
           "  c.UserName as ReAssignedBy \n" +
           "from \n" +
