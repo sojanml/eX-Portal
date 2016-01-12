@@ -18,8 +18,8 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "FDR Data";
 
       String SQL = "SELECT \n" +
-        "  MSTR_Drone.DroneName,\n" +
-        "  BBFlightID,\n" +
+        "  MSTR_Drone.DroneName as UAS,\n" +
+        "  BBFlightID as FdrFlightId,\n" +
         "  Min([BlackBoxData].ReadTime) as StartTime,\n" +
         "  Max([BlackBoxData].ReadTime) as EndTime,\n" +       
         "  Max(Speed) as MaxSpeed,\n" +
@@ -64,8 +64,8 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "FDR Live Data";
       string SQL =
         "SELECT\n" +
-        "  [DroneDataId]," +
-        "  MSTR_Drone.DroneName,\n" +
+        "  [DroneDataId] as UASDataId ," +
+        "  MSTR_Drone.DroneName as UAS,\n" +
         "  [ReadTime] as [Date],\n" +
         "  CASE ISNUMERIC([Latitude])\n" +
         "		 WHEN  1 THEN CONVERT(numeric(12, 3),[Latitude])\n" +
@@ -82,7 +82,7 @@ namespace eX_Portal.Controllers {
         "  CASE ISNUMERIC([BBFlightID])\n" +
         "    WHEN  1 THEN  CONVERT(numeric(12, 0),[BBFlightID])\n" +
         "    ELSE 0.00\n" +
-        "  END as [BBFlightID],\n" + 
+        "  END as [FDRFlightId],\n" + 
         "  Count(*) Over() as _TotalRecords,[DroneDataId] as _PKey\n" +
         "FROM\n" +
         "  [DroneData]\n" +
