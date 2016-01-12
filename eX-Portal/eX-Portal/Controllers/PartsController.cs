@@ -149,24 +149,30 @@ namespace eX_Portal.Controllers
         [HttpPost]
         public ActionResult Edit(MSTR_Parts Parts)
         {
-           // try
+           try
             {
                 // TODO: Add update logic here
 
                 if (!exLogic.User.hasAccess("PARTS.EDIT")) return RedirectToAction("NoAccess", "Home");
-
-                ViewBag.Title = "Edit Parts";
-                Parts.ModifiedBy = Util.getLoginUserID();
-                Parts.ModifiedOn = DateTime.Now;
-                db.Entry(Parts).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("PartsList", "Parts");
-
+                if (Parts.SupplierId < 1 || Parts.SupplierId == null) ModelState.AddModelError("SupplierId", "You must select a Company");
+                if (ModelState.IsValid)
+                {
+                    ViewBag.Title = "Edit Parts";
+                    Parts.ModifiedBy = Util.getLoginUserID();
+                    Parts.ModifiedOn = DateTime.Now;
+                    db.Entry(Parts).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("PartsList", "Parts");
+                }
+                else
+                {
+                    return View(Parts);
+                }
                
             }
-           // catch
+        catch
             {
-              //  return View(Parts);
+                return View(Parts);
             }
         }
 
