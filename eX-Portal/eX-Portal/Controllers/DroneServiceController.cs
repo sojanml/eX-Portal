@@ -16,7 +16,7 @@ namespace eX_Portal.Controllers {
 
       String SQL = "select\n" +
         "  a.ServiceId As ServiceId,\n" +
-        "  b.DroneName as DroneName,\n" +
+        "  b.DroneName as UAS,\n" +
         "  c.Name as ServiceType,\n" +
         "  a.DateOfService as DateOfService,\n" +
         "  a.FlightHour,\n" +
