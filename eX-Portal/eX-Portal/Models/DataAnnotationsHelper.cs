@@ -251,18 +251,49 @@ namespace eX_Portal.Models
         public Nullable<int> RecordType { get; set; }
         public string Description { get; set; }
         public int PartsId { get; set; }
-        [Required(ErrorMessage ="Please Enter the Parts Name")]
+        [Required(ErrorMessage = "Please Enter the Parts Name")]
         [Display(Name = "Parts Name")]
         public string PartsName { get; set; }
         [Required(ErrorMessage = "Please Enter the Supplier Name")]
         [Display(Name = "Supplier Name")]
         public Nullable<int> SupplierId { get; set; }
-       
+
         [Required(ErrorMessage = "Please Enter the Model Name")]
         [Display(Name = "Model Name")]
         public string Model { get; set; }
 
     }
 
+
+ 
+    [MetadataType(typeof(MSTR_DroneService_Helper))]
+    public partial class MSTR_DroneService
+    {
+
+    }
+
+    public class MSTR_DroneService_Helper
+    {
+       
+        public int ServiceId { get; set; }
+        public string Description { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<int> ModifiedBy { get; set; }
+        public Nullable<int> AcceptedBy { get; set; }
+        public Nullable<System.DateTime> CreatedOn { get; set; }
+        public Nullable<System.DateTime> ModifiedOn { get; set; }
+        public Nullable<System.DateTime> AcceptedOn { get; set; }
+        public Nullable<bool> IsActive { get; set; }
+        public Nullable<int> RecordType { get; set; }
+        [Required(ErrorMessage = "Please select UAS ")]
+        public Nullable<int> DroneId { get; set; }
+        [Required(ErrorMessage = "Please select Type Of Service ")]
+        public string TypeOfService { get; set; }
+        public Nullable<int> FlightHour { get; set; }
+        [Required(ErrorMessage = "Please select Date Of Service ")]
+        public Nullable<System.DateTime> DateOfService { get; set; }
+       
+        public Nullable<int> TypeOfServiceId { get; set; }
+    }
 
 }
