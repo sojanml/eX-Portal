@@ -178,6 +178,9 @@ namespace eX_Portal.Controllers {
 
     public String DroneFlightDetail(int ID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.VIEW")) return "Access Denied";
+      int DroneId,UserId;
+
+      string UASFormat,PilotFormat;
       String SQL =
       "SELECT\n" +
       "   DroneFlight.ID UASFlightId,\n" +
@@ -201,8 +204,14 @@ namespace eX_Portal.Controllers {
 
       qDetailView theView = new qDetailView(SQL);
       theView.Columns = 3;
-
-      return theView.getTable();
+            //this part for adding link to requred fields in the details
+            DroneId = Util.GetDroneIdFromFlight(ID);
+            UserId = Util.GetPilotIdFromFlight(ID);
+             UASFormat = "<a href='/Drone/Detail/"+ DroneId + "'>$UAS</a>";//url
+             PilotFormat= "<a href='/User/UserDetail/" + UserId + "'>$PilotName</a>";//url
+            theView.FormatCols.Add("UAS", UASFormat); //Adding the Column required for formatting  
+            theView.FormatCols.Add("PilotName", PilotFormat); // //Adding the Column required for formatting  
+            return theView.getTable();
     }//DroneFlightDetail ()
 
 
