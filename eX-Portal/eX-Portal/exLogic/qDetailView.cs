@@ -9,13 +9,20 @@ namespace eX_Portal.exLogic {
   public class qDetailView {
     public String SQL { get; set; }
     public int Columns { get; set; }
-    public qDetailView(String SQLQuery, int Cols = 3) {
+    public   Dictionary<string, string> FormatCols =
+                new Dictionary<string, string>();
+       
+        public qDetailView(String SQLQuery, int Cols = 3, Dictionary<string, string> FormatCol=null) {
       SQL = SQLQuery;
       Columns = Cols;
-    }
+      if (FormatCols == null) FormatCol = new Dictionary<string, string>();
+
+
+        }
     public String getTable() {
       int Col = 0;
-      StringBuilder Table = new StringBuilder();
+            
+            StringBuilder Table = new StringBuilder();
 
       using (var ctx = new ExponentPortalEntities())
       using (var cmd = ctx.Database.Connection.CreateCommand()) {
@@ -26,7 +33,11 @@ namespace eX_Portal.exLogic {
           //For each row
           while (reader.Read()) {
             Table.AppendLine("<table class=\"qDetailView\">");
-            for (int i = 0; i < reader.FieldCount; i++) {
+                       
+                        for (int i = 0; i < reader.FieldCount; i++) {
+
+                        
+                           
               Col = Col + 1;
               if (Col == 1) Table.AppendLine("<tr>");
               Table.Append("<td>");
@@ -34,14 +45,31 @@ namespace eX_Portal.exLogic {
               Table.Append(Util.toCaption(reader.GetName(i)));
               Table.Append(":</span>");
               Table.Append("<span class=\"value\">");
-              Table.Append(reader.GetValue(i).ToString());
-              Table.Append("</span>");
+                            //checking whether the column required link
+                            if (FormatCols.ContainsKey(reader.GetName(i)))
+                            {
+                                Table.Append(FormatCols[reader.GetName(i)]);
+                            }
+                            else
+                            {
+                                Table.Append("$" + reader.GetName(i).ToString());
+                               
+                            }
+              Table.Append("</span>");                            
               Table.Append("</td>");
               if (Col >= Columns) {
                 Col = 0;
                 Table.AppendLine("</tr>");
               }
-            }//for
+            } //for
+
+   
+            for(int i = 0; i < reader.FieldCount;  i++ ) {
+                 Table.Replace("$" + reader.GetName(i), reader.GetValue(i).ToString());
+            }
+           
+
+             
 
             //add additional columns if required
             if (Col > 0) {
@@ -61,3 +89,4 @@ namespace eX_Portal.exLogic {
     }//getTable()
   }//class
 }//namespace
+            
