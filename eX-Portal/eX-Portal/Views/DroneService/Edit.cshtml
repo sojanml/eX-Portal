@@ -19,7 +19,7 @@
         <div class="editor-field">
 
             @Html.DropDownListFor(model => model.DroneService.DroneId, Model.DroneList)
-
+            @Html.ValidationMessageFor(model => model.DroneService.DroneId, "", new { @class = "text-danger" })
         </div>
 
         <div class="editor-label">
@@ -28,6 +28,7 @@
         <div class="editor-field">
 
             @Html.DropDownListFor(model => model.DroneService.TypeOfService, Model.ServiceType)
+            @Html.ValidationMessageFor(model => model.DroneService.TypeOfService, "", new { @class = "text-danger" })
            
         </div>
 
