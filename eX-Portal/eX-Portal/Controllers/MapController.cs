@@ -18,6 +18,7 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult FlightData(int id = 0) {
+      ViewBag.Title = "Flight Map";
       ViewBag.FlightID = id;
       return View();
     }
