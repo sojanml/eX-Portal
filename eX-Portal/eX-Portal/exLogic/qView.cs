@@ -19,6 +19,18 @@ namespace eX_Portal.exLogic {
     public HttpResponse Response = HttpContext.Current.Response;
     public HttpRequest Request = HttpContext.Current.Request;
     private Dictionary<String, String> ColumnMapping = new Dictionary<string, string>();
+    private int _SortColumn = 0;
+    private String _SortOrder = "desc";
+
+    public int SortColumn {
+      get { return _SortColumn;}
+      set { _SortColumn = value;}
+    }
+
+    public String SortOrder {
+      get { return _SortOrder; }
+      set { _SortOrder = value; }
+    }
 
     public int _TotalRecords {
       get; set;
@@ -351,7 +363,8 @@ namespace eX_Portal.exLogic {
       Scripts.AppendLine("    \"searchDelay\": 1000, ");
       Scripts.AppendLine("    \"iDisplayLength\": 50, ");
       Scripts.AppendLine("    \"fnFooterCallback\": _fnFooterCallback, ");
-      Scripts.AppendLine("    \"fnDrawCallback\": _fnDrawCallback, "); 
+      Scripts.AppendLine("    \"fnDrawCallback\": _fnDrawCallback, ");
+      Scripts.AppendLine("    \"order\": [["  + _SortColumn.ToString() + ",\"" + _SortOrder + "\"]], ");
       Scripts.AppendLine("    \"ajax\": \"" + HttpContext.Current.Request.RequestContext.HttpContext.Request.Url + "\",");
       Scripts.Append(ScriptColumns);
 

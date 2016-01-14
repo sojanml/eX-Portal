@@ -241,9 +241,6 @@ namespace eX_Portal.Controllers {
         "Your GAC Authorization: " + getUploadedDocs(ID) +
         "</div>";
       }
-      
-
-
       return UploadedDocs + theView.getTable();
 
     }//DroneFlightDetail ()
