@@ -18,8 +18,8 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "FDR Data";
 
       String SQL = "SELECT \n" +
-        "  MSTR_Drone.DroneName,\n" +
-        "  BBFlightID,\n" +
+        "  MSTR_Drone.DroneName as UAS,\n" +
+        "  BBFlightID as FdrFlightId,\n" +
         "  Min([BlackBoxData].ReadTime) as StartTime,\n" +
         "  Max([BlackBoxData].ReadTime) as EndTime,\n" +       
         "  Max(Speed) as MaxSpeed,\n" +
@@ -64,9 +64,9 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "FDR Live Data";
       string SQL =
         "SELECT\n" +
-        "  [DroneDataId]," +
-        "  MSTR_Drone.DroneName,\n" +
-        "  [ReadTime],\n" +
+        "  [DroneDataId] as UASDataId ," +
+        "  MSTR_Drone.DroneName as UAS,\n" +
+        "  [ReadTime] as [Date],\n" +
         "  CASE ISNUMERIC([Latitude])\n" +
         "		 WHEN  1 THEN CONVERT(numeric(12, 3),[Latitude])\n" +
         "		 ELSE 0.00\n" +
@@ -75,23 +75,25 @@ namespace eX_Portal.Controllers {
         "    WHEN  1 THEN  CONVERT(numeric(12, 3),[Longitude])\n" +
         "    ELSE 0.00\n" +
         "  END as [Longitude],\n" +
-        "  [Altitude],\n" +
-        "  [Speed],\n" +
+        "  [Altitude] as [Altitude],\n" +
+        "  [Speed] as [Speed],\n" +
         "  [FixQuality],\n" +
         "  [Satellites],\n" +
         "  CASE ISNUMERIC([BBFlightID])\n" +
         "    WHEN  1 THEN  CONVERT(numeric(12, 0),[BBFlightID])\n" +
         "    ELSE 0.00\n" +
-        "  END as [BBFlightID],\n" + 
-        "  CASE isnumeric(TotalFlightTime)\n" +
-        "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), TotalFlightTime) / 60.0, 2) as numeric(36, 2))\n" +
-        "    ELSE 0.00\n" +
-        "  END as TotalFlightTime, \n " +
+        "  END as [FDRFlightId],\n" + 
         "  Count(*) Over() as _TotalRecords,[DroneDataId] as _PKey\n" +
         "FROM\n" +
         "  [DroneData]\n" +
         "LEFT JOIN MSTR_Drone ON\n" +
         "  MSTR_Drone.DroneID = [DroneData].DroneID";
+      /*
+              "  CASE isnumeric(TotalFlightTime)\n" +
+              "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), TotalFlightTime) / 60.0, 2) as numeric(36, 2))\n" +
+              "    ELSE 0.00\n" +
+              "  END as TotalFlightTime, \n " +
+      */
       if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
         SQL += " AND\n" +
           "  MSTR_Drone.AccountID=" + Util.getAccountID() + "\n" +

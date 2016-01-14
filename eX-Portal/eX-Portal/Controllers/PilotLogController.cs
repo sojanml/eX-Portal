@@ -42,21 +42,19 @@ namespace eX_Portal.Controllers
         public ActionResult Create(MSTR_Pilot_Log PilotLog)
         {
             if (!exLogic.User.hasAccess("PILOTLOG.CREATE")) return RedirectToAction("NoAccess", "Home");
-            if (PilotLog.DroneId < 1 || PilotLog.DroneId == null) ModelState.AddModelError("DroneID", "You must select a Drone.");
+            if (PilotLog.DroneId < 1 || PilotLog.DroneId == null) ModelState.AddModelError("DroneID", "You must select a UAS.");
 
 
             if (ModelState.IsValid)
             {
-                int ID = 0;
                 ExponentPortalEntities db = new ExponentPortalEntities();
                 db.MSTR_Pilot_Log.Add(PilotLog);
                 db.SaveChanges();
               
                 db.Dispose();
-                return RedirectToAction("UserDetail","User", new { ID = PilotLog.PilotId });
+        return RedirectToAction("UserDetail", "User", new { ID = PilotLog.PilotId });
             }
-            else
-            {
+      else {
                 ViewBag.Title = "Create Drone Flight";
                 return View(PilotLog);
             }
@@ -85,7 +83,7 @@ namespace eX_Portal.Controllers
                 ExponentPortalEntities db = new ExponentPortalEntities();
                 db.Entry(PilotLog).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("UserDetail","User", new { ID = PilotLog.PilotId });
+        return RedirectToAction("UserDetail", "User", new { ID = PilotLog.PilotId });
 
 
             }
@@ -131,6 +129,8 @@ namespace eX_Portal.Controllers
         }//UserDetail()
         public string PilotLogTotal([Bind(Prefix = "ID")] int PilotID)
         {
+      return "";
+      /*
             if (!exLogic.User.hasAccess("PILOTLOG.VIEW")) return "Access Denied";
 
             string SQL= "SELECT \n" +
@@ -152,19 +152,14 @@ namespace eX_Portal.Controllers
             {
                 ctx.Database.Connection.Open();
                 cmd.CommandText = SQL;
-               
+                TFooter.AppendLine("<td>");
+                TFooter.AppendLine("---------Total-----------");
+                TFooter.AppendLine("</td>");
 
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                      if (reader["Total"] != DBNull.Value)
-                        {
-                            TFooter.AppendLine("<td>");
-                            TFooter.AppendLine("---------Total-----------");
-                            TFooter.AppendLine("</td>");
-
-                        }
                         TFooter.AppendLine("<td>");
                         TFooter.AppendLine(reader["FixedWing"].ToString());
                         TFooter.AppendLine("</td>");
@@ -205,6 +200,7 @@ namespace eX_Portal.Controllers
             Table.AppendLine("</tfoot>");
             Table.AppendLine("</table>");
             return Table.ToString();
+      */
         }
         public string PilotLogDetails([Bind(Prefix = "ID")] int PilotID)
         {
@@ -221,7 +217,7 @@ namespace eX_Portal.Controllers
                         " ,a.SimulatedInstrument as Simulator" +
                         " ,a.AsflightInstructor " +
                         " ,a.DualRecieved  " +
-                        " ,a.FloatingCommand as FloatInCommand " +                      
+                  " ,a.FloatingCommand as PilotInCommand " +
                         " , a.DualRecieved + a.FloatingCommand as TotalDuration " +
                         " , a.Id as _PKey" +
                         " FROM MSTR_Pilot_Log  " +
@@ -229,13 +225,36 @@ namespace eX_Portal.Controllers
                         "on a.DroneId = b.DroneId  " +
                         " where a.PilotId=" + PilotID;
 
+      string TotalSQL = "SELECT \n" +
+      "  'Total' as Date,\n" +
+      "  '' as UASName,\n" +
+      "  '' as RouteFrom,\n" +
+      "  '' as RouteTo,\n" +
+      "  '' as Remarks,\n" +
+      "  sum(FixedWing) as FixedWing, \n" +
+      "  sum(MultiDashRotor) as MultiDashRotor,\n" +
+      "  sum(SimulatedInstrument) as Simulator,\n" +
+      "  sum(AsflightInstructor) as AsflightInstructor, \n" +
+      "  sum(DualRecieved) as DualRecieved,\n" +
+      "  sum(FloatingCommand) as PilotInCommandm,\n" +
+      "  SUM( DualRecieved + FloatingCommand) as TotalDuration \n" +
+      "FROM \n" +
+      "  [MSTR_Pilot_Log] \n" +
+      "where \n" +
+      "  PilotId=" + PilotID;
+
             qView nView = new qView(SQL);
+      nView.TotalSQL = TotalSQL;
             if (nView.HasRows)
             {
                 nView.isFilterByTop = false;
                 return
                   "<h2>Pilot Log Details</h2>\n" +
-                  nView.getDataTable(isIncludeData: true, isIncludeFooter: false, qDataTableID: "PilotLogDetails");
+          nView.getDataTable(
+            isIncludeData: true, 
+            isIncludeFooter: false, 
+            qDataTableID: "PilotLogDetails"
+          );
             }
 
             return "";

@@ -9,14 +9,15 @@ using eX_Portal.exLogic;
 
 namespace eX_Portal.Controllers {
   public class DroneServiceController : Controller {
-    // GET: DroneService
-    public ActionResult Index() {
+        // GET: DroneService
+        ExponentPortalEntities db = new ExponentPortalEntities();
+        public ActionResult Index() {
       if (!exLogic.User.hasAccess("SERVICE.VIEW")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Drone Service Listing";
 
       String SQL = "select\n" +
         "  a.ServiceId As ServiceId,\n" +
-        "  b.DroneName as DroneName,\n" +
+        "  b.DroneName as UAS,\n" +
         "  c.Name as ServiceType,\n" +
         "  a.DateOfService as DateOfService,\n" +
         "  a.FlightHour,\n" +
@@ -62,7 +63,7 @@ namespace eX_Portal.Controllers {
          
             ViewBag.ServiceId = id;
       ViewBag.Title = "View Checklist";
-      ViewBag.Title = "Drone Service Details";
+      ViewBag.Title = "UAS Service Details";
 
      string SQL = "select b.PartsName,a.ServicePartsType as Info,b.Model as ModelType,a.QtyCount as Qty, Count(*) Over() as _TotalRecords from M2M_DroneServiceParts" +
           " a left join MSTR_Parts b on a.PartsId=b.PartsId where a.ServiceId=" + id +
@@ -182,7 +183,7 @@ namespace eX_Portal.Controllers {
             var viewModel = new ViewModel.DroneServiceViewModel {
 
                 DroneService = new MSTR_DroneService(),
-                DroneID = DroneID.ToString(),
+                DroneID = DroneID.ToString(),                
         ServiceType = Util.GetDropDowntLists("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
         DroneList = Util.DroneList("usp_Portal_DroneNameList"),
 
@@ -199,61 +200,83 @@ namespace eX_Portal.Controllers {
     [HttpPost]
     public ActionResult Create(ViewModel.DroneServiceViewModel DroneServiceView) {
       try {
-        if (!exLogic.User.hasAccess("SERVICE.CREATE")) return RedirectToAction("NoAccess", "Home");
+                 MSTR_DroneService DroneService = DroneServiceView.DroneService;
+                 if (!exLogic.User.hasAccess("SERVICE.CREATE")) return RedirectToAction("NoAccess", "Home");
+                if (DroneService.DroneId < 1 || DroneService.DroneId == null) ModelState.AddModelError("DroneId", "You must select a UAS.");
+              
                 // TODO: Add insert logic here
-                if (ModelState.IsValid) {
+                if (ModelState.IsValid)
+                {
 
-                    MSTR_DroneService DroneService = DroneServiceView.DroneService;
-
-                    if (Session["UserId"] == null) {
-                        Session["UserId"] = -1;
-                    }
-                    if (DroneService.FlightHour == null)
-                    {
-                        DroneService.FlightHour = 0;
-                    }
+                   
+                    
+                         if (Session["UserId"] == null)
+                                {
+                                         Session["UserId"] = -1;
+                                 }
+                         if (DroneService.FlightHour == null)
+                                {
+                                     DroneService.FlightHour = 0;
+                                 }
           string SQL = "INSERT INTO MSTR_DRONESERVICE(Description,CreatedBy,CreatedOn,DroneId,TypeOfServiceId,TypeOfService,DateOfService,FlightHour) VALUES('"
                     + DroneService.Description + "'," + Session["UserId"] + ",'" +
                      DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "','"
-                    + DroneServiceView.DroneID + "'," + DroneService.TypeOfService + ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'," + DroneService.FlightHour + "); ";
+                    + DroneService.DroneId + "'," + DroneService.TypeOfService + ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'," + DroneService.FlightHour + "); ";
           // int ID = Util.InsertSQL(SQL);
           int ServiceId = Util.InsertSQL(SQL);
 
           //   int ServiceId = Util.GetServiceId();
-          if (DroneServiceView.SelectItemsForReplaced != null) {
-            if (DroneServiceView.SelectItemsForReplaced != null) {
-              for (var count = 0; count < DroneServiceView.SelectItemsForReplaced.Count(); count++) {
+           if (DroneServiceView.SelectItemsForReplaced != null)
+                    {
+               if (DroneServiceView.SelectItemsForReplaced != null)
+                        {
+                  for (var count = 0; count < DroneServiceView.SelectItemsForReplaced.Count(); count++)
+                             {
+                     string PartsId = ((string[])DroneServiceView.SelectItemsForReplaced)[count];
+                     int Qty = Util.toInt(Request["SelectItemsForReplaced_" + PartsId]);
+                     SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REP'," + Qty + ");";
+
+                       int ID = Util.InsertSQL(SQL);
+                             }
+                        }
+                    }
 
 
-                string PartsId = ((string[])DroneServiceView.SelectItemsForReplaced)[count];
-                int Qty = Util.toInt(Request["SelectItemsForReplaced_" + PartsId]);
-                SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REP'," + Qty + ");";
+                    if (DroneServiceView.SelectItemsForRefurbished != null)
+                      {
+                        for (var count = 0; count < DroneServiceView.SelectItemsForRefurbished.Count(); count++)
+                        { //int PartsId = Int32.Parse((DroneServiceView.SelectItems)[2])
+
+                             string PartsId = ((string[])DroneServiceView.SelectItemsForRefurbished)[count];
+                             int Qty = Util.toInt(Request["SelectItemsForRefurbished_" + PartsId]);
+                             SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REF'," + Qty + " );";
+
+                            int ID = Util.InsertSQL(SQL);
+                         }
 
 
+                      }
+                    return RedirectToAction("Index");
+                }
+                else
+                {
 
-                int ID = Util.InsertSQL(SQL);
-              }
-            }
-          }
+                    var viewModel = new ViewModel.DroneServiceViewModel
+                    {
 
+                        DroneService = new MSTR_DroneService(),                      
+                        ServiceType = Util.GetDropDowntLists("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
+                        DroneList = Util.DroneList("usp_Portal_DroneNameList"),
 
-          if (DroneServiceView.SelectItemsForRefurbished != null) {
-            for (var count = 0; count < DroneServiceView.SelectItemsForRefurbished.Count(); count++) { //int PartsId = Int32.Parse((DroneServiceView.SelectItems)[2])
+                        //   DronePartsList=Util1.DronePartsList("usp_Portal_GetDroneParts")
 
-              string PartsId = ((string[])DroneServiceView.SelectItemsForRefurbished)[count];
-              int Qty = Util.toInt(Request["SelectItemsForRefurbished_" + PartsId]);
-              SQL = "Insert into M2M_DroneServiceParts (ServiceId,PartsId,ServicePartsType,QtyCount) values(" + ServiceId + "," + PartsId + ",'REF'," + Qty + " );";
+                    };
 
-              int ID = Util.InsertSQL(SQL);
-            }
-
-
-          }
-
-        }
+                    return View(viewModel);
+                }
 
         // return RedirectToAction("Index");
-        return RedirectToAction("Index");
+       
       } catch {
         return View();
       }
@@ -262,7 +285,7 @@ namespace eX_Portal.Controllers {
     // GET: DroneService/Edit/5
     public ActionResult Edit(int id) {
       if (!exLogic.User.hasAccess("SERVICE.EDIT")) return RedirectToAction("NoAccess", "Home");
-      ExponentPortalEntities db = new ExponentPortalEntities();
+      
       int DroneId = Util.GetDroneIdFromService(id);
       int TypeOfServiceId = Util.GetTypeOfIdFromService(id);
       ViewBag.ServiceId = id;
@@ -278,7 +301,7 @@ namespace eX_Portal.Controllers {
 
         ServiceType = Util.GetDropDowntLists("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
         DroneList = Util.DroneList("usp_Portal_DroneNameList")
-        // SelectItemsForRefurbished = list;
+        
       };
 
 
@@ -330,10 +353,26 @@ namespace eX_Portal.Controllers {
 
           }
 
+                    return RedirectToAction("Index");
+                }
+       
 
-        }
-        return RedirectToAction("Index");
-      } catch (Exception ex) {
+
+                var viewModel = new ViewModel.DroneServiceViewModel
+                {
+
+
+                    DroneService = db.MSTR_DroneService.Find(DroneServiceView.DroneService.ServiceId),
+
+                    ServiceType = Util.GetDropDowntLists("ServiceType", "DroneName", "Code", "usp_Portal_DroneServiceType"),
+                    DroneList = Util.DroneList("usp_Portal_DroneNameList")
+
+                };
+
+
+
+                return View(viewModel);
+            } catch (Exception ex) {
         Util.ErrorHandler(ex);
         return View();
       }

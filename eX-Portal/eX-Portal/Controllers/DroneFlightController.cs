@@ -12,13 +12,13 @@ namespace eX_Portal.Controllers {
     // GET: DroneFlight
     public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT")) return RedirectToAction("NoAccess", "Home");
-      ViewBag.Title = "Drone Flights";
+      ViewBag.Title = "UAS Flights";
       ViewBag.DroneID = DroneID;
       String SQLFilter = "";
       String SQL =
       "SELECT\n" +
       "  DroneFlight.ID,\n" +
-      "   MSTR_Drone.DroneName,\n" +
+      "   MSTR_Drone.DroneName as UAS,\n" +
       "   tblPilot.FirstName as PilotName,\n" +
       "   tblGSC.FirstName as GSCName,\n" +
       "   tblCreated.FirstName as CreatedBy,\n" +
@@ -56,9 +56,8 @@ namespace eX_Portal.Controllers {
       qView nView = new qView(SQL);
       if (exLogic.User.hasAccess("FLIGHT.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.VIEW")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
-      nView.addMenu("Live Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
-      nView.addMenu("Live Chart", Url.Action("FlightChart", "Map", new { ID = "_PKey" }));
-     if (exLogic.User.hasAccess("FLIGHT.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+      nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("FLIGHT.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -71,7 +70,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult Create([Bind(Prefix = "ID")] int DroneID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.CREATE")) return RedirectToAction("NoAccess", "Home");
-      ViewBag.Title = "Create Drone Flight";
+      ViewBag.Title = "Create UAS Flight";
       DroneFlight InitialData = new DroneFlight();
       InitialData.DroneID = DroneID;
       return View(InitialData);
@@ -93,7 +92,7 @@ namespace eX_Portal.Controllers {
         db.Dispose();
         return RedirectToAction("Detail", new { ID = ID });
       } else {
-        ViewBag.Title = "Create Drone Flight";
+        ViewBag.Title = "Create UAS Flight";
         return View(theFlight);
       }
 
@@ -101,7 +100,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult Edit([Bind(Prefix = "ID")] int FlightID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.EDIT")) return RedirectToAction("NoAccess", "Home");
-      ViewBag.Title = "Edit Drone Flight";
+      ViewBag.Title = "Edit UAS Flight";
       ExponentPortalEntities db = new ExponentPortalEntities();   
       DroneFlight InitialData = db.DroneFlights.Find(FlightID); 
       return View(InitialData);
@@ -111,7 +110,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Edit(DroneFlight InitialData) {
       if (!exLogic.User.hasAccess("FLIGHT.EDIT")) return RedirectToAction("NoAccess", "Home");
 
-      ViewBag.Title = "Edit Drone Flight";
+      ViewBag.Title = "Edit UAS Flight";
       ExponentPortalEntities db = new ExponentPortalEntities();
       db.Entry(InitialData).State = EntityState.Modified;
       db.SaveChanges();
@@ -145,7 +144,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Detail(int ID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.VIEW")) return RedirectToAction("NoAccess", "Home");
             if (!exLogic.User.hasDrone(Util.GetDroneIdFromFlight(ID))) return RedirectToAction("NoAccess", "Home");
-            ViewBag.Title = "Drone Flight Details";
+            ViewBag.Title = "UAS Flight Details";
       ViewBag.FlightID = ID;
 
       String SQL =
@@ -179,10 +178,13 @@ namespace eX_Portal.Controllers {
 
     public String DroneFlightDetail(int ID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.VIEW")) return "Access Denied";
+      int DroneId,UserId;
+
+      string UASFormat,PilotFormat;
       String SQL =
       "SELECT\n" +
-      "   DroneFlight.ID,\n" +
-      "   MSTR_Drone.DroneName,\n" +
+      "   DroneFlight.ID UASFlightId,\n" +
+      "   MSTR_Drone.DroneName as UAS,\n" +
       "   tblPilot.FirstName as PilotName,\n" +
       "   tblGSC.FirstName as GSCName,\n" +
       "   tblCreated.FirstName as CreatedBy,\n" +
@@ -202,8 +204,14 @@ namespace eX_Portal.Controllers {
 
       qDetailView theView = new qDetailView(SQL);
       theView.Columns = 3;
-
-      return theView.getTable();
+            //this part for adding link to requred fields in the details
+            DroneId = Util.GetDroneIdFromFlight(ID);
+            UserId = Util.GetPilotIdFromFlight(ID);
+             UASFormat = "<a href='/Drone/Detail/"+ DroneId + "'>$UAS</a>";//url
+             PilotFormat= "<a href='/User/UserDetail/" + UserId + "'>$PilotName</a>";//url
+            theView.FormatCols.Add("UAS", UASFormat); //Adding the Column required for formatting  
+            theView.FormatCols.Add("PilotName", PilotFormat); // //Adding the Column required for formatting  
+            return theView.getTable();
     }//DroneFlightDetail ()
 
 
@@ -211,7 +219,7 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("FLIGHT")) return "Access Denied";
       String SQL =
       "SELECT TOP 5" +
-      "   MSTR_Drone.DroneName,\n" +
+      "   MSTR_Drone.DroneName as UAS,\n" +
       "   tblPilot.FirstName as PilotName,\n" +
       "   tblGSC.FirstName as GSCName,\n" +
       "   tblCreated.FirstName as CreatedBy,\n" +

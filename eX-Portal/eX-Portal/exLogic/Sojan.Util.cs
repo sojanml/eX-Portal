@@ -205,12 +205,22 @@ namespace eX_Portal.exLogic {
               SQL = "SELECT [DroneId] as Value, [DroneName] as Name FROM [MSTR_Drone] where IsActive=1";
               if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
                 SQL += "\n" +
-                  "WHERE\n" +
+                  " AND\n " +
                   "  MSTR_Drone.AccountID=" + Util.getAccountID();
               }
               SQL += "\n ORDER BY [DroneName]";
               break;
             case "pilot":
+                            SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User  WHERE \n";
+                            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                            {
+                                SQL += "\n" +
+
+                                  "  MSTR_User.AccountID=" + Util.getAccountID() +
+                                 " and ";
+                            }
+                            SQL += "\n MSTR_User.IsPilot=1 ORDER BY FirstName";
+             break;
             case "gsc":
               SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User";
               if (!exLogic.User.hasAccess("DRONE.MANAGE")) {

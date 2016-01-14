@@ -8,7 +8,7 @@
   @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
   <div class="form-group">
-    @Html.LabelFor(model => model.DroneID, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.DroneID,"UAS", htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
       @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("Drone"))
       @Html.ValidationMessageFor(model => model.DroneID, "", new { @class = "text-danger" })
@@ -16,7 +16,7 @@
   </div>
 
   <div class="form-group">
-    @Html.LabelFor(model => model.PilotID, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.PilotID,"Pilot Name", htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
       @Html.DropDownListFor(model => model.PilotID, Util.GetDropDowntList("Pilot"))
       @Html.ValidationMessageFor(model => model.PilotID, "", new { @class = "text-danger" })
