@@ -57,7 +57,8 @@ namespace eX_Portal.Controllers {
       if (exLogic.User.hasAccess("FLIGHT.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.VIEW")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
       nView.addMenu("Live Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
-      if (exLogic.User.hasAccess("FLIGHT.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+      nView.addMenu("Live Chart", Url.Action("FlightChart", "Map", new { ID = "_PKey" }));
+     if (exLogic.User.hasAccess("FLIGHT.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
