@@ -109,16 +109,25 @@ namespace eX_Portal.Controllers {
     }//
 
     public String DroneServiceDetail(int ID = 0) {
+            string UASFormat;
+           
       if (!exLogic.User.hasAccess("SERVICE.VIEW")) return "Access Denied";
       string SQL = "select a.ServiceId as ServiceId ,a.DateOfService as " +
-          "ServiceDate,b.DroneId,b.DroneIdHexa as DroneHex,c.UserName as  " +
+          "ServiceDate,b.DroneId as UASId,b.DroneName as UAS,c.UserName as  " +
           " ServicedBy, Count(*) Over() as _TotalRecords from MSTR_DroneService" +
           " a left join MSTR_Drone b on a.DroneId=b.DroneId  " +
           " left join MSTR_User c on a.CreatedBy=c.UserId where a.ServiceId=" + ID;
       qDetailView theView = new qDetailView(SQL);
       theView.Columns = 3;
 
-      return theView.getTable();
+            //this part for adding link to requred fields in the details
+           
+            UASFormat = "<a  href='/Drone/Detail/$UASId'>$UAS</a>";//url
+          
+            theView.FormatCols.Add("UAS", UASFormat); //Adding the Column required for formatting  
+            
+
+            return theView.getTable();
 
     }
 
