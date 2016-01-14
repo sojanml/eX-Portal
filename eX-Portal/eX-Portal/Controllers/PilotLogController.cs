@@ -42,7 +42,7 @@ namespace eX_Portal.Controllers
         public ActionResult Create(MSTR_Pilot_Log PilotLog)
         {
             if (!exLogic.User.hasAccess("PILOTLOG.CREATE")) return RedirectToAction("NoAccess", "Home");
-            if (PilotLog.DroneId < 1 || PilotLog.DroneId == null) ModelState.AddModelError("DroneID", "You must select a Drone.");
+            if (PilotLog.DroneId < 1 || PilotLog.DroneId == null) ModelState.AddModelError("DroneID", "You must select a UAS.");
 
 
             if (ModelState.IsValid)
