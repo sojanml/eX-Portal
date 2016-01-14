@@ -189,8 +189,38 @@ namespace eX_Portal.exLogic {
 
       return FlightMapDataList; //return the list objects
     }//function GetDropDowntList
+        public static IList<FlightMapData> GetFlightChartData(int FlID, int LastFlightID=0, int MaxRecords = 0)
+        {
 
-    public static bool IsDate(string Timestamp) {
+            IList<FlightMapData> FlightMapDataList;
+
+            int DataCount = 0;
+            int mode = 0;
+            using (ExponentPortalEntities ctx = new ExponentPortalEntities())
+            {
+                DataCount = (from FlightMapData in ctx.FlightMapDatas
+                             where FlightMapData.FlightID == FlID
+                             select FlightMapData).ToList().Count;
+                if(DataCount<50)
+                {
+                    FlightMapDataList = (from FlightMapData in ctx.FlightMapDatas.ToList().Select((FlightMapData, index) => new { FlightMapData, index })
+                                         where FlightMapData.FlightMapData.FlightID == FlID 
+                                         select FlightMapData.FlightMapData).OrderBy(x => x.FlightMapDataID).ToList();
+                }else
+                {
+                    mode = DataCount / 50;
+                FlightMapDataList = (from FlightMapData in ctx.FlightMapDatas.ToList().Select((FlightMapData, index) => new { FlightMapData, index })
+                                     where FlightMapData.FlightMapData.FlightID == FlID && FlightMapData.index % mode == 0
+                                     select FlightMapData.FlightMapData).OrderBy(x => x.FlightMapDataID).ToList();
+                }
+                
+            }
+            return FlightMapDataList; 
+            //return the list objects
+        }
+
+
+        public static bool IsDate(string Timestamp) {
       DateTime tempDate;
       return DateTime.TryParse(Timestamp, out tempDate) ? true : false;
     }

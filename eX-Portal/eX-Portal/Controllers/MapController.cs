@@ -21,6 +21,13 @@ namespace eX_Portal.Controllers {
       ViewBag.FlightID = id;
       return View();
     }
+     
+    public ActionResult FlightChart(int id=0)
+    {
+            ViewBag.FlightID = id;
+            return View();
+    }
+        
     [System.Web.Mvc.HttpGet]
     public JsonResult GetDrones() {
       string SQL =
@@ -116,5 +123,77 @@ namespace eX_Portal.Controllers {
 
 
     }
-  }
+        [System.Web.Mvc.HttpGet]
+        public JsonResult getLineChartData(int FlightID=80, int LastFlightDataID=0, int MaxRecords=20)
+        {
+            List<object> iData = new List<object>();
+            List<string> labels = new List<string>();
+            List<int> lst_dataItem_2 = new List<int>();
+            List<int> lst_dataItem_1 = new List<int>();
+            List<int> lst_dataItem_3 = new List<int>();
+            List<int> lst_dataItem_4 = new List<int>();
+            List<int> lst_dataItem_5 = new List<int>();
+            IList<FlightMapData> DroneDataList = Util.GetFlightChartData(FlightID, LastFlightDataID, MaxRecords);
+            foreach (FlightMapData FMD in DroneDataList)
+            {
+                labels.Add(FMD.ReadTime.Value.Hour+":"+ FMD.ReadTime.Value.Minute+":"+ FMD.ReadTime.Value.Second);
+                lst_dataItem_1.Add(Convert.ToInt32(FMD.Altitude));
+                lst_dataItem_2.Add(Convert.ToInt32(FMD.Satellites));
+                lst_dataItem_3.Add(Convert.ToInt32(FMD.Pitch));
+                lst_dataItem_4.Add(Convert.ToInt32(FMD.Roll));
+                lst_dataItem_5.Add(Convert.ToInt32(FMD.Speed));
+
+            }
+            iData.Add(labels);
+            iData.Add(lst_dataItem_1);
+            iData.Add(lst_dataItem_2);
+            iData.Add(lst_dataItem_3);
+            iData.Add(lst_dataItem_4);
+            iData.Add(lst_dataItem_5);
+
+            return Json(iData, JsonRequestBehavior.AllowGet);
+           
+        }
+
+        public ActionResult FlightDataView([Bind(Prefix = "ID")] String FlightID = "")
+        {
+            ViewBag.FlightID = FlightID;
+            int FID = Util.toInt(FlightID);
+            if (FID < 1) return RedirectToAction("Error");
+            ViewBag.Title = "Flight Data";
+//            ViewBag.DroneID = DroneID;
+
+            String SQL =
+             "SELECT \n" +
+             "  FlightMapDataID,\n" +
+             "  ReadTime,\n" +
+             "  Latitude,\n" +
+             "  Longitude,\n" +
+             "  Altitude,\n" +
+             "  Speed,\n" +
+             "  FixQuality,\n" +
+             "  Satellites,\n" +
+             "  Pitch,\n" +
+             "  Roll,\n" +
+             "  Heading,\n" +
+             "  TotalFlightTime,\n" +
+             "  Count(*) OVER() as _TotalRecords\n" +
+             "FROM\n" +
+             "  FlightMapData\n" +
+             "WHERE\n" +
+             "  FlightID=" + FID;
+
+            qView nView = new qView(SQL);
+
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }
+    }
 }

@@ -1,0 +1,31 @@
+﻿@model eX_Portal.exLogic.qView
+@Html.Action("DroneFlightDetail", "DroneFlight", new { ID = ViewBag.FlightID })
+
+
+<div style="width:100%">
+    <canvas id="myChart" style="width:100%"> </canvas>
+</div>
+
+
+
+@Html.Raw(Model.getDataTable())
+
+@section scripts {
+
+
+    <script src="~/Scripts/Chart.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var MapDataURL = '@Url.Action("getLineChartData", new {FlightID = ViewBag.FlightID})';
+        @Html.Raw(Model.getScripts())
+    </script>
+    <script type="text/javascript" src="~/Scripts/FlightChart.js"></script>
+}
+
+
+
+
+
+
+
+
