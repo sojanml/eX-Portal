@@ -127,6 +127,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DroneID" Type="int" Nullable="false" />
+          <Property Name="FlightID" Type="int" />
           <Property Name="DocumentType" Type="varchar" MaxLength="50" />
           <Property Name="DocumentName" Type="nvarchar" MaxLength="500" />
           <Property Name="UploadedDate" Type="datetime" />
@@ -1312,6 +1313,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="DocumentName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="UploadedDate" Type="DateTime" Precision="3" />
           <Property Name="UploadedBy" Type="Int32" />
+          <Property Name="FlightID" Type="Int32" />
         </EntityType>
         <EntityType Name="BlackBoxData">
           <Key>
@@ -2054,6 +2056,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySetMapping Name="DroneDocuments">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneDocument">
               <MappingFragment StoreEntitySet="DroneDocuments">
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
                 <ScalarProperty Name="UploadedBy" ColumnName="UploadedBy" />
                 <ScalarProperty Name="UploadedDate" ColumnName="UploadedDate" />
                 <ScalarProperty Name="DocumentName" ColumnName="DocumentName" />

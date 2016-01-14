@@ -1,0 +1,13 @@
+﻿@using eX_Portal.Models;
+@using eX_Portal.exLogic;
+@model IEnumerable<DroneDocument>
+@{ 
+  Layout = null;
+}
+@foreach(var Doc in Model) { 
+<li class="success">
+  <div style="float: right"><span data-file="@Doc.DocumentName" class="delete icon">&#xf057;</span></div>
+  @Util.getFilePart(Doc.DocumentName) - 100%
+  <input type="hidden" name="FileName" value="@Doc.DocumentName">
+</li>
+}

@@ -20,5 +20,6 @@ namespace eX_Portal.Models
         public string DocumentName { get; set; }
         public Nullable<System.DateTime> UploadedDate { get; set; }
         public Nullable<int> UploadedBy { get; set; }
+        public Nullable<int> FlightID { get; set; }
     }
 }

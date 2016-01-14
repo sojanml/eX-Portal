@@ -3,12 +3,16 @@ using eX_Portal.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
 namespace eX_Portal.Controllers {
   public class DroneFlightController : Controller {
+    static String RootUploadDir = "~/Upload/Drone/";
+
     // GET: DroneFlight
     public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT")) return RedirectToAction("NoAccess", "Home");
@@ -90,6 +94,10 @@ namespace eX_Portal.Controllers {
         db.SaveChanges();
         ID = theFlight.ID;
         db.Dispose();
+
+        //Move the uploaded file to correct path
+        MoveUploadFileTo((int)theFlight.DroneID, theFlight.ID);
+
         return RedirectToAction("Detail", new { ID = ID });
       } else {
         ViewBag.Title = "Create UAS Flight";
@@ -97,6 +105,7 @@ namespace eX_Portal.Controllers {
       }
 
     }
+
 
     public ActionResult Edit([Bind(Prefix = "ID")] int FlightID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.EDIT")) return RedirectToAction("NoAccess", "Home");
@@ -178,6 +187,8 @@ namespace eX_Portal.Controllers {
 
     public String DroneFlightDetail(int ID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.VIEW")) return "Access Denied";
+      String UploadedDocs = "";
+
       String SQL =
       "SELECT\n" +
       "   DroneFlight.ID UASFlightId,\n" +
@@ -202,8 +213,46 @@ namespace eX_Portal.Controllers {
       qDetailView theView = new qDetailView(SQL);
       theView.Columns = 3;
 
-      return theView.getTable();
+
+      //Check the documents for GCA is uploaded
+      SQL = "SELECT\n" +
+      "  Count(*)\n" +
+      "FROM\n" +
+      "  [DroneDocuments]\n" +
+      "WHERE\n" +
+      "  FlightID = " + ID.ToString() + " and\n" +
+      "  DocumentType = 'GCA Approval'\n";
+      int TheCount = Util.getDBInt(SQL);
+      if(TheCount < 1 ) {
+        UploadedDocs = "<div class=\"warning\"><span class=\"icon\">&#xf071;</span>" +
+        "Please upload your GCA Authorisation document before the flight</div>";
+      } else {
+        UploadedDocs = "<div class=\"authorise\"><span class=\"icon\">&#xf214;</span>" +
+        "Your GAC Authorization: " + getUploadedDocs(ID) +
+        "</div>";
+      }
+      
+
+
+      return UploadedDocs + theView.getTable();
     }//DroneFlightDetail ()
+
+    private String getUploadedDocs(int FlightID) {
+      StringBuilder theList = new StringBuilder();
+      String DroneName = "";
+      ExponentPortalEntities db = new ExponentPortalEntities();
+      List<DroneDocument> Docs = (from r in db.DroneDocuments
+                                  where (int)r.FlightID == FlightID
+                                  select r).ToList();
+      theList.Append("<UL>");
+      foreach (var Doc in Docs) {
+        if (DroneName == "") DroneName = Util.getDroneName(Doc.DroneID);
+        theList.AppendLine("<LI><span class=\"icon\">&#xf0f6;</span> <a href=\"/upload/Drone/" + DroneName + "/" + FlightID +
+        "/" + Doc.DocumentName + "\">" + Util.getFilePart(Doc.DocumentName) + "</a></LI>");
+      }
+      theList.Append("</UL>");
+      return theList.ToString();
+    }
 
 
     public String ByDrone([Bind(Prefix = "ID")] int DroneID = 0) {
@@ -242,6 +291,100 @@ namespace eX_Portal.Controllers {
       
     }
 
+    public String DeleteFile(String file, int FlightID=0) {
+
+      //now add the uploaded file to the database
+      String SQL = "DELETE FROM DroneDocuments\n" +
+        "WHERE\n" +
+        "  DocumentName='" + file + "' AND\n" +
+        "  FlightID = '" + FlightID + "'";
+      Util.doSQL(SQL);
+
+      StringBuilder JsonText = new StringBuilder();
+      JsonText.Append("{");
+      JsonText.Append(Util.Pair("status", "success", true));
+      JsonText.Append("}");
+
+      return JsonText.ToString();
+    }
+
+    public String UploadFile(int FlightID = 0, int DroneID = 0) {
+      String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+      //send information in JSON Format always
+      StringBuilder JsonText = new StringBuilder();
+      Response.ContentType = "text/json";
+
+      //when there are files in the request, save and return the file information
+      try {
+        var TheFile = Request.Files[0];
+        String FileName = System.Guid.NewGuid() + "~" + TheFile.FileName;
+        String DroneName = DroneID == 0 ? "0" : Util.getDroneName(DroneID);
+        String UploadDir = UploadPath + DroneName + "\\" + FlightID + "\\";
+        String FileURL = FileName;
+        String FullName = UploadDir + FileName;
+
+        if (!Directory.Exists(UploadDir)) Directory.CreateDirectory(UploadDir);
+        TheFile.SaveAs(FullName);
+        JsonText.Append("{");
+        JsonText.Append(Util.Pair("status", "success", true));
+        JsonText.Append("\"addFile\":[");
+        JsonText.Append(Util.getFileInfo(FullName, FileURL));
+        JsonText.Append("]}");
+
+        //now add the uploaded file to the database
+        String SQL = "INSERT INTO DroneDocuments(\n" +
+          " DroneID, FlightID, DocumentType, DocumentName, UploadedDate, UploadedBy\n" +
+          ") VALUES (\n" +
+          "  '" + DroneID + "',\n" +
+          "  '" + FlightID + "',\n" +
+          "  'GCA Approval',\n" +
+          "  '" + FileURL + "',\n" +
+          "  GETDATE(),\n" +
+          "  " + Util.getLoginUserID() + "\n" +
+          ")";
+        Util.doSQL(SQL);
+
+      } catch (Exception ex) {
+        JsonText.Clear();
+        JsonText.Append("{");
+        JsonText.Append(Util.Pair("status", "error", true));
+        JsonText.Append(Util.Pair("message", ex.Message, false));
+        JsonText.Append("}");
+      }//catch
+      return JsonText.ToString();
+    }//UploadFile()
+
+    private void MoveUploadFileTo(int DroneID, int FlightID) {
+      String[] Files = Request["FileName"].Split(',');
+      String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+      String OldUploadDir = UploadPath +  "0\\0\\";
+      String DroneName = DroneID == 0 ? "0" : Util.getDroneName(DroneID);
+      String NewUploadDir = UploadPath + DroneName + "\\" + FlightID + "\\";
+      foreach (String file in Files) {
+        if (String.IsNullOrEmpty(file)) continue;
+        String OldFullPath = OldUploadDir + file;
+        String NewFullPath = NewUploadDir + file;
+        if(System.IO.File.Exists(OldFullPath)) {
+          if (!Directory.Exists(NewFullPath)) Directory.CreateDirectory(NewUploadDir);
+          if(!System.IO.File.Exists(NewFullPath)) System.IO.File.Move(OldFullPath, NewFullPath);          
+          String SQL = "UPDATE DroneDocuments SET\n" +
+          "  DroneID=" + DroneID + ",\n" +
+          "  FlightID=" + FlightID + "\n" +
+          "WHERE\n" +
+          "  DocumentName='" + file + "'";
+          Util.doSQL(SQL);
+        }//if(System.IO.File.Exists
+      }//foreach (String file in Files)
+    }//MoveUploadFileTo
+
+
+    public ActionResult UASFiles(int FlightID=0) {
+      ExponentPortalEntities db = new ExponentPortalEntities();
+      List<DroneDocument> Docs = (from r in db.DroneDocuments
+                                 where (int)r.FlightID == FlightID
+                                 select r).ToList();
+      return View(Docs);
+    }
 
   }//class
 }//namespace

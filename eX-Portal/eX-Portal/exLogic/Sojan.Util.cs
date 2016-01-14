@@ -276,11 +276,12 @@ namespace eX_Portal.exLogic {
     }
 
 
-    public static String getFileInfo(String FileName) {
-
+    public static String getFileInfo(String FileName, String SaveFileName = null) {
+      if (String.IsNullOrEmpty(SaveFileName)) SaveFileName = FileName;
       FileInfo oFileInfo = new FileInfo(FileName);
       return "{" +
         Pair("name", oFileInfo.Name, true) +
+        Pair("savename", SaveFileName, true) +
         Pair("created", oFileInfo.CreationTime.ToString("dd-MMM-yyyy hh:mm:ss tt [zzz]"), true) +
         Pair("ext", oFileInfo.Extension, true) +
         Pair("records", getLineCount(FileName).ToString(), true) +
@@ -351,6 +352,12 @@ namespace eX_Portal.exLogic {
         //nothing
       }       
       return sTheDate;
+    }
+
+    public static String getFilePart(String FullFile) {
+      int TildAt = FullFile.IndexOf("~");
+      if (TildAt > 0) return FullFile.Substring(TildAt + 1);
+      return FullFile;
     }
 
   }//class Util

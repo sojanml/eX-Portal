@@ -5,62 +5,126 @@
   @using (Html.BeginForm()) {
   @Html.AntiForgeryToken()
 
-  @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-  <div class="form-group">
-    @Html.LabelFor(model => model.DroneID,"UAS", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-      @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("Drone"))
-      @Html.ValidationMessageFor(model => model.DroneID, "", new { @class = "text-danger" })
-    </div>
-  </div>
-
-  <div class="form-group">
-    @Html.LabelFor(model => model.PilotID,"Pilot Name", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-      @Html.DropDownListFor(model => model.PilotID, Util.GetDropDowntList("Pilot"))
-      @Html.ValidationMessageFor(model => model.PilotID, "", new { @class = "text-danger" })
-    </div>
-  </div>
-
-  <div class="form-group">
-    @Html.LabelFor(model => model.GSCID, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-      @Html.DropDownListFor(model => model.GSCID, Util.GetDropDowntList("Pilot"))
-      @Html.ValidationMessageFor(model => model.GSCID, "", new { @class = "text-danger" })
-    </div>
-  </div>
-
-  <div class="form-group">
-    @Html.LabelFor(model => model.FlightDate, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-      <input type="text" name="FlightDate" value="@String.Format("{0:dd-MMM-yyyy hh:mm tt}", Model.FlightDate)"  class="form-control date-picker"/>
-
-      @Html.ValidationMessageFor(model => model.FlightDate, "", new { @class = "text-danger" })
-    </div>
-  </div>
-
-
-
-<p >Home Point </p>
-<div class="form-group">
-    @Html.LabelFor(model => model.Latitude, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.EditorFor(model => model.Latitude)
-        @Html.ValidationMessageFor(model => model.Latitude, "", new { @class = "text-danger" })
-    </div>
-</div>
     <div class="form-group">
-        @Html.LabelFor(model => model.Longitude, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Longitude)
-            @Html.ValidationMessageFor(model => model.Longitude, "", new { @class = "text-danger" })
-        </div>
+      @Html.LabelFor(model => model.DroneID, "UAS", htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("Drone"))
+        @Html.ValidationMessageFor(model => model.DroneID, "", new { @class = "text-danger" })
+      </div>
     </div>
-  <div class="form-toolbar">
-    <input type="submit" value="Save" class="btn btn-default" />
-  </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.PilotID, "Pilot Name", htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.DropDownListFor(model => model.PilotID, Util.GetDropDowntList("Pilot"))
+        @Html.ValidationMessageFor(model => model.PilotID, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.GSCID, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.DropDownListFor(model => model.GSCID, Util.GetDropDowntList("Pilot"))
+        @Html.ValidationMessageFor(model => model.GSCID, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.FlightDate, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        <input type="text" name="FlightDate" value="@String.Format("{0:dd-MMM-yyyy hh:mm tt}", Model.FlightDate)" class="form-control date-picker" />
+
+        @Html.ValidationMessageFor(model => model.FlightDate, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <h2>Home Point </h2>
+    <div class="form-group">
+      <div class="col-md-10">
+        <table cellpadding="0" cellspacing="0" style="width:100%;">
+          <tr>
+            <td style="white-space:nowrap;">@Html.LabelFor(model => model.Latitude, htmlAttributes: new { @class = "control-label col-md-2" })</td>
+            <td style="padding-left:20px; width:100%;">@Html.EditorFor(model => model.Latitude)</td>
+          </tr>
+          <tr>
+            <td style="padding:5px 0px 0px 0px; white-space:nowrap;">@Html.LabelFor(model => model.Longitude, htmlAttributes: new { @class = "control-label col-md-2" })</td>
+            <td style="padding:5px 0px 0px 20px; width:100%;">@Html.EditorFor(model => model.Longitude)</td>
+          </tr>
+        </table>
+      </div>
+      @Html.ValidationMessageFor(model => model.Latitude, "", new { @class = "text-danger" })
+      @Html.ValidationMessageFor(model => model.Longitude, "", new { @class = "text-danger" })
+    </div>
+
+    <h2>GCA Approval </h2>
+    <div class="form-group">
+      <p>
+        You need to have GSA Approval for this flight. <a href="#">Click Here</a> for
+        GCA approval site. Download the PDF and upload it here.
+      </p>
+      <div class="col-md-10">
+        <ul id="FileUploadProgress">
+          @Html.Action("UASFiles", new { FlightID = Model.ID })
+        </ul>
+      </div>
+      <div><input type="file" multiple name="fileinput" id="fileinput" /></div>
+    </div>
+
+    <div class="form-toolbar">
+      <input type="submit" value="Save" class="btn btn-default" />
+    </div>
   }
 
 </div>
 
+@section header{
+  <link href="~/Content/black-box.css" rel="stylesheet" />
+}
+@section Scripts{
+  <script type="text/javascript">
+    var DroneUploadURL = '@Url.Action("UploadFile", new { DroneID = Model.DroneID, FlightID = Model.ID })';
+    DroneUploadURL = DroneUploadURL.replace(/&amp;/g, '&');
+    $(document).ready(function () {
+      $(document).on('click', 'span.delete', function (e) {
+        e.preventDefault();
+        DeleteThisFile($(this));
+      });
+
+    });
+
+    function DeleteThisFile(Obj) {
+      var LI = Obj.closest('LI');
+      $("#delete-confirm").dialog({
+        resizable: false,
+        modal: true,
+        buttons: {
+          "Delete": function () {
+            $(this).dialog("close");
+            processDeleteFile1(Obj);
+          },
+          Cancel: function () {
+            $(this).dialog("close");
+          }
+        }
+      });
+
+    }
+
+
+
+
+function processDeleteFile1(Obj) {
+  var FileName = Obj.attr("data-file");
+  var URL = '/DroneFlight/DeleteFile?FlightID=@(Model.ID)&file=' + FileName;
+  Obj.closest('LI').slideUp();
+  $.ajax({
+    url: URL,  //server script to process data
+    type: 'GET',
+    dataType: 'json'
+  });
+}
+  </script>
+  <script type="text/javascript" src="~/Scripts/drone.js"></script>
+}
