@@ -1,18 +1,9 @@
 ﻿$(document).ready(function () {
   
-      /*  var mb_one = $("#ddl_one").val();
-        var mb_two = $("#ddl_two").val();
-        var getYear = $("#ddlYear").val();
-
-        var jsonData = JSON.stringify({
-            mobileId_one: mb_one,
-            mobileId_two: mb_two,
-            year: getYear
-        });
-        */
+     
         $.ajax({
             type: "GET",
-            url: MapDataURL + "&LastFlightDataID=" + "0" + '&MaxRecords=' + "20",
+            url: ChartDataURL + "&LastFlightDataID=" + "0" + '&MaxRecords=' + "20",
             contentType: "application/json;charset=utf-8",
             dataType: "json",
             async: true,

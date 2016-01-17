@@ -16,7 +16,7 @@
     <script src="~/Scripts/Chart.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-        var MapDataURL = '@Url.Action("getLineChartData", new {FlightID = ViewBag.FlightID})';
+        var ChartDataURL = '@Url.Action("getLineChartData", new {FlightID = ViewBag.FlightID})';
         @Html.Raw(Model.getScripts())
     </script>
     <script type="text/javascript" src="~/Scripts/FlightChart.js"></script>
