@@ -228,7 +228,8 @@ namespace eX_Portal.Controllers {
 
     // GET: Drone/Details/5
     public String DroneDetail([Bind(Prefix = "ID")]  int DroneID) {
-
+            string OwnerFormat;
+            int OwnerId;
       if (!exLogic.User.hasAccess("DRONE")) return "Access Denied";
       String SQL = "SELECT \n" +
           "  D.[DroneName] as UAS,\n" +
@@ -257,7 +258,12 @@ namespace eX_Portal.Controllers {
       }
 
       qDetailView nView = new qDetailView(SQL);
-      return ReassignDetail(DroneID) + DecommissionDetail(DroneID) + nView.getTable();
+            //this part for adding link to requred fields in the details
+            OwnerId = Util.GetAccountIDFromDrone(DroneID);
+            OwnerFormat = "<a  href='/Admin/AccountDetail/" + OwnerId + "'>$OwnerName</a>";//url
+
+            nView.FormatCols.Add("OwnerName", OwnerFormat); //Adding the Column required for formatting  
+            return ReassignDetail(DroneID) + DecommissionDetail(DroneID) + nView.getTable();
       //+
     }
 
@@ -287,7 +293,7 @@ namespace eX_Portal.Controllers {
       if ((bool)Row["hasRows"] && Row["IsActive"].ToString() != "True") {
         Detail.AppendLine("<div class=\"decommission-info\">");
         Detail.AppendLine("ReAssigned For");
-        Detail.AppendLine("<span>" + Row["DroneName"] + "</span>");
+        Detail.AppendLine("<span>" + Row["UAS"] + "</span>");
         Detail.AppendLine("on");
         Detail.AppendLine("<span>" + Row["ReAssignDate"] + "</span>");
         Detail.AppendLine("by");

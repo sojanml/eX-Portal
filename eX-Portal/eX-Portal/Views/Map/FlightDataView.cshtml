@@ -3,27 +3,63 @@
 
 
 <div style="width:100%">
-    <canvas id="myChart" style="width:100%"> </canvas>
+  <canvas id="myChart" style="width:100%"> </canvas>
 </div>
-
-
+<div id="map-legent"></div>
 
 @Html.Raw(Model.getDataTable())
 
 @section scripts {
-
-
-    <script src="~/Scripts/Chart.js" type="text/javascript"></script>
-
-    <script type="text/javascript">
-        var ChartDataURL = '@Url.Action("getLineChartData", new {FlightID = ViewBag.FlightID})';
-        @Html.Raw(Model.getScripts())
-    </script>
-    <script type="text/javascript" src="~/Scripts/FlightChart.js"></script>
+  <script src="~/Scripts/Chart.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var MapDataURL = '@Url.Action("getLineChartData", new {FlightID = ViewBag.FlightID})';
+    @Html.Raw(Model.getScripts())
+  </script>
+  <script type="text/javascript" src="~/Scripts/FlightChart.js"></script>
 }
 
+@section header {
+<style type="text/css">
 
+ul#line-legend {
+margin:0px;
+padding:0px;
+list-style:none;
+width: 100%;
+border-bottom:1px black solid;
+margin-bottom:10px;
+padding-bottom:10px;
+}
 
+ul#line-legend li {
+margin: 0px;
+padding: 0px;
+width: 18%;
+display: inline-block;
+}
+
+ul#line-legend li span.legend {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+}
+
+ul#line-legend li span.legend span{  
+  font-size:10px;
+  color: white;
+  visibility:hidden;
+}
+ul#line-legend li.active span.legend span {
+   visibility:visible;
+}
+ul#line-legend li:hover span.legend  span {
+   visibility:visible;
+   color:black;
+}
+</style>
+}
 
 
 

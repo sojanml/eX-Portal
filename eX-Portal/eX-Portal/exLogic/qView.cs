@@ -376,8 +376,9 @@ namespace eX_Portal.exLogic {
 
 
     private void setColumDef() {
+      int ColumnCounter = 0;
       String mySQL = isFilterByTop ?
-        SQL.Replace("SELECT ", "SELECT TOP 1 ") : SQL;
+      SQL.Replace("SELECT ", "SELECT TOP 1 ") : SQL;
       /*
       //can not use the none filter, we need to find is there any rows
       //exists to build the list
@@ -416,12 +417,17 @@ namespace eX_Portal.exLogic {
 
       //For each field in the table...
       foreach (DataRow myField in schemaTable.Rows) {
+        ColumnCounter++;
+
         //For each property of the field...
         //Columns.Add(myField["BaseTableName"] + "." + myField["BaseColumnName"]);      
         String ColumnName = myField["ColumnName"].ToString();
         String FieldType = myField["DataType"].ToString();
         if (FieldType == "System.String") {
           FilterColumns.Add(ColumnName);
+        }
+        if(ColumnCounter == 1 && FieldType == "System.String") {
+          _SortOrder = "asc";
         }
 
 
