@@ -321,8 +321,19 @@ namespace eX_Portal.exLogic
                 }
             }
         }
+        public static int GetAccountIDFromDrone(int DroneId)
+        {
+            int result = 0;
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL = "select AccountID from MSTR_Drone where  DroneId=" + DroneId;
+                result = Util.toInt(Util.getDBVal(SQL));
 
-       
+            }
+
+            return result;
+        }
+
         public static int GetDroneIdFromFlight(int FlightId)
         {
             int result = 0;
