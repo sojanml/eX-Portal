@@ -92,11 +92,49 @@
         padding: 1px 3px 1px 0px;
         width: 16.666%;
       }
+      ul#line-legend {
+margin:0px;
+padding:0px;
+list-style:none;
+width: 100%;
+border-bottom:1px black solid;
+margin-bottom:10px;
+padding-bottom:10px;
+}
+
+ul#line-legend li {
+margin: 0px;
+padding: 0px;
+width: 18%;
+display: inline-block;
+}
+
+ul#line-legend li span.legend {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+}
+
+ul#line-legend li span.legend span{  
+  font-size:10px;
+  color: white;
+  visibility:hidden;
+}
+ul#line-legend li.active span.legend span {
+   visibility:visible;
+}
+ul#line-legend li:hover span.legend  span {
+   visibility:visible;
+   color:black;
+}
   </style>
 }
 <div style="width:100%">
     <canvas id="myChart" style="width:100%"> </canvas>
 </div>
+<div id="map-legent"></div>
 
 
 @section scripts{

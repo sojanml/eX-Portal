@@ -435,15 +435,27 @@ function SetChart()
     ctx.canvas.height = 300;  // setting height of canvas
     ctx.canvas.width = 1000; // setting width of canvas
      lineChart = new Chart(ctx).Line(data, {
-        bezierCurve: false,
+        bezierCurve: true,
         datasetFill: false,
         animateScale: false,
         // String - Template string for single tooltips
         tooltipTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>",
         //String - A legend template
         multiTooltipTemplate: "<%= datasetLabel %> : <%= value %>",
-        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>"
-    });
+        legendTemplate:
+      '<ul id=\"line-legend">\n' +
+      '  <% for (var i=0; i<datasets.length; i++){%>\n' +
+      '  <li class="active" data-label="<%=datasets[i].label%>">\n' +
+      '    <span class="legend" style=\"background-color:<%=datasets[i].strokeColor%>\">' +
+      '     <span class="icon">&#xf00c;</span>\n' +
+      '    </span>\n' +
+      '    <span><%=datasets[i].label%></span>\n' +
+      '  </li>\n' +
+      '  <%}%>\n' +
+      '</ul>'
+     });
+     var legend = lineChart.generateLegend();
+     $('#map-legent').append(legend);
 }
 
 function updateChart()
