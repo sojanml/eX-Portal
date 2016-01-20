@@ -1,48 +1,113 @@
-﻿
-@{
+﻿@{
   ViewBag.Title = "FlightData";
   Layout = "~/Views/Shared/_exPortal.cshtml";
 }
 @Html.Action("DroneFlightDetail", "DroneFlight", new { ID = ViewBag.FlightID })
 
-<table class="detail-info" style="width: 100%">
-  <thead>
-    <tr>
-      <th>Altitude</th>
-      <th>Speed</th>
-      <th colspan="3">Current Position</th>
-      <th>&nbsp;</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Min: <span id="data_Min_Altitude">-</span></td>
-      <td>Min: <span id="data_Min_Speed">-</span></td>
-      <td>Date: <span id="data_ReadTime">-</span></td>
-      <td>Speed: <span id="data_Speed">-</span></td>
-      <td>Heading: <span id="data_Heading">-</span></td>
-      <td rowspan="3" valign="bottom">
-        <div class="form-toolbar">
-          <input id="clickReplay" type="button" value="Replay" onclick="Replay();" />
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>Max: <span id="data_Max_Altitude">-</span></td>
-      <td>Max: <span id="data_Max_Speed">-</span></td>
-      <td>Lat: <span id="data_Latitude">-</span></td>
-      <td>Alt: <span id="data_Altitude">-</span></td>
-      <td>Satalite: <span id="data_Satellites">-</span></td>
-    </tr>
-    <tr>
-      <td>Avg: <span id="data_avg_Altitude">-</span></td>
-      <td>Avg: <span id="data_Avg_Speed">-</span></td>
-      <td>Lng: <span id="data_Longitude">-</span></td>
-      <td>Distance: <span id="data_Distance">-</span></td>
-      <td>Flight Time: <span id="data_TotalFlightTime">-</span></td>
-    </tr>
-  </tbody>
-</table>
+<div id="drone-map-info">
+  <div class="col-4 item1">
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="verticalTableHeader"><p>Flight<br />Time</p></td>
+        <td><div class="image"><span class="dash-image img1"></span></div></td>
+        <td><div class="data"><span id="data_TotalFlightTime">-</span></div></td>
+        <td style="vertical-align:bottom"><div class="unit">hrs</div></td>
+      </tr>
+    </table>
+</div>
+
+  <div class="col-4 item2">
+    <table cellpadding="0" cellspacing="0">
+      <tr>        
+        <td class="verticalTableHeader"><p>Speed</p></td>
+        <td><div class="image"><span class="dash-image img2"></span></div></td>
+        <td><div class="data"><span id="data_Speed">-</span></div></td>
+        <td style="vertical-align:bottom"><div class="unit">m/s</div></td>
+      </tr>
+      </table>
+    <div class="more-info">
+      <span class="icon min">&#xf063;</span><span id="data_Min_Speed">-</span>
+      <span class="icon max">&#xf062;</span><span id="data_Max_Speed">-</span>
+      <span class="icon avg">&#xf013;</span><span id="data_Avg_Speed">-</span>
+    </div>
+  </div>
+
+  <div class="col-4 item3">
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="verticalTableHeader"><p>Altitude</p></td>
+        <td><div class="image"><span class="dash-image img3"></span></div></td>
+        <td><div class="data"><span id="data_Altitude">-</span></div></td>
+        <td style="vertical-align:bottom"><div class="unit">m</div></td>
+      </tr>
+    </table>
+    <div class="more-info">
+      <span class="icon min">&#xf063;</span><span id="data_Min_Altitude">-</span>
+      <span class="icon max">&#xf062;</span><span id="data_Max_Altitude">-</span>
+      <span class="icon avg">&#xf013;</span><span id="data_avg_Altitude">-</span>
+    </div>
+
+  </div>
+
+  <div class="col-4 item4">
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="verticalTableHeader"><p>Distance</p></td>
+        <td><div class="image"><span class="dash-image img4"></span></div></td>
+        <td><div class="data"><span id="data_Distance">-</span></div></td>
+        <td style="vertical-align:bottom"><div class="unit">m</div></td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="clear:both; height:20px;"></div>
+  <!--second row starts here-->
+  <div class="col-4 item5">
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="verticalTableHeader"><p>Roll</p></td>
+        <td><div class="image"><span class="dash-image img5"></span></div></td>
+        <td><div class="data"><span id="data_Roll">-</span></div></td>
+        <td style="vertical-align:bottom"><div class="unit">Deg</div></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="col-4 item6">
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="verticalTableHeader"><p>Pitch</p></td>
+        <td><div class="image"><span class="dash-image img6"></span></div></td>
+        <td><div class="data"><span id="data_Pitch">-</span></div></td>
+        <td style="vertical-align:bottom"><div class="unit">Deg</div></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="col-4 item7">
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="verticalTableHeader"><p>Heading</p></td>
+        <td><div class="image"><span class="dash-image img7"></span></div></td>
+        <td><div class="data"><span id="data_Heading">-</span></div></td>
+        <td style="vertical-align:bottom"><div class="unit">Deg</div></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="col-4 item8">
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="verticalTableHeader"><p>Satellites</p></td>
+        <td><div class="image"><span class="dash-image img8"></span></div></td>
+        <td><div class="data"><span id="data_Satellites">-</span></div></td>
+        <td style="vertical-align:bottom"><div class="unit">#</div></td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="clear:both; height:20px;"></div>
+</div>
 
 <div id="map-holder">
   <div id="map_canvas" style="width: 100%; height: 480px;">
@@ -51,95 +116,17 @@
   <div id="map-info">-</div>
 </div>
 
-@section header{
-  <style type="text/css">
-    #map-holder {
-      position: relative;
-    }
-
-    #map-info {
-      position: absolute;
-      bottom: 0px;
-      left: 0px;
-      height: auto;
-      width: auto;
-      padding: 5px 10px 5px 10px;
-      background-color: #ea050e;
-      font-weight: bold;
-      color: white;
-    }
-
-    table.detail-info {
-      border-bottom: 1px #ea050e solid;
-    }
-
-      table.detail-info TH {
-        border-bottom: 1px #ea050e solid;
-        color: #ea050e;
-        text-align: left;
-        font-family: Conv_DINNextLTPro-LightCondensed,Arial;
-        font-size: 20px;
-      }
-      table.detail-info td {
-        white-space: nowrap;
-      }
-      table.detail-info td span {
-        color: gray;
-      }
-
-      table.detail-info TH,
-      table.detail-info td {
-        padding: 1px 3px 1px 0px;
-        width: 16.666%;
-      }
-      ul#line-legend {
-margin:0px;
-padding:0px;
-list-style:none;
-width: 100%;
-border-bottom:1px black solid;
-margin-bottom:10px;
-padding-bottom:10px;
-}
-
-ul#line-legend li {
-margin: 0px;
-padding: 0px;
-width: 18%;
-display: inline-block;
-}
-
-ul#line-legend li span.legend {
-  display: inline-block;
-  width: 25px;
-  height: 25px;
-  text-align: center;
-  line-height: 25px;
-}
-
-ul#line-legend li span.legend span{  
-  font-size:10px;
-  color: white;
-  visibility:hidden;
-}
-ul#line-legend li.active span.legend span {
-   visibility:visible;
-}
-ul#line-legend li:hover span.legend  span {
-   visibility:visible;
-   color:black;
-}
-  </style>
-}
 <div style="width:100%">
     <canvas id="myChart" style="width:100%"> </canvas>
 </div>
-<div id="map-legent"></div>
+
+<div id="MapData">
+  <table></table>
+</div>
 
 
 @section scripts{
 <script src="~/Scripts/Chart.js" type="text/javascript"></script>
-
   <script type="text/javascript">
       var MapDataURL = '@Url.Action("GetFlightData", new {FlightID = ViewBag.FlightID})';
       var ChartDataURL = '@Url.Action("GetFlightData", new {FlightID = ViewBag.FlightID})';
@@ -148,9 +135,41 @@ ul#line-legend li:hover span.legend  span {
   <script type="text/javascript" src="~/Scripts/map.js"></script>
 }
 
-<div id="MapData">
-  <table></table>
+@section header{
+  <link href="~/Content/map.css" rel="stylesheet" />
+  <style type="text/css">
+
+  .img1 { -webkit-mask-image: url('/images/image5.png');}
+  .img2 { -webkit-mask-image: url('/images/image6.png');}
+  .img3 {  -webkit-mask-image: url('/images/image7.png');}
+  .img4 { -webkit-mask-image: url('/images/image12.png');}
+  .img5 { -webkit-mask-image: url('/images/image9.png');}
+  .img6 { -webkit-mask-image: url('/images/image8.png');}
+  .img7 { -webkit-mask-image: url('/images/image11.png');}
+  .img8 { -webkit-mask-image: url('/images/image10.png');}
+
+  /*
+  .img1 { background-color: #9DC3E6;}
+  .img2 { background-color: rgba(187,17,17,1); }
+  .img5 { background-color: rgba(100,50,205,1); }
+  .img6 { background-color: rgba(255,119,119,1);}
+  .img8 { background-color: rgba(151,187,205,1);}
+  */
+
+  #drone-map-info div.col-4.item2 div.data { color: rgb(117, 237, 251); }
+  #drone-map-info div.col-4.item3 div.data { color: rgb(236, 215, 101); }
+
+  #drone-map-info div.col-4.item5 div.data { color: rgb(153, 131, 199); }
+  #drone-map-info div.col-4.item6 div.data { color: rgba(255,119,119,1); }
+  
+  </style>
+}
+
+@section toolbar {
+<div class="form-toolbar">
+  <input id="clickReplay" type="button" value="Replay" onclick="Replay();" />
 </div>
+}
 
 
 
