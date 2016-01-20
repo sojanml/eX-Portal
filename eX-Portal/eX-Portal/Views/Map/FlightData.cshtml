@@ -119,6 +119,7 @@
 <div style="width:100%">
     <canvas id="myChart" style="width:100%"> </canvas>
 </div>
+<div id="map-legent"></div>
 
 <div id="MapData">
   <table></table>
@@ -161,7 +162,43 @@
 
   #drone-map-info div.col-4.item5 div.data { color: rgb(153, 131, 199); }
   #drone-map-info div.col-4.item6 div.data { color: rgba(255,119,119,1); }
-  
+   ul#line-legend {
+margin:0px;
+padding:0px;
+list-style:none;
+width: 100%;
+border-bottom:1px black solid;
+margin-bottom:10px;
+padding-bottom:10px;
+}
+
+ul#line-legend li {
+margin: 0px;
+padding: 0px;
+width: 18%;
+display: inline-block;
+}
+
+ul#line-legend li span.legend {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+}
+
+ul#line-legend li span.legend span{  
+  font-size:10px;
+  color: white;
+  visibility:hidden;
+}
+ul#line-legend li.active span.legend span {
+   visibility:visible;
+}
+ul#line-legend li:hover span.legend  span {
+   visibility:visible;
+   color:black;
+}
   </style>
 }
 
