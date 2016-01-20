@@ -151,10 +151,10 @@ function initialize() {
   $('#MapData table').append(loctr);
   $('#MapData table').append(firsttr);
   $('#MapData table').addClass('report');
- // setLocation();
+  // setLocation();
   SetChart();
   GetDrones();
-  
+
   //  myInterval = setInterval(function () { }, 500);
 
 };
@@ -213,7 +213,7 @@ function GetDrones() {
       // }
       //catch (err) {
       //    alert('Live Drone Position Error' + err);
-        //}
+      //}
 
     },
     failure: function (msg) {
@@ -229,23 +229,22 @@ function GetDrones() {
 
 
 function directPlotPoints() {
-    var locationLength = _Location.length;
-    if (locationLength < 1)
-        isGraphReplayMode = true;
-    while (1) {
+  var locationLength = _Location.length;
+  if (locationLength < 1)
+    isGraphReplayMode = true;
+  while (1) {
     if (_Location.length < 1) break;
     var thisPoint = _Location.shift();
 
     setMarker(map, thisPoint);
-    SetCurrentValues(thisPoint);
+    thisPoint = SetCurrentValues(thisPoint);
     SetMapTable(thisPoint);
 
-    }
-    if (!isGraphReplayMode)
-    {
+  }
+  if (!isGraphReplayMode) {
     GetChartData();
-     lineChart.initialize(data);
-    }
+    lineChart.initialize(data);
+  }
 
 
 
@@ -259,7 +258,7 @@ function plotPoints() {
 
 
   setMarker(map, thisPoint);
-  SetCurrentValues(thisPoint);
+  thisPoint = SetCurrentValues(thisPoint);
   SetMapTable(thisPoint);
 
   var delay = getDelay(thisPoint);
@@ -359,15 +358,54 @@ function SetCurrentValues(_LastValue) {
 
   $.each(_LastValue, function (key, value) {
     if (value == null) value = '';
-    if (key == "ReadTime") {
-      var iDt = parseInt(_LastValue['ReadTime'].substr(6));
-      var theDate = new Date(iDt);
-      value = fmtDt(theDate);
+    switch (key) {
+      case "ReadTime":
+        var iDt = parseInt(_LastValue['ReadTime'].substr(6));
+        var theDate = new Date(iDt);
+        value = fmtDt(theDate);
+        break;
+      case "Distance":
+        value = parseInt(value);
+        if (isNaN(value)) value = 0;
+        break;
+      case "avg_Altitude":
+      case "Min_Altitude":
+      case "Max_Altitude":
+      case "Altitude":
+        value = parseFloat(value);
+        if (isNaN(value)) value = 0;
+        value = value.toFixed(2);
+        break;
+      case "Speed":
+      case "Avg_Speed":
+      case "Min_Speed":
+      case "Max_Speed":
+        value = parseFloat(value);
+        if (isNaN(value)) value = 0;
+        //if (value > 0) value = value / (60 * 60) * 1000;
+        value = value.toFixed(2);
+        break;
+      case "TotalFlightTime":
+        value = parseFloat(value);
+        if (isNaN(value)) value = 0;
+        if (value > 0) value = value / (60 * 60);
+        value = value.toFixed(2);
+        break;
+      case "Heading":
+        value = parseFloat(value);
+        if (isNaN(value)) value = 0;
+        if (value < 0) value = value + 360;
+        value = value.toFixed(2);
+        break;
+
+
     }
+    _LastValue[key] = value;
     $('#data_' + key).html(value);
   });
 
   MyLastLatLong = new google.maps.LatLng(_LastValue['Latitude'], _LastValue['Longitude']);
+  return _LastValue;
   // var oCompaniesTable = $('#MapData Table')
 }
 
@@ -389,17 +427,17 @@ function SetMapTable(_LastValue) {
     var tTotFlightTimeData = '';// '<td>' + _LastValue['TotalFlightTime'] + '</td>';
     var loctr = '<tr>' + tLatData + tLonData + tAltData + tSpeedData + tFxQltyData + tSatelliteData + tDrTime + tPitchData + tRollData + tHeadData + tTotFlightTimeData + '</tr>';
     $('#MapData table > tbody > tr:first').after(loctr);
-    
-  //  SetChart();
-   // if ($("#MapData > table > tbody > tr").length <= 2)
+
+    //  SetChart();
+    // if ($("#MapData > table > tbody > tr").length <= 2)
     //    {
-       // SetChartData(_LastValue);
-       // SetChart();
-  //  }
-  //  else
-   // {
-      SetChartUpdateData(_LastValue);
-      //  updateChart();
+    // SetChartData(_LastValue);
+    // SetChart();
+    //  }
+    //  else
+    // {
+    SetChartUpdateData(_LastValue);
+    //  updateChart();
     //}
     if ($("#MapData > table > tbody > tr").length > 20)
       $('#MapData > table > tbody > tr:last').remove();
@@ -428,102 +466,97 @@ function fmtDt(date) {
   return date.getDate() + "-" + Months[date.getMonth()] + "-" + date.getFullYear() + "  " + strTime;
 }
 
-function SetChart()
-{
-    GetChartData();
-    var ctx = $("#myChart").get(0).getContext('2d');
-    ctx.canvas.height = 300;  // setting height of canvas
-    ctx.canvas.width = 1000; // setting width of canvas
-     lineChart = new Chart(ctx).Line(data, {
-        bezierCurve: false,
-        datasetFill: false,
-        animateScale: false,
-        // String - Template string for single tooltips
-        tooltipTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>",
-        //String - A legend template
-        multiTooltipTemplate: "<%= datasetLabel %> : <%= value %>",
-        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>"
-    });
+function SetChart() {
+  GetChartData();
+  var ctx = $("#myChart").get(0).getContext('2d');
+  ctx.canvas.height = 300;  // setting height of canvas
+  ctx.canvas.width = 1000; // setting width of canvas
+  lineChart = new Chart(ctx).Line(data, {
+    bezierCurve: false,
+    datasetFill: false,
+    animateScale: false,
+    // String - Template string for single tooltips
+    tooltipTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>",
+    //String - A legend template
+    multiTooltipTemplate: "<%= datasetLabel %> : <%= value %>",
+    legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>"
+  });
 }
 
-function updateChart()
-{
-    if (lineChart != null) //lineChart.addData(ldata, aLabels);
-       lineChart.addData(ldata["datasets"],[ldata["labels"], 10, 20, 30]);
+function updateChart() {
+  if (lineChart != null) //lineChart.addData(ldata, aLabels);
+    lineChart.addData(ldata["datasets"], [ldata["labels"], 10, 20, 30]);
 }
 
 
 function GetChartData() {
-  
-    data = {
-        labels: aLabels,
-        datasets: [{
-            label: "Altitudes",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: aDatasets1
-        },
-        {
-            label: "Satellites",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: aDatasets2
-        },
-        {
-            label: "Pitch",
-            strokeColor: "rgba(255,119,119,1)",
-            pointColor: "rgba(255,119,119,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(255,119,119,1)",
-            data: aDatasets3
-        },
-        {
-            label: "Roll",
-            strokeColor: "rgba(100,50,205,1)",
-            pointColor: "rgba(100,50,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(100,50,205,1)",
-            data: aDatasets4
-        },
-        {
-            label: "Speed",
-            strokeColor: "rgba(187,17,17,1)",
-            pointColor: "rgba(187,17,17,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(187,17,17,1)",
-            data: aDatasets5
-        }]
-    };
 
-    
-   
-    
+  data = {
+    labels: aLabels,
+    datasets: [{
+      label: "Altitudes",
+      strokeColor: "rgb(236, 215, 101)",
+      pointColor: "rgb(236, 215, 101)",
+      pointStrokeColor: "#fff",
+      pointHighlightStroke: "rgb(236, 215, 101)",
+      data: aDatasets1
+    },
+    {
+      label: "Satellites",
+      strokeColor: "rgba(151,187,205,1)",
+      pointColor: "rgba(151,187,205,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightStroke: "rgba(151,187,205,1)",
+      data: aDatasets2
+    },
+    {
+      label: "Pitch",
+      strokeColor: "rgba(255,119,119,1)",
+      pointColor: "rgba(255,119,119,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightStroke: "rgba(255,119,119,1)",
+      data: aDatasets3
+    },
+    {
+      label: "Roll",
+      strokeColor: "rgb(153, 131, 199)",
+      pointColor: "rgb(153, 131, 199)",
+      pointStrokeColor: "#fff",
+      pointHighlightStroke: "rgb(153, 131, 199)",
+      data: aDatasets4
+    },
+    {
+      label: "Speed",
+      strokeColor: "rgb(117, 237, 251)",
+      pointColor: "rgb(117, 237, 251)",
+      pointStrokeColor: "#fff",
+      pointHighlightStroke: "rgba(187,17,17,1)",
+      data: aDatasets5
+    }]
+  };
+
+
+
+
 }
 
-function SetChartUpdateData(response)
-{
-    //ClearChartValues();
-    aData = response;
+function SetChartUpdateData(response) {
+  //ClearChartValues();
+  aData = response;
 
-    // aLabels = aData['ReadTime'];
-    var date = new Date(parseInt(aData['ReadTime'].substr(6)));
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var seconds = date.getSeconds();
-    var str = "";
-    str += hours + ":" + minutes + ":" + seconds + " ";
+  // aLabels = aData['ReadTime'];
+  var date = new Date(parseInt(aData['ReadTime'].substr(6)));
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var seconds = date.getSeconds();
+  var str = "";
+  str += hours + ":" + minutes + ":" + seconds + " ";
 
-    if (isGraphReplayMode)
-        {
+  if (isGraphReplayMode) {
     if (lineChart.datasets[0].points.length > 20)
-        lineChart.removeData();
-    lineChart.addData([aData['Altitude'], aData['Satellites'], aData['Pitch'], aData['Roll'],aData['Speed']], str);
-    }else
-    {
+      lineChart.removeData();
+    lineChart.addData([aData['Altitude'], aData['Satellites'], aData['Pitch'], aData['Roll'], aData['Speed']], str);
+  } else {
 
     aLabels.push((str).toString());
     aDatasets1.push(aData['Altitude']);
@@ -531,77 +564,75 @@ function SetChartUpdateData(response)
     aDatasets3.push(aData['Pitch']);
     aDatasets4.push(aData['Roll']);
     aDatasets5.push(aData['Speed']);
-    if(aLabels.length>20)
-    {
-        aLabels.shift();
-        aDatasets1.shift();
-        aDatasets2.shift();
-        aDatasets3.shift();
-        aDatasets4.shift();
-        aDatasets5.shift();        
+    if (aLabels.length > 20) {
+      aLabels.shift();
+      aDatasets1.shift();
+      aDatasets2.shift();
+      aDatasets3.shift();
+      aDatasets4.shift();
+      aDatasets5.shift();
     }
 
-    }
-    /*
-    ldata = {
-        labels: aLabels,
-        datasets: [{
-            label: "Altitudes",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: aDatasets1
-        },
-        {
-            label: "Satellites",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: aDatasets2
-        },
-        {
-            label: "Pitch",
-            strokeColor: "rgba(255,119,119,1)",
-            pointColor: "rgba(255,119,119,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(255,119,119,1)",
-            data: aDatasets3
-        },
-        {
-            label: "Roll",
-            strokeColor: "rgba(100,50,205,1)",
-            pointColor: "rgba(100,50,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(100,50,205,1)",
-            data: aDatasets4
-        },
-        {
-            label: "Speed",
-            strokeColor: "rgba(187,17,17,1)",
-            pointColor: "rgba(187,17,17,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(187,17,17,1)",
-            data: aDatasets5
-        }]
-    };
-    */
+  }
+  /*
+  ldata = {
+      labels: aLabels,
+      datasets: [{
+          label: "Altitudes",
+          strokeColor: "rgba(220,220,220,1)",
+          pointColor: "rgba(220,220,220,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightStroke: "rgba(220,220,220,1)",
+          data: aDatasets1
+      },
+      {
+          label: "Satellites",
+          strokeColor: "rgba(151,187,205,1)",
+          pointColor: "rgba(151,187,205,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightStroke: "rgba(151,187,205,1)",
+          data: aDatasets2
+      },
+      {
+          label: "Pitch",
+          strokeColor: "rgba(255,119,119,1)",
+          pointColor: "rgba(255,119,119,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightStroke: "rgba(255,119,119,1)",
+          data: aDatasets3
+      },
+      {
+          label: "Roll",
+          strokeColor: "rgba(100,50,205,1)",
+          pointColor: "rgba(100,50,205,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightStroke: "rgba(100,50,205,1)",
+          data: aDatasets4
+      },
+      {
+          label: "Speed",
+          strokeColor: "rgba(187,17,17,1)",
+          pointColor: "rgba(187,17,17,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightStroke: "rgba(187,17,17,1)",
+          data: aDatasets5
+      }]
+  };
+  */
 }
 
-function ClearChartValues()
-{
-    aDatasets1 = [];
-    aData = [];
-    aDatasets2 = [];
-    aDatasets3 = [];
-    aDatasets4 = [];
-    aDatasets5 = [];
-    ldata = [];
-    aLabels = [];
+function ClearChartValues() {
+  aDatasets1 = [];
+  aData = [];
+  aDatasets2 = [];
+  aDatasets3 = [];
+  aDatasets4 = [];
+  aDatasets5 = [];
+  ldata = [];
+  aLabels = [];
 }
 
 function OnErrorCall_(repo) {
-    alert("Woops something went wrong, pls try later !");
+  alert("Woops something went wrong, pls try later !");
 }
 
