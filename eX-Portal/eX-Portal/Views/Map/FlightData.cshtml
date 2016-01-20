@@ -1,5 +1,5 @@
 ﻿@{
-  ViewBag.Title = "FlightData";
+  ViewBag.Title = "Flight Data";
   Layout = "~/Views/Shared/_exPortal.cshtml";
 }
 @Html.Action("DroneFlightDetail", "DroneFlight", new { ID = ViewBag.FlightID })
@@ -203,9 +203,7 @@ ul#line-legend li:hover span.legend  span {
 }
 
 @section toolbar {
-<div class="form-toolbar">
   <input id="clickReplay" type="button" value="Replay" onclick="Replay();" />
-</div>
 }
 
 

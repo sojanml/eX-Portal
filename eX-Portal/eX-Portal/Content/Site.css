@@ -417,6 +417,11 @@ div.form-toolbar {
   margin:10px 0px 10px 0px;
   text-align:right;
 }
+
+div.header-bar div.form-toolbar {
+  margin:0px;
+}
+
 div.form-toolbar input,
 div.form-toolbar button,
 div.form-toolbar a.button,
