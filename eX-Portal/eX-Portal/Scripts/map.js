@@ -412,8 +412,8 @@ function SetCurrentValues(_LastValue) {
 function SetMapTable(_LastValue) {
 
   if (_LastValue != null) {
-    var date = new Date(parseInt(_LastValue['ReadTime'].substr(6)));
-    var theDate = fmtDt(date)
+    var vdate = new Date(_LastValue['ReadTime']);
+    var theDate = _LastValue['ReadTime'];
     var tLatData = '<td>' + _LastValue['Latitude'] + '</td>';
     var tLonData = '<td>' + _LastValue['Longitude'] + '</td>';
     var tAltData = '<td>' + _LastValue['Altitude'] + '</td>';
@@ -463,7 +463,8 @@ function fmtDt(date) {
   //hours = hours ? hours : 12; // the hour '0' should be '12'
   minutes = minutes < 10 ? '0' + minutes : minutes;
   var strTime = hours + ':' + minutes + ':' + date.getSeconds();
-  return date.getDate() + "-" + Months[date.getMonth()] + "-" + date.getFullYear() + "  " + strTime;
+  var strDate = date.getDate() + "-" + Months[date.getMonth()] + "-" + date.getFullYear();
+  return strDate + " " + strTime;
 }
 
 function SetChart() {
