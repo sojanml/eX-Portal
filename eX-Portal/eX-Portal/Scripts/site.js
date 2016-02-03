@@ -124,6 +124,6 @@ function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
 function _fnDrawCallback() {
   $('#qViewTable_paginate').append('<span class="refresh">&#xf021;</span>');
   if($('#qViewTable_filter').find('.refresh').length <= 0) 
-    $('#qViewTable_filter').append('<span class="refresh">&#xf021;</span>');
+  $('#qViewTable_filter').append('<span class="refresh">&#xf021;</span>');
 
 }

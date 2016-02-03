@@ -1,53 +1,36 @@
-﻿@{
-  ViewBag.Title = "Dashboard";
-}
+﻿@model eX_Portal.exLogic.qView
 
-
-<div class="row">
-
-  <div class="col-3">
-    <h2>UAS</h2>
-    <p>
-      This feature allow you to view all the UAS registered. From the
-      UAS, you will be able to see the service history and flight details.
-    </p>
-    <p><a class="btn btn-default" href="/Drone/">Click Here...</a></p>
-  </div>
-
-  <div class="col-3">
-    <h2>UAS Flight</h2>
-    <p>
-      List of flights created for UAS is listed here.
-    <p><a class="btn btn-default" href="/DroneFlight/">Click Here...</a></p>
-  </div>
-
-  <div class="col-3">
-    <h2>UAS Service Details</h2>
-    <p>Create and manage UAS Services and History.</p>
-    <p><a class="btn btn-default" href="/DroneService/">Click Here...</a></p>
-  </div>
-</div>
 <div id="map_canvas" style="width: 100%; height: 480px;"></div>
-<div style="height:150px;">&nbsp;</div>
+<div style="height:20px;">&nbsp;</div>
 
-@section scripts{
-  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+@Html.Raw(Model.getDataTable())
+
+@section scripts {
+  <script type="text/javascript">
+@Html.Raw(Model.getScripts())
+
+  </script>
+
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript" src="~/Scripts/infobox.js"></script>
 
-  <script type="text/javascript">
+<script type="text/javascript">
     var map;
     var _Location = [];
     var livemarkers = [];
-
+    
     var initLat = 24.9899106;
     var initLng = 55.0034188;
     var defaultZoom = 10;
 
-
     var bounds = new google.maps.LatLngBounds();
     var infowindow = new google.maps.InfoWindow();
 
-
+    function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
+      //alert('Start at: ' + iStart);
+      deleteMarkers();
+      setMarker(map, aData)
+    }
 
     $(document).ready(function () {
 
@@ -77,36 +60,19 @@
       map = new google.maps.Map(document.getElementById('map_canvas'),
           mapOptions);
 
-      GetDrones();
+      //GetDrones();
     };
 
 
-    function GetDrones() {
-      var _locVal = [];
-      $.ajax({
-        type: "GET",
-        url: '@Url.Action("GetDrones", "Map")',
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        async: true,
-        success: function (_Location) {
-          setMarker(map, _Location)
-        },
-        failure: function (msg) {
-          alert('Live Drone ' + msg);
-        }
-      });
-    }
 
     function setMarker(map, _Location) {
       $.each(_Location, function (index, location) {
         var body = '' +
-            '<b>' + location['DroneName'] + '</b><br>\n' +
-            'Owner: ' + location['OwnerName'] + '<br>\n' +
-            'Manufacture: ' + location['Manufacture'] + '<br>\n' +
-            'UAV Type: ' + location['UAVType'];
+            '<b>' + location['RFID'] + '</b><br>\n' +
+            'RSSI: ' + location['RSSI'] + '<br>\n' +
+            location['Latitude'] + ", " + location['Longitude'];
 
-        var myLatLng = new google.maps.LatLng(location['LastLatitude'], location['LastLongitude']);
+        var myLatLng = new google.maps.LatLng(location['Latitude'], location['Longitude']);
         var marker = createMarker(map, myLatLng, location['DroneName'], body);
 
       });
@@ -114,7 +80,7 @@
     }
 
     function createMarker(map, latlng, heading, body) {
-      var image = '/Blue.png';
+      var image = '/images/car-icon.png';
       var marker = new google.maps.Marker({
         position: latlng,
         map: map,
@@ -139,9 +105,6 @@
         enableEventPropagation: true
       };
 
-      var ibLabel = new InfoBox(myOptions);
-      ibLabel.open(map);
-
       marker.addListener('click', function () {
         var infowindow = new google.maps.InfoWindow({
           content: body
@@ -150,6 +113,9 @@
       });
 
       bounds.extend(marker.position);
+
+      livemarkers.push(marker);
+      return marker;
     }
 
     function ShowInfo(marker, i) {
@@ -158,5 +124,32 @@
       }
     }
 
-  </script>
+    // Sets the map on all markers in the array.
+    function setMapOnAll(map) {
+      for (var i = 0; i < livemarkers.length; i++) {
+        livemarkers[i].setMap(map);
+      }
+    }
+
+
+    // Removes the markers from the map, but keeps them in the array.
+    function clearMarkers() {
+      setMapOnAll(null);
+    }
+
+    // Shows any markers currently in the array.
+    function showMarkers() {
+      setMapOnAll(map);
+    }
+
+    // Deletes all markers in the array by removing references to them.
+    function deleteMarkers() {
+      clearMarkers();
+      livemarkers = [];
+    }
+
+</script>
 }
+
+
+
