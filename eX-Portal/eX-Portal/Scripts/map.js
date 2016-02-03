@@ -6,14 +6,6 @@ var PlotTimerDelay = 100;
 var isReplayMode = false;
 var mytimer = null;
 
-var _truckName = [];
-var _viGroupName = [];
-var _truck;
-var _vigroup;
-var _truckIcon;
-var _viGroupTruckArry = [];
-var _viGroupTruckIconArry = [];
-var _vigroupValue;
 var initLat = 24.9899106;
 var initLng = 55.0034188;
 var defaultZoom = 18;

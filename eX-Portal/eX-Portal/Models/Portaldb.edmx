@@ -127,11 +127,11 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DroneID" Type="int" Nullable="false" />
-          <Property Name="FlightID" Type="int" />
           <Property Name="DocumentType" Type="varchar" MaxLength="50" />
           <Property Name="DocumentName" Type="nvarchar" MaxLength="500" />
           <Property Name="UploadedDate" Type="datetime" />
           <Property Name="UploadedBy" Type="int" />
+          <Property Name="FlightID" Type="int" />
         </EntityType>
         <EntityType Name="DroneFlight">
           <Key>
@@ -157,7 +157,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="LogBattery2ID" Type="varchar" MaxLength="50" />
           <Property Name="LogBattery2StartV" Type="decimal" Precision="5" Scale="2" />
           <Property Name="LogBattery2EndV" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="isLogged" Type="tinyint" />
+          <Property Name="IsLogged" Type="tinyint" />
           <Property Name="LogDateTime" Type="datetime" />
           <Property Name="LogCreatedBy" Type="int" />
           <Property Name="Descrepency" Type="nvarchar" MaxLength="500" />
@@ -358,10 +358,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="Address2" Type="nvarchar" MaxLength="50" />
           <Property Name="Address3" Type="nvarchar" MaxLength="50" />
           <Property Name="CountryCode" Type="int" />
-          <Property Name="BrandLogo" Type="varchar" MaxLength="50" />
-          <Property Name="BrandColor" Type="varchar" MaxLength="20" />
           <Property Name="ContactName" Type="nvarchar" MaxLength="50" />
           <Property Name="ContactTitle" Type="nvarchar" MaxLength="50" />
+          <Property Name="BrandColor" Type="varchar" MaxLength="50" />
+          <Property Name="BrandLogo" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MSTR_Drone">
           <Key>
@@ -400,31 +400,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="UATReportNote" Type="varchar(max)" />
           <Property Name="IncidentReportNote" Type="nvarchar(max)" />
           <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="MSTR_Drone_TechnicalLog">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Date" Type="date" />
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserId" Type="int" />
-        </EntityType>
-        <EntityType Name="MSTR_Drone_TechnicalLogDetails">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="PlaceFrom" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlaceTo" Type="nvarchar" MaxLength="50" />
-          <Property Name="TakeOffTime" Type="time" Precision="7" />
-          <Property Name="LandingTime" Type="time" Precision="7" />
-          <Property Name="FlightTime" Type="time" Precision="7" />
-          <Property Name="Battery1ID" Type="nvarchar" MaxLength="50" />
-          <Property Name="B1StartingVoltage" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="B1EndingVoltage" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="Battery2ID" Type="nvarchar" MaxLength="50" />
-          <Property Name="B2StartingVoltage" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="B2EndingVoltage" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="MSTR_DroneCheckList">
           <Key>
@@ -576,6 +551,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="LastModifiedBy" Type="int" />
           <Property Name="ApprovedBy" Type="int" />
           <Property Name="UserProfileId" Type="int" />
+          <Property Name="UserAccountId" Type="int" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
           <Property Name="MobileNo" Type="nvarchar" MaxLength="20" />
           <Property Name="OfficeNo" Type="nvarchar" MaxLength="20" />
@@ -634,6 +610,50 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="ModifiedOn" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ExponentPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PayLoadData">
+          <Key>
+            <PropertyRef Name="PayLoadDataID" />
+          </Key>
+          <Property Name="PayLoadDataID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FlightUniqueID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DroneId" Type="nvarchar" MaxLength="50" />
+          <Property Name="RFID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductQrCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="RSSI" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReadTime" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReadCount" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReadFreq" Type="nvarchar" MaxLength="50" />
+          <Property Name="Latitude" Type="nvarchar" MaxLength="50" />
+          <Property Name="Longitude" Type="nvarchar" MaxLength="50" />
+          <Property Name="GPSTime" Type="nvarchar" MaxLength="25" />
+          <Property Name="CreatedTime" Type="datetime" />
+          <Property Name="FlightID" Type="int" />
+          <Property Name="GPSFix" Type="nvarchar" MaxLength="25" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PayLoadMapData">
+          <Key>
+            <PropertyRef Name="PayLoadDataMapID" />
+          </Key>
+          <Property Name="PayLoadDataMapID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FlightUniqueID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DroneId" Type="nvarchar" MaxLength="50" />
+          <Property Name="RFID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductQrCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="RSSI" Type="int" />
+          <Property Name="ReadTime" Type="datetime" />
+          <Property Name="ReadCount" Type="int" />
+          <Property Name="ReadFreq" Type="int" />
+          <Property Name="Latitude" Type="decimal" Precision="18" Scale="9" />
+          <Property Name="Longitude" Type="decimal" Precision="18" Scale="9" />
+          <Property Name="GPSTime" Type="datetime" />
+          <Property Name="CreatedTime" Type="datetime" />
+          <Property Name="FlightID" Type="int" />
+          <Property Name="GPSFix" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="ProductDefinition">
           <Key>
@@ -703,6 +723,16 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Parameter Name="string" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="stringlength" Type="int" Mode="In" />
         </Function>
+        <Function Name="Recover_Dropped_Objects_Proc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Database_Name" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Date_From" Type="datetime" Mode="In" />
+          <Parameter Name="Date_To" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="sp_Recover_Dropped_Objects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Database_Name" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Date_From" Type="datetime" Mode="In" />
+          <Parameter Name="Date_To" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="usp_Portal_CreateDrone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OwnerID" Type="int" Mode="In" />
           <Parameter Name="ManufacturerID" Type="int" Mode="In" />
@@ -736,8 +766,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySet Name="M2M_UserAccount" EntityType="Self.M2M_UserAccount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Account" EntityType="Self.MSTR_Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Drone" EntityType="Self.MSTR_Drone" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MSTR_Drone_TechnicalLog" EntityType="Self.MSTR_Drone_TechnicalLog" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MSTR_Drone_TechnicalLogDetails" EntityType="Self.MSTR_Drone_TechnicalLogDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_DroneCheckList" EntityType="Self.MSTR_DroneCheckList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_DroneCheckListItems" EntityType="Self.MSTR_DroneCheckListItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_DroneService" EntityType="Self.MSTR_DroneService" Schema="dbo" store:Type="Tables" />
@@ -781,6 +809,44 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
     [BlackBoxData].[FlightID] AS [FlightID], 
     [BlackBoxData].[BBFlightID] AS [BBFlightID]
     FROM [dbo].[BlackBoxData] AS [BlackBoxData]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PayLoadData" EntityType="Self.PayLoadData" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PayLoadData].[PayLoadDataID] AS [PayLoadDataID], 
+    [PayLoadData].[FlightUniqueID] AS [FlightUniqueID], 
+    [PayLoadData].[DroneId] AS [DroneId], 
+    [PayLoadData].[RFID] AS [RFID], 
+    [PayLoadData].[ProductQrCode] AS [ProductQrCode], 
+    [PayLoadData].[RSSI] AS [RSSI], 
+    [PayLoadData].[ReadTime] AS [ReadTime], 
+    [PayLoadData].[ReadCount] AS [ReadCount], 
+    [PayLoadData].[ReadFreq] AS [ReadFreq], 
+    [PayLoadData].[Latitude] AS [Latitude], 
+    [PayLoadData].[Longitude] AS [Longitude], 
+    [PayLoadData].[GPSTime] AS [GPSTime], 
+    [PayLoadData].[CreatedTime] AS [CreatedTime], 
+    [PayLoadData].[FlightID] AS [FlightID], 
+    [PayLoadData].[GPSFix] AS [GPSFix]
+    FROM [dbo].[PayLoadData] AS [PayLoadData]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PayLoadMapData" EntityType="Self.PayLoadMapData" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PayLoadMapData].[PayLoadDataMapID] AS [PayLoadDataMapID], 
+    [PayLoadMapData].[FlightUniqueID] AS [FlightUniqueID], 
+    [PayLoadMapData].[DroneId] AS [DroneId], 
+    [PayLoadMapData].[RFID] AS [RFID], 
+    [PayLoadMapData].[ProductQrCode] AS [ProductQrCode], 
+    [PayLoadMapData].[RSSI] AS [RSSI], 
+    [PayLoadMapData].[ReadTime] AS [ReadTime], 
+    [PayLoadMapData].[ReadCount] AS [ReadCount], 
+    [PayLoadMapData].[ReadFreq] AS [ReadFreq], 
+    [PayLoadMapData].[Latitude] AS [Latitude], 
+    [PayLoadMapData].[Longitude] AS [Longitude], 
+    [PayLoadMapData].[GPSTime] AS [GPSTime], 
+    [PayLoadMapData].[CreatedTime] AS [CreatedTime], 
+    [PayLoadMapData].[FlightID] AS [FlightID], 
+    [PayLoadMapData].[GPSFix] AS [GPSFix]
+    FROM [dbo].[PayLoadMapData] AS [PayLoadMapData]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
             <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
@@ -1160,12 +1226,22 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySet Name="MSTR_User_Pilot" EntityType="ExponentPortalModel.MSTR_User_Pilot" />
           <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="ExponentPortalModel.MSTR_User_Pilot_Certification" />
           <EntitySet Name="MSTR_User_Pilot_ExponentUAS" EntityType="ExponentPortalModel.MSTR_User_Pilot_ExponentUAS" />
-          <EntitySet Name="MSTR_Drone_TechnicalLog" EntityType="ExponentPortalModel.MSTR_Drone_TechnicalLog" />
-          <EntitySet Name="MSTR_Drone_TechnicalLogDetails" EntityType="ExponentPortalModel.MSTR_Drone_TechnicalLogDetails" />
           <EntitySet Name="MSTR_Pilot_Log" EntityType="ExponentPortalModel.MSTR_Pilot_Log" />
           <EntitySet Name="DroneFlights" EntityType="ExponentPortalModel.DroneFlight" />
           <EntitySet Name="MSTR_Account" EntityType="ExponentPortalModel.MSTR_Account" />
           <EntitySet Name="MSTR_User" EntityType="ExponentPortalModel.MSTR_User" />
+          <EntitySet Name="PayLoadDatas" EntityType="ExponentPortalModel.PayLoadData" />
+          <EntitySet Name="PayLoadMapDatas" EntityType="ExponentPortalModel.PayLoadMapData" />
+          <FunctionImport Name="Recover_Dropped_Objects_Proc">
+            <Parameter Name="Database_Name" Mode="In" Type="String" />
+            <Parameter Name="Date_From" Mode="In" Type="DateTime" />
+            <Parameter Name="Date_To" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Recover_Dropped_Objects">
+            <Parameter Name="Database_Name" Mode="In" Type="String" />
+            <Parameter Name="Date_From" Mode="In" Type="DateTime" />
+            <Parameter Name="Date_To" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -1428,31 +1504,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="MSTR_Drone_TechnicalLog">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Date" Type="DateTime" Precision="0" />
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" />
-        </EntityType>
-        <EntityType Name="MSTR_Drone_TechnicalLogDetails">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="PlaceFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlaceTo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TakeOffTime" Type="Time" Precision="7" />
-          <Property Name="LandingTime" Type="Time" Precision="7" />
-          <Property Name="FlightTime" Type="Time" Precision="7" />
-          <Property Name="Battery1ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="B1StartingVoltage" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="B1EndingVoltage" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="Battery2ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="B2StartingVoltage" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="B2EndingVoltage" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-        </EntityType>
         <EntityType Name="MSTR_Pilot_Log">
           <Key>
             <PropertyRef Name="Id" />
@@ -1495,11 +1546,11 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="LogBattery2ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LogBattery2StartV" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="LogBattery2EndV" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="isLogged" Type="Byte" />
           <Property Name="LogDateTime" Type="DateTime" Precision="3" />
           <Property Name="LogCreatedBy" Type="Int32" />
           <Property Name="Descrepency" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="ActionTaken" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsLogged" Type="Byte" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -1526,7 +1577,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CountryCode" Type="Int32" />
           <Property Name="BrandLogo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="BrandColor" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="BrandColor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ContactName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ContactTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
@@ -1560,6 +1611,47 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="PasswordSalt" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AccountId" Type="Int32" />
           <Property Name="IsPilot" Type="Boolean" />
+          <Property Name="UserAccountId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PayLoadData">
+          <Key>
+            <PropertyRef Name="PayLoadDataID" />
+          </Key>
+          <Property Name="PayLoadDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FlightUniqueID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DroneId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReadTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReadCount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReadFreq" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GPSTime" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="GPSFix" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PayLoadMapData">
+          <Key>
+            <PropertyRef Name="PayLoadDataMapID" />
+          </Key>
+          <Property Name="PayLoadDataMapID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FlightUniqueID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DroneId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RSSI" Type="Int32" />
+          <Property Name="ReadTime" Type="DateTime" Precision="3" />
+          <Property Name="ReadCount" Type="Int32" />
+          <Property Name="ReadFreq" Type="Int32" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="9" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="9" />
+          <Property Name="GPSTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="GPSFix" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2184,33 +2276,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MSTR_Drone_TechnicalLog">
-            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone_TechnicalLog">
-              <MappingFragment StoreEntitySet="MSTR_Drone_TechnicalLog">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MSTR_Drone_TechnicalLogDetails">
-            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone_TechnicalLogDetails">
-              <MappingFragment StoreEntitySet="MSTR_Drone_TechnicalLogDetails">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="B2EndingVoltage" ColumnName="B2EndingVoltage" />
-                <ScalarProperty Name="B2StartingVoltage" ColumnName="B2StartingVoltage" />
-                <ScalarProperty Name="Battery2ID" ColumnName="Battery2ID" />
-                <ScalarProperty Name="B1EndingVoltage" ColumnName="B1EndingVoltage" />
-                <ScalarProperty Name="B1StartingVoltage" ColumnName="B1StartingVoltage" />
-                <ScalarProperty Name="Battery1ID" ColumnName="Battery1ID" />
-                <ScalarProperty Name="FlightTime" ColumnName="FlightTime" />
-                <ScalarProperty Name="LandingTime" ColumnName="LandingTime" />
-                <ScalarProperty Name="TakeOffTime" ColumnName="TakeOffTime" />
-                <ScalarProperty Name="PlaceTo" ColumnName="PlaceTo" />
-                <ScalarProperty Name="PlaceFrom" ColumnName="PlaceFrom" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MSTR_Pilot_Log">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Pilot_Log">
               <MappingFragment StoreEntitySet="MSTR_Pilot_Log">
@@ -2233,11 +2298,11 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="IsLogged" ColumnName="IsLogged" />
                 <ScalarProperty Name="ActionTaken" ColumnName="ActionTaken" />
                 <ScalarProperty Name="Descrepency" ColumnName="Descrepency" />
                 <ScalarProperty Name="LogCreatedBy" ColumnName="LogCreatedBy" />
                 <ScalarProperty Name="LogDateTime" ColumnName="LogDateTime" />
-                <ScalarProperty Name="isLogged" ColumnName="isLogged" />
                 <ScalarProperty Name="LogBattery2EndV" ColumnName="LogBattery2EndV" />
                 <ScalarProperty Name="LogBattery2StartV" ColumnName="LogBattery2StartV" />
                 <ScalarProperty Name="LogBattery2ID" ColumnName="LogBattery2ID" />
@@ -2294,6 +2359,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <EntitySetMapping Name="MSTR_User">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
               <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="UserAccountId" ColumnName="UserAccountId" />
                 <ScalarProperty Name="IsPilot" ColumnName="IsPilot" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
                 <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
@@ -2323,6 +2389,50 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PayLoadDatas">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadData">
+              <MappingFragment StoreEntitySet="PayLoadData">
+                <ScalarProperty Name="GPSFix" ColumnName="GPSFix" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="GPSTime" ColumnName="GPSTime" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="ReadFreq" ColumnName="ReadFreq" />
+                <ScalarProperty Name="ReadCount" ColumnName="ReadCount" />
+                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+                <ScalarProperty Name="RSSI" ColumnName="RSSI" />
+                <ScalarProperty Name="ProductQrCode" ColumnName="ProductQrCode" />
+                <ScalarProperty Name="RFID" ColumnName="RFID" />
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+                <ScalarProperty Name="FlightUniqueID" ColumnName="FlightUniqueID" />
+                <ScalarProperty Name="PayLoadDataID" ColumnName="PayLoadDataID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayLoadMapDatas">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadMapData">
+              <MappingFragment StoreEntitySet="PayLoadMapData">
+                <ScalarProperty Name="GPSFix" ColumnName="GPSFix" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="GPSTime" ColumnName="GPSTime" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="ReadFreq" ColumnName="ReadFreq" />
+                <ScalarProperty Name="ReadCount" ColumnName="ReadCount" />
+                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+                <ScalarProperty Name="RSSI" ColumnName="RSSI" />
+                <ScalarProperty Name="ProductQrCode" ColumnName="ProductQrCode" />
+                <ScalarProperty Name="RFID" ColumnName="RFID" />
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+                <ScalarProperty Name="FlightUniqueID" ColumnName="FlightUniqueID" />
+                <ScalarProperty Name="PayLoadDataMapID" ColumnName="PayLoadDataMapID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Recover_Dropped_Objects_Proc" FunctionName="ExponentPortalModel.Store.Recover_Dropped_Objects_Proc" />
+          <FunctionImportMapping FunctionImportName="sp_Recover_Dropped_Objects" FunctionName="ExponentPortalModel.Store.sp_Recover_Dropped_Objects" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

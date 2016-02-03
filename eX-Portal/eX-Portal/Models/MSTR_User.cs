@@ -40,5 +40,6 @@ namespace eX_Portal.Models
         public string PasswordSalt { get; set; }
         public Nullable<int> AccountId { get; set; }
         public Nullable<bool> IsPilot { get; set; }
+        public Nullable<int> UserAccountId { get; set; }
     }
 }
