@@ -189,6 +189,7 @@ namespace eX_Portal.exLogic {
 
       return FlightMapDataList; //return the list objects
     }//function GetDropDowntList
+
         public static IList<FlightMapData> GetFlightChartData(int FlID, int LastFlightID=0, int MaxRecords = 0)
         {
 
@@ -224,5 +225,21 @@ namespace eX_Portal.exLogic {
       DateTime tempDate;
       return DateTime.TryParse(Timestamp, out tempDate) ? true : false;
     }
-  }
+        public static IList<PayLoadMapData> GetPayLoadData(string FlID, int LastFlightID, int MaxRecords = 1)
+        {
+
+             IList<PayLoadMapData> PayLoadMapDataList;
+            using (ExponentPortalEntities ctx = new ExponentPortalEntities())
+            {
+                PayLoadMapDataList = (from PayLoadMapData in ctx.PayLoadMapDatas
+                                      where PayLoadMapData.FlightUniqueID == FlID &&
+                                           PayLoadMapData.PayLoadDataMapID > LastFlightID
+                                     select PayLoadMapData).OrderBy(x => x.RFID).Take(MaxRecords).ToList();
+
+            }
+
+
+            return PayLoadMapDataList; //return the list objects
+        }//function GetDropDowntList
+    }
 }

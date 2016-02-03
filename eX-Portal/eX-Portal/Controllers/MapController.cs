@@ -28,8 +28,14 @@ namespace eX_Portal.Controllers {
             ViewBag.FlightID = id;
             return View();
     }
-        
-    [System.Web.Mvc.HttpGet]
+
+        public ActionResult PayLoadDataView(string id = "")
+        {
+            ViewBag.FlightUniqueID = id;
+            return View();
+        }
+
+        [System.Web.Mvc.HttpGet]
     public JsonResult GetDrones() {
       string SQL =
       "SELECT\n" +
@@ -196,5 +202,19 @@ namespace eX_Portal.Controllers {
                 return View(nView);
             }//if(IsAjaxRequest)
         }
+
+        [System.Web.Mvc.HttpGet]
+        public JsonResult GetPayLoadData(string FlightUniqueID = "", int LastFlightDataID = 0, int MaxRecords = 1)
+        {
+
+            ViewBag.FlightUniqueID = FlightUniqueID;
+            IList<PayLoadMapData> PayLoadDataList = Util.GetPayLoadData(FlightUniqueID, LastFlightDataID, MaxRecords);
+            //  LiveDrones.SQL = ;
+            //string JsonData=Json(LiveDrones)
+            // return Json(JsonData);
+            return Json(PayLoadDataList, JsonRequestBehavior.AllowGet);
+            // return LiveDrones;
+        }
+
     }
 }
