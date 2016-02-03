@@ -198,7 +198,7 @@ namespace eX_Portal.exLogic {
               if (i > 0) Columns.AppendLine(",");
               Columns.Append("\"" + reader.GetName(i) + "\"");
               Columns.Append(" : ");
-              Columns.Append("\"" + DisplayValue + "\"");
+              Columns.Append("\"" + Util.toSQL(DisplayValue) + "\"");
             }
             Row.Append("{");
             Row.Append(Columns);

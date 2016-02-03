@@ -189,7 +189,9 @@ namespace eX_Portal.exLogic {
       String sVal = FieldValue;
       sVal = sVal.Replace("\\", "\\\\");
       sVal = sVal.Replace("'", "\\'");
-      return sVal;
+            sVal = sVal.Replace("\n", "\\n");
+            sVal = sVal.Replace("\r", "\\r");
+            return sVal;
     }
 
     public static IEnumerable<SelectListItem> GetDropDowntList(String TypeOfList) {
