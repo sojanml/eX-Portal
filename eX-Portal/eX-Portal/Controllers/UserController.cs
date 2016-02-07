@@ -145,7 +145,7 @@ namespace eX_Portal.Controllers {
     }
         public ActionResult PilotList()
         {
-            if (!exLogic.User.hasAccess("USER.VIEW")) return RedirectToAction("NoAccess", "Home");
+            if (!exLogic.User.hasAccess("PILOT")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "User View";
             string SQL = "select a.UserName,a.FirstName,a.MobileNo,b.ProfileName, Count(*) Over() as _TotalRecords ,  a.UserId as _PKey " +
                 " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId where a.ispilot=1 ";
