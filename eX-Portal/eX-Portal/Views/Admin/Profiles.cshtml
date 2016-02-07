@@ -1,0 +1,26 @@
+﻿
+@{Html.RenderAction("ProfileMenuGen", new { ProfileID = ViewBag.ProfileID, ParentID = 0 });}
+@section Scripts {
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('li.profile_menu_row').on("click", function (e) {
+      var theObj = $(this);
+      var isChecked = $(this).hasClass("on");
+      var MenuID = $(this).attr("data-menuid");
+      var URL = '@Url.Action("ProfileSet", "Admin")?ProfileID=@ViewBag.ProfileID&MenuID=' + MenuID;
+      theObj.find("span.progress").css({ display: 'inline-block' });
+      $.get(URL, function (NewOption) {
+        theObj.find("span.progress").css({ display: 'none' });
+        if (NewOption == "on") {
+          theObj.removeClass("off");
+          theObj.addClass("on");
+        } else {
+          theObj.removeClass("on");
+          theObj.addClass("off");
+        }
+      });
+    });
+  });
+
+</script>
+}

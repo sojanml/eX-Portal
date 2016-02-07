@@ -1,0 +1,14 @@
+﻿@model List<Dictionary<String, Object>>
+@{
+    ViewBag.Title = "Profile Menu";
+}
+
+<ul>
+@foreach(var Row in Model) {
+<li>
+<a href="@Url.Action("Profiles", "Admin", new {ID= Row["ProfileId"]})">@Row["ProfileName"]</a></li>
+}
+
+</ul>
+
+

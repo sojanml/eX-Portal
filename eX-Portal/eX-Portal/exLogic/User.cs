@@ -14,7 +14,7 @@ namespace eX_Portal.exLogic {
     public static bool hasAccess(String PermissionID) {
       HttpSessionState Session = HttpContext.Current.Session;
       int UserID = 0;
-      if(Session["UserID"] != null) Int32.TryParse(Session["UserID"].ToString(), out UserID);
+      if (Session["UserID"] != null) Int32.TryParse(Session["UserID"].ToString(), out UserID);
       String SQL =
       "select\n" +
       "  Count(MSTR_Menu.MenuID) as PermissionCount\n" +
@@ -43,7 +43,7 @@ namespace eX_Portal.exLogic {
         "  DroneID=" + DroneID + " AND\n" +
         "  AccountID=" + Util.getAccountID();
       int Count = Util.getDBInt(SQL);
-      if (Count > 0 )  return true;
+      if (Count > 0) return true;
       return false;
 
     }
@@ -51,13 +51,34 @@ namespace eX_Portal.exLogic {
     public static int UserValidation(String UserName, String Password) {
 
 
-                string PasswordCrypto = Util.GetEncryptedPassword(Password);
-                int result = 0;
+      string PasswordCrypto = Util.GetEncryptedPassword(Password);
+      int result = 0;
+      using (var ctx = new ExponentPortalEntities()) {
+        var _objuserdetail = (from data in ctx.MSTR_User
+                              where data.UserName == UserName
+                              && data.Password == PasswordCrypto
+
+                              select data);
+
+        result = _objuserdetail.Count();
+      }
+
+      return result;
+
+
+    }
+
+
+
+    public static int UserExist(String UserName) {
+      try {
+
+        int result = 0;
         using (var ctx = new ExponentPortalEntities()) {
           var _objuserdetail = (from data in ctx.MSTR_User
                                 where data.UserName == UserName
-                                && data.Password == PasswordCrypto
-                              
+
+
                                 select data);
 
           result = _objuserdetail.Count();
@@ -65,40 +86,14 @@ namespace eX_Portal.exLogic {
 
         return result;
 
-
+      } catch (Exception ex) {
+        Util.ErrorHandler(ex);
+        System.Web.HttpContext.Current.Response.Write("<script>alert('Please Check Database Connection');</script>");
+        return -1;
+      }
     }
 
-
-
-        public static int UserExist(String UserName)
-        {
-            try
-            {
-               
-                int result = 0;
-                using (var ctx = new ExponentPortalEntities())
-                {
-                    var _objuserdetail = (from data in ctx.MSTR_User
-                                          where data.UserName == UserName
-                                         
-
-                                          select data);
-
-                    result = _objuserdetail.Count();
-                }
-
-                return result;
-
-            }
-            catch (Exception ex)
-            {
-                Util.ErrorHandler(ex);
-                System.Web.HttpContext.Current.Response.Write("<script>alert('Please Check Database Connection');</script>");
-                return -1;
-            }
-        }
-
-        public static int GetUserId(String UserName) {
+    public static int GetUserId(String UserName) {
       int result = 0;
       using (var ctx = new ExponentPortalEntities()) {
         String SQL = "select UserId from MSTR_User" +
@@ -148,8 +143,6 @@ namespace eX_Portal.exLogic {
       if (thisUser.BrandLogo == "") thisUser.BrandLogo = "exponent-logo.png";
       return thisUser;
     }
-
-
 
 
     public static IList<MenuModel> BuildMenu() {
