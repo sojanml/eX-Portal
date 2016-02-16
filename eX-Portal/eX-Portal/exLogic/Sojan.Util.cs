@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using System.Globalization;
 using System.IO;
 using System.Web.SessionState;
+using System.Text;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
@@ -156,6 +157,44 @@ namespace eX_Portal.exLogic {
       return Result;
     }//function
 
+    public static String getDBRowsJson(String SQL) {
+      StringBuilder SB = new StringBuilder();
+      StringBuilder sRow = new StringBuilder();
+      List<Dictionary<String, Object>> Rows = getDBRows(SQL);
+      foreach(var Row in Rows) {
+        if (SB.Length > 0) SB.AppendLine(",");
+        sRow.Clear();
+        foreach (var Key in Row.Keys) {
+          if (sRow.Length > 0) sRow.AppendLine(",");
+          sRow.Append("\"");
+          sRow.Append(Key);
+          sRow.Append("\":");
+          if(!IsNumber(Row[Key])) sRow.Append("\"");
+          sRow.Append(Row[Key]);
+          if (!IsNumber(Row[Key])) sRow.Append("\"");
+        }
+        SB.Append("{");
+        SB.Append(sRow);
+        SB.AppendLine("}");
+      }
+      return SB.ToString();
+
+    }
+
+
+    public static bool IsNumber(object value) {
+      return value is sbyte
+              || value is byte
+              || value is short
+              || value is ushort
+              || value is int
+              || value is uint
+              || value is long
+              || value is ulong
+              || value is float
+              || value is double
+              || value is decimal;
+    }
 
     public static List<Dictionary<String, Object>> getDBRows(String SQL) {      
       var Rows = new List<Dictionary<String, Object>>();

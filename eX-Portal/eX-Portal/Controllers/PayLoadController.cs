@@ -10,31 +10,22 @@ namespace eX_Portal.Controllers {
     // GET: PayLoad
     public ActionResult Index() {
       ViewBag.Title = "PayLoad Flights";
-
-      String SQL = "SELECT  FlightUniqueID,COUNT(*) as RFIDCount,\n" +
-      " Convert(nvarchar(10), ReadTime, 110) as ReadDate,\n" +
-      " Count(*) Over() as _TotalRecords,\n" +
-      " FlightUniqueID as _PKey\n" +
-      " FROM [PayLoadMapData]\n" +
-      " group by \n" +
-      " FlightUniqueID,Convert(nvarchar(10), ReadTime, 110)";
-
-      //",[RFIDCount]\n" +
-      //",[CreatedTime]\n" +
-
-
-      SQL = "SELECT\n" +
-          "  PayLoadFlightID, \n" +
-          "  FlightUniqueID,\n" +
-          "[RFIDCount],\n" +
-          "[CreatedTime],\n" +
-          "  Count(*) Over() as _TotalRecords,\n" +
-          "  FlightUniqueID as _PKey\n" +
-          "FROM\n" +
-          "  PayLoadFlight";
-
+      String SQL =
+      @"SELECT
+        PayLoadFlightID, 
+        FlightUniqueID,
+        PayLoadYard.YardName,
+        [RFIDCount],
+        [CreatedTime],
+        Count(*) Over() as _TotalRecords,
+        FlightUniqueID as _PKey
+      FROM
+        PayLoadFlight
+      LEFT JOIN PayLoadYard ON
+        PayLoadYard.YardID = PayLoadFlight.YardID";
+      
       qView nView = new qView(SQL);
-      nView.addMenu("PayLoad Data", Url.Action("PayLoadDataView", "Map", new { ID = "_PKey" }));
+      nView.addMenu("PayLoad Data", Url.Action("PayLoad", "Map", new { ID = "_PKey" }));
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -44,6 +35,6 @@ namespace eX_Portal.Controllers {
       }//if(IsAjaxRequest)
 
 
-    }
-  }
-}
+    }//ActionResult Index()
+  }//class PayLoadController
+}//namespace eX_Portal.Controllers
