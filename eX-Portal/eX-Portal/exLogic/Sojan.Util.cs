@@ -165,17 +165,17 @@ namespace eX_Portal.exLogic {
         if (SB.Length > 0) SB.AppendLine(",");
         sRow.Clear();
         foreach (var Key in Row.Keys) {
-          if (sRow.Length > 0) sRow.AppendLine(",");
+          if (sRow.Length > 0) sRow.Append(", ");
           sRow.Append("\"");
           sRow.Append(Key);
-          sRow.Append("\":");
+          sRow.Append("\": ");
           if(!IsNumber(Row[Key])) sRow.Append("\"");
           sRow.Append(Row[Key]);
           if (!IsNumber(Row[Key])) sRow.Append("\"");
         }
         SB.Append("{");
         SB.Append(sRow);
-        SB.AppendLine("}");
+        SB.Append("}");
       }
       return SB.ToString();
 

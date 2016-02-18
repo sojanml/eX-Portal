@@ -1,423 +1,402 @@
-﻿var MaxRecords = 2000;
-var map;
+﻿var map;
 var _Location = [];
-var PlotTimer = null;
-var PlotTimerDelay = 100;
-var isReplayMode = false;
-var mytimer = null;
-
-var initLat = 24.9899106;
-var initLng = 55.0034188;
-var defaultZoom = 18;
-var gpsGrpID;
-var timezone;
-var clientID;
-var programName;
-
 var livemarkers = [];
-var datemarkers = [];
-var secureDateMarker = [];
-var historymarkers = [];
-var allHistorymarkers = [];
-var InfoMarker = null;
-var trafficLayer = new google.maps.TrafficLayer();
-var contentString;
-var browser = false;
-var enableRefreshIntervalID;
-var pickupStatus = false;
-var truckStatus = false;
-var geocoder;
-var LastPayLoadDataID = 0;
-var INTERVAL = 100;
-var poly;
-var TimerValue = 0;
-var LastDatas = [];
-var i = 0;
-var myInterval;
-var myLatLong = [];
-var MyLastLatLong = null;
-var MyLastMarker = null;
-var service = new google.maps.DirectionsService();
-var path = new google.maps.MVCArray();
+
+var ColorNormal = '#AA3939';
+var ColorHilite = '#CC0000';
+var ColorActive = '#00FF00';
+var ColorActiveHilite = '#0000FF';
+
+var initLat = GridBoundBox["TopLeftLat"];
+var initLng = GridBoundBox["TopLeftLon"];
+var defaultZoom = 10;
 var bounds = new google.maps.LatLngBounds();
 var infowindow = new google.maps.InfoWindow();
-var aData = [];
-var aLabels = [];
-var aDatasets1 = [];
-var aDatasets2 = [];
-var aDatasets3 = [];
-var aDatasets4 = [];
-var aDatasets5 = [];
-var data = [];
-var lineChart = null;
-var ldata = [];
+var ProductGrid = new Object();
 
-var isGraphReplayMode = false;
+function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
+  //alert('Start at: ' + iStart);
+  //deleteMarkers();
+  //setMarker(map, aData)
+  setGridHilite(aData);
+}
 
+function setGridHilite(aData) {
+  for (var r = 0; r < Grid.length; r++) {
+    for (var c = 0; c < Grid[r].length; c++) {
+      var refID = r + "_" + c;
+      if (ProductGrid[refID]) ProductGrid[refID].setOptions({ fillColor: ColorNormal })
+    }
+  }
+  for (var d = 0; d < aData.length; d++) {
+    var refID = aData[d]['Row'] + "_" + aData[d]['Col'];
+    if(ProductGrid[refID]) ProductGrid[refID].setOptions({ fillColor: ColorActive })
+  }
+  map.fitBounds(bounds);
+
+}
 
 $(document).ready(function () {
-
-    initialize();
+  initialize();
+  setGridBox();
+  drawGridLines(GridLinesRows);
+  drawGridLines(GridLinesCols);
+  drawLabels();
+  drawProducts();
 });
 
-function initialize() {
-    geocoder = new google.maps.Geocoder();
 
-    var mapOptions = {
-        zoom: defaultZoom,
-        center: new google.maps.LatLng(initLat, initLng),
-        panControl: false,
-        mapTypeControl: true,
-        mapTypeControlOptions: {
-            position: google.maps.ControlPosition.RIGHT_TOP,
-        },
-        zoomControl: true,
-        zoomControlOptions: {
-            style: google.maps.ZoomControlStyle.LARGE,
-            position: google.maps.ControlPosition.LEFT_TOP,
-        },
-        scaleControl: false,
-        streetViewControl: true,
-        overviewMapControl: false,
+function setGridBox() {
+  var BoxCoords = [
+    { lat: GridBoundBox["TopLeftLat"], lng: GridBoundBox["TopLeftLon"] },
+    { lat: GridBoundBox["TopRightLat"], lng: GridBoundBox["TopRightLon"] },
+    { lat: GridBoundBox["BottomRightLat"], lng: GridBoundBox["BottomRightLon"] },
+    { lat: GridBoundBox["BottomLeftLat"], lng: GridBoundBox["BottomLeftLon"] }
+  ];
+  // Construct the polygon.
+  var theBox = new google.maps.Polygon({
+    paths: BoxCoords,
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.7,
+    strokeWeight: 1,
+    fillColor: '#FF0000',
+    fillOpacity: 0.03
+  });
+  theBox.setMap(map);
+}
 
-        mapTypeId: google.maps.MapTypeId.HYBRID
-    };
-    map = new google.maps.Map(document.getElementById('map_canvas'),
-        mapOptions);
+function drawGridLines(GridLines) {
 
-    poly = new google.maps.Polyline({
-        strokeColor: '#000000',
-        strokeOpacity: 1.0,
-        strokeWeight: 3
+  for (var i = 0; i < GridLines.length; i++) {
+    var Color = '#000000';
+    var lineCoordinates = [
+      new google.maps.LatLng(GridLines[i]["sLat"], GridLines[i]["sLon"]),
+      new google.maps.LatLng(GridLines[i]["eLat"], GridLines[i]["eLon"])
+    ];
+
+    //Draw Rows and Columns
+    var line = new google.maps.Polyline({
+      path: lineCoordinates,
+      geodesic: true,
+      strokeColor: Color,
+      strokeOpacity: 0.4,
+      strokeWeight: 1
     });
-    poly.setMap(map);
-    var loctr = '<thead><tr><th>RFID</th><th>RSSI</th>'
-                + '<th>ReadTime</th><th>Latitude</th>'
-                + '<th>Longitude</th><th>GPSFix</th>'
-                + '<th>ReadCount</th><th>ReadFrequency</th>'
-                + '</tr></thead>';
-    var firsttr = '<tr style="display:none"><td></td><td></td>'
-               + '<td></td><td></td>'
-               + '<td></td><td></td>'
-               + '<td></td><td></td>'
-               +'</tr>';
-    $('#MapData table').append(loctr);
-    $('#MapData table').append(firsttr);
-    $('#MapData table').addClass('report');
-   
-    GetPayLoadData();
-}
+    line.setMap(map);
 
-function GetPayLoadData() {
-    var _locVal = [];
-    $.ajax({
-        type: "GET",
-        url: MapDataURL + "&LastFlightDataID=" + LastPayLoadDataID + '&MaxRecords=' + MaxRecords,
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        async: true,
-        success: function (msg) {
-            //   try {
-
-            msg = msg.hasOwnProperty('d') ? msg.d : msg;
-            $.each(msg, function (index, obj) {
-                _Location.push(obj);
-                LastPayLoadDataID = obj['PayLoadDataMapID'];
-            });
-
-
-            if (isReplayMode) {
-                plotPoints();
-            } else {
-                directPlotPoints();
-            }
-            //LastDatas = _Location;
-
-            // }
-            //catch (err) {
-            //    alert('Live Drone Position Error' + err);
-            //}
-
-        },
-        failure: function (msg) {
-            alert('Live Drone Position Error' + msg);
-        },
-        complete: function (msg) {
-            if (mytimer) window.clearTimeout(mytimer);
-       //     mytimer = window.setTimeout(GetPayLoadData, 1000);
-        }
-    });
-
-}
-
-function directPlotPoints() {
-    var locationLength = _Location.length;
-    if (locationLength < 1)
-        isGraphReplayMode = true;
-    while (1) {
-        if (_Location.length < 1) break;
-        var thisPoint = _Location.shift();
-
-        setMarker(map, thisPoint);
-      //  thisPoint = SetCurrentValues(thisPoint);
-        SetMapTable(thisPoint);
-
-    }
-   
-
-
-}
-function plotPoints() {
-    if (PlotTimer) window.clearTimeout(PlotTimer);
-    if (_Location.length < 1) return;
-
-    var thisPoint = _Location.shift();
-
-
-    setMarker(map, thisPoint);
-  //  thisPoint = SetCurrentValues(thisPoint);
-    SetMapTable(thisPoint);
-
-    var delay = getDelay(thisPoint);
-    PlotTimer = window.setTimeout(plotPoints, delay);
-
+  }
 }
 
 
-function setMarker(map, loc) {
-   
-    var body = '' +
-           '<b>' + loc['RFID'] + '</b><br>\n' +
-           'Latitude: ' + loc['Latitude'] + '<br>\n' +
-           'Longitude: ' + loc['Longitude'] + '<br>\n';
-           
-    var myLatLng = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
-    var marker = createMarker(map, myLatLng, loc['RFID'], body, i);
-}
 
 
-function createMarker(map, latlng, heading, body, zindex) {
-    if (poly.map == null)
-    {
-        //addLines();
-    }
-    var path = poly.getPath();
+function drawLabels() {
+  //Set Row and Column Label
+  var bounds = new google.maps.LatLngBounds();
 
-  //  path.push(latlng);
-    var image = '/bullet_blue.png';
-    var marker = new google.maps.Marker({
-        position: latlng,
-        map: map,
-        icon: image,
-        title: heading,
-        zIndex: 9999
-    });
-    var myOptions = {
-        content: heading,
-        boxStyle: {
-            textAlign: "center",
-            color: 'red',
-            fontSize: "8pt",
-            width: "auto"
-        },
-        disableAutoPan: true,
-        pixelOffset: new google.maps.Size(-25, 0),
-        position: latlng,
-        closeBoxURL: "",
-        isHidden: false,
-        pane: "mapPane",
-        enableEventPropagation: true
-    };
+  var TL = new google.maps.LatLng(GridBoundBox["TopLeftLat"], GridBoundBox["TopLeftLon"]);
+  var TR = new google.maps.LatLng(GridBoundBox["TopRightLat"], GridBoundBox["TopRightLon"]);
+  var BR = new google.maps.LatLng(GridBoundBox["BottomRightLat"], GridBoundBox["BottomRightLon"]);
+  var BL = new google.maps.LatLng(GridBoundBox["BottomLeftLat"], GridBoundBox["BottomLeftLon"]);
 
-   // var ibLabel = new InfoBox(myOptions);
-    //ibLabel.open(map);
+  bounds.extend(TL);
+  bounds.extend(TR);
+  bounds.extend(BR);
+  bounds.extend(BL);
 
-    marker.addListener('click', function () {
-        var infowindow = new google.maps.InfoWindow({
-            content: body
-        });
-        infowindow.open(map, marker);
-    });
-    if (MyLastMarker != null) {
-        MyLastMarker.setIcon('/bullet_blue.png');
-    }
-    MyLastMarker = marker;
-    map.setCenter(latlng);
-    closeMargin = '120px';
-    livemarkers.push(marker);
-   
+  var BoxCenter = bounds.getCenter();
   
+  
+  var RowCenter = MidPoint(TL, TR);
+  var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, RowCenter);
+  var NextP = getNextPoint(RowCenter, Angle, 0.003);
+  setLabelGrid("Row",  Angle, 0, 0, NextP);
+
+  var RowCenter = MidPoint(BL, BR);
+  var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, RowCenter);
+  var NextP = getNextPoint(RowCenter, Angle, 0.003);
+  setLabelGrid("Row", Angle, 0, 0, NextP);
+
+
+  var RowCenter = MidPoint(TR, BR);
+  var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, RowCenter);
+  var NextP = getNextPoint(RowCenter, Angle, 0.003);
+  setLabelGrid("Column",  Angle, 0, 0, NextP);
+
+  var RowCenter = MidPoint(TL, BL);
+  var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, RowCenter);
+  var NextP = getNextPoint(RowCenter, Angle, 0.003);
+  setLabelGrid("Column",  Angle, 0, 0, NextP);
+
+
+  for (var r = 0; r < Grid.length; r++) {
+    var Col = Grid[r][0];
+    var GPS = Col['grid'];
+    var Point = MidPoint(
+      new google.maps.LatLng(GPS[0][0], GPS[0][1]),
+      new google.maps.LatLng(GPS[3][0], GPS[3][1])
+    );
+    var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, Point);
+    var NextP = getNextPoint(Point, Angle, 0.001);
+    setLabelGrid(r + 1, 0, 0, 0, NextP);
+  }
+
+
+  for (var c = 0; c < Grid[0].length; c++) {
+    var Col = Grid[0][c];
+    var GPS = Col['grid'];
+    var Point = MidPoint(
+      new google.maps.LatLng(GPS[0][0], GPS[0][1]),
+      new google.maps.LatLng(GPS[1][0], GPS[1][1])
+    );
+    var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, Point);
+    var NextP = getNextPoint(Point, Angle, 0.001);
+    setLabelGrid(c + 1, 0, 0, 0, NextP);
+  }
+
+}
+
+function MidPoint(P1, P2) {
+  return new google.maps.LatLng(
+    (P1.lat() + P2.lat())/2, 
+    (P1.lng() + P2.lng())/2
+  );  
+}
+
+
+function toRad( num) {
+  return num * Math.PI / 180;
+}
+
+function toDeg(num) {
+  return num * 180 / Math.PI;
+}
+
+function getNextPoint(Point, Angle, Distance) {
+
+  var dist = Distance / 6371;
+  var brng = toRad(Angle);
+
+  var lat1 = toRad(Point.lat()), lon1 = toRad(Point.lng());
+
+  var lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist) + 
+                        Math.cos(lat1) * Math.sin(dist) * Math.cos(brng));
+
+  var lon2 = lon1 + Math.atan2(Math.sin(brng) * Math.sin(dist) *
+                                Math.cos(lat1), 
+                                Math.cos(dist) - Math.sin(lat1) *
+                                Math.sin(lat2));
+
+  if (isNaN(lat2) || isNaN(lon2)) return null;
+
+  return new google.maps.LatLng(toDeg(lat2), toDeg(lon2));
+
+}
+
+function setLabelGrid(Caption, Angle, OffsetX, OffsetY, Position) {
+
+  var myOptions = getLabelOptions(Caption, Angle, OffsetX, OffsetY, Position);
+  var ibLabel = new InfoBox(myOptions);
+  ibLabel.open(map);
+}
+
+function getLabelOptions(Caption, Angle, OffsetX, OffsetY, Position) {
+  var myOptions = {
+    content: '<span>' + Caption + '</span>',
+    boxStyle: {
+      textAlign: "center",
+      color: 'black',
+      fontSize: "8pt",
+      width: "auto",
+      transform: "rotate(" + Angle + "deg)"
+    },
+    disableAutoPan: true,
+    pixelOffset: new google.maps.Size(OffsetX, OffsetY),
+    position: Position,
+    closeBoxURL: "",
+    isHidden: false,
+    pane: "mapPane",
+    enableEventPropagation: true
+  };
+
+  return myOptions;
+}
+
+
+function setLabelLine(Caption, GeoTag) {
+  
+  var Angle = google.maps.geometry.spherical.computeHeading(GeoTag[0], GeoTag[1]);
+  var myOptions = getLabelOptions(Caption, Angle, 5,0, GeoTag[0]);
+  var ibLabel = new InfoBox(myOptions);
+  ibLabel.open(map);
+
+}
+
+function drawProducts() {
+  for (var r = 0; r < Grid.length; r++) {
+    for (var c = 0; c < Grid[r].length; c++) {
+      var Col = Grid[r][c];
+      var GPS = Col['grid'];
+      if (Col['items'] > 0) {
+
+        var theBox = [
+          { lat: GPS[0][0], lng: GPS[0][1] },
+          { lat: GPS[1][0], lng: GPS[1][1] },
+          { lat: GPS[3][0], lng: GPS[3][1] },
+          { lat: GPS[2][0], lng: GPS[2][1] }
+        ];
+        // Construct the polygon.
+
+        var refID = r + "_" + c;
+        ProductGrid[refID] = new google.maps.Polygon({
+          paths: theBox,
+          strokeColor: ColorNormal,
+          strokeOpacity: 0.8,
+          strokeWeight: 0,
+          fillColor: ColorNormal,
+          fillOpacity: 0.5
+        });
+        ProductGrid[refID].setMap(map);
+
+        google.maps.event.addListener(ProductGrid[refID], "mouseover", function () {          
+          if (this.fillColor != ColorActive) {
+            this.setOptions({ fillColor: ColorHilite });
+          } else {
+            this.setOptions({ fillColor: ColorActiveHilite });
+          }
+        });
+
+        google.maps.event.addListener(ProductGrid[refID], "mouseout", function () {
+          if (this.fillColor != ColorActiveHilite) {
+            this.setOptions({ fillColor: ColorNormal });
+          } else {
+            this.setOptions({ fillColor: ColorActive});
+          }
+        });
+        
+      }//if (Col['products'] > 0)
+    }//for(var c = 0)
+  }//for (var r = 0)
+
+}
+
+function initialize() {
+  var Center = new google.maps.LatLng(initLat, initLng);
+  geocoder = new google.maps.Geocoder();
+  var mapOptions = {
+    zoom: defaultZoom,
+    center: Center,
+    panControl: false,
+    mapTypeControl: false,
+    mapTypeControlOptions: {
+      position: google.maps.ControlPosition.RIGHT_TOP,
+    },
+    zoomControl: true,
+    zoomControlOptions: {
+      style: google.maps.ZoomControlStyle.LARGE,
+      position: google.maps.ControlPosition.LEFT_TOP,
+    },
+    scaleControl: false,
+    streetViewControl: true,
+    overviewMapControl: false,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+
+  bounds.extend(Center);
+
+  //GetDrones();
+};
+
+
+function setMarker(map, _Location) {
+  $.each(_Location, function (index, location) {
+    var body = '' +
+        '<b>' + location['RFID'] + '</b><br>\n' +
+        'RSSI: ' + location['RSSI'] + '<br>\n' +
+        location['Latitude'] + ", " + location['Longitude'];
+
+    var myLatLng = new google.maps.LatLng(location['Latitude'], location['Longitude']);
+    var marker = createMarker(map, myLatLng, location['DroneName'], body);
+
+  });
+  map.fitBounds(bounds);
+}
+
+function createMarker(map, latlng, heading, body) {
+  var image = '/images/car-icon.png';
+  var marker = new google.maps.Marker({
+    position: latlng,
+    map: map,
+    icon: image,
+    title: heading
+  });
+
+  var myOptions = {
+    content: heading,
+    boxStyle: {
+      textAlign: "center",
+      color: 'red',
+      fontSize: "8pt",
+      width: "auto"
+    },
+    disableAutoPan: true,
+    pixelOffset: new google.maps.Size(-25, 0),
+    position: latlng,
+    closeBoxURL: "",
+    isHidden: false,
+    pane: "mapPane",
+    enableEventPropagation: true
+  };
+
+  marker.addListener('click', function () {
+    var infowindow = new google.maps.InfoWindow({
+      content: body
+    });
+    infowindow.open(map, marker);
+  });
+
+  bounds.extend(marker.position);
+
+  livemarkers.push(marker);
+  return marker;
 }
 
 function ShowInfo(marker, i) {
-    return function () {
-        infowindow.open(map, marker);
-    }
+  return function () {
+    infowindow.open(map, marker);
+  }
+}
+
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  for (var i = 0; i < livemarkers.length; i++) {
+    livemarkers[i].setMap(map);
+  }
 }
 
 
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setMapOnAll(map);
+}
+
+// Deletes all markers in the array by removing references to them.
 function deleteMarkers() {
-    clearMarkers(null);
-    livemarkers = [];
+  clearMarkers();
+  livemarkers = [];
 }
 
-function getDelay(TheObj) {
-    if (TheObj == null) return PlotTimerDelay;
-    if (isReplayMode) {
-        var delay = TheObj['Speed'] * 5000;
-        if (delay < PlotTimerDelay) delay = PlotTimerDelay;
-        return delay;
-    } else {
-        return PlotTimerDelay
-    }
-}
-
-
-
-
-function Replay() {
-    //mytimer = null;
-    _Location = [];
-    if (PlotTimer) window.clearTimeout(PlotTimer);
-    PlotTimer = null;
-    isReplayMode = true;
-    MaxRecords = 20;
-
-    clearTimeout(mytimer);
-    MyLastLatLong = null;
-    MyLastMarker = null;
-    myLatLong = null;
-    LastDroneDataID = 0;
-    deleteMarkers();
-    removeLines();
-    GetPayLoadData();
- //   ClearChartValues();
-   // GetChartData();
-    //lineChart.initialize(data);
-
-
-    // addLines();
-}
-function addLines() {
-    path = new google.maps.MVCArray();
-    poly.setPath(path);
-    poly.setMap(map);
-}
-
-function clearMarkers(map) {
-    for (var i = 0; i < livemarkers.length; i++) {
-        livemarkers[i].setMap(map);
-    }
-
-}
-function removeLines() {
-    poly.setMap(null);
-    poly.latLngs.clear();
-    // path = [];
-    //    setTimeout()
-    // flightPath.setMap(null);
-}
-
-function SetCurrentValues(_LastValue) {
-    var date;
-
-    $.each(_LastValue, function (key, value) {
-        if (value == null) value = '';
-        switch (key) {
-            case "ReadTime":
-                var iDt = parseInt(_LastValue['ReadTime'].substr(6));
-                var theDate = new Date(iDt);
-                value = fmtDt(theDate);
-                break;
-            case "Distance":
-                value = parseInt(value);
-                if (isNaN(value)) value = 0;
-                break;
-            case "avg_Altitude":
-            case "Min_Altitude":
-            case "Max_Altitude":
-            case "Altitude":
-                value = parseFloat(value);
-                if (isNaN(value)) value = 0;
-                value = value.toFixed(2);
-                break;
-            case "Speed":
-            case "Avg_Speed":
-            case "Min_Speed":
-            case "Max_Speed":
-                value = parseFloat(value);
-                if (isNaN(value)) value = 0;
-                //if (value > 0) value = value / (60 * 60) * 1000;
-                value = value.toFixed(2);
-                break;
-            case "TotalFlightTime":
-                value = parseFloat(value);
-                if (isNaN(value)) value = 0;
-                if (value > 0) value = value / (60 * 60);
-                value = value.toFixed(2);
-                break;
-            case "Heading":
-                value = parseFloat(value);
-                if (isNaN(value)) value = 0;
-                if (value < 0) value = value + 360;
-                value = value.toFixed(2);
-                break;
-
-
-        }
-        _LastValue[key] = value;
-        $('#data_' + key).html(value);
-    });
-
-    MyLastLatLong = new google.maps.LatLng(_LastValue['Latitude'], _LastValue['Longitude']);
-    return _LastValue;
-    // var oCompaniesTable = $('#MapData Table')
-}
-
-function SetMapTable(_LastValue) {
-
-    if (_LastValue != null) {
-        var vdate = new Date( parseInt(_LastValue['ReadTime'].substr(6)));
-        var theDate = fmtDt(vdate);
-        var tRFID = '<td>' + _LastValue['RFID'] + '</td>';
-        var tRSSI = '<td>' + _LastValue['RSSI'] + '</td>';
-        var tDrTime = '<td>' + theDate + '</td>';
-        var tLatitude = '<td>' + _LastValue['Latitude'] + '</td>';
-        var tLongitude = '<td>' + _LastValue['Longitude'] + '</td>';
-        var tGPSFix = '<td>' + _LastValue['GPSFix'] + '</td>';
-        var tReadcount = '<td>' + _LastValue['ReadCount'] + '</td>';
-       
-        var tReadFreq = '<td>' + _LastValue['ReadFreq'] + '</td>';
-     
-        var tTotFlightTimeData = '';// '<td>' + _LastValue['TotalFlightTime'] + '</td>';
-        var loctr = '<tr>' + tRFID + tRSSI + tDrTime + tLatitude + tLongitude + tGPSFix + tReadcount + tReadFreq + '</tr>';
-        $('#MapData table > tbody > tr:first').after(loctr);
-        /*
-        
-        if ($("#MapData > table > tbody > tr").length > 20)
-            $('#MapData > table > tbody > tr:last').remove();*/
-    }
-
-    //get the last item
-    $('#map-info').html(
-      theDate + ', ' +
-      'Lat: ' + _LastValue['Latitude'] + ', Lon: ' + _LastValue['Longitude']);
-}
-
-function fmtDt(date) {
-    if (date instanceof Date) {
-
-    } else {
-        return 'Invalid';
-    }
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    //var ampm = hours >= 12 ? 'pm' : 'am';
-    //hours = hours % 12;
-    //hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    var strTime = hours + ':' + minutes + ':' + date.getSeconds();
-    var strDate = date.getDate() + "-" + Months[date.getMonth()] + "-" + date.getFullYear();
-    return strDate + " " + strTime;
+function getRandomColor() {
+  var letters = '0123456789ABCDEF'.split('');
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }

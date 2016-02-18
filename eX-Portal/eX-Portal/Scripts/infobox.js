@@ -402,7 +402,7 @@ InfoBox.prototype.setBoxStyle_ = function () {
 
     // Fix for iOS disappearing InfoBox problem.
     // See http://stackoverflow.com/questions/9229535/google-maps-markers-disappear-at-certain-zoom-level-only-on-iphone-ipad
-    this.div_.style.WebkitTransform = "translateZ(0)";
+    //this.div_.style.WebkitTransform = "translateZ(0)";
 
     // Fix up opacity style for benefit of MSIE:
     //

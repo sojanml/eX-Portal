@@ -28,12 +28,6 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-    public ActionResult PayLoadDataView(string id = "") {
-      ViewBag.Title = "Payload Data";
-      ViewBag.FlightUniqueID = id;
-      return View();
-    }
-
     public ActionResult PayLoad([Bind(Prefix = "ID")] String FlightUniqueID = "") {
       ViewBag.Title = "Payload Data";
 
@@ -45,6 +39,8 @@ namespace eX_Portal.Controllers {
       "  [ReadCount], \n" +
       "  [Latitude], \n" +
       "  [Longitude],\n" +
+      "  [RowNumber] as [Row], \n" +
+      "  [ColumnNumber] as [Col],\n" +
       "  Count(*) Over() as _TotalRecords,\n" +
       "  [RFID] as _PKey\n" +
       "FROM \n" +
@@ -54,7 +50,7 @@ namespace eX_Portal.Controllers {
 
       qView nView = new qView(SQL);
       nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
-
+      ViewBag.FlightUniqueID = FlightUniqueID;
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";

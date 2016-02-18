@@ -1,6 +1,8 @@
-﻿using System;
+﻿using eX_Portal.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace eX_Portal.exLogic {
@@ -23,6 +25,10 @@ namespace eX_Portal.exLogic {
       _YardID = _pYardID;
     }
 
+    public GeoGrid(String FlightUniqueID) {
+      _YardID = getYardID(FlightUniqueID);
+    }
+
     public int YardID { 
       get {
         return _YardID;
@@ -35,6 +41,11 @@ namespace eX_Portal.exLogic {
     public String getBox() {
       String SQL = "SELECT * FROM PayLoadYard WHERE YardID=" + _YardID;
       return Util.getDBRowsJson(SQL);
+    }
+
+    private int getYardID(String FlightUniqueID) {
+      String SQL = @"SELECT YardID From PayLoadFlight WHERE FlightUniqueID='" + FlightUniqueID + "'";
+      return Util.getDBInt(SQL);
     }
 
     public String getRowLines() {
@@ -83,6 +94,79 @@ namespace eX_Portal.exLogic {
         ORDER BY 
           LeftPoint.ColumnNumber;";
       return Util.getDBRowsJson(SQL);
+    }
+
+    public String getGrid(String FlightUniqueID) {
+      _YardID = getYardID(FlightUniqueID);
+      String SQL = "SELECT MAX(RowNumber) as Rows,  MAX(ColumnNumber) as Cols FROM PayLoadYardGrid WHERE YardID=" + _YardID;
+      var GridSpec = Util.getDBRow(SQL);
+
+      SQL = @"SELECT 
+        PayLoadYardGrid.ColumnNumber ColNum,
+        PayLoadYardGrid.RowNumber as RowNum,
+        Concat(
+        '[', PayLoadYardGrid.[TopLeftLat], ',',PayLoadYardGrid.[TopLeftLon], '],',
+        '[', PayLoadYardGrid.[TopRightLat], ',',  PayLoadYardGrid.[TopRightLon], '],',
+        '[', PayLoadYardGrid.[BottomLeftLat],',', PayLoadYardGrid.[BottomLeftLon], '],',
+        '[', PayLoadYardGrid.[BottomRightLat],',', PayLoadYardGrid.[BottomRightLon], ']'
+        ) as Grid, 
+        (SELECT Count(*) FROM 
+          PayLoadMapData
+        WHERE
+          PayLoadMapData.RowNumber = PayLoadYardGrid.RowNumber and
+          PayLoadMapData.ColumnNumber = PayLoadYardGrid.ColumnNumber and
+          PayLoadMapData.FlightUniqueID = '" + FlightUniqueID + @"'    
+        ) as Products
+      FROM 
+         PayLoadYardGrid 
+      WHERE 
+        PayLoadYardGrid.YardID=" + _YardID + @"
+      ORDER BY
+        RowNum,
+        ColNum";
+
+      StringBuilder Grid = new StringBuilder();
+      StringBuilder GridRow = new StringBuilder(); 
+      int lastRow = -1, Row = 0, ProductCount = 0;
+
+      using (var ctx = new ExponentPortalEntities()) {
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          using (var reader = cmd.ExecuteReader()) {
+            while (reader.Read()) {
+              Row = reader.GetInt32(reader.GetOrdinal("RowNum"));
+              ProductCount = reader.GetInt32(reader.GetOrdinal("Products"));
+              if (Row != lastRow && GridRow.Length > 0) {
+                if (Grid.Length > 0) Grid.AppendLine(",");
+                Grid.Append("[");
+                Grid.Append(GridRow);
+                Grid.Append("]");
+                GridRow.Clear();
+              }
+              if (GridRow.Length > 0) GridRow.Append(",");
+              GridRow.Append("{\"grid\":[");
+              GridRow.Append(reader.GetValue(reader.GetOrdinal("Grid")).ToString());
+              GridRow.Append("], \"items\":");
+              GridRow.Append(ProductCount);
+              GridRow.Append("}");
+              lastRow = Row;
+            }//while
+          }//using reader
+        }//using ctx.Database.Connection.CreateCommand
+      }//using ExponentPortalEntities
+
+      //adding the last row
+      if (Grid.Length > 0) Grid.AppendLine(",");
+      Grid.Append("[");
+      Grid.Append(GridRow);
+      Grid.Append("]");
+      GridRow.Clear();
+
+
+      return Grid.ToString();
+
+
     }
 
     public String getCords() {
