@@ -29,8 +29,10 @@ function setGridHilite(aData) {
     }
   }
   for (var d = 0; d < aData.length; d++) {
-    var refID = aData[d]['Row'] + "_" + aData[d]['Col'];
-    if(ProductGrid[refID]) ProductGrid[refID].setOptions({ fillColor: ColorActive })
+    var R = aData[d]['Row'] - 1; //convert to 0 index
+    var C = aData[d]['Col'] - 1; //convert to 0 index
+    var refID = R + "_" + C;
+    if (ProductGrid[refID]) ProductGrid[refID].setOptions({ fillColor: ColorActive })
   }
   map.fitBounds(bounds);
 
@@ -43,8 +45,26 @@ $(document).ready(function () {
   drawGridLines(GridLinesCols);
   drawLabels();
   drawProducts();
+
+  $('#rfid-auto-correct').on("click", rfid_auto_correct_click);
 });
 
+
+function rfid_auto_correct_click(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  $('#rfid-auto-correct').html('Reading <span class="icon progress">&#xf110;</span>');
+
+  $.ajax({
+    url: rfid_auto_correct_Url,
+    dataType: 'JSON',
+    success: function (data) {
+      Grid = data;
+      top.location.reload();
+    }
+  });
+
+}
 
 function setGridBox() {
   var BoxCoords = [
@@ -83,11 +103,8 @@ function drawGridLines(GridLines) {
       strokeWeight: 1
     });
     line.setMap(map);
-
   }
 }
-
-
 
 
 function drawLabels() {
@@ -105,66 +122,81 @@ function drawLabels() {
   bounds.extend(BL);
 
   var BoxCenter = bounds.getCenter();
-  
-  
+
   var RowCenter = MidPoint(TL, TR);
   var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, RowCenter);
-  var NextP = getNextPoint(RowCenter, Angle, 0.003);
-  setLabelGrid("Row",  Angle, 0, 0, NextP);
+  var NextP = getNextPoint(RowCenter, Angle, 0.002);
+  setLabelGrid("Row", Angle, 0, 0, NextP);
+
 
   var RowCenter = MidPoint(BL, BR);
   var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, RowCenter);
-  var NextP = getNextPoint(RowCenter, Angle, 0.003);
+  var NextP = getNextPoint(RowCenter, Angle, 0.002);
   setLabelGrid("Row", Angle, 0, 0, NextP);
 
 
   var RowCenter = MidPoint(TR, BR);
   var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, RowCenter);
-  var NextP = getNextPoint(RowCenter, Angle, 0.003);
-  setLabelGrid("Column",  Angle, 0, 0, NextP);
+  var NextP = getNextPoint(RowCenter, Angle, 0.002);
+  setLabelGrid("Column", Angle, 0, 0, NextP);
 
   var RowCenter = MidPoint(TL, BL);
   var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, RowCenter);
-  var NextP = getNextPoint(RowCenter, Angle, 0.003);
-  setLabelGrid("Column",  Angle, 0, 0, NextP);
+  var NextP = getNextPoint(RowCenter, Angle, 0.002);
+  setLabelGrid("Column", Angle, 0, 0, NextP);
 
 
   for (var r = 0; r < Grid.length; r++) {
-    var Col = Grid[r][0];
-    var GPS = Col['grid'];
-    var Point = MidPoint(
-      new google.maps.LatLng(GPS[0][0], GPS[0][1]),
-      new google.maps.LatLng(GPS[3][0], GPS[3][1])
+    var LastCol = Grid[r].length - 1;
+    var GPSFirst = Grid[r][0]['grid'];
+    var GPSLast = Grid[r][LastCol]['grid'];
+
+    var FirstPoint = MidPoint(
+      new google.maps.LatLng(GPSFirst[0][0], GPSFirst[0][1]),
+      new google.maps.LatLng(GPSFirst[3][0], GPSFirst[3][1])
     );
-    var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, Point);
-    var NextP = getNextPoint(Point, Angle, 0.001);
+    var LastPoint = MidPoint(
+      new google.maps.LatLng(GPSLast[0][0], GPSLast[0][1]),
+      new google.maps.LatLng(GPSLast[3][0], GPSLast[3][1])
+    );
+
+    var Angle = google.maps.geometry.spherical.computeHeading(LastPoint, FirstPoint);
+    var NextP = getNextPoint(FirstPoint, Angle, 0.001);
     setLabelGrid(r + 1, 0, 0, 0, NextP);
   }
 
 
+  var LastRow = Grid.length - 1;
   for (var c = 0; c < Grid[0].length; c++) {
-    var Col = Grid[0][c];
-    var GPS = Col['grid'];
-    var Point = MidPoint(
-      new google.maps.LatLng(GPS[0][0], GPS[0][1]),
-      new google.maps.LatLng(GPS[1][0], GPS[1][1])
+    var GPSFirst = Grid[0][c]['grid'];
+    var GPSLast = Grid[LastRow][c]['grid'];
+
+    var FirstPoint = MidPoint(
+      new google.maps.LatLng(GPSFirst[1][0], GPSFirst[1][1]),
+      new google.maps.LatLng(GPSFirst[2][0], GPSFirst[2][1])
     );
-    var Angle = google.maps.geometry.spherical.computeHeading(BoxCenter, Point);
-    var NextP = getNextPoint(Point, Angle, 0.001);
+    var LastPoint = MidPoint(
+      new google.maps.LatLng(GPSLast[1][0], GPSLast[1][1]),
+      new google.maps.LatLng(GPSLast[2][0], GPSLast[2][1])
+    );
+
+    var Angle = google.maps.geometry.spherical.computeHeading(LastPoint, FirstPoint);
+    var NextP = getNextPoint(FirstPoint, Angle, 0.002);
     setLabelGrid(c + 1, 0, 0, 0, NextP);
   }
+
 
 }
 
 function MidPoint(P1, P2) {
   return new google.maps.LatLng(
-    (P1.lat() + P2.lat())/2, 
-    (P1.lng() + P2.lng())/2
-  );  
+    (P1.lat() + P2.lat()) / 2,
+    (P1.lng() + P2.lng()) / 2
+  );
 }
 
 
-function toRad( num) {
+function toRad(num) {
   return num * Math.PI / 180;
 }
 
@@ -179,11 +211,11 @@ function getNextPoint(Point, Angle, Distance) {
 
   var lat1 = toRad(Point.lat()), lon1 = toRad(Point.lng());
 
-  var lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist) + 
+  var lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist) +
                         Math.cos(lat1) * Math.sin(dist) * Math.cos(brng));
 
   var lon2 = lon1 + Math.atan2(Math.sin(brng) * Math.sin(dist) *
-                                Math.cos(lat1), 
+                                Math.cos(lat1),
                                 Math.cos(dist) - Math.sin(lat1) *
                                 Math.sin(lat2));
 
@@ -224,9 +256,9 @@ function getLabelOptions(Caption, Angle, OffsetX, OffsetY, Position) {
 
 
 function setLabelLine(Caption, GeoTag) {
-  
+
   var Angle = google.maps.geometry.spherical.computeHeading(GeoTag[0], GeoTag[1]);
-  var myOptions = getLabelOptions(Caption, Angle, 5,0, GeoTag[0]);
+  var myOptions = getLabelOptions(Caption, Angle, 5, 0, GeoTag[0]);
   var ibLabel = new InfoBox(myOptions);
   ibLabel.open(map);
 
@@ -257,28 +289,53 @@ function drawProducts() {
           fillOpacity: 0.5
         });
         ProductGrid[refID].setMap(map);
+        ProductGrid[refID]['Row'] = r;
+        ProductGrid[refID]['Col'] = c;
+        google.maps.event.addListener(ProductGrid[refID], "mouseover", Tile_mouseover);
 
-        google.maps.event.addListener(ProductGrid[refID], "mouseover", function () {          
-          if (this.fillColor != ColorActive) {
-            this.setOptions({ fillColor: ColorHilite });
-          } else {
-            this.setOptions({ fillColor: ColorActiveHilite });
-          }
+        google.maps.event.addListener(ProductGrid[refID], "mouseout", Tile_mouseout);
+        google.maps.event.addListener(ProductGrid[refID], "click", function () {
+          var Obj = this;
+          Tile_Click(Obj);
         });
 
-        google.maps.event.addListener(ProductGrid[refID], "mouseout", function () {
-          if (this.fillColor != ColorActiveHilite) {
-            this.setOptions({ fillColor: ColorNormal });
-          } else {
-            this.setOptions({ fillColor: ColorActive});
-          }
-        });
-        
       }//if (Col['products'] > 0)
     }//for(var c = 0)
   }//for (var r = 0)
 
 }
+
+
+function Tile_mouseover() {
+  if (this.fillColor != ColorActive) {
+    this.setOptions({ fillColor: ColorHilite });
+  } else {
+    this.setOptions({ fillColor: ColorActiveHilite });
+  }
+}
+
+function Tile_mouseout() {
+  if (this.fillColor != ColorActiveHilite) {
+    this.setOptions({ fillColor: ColorNormal });
+  } else {
+    this.setOptions({ fillColor: ColorActive });
+  }
+}
+
+function Tile_Click(Obj) {
+  var row = Obj['Row'] + 1;
+  var col = Obj['Col'] + 1;
+  $('#map-info').html('Row: ' + row + ', Column: ' + col + 
+  ' <span id="map-info-rfid"><span class="icon progress">&#xf110;</span></span>');
+  var nURL = RFID_Url + '&row=' + row + '&Column=' + col;
+  $.ajax({
+    url: nURL,
+    success: function (data) {
+      $('#map-info-rfid').html(" - " + data);
+    }
+  });
+}
+
 
 function initialize() {
   var Center = new google.maps.LatLng(initLat, initLng);

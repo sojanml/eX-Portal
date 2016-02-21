@@ -29,6 +29,7 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult PayLoad([Bind(Prefix = "ID")] String FlightUniqueID = "") {
+      if (!exLogic.User.hasAccess("PAYLOAD.MAP")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Payload Data";
 
       String SQL =
@@ -39,8 +40,8 @@ namespace eX_Portal.Controllers {
       "  [ReadCount], \n" +
       "  [Latitude], \n" +
       "  [Longitude],\n" +
-      "  [RowNumber] as [Row], \n" +
-      "  [ColumnNumber] as [Col],\n" +
+      "  [RowNumber] + 1 as [Row], \n" +
+      "  [ColumnNumber] + 1 as [Col],\n" +
       "  Count(*) Over() as _TotalRecords,\n" +
       "  [RFID] as _PKey\n" +
       "FROM \n" +

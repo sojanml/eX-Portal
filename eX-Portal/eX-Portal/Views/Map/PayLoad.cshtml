@@ -2,7 +2,12 @@
 
 @model eX_Portal.exLogic.qView
 
-<div id="map_canvas" style="width: 100%; height: 480px;"></div>
+<div id="map-holder">
+  <div id="map_canvas" style="width: 100%; height: 480px;"></div>
+  <div id="map-info">Click on a block for information</div>
+</div>
+
+
 <div style="height:20px;">&nbsp;</div>
 
 @Html.Raw(Model.getDataTable())
@@ -17,11 +22,13 @@
   @{
     GeoGrid Info = new GeoGrid(ViewBag.FlightUniqueID.ToString());
   }
+  var RFID_Url = '@Url.Action("getRFID", "PayLoad", new { FlightUniqueID =  ViewBag.FlightUniqueID.ToString()})';
+  var rfid_auto_correct_Url = '@Url.Action("AutoCorrect", "PayLoad", new { FlightUniqueID =  ViewBag.FlightUniqueID.ToString()})';
   var GridBoundBox = @Html.Raw(Info.getBox());
   var GridLinesRows = [
     @Html.Raw(Info.getRowLines())
   ];
-  
+
   var GridLinesCols = [
     @Html.Raw(Info.getColumnLines())
   ];
@@ -34,3 +41,9 @@
 
 
 
+@section header{
+<link href="~/Content/map.css" rel="stylesheet" />
+}
+@section toolbar {
+<a href="#" class="button" id="rfid-auto-correct">Auto Correct</a>
+}

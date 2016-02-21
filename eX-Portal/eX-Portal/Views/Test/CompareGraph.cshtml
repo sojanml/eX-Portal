@@ -44,6 +44,7 @@
       $('.point').on("change", function (e) {
         var obj = $(this);
         var id = parseInt(obj.attr("data-value"), 0);
+        if (!Circles[id]) return;
         if (obj.is(':checked')) {
           Circles[id].setMap(map);
           Lines[id].setMap(map);
@@ -79,27 +80,32 @@
 
         var Color = getRandomColor();
         var Distance = getDistance(BasePoint, EndPoint);
-        Circles[i] = new google.maps.Circle({
-          map: map,
-          radius: Distance,
-          center: BasePoint,
-          fillColor: Color,
-          fillOpacity: 0.5,
-          strokeColor: Color,
-          strokeOpacity: 0.8,
-          strokeWeight: 0
-        });
 
-        var lineCoordinates = [BasePoint, EndPoint];
-        Lines[i] = new google.maps.Polyline({
-          path: lineCoordinates,
-          geodesic: true,
-          strokeColor: '#000000',
-          strokeOpacity: 1,
-          strokeWeight: 1
-        });
-        Lines[i].setMap(map);
+        if (GeoData[i]["cLat"] == 0 && GeoData[i]["cLon"] == 0) {
 
+        } else {
+
+          Circles[i] = new google.maps.Circle({
+            map: map,
+            radius: Distance,
+            center: BasePoint,
+            fillColor: Color,
+            fillOpacity: 0.5,
+            strokeColor: Color,
+            strokeOpacity: 0.8,
+            strokeWeight: 0
+          });
+
+          var lineCoordinates = [BasePoint, EndPoint];
+          Lines[i] = new google.maps.Polyline({
+            path: lineCoordinates,
+            geodesic: true,
+            strokeColor: '#000000',
+            strokeOpacity: 1,
+            strokeWeight: 1
+          });
+          Lines[i].setMap(map);
+        }
         var Row = $('<tr>' +
         '<td><input class="point" data-value="' + i + '" checked type="checkbox" name="check_' + i + '"></td>\n' +
         '<td>' + GeoData[i]["RFID"] + '</td>\n' +

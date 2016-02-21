@@ -96,7 +96,7 @@ namespace eX_Portal.exLogic {
       return Util.getDBRowsJson(SQL);
     }
 
-    public String getGrid(String FlightUniqueID) {
+    public String getGrid(String FlightUniqueID, bool IsReturnJSon = false) {
       _YardID = getYardID(FlightUniqueID);
       String SQL = "SELECT MAX(RowNumber) as Rows,  MAX(ColumnNumber) as Cols FROM PayLoadYardGrid WHERE YardID=" + _YardID;
       var GridSpec = Util.getDBRow(SQL);
@@ -163,7 +163,13 @@ namespace eX_Portal.exLogic {
       Grid.Append("]");
       GridRow.Clear();
 
-
+      if(IsReturnJSon) {
+        StringBuilder JsonGrid = new StringBuilder();
+        JsonGrid.Append("[");
+        JsonGrid.Append(Grid);
+        JsonGrid.Append("]");
+        return JsonGrid.ToString();
+      }
       return Grid.ToString();
 
 

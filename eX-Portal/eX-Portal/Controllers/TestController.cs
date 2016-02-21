@@ -20,10 +20,10 @@ namespace eX_Portal.Controllers {
     public ActionResult CompareGraph(int From = 0, int To = 0) {
       String SQL =
       @"SELECT BasePoint.RFID,
-        BasePoint.Latitude AS bLat,
-        BasePoint.Longitude AS bLon,
-        ComparePoint.Latitude AS cLat,
-        ComparePoint.Longitude AS cLon
+        IsNull(BasePoint.Latitude,0) AS bLat,
+        IsNull(BasePoint.Longitude,0) AS bLon,
+        IsNull(ComparePoint.Latitude,0) AS cLat,
+        IsNull(ComparePoint.Longitude,0) AS cLon
       FROM PayLoadMapData AS BasePoint
       LEFT JOIN PayLoadMapData AS ComparePoint
         ON ComparePoint.RFID = BasePoint.RFID

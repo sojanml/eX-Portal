@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -9,6 +10,7 @@ namespace eX_Portal.Controllers {
   public class PayLoadController : Controller {
     // GET: PayLoad
     public ActionResult Index() {
+      if (!exLogic.User.hasAccess("PAYLOAD.VIEW")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "PayLoad Flights";
       String SQL =
       @"SELECT
@@ -33,8 +35,33 @@ namespace eX_Portal.Controllers {
       } else {
         return View(nView);
       }//if(IsAjaxRequest)
-
-
     }//ActionResult Index()
-  }//class PayLoadController
+
+    public String getRFID(int Row, int Column, String FlightUniqueID) {
+      StringBuilder theRow = new StringBuilder();
+      String SQL = @"SELECT RFID, RSSI FROM PayLoadMapData
+      WHERE
+        FlightUniqueID='" + FlightUniqueID + @"' AND
+        RowNumber=" + (Row - 1) + @" AND
+        ColumnNumber=" + (Column - 1);      
+      var Rows = Util.getDBRows(SQL);
+      foreach(var Record in Rows) {
+        if (theRow.Length > 0) theRow.Append(", ");
+        theRow.Append(Record["RFID"]);
+        theRow.Append(" [");
+        theRow.Append(Record["RSSI"]);
+        theRow.Append("]");
+      }
+      return theRow.ToString();
+    }
+
+    public String AutoCorrect(String FlightUniqueID) {
+      GeoGrid myGrid = new GeoGrid(FlightUniqueID);
+      String SQL = "EXEC usp_PayLoad_AutoCorrectGrid '" + FlightUniqueID + "', " + myGrid.YardID;
+      Util.doSQL(SQL);
+      return myGrid.getGrid(FlightUniqueID, true);
+      //return "OK";
+    }
+
+    }//class PayLoadController
 }//namespace eX_Portal.Controllers
