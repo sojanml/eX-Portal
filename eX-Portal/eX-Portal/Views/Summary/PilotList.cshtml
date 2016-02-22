@@ -1,0 +1,17 @@
+﻿@model IEnumerable<eX_Portal.ViewModel.Summary>
+@{
+    
+    Layout = null;
+}
+
+
+@foreach (var item in Model)
+{
+    <div>
+        Total Number of Pilot: @Html.DisplayFor(Model => item.PilotCount)
+    </div>
+    <div>
+        Exponent Certified Pilot: @Html.DisplayFor(Model => item.Certificatecount)
+    </div>
+
+}
