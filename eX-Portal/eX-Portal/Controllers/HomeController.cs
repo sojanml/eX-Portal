@@ -8,6 +8,7 @@ namespace eX_Portal.Controllers {
   public class HomeController : Controller {
     public ActionResult Index() {
       if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("Index", "User");
+      ViewBag.DashBoard = "Dewa";
       return View();
     }
 

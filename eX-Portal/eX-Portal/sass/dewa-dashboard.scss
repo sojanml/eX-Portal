@@ -1,0 +1,42 @@
+﻿@import "compass";
+
+// first we set the variables:
+$BaseColor: gray;
+$HiliteColor: #2B7624;
+$SparkColor: #ec5879;
+
+div.dash-row {
+  width:100%;
+  div.dash-column {
+    width:50%;
+    float:left; 
+    @include box-sizing(border-box);
+    &.col1 {
+    padding-right: 5px;
+    }
+    &.col2 {
+    padding-left: 5px;
+    }
+  }
+
+  div.content {
+    width:100%;
+    border:1px lighten($SparkColor, 30%) solid;
+    @include box-sizing(border-box);
+    padding: 10px;
+    min-height:300px;
+    max-height:300px;
+    overflow:auto;
+  }
+
+  h2 {
+    color: $SparkColor;
+  }
+  a {
+    color: $HiliteColor;
+    text-decoration: none;
+  }
+
+  @include clearfix();
+
+}

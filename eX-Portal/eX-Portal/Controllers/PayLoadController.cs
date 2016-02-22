@@ -63,5 +63,35 @@ namespace eX_Portal.Controllers {
       //return "OK";
     }
 
+    public ActionResult Detail([Bind(Prefix = "ID")] String FlightUniqueID) {
+      var Parts = FlightUniqueID.Split(',');
+      ViewBag.Title = "UAS Listing";
+
+      String SQL = @"SELECT 
+        [RSSI],
+        [ReadTime],
+        [ReadCount],
+        [Latitude],
+        [Longitude],
+        [RowNumber],
+        [ColumnNumber],
+        [CellID],        
+        [IsProcessed],
+        Count(*) Over() as _TotalRecords
+      FROM 
+        [PayLoadData]
+      WHERE
+         [RFID] ='" + Parts[0] + @"' AND
+          [FlightUniqueID]  ='" + Parts[1] + @"'";
+
+      qView nView = new qView(SQL);
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
+    }
+
     }//class PayLoadController
 }//namespace eX_Portal.Controllers

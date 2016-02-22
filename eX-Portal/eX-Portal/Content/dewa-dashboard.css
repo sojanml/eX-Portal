@@ -1,0 +1,43 @@
+/* line 8, ../sass/dewa-dashboard.scss */
+div.dash-row {
+  width: 100%;
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 10, ../sass/dewa-dashboard.scss */
+div.dash-row div.dash-column {
+  width: 50%;
+  float: left;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* line 14, ../sass/dewa-dashboard.scss */
+div.dash-row div.dash-column.col1 {
+  padding-right: 5px;
+}
+/* line 17, ../sass/dewa-dashboard.scss */
+div.dash-row div.dash-column.col2 {
+  padding-left: 5px;
+}
+/* line 22, ../sass/dewa-dashboard.scss */
+div.dash-row div.content {
+  width: 100%;
+  border: 1px #fce1e7 solid;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+  min-height: 300px;
+  max-height: 300px;
+  overflow: auto;
+}
+/* line 32, ../sass/dewa-dashboard.scss */
+div.dash-row h2 {
+  color: #ec5879;
+}
+/* line 35, ../sass/dewa-dashboard.scss */
+div.dash-row a {
+  color: #2B7624;
+  text-decoration: none;
+}
