@@ -16,8 +16,8 @@ var ProductGrid = new Object();
 
 function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
   //alert('Start at: ' + iStart);
-  //deleteMarkers();
-  //setMarker(map, aData)
+  deleteMarkers();
+  setMarker(map, aData)
   setGridHilite(aData);
 }
 

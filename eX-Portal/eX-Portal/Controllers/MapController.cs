@@ -43,14 +43,14 @@ namespace eX_Portal.Controllers {
       "  [RowNumber] + 1 as [Row], \n" +
       "  [ColumnNumber] + 1 as [Col],\n" +
       "  Count(*) Over() as _TotalRecords,\n" +
-      "  [RFID] as _PKey\n" +
+      "  Concat([RFID],',',FlightUniqueID) as _PKey\n" +
       "FROM \n" +
       "  [PayLoadMapData] \n" +
       "WHERE\n" +
       "  FlightUniqueID='" + FlightUniqueID + "'";
 
       qView nView = new qView(SQL);
-      nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
+      nView.addMenu("Detail", Url.Action("Detail", "Payload", new { ID = "_Pkey" }));
       ViewBag.FlightUniqueID = FlightUniqueID;
 
       if (Request.IsAjaxRequest()) {
