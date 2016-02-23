@@ -1,0 +1,9 @@
+/* line 8, ../sass/dewa-dashboard.scss */
+div.dash-row {
+  width: 100%;
+}
+/* line 10, ../sass/dewa-dashboard.scss */
+div.dash-row div.dash-column {
+  width: 50%;
+  float: left;
+}

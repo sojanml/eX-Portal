@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using eX_Portal.exLogic;
+using System.Text;
 
 namespace eX_Portal.Controllers {
   public class TestController : Controller {
@@ -40,6 +41,67 @@ namespace eX_Portal.Controllers {
       ViewBag.Json = Util.getDBRowsJson(SQL);
       return View();
     }
+
+    public ActionResult Analysis(String OrgLoc, String CmpLoc) {
+      StringBuilder JSon = new StringBuilder();
+      String SQL = @"Select
+        OrgLoc.Latitude,
+        OrgLoc.Longitude,
+        OrgLoc.RFID,
+        OrgLoc.RSSI,
+        OrgLoc.ReadCount
+      FROM
+        PayLoadMapData  as OrgLoc
+      WHERE
+        OrgLoc.FlightUniqueID = '" + OrgLoc + "'";
+
+      StringBuilder SB = new StringBuilder();
+      StringBuilder sRow = new StringBuilder();
+      List<Dictionary<String, Object>> Rows = Util.getDBRows(SQL);
+      foreach (var Row in Rows) {
+        if (SB.Length > 0) SB.AppendLine(",");
+        sRow.Clear();
+        foreach (var Key in Row.Keys) {
+          if (sRow.Length > 0) sRow.Append(", ");
+          sRow.Append("\"");
+          sRow.Append(Key);
+          sRow.Append("\": ");
+          if (!Util.IsNumber(Row[Key])) sRow.Append("\"");
+          sRow.Append(Row[Key]);
+          if (!Util.IsNumber(Row[Key])) sRow.Append("\"");
+        }
+        SB.Append("{");
+        SB.Append(sRow);
+        SB.Append(", \"Reads\": [");
+        SB.Append(getReads(Row["RFID"].ToString(), CmpLoc));
+        SB.Append("]}");
+      }
+
+      ViewBag.Json = SB.ToString();
+      return View();
+
+
+
+
+    }
+
+    private String getReads(String RFID, String uKey) {
+      String SQL = @"select
+        Latitude,
+        Longitude,
+        RFID,
+        RSSI,
+        ReadCount
+      FROM
+        PayLoadData as OrgLocation
+      WHERE
+        FlightUniqueID = '" + uKey + @"' AND
+        RFID='" + RFID + @"'
+      ORDER BY
+        CreatedTime";
+     return Util.getDBRowsJson(SQL);
+    }
+
   }
 
 }

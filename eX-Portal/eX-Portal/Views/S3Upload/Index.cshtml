@@ -1,0 +1,71 @@
+﻿@model eX_Portal.Models.DroneDocument
+@using eX_Portal.exLogic
+
+<form id="formS3" name="formS3" action="@ViewBag.FormAction" method="@ViewBag.FormMethod" enctype="@ViewBag.FormEnclosureType">
+  <section class="general-form" id="loginForm">
+    <input type="hidden" name="key" value="@ViewBag.FileId" />
+    <input type="hidden" name="AWSAccessKeyId" value="@ViewBag.AWSAccessKey" />
+    <input type="hidden" name="acl" value="@ViewBag.Acl" />
+    <input type="hidden" name="policy" value="@ViewBag.Base64EncodedPolicy" />
+    <input type="hidden" name="signature" value="@ViewBag.Signature" />
+    <input type="hidden" name="redirect" value="@ViewBag.RedirectUrl" />    
+    
+
+    <div class="editor-label">
+     Select the Drone for Uploading the document
+    </div>
+    <div class="editor-field">
+      @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("Drone"))
+      <span style="display:none;" id="DroneID-Required" class="field-validation-error">Please select a drone to contine...</span>
+    </div>
+
+    <div class="editor-label">
+      @Html.LabelFor(model => model.DocumentTitle)
+    </div>
+    <div class="editor-field">
+      @Html.EditorFor(model => model.DocumentTitle)
+      @Html.ValidationMessageFor(model => model.DocumentTitle)
+    </div>
+    <div class="editor-label">
+      @Html.LabelFor(model => model.DocumentDesc, "Description")
+    </div>
+
+    <div class="editor-field">
+      @Html.EditorFor(model => model.DocumentDesc)
+      @Html.ValidationMessageFor(model => model.DocumentDesc)
+    </div>
+
+    <div class="editor-label">
+      @Html.LabelFor(model => model.DocumentDate)
+    </div>
+    <div class="editor-field">
+      @Html.EditorFor(model => model.DocumentDate)
+      @Html.ValidationMessageFor(model => model.DocumentDate)
+    </div>
+
+    <div class="editor-label">
+      @Html.LabelFor(model => model.DocumentName, "Upload Document")
+    </div>
+    <div class="editor-field" id="file-input">
+      <input name="file" type="file" />
+      <span style="display:none;" id="file-Required" class="field-validation-error">Please select a file to upload...</span>
+    </div>
+    <div class="editor-field" id="file-info">
+      <span id="file-info-name"></span><span id="file-info-status"></span>
+    </div>
+
+    <div class="form-toolbar">
+      <input type="submit" value="Save" />
+    </div>
+  </section>
+</form>
+
+
+@section header{
+  <link href="~/Content/black-box.css" rel="stylesheet" />
+
+}
+@section Scripts{
+  @Scripts.Render("~/bundles/jqueryval")
+  <script type="text/javascript" src="~/Scripts/S3Upload.js"></script>
+}

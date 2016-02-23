@@ -1,0 +1,33 @@
+﻿@{ 
+  Double Buffer = 3;
+  String sBuffer = Request.QueryString["Buffer"];
+  if (!String.IsNullOrWhiteSpace(sBuffer)) {
+    Double.TryParse(sBuffer, out Buffer);
+  }
+}
+<h1>The Video</h1>
+<div id="myElement">Loading the player...</div>
+@section scripts {
+<script src="~/jwplayer/jwplayer.js"></script>
+<script>jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";</script>
+<script type="text/javascript">
+  var playerInstance = null;
+  $(document).ready(function () {
+    playerInstance = jwplayer("myElement");
+    playerInstance.setup({
+      file: "rtmp://52.29.242.123/live/drone1",
+      width: 640,
+      height: 360,
+      title: 'Basic Video Embed',
+      description: 'A video with a basic title and description!',
+      mediaid: '123456',
+      rtmp: {
+        bufferlength: @Buffer
+      }
+    });
+  })
+
+</script>
+}
+
+

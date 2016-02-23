@@ -99,3 +99,10 @@ UL#UploadedFilesList LI div.toolbar A {
   UL#UploadedFilesList LI div.toolbar A:hover {
     background-color: #ea050e;
   }
+
+
+  #file-info-status {
+    color: red;
+    padding-left:30px;
+
+  }
