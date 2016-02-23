@@ -63,6 +63,10 @@ namespace eX_Portal.Models
         public virtual DbSet<MSTR_User> MSTR_User { get; set; }
         public virtual DbSet<PayLoadData> PayLoadDatas { get; set; }
         public virtual DbSet<PayLoadMapData> PayLoadMapDatas { get; set; }
+        public virtual DbSet<PayLoadYard> PayLoadYards { get; set; }
+        public virtual DbSet<PayLoadFlight> PayLoadFlights { get; set; }
+        public virtual DbSet<PayLoadImageData> PayLoadImageDatas { get; set; }
+        public virtual DbSet<PayLoadYardGrid> PayLoadYardGrids { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

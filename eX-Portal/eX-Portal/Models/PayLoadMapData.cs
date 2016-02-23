@@ -29,5 +29,16 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> CreatedTime { get; set; }
         public Nullable<int> FlightID { get; set; }
         public string GPSFix { get; set; }
+        public Nullable<decimal> RFIDAverage { get; set; }
+        public Nullable<int> RFIDMin { get; set; }
+        public Nullable<System.DateTime> LastProcessed { get; set; }
+        public string IsProcessed { get; set; }
+        public Nullable<int> YardID { get; set; }
+        public Nullable<int> RowNumber { get; set; }
+        public Nullable<int> ColumnNumber { get; set; }
+        public Nullable<int> CellID { get; set; }
+        public Nullable<int> MaxCellID { get; set; }
+        public Nullable<int> MaxRow { get; set; }
+        public Nullable<int> MaxCol { get; set; }
     }
 }

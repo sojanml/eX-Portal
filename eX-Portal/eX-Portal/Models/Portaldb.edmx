@@ -132,6 +132,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="UploadedDate" Type="datetime" />
           <Property Name="UploadedBy" Type="int" />
           <Property Name="FlightID" Type="int" />
+          <Property Name="AccountID" Type="int" />
+          <Property Name="DocumentDate" Type="datetime" />
+          <Property Name="DocumentTitle" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocumentDesc" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="DroneFlight">
           <Key>
@@ -632,6 +636,44 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadData' does not have a pr
           <Property Name="CreatedTime" Type="datetime" />
           <Property Name="FlightID" Type="int" />
           <Property Name="GPSFix" Type="nvarchar" MaxLength="25" />
+          <Property Name="YardID" Type="int" />
+          <Property Name="IsProcessed" Type="bit" />
+          <Property Name="RowNumber" Type="int" />
+          <Property Name="ColumnNumber" Type="int" />
+          <Property Name="CellID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ExponentPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PayLoadFlight">
+          <Key>
+            <PropertyRef Name="PayLoadFlightID" />
+          </Key>
+          <Property Name="PayLoadFlightID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FlightUniqueID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedTime" Type="datetime" />
+          <Property Name="FlightID" Type="int" />
+          <Property Name="RFIDCount" Type="int" />
+          <Property Name="PayLoadImageFolder" Type="nvarchar" MaxLength="50" />
+          <Property Name="YardID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ExponentPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PayLoadImageData">
+          <Key>
+            <PropertyRef Name="PayLoadImageDataID" />
+          </Key>
+          <Property Name="PayLoadImageDataID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PayLoadFlightID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DroneId" Type="nvarchar" MaxLength="50" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="50" />
+          <Property Name="ImageCreatedDate" Type="datetime" />
+          <Property Name="Latitude" Type="decimal" Precision="18" Scale="9" />
+          <Property Name="Longitude" Type="decimal" Precision="18" Scale="9" />
+          <Property Name="GPSTime" Type="datetime" />
+          <Property Name="CreatedTime" Type="datetime" />
+          <Property Name="FlightID" Type="int" />
+          <Property Name="GPSFix" Type="nvarchar" MaxLength="10" />
+          <Property Name="LogFilePath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -654,6 +696,62 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <Property Name="CreatedTime" Type="datetime" />
           <Property Name="FlightID" Type="int" />
           <Property Name="GPSFix" Type="nvarchar" MaxLength="10" />
+          <Property Name="RFIDAverage" Type="decimal" Precision="15" Scale="3" />
+          <Property Name="RFIDMin" Type="int" />
+          <Property Name="LastProcessed" Type="datetime" />
+          <Property Name="IsProcessed" Type="char" MaxLength="1" />
+          <Property Name="YardID" Type="int" />
+          <Property Name="RowNumber" Type="int" />
+          <Property Name="ColumnNumber" Type="int" />
+          <Property Name="CellID" Type="int" />
+          <Property Name="MaxCellID" Type="int" />
+          <Property Name="MaxRow" Type="int" />
+          <Property Name="MaxCol" Type="int" />
+        </EntityType>
+        <EntityType Name="PayLoadYard">
+          <Key>
+            <PropertyRef Name="YardID" />
+          </Key>
+          <Property Name="YardID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountID" Type="int" Nullable="false" />
+          <Property Name="YardName" Type="varchar" MaxLength="200" />
+          <Property Name="TopLeftLat" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="TopLeftLon" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="TopRightLat" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="TopRightLon" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="BottomLeftLat" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="BottomLeftLon" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="BottomRightLat" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="BottomRightLon" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="VechileOrientation" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="VechileLength" Type="int" />
+          <Property Name="VechileWidth" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PayLoadYardGrid">
+          <Key>
+            <PropertyRef Name="CellID" />
+            <PropertyRef Name="YardID" />
+          </Key>
+          <Property Name="CellID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="YardID" Type="int" Nullable="false" />
+          <Property Name="CellNumber" Type="int" />
+          <Property Name="TopLeftLat" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="TopLeftLon" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="TopRightLat" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="TopRightLon" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="BottomLeftLat" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="BottomLeftLon" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="BottomRightLat" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="BottomRightLon" Type="numeric" Precision="15" Scale="10" />
+          <Property Name="RowNumber" Type="int" />
+          <Property Name="ColumnNumber" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="Polygon" Type="geography" />
         </EntityType>
         <EntityType Name="ProductDefinition">
           <Key>
@@ -778,6 +876,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <EntitySet Name="MSTR_User_Pilot" EntityType="Self.MSTR_User_Pilot" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="Self.MSTR_User_Pilot_Certification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot_ExponentUAS" EntityType="Self.MSTR_User_Pilot_ExponentUAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayLoadYard" EntityType="Self.PayLoadYard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
@@ -826,8 +925,40 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
     [PayLoadData].[GPSTime] AS [GPSTime], 
     [PayLoadData].[CreatedTime] AS [CreatedTime], 
     [PayLoadData].[FlightID] AS [FlightID], 
-    [PayLoadData].[GPSFix] AS [GPSFix]
+    [PayLoadData].[GPSFix] AS [GPSFix], 
+    [PayLoadData].[YardID] AS [YardID], 
+    [PayLoadData].[IsProcessed] AS [IsProcessed], 
+    [PayLoadData].[RowNumber] AS [RowNumber], 
+    [PayLoadData].[ColumnNumber] AS [ColumnNumber], 
+    [PayLoadData].[CellID] AS [CellID]
     FROM [dbo].[PayLoadData] AS [PayLoadData]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PayLoadFlight" EntityType="Self.PayLoadFlight" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PayLoadFlight].[PayLoadFlightID] AS [PayLoadFlightID], 
+    [PayLoadFlight].[FlightUniqueID] AS [FlightUniqueID], 
+    [PayLoadFlight].[CreatedTime] AS [CreatedTime], 
+    [PayLoadFlight].[FlightID] AS [FlightID], 
+    [PayLoadFlight].[RFIDCount] AS [RFIDCount], 
+    [PayLoadFlight].[PayLoadImageFolder] AS [PayLoadImageFolder], 
+    [PayLoadFlight].[YardID] AS [YardID]
+    FROM [dbo].[PayLoadFlight] AS [PayLoadFlight]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PayLoadImageData" EntityType="Self.PayLoadImageData" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PayLoadImageData].[PayLoadImageDataID] AS [PayLoadImageDataID], 
+    [PayLoadImageData].[PayLoadFlightID] AS [PayLoadFlightID], 
+    [PayLoadImageData].[DroneId] AS [DroneId], 
+    [PayLoadImageData].[ImagePath] AS [ImagePath], 
+    [PayLoadImageData].[ImageCreatedDate] AS [ImageCreatedDate], 
+    [PayLoadImageData].[Latitude] AS [Latitude], 
+    [PayLoadImageData].[Longitude] AS [Longitude], 
+    [PayLoadImageData].[GPSTime] AS [GPSTime], 
+    [PayLoadImageData].[CreatedTime] AS [CreatedTime], 
+    [PayLoadImageData].[FlightID] AS [FlightID], 
+    [PayLoadImageData].[GPSFix] AS [GPSFix], 
+    [PayLoadImageData].[LogFilePath] AS [LogFilePath]
+    FROM [dbo].[PayLoadImageData] AS [PayLoadImageData]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadMapData" EntityType="Self.PayLoadMapData" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -845,8 +976,39 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
     [PayLoadMapData].[GPSTime] AS [GPSTime], 
     [PayLoadMapData].[CreatedTime] AS [CreatedTime], 
     [PayLoadMapData].[FlightID] AS [FlightID], 
-    [PayLoadMapData].[GPSFix] AS [GPSFix]
+    [PayLoadMapData].[GPSFix] AS [GPSFix], 
+    [PayLoadMapData].[RFIDAverage] AS [RFIDAverage], 
+    [PayLoadMapData].[RFIDMin] AS [RFIDMin], 
+    [PayLoadMapData].[LastProcessed] AS [LastProcessed], 
+    [PayLoadMapData].[IsProcessed] AS [IsProcessed], 
+    [PayLoadMapData].[YardID] AS [YardID], 
+    [PayLoadMapData].[RowNumber] AS [RowNumber], 
+    [PayLoadMapData].[ColumnNumber] AS [ColumnNumber], 
+    [PayLoadMapData].[CellID] AS [CellID], 
+    [PayLoadMapData].[MaxCellID] AS [MaxCellID], 
+    [PayLoadMapData].[MaxRow] AS [MaxRow], 
+    [PayLoadMapData].[MaxCol] AS [MaxCol]
     FROM [dbo].[PayLoadMapData] AS [PayLoadMapData]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PayLoadYardGrid" EntityType="Self.PayLoadYardGrid" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PayLoadYardGrid].[CellID] AS [CellID], 
+    [PayLoadYardGrid].[YardID] AS [YardID], 
+    [PayLoadYardGrid].[CellNumber] AS [CellNumber], 
+    [PayLoadYardGrid].[TopLeftLat] AS [TopLeftLat], 
+    [PayLoadYardGrid].[TopLeftLon] AS [TopLeftLon], 
+    [PayLoadYardGrid].[TopRightLat] AS [TopRightLat], 
+    [PayLoadYardGrid].[TopRightLon] AS [TopRightLon], 
+    [PayLoadYardGrid].[BottomLeftLat] AS [BottomLeftLat], 
+    [PayLoadYardGrid].[BottomLeftLon] AS [BottomLeftLon], 
+    [PayLoadYardGrid].[BottomRightLat] AS [BottomRightLat], 
+    [PayLoadYardGrid].[BottomRightLon] AS [BottomRightLon], 
+    [PayLoadYardGrid].[RowNumber] AS [RowNumber], 
+    [PayLoadYardGrid].[ColumnNumber] AS [ColumnNumber], 
+    [PayLoadYardGrid].[CreatedBy] AS [CreatedBy], 
+    [PayLoadYardGrid].[CreatedOn] AS [CreatedOn], 
+    [PayLoadYardGrid].[Polygon] AS [Polygon]
+    FROM [dbo].[PayLoadYardGrid] AS [PayLoadYardGrid]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
             <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
@@ -1242,6 +1404,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
             <Parameter Name="Date_From" Mode="In" Type="DateTime" />
             <Parameter Name="Date_To" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="PayLoadYards" EntityType="ExponentPortalModel.PayLoadYard" />
+          <EntitySet Name="PayLoadFlights" EntityType="ExponentPortalModel.PayLoadFlight" />
+          <EntitySet Name="PayLoadImageDatas" EntityType="ExponentPortalModel.PayLoadImageData" />
+          <EntitySet Name="PayLoadYardGrids" EntityType="ExponentPortalModel.PayLoadYardGrid" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -1390,6 +1556,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <Property Name="UploadedDate" Type="DateTime" Precision="3" />
           <Property Name="UploadedBy" Type="Int32" />
           <Property Name="FlightID" Type="Int32" />
+          <Property Name="AccountID" Type="Int32" />
+          <Property Name="DocumentDate" Type="DateTime" Precision="3" />
+          <Property Name="DocumentTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="BlackBoxData">
           <Key>
@@ -1632,6 +1802,11 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <Property Name="CreatedTime" Type="DateTime" Precision="3" />
           <Property Name="FlightID" Type="Int32" />
           <Property Name="GPSFix" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="YardID" Type="Int32" />
+          <Property Name="IsProcessed" Type="Boolean" />
+          <Property Name="RowNumber" Type="Int32" />
+          <Property Name="ColumnNumber" Type="Int32" />
+          <Property Name="CellID" Type="Int32" />
         </EntityType>
         <EntityType Name="PayLoadMapData">
           <Key>
@@ -1652,6 +1827,89 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <Property Name="CreatedTime" Type="DateTime" Precision="3" />
           <Property Name="FlightID" Type="Int32" />
           <Property Name="GPSFix" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="RFIDAverage" Type="Decimal" Precision="15" Scale="3" />
+          <Property Name="RFIDMin" Type="Int32" />
+          <Property Name="LastProcessed" Type="DateTime" Precision="3" />
+          <Property Name="IsProcessed" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="YardID" Type="Int32" />
+          <Property Name="RowNumber" Type="Int32" />
+          <Property Name="ColumnNumber" Type="Int32" />
+          <Property Name="CellID" Type="Int32" />
+          <Property Name="MaxCellID" Type="Int32" />
+          <Property Name="MaxRow" Type="Int32" />
+          <Property Name="MaxCol" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PayLoadYard">
+          <Key>
+            <PropertyRef Name="YardID" />
+          </Key>
+          <Property Name="YardID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountID" Type="Int32" Nullable="false" />
+          <Property Name="YardName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="TopLeftLat" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="TopLeftLon" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="TopRightLat" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="TopRightLon" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="BottomLeftLat" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="BottomLeftLon" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="BottomRightLat" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="BottomRightLon" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="VechileOrientation" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="VechileLength" Type="Int32" />
+          <Property Name="VechileWidth" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PayLoadFlight">
+          <Key>
+            <PropertyRef Name="PayLoadFlightID" />
+          </Key>
+          <Property Name="PayLoadFlightID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FlightUniqueID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="RFIDCount" Type="Int32" />
+          <Property Name="PayLoadImageFolder" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YardID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PayLoadImageData">
+          <Key>
+            <PropertyRef Name="PayLoadImageDataID" />
+          </Key>
+          <Property Name="PayLoadImageDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PayLoadFlightID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DroneId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImageCreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="9" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="9" />
+          <Property Name="GPSTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="GPSFix" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="LogFilePath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PayLoadYardGrid">
+          <Key>
+            <PropertyRef Name="CellID" />
+            <PropertyRef Name="YardID" />
+          </Key>
+          <Property Name="CellID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="YardID" Type="Int32" Nullable="false" />
+          <Property Name="CellNumber" Type="Int32" />
+          <Property Name="TopLeftLat" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="TopLeftLon" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="TopRightLat" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="TopRightLon" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="BottomLeftLat" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="BottomLeftLon" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="BottomRightLat" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="BottomRightLon" Type="Decimal" Precision="15" Scale="10" />
+          <Property Name="RowNumber" Type="Int32" />
+          <Property Name="ColumnNumber" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="Polygon" Type="Geography" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2148,6 +2406,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <EntitySetMapping Name="DroneDocuments">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneDocument">
               <MappingFragment StoreEntitySet="DroneDocuments">
+                <ScalarProperty Name="DocumentDesc" ColumnName="DocumentDesc" />
+                <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
                 <ScalarProperty Name="FlightID" ColumnName="FlightID" />
                 <ScalarProperty Name="UploadedBy" ColumnName="UploadedBy" />
                 <ScalarProperty Name="UploadedDate" ColumnName="UploadedDate" />
@@ -2392,6 +2654,11 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <EntitySetMapping Name="PayLoadDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadData">
               <MappingFragment StoreEntitySet="PayLoadData">
+                <ScalarProperty Name="CellID" ColumnName="CellID" />
+                <ScalarProperty Name="ColumnNumber" ColumnName="ColumnNumber" />
+                <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
+                <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
+                <ScalarProperty Name="YardID" ColumnName="YardID" />
                 <ScalarProperty Name="GPSFix" ColumnName="GPSFix" />
                 <ScalarProperty Name="FlightID" ColumnName="FlightID" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
@@ -2413,6 +2680,17 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <EntitySetMapping Name="PayLoadMapDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadMapData">
               <MappingFragment StoreEntitySet="PayLoadMapData">
+                <ScalarProperty Name="MaxCol" ColumnName="MaxCol" />
+                <ScalarProperty Name="MaxRow" ColumnName="MaxRow" />
+                <ScalarProperty Name="MaxCellID" ColumnName="MaxCellID" />
+                <ScalarProperty Name="CellID" ColumnName="CellID" />
+                <ScalarProperty Name="ColumnNumber" ColumnName="ColumnNumber" />
+                <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
+                <ScalarProperty Name="YardID" ColumnName="YardID" />
+                <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
+                <ScalarProperty Name="LastProcessed" ColumnName="LastProcessed" />
+                <ScalarProperty Name="RFIDMin" ColumnName="RFIDMin" />
+                <ScalarProperty Name="RFIDAverage" ColumnName="RFIDAverage" />
                 <ScalarProperty Name="GPSFix" ColumnName="GPSFix" />
                 <ScalarProperty Name="FlightID" ColumnName="FlightID" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
@@ -2433,6 +2711,81 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="Recover_Dropped_Objects_Proc" FunctionName="ExponentPortalModel.Store.Recover_Dropped_Objects_Proc" />
           <FunctionImportMapping FunctionImportName="sp_Recover_Dropped_Objects" FunctionName="ExponentPortalModel.Store.sp_Recover_Dropped_Objects" />
+          <EntitySetMapping Name="PayLoadYards">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadYard">
+              <MappingFragment StoreEntitySet="PayLoadYard">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="VechileWidth" ColumnName="VechileWidth" />
+                <ScalarProperty Name="VechileLength" ColumnName="VechileLength" />
+                <ScalarProperty Name="VechileOrientation" ColumnName="VechileOrientation" />
+                <ScalarProperty Name="BottomRightLon" ColumnName="BottomRightLon" />
+                <ScalarProperty Name="BottomRightLat" ColumnName="BottomRightLat" />
+                <ScalarProperty Name="BottomLeftLon" ColumnName="BottomLeftLon" />
+                <ScalarProperty Name="BottomLeftLat" ColumnName="BottomLeftLat" />
+                <ScalarProperty Name="TopRightLon" ColumnName="TopRightLon" />
+                <ScalarProperty Name="TopRightLat" ColumnName="TopRightLat" />
+                <ScalarProperty Name="TopLeftLon" ColumnName="TopLeftLon" />
+                <ScalarProperty Name="TopLeftLat" ColumnName="TopLeftLat" />
+                <ScalarProperty Name="YardName" ColumnName="YardName" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="YardID" ColumnName="YardID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayLoadFlights">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadFlight">
+              <MappingFragment StoreEntitySet="PayLoadFlight">
+                <ScalarProperty Name="YardID" ColumnName="YardID" />
+                <ScalarProperty Name="PayLoadImageFolder" ColumnName="PayLoadImageFolder" />
+                <ScalarProperty Name="RFIDCount" ColumnName="RFIDCount" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="FlightUniqueID" ColumnName="FlightUniqueID" />
+                <ScalarProperty Name="PayLoadFlightID" ColumnName="PayLoadFlightID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayLoadImageDatas">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadImageData">
+              <MappingFragment StoreEntitySet="PayLoadImageData">
+                <ScalarProperty Name="LogFilePath" ColumnName="LogFilePath" />
+                <ScalarProperty Name="GPSFix" ColumnName="GPSFix" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="GPSTime" ColumnName="GPSTime" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="ImageCreatedDate" ColumnName="ImageCreatedDate" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+                <ScalarProperty Name="PayLoadFlightID" ColumnName="PayLoadFlightID" />
+                <ScalarProperty Name="PayLoadImageDataID" ColumnName="PayLoadImageDataID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayLoadYardGrids">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadYardGrid">
+              <MappingFragment StoreEntitySet="PayLoadYardGrid">
+                <ScalarProperty Name="Polygon" ColumnName="Polygon" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ColumnNumber" ColumnName="ColumnNumber" />
+                <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
+                <ScalarProperty Name="BottomRightLon" ColumnName="BottomRightLon" />
+                <ScalarProperty Name="BottomRightLat" ColumnName="BottomRightLat" />
+                <ScalarProperty Name="BottomLeftLon" ColumnName="BottomLeftLon" />
+                <ScalarProperty Name="BottomLeftLat" ColumnName="BottomLeftLat" />
+                <ScalarProperty Name="TopRightLon" ColumnName="TopRightLon" />
+                <ScalarProperty Name="TopRightLat" ColumnName="TopRightLat" />
+                <ScalarProperty Name="TopLeftLon" ColumnName="TopLeftLon" />
+                <ScalarProperty Name="TopLeftLat" ColumnName="TopLeftLat" />
+                <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
+                <ScalarProperty Name="YardID" ColumnName="YardID" />
+                <ScalarProperty Name="CellID" ColumnName="CellID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
