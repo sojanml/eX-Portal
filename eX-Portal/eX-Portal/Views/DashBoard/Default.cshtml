@@ -1,0 +1,42 @@
+﻿@using eX_Portal.exLogic
+@{ 
+  Layout = null;
+}
+
+<div class="row">
+
+  <div class="col-3">
+    <h2>UAS</h2>
+    <p>
+      This feature allow you to view all the UAS registered. From the
+      UAS, you will be able to see the service history and flight details.
+    </p>
+    <p><a class="btn btn-default" href="/Drone/">Click Here...</a></p>
+  </div>
+
+  <div class="col-3">
+    <h2>UAS Flight</h2>
+    <p>
+      List of flights created for UAS is listed here.
+    <p><a class="btn btn-default" href="/DroneFlight/">Click Here...</a></p>
+  </div>
+
+  <div class="col-3">
+    <h2>UAS Service Details</h2>
+    <p>Create and manage UAS Services and History.</p>
+    <p><a class="btn btn-default" href="/DroneService/">Click Here...</a></p>
+  </div>
+</div>
+<div id="map_canvas" style="width: 100%; height: 480px;"></div>
+<div style="height:150px;">&nbsp;</div>
+<script type="text/javascript">
+  var HomeMapURL = '@Url.Action("GetDrones", "Map")';
+
+</script>
+@{ 
+  Html.AddJavaScript("http://maps.google.com/maps/api/js?sensor=false");
+  Html.AddJavaScript("/Scripts/infobox.js");
+  Html.AddJavaScript("/Scripts/HomeMap.js");
+}
+
+

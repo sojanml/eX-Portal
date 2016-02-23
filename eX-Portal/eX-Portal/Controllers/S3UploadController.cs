@@ -46,11 +46,6 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-    public String CreateFolder() {
-      return "";
-
-    }
-
 
 
   }//class

@@ -296,4 +296,19 @@ namespace eX_Portal.Models
         public Nullable<int> TypeOfServiceId { get; set; }
     }
 
+
+
+  [MetadataType(typeof(DroneDocument_Helper))]
+  public partial class DroneDocument { }
+
+  public class DroneDocument_Helper {
+    [Required]
+    public int DroneID { get; set; }
+    [Required]
+    public string DocumentType { get; set; }
+    [Required]
+    public string DocumentName { get; set; }
+
+  }
+
 }

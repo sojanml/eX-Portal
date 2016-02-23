@@ -3,13 +3,36 @@ var ULElem = null;
 var FileInfo = '';
 
 $(document).ready(function () {
-  $('#formS3').on("submit", function (e) {
+  $(':input').on("change", checkForm);
+
+  $('#formS3').on("submit", function (e) {    
     e.stopPropagation();
     e.preventDefault();
+    if (!checkForm()) return false;
     startUpload();
   });
 
 });
+
+function checkForm() {
+  var ReturnValue = true;
+  var Drone = document.forms['formS3']['DroneID'].value;
+  var File = document.forms['formS3']['file'];
+
+  if (Drone == '0') {
+    $('#DroneID-Required').show();
+    ReturnValue = false;
+  }
+  if(File.files.length < 1) {
+    $('#file-Required').show();
+  }
+
+  if (ReturnValue) {
+    $('#DroneID-Required').hide();
+    $('#file-Required').hide();
+  }
+  return ReturnValue;
+}
 
 
 function startUpload() {
@@ -48,7 +71,7 @@ function SubmitFile(file) {
   QueID++;
   
   var FileName = file.name;
-  var FileInfo = 'Uploading ' + FileName + ' (' + Math.floor(file.size / 1024) + ' KB)';
+  var FileInfo = FileName + ' (' + Math.floor(file.size / 1024) + ' KB)';
   var KeyName = getKeyName(file.name);
 
   $('#file-input').hide();
@@ -81,7 +104,8 @@ function SubmitFile(file) {
       uploadComplete(res, status, xhr);
     },
     complete: completeHandler = function (res, status, xhr) {
-      uploadComplete(res, status, xhr);
+      $('#file-info-status').html('Completed');
+      //uploadComplete(res, status, xhr);
     },
     // Form data
     data: fd,
