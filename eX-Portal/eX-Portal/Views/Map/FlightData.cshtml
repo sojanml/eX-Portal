@@ -1,6 +1,12 @@
 ﻿@{
   ViewBag.Title = "Flight Data";
   Layout = "~/Views/Shared/_exPortal.cshtml";
+
+  Double Buffer = 3;
+  String sBuffer = Request.QueryString["Buffer"];
+  if (!String.IsNullOrWhiteSpace(sBuffer)) {
+    Double.TryParse(sBuffer, out Buffer);
+  }
 }
 @Html.Action("DroneFlightDetail", "DroneFlight", new { ID = ViewBag.FlightID })
 
@@ -114,6 +120,10 @@
 
   </div>
   <div id="map-info">-</div>
+
+  <div id="map-video">
+    <div id="myElement">Loading the player...</div>
+  </div>
 </div>
 
 <div style="width:100%">
@@ -134,7 +144,30 @@
   </script>
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
   <script type="text/javascript" src="~/Scripts/map.js"></script>
+  <script src="~/jwplayer/jwplayer.js"></script>
+  <script>jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";</script>
+  <script type="text/javascript">
+  var playerInstance = null;
+  $(document).ready(function () {
+    playerInstance = jwplayer("myElement");
+    playerInstance.setup({
+      file: "rtmp://52.29.242.123/live/drone1",
+      width: 256,
+      height: 192,
+      title: 'Live Video',
+      description: 'Play the live video feed.',
+      mediaid: '123456',
+      rtmp: {
+        bufferlength: @Buffer
+      }
+    });
+  })
+
+  </script>
 }
+
+
+
 
 @section header{
   <link href="~/Content/map.css" rel="stylesheet" />
@@ -198,6 +231,11 @@ ul#line-legend li.active span.legend span {
 ul#line-legend li:hover span.legend  span {
    visibility:visible;
    color:black;
+}
+#map-video {
+position:absolute;
+bottom:0px;
+right:0px;
 }
   </style>
 }

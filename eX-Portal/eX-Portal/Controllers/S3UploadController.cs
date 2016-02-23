@@ -9,6 +9,8 @@ using eX_Portal.Models;
 
 namespace eX_Portal.Controllers {
   public class S3UploadController : Controller {
+    public ExponentPortalEntities db = new ExponentPortalEntities();
+
     // GET: S3Upload
     public ActionResult Index() {
       var fileStorageProvider = new AmazonS3FileStorageProvider();
@@ -46,6 +48,12 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
+    [HttpPost]
+    public String Upload(DroneDocument Doc) {
+      db.DroneDocuments.Add(Doc);
+      db.SaveChanges();
+      return Url.Action("Document", "Drone", new { ID = Doc.ID });
+    }
 
 
   }//class

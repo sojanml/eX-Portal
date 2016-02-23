@@ -136,6 +136,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="DocumentDate" Type="datetime" />
           <Property Name="DocumentTitle" Type="nvarchar" MaxLength="50" />
           <Property Name="DocumentDesc" Type="nvarchar" MaxLength="500" />
+          <Property Name="S3Url" Type="nchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="DroneFlight">
           <Key>
@@ -1560,6 +1561,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <Property Name="DocumentDate" Type="DateTime" Precision="3" />
           <Property Name="DocumentTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DocumentDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="S3Url" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="BlackBoxData">
           <Key>
@@ -2406,6 +2408,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <EntitySetMapping Name="DroneDocuments">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneDocument">
               <MappingFragment StoreEntitySet="DroneDocuments">
+                <ScalarProperty Name="S3Url" ColumnName="S3Url" />
                 <ScalarProperty Name="DocumentDesc" ColumnName="DocumentDesc" />
                 <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
                 <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
