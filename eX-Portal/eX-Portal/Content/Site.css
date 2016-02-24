@@ -575,6 +575,15 @@ div.form-horizontal div.form-group {
   margin-bottom:20px;
 }
 
+section.content a {
+text-decoration: underline;
+color: gray;
+}
+section.content a:hover {
+text-decoration: none;
+color:black;
+}
+
 section.general-form div.editor-field input,
 section.general-form div.editor-field select,
 section.general-form div.editor-field textarea,

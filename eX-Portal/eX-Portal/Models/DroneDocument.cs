@@ -25,5 +25,6 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> DocumentDate { get; set; }
         public string DocumentTitle { get; set; }
         public string DocumentDesc { get; set; }
+        public string S3Url { get; set; }
     }
 }

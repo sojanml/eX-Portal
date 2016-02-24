@@ -5,7 +5,7 @@ var FileInfo = '';
 $(document).ready(function () {
   $(':input').on("change", checkForm);
 
-  $('#formS3').on("submit", function (e) {    
+  $('#formS3').on("submit", function (e) {
     e.stopPropagation();
     e.preventDefault();
     if (!checkForm()) return false;
@@ -23,8 +23,9 @@ function checkForm() {
     $('#DroneID-Required').show();
     ReturnValue = false;
   }
-  if(File.files.length < 1) {
+  if (File.files.length < 1) {
     $('#file-Required').show();
+    ReturnValue = false;
   }
 
   if (ReturnValue) {
@@ -69,21 +70,24 @@ function fixName(theStr) {
 
 function SubmitFile(file) {
   QueID++;
-  
+
   var FileName = file.name;
   var FileInfo = FileName + ' (' + Math.floor(file.size / 1024) + ' KB)';
   var KeyName = getKeyName(file.name);
+  var FORM = document.forms['formS3'];
+  var S3UploadUrl = $('#formS3').prop("action");
+  var fd = new FormData();
+  var AjaxData = $('#formS3').serialize() + '&S3Url=' + KeyName;
+
+  $("#formS3 :input").prop("disabled", true);
+  $('#btn-submit').val("Uploading...");
 
   $('#file-input').hide();
   $('#file-info-name').html(FileInfo);
 
-  var FORM = document.forms['formS3'];
-  var S3UploadUrl = $('#formS3').prop("action");
-  var fd = new FormData();
-
   fd.append('key', KeyName);
   fd.append('AWSAccessKeyId', FORM['AWSAccessKeyId'].value);
-  fd.append('acl', 'public-read');   
+  fd.append('acl', 'public-read');
   fd.append('policy', FORM['policy'].value)
   fd.append('signature', FORM['signature'].value);
 
@@ -105,7 +109,7 @@ function SubmitFile(file) {
     },
     complete: completeHandler = function (res, status, xhr) {
       $('#file-info-status').html('Completed');
-      //uploadComplete(res, status, xhr);
+      saveDocument(AjaxData);
     },
     // Form data
     data: fd,
@@ -128,6 +132,17 @@ function SubmitFile(file) {
   xhr.send(fd);
 
   */
+}
+
+function saveDocument(AjaxData) {
+  $.ajax({
+    url: '/S3Upload/Upload',  //server script to process data
+    type: 'POST',
+    data: AjaxData,
+    success: completeHandler = function (response) {
+      top.location.href = response;
+    }
+  });
 }
 
 function progressHandlingFunction(evt) {
