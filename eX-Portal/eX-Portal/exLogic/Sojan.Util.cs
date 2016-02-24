@@ -42,7 +42,7 @@ namespace eX_Portal.exLogic {
 
           cmd.CommandText = "SELECT scope_identity()";
           result = Int32.Parse(cmd.ExecuteScalar().ToString());
-           
+
         }
       }
       return result;
@@ -76,7 +76,7 @@ namespace eX_Portal.exLogic {
           ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
           var oResult = cmd.ExecuteScalar();
-          if (oResult != null) 
+          if (oResult != null)
             Result = oResult.ToString();
         }
       }
@@ -97,10 +97,10 @@ namespace eX_Portal.exLogic {
         //10/12/2015 07:17:53
         dt = DateTime.ParseExact(StrDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
         isSuccess = true;
-      } catch  {
+      } catch {
         //nothing
       }
-      if(!isSuccess)
+      if (!isSuccess)
         try {
           dt = DateTime.ParseExact(StrDate, "dd MM yyyy HH:mm:ss", CultureInfo.InvariantCulture);
           isSuccess = true;
@@ -161,7 +161,7 @@ namespace eX_Portal.exLogic {
       StringBuilder SB = new StringBuilder();
       StringBuilder sRow = new StringBuilder();
       List<Dictionary<String, Object>> Rows = getDBRows(SQL);
-      foreach(var Row in Rows) {
+      foreach (var Row in Rows) {
         if (SB.Length > 0) SB.AppendLine(",");
         sRow.Clear();
         foreach (var Key in Row.Keys) {
@@ -169,7 +169,7 @@ namespace eX_Portal.exLogic {
           sRow.Append("\"");
           sRow.Append(Key);
           sRow.Append("\": ");
-          if(!IsNumber(Row[Key])) sRow.Append("\"");
+          if (!IsNumber(Row[Key])) sRow.Append("\"");
           sRow.Append(Row[Key]);
           if (!IsNumber(Row[Key])) sRow.Append("\"");
         }
@@ -196,7 +196,7 @@ namespace eX_Portal.exLogic {
               || value is decimal;
     }
 
-    public static List<Dictionary<String, Object>> getDBRows(String SQL) {      
+    public static List<Dictionary<String, Object>> getDBRows(String SQL) {
       var Rows = new List<Dictionary<String, Object>>();
       var Result = new Dictionary<String, Object>();
       using (var ctx = new ExponentPortalEntities()) {
@@ -228,9 +228,9 @@ namespace eX_Portal.exLogic {
       String sVal = FieldValue;
       sVal = sVal.Replace("\\", "\\\\");
       sVal = sVal.Replace("'", "\\'");
-            sVal = sVal.Replace("\n", "\\n");
-            sVal = sVal.Replace("\r", "\\r");
-            return sVal;
+      sVal = sVal.Replace("\n", "\\n");
+      sVal = sVal.Replace("\r", "\\r");
+      return sVal;
     }
 
     public static IEnumerable<SelectListItem> GetDropDowntList(String TypeOfList) {
@@ -242,42 +242,42 @@ namespace eX_Portal.exLogic {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           switch (TypeOfList.ToLower()) {
-            case "drone":              
-              SQL = "SELECT [DroneId] as Value, [DroneName] as Name FROM [MSTR_Drone] where IsActive=1";
-              if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
-                SQL += "\n" +
-                  " AND\n " +
-                  "  MSTR_Drone.AccountID=" + Util.getAccountID();
-              }
-              SQL += "\n ORDER BY [DroneName]";
-              break;
-            case "pilot":
-                            SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User  WHERE \n";
-                            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                            {
-                                SQL += "\n" +
+          case "drone":
+          SQL = "SELECT [DroneId] as Value, [DroneName] as Name FROM [MSTR_Drone] where IsActive=1";
+          if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+            SQL += "\n" +
+              " AND\n " +
+              "  MSTR_Drone.AccountID=" + Util.getAccountID();
+          }
+          SQL += "\n ORDER BY [DroneName]";
+          break;
+          case "pilot":
+          SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User  WHERE \n";
+          if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+            SQL += "\n" +
 
-                                  "  MSTR_User.AccountID=" + Util.getAccountID() +
-                                 " and ";
-                            }
-                            SQL += "\n MSTR_User.IsPilot=1 ORDER BY FirstName";
-             break;
-            case "gsc":
-              SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User";
-              if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
-                SQL += "\n" +
-                  "WHERE\n" +
-                  "  MSTR_User.AccountID=" + Util.getAccountID();
-              }
-              SQL += "\nORDER BY FirstName";
-              break;
+              "  MSTR_User.AccountID=" + Util.getAccountID() +
+             " and ";
+          }
+          SQL += "\n MSTR_User.IsPilot=1 ORDER BY FirstName";
+          break;
+          case "gsc":
+          SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User";
+          if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+            SQL += "\n" +
+              "WHERE\n" +
+              "  MSTR_User.AccountID=" + Util.getAccountID();
+          }
+          SQL += "\nORDER BY FirstName";
+          break;
           }
           cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
               SelectList.Add(new SelectListItem {
                 Text = reader["Name"].ToString(),
-                Value = reader["Value"].ToString() });
+                Value = reader["Value"].ToString()
+              });
             }//while
           }//using
 
@@ -365,7 +365,7 @@ namespace eX_Portal.exLogic {
       if (UserID == 0) UserID = getLoginUserID();
       String SQL = "SELECT PhotoUrl From MSTR_User WHERE UserID=" + UserID;
       String ProfileImage = Util.getDBVal(SQL).ToString();
-      if(ProfileImage == "") {
+      if (ProfileImage == "") {
         return "/Upload/User/none.png";
       } else {
         return "/Upload/User/" + UserID + "/" + ProfileImage;
@@ -376,8 +376,8 @@ namespace eX_Portal.exLogic {
     public static String fmtDt(String theDt, bool isAddTime = true) {
       DateTime dt;
       DateTime.TryParse(theDt, out dt);
-      if(isAddTime) { 
-      return dt.ToString("dd-MMM-yyyy hh:mm tt");
+      if (isAddTime) {
+        return dt.ToString("dd-MMM-yyyy hh:mm tt");
       } else {
         return dt.ToString("dd-MMM-yyyy");
       }
@@ -388,10 +388,10 @@ namespace eX_Portal.exLogic {
       String sTheDate = "2001-01-01 00:00:01";
       try {
         DateTime theDate = DateTime.ParseExact(sDate, "dd-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-        sTheDate  = theDate.ToString("yyyy-MM-dd HH:mm:ss");
+        sTheDate = theDate.ToString("yyyy-MM-dd HH:mm:ss");
       } catch {
         //nothing
-      }       
+      }
       return sTheDate;
     }
 

@@ -12,26 +12,37 @@ $(document).ready(function () {
     startUpload();
   });
 
+
 });
 
 function checkForm() {
   var ReturnValue = true;
   var Drone = document.forms['formS3']['DroneID'].value;
   var File = document.forms['formS3']['file'];
+  var DocumentType = document.forms['formS3']['DocumentType'].value;
 
   if (Drone == '0') {
-    $('#DroneID-Required').show();
+    $('#DroneID-Required').fadeIn();
     ReturnValue = false;
+  } else {
+    $('#DroneID-Required').fadeOut();
   }
   if (File.files.length < 1) {
-    $('#file-Required').show();
+    $('#file-Required').fadeIn();
     ReturnValue = false;
+  } else {
+    $('#file-Required').fadeOut();
   }
 
-  if (ReturnValue) {
-    $('#DroneID-Required').hide();
-    $('#file-Required').hide();
+  if (DocumentType.length <= 0) {
+    $('#DocumentType-Required').fadeIn();
+    ReturnValue = false;
+  } else {
+    $('#DocumentType-Required').fadeOut();
   }
+
+
+
   return ReturnValue;
 }
 
