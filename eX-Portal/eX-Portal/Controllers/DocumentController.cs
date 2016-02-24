@@ -11,7 +11,7 @@ using eX_Portal.exLogic;
 
 namespace eX_Portal.Controllers
 {
-    public class DocumentListingController : Controller
+    public class DocumentController : Controller
     {
         private ExponentPortalEntities ctx = new ExponentPortalEntities();
 

@@ -174,7 +174,7 @@
     <Compile Include="Controllers\AutoCompleteController.cs" />
     <Compile Include="Controllers\BlackBoxController.cs" />
     <Compile Include="Controllers\DesignController.cs" />
-    <Compile Include="Controllers\DocumentListingController.cs" />
+    <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\DroneCheckListController.cs" />
     <Compile Include="Controllers\DroneController.cs" />
     <Compile Include="Controllers\DroneFlightController.cs" />
