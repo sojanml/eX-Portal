@@ -8,11 +8,24 @@
     <input type="hidden" name="acl" value="@ViewBag.Acl" />
     <input type="hidden" name="policy" value="@ViewBag.Base64EncodedPolicy" />
     <input type="hidden" name="signature" value="@ViewBag.Signature" />
-    <input type="hidden" name="redirect" value="@ViewBag.RedirectUrl" />    
-    
+    <input type="hidden" name="redirect" value="@ViewBag.RedirectUrl" />
 
     <div class="editor-label">
-     Select the Drone for Uploading the document
+      Select the Document Type
+    </div>
+    <div class="editor-field">
+      <select data-val="true" id="DocumentType" name="DocumentType" class="valid">
+        <option selected="selected" value="">Please Select...</option>
+        <option value="Power Line Inspection">Power Line Inspection</option>
+        <option value="Water Sampling">Water Sampling</option>
+        <option value="Red Tide and Oil Spill Detection">Red Tide and Oil Spill Detection</option>
+        <option value="Power Plants Surveillance">Power Plants Surveillance</option>
+      </select>
+      <span style="display:none;" id="DocumentType-Required" class="field-validation-error">Please select a document type</span>
+    </div>
+
+    <div class="editor-label">
+      Select the Drone for Uploading the document
     </div>
     <div class="editor-field">
       @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("Drone"))
