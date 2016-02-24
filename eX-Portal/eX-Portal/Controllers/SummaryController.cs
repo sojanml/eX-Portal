@@ -108,7 +108,7 @@ namespace eX_Portal.Controllers
                 int Flightcount = value;
                 fhdata.Total_Flight_count = value;
                 //TotalFlightHour
-                var Total_Flight_Hour = ctx.Database.SqlQuery<int>("select flightHour from MSTR_DroneService").ToList();
+                var Total_Flight_Hour = ctx.Database.SqlQuery<int>("select sum(flightHour) from MSTR_DroneService").ToList();
                 var value1 = Convert.ToInt16((from p in Total_Flight_Hour select p).Single());
                 int TotalHour = value1;
                 fhdata.Total_Flight_Hour = value1;

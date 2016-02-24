@@ -124,6 +124,7 @@ namespace eX_Portal.Controllers
             Models.MSTR_User User = db.MSTR_User.Find(UserID);
             if (User == null) return RedirectToAction("Error", "Home");
             ViewBag.Title = User.FirstName;
+
             return View(User);
 
         }//UserDetail()
@@ -219,6 +220,7 @@ namespace eX_Portal.Controllers
                         " ,a.DualRecieved  " +
                   " ,a.FloatingCommand as PilotInCommand " +
                         " , a.DualRecieved + a.FloatingCommand as TotalDuration " +
+                       
                         " , a.Id as _PKey" +
                         " FROM MSTR_Pilot_Log  " +
                         "a left join mstr_drone b  " +

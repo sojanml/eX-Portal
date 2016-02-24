@@ -154,3 +154,6 @@ C:\DroneProject\eX-Portal\eX-Portal\eX-Portal\bin\eX-Portal.pdb
 C:\DroneProject\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.dll
 C:\DroneProject\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.pdb
 C:\DroneProject\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache
+C:\Users\Dell-User\Documents\GitHub\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache
+C:\Users\Dell-User\Documents\GitHub\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.dll
+C:\Users\Dell-User\Documents\GitHub\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.pdb
