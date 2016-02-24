@@ -85,5 +85,11 @@ namespace eX_Portal.Controllers
 
         }
 
+        public ActionResult Details()
+        {
+
+            return View();
+        }
+
     }
 }

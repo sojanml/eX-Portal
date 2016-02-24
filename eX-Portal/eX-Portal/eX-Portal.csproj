@@ -281,6 +281,8 @@
     <Compile Include="Models\MSTR_User_Pilot_Certification.cs" />
     <Compile Include="Models\MSTR_User_Pilot_ExponentUAS.cs" />
     <Compile Include="Models\PayLoadData.cs" />
+    <Compile Include="Models\PayLoadFlight.cs" />
+    <Compile Include="Models\PayLoadImageData.cs" />
     <Compile Include="Models\PayLoadMapData.cs" />
     <Compile Include="Models\Portaldb.Context.cs">
       <AutoGen>True</AutoGen>
@@ -689,10 +691,10 @@
     <Content Include="Views\PilotLog\Edit.cshtml" />
     <Content Include="Views\PilotLog\PilotLogDetails.cshtml" />
     <Content Include="Views\Test\CompareGraph.cshtml" />
-    <Content Include="Views\DocumentListing\PowerLine.cshtml" />
-    <Content Include="Views\DocumentListing\PowerPlant.cshtml" />
-    <Content Include="Views\DocumentListing\SpillDetection.cshtml" />
-    <Content Include="Views\DocumentListing\WaterSampling.cshtml" />
+    <Content Include="Views\Document\PowerLine.cshtml" />
+    <Content Include="Views\Document\PowerPlant.cshtml" />
+    <Content Include="Views\Document\SpillDetection.cshtml" />
+    <Content Include="Views\Document\WaterSampling.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
