@@ -1,0 +1,19 @@
+﻿@model IEnumerable<eX_Portal.ViewModel.Summary>
+@{
+   
+    Layout = null;
+}
+
+
+@foreach (var item in Model)
+{
+    <div>
+        Total Number Of Users: @Html.DisplayFor(Model => item.UserCount)
+    </div>
+    <div>
+       InActive Users:  @Html.DisplayFor(Model => item.InActive_User)
+    </div>
+  
+
+
+}

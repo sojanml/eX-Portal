@@ -1,0 +1,21 @@
+﻿
+
+@model IEnumerable<eX_Portal.ViewModel.Summary>
+@{Layout = null;}
+@foreach (var item in Model)
+    {
+    <div>
+        Total Flight Count  :  @Html.DisplayFor(Model => item.Total_Flight_count)
+    </div>
+    <div>
+        Total Flight Hour   :  @Html.DisplayFor(Model => item.Total_Flight_Hour)
+    </div>
+    <div>
+        Last Flight Date    : @Html.DisplayFor(Model => item.Last_Flight_Date)
+    </div>
+    <div>
+        Last UAS ID Used    :  @Html.DisplayFor(Model => item.Last_UAS_ID)
+    </div>
+
+}
+

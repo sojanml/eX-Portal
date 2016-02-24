@@ -170,14 +170,25 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AutoCompleteController.cs" />
+    <Compile Include="Controllers\BlackBoxController.cs" />
     <Compile Include="Controllers\DesignController.cs" />
+    <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\DroneCheckListController.cs" />
     <Compile Include="Controllers\DroneController.cs" />
     <Compile Include="Controllers\DroneFlightController.cs" />
     <Compile Include="Controllers\DroneServiceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MapController.cs" />
+    <Compile Include="Controllers\PartsController.cs" />
+    <Compile Include="Controllers\PayLoadController.cs" />
+    <Compile Include="Controllers\PilotLogController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\SummaryController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="exLogic\Ajith.Util.cs" />
     <Compile Include="exLogic\Cathey.Util.cs" />
@@ -190,22 +201,28 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BlackBoxData.cs" />
+    <Compile Include="Models\DataAnnotationsHelper.cs" />
     <Compile Include="Models\DroneCheckList.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DroneCheckListItem.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DroneCheckListValidation.cs" />
     <Compile Include="Models\DroneData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DroneDefinition.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DroneDocument.cs" />
     <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FlightMapData.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LiveDrone.cs" />
     <Compile Include="Models\LUP_Drone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -221,6 +238,7 @@
     <Compile Include="Models\M2M_DroneServiceParts.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\M2M_ProfileMenu.cs" />
     <Compile Include="Models\M2M_UserAccount.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -249,6 +267,7 @@
     <Compile Include="Models\MSTR_Parts.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MSTR_Pilot_Log.cs" />
     <Compile Include="Models\MSTR_Product.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -258,6 +277,11 @@
     <Compile Include="Models\MSTR_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MSTR_User_Pilot.cs" />
+    <Compile Include="Models\MSTR_User_Pilot_Certification.cs" />
+    <Compile Include="Models\MSTR_User_Pilot_ExponentUAS.cs" />
+    <Compile Include="Models\PayLoadData.cs" />
+    <Compile Include="Models\PayLoadMapData.cs" />
     <Compile Include="Models\Portaldb.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -285,17 +309,38 @@
     <Compile Include="Models\usp_Portal_CreateDrone_Result.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\usp_Portal_DroneNameList_Result.cs" />
+    <Compile Include="Models\usp_Portal_DroneServiceType_Result.cs" />
     <Compile Include="Models\usp_Portal_GetDroneDropDown_Result.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\usp_Portal_GetDroneParts_Result.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlParser\BracesTag.cs" />
+    <Compile Include="SqlParser\ForUpdateTag.cs" />
+    <Compile Include="SqlParser\FromTag.cs" />
+    <Compile Include="SqlParser\GroupByTag.cs" />
+    <Compile Include="SqlParser\OrderByTag.cs" />
+    <Compile Include="SqlParser\ParserBase.cs" />
+    <Compile Include="SqlParser\QuotedIdentifierTag.cs" />
+    <Compile Include="SqlParser\SelectTag.cs" />
+    <Compile Include="SqlParser\SimpleOneWordTag.cs" />
+    <Compile Include="SqlParser\SimpleTwoWordTag.cs" />
+    <Compile Include="SqlParser\SqlParser.cs" />
+    <Compile Include="SqlParser\StartWith.cs" />
+    <Compile Include="SqlParser\StringLiteralTag.cs" />
+    <Compile Include="SqlParser\TagBase.cs" />
+    <Compile Include="SqlParser\WhereTag.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\AccountViewModel.cs" />
     <Compile Include="ViewModel\DroneServiceViewModel.cs" />
     <Compile Include="ViewModel\DroneView.cs" />
+    <Compile Include="ViewModel\ListViewModel.cs" />
     <Compile Include="ViewModel\MenuModel.cs" />
+    <Compile Include="ViewModel\Summary.cs" />
     <Compile Include="ViewModel\UserLogin.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
   </ItemGroup>
@@ -441,6 +486,10 @@
     <Content Include="obj\Debug\edmxResourcesToEmbed\Models\Portaldb.msl" />
     <Content Include="obj\Debug\edmxResourcesToEmbed\Models\Portaldb.ssdl" />
     <Content Include="obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache" />
+    <Content Include="sass\dewa-dashboard.scss" />
+    <Content Include="sass\ie.scss" />
+    <Content Include="sass\print.scss" />
+    <Content Include="sass\screen.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -454,6 +503,103 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Upload\Brand-Logo\dewa-logo.png" />
+    <Content Include="Upload\Brand-Logo\DpWorld-logo.png" />
+    <Content Include="Upload\Brand-Logo\exponent-logo.png" />
+    <Content Include="Views\Map\images\add.png" />
+    <Content Include="Views\Map\images\ajax-loader.gif" />
+    <Content Include="Views\Map\images\arrow-down.png" />
+    <Content Include="Views\Map\images\arrow_down1.png" />
+    <Content Include="Views\Map\images\arrow_down2.png" />
+    <Content Include="Views\Map\images\beachflag.png" />
+    <Content Include="Views\Map\images\beachflag_shadow.png" />
+    <Content Include="Views\Map\images\black.png" />
+    <Content Include="Views\Map\images\boot.png" />
+    <Content Include="Views\Map\images\button-orange.png" />
+    <Content Include="Views\Map\images\button_green.png" />
+    <Content Include="Views\Map\images\Calendar.png" />
+    <Content Include="Views\Map\images\circle\black.png" />
+    <Content Include="Views\Map\images\circle\blue.png" />
+    <Content Include="Views\Map\images\circle\brown.png" />
+    <Content Include="Views\Map\images\circle\brown1.1.png" />
+    <Content Include="Views\Map\images\circle\brown1.png" />
+    <Content Include="Views\Map\images\circle\default.png" />
+    <Content Include="Views\Map\images\circle\green.png" />
+    <Content Include="Views\Map\images\circle\purple.png" />
+    <Content Include="Views\Map\images\circle\red.png" />
+    <Content Include="Views\Map\images\circle\white.png" />
+    <Content Include="Views\Map\images\circle\yellow.png" />
+    <Content Include="Views\Map\images\close.png" />
+    <Content Include="Views\Map\images\edit_clear_24.png" />
+    <Content Include="Views\Map\images\edit_clear_32.png" />
+    <Content Include="Views\Map\images\flag\black.png" />
+    <Content Include="Views\Map\images\flag\blue.png" />
+    <Content Include="Views\Map\images\flag\blue1.png" />
+    <Content Include="Views\Map\images\flag\brown.png" />
+    <Content Include="Views\Map\images\flag\green.png" />
+    <Content Include="Views\Map\images\flag\green1.png" />
+    <Content Include="Views\Map\images\flag\orange.png" />
+    <Content Include="Views\Map\images\flag\pink.png" />
+    <Content Include="Views\Map\images\flag\purple.png" />
+    <Content Include="Views\Map\images\flag\rainbow.png" />
+    <Content Include="Views\Map\images\flag\red.png" />
+    <Content Include="Views\Map\images\flag\teal.png" />
+    <Content Include="Views\Map\images\flag\white.png" />
+    <Content Include="Views\Map\images\flag\yellow.png" />
+    <Content Include="Views\Map\images\flag\yellow1.png" />
+    <Content Include="Views\Map\images\help_black.png" />
+    <Content Include="Views\Map\images\home.png" />
+    <Content Include="Views\Map\images\pins\black.png" />
+    <Content Include="Views\Map\images\pins\blue.png" />
+    <Content Include="Views\Map\images\pins\blue1.png" />
+    <Content Include="Views\Map\images\pins\brown.png" />
+    <Content Include="Views\Map\images\pins\green.png" />
+    <Content Include="Views\Map\images\pins\green1.png" />
+    <Content Include="Views\Map\images\pins\orange.png" />
+    <Content Include="Views\Map\images\pins\pink.png" />
+    <Content Include="Views\Map\images\pins\purple.png" />
+    <Content Include="Views\Map\images\pins\rainbow.png" />
+    <Content Include="Views\Map\images\pins\red.png" />
+    <Content Include="Views\Map\images\pins\teal.png" />
+    <Content Include="Views\Map\images\pins\white.png" />
+    <Content Include="Views\Map\images\pins\yellow.png" />
+    <Content Include="Views\Map\images\pushpin\black.png" />
+    <Content Include="Views\Map\images\pushpin\blue.png" />
+    <Content Include="Views\Map\images\pushpin\blue1.png" />
+    <Content Include="Views\Map\images\pushpin\brown.png" />
+    <Content Include="Views\Map\images\pushpin\green.png" />
+    <Content Include="Views\Map\images\pushpin\green1.png" />
+    <Content Include="Views\Map\images\pushpin\orange.png" />
+    <Content Include="Views\Map\images\pushpin\pink.png" />
+    <Content Include="Views\Map\images\pushpin\purple.png" />
+    <Content Include="Views\Map\images\pushpin\red.png" />
+    <Content Include="Views\Map\images\pushpin\teal.png" />
+    <Content Include="Views\Map\images\pushpin\white %281%29.png" />
+    <Content Include="Views\Map\images\pushpin\white.png" />
+    <Content Include="Views\Map\images\pushpin\yellow.png" />
+    <Content Include="Views\Map\images\pushpin\yellow1.png" />
+    <Content Include="Views\Map\images\refresh.png" />
+    <Content Include="Views\Map\images\save.png" />
+    <Content Include="Views\Map\images\save_48.png" />
+    <Content Include="Views\Map\images\separator.png" />
+    <Content Include="Views\Map\images\tipbox.gif" />
+    <Content Include="Views\Map\images\tonka_truck.png" />
+    <Content Include="Views\Map\images\Triangle\1tgreen.png" />
+    <Content Include="Views\Map\images\Triangle\tblack.png" />
+    <Content Include="Views\Map\images\Triangle\tblue.png" />
+    <Content Include="Views\Map\images\Triangle\tbrown.png" />
+    <Content Include="Views\Map\images\Triangle\tgreen.png" />
+    <Content Include="Views\Map\images\Triangle\tpurple.png" />
+    <Content Include="Views\Map\images\Triangle\tred.png" />
+    <Content Include="Views\Map\images\Triangle\twhite.png" />
+    <Content Include="Views\Map\images\Triangle\tyellow.png" />
+    <Content Include="Views\Map\images\Trucks\Green.png" />
+    <Content Include="Views\Map\images\Trucks\Yellow.png" />
+    <Content Include="Views\Map\images\Trucks\yellow24.png" />
+    <Content Include="Views\Map\images\Trucks\yellow32.png" />
+    <Content Include="Views\Map\images\Trucks\yellow48.png" />
+    <Content Include="Views\Map\images\Trucks\yellow64.png" />
+    <Content Include="Views\Map\test.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -506,6 +652,47 @@
     <Content Include="Views\DroneService\Index.cshtml" />
     <Content Include="Views\DroneService\Details.cshtml" />
     <Content Include="Views\DroneCheckList\Complete.cshtml" />
+    <Content Include="Views\Summary\FlightHistorySummary.cshtml" />
+    <Content Include="Views\Summary\PilotList.cshtml" />
+    <Content Include="Views\Summary\UASFlightSummary.cshtml" />
+    <Content Include="Views\Summary\UASServiceHistory.cshtml" />
+    <Content Include="Views\Summary\UASSummary.cshtml" />
+    <Content Include="Views\Summary\UserList.cshtml" />
+    <Content Include="SqlParser\ClassDiagram.cd" />
+    <Content Include="Views\Admin\Account.cshtml" />
+    <Content Include="Views\Admin\AccountCreate.cshtml" />
+    <Content Include="Views\Admin\AccountDetail.cshtml" />
+    <Content Include="Views\Admin\AccountEdit.cshtml" />
+    <Content Include="Views\Admin\ProfileMenu.cshtml" />
+    <Content Include="Views\Admin\ProfileMenuGen.cshtml" />
+    <Content Include="Views\Admin\Profiles.cshtml" />
+    <Content Include="Views\BlackBox\Decommission.cshtml" />
+    <Content Include="Views\BlackBox\Detail.cshtml" />
+    <Content Include="Views\BlackBox\Index.cshtml" />
+    <Content Include="Views\BlackBox\Live.cshtml" />
+    <Content Include="Views\BlackBox\Upload.cshtml" />
+    <Content Include="Views\List\Create.cshtml" />
+    <Content Include="Views\List\LookupDetails.cshtml" />
+    <Content Include="Views\Map\FightMap.cshtml" />
+    <Content Include="Views\Map\FlightChart.cshtml" />
+    <Content Include="Views\Map\FlightData.cshtml" />
+    <Content Include="Views\Map\FlightDataView.cshtml" />
+    <Content Include="Views\Map\PayLoad.cshtml" />
+    <Content Include="Views\Map\PayLoadDataView.cshtml" />
+    <Content Include="Views\Parts\Create.cshtml" />
+    <Content Include="Views\Parts\Detail.cshtml" />
+    <Content Include="Views\Parts\Edit.cshtml" />
+    <Content Include="Views\Parts\PartsList.cshtml" />
+    <Content Include="Views\PayLoad\Index.cshtml" />
+    <Content Include="Views\PilotLog\Create.cshtml" />
+    <Content Include="Views\PilotLog\Detail.cshtml" />
+    <Content Include="Views\PilotLog\Edit.cshtml" />
+    <Content Include="Views\PilotLog\PilotLogDetails.cshtml" />
+    <Content Include="Views\Test\CompareGraph.cshtml" />
+    <Content Include="Views\DocumentListing\PowerLine.cshtml" />
+    <Content Include="Views\DocumentListing\PowerPlant.cshtml" />
+    <Content Include="Views\DocumentListing\SpillDetection.cshtml" />
+    <Content Include="Views\DocumentListing\WaterSampling.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

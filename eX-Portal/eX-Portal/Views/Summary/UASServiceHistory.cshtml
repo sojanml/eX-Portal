@@ -1,0 +1,37 @@
+﻿
+
+
+
+@model IEnumerable<eX_Portal.ViewModel.Summary>
+@{Layout = null;}
+@foreach (var item in Model)
+{
+    <div>
+        Total_Flight_count  :  @Html.DisplayFor(Model => item.Service_in_Last_30_days)
+    </div>
+    <div>
+        Total Flight Hour   :  @Html.DisplayFor(Model => item.Service_Due_in_next_30_Days)
+    </div>
+    <div>
+        Last_Flight_Date    : @Html.DisplayFor(Model => item.CSTotalDues)
+    </div>
+    <div>
+        Last_UAS_ID         :  @Html.DisplayFor(Model => item.CSDue_in_30_days)
+    </div>
+    <div>
+        Total_Flight_count  :  @Html.DisplayFor(Model => item.CSDue_done_in_30_days)
+    </div>
+    <div>
+        Total_Flight_Hour   :  @Html.DisplayFor(Model => item.OSTotalDues)
+    </div>
+    <div>
+        Last_Flight_Date    : @Html.DisplayFor(Model => item.OSDue_in_30_days)
+    </div>
+    <div>
+        Last_UAS_ID         :  @Html.DisplayFor(Model => item.OSDue_done_in_30_days)
+    </div>
+
+
+
+}
+
