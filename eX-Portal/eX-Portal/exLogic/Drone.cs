@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace eX_Portal.exLogic {
@@ -18,7 +19,42 @@ namespace eX_Portal.exLogic {
         _DroneID = value;
       }
     }
+    public int getDroneIDForFlight(int FlightID) {
+      return 80;
+    }
 
+    public String getAllowedLocation(int FlightID) {
+      int DroneID = getDroneIDForFlight(FlightID);
+
+      StringBuilder Cord = new StringBuilder();
+      String SQL = @"SELECT 
+        ApprovalID,
+        Coordinates
+      FROM
+        [GCA_Approval]
+      WHERE
+        DroneID = " + DroneID + @" AND
+        GETDATE() BETWEEN StartDate and EndDate";
+
+      var Rows = Util.getDBRows(SQL);
+      foreach (var Row in Rows) {
+        StringBuilder thisCord = new StringBuilder();
+        String Coordinates = Row["Coordinates"].ToString();
+        if (Cord.Length > 0) Cord.Append(",");
+        Cord.Append("[");
+
+        foreach(String LatLng in Coordinates.Split(',')) {
+          var tLatLng = LatLng.Trim();
+          String[] temp = tLatLng.Split(' ');
+          if (thisCord.Length > 0) thisCord.Append(",");
+          thisCord.Append("new google.maps.LatLng(" + temp[0] + "," + temp[1] + ")");
+        }
+        Cord.Append(thisCord);
+        Cord.Append("]");
+      }
+
+      return Cord.ToString();
+    }
     public List<DroneFlight> getLogFlights(List<DroneFlight> Flights, int FlightID = 0) {
       String SQL = FlightID == 0 ?
         "SELECT\n" +

@@ -54,10 +54,44 @@ var isGraphReplayMode = false;
 
 
 $(document).ready(function () {
-
   initialize();
+  setPolygon();
+  setAlertTimer();
 });
 
+function setAlertTimer() {
+  window.setTimeout(function () {
+    checkAlert();
+  }, 4000);
+}
+
+
+
+var BoundaryBox = null;
+function setPolygon() { 
+  for (var i = 0; i < AllowedLocation.length; i++) {
+    var paths = AllowedLocation[i];
+    BoundaryBox = new google.maps.Polygon({
+      paths: paths,
+      strokeWeight: 1,
+      fillColor: '#55FF55',
+      fillOpacity: 0.3,
+      editable: false
+    });
+    BoundaryBox.setMap(map);
+  }
+}
+
+
+function getBoundary() {
+  var Bounds = BoundaryBox.getPath().getArray();
+  var LatLng = '';
+  for (var i = 0; i < Bounds.length; i++) {
+    if (LatLng != '') LatLng += ',';
+    LatLng = LatLng + Bounds[i].lat() + ' ' + Bounds[i].lng()
+  }
+  return LatLng;
+}
 /*
 
 [{

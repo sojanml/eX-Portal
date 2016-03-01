@@ -229,10 +229,8 @@ namespace eX_Portal.Controllers {
       String Status = "ok";
       String StatusMessage = "Completed Successfully";
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
-     
-            
-             
-      Blackbox Process = new BlackBox();
+
+      BlackBox Process = new BlackBox();
       StringBuilder JsonText = new StringBuilder();
       int ImportedRows = 0;
       //String newFile = Process.FixImportFile(UploadPath + file);

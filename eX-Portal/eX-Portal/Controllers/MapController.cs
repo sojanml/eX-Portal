@@ -20,6 +20,8 @@ namespace eX_Portal.Controllers {
     public ActionResult FlightData(int id = 0) {
       ViewBag.Title = "Flight Map";
       ViewBag.FlightID = id;
+      Drones thisDrone = new Drones();
+      ViewBag.AllowedLocation = thisDrone.getAllowedLocation(id);
       return View();
     }
 

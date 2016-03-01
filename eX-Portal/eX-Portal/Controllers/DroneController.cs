@@ -608,7 +608,7 @@ namespace eX_Portal.Controllers
                     }
 
                 }
-                return RedirectToAction("Detail", new { ID = DroneView.Drone.DroneId });
+                return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
             }
             catch (Exception ex)
             {
