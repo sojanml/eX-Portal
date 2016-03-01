@@ -736,16 +736,12 @@ namespace eX_Portal.Controllers
                 var aa = (from p in List where p.DroneID == DroneID select p).ToList(); ;
                              return View(aa);
 
-                
-                
             }
 
         }
 
         public ActionResult GCAApproval()
-        {
-
-            String SQL = "SELECT [ApprovalID]\n ,[ApprovalName]\n,[ApprovalDate]\n,[StartDate]\n ,[EndDate]\n ,[StartTime]\n,[EndTime]\n,[ApprovalFileUrl]\n,Count(*) Over() as _TotalRecords,DroneID as _PKey FROM[ExponentPortal].[dbo].[GCA_Approval]";
+        { String SQL = "SELECT [ApprovalID]\n ,[ApprovalName]\n,[ApprovalDate]\n,[StartDate]\n ,[EndDate]\n ,[StartTime]\n,[EndTime]\n,[ApprovalFileUrl]\n,Count(*) Over() as _TotalRecords,DroneID as _PKey FROM[ExponentPortal].[dbo].[GCA_Approval]";
             qView nView = new qView(SQL);
             
             if (Request.IsAjaxRequest())

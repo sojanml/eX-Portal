@@ -394,7 +394,8 @@ namespace eX_Portal.Controllers {
                                  select r).ToList();
       return View(Docs);
     }
-        public ActionResult PortalAlert(){
+        public ActionResult PortalAlert()
+        {
        String SQL = "SELECT [AlertID] ,[FlightID] ,[FlightReadTime],[Latitude],[Longitude],[Altitude],[FlightDataID],[AlertMessage],[CreatedOn],Count(*) Over() as _TotalRecords,FlightID as _PKey FROM[ExponentPortal].[dbo].[PortalAlert]";
             qView nView = new qView(SQL);
             nView.addMenu("Report", Url.Action("Index", "Drone", new { ID = "_PKey" }));
