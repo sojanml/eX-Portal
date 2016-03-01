@@ -743,7 +743,6 @@ namespace eX_Portal.Controllers
         public ActionResult GCAApproval()
         { String SQL = "SELECT [ApprovalID]\n ,[ApprovalName]\n,[ApprovalDate]\n,[StartDate]\n ,[EndDate]\n ,[StartTime]\n,[EndTime]\n,[ApprovalFileUrl]\n,Count(*) Over() as _TotalRecords,DroneID as _PKey FROM[ExponentPortal].[dbo].[GCA_Approval]";
             qView nView = new qView(SQL);
-            
             if (Request.IsAjaxRequest())
             {
                 Response.ContentType = "text/javascript";
@@ -756,8 +755,7 @@ namespace eX_Portal.Controllers
         }
 
         public ActionResult GCADetails([Bind(Prefix = "ID")] int? DroneID)
-        {
-            using (var ctx = new ExponentPortalEntities())
+        {  using (var ctx = new ExponentPortalEntities())
             {
                 var List = ctx.GCA_Approval.ToList();
                 var aa = (from p in List where p.DroneID == DroneID select p).ToList();
