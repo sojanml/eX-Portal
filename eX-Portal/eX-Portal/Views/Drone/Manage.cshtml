@@ -15,7 +15,13 @@
       <span class="icon">&#xf0a9;</span>
       <a href="@Url.Action("Create", "DroneFlight", new  { ID = DroneID})">Flight Creation</a><br />
       <span class="icon">&#xf0a9;</span>
-      <a href="@Url.Action("Index", "DroneFlight", new  { ID = DroneID})">Flight History</a>
+      <a href="@Url.Action("Index", "DroneFlight", new  { ID = DroneID})">Flight History</a><br />
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("GCAApprovals", "Drone", new  { ID = DroneID})">GCA Approvals</a><br />
+      <span class="icon">&#xf0a9;</span>
+      <a href="@Url.Action("GCAApproval", "S3Upload", new  { ID = DroneID})">Upload GCA Approval</a>
+
+
     </div>
   </div>
 
