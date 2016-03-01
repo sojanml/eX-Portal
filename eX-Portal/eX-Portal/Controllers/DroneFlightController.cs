@@ -394,6 +394,20 @@ namespace eX_Portal.Controllers {
                                  select r).ToList();
       return View(Docs);
     }
+        public ActionResult PortalAlert(){
+       String SQL = "SELECT [AlertID] ,[FlightID] ,[FlightReadTime],[Latitude],[Longitude],[Altitude],[FlightDataID],[AlertMessage],[CreatedOn],Count(*) Over() as _TotalRecords,FlightID as _PKey FROM[ExponentPortal].[dbo].[PortalAlert]";
+            qView nView = new qView(SQL);
+            nView.addMenu("Report", Url.Action("Index", "Drone", new { ID = "_PKey" }));
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }
+        
 
   }//class
 }//namespace

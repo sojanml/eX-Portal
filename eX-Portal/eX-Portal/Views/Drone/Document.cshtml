@@ -1,0 +1,38 @@
+﻿
+    @model IEnumerable<eX_Portal.Models.DroneDocument>
+   @{
+       ViewBag.Title ="Title";
+       Layout = "~/Views/Shared/_exPortal.cshtml";
+}
+      
+    @foreach (var item in Model)
+    {
+          
+           <div>    
+           <b>UASID:</b>@Html.DisplayFor(Model =>item.DroneID)
+            </div><br />
+            <div>
+               <b>Type:</b>
+               @Html.DisplayFor(Model => item.DocumentType)
+            </div><br />
+            <div>
+                <b>
+                    Name:</b>
+                    @Html.DisplayFor(Model => item.DocumentName)
+</div><br />
+            <div>
+                <b>Title:</b>
+                @Html.DisplayFor(Model => item.DocumentTitle)
+            </div><br/>
+            <div>
+                <b>Description:</b>
+                @Html.DisplayFor(Model => item.DocumentDesc)
+            </div>
+
+
+
+        }
+    <div class="form-toolbar">
+        <input type="submit" value="Download" />
+    </div>
+

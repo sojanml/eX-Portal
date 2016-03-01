@@ -1,0 +1,100 @@
+﻿@model eX_Portal.Models.DroneDocument
+
+<div>
+    <h4>DroneDocument</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DroneID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DroneID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UploadedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UploadedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UploadedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UploadedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FlightID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FlightID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AccountID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentDesc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentDesc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.S3Url)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.S3Url)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

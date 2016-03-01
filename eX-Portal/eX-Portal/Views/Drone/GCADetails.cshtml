@@ -1,0 +1,68 @@
+﻿@model IEnumerable<eX_Portal.Models.GCA_Approval>
+
+@{
+    ViewBag.Title = "GCA Details";
+    Layout = "~/Views/Shared/_exPortal.cshtml";
+}
+
+
+@foreach (var item in Model)
+{
+
+
+    <div>
+        <b>ApprovalID:</b>@Html.DisplayFor(Model => item.ApprovalID)
+    </div><br />
+    <div>
+        <b>ApprovalName:</b>
+        @Html.DisplayFor(Model => item.ApprovalName)
+    </div><br />
+    <div>
+        <b>
+            ApprovalDate:
+        </b>
+        @Html.DisplayFor(Model => item.ApprovalDate)
+    </div><br />
+            <div>
+                <b>StartDate:</b>
+                @Html.DisplayFor(Model => item.StartDate)
+            </div><br />
+            <div>
+                <b>EndDate:</b>
+                @Html.DisplayFor(Model => item.EndDate)
+            </div><br/>
+            <div>
+                <b>StartTime:</b>
+                @Html.DisplayFor(Model => item.StartTime)
+            </div><br />
+            <div>
+                <b>EndTime:</b>
+                @Html.DisplayFor(Model => item.EndTime)
+            </div><br />
+            <div>
+                <b>Coordinates:</b>
+                @Html.DisplayFor(Model => item.Coordinates)
+            </div><br/>
+
+            <div>
+                <b>CreatedOn:</b>
+                @Html.DisplayFor(Model => item.CreatedOn)
+            </div><br />
+            <div>
+                <b>CreatedBy:</b>
+                @Html.DisplayFor(Model => item.CreatedBy)
+            </div><br />
+            <div>
+                <b>DroneID:</b>
+                @Html.DisplayFor(Model => item.DroneID)
+            </div><br/>
+            <div>
+                <B>ApprovalFilterUrl:</B>
+                @Html.DisplayFor(Model => item.ApprovalFileUrl)
+            </div>
+
+
+
+}
+
+

@@ -85,8 +85,14 @@ namespace eX_Portal.Controllers
 
         }
 
-        public ActionResult Details()
+        public ActionResult Details([Bind(Prefix = "ID")] int DroneID)
         {
+
+            //if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
+           // if (!exLogic.User.hasDrone(DroneID)) return RedirectToAction("NoAccess", "Home");
+
+            ViewBag.Title = Util.getDroneName(DroneID);
+            ViewBag.DroneID = DroneID;
 
             return View();
         }
