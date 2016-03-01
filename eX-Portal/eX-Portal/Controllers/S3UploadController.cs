@@ -94,10 +94,86 @@ namespace eX_Portal.Controllers {
     private string toTitle(String S3url) {
       var SlashAt = S3url.LastIndexOf('/');
       var LastDot = S3url.LastIndexOf('.');
-      var FileOnly = S3url.Substring(SlashAt + 1, LastDot- SlashAt - 1);
-      var UKeyEnd = FileOnly.IndexOf('_');
+      var FileOnly = S3url.Substring(SlashAt + 1, LastDot- SlashAt);
+      var UKeyEnd = S3url.IndexOf('_');
       return FileOnly.Substring(UKeyEnd + 1);
     }
 
-  }//class
+        public ActionResult GCAApproval()
+        {
+            var fileStorageProvider = new AmazonS3FileStorageProvider();
+
+            var fileUploadViewModel = new S3Upload(
+              fileStorageProvider.PublicKey,
+              fileStorageProvider.PrivateKey,
+              fileStorageProvider.BucketName,
+              Url.Action("complete", "home", null, Request.Url.Scheme)
+            );
+
+            fileUploadViewModel.SetPolicy(
+              fileStorageProvider.GetPolicyString(
+                fileUploadViewModel.FileId,
+                fileUploadViewModel.RedirectUrl
+              )
+            );
+
+
+            ViewBag.FormAction = fileUploadViewModel.FormAction;
+            ViewBag.FormMethod = fileUploadViewModel.FormMethod;
+            ViewBag.FormEnclosureType = fileUploadViewModel.FormEnclosureType;
+            ViewBag.AWSAccessKey = fileUploadViewModel.AWSAccessKey;
+            ViewBag.Acl = fileUploadViewModel.Acl;
+            ViewBag.Base64EncodedPolicy = fileUploadViewModel.Base64EncodedPolicy;
+            ViewBag.Signature = fileUploadViewModel.Signature;
+
+            var GCAApprovalDoc = new GCA_Approval();
+            return View(GCAApprovalDoc);
+
+        }//ActionResult GCAApproval()
+
+
+        [HttpPost]
+        public String UploadGCA(GCA_Approval GCA)
+        {
+            //Doc.DocumentTitle = Doc.DocumentTitle.Trim();
+            if (String.IsNullOrWhiteSpace(GCA.ApprovalName))
+            {
+                GCA.ApprovalName = toTitle(GCA.ApprovalFileUrl);
+            }
+
+            string[] Coord = GCA.Coordinates.Split(',');
+           string Poly= GCA.Coordinates + ","+Coord[0];
+
+            String SQL = @" insert into [GCA_Approval]
+                         ([ApprovalName]
+                        ,[ApprovalDate]
+                        ,[StartDate]
+                        ,[EndDate]
+                        ,[StartTime]
+                        ,[EndTime]
+                        ,[Coordinates]
+                         ,[Polygon]
+                         ,DroneID
+                          ,ApprovalFileUrl  )
+                      values
+                      ('"+GCA.ApprovalName+@"',
+                      '"+GCA.ApprovalDate+@"',
+                      '"+GCA.StartDate+@"',
+                      '"+GCA.EndDate+ @"',
+                      '"+GCA.StartTime+ @"',
+                      '"+GCA.EndTime+ @"',
+                      '" + GCA.Coordinates + @"',
+                      geography::STGeomFromText('POLYGON(("+ Poly+ "))',4326).MakeValid()," 
+                      + GCA.DroneID+@",
+                        '"+GCA.S3Url+"')";
+
+            GCA.ApprovalID = Util.InsertSQL(SQL);
+
+            string UpdateRingQuery = "Update [GCA_Approval] set Polygon=Polygon.ReorientObject().MakeValid()  where Polygon.STArea()>999999 and ApprovalID=" + GCA.ApprovalID;
+
+            int res= Util.doSQL(SQL);
+            return null;
+        }
+
+    }//class
 }//namespace

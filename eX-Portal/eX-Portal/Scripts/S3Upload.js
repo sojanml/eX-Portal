@@ -19,7 +19,8 @@ function checkForm() {
   var ReturnValue = true;
   var Drone = document.forms['formS3']['DroneID'].value;
   var File = document.forms['formS3']['file'];
-  var DocumentType = document.forms['formS3']['DocumentType'].value;
+  var DocumentType = DocType;
+      //document.forms['formS3']['DocumentType'].value;
 
   if (Drone == '0') {
     $('#DroneID-Required').fadeIn();
@@ -52,7 +53,7 @@ function startUpload() {
   for (var i = 0; i < File.files.length; i++) {
     var file = File.files[i];
     if (file.name.length < 1) {
-    } else if (file.size > 50 * 1024 * 1024) {
+    } else if (file.size > 5 * 1024 * 1024) {
       alert("File is to big");
     } else {
       SubmitFile(file);
@@ -64,7 +65,6 @@ function startUpload() {
 function getKeyName(FileName) {
   var Dt = new Date();
   var KeyName = Dt.toISOString().replace(/[^0-9]/g, "");
-  var DocType = fixName(document.forms['formS3']['DocumentType'].value);
   var Drone = document.forms['formS3']['DroneID'];
   var DroneName = fixName(Drone.options[Drone.selectedIndex].text);
   DroneName = DroneName.replace(/\./g, '');
@@ -148,7 +148,7 @@ function SubmitFile(file) {
 
 function saveDocument(AjaxData) {
   $.ajax({
-    url: '/S3Upload/Upload',  //server script to process data
+      url: UploadUrl,  //server script to process data
     type: 'POST',
     data: AjaxData,
     success: completeHandler = function (response) {
