@@ -41,5 +41,6 @@ namespace eX_Portal.Models
         public Nullable<int> AccountId { get; set; }
         public Nullable<bool> IsPilot { get; set; }
         public Nullable<int> UserAccountId { get; set; }
+        public string Dashboard { get; set; }
     }
 }

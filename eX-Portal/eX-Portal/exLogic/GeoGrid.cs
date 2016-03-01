@@ -38,9 +38,123 @@ namespace eX_Portal.exLogic {
       } 
     }
 
+    public String getTable(String FlightUniqueID) {
+      int MaxRow = 0;
+      int MaxCol = 0;
+      Dictionary<String, String> Rows = new Dictionary<String, String>();
+
+      String SQL = @"select 
+        Max(RowNumber) as MaxRow,
+        Max(ColumnNumber) as MaxCol
+      from
+        PayLoadMapData
+      where
+        FlightUniqueID = '" + FlightUniqueID + "'";
+      var Max = Util.getDBRow(SQL);
+      int.TryParse(Max["MaxRow"].ToString(), out MaxRow);
+      int.TryParse(Max["MaxCol"].ToString(), out MaxCol);
+
+      SQL = @"select 
+        RowNumber,
+        ColumnNumber,
+        Count(PayLoadDataMapID) as Items
+      from 
+        PayLoadMapData  
+      where 
+        FlightUniqueID='" + FlightUniqueID + @"'
+      GROUP BY
+        RowNumber,
+        ColumnNumber
+      Order By
+        RowNumber,
+        ColumnNumber";
+
+    //Add all reference to rows      
+    for(var Row = 1; Row <= MaxRow; Row++) {
+      for(var Col = 1; Col <= MaxCol; Col++) {
+          String ThisRef = Row + "." + Col;
+          Rows[ThisRef] = "";
+      }
+    }
+
+      using (var ctx = new ExponentPortalEntities()) {
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          using (var reader = cmd.ExecuteReader()) {
+            while (reader.Read()) {
+              String ThisRef = reader["RowNumber"].ToString() + "." + 
+                               reader["ColumnNumber"].ToString();
+              String RFID = getRFID(
+                ctx,
+                FlightUniqueID, 
+                reader["RowNumber"].ToString(), 
+                reader["ColumnNumber"].ToString());
+              //Rows[ThisRef] = int.Parse(reader["Items"].ToString());
+              Rows[ThisRef] = RFID;
+            }//while
+          }//using reader
+        }//using ctx.Database.Connection.CreateCommand
+      }//using ExponentPortalEntities
+
+
+      StringBuilder TableRows = new StringBuilder();
+      for (var Row = 1; Row <= MaxRow; Row++) {
+        for (var Col = 1; Col <= MaxCol; Col++) {
+          String ThisRef = Row + "." + Col;
+          if (TableRows.Length > 0) TableRows.Append(",");
+          TableRows.Append("\"");
+          TableRows.Append(ThisRef);
+          TableRows.Append("\": \"");
+          TableRows.Append(Rows[ThisRef]);
+          TableRows.Append("\"");
+        }
+        if (TableRows.Length > 0) TableRows.AppendLine("");
+      }
+
+      if (TableRows.Length > 0) TableRows.Append(",");
+      TableRows.Append("\"Rows\":");
+      TableRows.Append(MaxRow);
+      TableRows.Append(",\"Cols\":");
+      TableRows.Append(MaxCol);
+
+      return TableRows.ToString();
+    }
+
+    private String getRFID(
+      ExponentPortalEntities DB,
+      String FlightUniqueID, 
+      String sRow, String sCol) {
+      int Row = -100;  
+      int Col = -100;
+      int.TryParse(sRow, out Row);
+      int.TryParse(sCol, out Col);
+      
+
+      String SQL = "SELECT RFID From PayLoadMapData WHERE\n" +
+      "  FlightUniqueID='" + FlightUniqueID + "' AND\n" +
+      "  RowNumber='" + Row + "' AND\n" +
+      "  ColumnNumber='" + Col + "'";
+      String RFID = "";
+      using (var cmd = DB.Database.Connection.CreateCommand()) {
+        //DB.Database.Connection.Open();
+        cmd.CommandText = SQL;
+        using (var reader = cmd.ExecuteReader()) {
+          while (reader.Read()) {
+            if (RFID != "") RFID += ",";
+            RFID += reader["RFID"].ToString().Substring(4,6);
+          }//while
+        }//using reader
+      }//using ctx.Database.Connection.CreateCommand
+
+      return RFID;
+    }
+
     public String getBox() {
       String SQL = "SELECT * FROM PayLoadYard WHERE YardID=" + _YardID;
-      return Util.getDBRowsJson(SQL);
+      String JSon = Util.getDBRowsJson(SQL);
+      if (String.IsNullOrWhiteSpace(JSon)) JSon = "[]";
+      return JSon;
     }
 
     private int getYardID(String FlightUniqueID) {

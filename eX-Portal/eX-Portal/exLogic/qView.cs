@@ -100,10 +100,11 @@ namespace eX_Portal.exLogic {
       if (SearchTerm != "") {
 
         foreach (var Column in FilterColumns) {
+          if(!String.IsNullOrWhiteSpace(ColumnMapping[Column])) { 
           if (Filter != "") Filter += " OR ";
           Filter += ColumnMapping[Column] + " LIKE '%" + SearchTerm + "%'";
         }
-
+        }
         if (Filter != "") Filter = " (" + Filter + ")";
       }
       return Filter;

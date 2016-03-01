@@ -207,6 +207,26 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="PointDistance" Type="numeric" Precision="18" Scale="5" />
           <Property Name="Distance" Type="numeric" Precision="18" Scale="5" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ExponentPortal.dbo.GCA_Approval' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="GCA_Approval">
+          <Key>
+            <PropertyRef Name="ApprovalID" />
+          </Key>
+          <Property Name="ApprovalID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApprovalName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApprovalDate" Type="datetime" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="Coordinates" Type="nvarchar" MaxLength="250" />
+          <Property Name="Polygon" Type="geography" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="datetime" />
+          <Property Name="DroneID" Type="int" />
+          <Property Name="ApprovalFileUrl" Type="nvarchar" MaxLength="250" />
+          <Property Name="EndTime" Type="nvarchar" MaxLength="10" />
+          <Property Name="StartTime" Type="nvarchar" MaxLength="10" />
+        </EntityType>
         <EntityType Name="LiveDrone">
           <Key>
             <PropertyRef Name="ID" />
@@ -569,6 +589,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="ApprovedOn" Type="datetime" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="PasswordSalt" Type="nvarchar" MaxLength="200" />
+          <Property Name="Dashboard" Type="nvarchar" MaxLength="50" />
           <Property Name="AccountId" Type="int" />
           <Property Name="IsPilot" Type="bit" />
         </EntityType>
@@ -708,6 +729,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <Property Name="MaxCellID" Type="int" />
           <Property Name="MaxRow" Type="int" />
           <Property Name="MaxCol" Type="int" />
+          <Property Name="RowDistance" Type="decimal" Precision="18" Scale="9" />
+          <Property Name="ColDistance" Type="decimal" Precision="18" Scale="9" />
         </EntityType>
         <EntityType Name="PayLoadYard">
           <Key>
@@ -753,6 +776,22 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="Polygon" Type="geography" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PortalAlert">
+          <Key>
+            <PropertyRef Name="AlertID" />
+          </Key>
+          <Property Name="AlertID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FlightID" Type="int" />
+          <Property Name="FlightReadTime" Type="datetime" />
+          <Property Name="Latitude" Type="decimal" Precision="18" Scale="9" />
+          <Property Name="Longitude" Type="decimal" Precision="18" Scale="9" />
+          <Property Name="Altitude" Type="int" />
+          <Property Name="FlightDataID" Type="int" />
+          <Property Name="AlertMessage" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="ProductDefinition">
           <Key>
@@ -910,6 +949,23 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
     [BlackBoxData].[BBFlightID] AS [BBFlightID]
     FROM [dbo].[BlackBoxData] AS [BlackBoxData]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="GCA_Approval" EntityType="Self.GCA_Approval" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [GCA_Approval].[ApprovalID] AS [ApprovalID], 
+    [GCA_Approval].[ApprovalName] AS [ApprovalName], 
+    [GCA_Approval].[ApprovalDate] AS [ApprovalDate], 
+    [GCA_Approval].[StartDate] AS [StartDate], 
+    [GCA_Approval].[EndDate] AS [EndDate], 
+    [GCA_Approval].[Coordinates] AS [Coordinates], 
+    [GCA_Approval].[Polygon] AS [Polygon], 
+    [GCA_Approval].[CreatedOn] AS [CreatedOn], 
+    [GCA_Approval].[CreatedBy] AS [CreatedBy], 
+    [GCA_Approval].[DroneID] AS [DroneID], 
+    [GCA_Approval].[ApprovalFileUrl] AS [ApprovalFileUrl], 
+    [GCA_Approval].[EndTime] AS [EndTime], 
+    [GCA_Approval].[StartTime] AS [StartTime]
+    FROM [dbo].[GCA_Approval] AS [GCA_Approval]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="PayLoadData" EntityType="Self.PayLoadData" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [PayLoadData].[PayLoadDataID] AS [PayLoadDataID], 
@@ -988,7 +1044,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
     [PayLoadMapData].[CellID] AS [CellID], 
     [PayLoadMapData].[MaxCellID] AS [MaxCellID], 
     [PayLoadMapData].[MaxRow] AS [MaxRow], 
-    [PayLoadMapData].[MaxCol] AS [MaxCol]
+    [PayLoadMapData].[MaxCol] AS [MaxCol], 
+    [PayLoadMapData].[RowDistance] AS [RowDistance], 
+    [PayLoadMapData].[ColDistance] AS [ColDistance]
     FROM [dbo].[PayLoadMapData] AS [PayLoadMapData]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadYardGrid" EntityType="Self.PayLoadYardGrid" store:Type="Tables" store:Schema="dbo">
@@ -1010,6 +1068,19 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
     [PayLoadYardGrid].[CreatedOn] AS [CreatedOn], 
     [PayLoadYardGrid].[Polygon] AS [Polygon]
     FROM [dbo].[PayLoadYardGrid] AS [PayLoadYardGrid]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PortalAlert" EntityType="Self.PortalAlert" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PortalAlert].[AlertID] AS [AlertID], 
+    [PortalAlert].[FlightID] AS [FlightID], 
+    [PortalAlert].[FlightReadTime] AS [FlightReadTime], 
+    [PortalAlert].[Latitude] AS [Latitude], 
+    [PortalAlert].[Longitude] AS [Longitude], 
+    [PortalAlert].[Altitude] AS [Altitude], 
+    [PortalAlert].[FlightDataID] AS [FlightDataID], 
+    [PortalAlert].[AlertMessage] AS [AlertMessage], 
+    [PortalAlert].[CreatedOn] AS [CreatedOn]
+    FROM [dbo].[PortalAlert] AS [PortalAlert]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
             <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
@@ -1409,6 +1480,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <EntitySet Name="PayLoadFlights" EntityType="ExponentPortalModel.PayLoadFlight" />
           <EntitySet Name="PayLoadImageDatas" EntityType="ExponentPortalModel.PayLoadImageData" />
           <EntitySet Name="PayLoadYardGrids" EntityType="ExponentPortalModel.PayLoadYardGrid" />
+          <EntitySet Name="GCA_Approval" EntityType="ExponentPortalModel.GCA_Approval" />
+          <EntitySet Name="PortalAlerts" EntityType="ExponentPortalModel.PortalAlert" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -1784,6 +1857,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <Property Name="AccountId" Type="Int32" />
           <Property Name="IsPilot" Type="Boolean" />
           <Property Name="UserAccountId" Type="Int32" />
+          <Property Name="Dashboard" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PayLoadData">
           <Key>
@@ -1840,6 +1914,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <Property Name="MaxCellID" Type="Int32" />
           <Property Name="MaxRow" Type="Int32" />
           <Property Name="MaxCol" Type="Int32" />
+          <Property Name="RowDistance" Type="Decimal" Precision="18" Scale="9" />
+          <Property Name="ColDistance" Type="Decimal" Precision="18" Scale="9" />
         </EntityType>
         <EntityType Name="PayLoadYard">
           <Key>
@@ -1912,6 +1988,38 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="Polygon" Type="Geography" />
+        </EntityType>
+        <EntityType Name="GCA_Approval">
+          <Key>
+            <PropertyRef Name="ApprovalID" />
+          </Key>
+          <Property Name="ApprovalID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApprovalName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="Coordinates" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Polygon" Type="Geography" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="DateTime" Precision="3" />
+          <Property Name="DroneID" Type="Int32" />
+          <Property Name="ApprovalFileUrl" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="EndTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="StartTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PortalAlert">
+          <Key>
+            <PropertyRef Name="AlertID" />
+          </Key>
+          <Property Name="AlertID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="FlightReadTime" Type="DateTime" Precision="3" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="9" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="9" />
+          <Property Name="Altitude" Type="Int32" />
+          <Property Name="FlightDataID" Type="Int32" />
+          <Property Name="AlertMessage" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2624,6 +2732,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <EntitySetMapping Name="MSTR_User">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
               <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="Dashboard" ColumnName="Dashboard" />
                 <ScalarProperty Name="UserAccountId" ColumnName="UserAccountId" />
                 <ScalarProperty Name="IsPilot" ColumnName="IsPilot" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
@@ -2683,6 +2792,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <EntitySetMapping Name="PayLoadMapDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadMapData">
               <MappingFragment StoreEntitySet="PayLoadMapData">
+                <ScalarProperty Name="ColDistance" ColumnName="ColDistance" />
+                <ScalarProperty Name="RowDistance" ColumnName="RowDistance" />
                 <ScalarProperty Name="MaxCol" ColumnName="MaxCol" />
                 <ScalarProperty Name="MaxRow" ColumnName="MaxRow" />
                 <ScalarProperty Name="MaxCellID" ColumnName="MaxCellID" />
@@ -2786,6 +2897,40 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
                 <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
                 <ScalarProperty Name="YardID" ColumnName="YardID" />
                 <ScalarProperty Name="CellID" ColumnName="CellID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GCA_Approval">
+            <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
+              <MappingFragment StoreEntitySet="GCA_Approval">
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="ApprovalFileUrl" ColumnName="ApprovalFileUrl" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Polygon" ColumnName="Polygon" />
+                <ScalarProperty Name="Coordinates" ColumnName="Coordinates" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="ApprovalName" ColumnName="ApprovalName" />
+                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PortalAlerts">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PortalAlert">
+              <MappingFragment StoreEntitySet="PortalAlert">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="AlertMessage" ColumnName="AlertMessage" />
+                <ScalarProperty Name="FlightDataID" ColumnName="FlightDataID" />
+                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="FlightReadTime" ColumnName="FlightReadTime" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="AlertID" ColumnName="AlertID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

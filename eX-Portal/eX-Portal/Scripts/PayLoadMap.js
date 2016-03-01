@@ -7,12 +7,45 @@ var ColorHilite = '#CC0000';
 var ColorActive = '#00FF00';
 var ColorActiveHilite = '#0000FF';
 
-var initLat = GridBoundBox["TopLeftLat"];
-var initLng = GridBoundBox["TopLeftLon"];
+//var initLat = GridBoundBox["TopLeftLat"];
+//var initLng = GridBoundBox["TopLeftLon"];
 var defaultZoom = 10;
 var bounds = new google.maps.LatLngBounds();
 var infowindow = new google.maps.InfoWindow();
 var ProductGrid = new Object();
+var IsGridInitilized = false;
+
+var BoundaryBox = null;
+
+$(document).ready(function () {
+  initialize();
+  setGridBox();
+  //drawGridLines(GridLinesRows);
+  //drawGridLines(GridLinesCols);
+  //drawLabels();
+  //drawProducts();
+
+  $('#rfid-auto-correct').on("click", rfid_auto_correct_click);
+
+  $('#rfid-virtual-grid').on("click", function (e) {
+      e.preventDefault();
+    $('#map-holder').hide();
+    $('#grid-holder').show();
+    if (!IsGridInitilized) {
+      $('#grid-holder-content').html(grid_getByRows());
+      IsGridInitilized = true;
+    }
+  });
+
+  $('#rfid-google-map').on("click", function (e) {
+    e.preventDefault();
+    $('#map-holder').show();
+    $('#grid-holder').hide();
+  });
+
+});
+
+
 
 function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
   //alert('Start at: ' + iStart);
@@ -37,17 +70,6 @@ function setGridHilite(aData) {
   map.fitBounds(bounds);
 
 }
-
-$(document).ready(function () {
-  initialize();
-  setGridBox();
-  drawGridLines(GridLinesRows);
-  drawGridLines(GridLinesCols);
-  drawLabels();
-  drawProducts();
-
-  $('#rfid-auto-correct').on("click", rfid_auto_correct_click);
-});
 
 
 function rfid_auto_correct_click(e) {
@@ -74,16 +96,28 @@ function setGridBox() {
     { lat: GridBoundBox["BottomLeftLat"], lng: GridBoundBox["BottomLeftLon"] }
   ];
   // Construct the polygon.
-  var theBox = new google.maps.Polygon({
+  BoundaryBox = new google.maps.Polygon({
     paths: BoxCoords,
     strokeColor: '#FF0000',
     strokeOpacity: 0.7,
     strokeWeight: 1,
     fillColor: '#FF0000',
-    fillOpacity: 0.03
+    fillOpacity: 0.03,
+    editable: true
   });
-  theBox.setMap(map);
+  BoundaryBox.setMap(map);
 }
+
+function getBoundary() {
+  var Bounds = BoundaryBox.getPath().getArray();
+  var LatLng = '';
+  for (var i = 0; i < Bounds.length; i++) {
+    if (LatLng != '') LatLng += ',';
+    LatLng = LatLng + Bounds[i].lat() + ' ' + Bounds[i].lng()
+  }
+  return LatLng;
+}
+
 
 function drawGridLines(GridLines) {
 
@@ -338,7 +372,7 @@ function Tile_Click(Obj) {
 
 
 function initialize() {
-  var Center = new google.maps.LatLng(initLat, initLng);
+  var Center = new google.maps.LatLng(0, 0);
   geocoder = new google.maps.Geocoder();
   var mapOptions = {
     zoom: defaultZoom,
@@ -360,7 +394,7 @@ function initialize() {
   };
   map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
 
-  bounds.extend(Center);
+  //bounds.extend(Center);
 
   //GetDrones();
 };
@@ -385,7 +419,7 @@ function createMarker(map, latlng, heading, body) {
   var marker = new google.maps.Marker({
     position: latlng,
     map: map,
-    icon: image,
+    //icon: image,
     title: heading
   });
 
@@ -456,4 +490,85 @@ function getRandomColor() {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
+}
+
+
+
+
+function grid_getByRows() {
+  var Row = TableDef['Rows'];
+  var Col = TableDef['Cols'];
+  var Table = '<table cellpadding="5" cellspacing="0">';
+  for (var R = 0; R <= Row; R++) {
+    Table += '<TR>\n';
+    for (var C = 0; C <= Col; C++) {
+      if (R == 0 && C == 0) {
+        Table += "<th>&nbsp;</th>";
+      } else if (R == 0) {
+        Table += "<th>" + C + "</th>";
+      } else if (C == 0) {
+        Table += "<th>" + R + "</th>";
+      } else {
+        var Items = TableDef[R + "." + C];
+        if (Items == "") Items = '&nbsp;';
+        Table += "<td>" + Items + "</td>";
+      }
+    }//for(C)
+    Table += '</TR>\n';
+  }//For(R)
+  Table += "</table>";
+
+  return Table;
+}
+
+function grid_getByRows_Rev() {
+  var Row = TableDef['Rows'];
+  var Col = TableDef['Cols'];
+  var Table = '<table border="1" cellpadding="5" cellspacing="0">';
+  for (var R = Row + 1; R >= 1; R--) {
+    Table += '<TR>\n';
+    for (var C = Col + 1; C >= 1 ; C--) {
+      if (R == (Row + 1) && C == (Col + 1)) {
+        Table += "<th>&nbsp;</th>";
+      } else if (R == (Row + 1)) {
+        Table += "<th>" + (Col - C + 1) + "</th>";
+      } else if (C == (Col + 1)) {
+        Table += "<th>" + (Row - R + 1) + "</th>";
+      } else {
+        var Items = TableDef[R + "." + C];
+        if (Items <= 0) Items = '&nbsp;';
+        Table += "<td>" + Items + "</td>";
+      }
+    }//for(C)
+    Table += '</TR>\n';
+  }//For(R)
+  Table += "</table>";
+
+  return Table;
+}
+
+function grid_getByCols() {
+  var Row = TableDef['Rows'];
+  var Col = TableDef['Cols'];
+  var Table = '<table border="1" cellpadding="5" cellspacing="0">';
+  for (var C = 0; C <= Col; C++) {
+    Table += '<TR>\n';
+    for (var R = 0; R <= Row; R++) {
+      if (R == 0 && C == 0) {
+        Table += "<th>&nbsp;</th>";
+      } else if (R == 0) {
+        Table += "<th>" + C + "</th>";
+      } else if (C == 0) {
+        Table += "<th>" + R + "</th>";
+      } else {
+        var Items = TableDef[R + "." + C];
+        if (Items <= 0) Items = '&nbsp;';
+        Table += "<td>" + Items + "</td>";
+      }
+    }//for(C)
+    Table += '</TR>\n';
+  }//For(R)
+  Table += "</table>";
+
+  return Table;
 }

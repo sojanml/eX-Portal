@@ -1,36 +1,21 @@
-﻿@{
+﻿@model List<Dictionary<String, Object>>
+@{
   Layout = null;
 }
+
 <link href="~/Content/dewa-dashboard.css" rel="stylesheet" />
+<script src="~/jwplayer/jwplayer.js"></script>
+<script>jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";</script>
 
 <div class="dash-row">
-
+@foreach (var Row in Model) {
   <div class="dash-column col1">
-    <div class="content">
-      <h2>Power Line Inspection</h2>
-      <div><a href="#">View more...</a></div>
+    <div class="dash-content">
+      @Html.Action("SubSection", new { DocumentID = Row["LastID"].ToString() })
+      <div style="float:right"><a href="#"><span class="icon">&#xf022;</span> View All...</a></div>
+      <div style="clear:both"></div>
     </div>
   </div>
-
-  <div class="dash-column col2">
-    <div class="content">
-      <h2>Red Tide &amp; Oil Spill Detection</h2>
-      <div><a href="#">View more...</a></div>
-    </div>
-  </div>
-
-  <div class="dash-column col3">
-    <div class="content">
-      <h2>Image Mapping</h2>
-      <div><a href="#">View more...</a></div>
-    </div>
-  </div>
-  
-  <div class="dash-column col4">
-    <div class="content">
-      <h2>Water Sampling</h2>
-      <div><a href="#">View more...</a></div>
-    </div>
-  </div>
+}
   
 </div>

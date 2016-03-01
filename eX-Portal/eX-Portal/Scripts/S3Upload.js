@@ -19,7 +19,8 @@ function checkForm() {
   var ReturnValue = true;
   var Drone = document.forms['formS3']['DroneID'].value;
   var File = document.forms['formS3']['file'];
-  var DocumentType = document.forms['formS3']['DocumentType'].value;
+  var DocumentType = DocType;
+      //document.forms['formS3']['DocumentType'].value;
 
   if (Drone == '0') {
     $('#DroneID-Required').fadeIn();
@@ -67,7 +68,7 @@ function getKeyName(FileName) {
   var Drone = document.forms['formS3']['DroneID'];
   var DroneName = fixName(Drone.options[Drone.selectedIndex].text);
   DroneName = DroneName.replace(/\./g, '');
-  return 'Drone/' + DroneName + '/DocType/' + KeyName + "_" + fixName(FileName);
+  return 'Drone/' + DroneName + '/' + DocType + '/' + KeyName + "_" + fixName(FileName);
 
 }
 
@@ -147,7 +148,7 @@ function SubmitFile(file) {
 
 function saveDocument(AjaxData) {
   $.ajax({
-    url: '/S3Upload/Upload',  //server script to process data
+      url: UploadUrl,  //server script to process data
     type: 'POST',
     data: AjaxData,
     success: completeHandler = function (response) {

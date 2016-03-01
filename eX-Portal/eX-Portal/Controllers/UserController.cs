@@ -128,7 +128,7 @@ namespace eX_Portal.Controllers {
 
 
       qView nView = new qView(SQL);
-          
+
       if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
@@ -143,36 +143,32 @@ namespace eX_Portal.Controllers {
 
 
     }
-        public ActionResult PilotList()
-        {
-            if (!exLogic.User.hasAccess("PILOT")) return RedirectToAction("NoAccess", "Home");
-            ViewBag.Title = "User View";
-            string SQL = "select a.UserName,a.FirstName,a.MobileNo,b.ProfileName, Count(*) Over() as _TotalRecords ,  a.UserId as _PKey " +
-                " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId where a.ispilot=1 ";
+    public ActionResult PilotList() {
+      if (!exLogic.User.hasAccess("PILOT")) return RedirectToAction("NoAccess", "Home");
+      ViewBag.Title = "User View";
+      string SQL = "select a.UserName,a.FirstName,a.MobileNo,b.ProfileName, Count(*) Over() as _TotalRecords ,  a.UserId as _PKey " +
+          " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId where a.ispilot=1 ";
 
 
-            qView nView = new qView(SQL);
+      qView nView = new qView(SQL);
 
-            if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
-            if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-            if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
-            if (exLogic.User.hasAccess("PILOTLOG.VIEW")) nView.addMenu("Pilot Log", Url.Action("Detail", "PilotLog", new { ID = "_PKey" }));
-            if (Request.IsAjaxRequest())
-            {
-                Response.ContentType = "text/javascript";
-                return PartialView("qViewData", nView);
-            }
-            else
-            {
-                return View(nView);
-            }//if(IsAjaxRequest)
+      if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("PILOTLOG.VIEW")) nView.addMenu("Pilot Log", Url.Action("Detail", "PilotLog", new { ID = "_PKey" }));
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
 
 
 
-        }
+    }
 
 
-        public ActionResult Create() {
+    public ActionResult Create() {
 
       ViewBag.Title = "Create User";
       if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
@@ -389,7 +385,7 @@ namespace eX_Portal.Controllers {
           "  CreatedOn,\n" +
           "  AccountId,\n" +
           "  IsPilot, \n" +
-          "  PhotoUrl\n" + 
+          "  PhotoUrl\n" +
           ") values(\n" +
           "  '" + UserModel.User.UserName + "',\n" +
           "  '" + Password + "',\n" +
@@ -434,8 +430,8 @@ namespace eX_Portal.Controllers {
         String newPath = UploadPath + id + "/";
         String PhotoURL = UploadPath + "0/" + UserModel.User.PhotoUrl;
         if (!System.IO.Directory.Exists(newPath)) Directory.CreateDirectory(newPath);
-        if(!String.IsNullOrEmpty(UserModel.User.PhotoUrl) && 
-            System.IO.File.Exists(PhotoURL)) { 
+        if (!String.IsNullOrEmpty(UserModel.User.PhotoUrl) &&
+            System.IO.File.Exists(PhotoURL)) {
           System.IO.File.Move(PhotoURL, newPath + UserModel.User.PhotoUrl);
         }
         return RedirectToAction("UserDetail", new { ID = id });

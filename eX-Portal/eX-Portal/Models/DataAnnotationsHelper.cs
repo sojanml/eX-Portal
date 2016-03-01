@@ -311,4 +311,15 @@ namespace eX_Portal.Models
 
   }
 
+    [MetadataType(typeof(GCA_Approval_Helper))]
+    public partial class GCA_Approval
+    {
+        public string S3Url { get; set; }
+    }
+
+    public class GCA_Approval_Helper
+    {
+        [DataType(DataType.MultilineText)]
+        public string Coordinates { get; set; }
+    }
 }

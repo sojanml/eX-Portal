@@ -38,6 +38,8 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PayLoadFlight" Width="1.5" PointX="7.375" PointY="17.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.PayLoadImageData" Width="1.5" PointX="17.375" PointY="9.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.PayLoadYardGrid" Width="1.5" PointX="17.375" PointY="14.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="19.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PortalAlert" Width="1.5" PointX="19.375" PointY="5.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
