@@ -569,6 +569,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="ApprovedOn" Type="datetime" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="PasswordSalt" Type="nvarchar" MaxLength="200" />
+          <Property Name="Dashboard" Type="nvarchar" MaxLength="50" />
           <Property Name="AccountId" Type="int" />
           <Property Name="IsPilot" Type="bit" />
         </EntityType>
@@ -708,6 +709,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <Property Name="MaxCellID" Type="int" />
           <Property Name="MaxRow" Type="int" />
           <Property Name="MaxCol" Type="int" />
+          <Property Name="RowDistance" Type="decimal" Precision="18" Scale="9" />
+          <Property Name="ColDistance" Type="decimal" Precision="18" Scale="9" />
         </EntityType>
         <EntityType Name="PayLoadYard">
           <Key>
@@ -988,7 +991,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
     [PayLoadMapData].[CellID] AS [CellID], 
     [PayLoadMapData].[MaxCellID] AS [MaxCellID], 
     [PayLoadMapData].[MaxRow] AS [MaxRow], 
-    [PayLoadMapData].[MaxCol] AS [MaxCol]
+    [PayLoadMapData].[MaxCol] AS [MaxCol], 
+    [PayLoadMapData].[RowDistance] AS [RowDistance], 
+    [PayLoadMapData].[ColDistance] AS [ColDistance]
     FROM [dbo].[PayLoadMapData] AS [PayLoadMapData]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadYardGrid" EntityType="Self.PayLoadYardGrid" store:Type="Tables" store:Schema="dbo">
@@ -1784,6 +1789,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <Property Name="AccountId" Type="Int32" />
           <Property Name="IsPilot" Type="Boolean" />
           <Property Name="UserAccountId" Type="Int32" />
+          <Property Name="Dashboard" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PayLoadData">
           <Key>
@@ -1840,6 +1846,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <Property Name="MaxCellID" Type="Int32" />
           <Property Name="MaxRow" Type="Int32" />
           <Property Name="MaxCol" Type="Int32" />
+          <Property Name="RowDistance" Type="Decimal" Precision="18" Scale="9" />
+          <Property Name="ColDistance" Type="Decimal" Precision="18" Scale="9" />
         </EntityType>
         <EntityType Name="PayLoadYard">
           <Key>
@@ -2624,6 +2632,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <EntitySetMapping Name="MSTR_User">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
               <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="Dashboard" ColumnName="Dashboard" />
                 <ScalarProperty Name="UserAccountId" ColumnName="UserAccountId" />
                 <ScalarProperty Name="IsPilot" ColumnName="IsPilot" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
@@ -2683,6 +2692,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <EntitySetMapping Name="PayLoadMapDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadMapData">
               <MappingFragment StoreEntitySet="PayLoadMapData">
+                <ScalarProperty Name="ColDistance" ColumnName="ColDistance" />
+                <ScalarProperty Name="RowDistance" ColumnName="RowDistance" />
                 <ScalarProperty Name="MaxCol" ColumnName="MaxCol" />
                 <ScalarProperty Name="MaxRow" ColumnName="MaxRow" />
                 <ScalarProperty Name="MaxCellID" ColumnName="MaxCellID" />

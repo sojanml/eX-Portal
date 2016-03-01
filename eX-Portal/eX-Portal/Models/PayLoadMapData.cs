@@ -40,5 +40,7 @@ namespace eX_Portal.Models
         public Nullable<int> MaxCellID { get; set; }
         public Nullable<int> MaxRow { get; set; }
         public Nullable<int> MaxCol { get; set; }
+        public Nullable<decimal> RowDistance { get; set; }
+        public Nullable<decimal> ColDistance { get; set; }
     }
 }

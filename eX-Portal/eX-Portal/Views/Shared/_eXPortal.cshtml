@@ -8,6 +8,7 @@
   @Styles.Render("~/Content/css")
   @Styles.Render("~/bundles/dataTableCss")
   @Scripts.Render("~/bundles/modernizr")
+  @Scripts.Render("~/bundles/jquery")
   @RenderSection("header", required: false)
   <link href="@Url.Action("CustomCss", "Design")" rel="stylesheet" />
 
@@ -75,7 +76,7 @@
     </p>
   </div>
 
-  @Scripts.Render("~/bundles/jquery")
+
 
   @Scripts.Render("~/bundles/dataTableScript")
   @RenderSection("scripts", required: false)

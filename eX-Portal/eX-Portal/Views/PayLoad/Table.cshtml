@@ -1,0 +1,93 @@
+﻿
+<div id="TheTable-Row"></div>
+<div id="TheTable-Row-Rev"></div>
+<div id="TheTable-Col"></div>
+@section scripts {
+<script type="text/javascript">
+  var TableDef = {@Html.Raw(ViewBag.JSon)};
+  $(document).ready(function () {
+
+    document.getElementById('TheTable-Row').innerHTML = getByRows();
+    document.getElementById('TheTable-Col').innerHTML = getByCols();
+    document.getElementById('TheTable-Row-Rev').innerHTML = getByRows_Rev();
+  });
+
+  function getByRows() {
+    var Row = TableDef['Rows'];
+    var Col = TableDef['Cols'];
+    var Table = '<table border="1" cellpadding="5" cellspacing="0">';
+    for (var R = 0; R <= Row; R++) {
+      Table += '<TR>\n';
+      for (var C = 0; C <= Col; C++) {
+        if (R == 0 && C == 0) {
+          Table += "<th>&nbsp;</th>";
+        } else if (R == 0) {
+          Table += "<th>" + C + "</th>";
+        } else if (C == 0) {
+          Table += "<th>" + R + "</th>";
+        } else {
+          var Items = TableDef[R + "." + C];
+          if (Items <= 0) Items = '&nbsp;';
+          Table += "<td>" + Items + "</td>";
+        }
+      }//for(C)
+      Table += '</TR>\n';
+    }//For(R)
+    Table += "</table>";
+
+    return Table;
+  }
+
+  function getByRows_Rev() {
+    var Row = TableDef['Rows'];
+    var Col = TableDef['Cols'];
+    var Table = '<table border="1" cellpadding="5" cellspacing="0">';
+    for (var R = Row + 1; R >= 1; R--) {
+      Table += '<TR>\n';
+      for (var C = Col + 1; C >= 1 ; C--) {
+        if (R == (Row + 1) && C == (Col + 1)) {
+          Table += "<th>&nbsp;</th>";
+        } else if (R == (Row + 1)) {
+          Table += "<th>" + (Col - C + 1) + "</th>";
+        } else if (C == (Col + 1)) {
+          Table += "<th>" + (Row - R + 1 ) + "</th>";
+        } else {
+          var Items = TableDef[R + "." + C];
+          if (Items <= 0) Items = '&nbsp;';
+          Table += "<td>" + Items + "</td>";
+        }
+      }//for(C)
+      Table += '</TR>\n';
+    }//For(R)
+    Table += "</table>";
+
+    return Table;
+  }
+
+  function getByCols() {
+    var Row = TableDef['Rows'];
+    var Col = TableDef['Cols'];
+    var Table = '<table border="1" cellpadding="5" cellspacing="0">';
+    for (var C = 0; C <= Col; C++) {      
+      Table += '<TR>\n';
+      for (var R = 0; R <= Row; R++) {
+        if (R == 0 && C == 0) {
+          Table += "<th>&nbsp;</th>";
+        } else if (R == 0) {
+          Table += "<th>" + C + "</th>";
+        } else if (C == 0) {
+          Table += "<th>" + R + "</th>";
+        } else {
+          var Items = TableDef[R + "." + C];
+          if (Items <= 0) Items = '&nbsp;';
+          Table += "<td>" + Items + "</td>";
+        }
+      }//for(C)
+      Table += '</TR>\n';
+    }//For(R)
+    Table += "</table>";
+
+    return Table;
+  }
+</script>
+}

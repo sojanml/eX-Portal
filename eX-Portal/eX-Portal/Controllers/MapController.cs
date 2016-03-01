@@ -40,8 +40,8 @@ namespace eX_Portal.Controllers {
       "  [ReadCount], \n" +
       "  [Latitude], \n" +
       "  [Longitude],\n" +
-      "  [RowNumber] + 1 as [Row], \n" +
-      "  [ColumnNumber] + 1 as [Col],\n" +
+      "  [RowNumber] as [Row], \n" +
+      "  [ColumnNumber]  as [Col],\n" +
       "  Count(*) Over() as _TotalRecords,\n" +
       "  Concat([RFID],',',FlightUniqueID) as _PKey\n" +
       "FROM \n" +

@@ -28,7 +28,7 @@
       Select the Drone for Uploading the document
     </div>
     <div class="editor-field">
-      @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("Drone"))
+      @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("Drone", true))
       <span style="display:none;" id="DroneID-Required" class="field-validation-error">Please select a drone to contine...</span>
     </div>
 

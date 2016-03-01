@@ -9,7 +9,7 @@
     var map = null;
     $(document).ready(function () {
       initialize();
-      drawGrids();
+      //drawGrids();
     });
 
     function initialize() {
@@ -51,14 +51,51 @@
 
       radius = new google.maps.Circle({map: map,
         radius: .5,
-        center: myLatLng,
-        fillColor: '#777',
+        center: triangleCoords[0],
+        fillColor: '#FF0000',
         fillOpacity: 0.1,
-        strokeColor: '#AA0000',
+        strokeColor: '#FF0000',
         strokeOpacity: 0.8,
         strokeWeight: 2,
         draggable: true,    // Dragable
       });
+
+
+      radius = new google.maps.Circle({map: map,
+        radius: .5,
+        center: triangleCoords[1],
+        fillColor: '#00FF00',
+        fillOpacity: 0.1,
+        strokeColor: '#00FF00',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        draggable: true,    // Dragable
+      });
+
+      radius = new google.maps.Circle({map: map,
+        radius: .5,
+        center: triangleCoords[2],
+        fillColor: '#0000FF',
+        fillOpacity: 0.1,
+        strokeColor: '#0000FF',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        draggable: true,    // Dragable
+      });
+
+
+      /*
+      radius = new google.maps.Circle({map: map,
+        radius: .5,
+        center: triangleCoords[3],
+        fillColor: '#00FFFF',
+        fillOpacity: 0.1,
+        strokeColor: '#00FFFF',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        draggable: true,    // Dragable
+      });
+      */
 
       google.maps.event.addListener(radius, 'center_changed', function(event) {
         $('#cord').html(radius.center.lat() + ", " + radius.center.lng());

@@ -907,3 +907,24 @@ li.profile_menu_row.on span.off,
 li.profile_menu_row.off span.on {
   display:none;
 }
+
+
+div#grid-holder-content {
+  width: 100%;
+  height: 400px;
+  overflow: auto;
+}
+
+div#grid-holder-content table {
+  min-height: 400px;
+  width: 100%;
+}
+
+div#grid-holder-content table tr td,
+div#grid-holder-content table tr th {
+  border-bottom: 1px #CCC solid;
+  border-right: 1px #CCC solid;
+}
+div#grid-holder-content table tr th {
+  background-color: rgba(234, 5, 14, 0.5);
+}

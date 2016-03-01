@@ -1,0 +1,35 @@
+﻿@model eX_Portal.Models.DroneDocument
+@{ 
+  Layout = null;
+}
+
+<h2>@Model.DocumentType</h2>
+
+@if (Model.isVideo()) {
+
+<div class="dash-video" id="dash-video-@Model.ID">Loading the player...</div>
+
+<script type="text/javascript">
+  var playerInstance = null;
+  $(document).ready(function () {
+    playerInstance = jwplayer("dash-video-@Model.ID");
+    playerInstance.setup({
+      file: "https://exponent-s3.s3.amazonaws.com/@Model.S3Url",
+      width: '100%',
+      height: 220,
+      title: '@Model.DocumentTitle'
+    });
+  })
+</script>
+} else {
+<h3>@Model.DocumentName</h3>
+<div class="content-inner">
+  <img style="float:left; padding:0px 10px 10px 0px;" src="@Model.getThumbnail()" width="120" height="120" />
+  @Model.DocumentDesc
+  <div style="clear:both"></div>
+</div>
+}
+<div style="float:left" class="download"><a
+href="https://exponent-s3.s3.amazonaws.com/@Model.S3Url">
+<span class="icon">&#xf0ed;</span>
+Download</a></div>

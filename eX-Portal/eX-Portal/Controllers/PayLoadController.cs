@@ -63,6 +63,12 @@ namespace eX_Portal.Controllers {
       //return "OK";
     }
 
+    public ActionResult Table(String FlightUniqueID) {
+      GeoGrid myGrid = new GeoGrid(FlightUniqueID);
+      ViewBag.JSon = myGrid.getTable(FlightUniqueID);
+      return View();
+    }
+
     public ActionResult Detail([Bind(Prefix = "ID")] String FlightUniqueID) {
       var Parts = FlightUniqueID.Split(',');
       ViewBag.Title = "UAS Listing";

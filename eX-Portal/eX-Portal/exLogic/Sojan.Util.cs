@@ -233,7 +233,7 @@ namespace eX_Portal.exLogic {
       return sVal;
     }
 
-    public static IEnumerable<SelectListItem> GetDropDowntList(String TypeOfList) {
+    public static IEnumerable<SelectListItem> GetDropDowntList(String TypeOfList, bool IsStrictFilter = false) {
       List<SelectListItem> SelectList = new List<SelectListItem>();
       SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
 
@@ -244,7 +244,7 @@ namespace eX_Portal.exLogic {
           switch (TypeOfList.ToLower()) {
           case "drone":
           SQL = "SELECT [DroneId] as Value, [DroneName] as Name FROM [MSTR_Drone] where IsActive=1";
-          if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+          if (IsStrictFilter || !exLogic.User.hasAccess("DRONE.MANAGE")) {
             SQL += "\n" +
               " AND\n " +
               "  MSTR_Drone.AccountID=" + Util.getAccountID();
@@ -253,7 +253,7 @@ namespace eX_Portal.exLogic {
           break;
           case "pilot":
           SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User  WHERE \n";
-          if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+          if (IsStrictFilter || !exLogic.User.hasAccess("DRONE.MANAGE")) {
             SQL += "\n" +
 
               "  MSTR_User.AccountID=" + Util.getAccountID() +
@@ -263,7 +263,7 @@ namespace eX_Portal.exLogic {
           break;
           case "gsc":
           SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User";
-          if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+          if (IsStrictFilter || !exLogic.User.hasAccess("DRONE.MANAGE")) {
             SQL += "\n" +
               "WHERE\n" +
               "  MSTR_User.AccountID=" + Util.getAccountID();
@@ -359,6 +359,13 @@ namespace eX_Portal.exLogic {
       int AccountID = 0;
       if (Session["AccountID"] != null) int.TryParse(Session["AccountID"].ToString(), out AccountID);
       return AccountID;
+    }
+
+    public static String getDashboard() {
+      String SQL = "SELECT DashBoard From MSTR_User WHERE UserID=" + getLoginUserID();
+      String DashBoard = getDBVal(SQL);
+      if (String.IsNullOrEmpty(DashBoard)) DashBoard = "Default";
+      return DashBoard;
     }
 
     public static String getProfileImage(int UserID = 0) {
