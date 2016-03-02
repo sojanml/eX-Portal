@@ -2,7 +2,7 @@
 var map;
 var _Location = [];
 var PlotTimer = null;
-var PlotTimerDelay = 100;
+var PlotTimerDelay = 500;
 var isReplayMode = false;
 var mytimer = null;
 
@@ -49,7 +49,7 @@ var aDatasets5 = [];
 var data = [];
 var lineChart = null;
 var ldata = [];
-
+var FirstTotalFlightTime = -100;
 var isGraphReplayMode = false;
 
 
@@ -60,15 +60,35 @@ $(document).ready(function () {
 });
 
 function setAlertTimer() {
-  window.setTimeout(function () {
-    checkAlert();
-  }, 4000);
+  window.setInterval(checkAlert, 10 * 1000);
 }
 
+function checkAlert() {
+  var URL = '/map/checkalert/' + UserID;
+  $.ajax({
+    url: URL
+  }).done(function (data) {
+    if (data != "") alertBox(data);
+  });
+}
 
+function alertBox(Message) {
+  $('#alert-message').html(Message);
+  $("#alert-box").dialog({
+    resizable: false,
+    height: 200,
+    minWidth: 400,
+    modal: true,
+    buttons: {
+      Cancel: function () {
+        $(this).dialog("close");
+      }
+    }
+  });
+}
 
 var BoundaryBox = null;
-function setPolygon() { 
+function setPolygon() {
   for (var i = 0; i < AllowedLocation.length; i++) {
     var paths = AllowedLocation[i];
     BoundaryBox = new google.maps.Polygon({
@@ -76,7 +96,8 @@ function setPolygon() {
       strokeWeight: 1,
       fillColor: '#55FF55',
       fillOpacity: 0.3,
-      editable: false
+      editable: false,
+      draggable: false
     });
     BoundaryBox.setMap(map);
   }
@@ -177,10 +198,10 @@ function initialize() {
   $('#MapData table').append(loctr);
   $('#MapData table').append(firsttr);
   $('#MapData table').addClass('report');
- // setLocation();
+  // setLocation();
   SetChart();
   GetDrones();
-  
+
   //  myInterval = setInterval(function () { }, 500);
 
 };
@@ -202,7 +223,9 @@ function setLocation() {
 function getDelay(TheObj) {
   if (TheObj == null) return PlotTimerDelay;
   if (isReplayMode) {
-    var delay = TheObj['Speed'] * 5000;
+    var Speed = TheObj['Speed'];
+    Speed = parseInt(Speed * 100,0);
+    var delay = Speed * PlotTimerDelay;
     if (delay < PlotTimerDelay) delay = PlotTimerDelay;
     return delay;
   } else {
@@ -239,7 +262,7 @@ function GetDrones() {
       // }
       //catch (err) {
       //    alert('Live Drone Position Error' + err);
-        //}
+      //}
 
     },
     failure: function (msg) {
@@ -255,10 +278,10 @@ function GetDrones() {
 
 
 function directPlotPoints() {
-    var locationLength = _Location.length;
-    if (locationLength < 1)
-        isGraphReplayMode = true;
-    while (1) {
+  var locationLength = _Location.length;
+  if (locationLength < 1)
+    isGraphReplayMode = true;
+  while (1) {
     if (_Location.length < 1) break;
     var thisPoint = _Location.shift();
 
@@ -266,11 +289,11 @@ function directPlotPoints() {
     thisPoint = SetCurrentValues(thisPoint);
     SetMapTable(thisPoint);
 
-    }
+  }
   if (!isGraphReplayMode) {
     GetChartData();
-     lineChart.initialize(data);
-    }
+    lineChart.initialize(data);
+  }
 
 
 
@@ -386,9 +409,9 @@ function SetCurrentValues(_LastValue) {
     if (value == null) value = '';
     switch (key) {
       case "ReadTime":
-      var iDt = parseInt(_LastValue['ReadTime'].substr(6));
-      var theDate = new Date(iDt);
-      value = fmtDt(theDate);
+        var iDt = parseInt(_LastValue['ReadTime'].substr(6));
+        var theDate = new Date(iDt);
+        value = fmtDt(theDate);
         break;
       case "Distance":
         value = parseInt(value);
@@ -414,8 +437,15 @@ function SetCurrentValues(_LastValue) {
       case "TotalFlightTime":
         value = parseFloat(value);
         if (isNaN(value)) value = 0;
-        if (value > 0) value = value / (60 * 60);
-        value = value.toFixed(2);
+        //First time only
+        if (FirstTotalFlightTime < 0) {
+          FirstTotalFlightTime = value;
+        }
+        //Set the offset for flightime
+        value = value - FirstTotalFlightTime;
+        if (value > 0) value = value / 60;
+        value = value.toFixed(3);
+
         break;
       case "Heading":
         value = parseFloat(value);
@@ -453,17 +483,17 @@ function SetMapTable(_LastValue) {
     var tTotFlightTimeData = '';// '<td>' + _LastValue['TotalFlightTime'] + '</td>';
     var loctr = '<tr>' + tLatData + tLonData + tAltData + tSpeedData + tFxQltyData + tSatelliteData + tDrTime + tPitchData + tRollData + tHeadData + tTotFlightTimeData + '</tr>';
     $('#MapData table > tbody > tr:first').after(loctr);
-    
-  //  SetChart();
-   // if ($("#MapData > table > tbody > tr").length <= 2)
+
+    //  SetChart();
+    // if ($("#MapData > table > tbody > tr").length <= 2)
     //    {
-       // SetChartData(_LastValue);
-       // SetChart();
-  //  }
-  //  else
-   // {
-      SetChartUpdateData(_LastValue);
-      //  updateChart();
+    // SetChartData(_LastValue);
+    // SetChart();
+    //  }
+    //  else
+    // {
+    SetChartUpdateData(_LastValue);
+    //  updateChart();
     //}
     if ($("#MapData > table > tbody > tr").length > 20)
       $('#MapData > table > tbody > tr:last').remove();
@@ -494,184 +524,185 @@ function fmtDt(date) {
 }
 
 function SetChart() {
-    GetChartData();
-    var ctx = $("#myChart").get(0).getContext('2d');
-    ctx.canvas.height = 300;  // setting height of canvas
-    ctx.canvas.width = 1000; // setting width of canvas
-     lineChart = new Chart(ctx).Line(data, {
-        bezierCurve: true,
-        datasetFill: false,
-        animateScale: false,
-        // String - Template string for single tooltips
-        tooltipTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>",
-        //String - A legend template
-        multiTooltipTemplate: "<%= datasetLabel %> : <%= value %>",
-        legendTemplate:
-      '<ul id=\"line-legend">\n' +
-      '  <% for (var i=0; i<datasets.length; i++){%>\n' +
-      '  <li class="active" data-label="<%=datasets[i].label%>">\n' +
-      '    <span class="legend" style=\"background-color:<%=datasets[i].strokeColor%>\">' +
-      '     <span class="icon">&#xf00c;</span>\n' +
-      '    </span>\n' +
-      '    <span><%=datasets[i].label%></span>\n' +
-      '  </li>\n' +
-      '  <%}%>\n' +
-      '</ul>'
-    });
-     var legend = lineChart.generateLegend();
-     $('#map-legent').append(legend);
+  GetChartData();
+  var ctx = $("#myChart").get(0).getContext('2d');
+  ctx.canvas.height = 300;  // setting height of canvas
+  ctx.canvas.width = 1000; // setting width of canvas
+  lineChart = new Chart(ctx).Line(data, {
+    bezierCurve: true,
+    datasetFill: false,
+    animateScale: false,
+    // String - Template string for single tooltips
+    tooltipTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>",
+    //String - A legend template
+    multiTooltipTemplate: "<%= datasetLabel %> : <%= value %>",
+    legendTemplate:
+  '<ul id=\"line-legend">\n' +
+  '  <% for (var i=0; i<datasets.length; i++){%>\n' +
+  '  <li class="active" data-label="<%=datasets[i].label%>">\n' +
+  '    <span class="legend" style=\"background-color:<%=datasets[i].strokeColor%>\">' +
+  '     <span class="icon">&#xf00c;</span>\n' +
+  '    </span>\n' +
+  '    <span><%=datasets[i].label%></span>\n' +
+  '  </li>\n' +
+  '  <%}%>\n' +
+  '</ul>'
+  });
+  var legend = lineChart.generateLegend();
+  $('#map-legent').append(legend);
 }
 
 function updateChart() {
-    if (lineChart != null) //lineChart.addData(ldata, aLabels);
+  if (lineChart != null) //lineChart.addData(ldata, aLabels);
     lineChart.addData(ldata["datasets"], [ldata["labels"], 10, 20, 30]);
 }
 
 
 function GetChartData() {
-  
-    data = {
-        labels: aLabels,
-        datasets: [{
-            label: "Altitudes",
+
+  data = {
+    labels: aLabels,
+    datasets: [{
+      label: "Altitudes",
       strokeColor: "rgb(236, 215, 101)",
       pointColor: "rgb(236, 215, 101)",
-            pointStrokeColor: "#fff",
+      pointStrokeColor: "#fff",
       pointHighlightStroke: "rgb(236, 215, 101)",
-            data: aDatasets1
-        },
-        {
-            label: "Satellites",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: aDatasets2
-        },
-        {
-            label: "Pitch",
-            strokeColor: "rgba(255,119,119,1)",
-            pointColor: "rgba(255,119,119,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(255,119,119,1)",
-            data: aDatasets3
-        },
-        {
-            label: "Roll",
+      data: aDatasets1
+    },
+    {
+      label: "Satellites",
+      strokeColor: "rgba(151,187,205,1)",
+      pointColor: "rgba(151,187,205,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightStroke: "rgba(151,187,205,1)",
+      data: aDatasets2
+    },
+    {
+      label: "Pitch",
+      strokeColor: "rgba(255,119,119,1)",
+      pointColor: "rgba(255,119,119,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightStroke: "rgba(255,119,119,1)",
+      data: aDatasets3
+    },
+    {
+      label: "Roll",
       strokeColor: "rgb(153, 131, 199)",
       pointColor: "rgb(153, 131, 199)",
-            pointStrokeColor: "#fff",
+      pointStrokeColor: "#fff",
       pointHighlightStroke: "rgb(153, 131, 199)",
-            data: aDatasets4
-        },
-        {
-            label: "Speed",
+      data: aDatasets4
+    },
+    {
+      label: "Speed",
       strokeColor: "rgb(117, 237, 251)",
       pointColor: "rgb(117, 237, 251)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(187,17,17,1)",
-            data: aDatasets5
-        }]
-    };
+      pointStrokeColor: "#fff",
+      pointHighlightStroke: "rgba(187,17,17,1)",
+      data: aDatasets5
+    }]
+  };
 
-    
-   
-    
+
+
+
 }
 
 function SetChartUpdateData(response) {
-    //ClearChartValues();
-    aData = response;
-
-    // aLabels = aData['ReadTime'];
-    var date = new Date(parseInt(aData['ReadTime'].substr(6)));
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var seconds = date.getSeconds();
-    var str = "";
-    str += hours + ":" + minutes + ":" + seconds + " ";
+  //ClearChartValues();
+  aData = response;
+  
+  // aLabels = aData['ReadTime'];
+  var date = new Date(parseInt(aData['ReadTime'].substr(6)));
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var seconds = date.getSeconds();
+  var str = "";
+  str += hours + ":" + minutes + ":" + seconds + " ";
+  str = aData['ReadTime'].substr(aData['ReadTime'].indexOf(' ') + 1);
+  //str = aData["TotalFlightTime"];
 
   if (isGraphReplayMode) {
-    if (lineChart.datasets[0].points.length > 20)
-        lineChart.removeData();
+    if (lineChart.datasets[0].points.length > 20) lineChart.removeData();
     lineChart.addData([aData['Altitude'], aData['Satellites'], aData['Pitch'], aData['Roll'], aData['Speed']], str);
   } else {
 
-    aLabels.push((str).toString());
+    aLabels.push(str);
     aDatasets1.push(aData['Altitude']);
     aDatasets2.push(aData['Satellites']);
     aDatasets3.push(aData['Pitch']);
     aDatasets4.push(aData['Roll']);
     aDatasets5.push(aData['Speed']);
     if (aLabels.length > 20) {
-        aLabels.shift();
-        aDatasets1.shift();
-        aDatasets2.shift();
-        aDatasets3.shift();
-        aDatasets4.shift();
-        aDatasets5.shift();        
+      aLabels.shift();
+      aDatasets1.shift();
+      aDatasets2.shift();
+      aDatasets3.shift();
+      aDatasets4.shift();
+      aDatasets5.shift();
     }
 
-    }
-    /*
-    ldata = {
-        labels: aLabels,
-        datasets: [{
-            label: "Altitudes",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: aDatasets1
-        },
-        {
-            label: "Satellites",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: aDatasets2
-        },
-        {
-            label: "Pitch",
-            strokeColor: "rgba(255,119,119,1)",
-            pointColor: "rgba(255,119,119,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(255,119,119,1)",
-            data: aDatasets3
-        },
-        {
-            label: "Roll",
-            strokeColor: "rgba(100,50,205,1)",
-            pointColor: "rgba(100,50,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(100,50,205,1)",
-            data: aDatasets4
-        },
-        {
-            label: "Speed",
-            strokeColor: "rgba(187,17,17,1)",
-            pointColor: "rgba(187,17,17,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightStroke: "rgba(187,17,17,1)",
-            data: aDatasets5
-        }]
-    };
-    */
+  }
+  /*
+  ldata = {
+      labels: aLabels,
+      datasets: [{
+          label: "Altitudes",
+          strokeColor: "rgba(220,220,220,1)",
+          pointColor: "rgba(220,220,220,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightStroke: "rgba(220,220,220,1)",
+          data: aDatasets1
+      },
+      {
+          label: "Satellites",
+          strokeColor: "rgba(151,187,205,1)",
+          pointColor: "rgba(151,187,205,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightStroke: "rgba(151,187,205,1)",
+          data: aDatasets2
+      },
+      {
+          label: "Pitch",
+          strokeColor: "rgba(255,119,119,1)",
+          pointColor: "rgba(255,119,119,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightStroke: "rgba(255,119,119,1)",
+          data: aDatasets3
+      },
+      {
+          label: "Roll",
+          strokeColor: "rgba(100,50,205,1)",
+          pointColor: "rgba(100,50,205,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightStroke: "rgba(100,50,205,1)",
+          data: aDatasets4
+      },
+      {
+          label: "Speed",
+          strokeColor: "rgba(187,17,17,1)",
+          pointColor: "rgba(187,17,17,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightStroke: "rgba(187,17,17,1)",
+          data: aDatasets5
+      }]
+  };
+  */
 }
 
 function ClearChartValues() {
-    aDatasets1 = [];
-    aData = [];
-    aDatasets2 = [];
-    aDatasets3 = [];
-    aDatasets4 = [];
-    aDatasets5 = [];
-    ldata = [];
-    aLabels = [];
+  aDatasets1 = [];
+  aData = [];
+  aDatasets2 = [];
+  aDatasets3 = [];
+  aDatasets4 = [];
+  aDatasets5 = [];
+  ldata = [];
+  aLabels = [];
 }
 
 function OnErrorCall_(repo) {
-    alert("Woops something went wrong, pls try later !");
+  alert("Woops something went wrong, pls try later !");
 }
 

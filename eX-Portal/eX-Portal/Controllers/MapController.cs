@@ -25,6 +25,31 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
+    public String CheckAlert(int id = 0) {
+      String AlertMsg = "";
+      String SQL = @"SELECT
+        PortalAlert.AlertID,
+        PortalAlert.AlertMessage
+      FROM
+        PortalAlert
+      LEFT JOIN PortalAlert_User ON
+        PortalAlert_User.AlertID = PortalAlert.AlertID and
+        PortalAlert_User.UserID = " + id + @"
+      WHERE
+        PortalAlert_User.UserID IS NULL AND
+         CreatedOn > DATEADD(minute,-30,GETDATE())";
+      var Rows = Util.getDBRows(SQL);
+      foreach(var Row in Rows) {
+        if (!String.IsNullOrWhiteSpace(AlertMsg)) AlertMsg = AlertMsg + "<br>\n";
+        AlertMsg = AlertMsg + Row["AlertMessage"];
+        SQL = "INSERT INTO PortalAlert_User(UserID, AlertID) VALUES( " +
+          id + ", " + Row["AlertID"] + ")";
+        Util.doSQL(SQL);
+      }
+
+      return AlertMsg;
+    }
+
     public ActionResult FlightChart(int id = 0) {
       ViewBag.FlightID = id;
       return View();

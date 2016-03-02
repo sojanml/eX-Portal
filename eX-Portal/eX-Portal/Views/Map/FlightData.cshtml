@@ -17,7 +17,7 @@
         <td class="verticalTableHeader"><p>Flight<br />Time</p></td>
         <td><div class="image"><span class="dash-image img1"></span></div></td>
         <td><div class="data"><span id="data_TotalFlightTime">-</span></div></td>
-        <td style="vertical-align:bottom"><div class="unit">hrs</div></td>
+        <td style="vertical-align:bottom"><div class="unit">Minutes</div></td>
       </tr>
     </table>
 </div>
@@ -153,7 +153,8 @@
   <script src="~/jwplayer/jwplayer.js"></script>
   <script>jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";</script>
   <script type="text/javascript">
-  var playerInstance = null;
+    var playerInstance = null;
+    var UserID = '@Session["UserID"]';
   $(document).ready(function () {
     playerInstance = jwplayer("myElement");
     playerInstance.setup({

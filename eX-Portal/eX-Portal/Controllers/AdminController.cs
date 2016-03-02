@@ -268,5 +268,37 @@ namespace eX_Portal.Controllers {
       return Util.jsonStat("OK");
     }
 
+    public ActionResult SMS() {
+      ViewBag.Mode = "edit";
+      ViewBag.SMS = getSMS();
+      return View();
+    }
+
+    private String getSMS() {
+      String SMS = "";
+      String SQL = "SELECT CellNumber FROM SMSTable";
+      var Rows = Util.getDBRows(SQL);
+      foreach (var Row in Rows) {
+        if (!String.IsNullOrEmpty(SMS)) SMS = SMS + Environment.NewLine;
+        SMS = SMS + Row["CellNumber"];
+      }
+      return SMS;
+    }
+
+    [HttpPost]
+    public ActionResult SMS(String CellNumber) {
+      String SQL = "DELETE FROM SMSTable";
+      Util.doSQL(SQL);
+      String[] CellNumbers = CellNumber.Split(new String[] { "\r\n", "\n" }, StringSplitOptions.None);
+      foreach(String cell in CellNumbers) {
+        SQL = "Insert into SMSTable(CellNumber) VALUES('" + cell.Trim() + "')";
+        Util.doSQL(SQL);
+      }
+
+      ViewBag.Mode = "view";
+      ViewBag.SMS = getSMS();
+      return View();
+    }
+
   }//class
 }//namespace
