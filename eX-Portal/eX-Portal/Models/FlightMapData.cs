@@ -48,5 +48,8 @@ namespace eX_Portal.Models
         public Nullable<decimal> Max_Satellites { get; set; }
         public Nullable<decimal> PointDistance { get; set; }
         public Nullable<decimal> Distance { get; set; }
+        public Nullable<bool> IsChecked { get; set; }
+        public Nullable<bool> IsOutSide { get; set; }
+        public Nullable<int> GCAID { get; set; }
     }
 }

@@ -89,6 +89,7 @@ function rfid_auto_correct_click(e) {
 }
 
 function setGridBox() {
+  if (!GridBoundBox["TopLeftLat"]) return;
   var BoxCoords = [
     { lat: GridBoundBox["TopLeftLat"], lng: GridBoundBox["TopLeftLon"] },
     { lat: GridBoundBox["TopRightLat"], lng: GridBoundBox["TopRightLon"] },

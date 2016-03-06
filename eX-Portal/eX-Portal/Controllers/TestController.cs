@@ -102,6 +102,10 @@ namespace eX_Portal.Controllers {
      return Util.getDBRowsJson(SQL);
     }
 
+
+    public ActionResult dt() {
+      return View();
+    }
   }
 
 }

@@ -1,0 +1,66 @@
+﻿
+<ul id="UL_timeset"></ul>
+@section header{
+<script type="text/javascript">
+  $(document).ready(function () {
+    var theDate = '02-Mar-2014 15:53:54';
+    tryParse(theDate, 'EST');
+
+    tryParse(theDate, 'CST');
+    tryParse(theDate, 'GMT');
+    fromUTC(theDate, 'EST');
+  });
+
+
+  function tryParse(theDate, TimeZone) {
+    var nDate = new Date(theDate + ' ' + TimeZone);
+    var html = 'Date: ' + theDate + '<br>\n' +
+    'Time Zone:' + TimeZone + '<br>\n' +
+    'Parse Date: ' + nDate + '<br>\n' +
+    'Time Offset: ' + nDate.getTimezoneOffset()  + '<BR>\n' + 
+    'GMT: ' + nDate.toGMTString()
+    var LI = $('<LI></LI>');
+    LI.append(html);
+    $('#UL_timeset').append(LI);
+
+
+  }
+
+  function fromUTC(theDate, TimeZone) {    
+    var nDate = new Date(theDate );
+    var OffsetZone = 0;
+    switch (TimeZone) {
+      case 'EST':
+        OffsetZone = -5 * 60;
+    }
+    var DateVar = nDate.getTime() + (OffsetZone * 60 * 1000);
+    var ETCDate = new Date(DateVar);
+
+    var html = 'Date: ' + theDate + '<br>\n' +
+    'Time Zone:' + TimeZone + '<br>\n' +
+    'Parse Date: ' + nDate + '<br>\n' +
+    'Time Offset: ' + nDate.getTimezoneOffset() + '<BR>\n' +
+    'GMT: ' + nDate.toGMTString() + '<br>\n' +
+    'OffsetZone: ' + OffsetZone + '<br>\n' +
+    'ETCDate :' + ETCDate;
+
+    var LI = $('<LI></LI>');
+    LI.append(html);
+    $('#UL_timeset').append(LI);
+
+  }
+
+  function getESTOffset() {
+    var jan = new Date(this.getFullYear(), 0, 1);
+    var jul = new Date(this.getFullYear(), 6, 1);
+    return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+  }
+
+</script>
+<style type="text/css">
+#UL_timeset li {
+  margin-top:30px;
+}
+
+</style>
+}

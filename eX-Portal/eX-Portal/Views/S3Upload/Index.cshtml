@@ -76,9 +76,12 @@
 
 @section header{
   <link href="~/Content/black-box.css" rel="stylesheet" />
-
 }
 @section Scripts{
   @Scripts.Render("~/bundles/jqueryval")
-  <script type="text/javascript" src="~/Scripts/S3Upload.js"></script>
+  <script type="text/javascript">
+    var DocType = 'DocType';
+    var UploadUrl = '/S3Upload/Upload'
+  </script>
+  <script type="text/javascript" src="~/Scripts/S3Upload.js"></script>  
 }

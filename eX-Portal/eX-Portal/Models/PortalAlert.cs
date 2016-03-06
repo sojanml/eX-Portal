@@ -23,5 +23,6 @@ namespace eX_Portal.Models
         public Nullable<int> FlightDataID { get; set; }
         public string AlertMessage { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
+        public Nullable<int> SMSSend { get; set; }
     }
 }

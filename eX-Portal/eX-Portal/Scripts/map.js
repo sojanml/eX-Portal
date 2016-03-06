@@ -51,7 +51,7 @@ var lineChart = null;
 var ldata = [];
 var FirstTotalFlightTime = -100;
 var isGraphReplayMode = false;
-
+var LastDrawPoint = null;
 
 $(document).ready(function () {
   initialize();
@@ -93,7 +93,8 @@ function setPolygon() {
     var paths = AllowedLocation[i];
     BoundaryBox = new google.maps.Polygon({
       paths: paths,
-      strokeWeight: 1,
+      strokeOpacity: 0,
+      strokeWeight: 0,
       fillColor: '#55FF55',
       fillOpacity: 0.3,
       editable: false,
@@ -180,15 +181,22 @@ function initialize() {
 
   poly = new google.maps.Polyline({
     strokeColor: '#000000',
-    strokeOpacity: 1.0,
-    strokeWeight: 3
+    strokeOpacity: 0.7,
+    strokeWeight: 2
   });
   poly.setMap(map);
-  var loctr = '<thead><tr><th>Latitude</th><th>Longitude</th>'
-              + '<th>Altitude (m)</th><th>Speed (m/s)</th>'
-              + '<th>FixQuality</th><th>Satellite</th>'
-              + '<th>ReadTime (UTC)</th><th>Pitch</th>'
-              + '<th>RollData</th><th>Heading</th>'
+  var loctr = '<thead>' + 
+              '<tr>' 
+              + '<th>ReadTime (UTC)</th>'
+              + '<th>Latitude</th>'
+              + '<th>Longitude</th>'
+              + '<th>Altitude (m)</th'
+              + '><th>Speed (m/s)</th>'
+              + '<th>FixQuality</th>'
+              + '<th>Satellite</th>'
+              + '<th>Pitch</th>'
+              + '<th>RollData</th>'
+              + '<th>Heading</th>'
               + '</tr></thead>';
   var firsttr = '<tr style="display:none"><td></td><td></td>'
              + '<td></td><td></td>'
@@ -224,7 +232,7 @@ function getDelay(TheObj) {
   if (TheObj == null) return PlotTimerDelay;
   if (isReplayMode) {
     var Speed = TheObj['Speed'];
-    Speed = parseInt(Speed * 100,0);
+    Speed = parseInt(Speed * 100, 0);
     var delay = Speed * PlotTimerDelay;
     if (delay < PlotTimerDelay) delay = PlotTimerDelay;
     return delay;
@@ -283,19 +291,22 @@ function directPlotPoints() {
     isGraphReplayMode = true;
   while (1) {
     if (_Location.length < 1) break;
-    var thisPoint = _Location.shift();
-
-    setMarker(map, thisPoint);
-    thisPoint = SetCurrentValues(thisPoint);
+    var thisPointRaw = _Location.shift();
+    if (LastDrawPoint != null &&
+      LastDrawPoint["Latitude"] == thisPointRaw["Latitude"] &&
+      LastDrawPoint["Longitude"] == thisPointRaw["Longitude"]) {
+      //nothing
+    } else {
+      setMarker(map, thisPointRaw);
+    }
+    thisPoint = SetCurrentValues(thisPointRaw);
     SetMapTable(thisPoint);
-
+    LastDrawPoint = thisPointRaw;
   }
   if (!isGraphReplayMode) {
     GetChartData();
     lineChart.initialize(data);
   }
-
-
 
 }
 
@@ -303,36 +314,44 @@ function plotPoints() {
   if (PlotTimer) window.clearTimeout(PlotTimer);
   if (_Location.length < 1) return;
 
-  var thisPoint = _Location.shift();
+  var thisPointRaw = _Location.shift();
+  if (LastDrawPoint != null &&
+    LastDrawPoint["Latitude"] == thisPointRaw["Latitude"] &&
+    LastDrawPoint["Longitude"] == thisPointRaw["Longitude"]) {
+    //nothing
+  } else {
+    setMarker(map, thisPointRaw);
+  }
 
-
-  setMarker(map, thisPoint);
-  thisPoint = SetCurrentValues(thisPoint);
+  thisPoint = SetCurrentValues(thisPointRaw);
   SetMapTable(thisPoint);
-
-  var delay = getDelay(thisPoint);
+  LastDrawPoint = thisPointRaw;
+  var delay = getDelay(thisPointRaw);
   PlotTimer = window.setTimeout(plotPoints, delay);
 
 }
 
 
 function setMarker(map, loc) {
-  var body = '' +
-      '<br/>Drone&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' + loc['FlightMapDataID'] +
-      '<br/>DroneID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' + loc['DroneRFID'] +
-      '<br/>Address&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
+
+  var iDt = parseInt(loc['ReadTime'].substr(6));
+  var theDate = new Date(iDt);
+  var FormatDate = fmtDt(theDate);
+  
+
+  var body = 'Lat: <b>' + loc['Latitude'] + '</b>, Lng:  <b>' + loc['Longitude'] + "</b><br>" +
+  "Time (UTC): <b>" + FormatDate + '</b>';
   var myLatLng = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
-  var marker = createMarker(map, myLatLng, loc['DroneRFID'], body, i);
+  var marker = createMarker(map, myLatLng, loc['DroneRFID'], body, i, loc['IsOutSide']);
 }
 
 
-function createMarker(map, latlng, heading, body, zindex) {
-  if (poly.map == null)
-  { addLines(); }
+function createMarker(map, latlng, heading, body, zindex, IsOutSide) {
+  if (poly.map == null) { addLines(); }
   var path = poly.getPath();
 
   path.push(latlng);
-  var image = '/red.png';
+  var image = '/bullet_red.png';
   var marker = new google.maps.Marker({
     position: latlng,
     map: map,
@@ -341,7 +360,11 @@ function createMarker(map, latlng, heading, body, zindex) {
     zIndex: 9999
   });
   if (MyLastMarker != null) {
-    MyLastMarker.setIcon('/bullet_blue.png');
+    if (IsOutSide) {
+      //keep red
+    } else {
+      MyLastMarker.setIcon('/bullet_blue.png');
+    }
   }
   MyLastMarker = marker;
   map.setCenter(latlng);
@@ -349,7 +372,21 @@ function createMarker(map, latlng, heading, body, zindex) {
   livemarkers.push(marker);
   if (livemarkers[0] != null)
     livemarkers[0].setIcon('/bullet_green.png');
-  google.maps.event.addListener(marker, 'click', function () { });
+  google.maps.event.addListener(marker, 'click', function () {
+    var infowindow = new google.maps.InfoWindow({
+      content: body
+    });
+    infowindow.open(map, marker);
+  });
+
+
+  //set opacity of marker
+  var initOpacity = 1;
+  for (var i = livemarkers.length - 1; i > 0; i--) {
+    livemarkers[i].setOpacity(initOpacity);
+    initOpacity = initOpacity - 0.05;
+    if (initOpacity < 0.4) return;
+  }
 }
 
 function deleteMarkers() {
@@ -481,7 +518,19 @@ function SetMapTable(_LastValue) {
     var tRollData = '<td>' + _LastValue['Roll'] + '</td>';
     var tHeadData = '<td>' + _LastValue['Heading'] + '</td>';
     var tTotFlightTimeData = '';// '<td>' + _LastValue['TotalFlightTime'] + '</td>';
-    var loctr = '<tr>' + tLatData + tLonData + tAltData + tSpeedData + tFxQltyData + tSatelliteData + tDrTime + tPitchData + tRollData + tHeadData + tTotFlightTimeData + '</tr>';
+    var loctr = '<tr>' +
+    tDrTime +
+    tLatData +
+    tLonData +
+    tAltData +
+    tSpeedData +
+    tFxQltyData +
+    tSatelliteData +
+    tPitchData +
+    tRollData +
+    tHeadData +
+    tTotFlightTimeData +
+    '</tr>';
     $('#MapData table > tbody > tr:first').after(loctr);
 
     //  SetChart();
@@ -511,15 +560,20 @@ function fmtDt(date) {
   } else {
     return 'Invalid';
   }
+  var day = date.getDate();
   var hours = date.getHours();
   var minutes = date.getMinutes();
+  var seconds = date.getSeconds();
   var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   //var ampm = hours >= 12 ? 'pm' : 'am';
   //hours = hours % 12;
   //hours = hours ? hours : 12; // the hour '0' should be '12'
+  seconds = seconds < 10 ? '0' + seconds : seconds;
+  hours = hours < 10 ? '0' + hours : hours;
   minutes = minutes < 10 ? '0' + minutes : minutes;
-  var strTime = hours + ':' + minutes + ':' + date.getSeconds();
-  var strDate = date.getDate() + "-" + Months[date.getMonth()] + "-" + date.getFullYear();
+  day = day < 10 ? '0' + day : day;
+  var strTime = hours + ':' + minutes + ':' + seconds;
+  var strDate = day + "-" + Months[date.getMonth()] + "-" + date.getFullYear();
   return strDate + " " + strTime;
 }
 
@@ -612,7 +666,7 @@ function GetChartData() {
 function SetChartUpdateData(response) {
   //ClearChartValues();
   aData = response;
-  
+
   // aLabels = aData['ReadTime'];
   var date = new Date(parseInt(aData['ReadTime'].substr(6)));
   var hours = date.getHours();

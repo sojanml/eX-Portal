@@ -42,5 +42,9 @@ namespace eX_Portal.Models
         public Nullable<int> MaxCol { get; set; }
         public Nullable<decimal> RowDistance { get; set; }
         public Nullable<decimal> ColDistance { get; set; }
+        public Nullable<decimal> ColPointLat { get; set; }
+        public Nullable<decimal> ColPointLon { get; set; }
+        public Nullable<decimal> RowPointLat { get; set; }
+        public Nullable<decimal> RowPointLon { get; set; }
     }
 }

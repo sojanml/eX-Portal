@@ -22,22 +22,30 @@ namespace eX_Portal.Controllers {
       ViewBag.FlightID = id;
       Drones thisDrone = new Drones();
       ViewBag.AllowedLocation = thisDrone.getAllowedLocation(id);
+      ViewBag.DroneID = thisDrone.DroneID;
       return View();
     }
 
     public String CheckAlert(int id = 0) {
       String AlertMsg = "";
+      int AccountID = Util.getDBInt("SELECT AccountID From MSTR_User WHERE UserID=" + id);
       String SQL = @"SELECT
-        PortalAlert.AlertID,
-        PortalAlert.AlertMessage
-      FROM
-        PortalAlert
-      LEFT JOIN PortalAlert_User ON
-        PortalAlert_User.AlertID = PortalAlert.AlertID and
-        PortalAlert_User.UserID = " + id + @"
-      WHERE
-        PortalAlert_User.UserID IS NULL AND
-         CreatedOn > DATEADD(minute,-30,GETDATE())";
+          PortalAlert.AlertID,
+          PortalAlert.AlertMessage
+        FROM
+          PortalAlert
+      LEFT JOIN DroneFlight ON
+          DroneFlight.ID = PortalAlert.FlightID
+      LEFT JOIN MSTR_Drone ON
+          MSTR_Drone.DroneID = DroneFlight.DroneID AND
+          MSTR_Drone.AccountID = " + AccountID + @"
+        LEFT JOIN PortalAlert_User ON
+          PortalAlert_User.AlertID = PortalAlert.AlertID and
+          PortalAlert_User.UserID =  " + id + @"
+        WHERE
+          MSTR_Drone.DroneID IS NOT NULL AND
+          PortalAlert_User.UserID IS NULL AND
+          PortalAlert.CreatedOn > DATEADD(minute,-30,GETDATE())";
       var Rows = Util.getDBRows(SQL);
       foreach(var Row in Rows) {
         if (!String.IsNullOrWhiteSpace(AlertMsg)) AlertMsg = AlertMsg + "<br>\n";

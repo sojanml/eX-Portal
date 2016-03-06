@@ -146,9 +146,23 @@ namespace eX_Portal.Controllers {
     public ActionResult PilotList() {
       if (!exLogic.User.hasAccess("PILOT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "User View";
-      string SQL = "select a.UserName,a.FirstName,a.MobileNo,b.ProfileName, Count(*) Over() as _TotalRecords ,  a.UserId as _PKey " +
-          " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId where a.ispilot=1 ";
-
+      string SQL = "select\n" +
+      "  a.UserName,\n" +
+      "  a.FirstName,\n" +
+      "  a.MobileNo,\n" +
+      "  b.ProfileName, \n" +
+      "  Count(*) Over() as _TotalRecords ,\n" +
+      "  a.UserId as _PKey\n" +
+      "from \n" +
+      "  MSTR_User a \n" +
+      "left join MSTR_Profile b \n" +
+      "  on a.UserProfileId = b.ProfileId\n" +
+      "where \n" +
+      "  a.ispilot=1";
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+        SQL += "AND\n" +
+          "  a.AccountID=" + Util.getAccountID();
+      }
 
       qView nView = new qView(SQL);
 
@@ -197,8 +211,6 @@ namespace eX_Portal.Controllers {
 
     [ChildActionOnly]
     public ActionResult UserDetailView([Bind(Prefix = "ID")] int UserID = 0) {
-      if (!exLogic.User.hasAccess("USER.VIEW")) return RedirectToAction("NoAccess", "Home");
-
 
       string SQL = "SELECT a.[UserName]\n" +
                   " ,a.[FirstName] \n " +
@@ -224,6 +236,12 @@ namespace eX_Portal.Controllers {
                   "left join MSTR_Profile d " +
                   "on a.UserProfileId=d.ProfileId" +
                   " where a.userid=" + UserID;
+
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+        SQL +=
+          " AND\n" +
+          "  a.AccountID=" + Util.getAccountID();
+      }
 
       qDetailView nView = new qDetailView(SQL);
       ViewBag.Message = nView.getTable();

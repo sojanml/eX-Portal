@@ -305,6 +305,27 @@ namespace eX_Portal.exLogic {
       return Util.getDBRowsJson(SQL);
     }
 
+    public String getDistance(String UniqueFlightID) {
+      String SQL = @"Select 
+        RowDistance,
+        ColDistance,
+        ColPointLat,
+        ColPointLon,
+        RowPointLat,
+        RowPointLon,
+        Latitude,
+        Longitude,
+        RowNumber,
+        ColumnNumber
+      from 
+        PayLoadMapData 
+      WHERE 
+        FlightUniqueID='" + UniqueFlightID + "'";
+      return Util.getDBRowsJson(SQL);
+
+
+    }
+
     // degrees to radians
     private static double Deg2rad(double degrees) {
       return Math.PI * degrees / 180.0;

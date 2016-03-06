@@ -39,5 +39,6 @@ namespace eX_Portal.Models
         public string Descrepency { get; set; }
         public string ActionTaken { get; set; }
         public Nullable<byte> IsLogged { get; set; }
+        public Nullable<bool> IsFlightOutside { get; set; }
     }
 }

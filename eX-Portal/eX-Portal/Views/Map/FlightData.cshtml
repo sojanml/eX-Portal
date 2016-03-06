@@ -147,18 +147,17 @@
     var AllowedLocation = [
       @ViewBag.AllowedLocation
     ];
-
+    var UserID = '@Session["UserID"]';
   </script>
   <script type="text/javascript" src="~/Scripts/map.js"></script>
   <script src="~/jwplayer/jwplayer.js"></script>
   <script>jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";</script>
   <script type="text/javascript">
     var playerInstance = null;
-    var UserID = '@Session["UserID"]';
   $(document).ready(function () {
     playerInstance = jwplayer("myElement");
     playerInstance.setup({
-      file: "rtmp://52.29.242.123/live/drone1",
+      file: "rtmp://52.29.242.123/live/drone" + @ViewBag.DroneID,
       width: 256,
       height: 192,
       title: 'Live Video',

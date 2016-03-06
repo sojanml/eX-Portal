@@ -17,10 +17,11 @@ $(document).ready(function () {
 
 function checkForm() {
   var ReturnValue = true;
-  var Drone = document.forms['formS3']['DroneID'].value;
-  var File = document.forms['formS3']['file'];
+  var Form = document.forms['formS3'];
+  var Drone = Form['DroneID'].value;
+  var File = Form['file'];
   var DocumentType = DocType;
-      //document.forms['formS3']['DocumentType'].value;
+  if (Form['DocumentType']) DocumentType = Form['DocumentType'].value;
 
   if (Drone == '0') {
     $('#DroneID-Required').fadeIn();
@@ -53,7 +54,7 @@ function startUpload() {
   for (var i = 0; i < File.files.length; i++) {
     var file = File.files[i];
     if (file.name.length < 1) {
-    } else if (file.size > 5 * 1024 * 1024) {
+    } else if (file.size > 200 * 1024 * 1024) {
       alert("File is to big");
     } else {
       SubmitFile(file);

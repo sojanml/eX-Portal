@@ -95,7 +95,7 @@ namespace eX_Portal.Controllers {
       var SlashAt = S3url.LastIndexOf('/');
       var LastDot = S3url.LastIndexOf('.');
       var FileOnly = S3url.Substring(SlashAt + 1, LastDot- SlashAt);
-      var UKeyEnd = S3url.IndexOf('_');
+      var UKeyEnd = FileOnly.IndexOf('_');
       return FileOnly.Substring(UKeyEnd + 1);
     }
 

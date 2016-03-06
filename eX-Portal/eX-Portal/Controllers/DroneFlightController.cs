@@ -200,7 +200,7 @@ namespace eX_Portal.Controllers {
       "   tblPilot.FirstName as PilotName,\n" +
       "   tblGSC.FirstName as GSCName,\n" +
       "   tblCreated.FirstName as CreatedBy,\n" +
-      "   FlightDate\n" +
+      "   FORMAT(FlightDate, 'dd-MMM-yyyy HH:mm:ss', 'en-US' ) as FlightDate\n" +
       "FROM\n" +
       "  DroneFlight\n" +
       "LEFT JOIN MSTR_Drone ON\n" +

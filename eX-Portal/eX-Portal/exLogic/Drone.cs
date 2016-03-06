@@ -20,11 +20,12 @@ namespace eX_Portal.exLogic {
       }
     }
     public int getDroneIDForFlight(int FlightID) {
-      return 80;
+      String SQL = "Select DroneID From DroneFlight WHERE ID=" + FlightID;
+      return Util.getDBInt(SQL);
     }
 
     public String getAllowedLocation(int FlightID) {
-      int DroneID = getDroneIDForFlight(FlightID);
+      _DroneID = getDroneIDForFlight(FlightID);
 
       StringBuilder Cord = new StringBuilder();
       String SQL = @"SELECT 
@@ -33,7 +34,7 @@ namespace eX_Portal.exLogic {
       FROM
         [GCA_Approval]
       WHERE
-        DroneID = " + DroneID + @" AND
+        DroneID = " + _DroneID + @" AND
         GETDATE() BETWEEN StartDate and EndDate";
 
       var Rows = Util.getDBRows(SQL);
