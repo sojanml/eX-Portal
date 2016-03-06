@@ -28,7 +28,10 @@ namespace eX_Portal.Controllers {
           'Power Line Inspection',
           'Water Sampling',
           'Red Tide and Oil Spill Detection',
-          'Power Plants Surveillance'
+          'Power Plants Surveillance',
+            'Vehicle Tracking - QR Codes',
+            'RFID Inventory Tracking',
+'Port Facility Surveillance'
         ) 
       Group BY
         DroneDocuments.DocumentType
