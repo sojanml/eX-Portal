@@ -834,17 +834,38 @@ float:left;
 margin-right:10px;
 }
 
-div.authorise {
-border-bottom:2px green solid;
+div.invalid {
+border-bottom:2px red solid;
+border-top:2px red solid;
+padding:5px;
 margin-bottom:10px;
 line-height:30px;
+background-color:rgba(255,0,0,0.2)
 }
+
+div.invalid > span.icon {
+color: red;
+font-size:30px;
+float:left;
+margin-right:10px;
+}
+
+div.authorise {
+border-bottom:2px green solid;
+border-top:2px green solid;
+padding:5px;
+margin-bottom:10px;
+line-height:30px;
+background-color:rgba(0,255,0,0.2)
+}
+
 div.authorise > span.icon {
 color: green;
 font-size:30px;
 float:left;
 margin-right:10px;
 }
+
 div.authorise ul li a {
   color:green;
   text-decoration: none;

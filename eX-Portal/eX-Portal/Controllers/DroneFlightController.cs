@@ -187,6 +187,7 @@ namespace eX_Portal.Controllers {
     }//Detail()
 
     public String DroneFlightDetail(int ID = 0) {
+      String CheckListMessage = "";
       if (!exLogic.User.hasAccess("FLIGHT.VIEW")) return "Access Denied";
       int DroneId,UserId;
 
@@ -197,8 +198,8 @@ namespace eX_Portal.Controllers {
       "SELECT\n" +
       "   DroneFlight.ID UASFlightId,\n" +
       "   MSTR_Drone.DroneName as UAS,\n" +
-      "   tblPilot.FirstName as PilotName,\n" +
-      "   tblGSC.FirstName as GSCName,\n" +
+      "   tblPilot.FirstName + ' ' + tblPilot.MiddleName + ' ' + tblPilot.LastName  as PilotName,\n" +
+      "   tblGSC.FirstName as [GroundStation],\n" +
       "   tblCreated.FirstName as CreatedBy,\n" +
       "   FORMAT(FlightDate, 'dd-MMM-yyyy HH:mm:ss', 'en-US' ) as FlightDate\n" +
       "FROM\n" +
@@ -224,6 +225,27 @@ namespace eX_Portal.Controllers {
       theView.FormatCols.Add("UAS", UASFormat); //Adding the Column required for formatting  
       theView.FormatCols.Add("PilotName", PilotFormat); // //Adding the Column required for formatting  
 
+      SQL = @"
+      SELECT 
+        Count([DroneCheckList].[ID]) as FlightCheckList
+      FROM 
+        [DroneCheckList]
+      LEFT JOIN [MSTR_DroneCheckList] ON
+        [MSTR_DroneCheckList].ID = [DroneCheckListID]
+      WHERE
+        [MSTR_DroneCheckList].[CheckListTitle]='Pre-Flight Checklist' AND
+        [DroneCheckList].[FlightID]=" + ID;
+      int CheckListCount = Util.getDBInt(SQL);
+      if (CheckListCount >= 3) {
+        CheckListMessage = "<div class=\"authorise\"><span class=\"icon\">&#xf214;</span>" +
+        "You have successfully completed all the checklist</div>";
+      } else if (CheckListCount >= 1) {
+        CheckListMessage = "<div class=\"warning\"><span class=\"icon\">&#xf071;</span>" +
+        "Please complete all the checklist for the flight.</div>";
+      } else {
+        CheckListMessage = "<div class=\"invalid\"><span class=\"icon\">&#xf071;</span>" +
+        "You need to complete all checklist before the flight</div>";
+      }
 
       //Check the documents for GCA is uploaded
       SQL = "SELECT\n" +
@@ -242,7 +264,9 @@ namespace eX_Portal.Controllers {
         "Your GAC Authorization: " + getUploadedDocs(ID) +
         "</div>";
       }
-      return UploadedDocs + theView.getTable();
+      return UploadedDocs + CheckListMessage + theView.getTable();
+
+
 
     }//DroneFlightDetail ()
 
