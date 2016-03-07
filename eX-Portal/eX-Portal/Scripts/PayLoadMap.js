@@ -23,7 +23,7 @@ $(document).ready(function () {
   //drawGridLines(GridLinesRows);
   //drawGridLines(GridLinesCols);
   //drawLabels();
-  //drawProducts();
+  drawProducts();
 
   $('#rfid-auto-correct').on("click", rfid_auto_correct_click);
 
