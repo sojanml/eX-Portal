@@ -258,10 +258,10 @@ namespace eX_Portal.Controllers {
       int TheCount = Util.getDBInt(SQL);
       if(TheCount < 1 ) {
         UploadedDocs = "<div class=\"warning\"><span class=\"icon\">&#xf071;</span>" +
-        "Please upload your GCA Authorisation document before the flight</div>";
+        "Please upload your DGCAA Authorisation document before the flight</div>";
       } else {
         UploadedDocs = "<div class=\"authorise\"><span class=\"icon\">&#xf214;</span>" +
-        "Your GAC Authorization: " + getUploadedDocs(ID) +
+        "Your DGCAA Authorization: " + getUploadedDocs(ID) +
         "</div>";
       }
       return UploadedDocs + CheckListMessage + theView.getTable();

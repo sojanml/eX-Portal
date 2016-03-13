@@ -23,8 +23,8 @@ namespace eX_Portal.exLogic {
     private String _SortOrder = "desc";
 
     public int SortColumn {
-      get { return _SortColumn;}
-      set { _SortColumn = value;}
+      get { return _SortColumn; }
+      set { _SortColumn = value; }
     }
 
     public String SortOrder {
@@ -49,6 +49,7 @@ namespace eX_Portal.exLogic {
 
     private List<qViewMenu> qViewMenus = new List<qViewMenu>();
     private bool IsPrimaryKey = false;
+    public bool IsFormatDate = true;
 
     public qView(String sSQL = "") {
       if (sSQL != "") SQL = sSQL;
@@ -58,9 +59,9 @@ namespace eX_Portal.exLogic {
     } //qView
 
     public bool addMenu(String Caption, String URL, String Icon = "") {
-      qViewMenu Menu = new qViewMenu{
-        Caption= Caption,
-        URL= URL,
+      qViewMenu Menu = new qViewMenu {
+        Caption = Caption,
+        URL = URL,
         Icon = Icon
       };
       qViewMenus.Add(Menu);
@@ -70,11 +71,11 @@ namespace eX_Portal.exLogic {
     private StringBuilder getMenu() {
       StringBuilder Menus = new StringBuilder();
       int i = 0;
-      foreach(var Menu in qViewMenus) {
+      foreach (var Menu in qViewMenus) {
         i = i + 1;
         if (i > 1) Menus.AppendLine(",");
         Menus.AppendLine("{");
-        Menus.AppendLine("\"caption\": \"" + Menu.Caption +  "\",");
+        Menus.AppendLine("\"caption\": \"" + Menu.Caption + "\",");
         Menus.AppendLine("\"url\": \"" + Menu.URL + "\",");
         Menus.AppendLine("\"class\": \"" + Menu.ClassName + "\"");
         Menus.Append("}");
@@ -100,10 +101,10 @@ namespace eX_Portal.exLogic {
       if (SearchTerm != "") {
 
         foreach (var Column in FilterColumns) {
-          if(!String.IsNullOrWhiteSpace(ColumnMapping[Column])) { 
-          if (Filter != "") Filter += " OR ";
-          Filter += ColumnMapping[Column] + " LIKE '%" + SearchTerm + "%'";
-        }
+          if (!String.IsNullOrWhiteSpace(ColumnMapping[Column])) {
+            if (Filter != "") Filter += " OR ";
+            Filter += ColumnMapping[Column] + " LIKE '%" + SearchTerm + "%'";
+          }
         }
         if (Filter != "") Filter = " (" + Filter + ")";
       }
@@ -120,7 +121,7 @@ namespace eX_Portal.exLogic {
       if (OrderDir != "asc") OrderDir = "desc";
 
       return ColumDef.ElementAt(OrderColumn) + " " + OrderDir;
-      
+
     }
 
     private String setOrderFilterPaging(String SQL) {
@@ -228,22 +229,26 @@ namespace eX_Portal.exLogic {
       String FieldValue = "";
       switch (reader.GetFieldType(i).ToString()) {
       case "System.DateTime":
-          if (String.IsNullOrEmpty(reader.GetValue(i).ToString())) {
-            FieldValue = "Invalid";
-          } else {
-            FieldValue = String.Format("{0:dd-MMM-yyyy hh:mm tt}", reader.GetDateTime(i));
-          }
-          break;
+      if (String.IsNullOrEmpty(reader.GetValue(i).ToString())) {
+        FieldValue = "Invalid";
+      } else {
+        if (IsFormatDate) {
+          FieldValue = String.Format("{0:dd-MMM-yyyy hh:mm tt}", reader.GetDateTime(i));
+        } else {
+          FieldValue = String.Format("{0:dd-MMM-yyyy HH:mm:ss}", reader.GetDateTime(i));
+        }
+      }
+      break;
       default:
-          FieldValue = reader.GetValue(i).ToString();
-          break;
+      FieldValue = reader.GetValue(i).ToString();
+      break;
       }
       return FieldValue;
     }
 
 
     public String getDataTable(
-      bool isIncludeData = false, 
+      bool isIncludeData = false,
       bool isIncludeFooter = true,
       String qDataTableID = "qViewTable") {
       StringBuilder Table = new StringBuilder();
@@ -255,7 +260,7 @@ namespace eX_Portal.exLogic {
         THead.Append(Util.toCaption(Column));
         THead.AppendLine("</th>");
       }//foreach
-      if(IsPrimaryKey) THead.Append("<th class=\"menu\">&nbsp;</th>");
+      if (IsPrimaryKey) THead.Append("<th class=\"menu\">&nbsp;</th>");
       THead.AppendLine("</tr>");
 
       Table.AppendLine("<table id=\"" + qDataTableID + "\" class=\"report\">");
@@ -264,35 +269,35 @@ namespace eX_Portal.exLogic {
 
       Table.AppendLine("</thead>");
 
-      if(isIncludeData) {
+      if (isIncludeData) {
         Table.AppendLine("<tbody>");
         Table.Append(getTableRows());
         Table.AppendLine("</tbody>");
       }
 
       //add total row to the sql
-      if(!String.IsNullOrEmpty(TotalSQL)) {
+      if (!String.IsNullOrEmpty(TotalSQL)) {
         Dictionary<String, Object> Row = Util.getDBRow(TotalSQL);
         StringBuilder TotalRow = new StringBuilder();
         TotalRow.AppendLine("<tfoot>");
         TotalRow.AppendLine("<tr>");
         foreach (var Column in Row) {
-          switch(Column.Key.ToLower()) {
-            case "hasrows":
-              break;
-            default:
-              TotalRow.AppendLine("<th>" + Column.Value.ToString() + "</th>");
-              break;
-          }          
+          switch (Column.Key.ToLower()) {
+          case "hasrows":
+          break;
+          default:
+          TotalRow.AppendLine("<th>" + Column.Value.ToString() + "</th>");
+          break;
+          }
         }
-        if(IsPrimaryKey) TotalRow.AppendLine("<th></th>");
+        if (IsPrimaryKey) TotalRow.AppendLine("<th></th>");
         TotalRow.AppendLine("</tr>");
         TotalRow.AppendLine("</tfoot>");
         Table.Append(TotalRow);
       }
 
 
-      if(isIncludeFooter) { 
+      if (isIncludeFooter) {
         Table.AppendLine("<tfoot>");
         Table.Append(THead);
         Table.AppendLine("</tfoot>");
@@ -319,12 +324,12 @@ namespace eX_Portal.exLogic {
             for (int i = 0; i < reader.FieldCount; i++) {
               String DisplayValue = getFieldVal(reader, i);
               switch (reader.GetName(i).ToLower()) {
-                case "_pkey":
-                  Rows.AppendLine("<td class=\"menu\"><img data-pkey=\"" + DisplayValue + "\" class=\"row-button\" src=\"/images/drop-down.png\"></td>");
-                  break;
-                default:
-                  Rows.AppendLine("<td>" + DisplayValue + "</td>");
-                  break;
+              case "_pkey":
+              Rows.AppendLine("<td class=\"menu\"><img data-pkey=\"" + DisplayValue + "\" class=\"row-button\" src=\"/images/drop-down.png\"></td>");
+              break;
+              default:
+              Rows.AppendLine("<td>" + DisplayValue + "</td>");
+              break;
               }//switch
             }//for
             Rows.AppendLine("</tr>");
@@ -348,7 +353,7 @@ namespace eX_Portal.exLogic {
         ScriptColumns.Append("}");
         isFirstColumn = false;
       }
-      if(IsPrimaryKey) ScriptColumns.AppendLine("\n, { \"data\": null, \"defaultContent\": \"<img class=button src=/images/drop-down.png>\", className: \"menu\" }");
+      if (IsPrimaryKey) ScriptColumns.AppendLine("\n, { \"data\": null, \"defaultContent\": \"<img class=button src=/images/drop-down.png>\", className: \"menu\" }");
 
       ScriptColumns.AppendLine("]");
 
@@ -365,7 +370,7 @@ namespace eX_Portal.exLogic {
       Scripts.AppendLine("    \"iDisplayLength\": 50, ");
       Scripts.AppendLine("    \"fnFooterCallback\": _fnFooterCallback, ");
       Scripts.AppendLine("    \"fnDrawCallback\": _fnDrawCallback, ");
-      Scripts.AppendLine("    \"order\": [["  + _SortColumn.ToString() + ",\"" + _SortOrder + "\"]], ");
+      Scripts.AppendLine("    \"order\": [[" + _SortColumn.ToString() + ",\"" + _SortOrder + "\"]], ");
       Scripts.AppendLine("    \"ajax\": \"" + HttpContext.Current.Request.RequestContext.HttpContext.Request.Url + "\",");
       Scripts.Append(ScriptColumns);
 
@@ -401,7 +406,7 @@ namespace eX_Portal.exLogic {
       DataTable schemaTable;
       ctx.Database.Connection.Open();
       cmd.CommandText = mySQL;
- 
+
       DbDataReader myReader = cmd.ExecuteReader(CommandBehavior.KeyInfo);
       HasRows = myReader.HasRows;
       schemaTable = myReader.GetSchemaTable();
@@ -427,21 +432,21 @@ namespace eX_Portal.exLogic {
         if (FieldType == "System.String") {
           FilterColumns.Add(ColumnName);
         }
-        if(ColumnCounter == 1 && FieldType == "System.String") {
+        if (ColumnCounter == 1 && FieldType == "System.String") {
           _SortOrder = "asc";
         }
 
 
         if (myField["IsHidden"].ToString() == "False") {
           switch (ColumnName.ToLower()) {
-            case "_totalrecords":
-              break;
-            case "_pkey":
-              IsPrimaryKey = true;
-              break;
-            default:
-              ColumDef.Add(ColumnName);
-              break;
+          case "_totalrecords":
+          break;
+          case "_pkey":
+          IsPrimaryKey = true;
+          break;
+          default:
+          ColumDef.Add(ColumnName);
+          break;
           } //switch
         }
 
@@ -456,7 +461,7 @@ namespace eX_Portal.exLogic {
 
   }//class qView
 
-  public class qViewMenu{
+  public class qViewMenu {
     private String pCaption = "";
     public String Caption {
       get {
@@ -464,7 +469,7 @@ namespace eX_Portal.exLogic {
       }//set
       set {
         pCaption = value;
-        if(String.IsNullOrEmpty(ClassName)) ClassName = "_" + pCaption.ToLower().Replace(" ", "_");
+        if (String.IsNullOrEmpty(ClassName)) ClassName = "_" + pCaption.ToLower().Replace(" ", "_");
       }//set
     }//property Caption
     public String URL { get; set; }

@@ -132,3 +132,25 @@ div.more-info {
 div.more-info span {
 padding-right:3px;
 }
+
+form#setYard > table { 
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+#rfid-settings-layer table input {
+  width:100%;
+}
+
+#rfid-settings-layer  table input[type=radio],
+#rfid-settings-layer table input[type=checkbox] {
+  width:1.5em !important;
+  height:1.5em !important;
+}
+
+
+
+form#setYard > table > tbody > tr > td {
+border-bottom:1px red solid;
+padding:5px 10px 5px 0px;
+}

@@ -24,7 +24,7 @@ div.dash-row div.dash-column:nth-child(even) {
 /* line 26, ../sass/dewa-dashboard.scss */
 div.dash-row div.dash-content {
   width: 100%;
-  border: 1px #fce1e7 solid;
+  border: 1px rgba(0, 91, 144, 0.2) solid;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -35,18 +35,18 @@ div.dash-row div.dash-content {
 }
 /* line 36, ../sass/dewa-dashboard.scss */
 div.dash-row h2 {
-  color: #ec5879;
+  color: #005b90;
 }
 /* line 39, ../sass/dewa-dashboard.scss */
 div.dash-row h3 {
-  color: #2B7624;
+  color: #01c074;
   margin: 0px 0px 10px 0px;
   padding: 0px;
   font-size: 12pt;
 }
 /* line 46, ../sass/dewa-dashboard.scss */
 div.dash-row a {
-  color: #2B7624;
+  color: #005b90;
   text-decoration: none;
 }
 /* line 51, ../sass/dewa-dashboard.scss */

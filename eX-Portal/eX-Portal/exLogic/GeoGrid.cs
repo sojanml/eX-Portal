@@ -19,6 +19,23 @@ namespace eX_Portal.exLogic {
     public MapPoint BottomRight { get; set; }
   }
 
+  public class Yard {
+    public GeoBox Bounds { get; set; }
+    public String VechileOrientation { get; set; }
+    public int VechileLength { get; set; }
+    public int VechileWidth { get; set; }
+    public int YardID { get; set; }
+    public int AccountID { get; set; }
+    public String YardName { get; set; }
+
+    public String isChecked(String Orientation) {
+      if (VechileOrientation == Orientation) return "checked=\"checked\"";
+      if (String.IsNullOrEmpty(VechileOrientation) && Orientation == "H") return "checked=\"checked\"";
+      if (Orientation == "new" && YardID <= 0) return "checked=\"checked\"";
+      return "";
+    }
+  }
+
   public class GeoGrid {
     private int _YardID = 0;
     public GeoGrid(int _pYardID = 0) {
@@ -36,6 +53,58 @@ namespace eX_Portal.exLogic {
       set {
         _YardID = value;
       } 
+    }
+
+    public Yard getYard() {
+      String SQL = @"SELECT
+        [AccountID],
+        [YardName],
+        [TopLeftLat],
+        [TopLeftLon],
+        [TopRightLat],
+        [TopRightLon],
+        [BottomLeftLat],
+        [BottomLeftLon],
+        [BottomRightLat],
+        [BottomRightLon],
+        [VechileOrientation],
+        [VechileLength],
+        [VechileWidth],
+        [CreatedBy],
+        [CreatedOn]
+      FROM 
+        [PayLoadYard]
+      WHERE
+        YardID=" + _YardID;
+      var Row = Util.getDBRow(SQL);
+      var theYard = new Yard();
+      if(Row["hasRows"].ToString() == "True") theYard = new Yard {
+        YardID = _YardID,
+        AccountID = Util.toInt(Row["AccountID"]),
+        YardName = Row["YardName"].ToString(),
+        VechileOrientation = Row["VechileOrientation"].ToString(),
+        VechileLength = Util.toInt(Row["VechileLength"]),
+        VechileWidth = Util.toInt(Row["VechileWidth"]),
+        Bounds = new GeoBox {
+          TopLeft = new MapPoint {
+            Latitude = Util.toDouble(Row["TopLeftLat"]),
+            Longitude = Util.toDouble(Row["TopLeftLon"])
+          },
+          TopRight = new MapPoint {
+            Latitude = Util.toDouble(Row["TopRightLat"]),
+            Longitude = Util.toDouble(Row["TopRightLon"])
+          },
+          BottomRight = new MapPoint {
+            Latitude = Util.toDouble(Row["BottomRightLat"]),
+            Longitude = Util.toDouble(Row["BottomRightLon"])
+          },
+          BottomLeft = new MapPoint {
+            Latitude = Util.toDouble(Row["BottomLeftLat"]),
+            Longitude = Util.toDouble(Row["BottomLeftLon"])
+          }
+        }
+      };
+      return theYard;
     }
 
     public String getTable(String FlightUniqueID) {
