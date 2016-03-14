@@ -733,10 +733,7 @@ namespace eX_Portal.Controllers
             string sql = "Select password from MSTR_USER where password ='" + code + "' and UserId='" + Session["UserID"] + "'";
 
             if (Util.getDBRows(sql).Count > 0)
-            {
-                
-
-                    try
+            {    try
                     {
 
                         if (password.NewPassword == password.ConfirmPassword)
