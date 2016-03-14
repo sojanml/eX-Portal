@@ -2,6 +2,110 @@
 
 @model eX_Portal.exLogic.qView
 
+<div id="rfid-settings-layer" style="display:none">
+  <form method="post" name="setYard" id="setYard" action="/Map/setYard">
+  <input type="hidden" name="FlightUniqueID" value="@ViewBag.FlightUniqueID" />
+    <input type="hidden" name="YardID" value="@ViewBag.Yard.YardID" />
+
+    <table style="width: 100%">
+      <tr>
+        <td style="white-space: nowrap;">Change Yard to</td>
+        <td style="width: 100%">
+          <select name="loadYardID">
+            <option></option>
+          </select>
+        </td>
+        <td style="white-space: nowrap;">(This will process the grid again)</td>
+        <td><input type="button" name="btnLoadYard" value="Load"></td>
+      </tr>
+    </table>
+
+    <table style="width: 100%">
+      <tr>
+        <td colspan="2">
+          Top Left
+        </td>
+        <td colspan="2">
+          Top Right
+        </td>
+        <td colspan="2">
+          Bottom Right
+        </td>
+        <td colspan="2">Bottom Left</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+          <input name="TopLeftLat" type="text">
+        </td>
+        <td>
+          <input name="TopLeftLon" type="text">
+        </td>
+        <td>
+          <input name="TopRightLat" type="text">
+        </td>
+        <td>
+          <input name="TopRightLon" type="text">
+        </td>
+
+        <td>
+          <input name="BottomRightLat" type="text">
+        </td>
+        <td>
+          <input name="BottomRightLon" type="text">
+        </td>
+
+        <td>
+          <input name="BottomLeftLat" type="text">
+        </td>
+        <td>
+          <input name="BottomLeftLon" type="text">
+        </td>
+        <td><input type="button" id="btnAutoSet" class="button" value="Auto Set"/></td>
+      </tr>
+    </table>
+
+    <table style="width: 100%">
+      <tr>
+        <td>Orientation</td>
+        <td>Width</td>
+        <td>Height</td>
+        <td>Save Yard Setting as</td>
+        <td><input  id="chkNewSetting" 
+         @ViewBag.Yard.isChecked("new")
+        name="chkNewSetting" value="1" type="checkbox" /></td>
+        <td style="white-space:nowrap">
+          <label for="chkNewSetting">Save as New Setting</label></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+          <table cellpadding="0" cellspacing="0">
+            <tr>
+              <td><input id="VechileOrientation_H" @ViewBag.Yard.isChecked("H") name="VechileOrientation" type="radio" value="H" /></td>
+              <td><label for="VechileOrientation_H">Horizondal</label></td>
+              <td><input id="VechileOrientation_V" @ViewBag.Yard.isChecked("V") name="VechileOrientation" type="radio" value="V" /></td>
+              <td><label for="VechileOrientation_V">Vertical</label></td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <input style="width:100px;" name="VechileWidth" value="@ViewBag.Yard.VechileWidth" type="text">
+        </td>
+        <td>
+          <input style="width:100px;"  name="VechileLength" value="@ViewBag.Yard.VechileLength" type="text">
+        </td>
+        <td>
+          <input name="YardName" value="@ViewBag.Yard.YardName" type="text">
+        </td>
+        <td><input id="chkReProcess" checked="checked"  name="chkReProcess" type="checkbox"  value="1"/></td>
+        <td style="white-space:nowrap"><label for="chkReProcess">Process Row/Column again</label></td>
+        <td><input class="button" type="submit" id="btnSubmit" name="btnSubmit" value="Save"></td>
+      </tr>
+    </table>
+  </form>
+</div>
+
 <div id="map-holder">
   <div id="map_canvas" style="width: 100%; height: 480px;"></div>
   <div id="map-info">Click on a block for information</div>
@@ -16,37 +120,39 @@
 
 @section scripts {
   <script type="text/javascript">
-  @Html.Raw(Model.getScripts())
+    @Html.Raw(Model.getScripts())
   </script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry"></script>
-<script type="text/javascript" src="~/Scripts/infobox.js".js"></script>
-<script type="text/javascript">
+  <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false&libraries=geometry"></script>
+  <script type="text/javascript" src="~/Scripts/infobox.js" .js"></script>
+  <script type="text/javascript">
   @{
     GeoGrid Info = new GeoGrid(ViewBag.FlightUniqueID.ToString());
   }
-  var RFID_Url = '@Url.Action("getRFID", "PayLoad", new { FlightUniqueID =  ViewBag.FlightUniqueID.ToString()})';
-  var rfid_auto_correct_Url = '@Url.Action("AutoCorrect", "PayLoad", new { FlightUniqueID =  ViewBag.FlightUniqueID.ToString()})';
-  var GridBoundBox = @Html.Raw(Info.getBox());
-  var GridLinesRows = [
-    @Html.Raw(Info.getRowLines())
-  ];
+    var RFID_Url = '@Url.Action("getRFID", "PayLoad", new { FlightUniqueID =  ViewBag.FlightUniqueID.ToString()})';
+    var rfid_auto_correct_Url = '@Url.Action("AutoCorrect", "PayLoad", new { FlightUniqueID =  ViewBag.FlightUniqueID.ToString()})';
+    var GridBoundBox = @Html.Raw(Info.getBox());
+    var GridLinesRows = [
+      @Html.Raw(Info.getRowLines())
+    ];
 
-  var GridLinesCols = [
-    @Html.Raw(Info.getColumnLines())
-  ];
-  var Grid = [
-    @Html.Raw(Info.getGrid(ViewBag.FlightUniqueID))
-  ] 
-  var TableDef = {@Html.Raw(Info.getTable(ViewBag.FlightUniqueID))};
-</script>
-<script type="text/javascript" src="~/Scripts/PayLoadMap.js"></script>
+    var GridLinesCols = [
+      @Html.Raw(Info.getColumnLines())
+    ];
+    var Grid = [
+      @Html.Raw(Info.getGrid(ViewBag.FlightUniqueID))
+    ]
+    var TableDef = {@Html.Raw(Info.getTable(ViewBag.FlightUniqueID))};
+  </script>
+  <script type="text/javascript" src="~/Scripts/PayLoadMap.js"></script>
 }
 
 @section header{
-<link href="~/Content/map.css" rel="stylesheet" />
+  <link href="~/Content/map.css" rel="stylesheet" />
 }
 @section toolbar {
-<a href="#" class="button" id="rfid-virtual-grid">Virtual Grid</a>
-<a href="#" class="button" id="rfid-google-map">Google Map</a>
-<a href="#" class="button" id="rfid-auto-correct">Auto Correct</a>
+  <a href="#" class="button" id="rfid-virtual-grid">Virtual Grid</a>
+  <a href="#" class="button" id="rfid-google-map">Google Map</a>
+  <a href="#" class="button" id="rfid-settings">
+    <span class="icon ">&#xf085;</span> Settings
+  </a>
 }

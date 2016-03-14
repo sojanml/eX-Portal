@@ -124,6 +124,17 @@ namespace eX_Portal.exLogic {
       return theNum;
     }
 
+    public static Double toDouble(Object Num) {
+      Double theNum = 0;
+      Double.TryParse(Num.ToString(), out theNum);
+      return theNum;
+    }
+
+    public static int toInt(Object Str) {
+      var theStr = Str.ToString();
+      return toInt(theStr);
+    }
+
     public static int getDBInt(String SQL) {
       int Result = 0;
       using (var ctx = new ExponentPortalEntities()) {

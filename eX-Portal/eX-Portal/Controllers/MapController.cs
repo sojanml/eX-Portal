@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using eX_Portal.Models;
 using eX_Portal.exLogic;
 using System.Data;
+using System.Data.Entity;
 
 namespace eX_Portal.Controllers {
   public class MapController : Controller {
@@ -67,6 +68,8 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("PAYLOAD.MAP")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Payload Data";
 
+
+
       String SQL =
       "SELECT \n" +
       "  [RFID], \n" +
@@ -92,8 +95,56 @@ namespace eX_Portal.Controllers {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
+
+        //get yard information for FlightUniqueID
+        GeoGrid theYard = new GeoGrid(FlightUniqueID);
+        ViewBag.Yard = theYard.getYard();
+
         return View(nView);
       }//if(IsAjaxRequest)
+
+    }
+
+    [System.Web.Mvc.HttpPost]
+    public JsonResult setYard(PayLoadYard Yard) {
+      ExponentPortalEntities DB = new ExponentPortalEntities();
+      if (Request["chkNewSetting"] == "1") {
+        DB.PayLoadYards.Add(Yard);
+        DB.SaveChanges();
+      } else {
+        DB.Entry(Yard).State = EntityState.Modified;
+        DB.SaveChanges();
+      }
+
+      //If created a new Yard, then set the Yard ID
+      //of current Payload Flight to new one
+      if (Request["chkNewSetting"] == "1") {
+        String SQL;
+        SQL = "UPDATE PayLoadMapData SET YardID=" + Yard.YardID +
+        " WHERE FlightUniqueID='" + Request["FlightUniqueID"] + "'";
+        Util.doSQL(SQL);
+
+        SQL = "UPDATE PayLoadFlight SET YardID=" + Yard.YardID +
+        " WHERE FlightUniqueID='" + Request["FlightUniqueID"] + "'";
+        Util.doSQL(SQL);
+      }
+
+      if(Request["chkReProcess"] == "1") {
+        String SQL;
+        SQL = "UPDATE PayLoadMapData SET \n" + 
+        " YardID=" + Yard.YardID + ",\n" +
+        " RowNumber= -1,\n" +
+        " ColumnNumber= -1,\n" +
+        " IsProcessed= 0,\n" +
+        " RowFixExecuted= 0,\n" +
+        " ColFixExecuted= 0,\n" +
+        " AutoFixGap= 0\n" +
+        "WHERE\n" +
+        "  FlightUniqueID='" + Request["FlightUniqueID"] + "'";
+        Util.doSQL(SQL);
+      }
+
+      return Json(Yard, JsonRequestBehavior.AllowGet);
 
     }
 
@@ -250,7 +301,7 @@ namespace eX_Portal.Controllers {
        "  FlightID=" + FID;
 
       qView nView = new qView(SQL);
-
+      nView.IsFormatDate = false;
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);

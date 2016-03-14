@@ -2,8 +2,8 @@
 
 // first we set the variables:
 $BaseColor: gray;
-$HiliteColor: #2B7624;
-$SparkColor: #ec5879;
+$HiliteColor: #005b90;
+$SparkColor: rgb(1,192,116);
 
 div.dash-row {
   width: 100%;
@@ -25,7 +25,7 @@ div.dash-row {
 
   div.dash-content {
     width: 100%;
-    border: 1px lighten($SparkColor, 30%) solid;
+    border: 1px rgba($HiliteColor, 0.2)  solid;
     @include box-sizing(border-box);
     padding: 10px 10px 0px 10px;
     min-height: 300px;
@@ -34,10 +34,10 @@ div.dash-row {
   }
 
   h2 {
-    color: $SparkColor;
+    color: $HiliteColor;
   }
   h3 { 
-    color: $HiliteColor;
+    color: $SparkColor;
     margin:0px 0px 10px 0px;
     padding:0px;
     font-size: 12pt;

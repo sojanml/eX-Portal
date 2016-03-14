@@ -26,6 +26,11 @@ span.icon {
   cursor: pointer;
   color: gray;
 }
+
+div.form-toolbar > a > span.icon {
+  color: black;
+}
+
 span.refresh:hover,
 span.delete:hover {
   color: #ea050e;
@@ -422,6 +427,7 @@ div.header-bar div.form-toolbar {
   margin:0px;
 }
 
+input.button,
 div.form-toolbar input,
 div.form-toolbar button,
 div.form-toolbar a.button,

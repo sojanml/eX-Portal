@@ -16,6 +16,7 @@ var ProductGrid = new Object();
 var IsGridInitilized = false;
 
 var BoundaryBox = null;
+var BoundaryMarker = [null, null, null, null];
 
 $(document).ready(function () {
   initialize();
@@ -24,8 +25,10 @@ $(document).ready(function () {
   //drawGridLines(GridLinesCols);
   //drawLabels();
   drawProducts();
+  setCordinatesEditable();
 
-  $('#rfid-auto-correct').on("click", rfid_auto_correct_click);
+
+  $('#rfid-settings').on("click", rfid_settings);
 
   $('#rfid-virtual-grid').on("click", function (e) {
       e.preventDefault();
@@ -43,9 +46,15 @@ $(document).ready(function () {
     $('#grid-holder').hide();
   });
 
+  $('#setYard').on("submit", setYard_post);
+  $('#btnAutoSet').on("click", btnAutoSet_click);
+
 });
 
+function btnAutoSet_click(e) {
+  //auto border set
 
+}
 
 function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
   //alert('Start at: ' + iStart);
@@ -72,20 +81,11 @@ function setGridHilite(aData) {
 }
 
 
-function rfid_auto_correct_click(e) {
+function rfid_settings(e) {
   e.stopPropagation();
   e.preventDefault();
-  $('#rfid-auto-correct').html('Reading <span class="icon progress">&#xf110;</span>');
-
-  $.ajax({
-    url: rfid_auto_correct_Url,
-    dataType: 'JSON',
-    success: function (data) {
-      Grid = data;
-      top.location.reload();
-    }
-  });
-
+  $('#rfid-settings-layer').slideToggle();
+ 
 }
 
 function setGridBox() {
@@ -104,12 +104,15 @@ function setGridBox() {
     strokeWeight: 1,
     fillColor: '#FF0000',
     fillOpacity: 0.03,
-    editable: true
+    draggable: true
   });
   BoundaryBox.setMap(map);
+
+  google.maps.event.addListener(BoundaryBox, "dragend", moveCordinatesEditable);
 }
 
 function getBoundary() {
+  if (BoundaryBox == null) return '';
   var Bounds = BoundaryBox.getPath().getArray();
   var LatLng = '';
   for (var i = 0; i < Bounds.length; i++) {
@@ -421,7 +424,8 @@ function createMarker(map, latlng, heading, body) {
     position: latlng,
     map: map,
     //icon: image,
-    title: heading
+    title: heading,
+    zIndex: 999
   });
 
   var myOptions = {
@@ -572,4 +576,72 @@ function grid_getByCols() {
   Table += "</table>";
 
   return Table;
+}
+
+
+
+function setCordinatesEditable() {
+  if (BoundaryBox == null) return;
+  var Icons = ['top-left.png', 'top-right.png', 'bottom-right.png', 'bottom-left.png']
+  var Bounds = BoundaryBox.getPath().getArray();
+  for (var i = 0; i < Bounds.length; i++) {
+    BoundaryMarker[i] = new google.maps.Marker({
+      position: Bounds[i],
+      map: map,
+      icon: '/images/map/' + Icons[i],
+      draggable: true
+    });
+    resetCordinateEdit(i, Bounds[i]);
+    google.maps.event.addListener(BoundaryMarker[i], "drag", dragCordinatesEditable(i));
+  }
+
+}
+
+function moveCordinatesEditable() {
+  if (BoundaryBox == null) return;
+  var Bounds = BoundaryBox.getPath().getArray();
+  for (var i = 0; i < Bounds.length; i++) {
+    BoundaryMarker[i].setPosition(Bounds[i]);
+    resetCordinateEdit(i, Bounds[i]);
+  }
+
+}
+
+function resetCordinateEdit(pos, Point) {
+  var FORM = document.forms['setYard'];
+  var Cord = ['TopLeft', 'TopRight', 'BottomRight', 'BottomLeft'];
+  FORM[Cord[pos] + 'Lat'].value = Point.lat();
+  FORM[Cord[pos] + 'Lon'].value = Point.lng();
+}
+
+function dragCordinatesEditable(i) {
+  return function (event) {
+    var Point = event.latLng;
+    BoundaryBox.getPath().setAt(i, Point);
+    resetCordinateEdit(i, Point);
+  };
+}
+
+function setYard_post(e) {
+  e.preventDefault();
+  $('#btnSubmit').val("Wait...");
+  var FORM = $(this);
+  var Data = FORM.serialize();
+  $.ajax({
+    url: '/map/setYard',
+    method: "POST",
+    data: Data,
+    success: setYard_post_done
+  })
+}
+
+function setYard_post_done(data, textStatus, jqXHR) {
+  $('#rfid-settings-layer').slideUp();
+  $('#btnSubmit').val("Save");
+  dorument.forms['setYard']['YardID'].value = data.YardID;
+  dorument.forms['setYard']['chkNewSetting'].checked = false;
+}
+
+function btnAutoSet_click(e) {
+
 }
