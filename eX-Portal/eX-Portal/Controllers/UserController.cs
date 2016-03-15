@@ -15,22 +15,26 @@ using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Configuration;
 
-namespace eX_Portal.Controllers {
+namespace eX_Portal.Controllers
+{
 
-    public class UserController : Controller {
+    public class UserController : Controller
+    {
         // GET: UserLogin
         public ExponentPortalEntities db = new ExponentPortalEntities();
         static String RootUploadDir = "~/Upload/User/";
         public object EntityState { get; private set; }
 
-        public ActionResult Index() {
+        public ActionResult Index()
+        {
             ViewBag.Title = "Login";
             UserLogin _objuserlogin = new UserLogin();
             return View(_objuserlogin);
         }//Login()
 
 
-        public string ExponentCertificateDetails([Bind(Prefix = "ID")] int PilotID) {
+        public string ExponentCertificateDetails([Bind(Prefix = "ID")] int PilotID)
+        {
             if (!exLogic.User.hasAccess("EXPCERT.VIEW")) return "Access Denied";
 
             string SQL = " select b.name as Certification,\n " +
@@ -47,7 +51,8 @@ namespace eX_Portal.Controllers {
                   "  and \n" +
                   "  a.UserId =" + PilotID;
             qView nView = new qView(SQL);
-            if (nView.HasRows) {
+            if (nView.HasRows)
+            {
                 nView.isFilterByTop = false;
                 return
                   "<h2>Exponent Certification Details</h2>\n" +
@@ -57,7 +62,8 @@ namespace eX_Portal.Controllers {
             return "";
 
         }
-        public String PilotCertificateDetails([Bind(Prefix = "ID")] int PilotID) {
+        public String PilotCertificateDetails([Bind(Prefix = "ID")] int PilotID)
+        {
             if (!exLogic.User.hasAccess("PILOTCERT.VIEW")) return "Access Denied";
 
             String SQL = "  select b.name as Certification, \n" +
@@ -78,7 +84,8 @@ namespace eX_Portal.Controllers {
              "  and a.UserId =" + PilotID;
             qView nView = new qView(SQL);
 
-            if (nView.HasRows) {
+            if (nView.HasRows)
+            {
                 nView.isFilterByTop = false;
                 return
                   "<h2>Pilot Certification Details</h2>\n" +
@@ -93,14 +100,16 @@ namespace eX_Portal.Controllers {
 
 
         [HttpPost]
-        public ActionResult Index(UserLogin _objuserlogin) {
+        public ActionResult Index(UserLogin _objuserlogin)
+        {
             ViewBag.Title = "Login";
 
             /*Create instance of entity model*/
             ExponentPortalEntities objentity = new ExponentPortalEntities();
             /*Getting data from database for user validation*/
 
-            if (exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0) {
+            if (exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0)
+            {
                 /*Redirect user to success apge after successfull login*/
                 ViewBag.Message = 1;
                 UserInfo thisUser = exLogic.User.getInfo(_objuserlogin.UserName);
@@ -112,19 +121,22 @@ namespace eX_Portal.Controllers {
                 Session["AccountID"] = thisUser.AccountID;
                 return RedirectToAction("Index", "Home");
 
-            } else {
+            }
+            else {
                 ViewBag.Message = 0;
             }
             return View(_objuserlogin);
         }//HttpPost Login()
 
-        public ActionResult Logout() {
+        public ActionResult Logout()
+        {
             ViewBag.Title = "Logout";
             Session.RemoveAll();
             return View();
         }//Login()
 
-        public ActionResult UserList() {
+        public ActionResult UserList()
+        {
             if (!exLogic.User.hasAccess("USER.VIEW")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "User View";
             string SQL = "select a.UserName,a.FirstName,a.MobileNo,b.ProfileName, Count(*) Over() as _TotalRecords ,  a.UserId as _PKey " +
@@ -137,17 +149,20 @@ namespace eX_Portal.Controllers {
             if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("PILOTLOG.VIEW")) nView.addMenu("Pilot Log", Url.Action("Detail", "PilotLog", new { ID = "_PKey" }));
-            if (Request.IsAjaxRequest()) {
+            if (Request.IsAjaxRequest())
+            {
                 Response.ContentType = "text/javascript";
                 return PartialView("qViewData", nView);
-            } else {
+            }
+            else {
                 return View(nView);
             }//if(IsAjaxRequest)
 
 
 
         }
-        public ActionResult PilotList() {
+        public ActionResult PilotList()
+        {
             if (!exLogic.User.hasAccess("PILOT")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "User View";
             string SQL = "select\n" +
@@ -163,7 +178,8 @@ namespace eX_Portal.Controllers {
             "  on a.UserProfileId = b.ProfileId\n" +
             "where \n" +
             "  a.ispilot=1";
-            if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
                 SQL += "AND\n" +
                   "  a.AccountID=" + Util.getAccountID();
             }
@@ -174,10 +190,12 @@ namespace eX_Portal.Controllers {
             if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("PILOTLOG.VIEW")) nView.addMenu("Pilot Log", Url.Action("Detail", "PilotLog", new { ID = "_PKey" }));
-            if (Request.IsAjaxRequest()) {
+            if (Request.IsAjaxRequest())
+            {
                 Response.ContentType = "text/javascript";
                 return PartialView("qViewData", nView);
-            } else {
+            }
+            else {
                 return View(nView);
             }//if(IsAjaxRequest)
 
@@ -186,12 +204,14 @@ namespace eX_Portal.Controllers {
         }
 
 
-        public ActionResult Create() {
+        public ActionResult Create()
+        {
 
             ViewBag.Title = "Create User";
             if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
 
-            var viewModel = new ViewModel.UserViewModel {
+            var viewModel = new ViewModel.UserViewModel
+            {
                 User = new MSTR_User(),
                 Pilot = new MSTR_User_Pilot(),
                 ProfileList = Util.GetProfileList(),
@@ -202,7 +222,8 @@ namespace eX_Portal.Controllers {
             return View(viewModel);
         }
 
-        public ActionResult UserDetail([Bind(Prefix = "ID")] int UserID = 0) {
+        public ActionResult UserDetail([Bind(Prefix = "ID")] int UserID = 0)
+        {
             if (!exLogic.User.hasAccess("USER.VIEW")) return RedirectToAction("NoAccess", "Home");
 
 
@@ -214,7 +235,8 @@ namespace eX_Portal.Controllers {
         }//UserDetail()
 
         [ChildActionOnly]
-        public ActionResult UserDetailView([Bind(Prefix = "ID")] int UserID = 0) {
+        public ActionResult UserDetailView([Bind(Prefix = "ID")] int UserID = 0)
+        {
 
             string SQL = "SELECT a.[UserName]\n" +
                         " ,a.[FirstName] \n " +
@@ -241,7 +263,8 @@ namespace eX_Portal.Controllers {
                         "on a.UserProfileId=d.ProfileId" +
                         " where a.userid=" + UserID;
 
-            if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
                 SQL +=
                   " AND\n" +
                   "  a.AccountID=" + Util.getAccountID();
@@ -254,14 +277,16 @@ namespace eX_Portal.Controllers {
         }
 
 
-        public String UploadFile([Bind(Prefix = "ID")] int UserID = 0) {
+        public String UploadFile([Bind(Prefix = "ID")] int UserID = 0)
+        {
             String UploadPath = Server.MapPath(Url.Content(RootUploadDir) + UserID + "/");
             //send information in JSON Format always
             StringBuilder JsonText = new StringBuilder();
             Response.ContentType = "text/json";
 
             //when there are files in the request, save and return the file information
-            try {
+            try
+            {
                 var TheFile = Request.Files[0];
                 String FileName = System.Guid.NewGuid() + "~" + TheFile.FileName;
                 String FullName = UploadPath + FileName;
@@ -274,7 +299,9 @@ namespace eX_Portal.Controllers {
                 JsonText.Append(Util.getFileInfo(FullName));
                 JsonText.Append("]}");
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 JsonText.Clear();
                 JsonText.Append("{");
                 JsonText.Append(Util.Pair("status", "error", true));
@@ -285,10 +312,12 @@ namespace eX_Portal.Controllers {
         }//Save()
 
         // GET: DroneService/Edit/5
-        public ActionResult Edit(int id) {
+        public ActionResult Edit(int id)
+        {
 
             if (!exLogic.User.hasAccess("USER.EDIT")) return RedirectToAction("NoAccess", "Home");
-            var viewModel = new ViewModel.UserViewModel {
+            var viewModel = new ViewModel.UserViewModel
+            {
                 User = db.MSTR_User.Find(id),
                 Pilot = db.MSTR_User_Pilot.Find(id),
                 ProfileList = Util.GetProfileList(),
@@ -300,20 +329,26 @@ namespace eX_Portal.Controllers {
 
 
         [HttpPost]
-        public ActionResult Edit(ViewModel.UserViewModel UserModel) {
+        public ActionResult Edit(ViewModel.UserViewModel UserModel)
+        {
             String Pass_SQL = "\n";
             if (!exLogic.User.hasAccess("USER.EDIT")) return RedirectToAction("NoAccess", "Home");
-            if (ModelState.IsValid) {
-                if (!String.IsNullOrEmpty(UserModel.User.Password) && !String.IsNullOrEmpty(UserModel.User.ConfirmPassword)) {
-                    if (UserModel.User.Password != UserModel.User.ConfirmPassword) {
+            if (ModelState.IsValid)
+            {
+                if (!String.IsNullOrEmpty(UserModel.User.Password) && !String.IsNullOrEmpty(UserModel.User.ConfirmPassword))
+                {
+                    if (UserModel.User.Password != UserModel.User.ConfirmPassword)
+                    {
                         ModelState.AddModelError("User.Password", "Password doesn't match.");
-                    } else {
+                    }
+                    else {
                         Pass_SQL = ",\n  Password='" + Util.GetEncryptedPassword(UserModel.User.Password).ToString() + "'\n";
                     }
                 }
             }
 
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 string SQL = "UPDATE MSTR_USER SET\n" +
                   "  UserProfileId=" + Util.toInt(UserModel.User.UserProfileId.ToString()) + ",\n" +
                   "  FirstName='" + UserModel.User.FirstName + "',\n" +
@@ -351,7 +386,8 @@ namespace eX_Portal.Controllers {
                 return RedirectToAction("UserDetail", new { ID = UserModel.User.UserId });
             }
 
-            var viewModel = new ViewModel.UserViewModel {
+            var viewModel = new ViewModel.UserViewModel
+            {
 
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
@@ -363,31 +399,39 @@ namespace eX_Portal.Controllers {
 
 
         [HttpPost]
-        public ActionResult Create(ViewModel.UserViewModel UserModel) {
+        public ActionResult Create(ViewModel.UserViewModel UserModel)
+        {
             if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
             //if (ModelState.IsValid) {
-            if (exLogic.User.UserExist(UserModel.User.UserName) > 0) {
+            if (exLogic.User.UserExist(UserModel.User.UserName) > 0)
+            {
                 ModelState.AddModelError("User.UserName", "This username already exists.");
             }
 
-            if (String.IsNullOrEmpty(UserModel.User.Password)) {
+            if (String.IsNullOrEmpty(UserModel.User.Password))
+            {
                 ModelState.AddModelError("User.Password", "Invalid Password. Please enter again.");
             }
 
-            if (UserModel.User.IsPilot == true) {
-                if (String.IsNullOrEmpty(UserModel.Pilot.EmiratesId)) {
+            if (UserModel.User.IsPilot == true)
+            {
+                if (String.IsNullOrEmpty(UserModel.Pilot.EmiratesId))
+                {
                     ModelState.AddModelError("Pilot.EmiratesId", "Emirates ID is required.");
                 }
-                if (String.IsNullOrEmpty(UserModel.Pilot.PassportNo)) {
+                if (String.IsNullOrEmpty(UserModel.Pilot.PassportNo))
+                {
                     ModelState.AddModelError("Pilot.PassportNo", "Passport  ID is required.");
                 }
-                if (String.IsNullOrEmpty(UserModel.Pilot.Department)) {
+                if (String.IsNullOrEmpty(UserModel.Pilot.Department))
+                {
                     ModelState.AddModelError("Pilot.Department", "Department is required.");
                 }
             }//if(UserModel.User.IsPilot == true) {
              //}
 
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 string Password = Util.GetEncryptedPassword(UserModel.User.Password).ToString();
                 String SQL = "insert into MSTR_User(\n" +
                   "  UserName,\n" +
@@ -453,14 +497,16 @@ namespace eX_Portal.Controllers {
                 String PhotoURL = UploadPath + "0/" + UserModel.User.PhotoUrl;
                 if (!System.IO.Directory.Exists(newPath)) Directory.CreateDirectory(newPath);
                 if (!String.IsNullOrEmpty(UserModel.User.PhotoUrl) &&
-                    System.IO.File.Exists(PhotoURL)) {
+                    System.IO.File.Exists(PhotoURL))
+                {
                     System.IO.File.Move(PhotoURL, newPath + UserModel.User.PhotoUrl);
                 }
                 return RedirectToAction("UserDetail", new { ID = id });
 
             }
 
-            var viewModel = new ViewModel.UserViewModel {
+            var viewModel = new ViewModel.UserViewModel
+            {
                 User = UserModel.User,
                 Pilot = UserModel.Pilot,
                 ProfileList = Util.GetProfileList(),
@@ -474,7 +520,8 @@ namespace eX_Portal.Controllers {
 
 
 
-        public String Delete([Bind(Prefix = "ID")]int UserID = 0) {
+        public String Delete([Bind(Prefix = "ID")]int UserID = 0)
+        {
             if (!exLogic.User.hasAccess("USER.DELETE"))
 
                 return Util.jsonStat("ERROR", "Access Denied");
@@ -507,7 +554,8 @@ namespace eX_Portal.Controllers {
 
 
 
-        public ActionResult PilotCertificationCreate([Bind(Prefix = "ID")] int PilotID = 0) {
+        public ActionResult PilotCertificationCreate([Bind(Prefix = "ID")] int PilotID = 0)
+        {
 
             if (!exLogic.User.hasAccess("PILOTCERT.CREATE")) return RedirectToAction("NoAccess", "Home");
 
@@ -519,13 +567,15 @@ namespace eX_Portal.Controllers {
 
         // POST: user/PilotCertificationCreate
         [HttpPost]
-        public ActionResult PilotCertificationCreate(MSTR_User_Pilot_Certification PCertificate) {
+        public ActionResult PilotCertificationCreate(MSTR_User_Pilot_Certification PCertificate)
+        {
             if (!exLogic.User.hasAccess("PILOTCERT.CREATE")) return RedirectToAction("NoAccess", "Home");
 
             if (PCertificate.CertificateId < 1 || PCertificate.CertificateId == null) ModelState.AddModelError("CertificateId", "You must select a Certificate.");
             if (PCertificate.IssuingAuthorityId < 1 || PCertificate.IssuingAuthorityId == null) ModelState.AddModelError("IssuingAuthorityId", "Please Select Issuing Authority.");
 
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 int ID = 0;
 
 
@@ -539,14 +589,16 @@ namespace eX_Portal.Controllers {
                 db.Dispose();
 
                 return RedirectToAction("UserDetail", new { ID = PCertificate.UserId });
-            } else {
+            }
+            else {
                 ViewBag.Title = "Create Pilot Certification";
                 return View(PCertificate);
             }
         }
 
 
-        public ActionResult PilotCertificationEdit([Bind(Prefix = "ID")] int PCertId = 0) {
+        public ActionResult PilotCertificationEdit([Bind(Prefix = "ID")] int PCertId = 0)
+        {
             if (!exLogic.User.hasAccess("PILOTCERT.EDIT")) return RedirectToAction("NoAccess", "Home");
 
             ViewBag.Title = "Edit Pilot Certificate";
@@ -556,7 +608,8 @@ namespace eX_Portal.Controllers {
         }
 
         [HttpPost]
-        public ActionResult PilotCertificationEdit(MSTR_User_Pilot_Certification PCertificate) {
+        public ActionResult PilotCertificationEdit(MSTR_User_Pilot_Certification PCertificate)
+        {
             if (!exLogic.User.hasAccess("PILOTCERT.EDIT")) return RedirectToAction("NoAccess", "Home");
 
             ViewBag.Title = "Edit Piltot Certificate";
@@ -571,7 +624,8 @@ namespace eX_Portal.Controllers {
         }
 
 
-        public String PilotCertificationDelete([Bind(Prefix = "ID")]int PCertId = 0) {
+        public String PilotCertificationDelete([Bind(Prefix = "ID")]int PCertId = 0)
+        {
             if (!exLogic.User.hasAccess("PILOTCERT.DELETE")) return Util.jsonStat("ERROR", "Access Denied");
 
             string SQL = "DELETE FROM MSTR_User_Pilot_Certification WHERE Id = " + PCertId;
@@ -583,7 +637,8 @@ namespace eX_Portal.Controllers {
         }
 
 
-        public ActionResult ExponentCertificationCreate([Bind(Prefix = "ID")] int PilotID = 0) {
+        public ActionResult ExponentCertificationCreate([Bind(Prefix = "ID")] int PilotID = 0)
+        {
             if (!exLogic.User.hasAccess("EXPCERT.CREATE")) return RedirectToAction("NoAccess", "Home");
 
             ViewBag.Title = "Create Exponent Certificate";
@@ -594,13 +649,15 @@ namespace eX_Portal.Controllers {
 
         // POST: user/PilotCertificationCreate
         [HttpPost]
-        public ActionResult ExponentCertificationCreate(MSTR_User_Pilot_ExponentUAS ExpCertificate) {
+        public ActionResult ExponentCertificationCreate(MSTR_User_Pilot_ExponentUAS ExpCertificate)
+        {
             if (!exLogic.User.hasAccess("EXPCERT.CREATE")) return RedirectToAction("NoAccess", "Home");
 
             if (ExpCertificate.CertificateId < 1 || ExpCertificate.CertificateId == null) ModelState.AddModelError("CertificateId", "You must select a Certificate.");
 
 
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 int ID = 0;
 
 
@@ -615,14 +672,16 @@ namespace eX_Portal.Controllers {
                 db.Dispose();
 
                 return RedirectToAction("UserDetail", new { ID = ExpCertificate.UserId });
-            } else {
+            }
+            else {
                 ViewBag.Title = "Create Exponent Certification";
                 return View(ExpCertificate);
             }
         }
 
 
-        public ActionResult ExponentCertificationEdit([Bind(Prefix = "ID")] int ExpCertId = 0) {
+        public ActionResult ExponentCertificationEdit([Bind(Prefix = "ID")] int ExpCertId = 0)
+        {
             if (!exLogic.User.hasAccess("EXPCERT.EDIT")) return RedirectToAction("NoAccess", "Home");
 
             ViewBag.Title = "Edit Exponent Certificate";
@@ -633,7 +692,8 @@ namespace eX_Portal.Controllers {
         }
 
         [HttpPost]
-        public ActionResult ExponentCertificationEdit(MSTR_User_Pilot_ExponentUAS ExpCertificate) {
+        public ActionResult ExponentCertificationEdit(MSTR_User_Pilot_ExponentUAS ExpCertificate)
+        {
             if (!exLogic.User.hasAccess("EXPCERT.EDIT")) return RedirectToAction("NoAccess", "Home");
 
             ViewBag.Title = "Edit Exponent Certificate";
@@ -648,7 +708,8 @@ namespace eX_Portal.Controllers {
         }
 
 
-        public String ExponentCertificationDelete([Bind(Prefix = "ID")]int ExpCertId = 0) {
+        public String ExponentCertificationDelete([Bind(Prefix = "ID")]int ExpCertId = 0)
+        {
 
             if (!exLogic.User.hasAccess("EXPCERT.DELETE")) return Util.jsonStat("ERROR", "Access Denied");
             string SQL = "DELETE FROM  MSTR_User_Pilot_ExponentUAS WHERE Id = " + ExpCertId;
@@ -657,38 +718,63 @@ namespace eX_Portal.Controllers {
 
             return Util.jsonStat("OK");
         }
-    
-        public ActionResult  ResetPassword()
+
+        public ActionResult ResetPassword()
         {
+
             return View();
         }
-
+        public static ExponentPortalEntities ctx = new ExponentPortalEntities();
         [HttpPost]
         public ActionResult ResetPassword(ChangePasswordViewModel password)
         {
+            MSTR_User mu = new MSTR_User();
+            string code = Util.GetEncryptedPassword(password.OldPassword).ToString();
+            string sql = "Select password from MSTR_USER where password ='" + code + "' and UserId='" + Session["UserID"] + "'";
 
-            if (password.NewPassword == password.ConfirmPassword)
-            {
-                string Password = Util.GetEncryptedPassword(password.NewPassword).ToString();
-                string SQL = "UPDATE MSTR_User SET Password='" + Password + "' where Userid='" + Session["UserID"] + "'";
+            if (Util.getDBRows(sql).Count > 0)
+            {    try
+                    {
 
-                int Uid = Util.doSQL(SQL);
-                { return RedirectToAction("Index"); }
+                        if (password.NewPassword == password.ConfirmPassword)
+                        {
+                            string Password = Util.GetEncryptedPassword(password.NewPassword).ToString();
+                            string SQL = "UPDATE MSTR_User SET Password='" + Password + "' where Userid='" + Session["UserID"] + "'";
+
+                            int Uid = Util.doSQL(SQL);
+                            {
+                                return RedirectToAction("Home");
+                            }
+                        }
+
+                        else
+                        {
+                        ViewBag.Message = 0;
+                        ViewBag.MessageText = "Password Does not match....";
+                        ModelState.AddModelError("error", "Password Does not match....");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                    ViewBag.Message = 0;
+                    ViewBag.MessageText = "Error";
+
+                }
+                //}
             }
             else
-            {
-                ViewData["Message"] = "Password Does not match....";
-                return RedirectToAction("ResetPassword");
+            { ModelState.AddModelError("error", "Old Password is wrong..");
+                ViewBag.Message = 0;
+                ViewBag.MessageText = "Old Password is wrong..";
             }
-               
 
+
+
+
+            return View();
         }
+    }
+}
 
 
-               
-
-
-
-  } //class
-}//namespace
 
