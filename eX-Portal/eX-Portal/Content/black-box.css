@@ -106,3 +106,38 @@ UL#UploadedFilesList LI div.toolbar A {
     padding-left:30px;
 
   }
+
+  ul#GPS-Images {
+    list-style;none;
+    margin:0px;
+    padding:0px;
+  }
+
+  ul#GPS-Images li {
+  width:100px;
+  height:auto;
+  float:left;
+  margin:0px 20px 20px 0px;
+  list-style:none;
+  position:relative;
+  display:block;
+  }
+
+ ul#GPS-Images li div.delete-icon  {
+  position:absolute;
+  right:10px;
+  top:10px;
+  z-index:20;
+
+  }
+  ul#GPS-Images li div.delete-icon  a {
+      text-decoration:none !important;
+  }
+  ul#GPS-Images li div.delete-icon  a span.icon {
+    color:white;
+    font-size:22px !important;
+        text-shadow: 1px 1px 3px black;
+  }
+  ul#GPS-Images li div.delete-icon  a:hover span.icon {
+    color:red;
+  }
