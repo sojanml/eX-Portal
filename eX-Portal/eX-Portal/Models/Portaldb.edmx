@@ -135,8 +135,11 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="AccountID" Type="int" />
           <Property Name="DocumentDate" Type="datetime" />
           <Property Name="DocumentTitle" Type="nvarchar" MaxLength="50" />
-          <Property Name="DocumentDesc" Type="nvarchar" MaxLength="500" />
+          <Property Name="DocumentDesc" Type="nvarchar(max)" />
           <Property Name="S3Url" Type="nchar" MaxLength="500" />
+          <Property Name="Latitude" Type="numeric" Precision="18" Scale="12" />
+          <Property Name="Longitude" Type="numeric" Precision="18" Scale="12" />
+          <Property Name="Altitude" Type="numeric" Precision="18" Scale="12" />
         </EntityType>
         <EntityType Name="DroneFlight">
           <Key>
@@ -641,6 +644,14 @@ warning 6002: The table/view 'ExponentPortal.dbo.GCA_Approval' does not have a p
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
+        <EntityType Name="PayLoad_AutoFix">
+          <Key>
+            <PropertyRef Name="Row" />
+            <PropertyRef Name="Col" />
+          </Key>
+          <Property Name="Row" Type="int" Nullable="false" />
+          <Property Name="Col" Type="int" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'ExponentPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadData">
@@ -739,6 +750,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <Property Name="ColPointLon" Type="decimal" Precision="18" Scale="9" />
           <Property Name="RowPointLat" Type="decimal" Precision="18" Scale="9" />
           <Property Name="RowPointLon" Type="decimal" Precision="18" Scale="9" />
+          <Property Name="RowFixExecuted" Type="int" />
+          <Property Name="ColFixExecuted" Type="int" />
+          <Property Name="AutoFixCol1" Type="int" />
+          <Property Name="AutoFixGap" Type="int" />
         </EntityType>
         <EntityType Name="PayLoadYard">
           <Key>
@@ -936,6 +951,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="MSTR_User_Pilot" EntityType="Self.MSTR_User_Pilot" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="Self.MSTR_User_Pilot_Certification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot_ExponentUAS" EntityType="Self.MSTR_User_Pilot_ExponentUAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayLoad_AutoFix" EntityType="Self.PayLoad_AutoFix" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoadYard" EntityType="Self.PayLoadYard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
@@ -1070,7 +1086,11 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
     [PayLoadMapData].[ColPointLat] AS [ColPointLat], 
     [PayLoadMapData].[ColPointLon] AS [ColPointLon], 
     [PayLoadMapData].[RowPointLat] AS [RowPointLat], 
-    [PayLoadMapData].[RowPointLon] AS [RowPointLon]
+    [PayLoadMapData].[RowPointLon] AS [RowPointLon], 
+    [PayLoadMapData].[RowFixExecuted] AS [RowFixExecuted], 
+    [PayLoadMapData].[ColFixExecuted] AS [ColFixExecuted], 
+    [PayLoadMapData].[AutoFixCol1] AS [AutoFixCol1], 
+    [PayLoadMapData].[AutoFixGap] AS [AutoFixGap]
     FROM [dbo].[PayLoadMapData] AS [PayLoadMapData]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadYardGrid" EntityType="Self.PayLoadYardGrid" store:Type="Tables" store:Schema="dbo">
@@ -1507,6 +1527,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="PayLoadYardGrids" EntityType="ExponentPortalModel.PayLoadYardGrid" />
           <EntitySet Name="GCA_Approval" EntityType="ExponentPortalModel.GCA_Approval" />
           <EntitySet Name="PortalAlerts" EntityType="ExponentPortalModel.PortalAlert" />
+          <EntitySet Name="PayLoad_AutoFix" EntityType="ExponentPortalModel.PayLoad_AutoFix" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -1658,8 +1679,11 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="AccountID" Type="Int32" />
           <Property Name="DocumentDate" Type="DateTime" Precision="3" />
           <Property Name="DocumentTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DocumentDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="S3Url" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="12" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="12" />
+          <Property Name="Altitude" Type="Decimal" Precision="18" Scale="12" />
         </EntityType>
         <EntityType Name="BlackBoxData">
           <Key>
@@ -1949,6 +1973,10 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="ColPointLon" Type="Decimal" Precision="18" Scale="9" />
           <Property Name="RowPointLat" Type="Decimal" Precision="18" Scale="9" />
           <Property Name="RowPointLon" Type="Decimal" Precision="18" Scale="9" />
+          <Property Name="RowFixExecuted" Type="Int32" />
+          <Property Name="ColFixExecuted" Type="Int32" />
+          <Property Name="AutoFixCol1" Type="Int32" />
+          <Property Name="AutoFixGap" Type="Int32" />
         </EntityType>
         <EntityType Name="PayLoadYard">
           <Key>
@@ -2054,6 +2082,14 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="AlertMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="SMSSend" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PayLoad_AutoFix">
+          <Key>
+            <PropertyRef Name="Row" />
+            <PropertyRef Name="Col" />
+          </Key>
+          <Property Name="Row" Type="Int32" Nullable="false" />
+          <Property Name="Col" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2550,6 +2586,9 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="DroneDocuments">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneDocument">
               <MappingFragment StoreEntitySet="DroneDocuments">
+                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
                 <ScalarProperty Name="S3Url" ColumnName="S3Url" />
                 <ScalarProperty Name="DocumentDesc" ColumnName="DocumentDesc" />
                 <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
@@ -2830,6 +2869,10 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="PayLoadMapDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadMapData">
               <MappingFragment StoreEntitySet="PayLoadMapData">
+                <ScalarProperty Name="AutoFixGap" ColumnName="AutoFixGap" />
+                <ScalarProperty Name="AutoFixCol1" ColumnName="AutoFixCol1" />
+                <ScalarProperty Name="ColFixExecuted" ColumnName="ColFixExecuted" />
+                <ScalarProperty Name="RowFixExecuted" ColumnName="RowFixExecuted" />
                 <ScalarProperty Name="RowPointLon" ColumnName="RowPointLon" />
                 <ScalarProperty Name="RowPointLat" ColumnName="RowPointLat" />
                 <ScalarProperty Name="ColPointLon" ColumnName="ColPointLon" />
@@ -2974,6 +3017,14 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
                 <ScalarProperty Name="FlightReadTime" ColumnName="FlightReadTime" />
                 <ScalarProperty Name="FlightID" ColumnName="FlightID" />
                 <ScalarProperty Name="AlertID" ColumnName="AlertID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayLoad_AutoFix">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PayLoad_AutoFix">
+              <MappingFragment StoreEntitySet="PayLoad_AutoFix">
+                <ScalarProperty Name="Col" ColumnName="Col" />
+                <ScalarProperty Name="Row" ColumnName="Row" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -26,5 +26,8 @@ namespace eX_Portal.Models
         public string DocumentTitle { get; set; }
         public string DocumentDesc { get; set; }
         public string S3Url { get; set; }
+        public Nullable<decimal> Latitude { get; set; }
+        public Nullable<decimal> Longitude { get; set; }
+        public Nullable<decimal> Altitude { get; set; }
     }
 }
