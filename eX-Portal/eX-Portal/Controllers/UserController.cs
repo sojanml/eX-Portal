@@ -728,53 +728,58 @@ namespace eX_Portal.Controllers
         [HttpPost]
         public ActionResult ResetPassword(ChangePasswordViewModel password)
         {
-            MSTR_User mu = new MSTR_User();
-            string code = Util.GetEncryptedPassword(password.OldPassword).ToString();
-            string sql = "Select password from MSTR_USER where password ='" + code + "' and UserId='" + Session["UserID"] + "'";
-
-            if (Util.getDBRows(sql).Count > 0)
-            {    try
+            
+            if (ModelState.IsValid)
+            {
+                if (String.IsNullOrEmpty(password.OldPassword) && String.IsNullOrEmpty(password.NewPassword) && String.IsNullOrEmpty(password.ConfirmPassword)) ModelState.AddModelError("Error", "Enter password");
+                {
+                    MSTR_User mu = new MSTR_User();
+                    string code = Util.GetEncryptedPassword(password.OldPassword).ToString();
+                    string sql = "Select password from MSTR_USER where password ='" + code + "' and UserId='" + Session["UserID"] + "'";
                     {
-
-                        if (password.NewPassword == password.ConfirmPassword)
+                        if (Util.getDBRows(sql).Count > 0)
                         {
-                            string Password = Util.GetEncryptedPassword(password.NewPassword).ToString();
-                            string SQL = "UPDATE MSTR_User SET Password='" + Password + "' where Userid='" + Session["UserID"] + "'";
-
-                            int Uid = Util.doSQL(SQL);
+                            try
                             {
-                                return RedirectToAction("Home");
-                            }
-                        }
+                                if (password.NewPassword == password.ConfirmPassword)
+                                {
+                                    string Password = Util.GetEncryptedPassword(password.NewPassword).ToString();
+                                    string SQL = "UPDATE MSTR_User SET Password='" + Password + "' where Userid='" + Session["UserID"] + "'";
 
+                                    int Uid = Util.doSQL(SQL);
+                                    {
+                                        return RedirectToAction("Index", "Home");
+                                    }
+                                }
+
+                                else
+                                {
+                                    ViewBag.Message = 0;
+                                    ViewBag.MessageText = "Password Does not match....";
+
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                ViewBag.Message = 0;
+                                ViewBag.MessageText = "Please Enter NewPassword and ConfirmPassword";
+
+                            }
+                            //}
+                        }
                         else
                         {
-                        ViewBag.Message = 0;
-                        ViewBag.MessageText = "Password Does not match....";
-                        ModelState.AddModelError("error", "Password Does not match....");
+                            ModelState.AddModelError("error", "Old Password is wrong..");
+                            ViewBag.Message = 0;
+                            ViewBag.MessageText = "Old Password is wrong..";
                         }
+
                     }
-                    catch (Exception ex)
-                    {
-                    ViewBag.Message = 0;
-                    ViewBag.MessageText = "Error";
-
                 }
-                //}
             }
-            else
-            { ModelState.AddModelError("error", "Old Password is wrong..");
-                ViewBag.Message = 0;
-                ViewBag.MessageText = "Old Password is wrong..";
+                return View();
             }
-
-
-
-
-            return View();
         }
     }
-}
-
 
 
