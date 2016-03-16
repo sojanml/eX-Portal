@@ -171,6 +171,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="Descrepency" Type="nvarchar" MaxLength="500" />
           <Property Name="ActionTaken" Type="nvarchar" MaxLength="500" />
           <Property Name="IsFlightOutside" Type="bit" />
+          <Property Name="RecordedVideoURL" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="FlightMapData">
           <Key>
@@ -872,6 +873,18 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
         <EntityType Name="SMSTable">
           <Property Name="CellNumber" Type="nvarchar" MaxLength="20" />
         </EntityType>-->
+        <EntityType Name="UserLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="LoggedInTime" Type="datetime" />
+          <Property Name="LoggedOfTime" Type="datetime" />
+          <Property Name="UserIPAddress" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Browser" Type="nvarchar" MaxLength="1" />
+          <Property Name="SessionID" Type="int" />
+        </EntityType>
         <Association Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
           <End Role="M2M_DroneServiceParts" Type="Self.M2M_DroneServiceParts" Multiplicity="1" />
           <End Role="M2M_DroneServiceParts1" Type="Self.M2M_DroneServiceParts" Multiplicity="0..1" />
@@ -956,6 +969,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserLog" EntityType="Self.UserLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxData" EntityType="Self.BlackBoxData" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [BlackBoxData].[BlackBoxDataID] AS [BlackBoxDataID], 
@@ -1528,6 +1542,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="GCA_Approval" EntityType="ExponentPortalModel.GCA_Approval" />
           <EntitySet Name="PortalAlerts" EntityType="ExponentPortalModel.PortalAlert" />
           <EntitySet Name="PayLoad_AutoFix" EntityType="ExponentPortalModel.PayLoad_AutoFix" />
+          <EntitySet Name="UserLogs" EntityType="ExponentPortalModel.UserLog" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -1849,6 +1864,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="ActionTaken" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="IsLogged" Type="Byte" />
           <Property Name="IsFlightOutside" Type="Boolean" />
+          <Property Name="RecordedVideoURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -2090,6 +2106,18 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           </Key>
           <Property Name="Row" Type="Int32" Nullable="false" />
           <Property Name="Col" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="LoggedInTime" Type="DateTime" Precision="3" />
+          <Property Name="LoggedOfTime" Type="DateTime" Precision="3" />
+          <Property Name="UserIPAddress" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Browser" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="SessionID" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2747,6 +2775,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="RecordedVideoURL" ColumnName="RecordedVideoURL" />
                 <ScalarProperty Name="IsFlightOutside" ColumnName="IsFlightOutside" />
                 <ScalarProperty Name="IsLogged" ColumnName="IsLogged" />
                 <ScalarProperty Name="ActionTaken" ColumnName="ActionTaken" />
@@ -3025,6 +3054,19 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
               <MappingFragment StoreEntitySet="PayLoad_AutoFix">
                 <ScalarProperty Name="Col" ColumnName="Col" />
                 <ScalarProperty Name="Row" ColumnName="Row" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserLogs">
+            <EntityTypeMapping TypeName="ExponentPortalModel.UserLog">
+              <MappingFragment StoreEntitySet="UserLog">
+                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+                <ScalarProperty Name="Browser" ColumnName="Browser" />
+                <ScalarProperty Name="UserIPAddress" ColumnName="UserIPAddress" />
+                <ScalarProperty Name="LoggedOfTime" ColumnName="LoggedOfTime" />
+                <ScalarProperty Name="LoggedInTime" ColumnName="LoggedInTime" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

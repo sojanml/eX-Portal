@@ -70,6 +70,7 @@ namespace eX_Portal.Models
         public virtual DbSet<GCA_Approval> GCA_Approval { get; set; }
         public virtual DbSet<PortalAlert> PortalAlerts { get; set; }
         public virtual DbSet<PayLoad_AutoFix> PayLoad_AutoFix { get; set; }
+        public virtual DbSet<UserLog> UserLogs { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

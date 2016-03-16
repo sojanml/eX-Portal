@@ -387,7 +387,7 @@ function createMarker(map, latlng, heading, body, zindex, IsOutSide) {
   for (var i = livemarkers.length - 1; i > 0; i--) {
     livemarkers[i].setOpacity(initOpacity);
     initOpacity = initOpacity - 0.05;
-    if (initOpacity < 0.4) return;
+    if (initOpacity < 0.0) return;
   }
 }
 

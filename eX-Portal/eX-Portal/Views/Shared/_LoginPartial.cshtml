@@ -2,13 +2,20 @@
 <nav class="user-management">
   @if (Session["UserID"] == null) {
 
-    <ul>
-      <li>@Html.ActionLink("Log in", "Index", "User")</li>
-    </ul>
+  <ul>
+    <li>@Html.ActionLink("Log in", "Index", "User")</li>
+  </ul>
   } else {
-    <ul>
-      <li>Welcome @Session["FirstName"]</li>
-      <li>@Html.ActionLink("Log Out", "Logout", "User")</li>
-    </ul>
+  <ul>
+    <li>Welcome @Session["FirstName"]</li>
+    <li id="user-menu" >
+      <a href="#" id="user-menu-link"><span class="icon">&#xf013;</span> Settings</a>
+      <ul id="user-menu-items">
+        <li>@Html.ActionLink("Log Out", "Logout", "User")</li>
+        <li>@Html.ActionLink("Change Password", "ResetPassword", "User")</li>
+      </ul>
+
+    </li>
+  </ul>
   }
 </nav>
