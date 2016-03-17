@@ -18,8 +18,8 @@ namespace eX_Portal.Models
         public Nullable<int> UserID { get; set; }
         public Nullable<System.DateTime> LoggedInTime { get; set; }
         public Nullable<System.DateTime> LoggedOfTime { get; set; }
-        public Nullable<decimal> UserIPAddress { get; set; }
+        public string UserIPAddress { get; set; }
         public string Browser { get; set; }
-        public Nullable<int> SessionID { get; set; }
+        public string SessionID { get; set; }
     }
 }

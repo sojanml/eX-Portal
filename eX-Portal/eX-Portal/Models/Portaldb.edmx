@@ -234,6 +234,11 @@ warning 6002: The table/view 'ExponentPortal.dbo.GCA_Approval' does not have a p
           <Property Name="ApprovalFileUrl" Type="nvarchar" MaxLength="250" />
           <Property Name="EndTime" Type="nvarchar" MaxLength="10" />
           <Property Name="StartTime" Type="nvarchar" MaxLength="10" />
+          <Property Name="InnerBoundary" Type="geography" />
+          <Property Name="InnerBoundaryCoord" Type="nvarchar(max)" />
+          <Property Name="BoundaryInMeters" Type="int" />
+          <Property Name="MinAltitude" Type="int" />
+          <Property Name="MaxAltitude" Type="int" />
         </EntityType>
         <EntityType Name="LiveDrone">
           <Key>
@@ -433,6 +438,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.GCA_Approval' does not have a p
           <Property Name="UATReportNote" Type="varchar(max)" />
           <Property Name="IncidentReportNote" Type="nvarchar(max)" />
           <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsLiveVideo" Type="int" />
         </EntityType>
         <EntityType Name="MSTR_DroneCheckList">
           <Key>
@@ -818,12 +824,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="SMSSend" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PortalAlert_User">
-          <Property Name="AlertID" Type="int" />
-          <Property Name="UserID" Type="int" />
-        </EntityType>-->
         <EntityType Name="ProductDefinition">
           <Key>
             <PropertyRef Name="Id" />
@@ -868,11 +868,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have
           <Property Name="IsActive" Type="bit" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SMSTable">
-          <Property Name="CellNumber" Type="nvarchar" MaxLength="20" />
-        </EntityType>-->
         <EntityType Name="UserLog">
           <Key>
             <PropertyRef Name="ID" />
@@ -881,9 +876,9 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="UserID" Type="int" />
           <Property Name="LoggedInTime" Type="datetime" />
           <Property Name="LoggedOfTime" Type="datetime" />
-          <Property Name="UserIPAddress" Type="decimal" Precision="18" Scale="5" />
-          <Property Name="Browser" Type="nvarchar" MaxLength="1" />
-          <Property Name="SessionID" Type="int" />
+          <Property Name="UserIPAddress" Type="nvarchar" MaxLength="45" />
+          <Property Name="Browser" Type="nvarchar" MaxLength="45" />
+          <Property Name="SessionID" Type="nvarchar" MaxLength="45" />
         </EntityType>
         <Association Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
           <End Role="M2M_DroneServiceParts" Type="Self.M2M_DroneServiceParts" Multiplicity="1" />
@@ -1013,7 +1008,12 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
     [GCA_Approval].[DroneID] AS [DroneID], 
     [GCA_Approval].[ApprovalFileUrl] AS [ApprovalFileUrl], 
     [GCA_Approval].[EndTime] AS [EndTime], 
-    [GCA_Approval].[StartTime] AS [StartTime]
+    [GCA_Approval].[StartTime] AS [StartTime], 
+    [GCA_Approval].[InnerBoundary] AS [InnerBoundary], 
+    [GCA_Approval].[InnerBoundaryCoord] AS [InnerBoundaryCoord], 
+    [GCA_Approval].[BoundaryInMeters] AS [BoundaryInMeters], 
+    [GCA_Approval].[MinAltitude] AS [MinAltitude], 
+    [GCA_Approval].[MaxAltitude] AS [MaxAltitude]
     FROM [dbo].[GCA_Approval] AS [GCA_Approval]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadData" EntityType="Self.PayLoadData" store:Type="Tables" store:Schema="dbo">
@@ -1342,6 +1342,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="UATReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IncidentReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsLiveVideo" Type="Int32" />
         </EntityType>
         <EntityType Name="MSTR_DroneService">
           <Key>
@@ -2083,6 +2084,11 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="ApprovalFileUrl" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="EndTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="StartTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="InnerBoundary" Type="Geography" />
+          <Property Name="InnerBoundaryCoord" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BoundaryInMeters" Type="Int32" />
+          <Property Name="MinAltitude" Type="Int32" />
+          <Property Name="MaxAltitude" Type="Int32" />
         </EntityType>
         <EntityType Name="PortalAlert">
           <Key>
@@ -2115,9 +2121,9 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="UserID" Type="Int32" />
           <Property Name="LoggedInTime" Type="DateTime" Precision="3" />
           <Property Name="LoggedOfTime" Type="DateTime" Precision="3" />
-          <Property Name="UserIPAddress" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Browser" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="SessionID" Type="Int32" />
+          <Property Name="UserIPAddress" Type="String" />
+          <Property Name="Browser" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="SessionID" Type="String" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2289,6 +2295,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="MSTR_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
               <MappingFragment StoreEntitySet="MSTR_Drone">
+                <ScalarProperty Name="IsLiveVideo" ColumnName="IsLiveVideo" />
                 <ScalarProperty Name="ModelName" ColumnName="ModelName" />
                 <ScalarProperty Name="IncidentReportNote" ColumnName="IncidentReportNote" />
                 <ScalarProperty Name="UATReportNote" ColumnName="UATReportNote" />
@@ -3017,6 +3024,11 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="GCA_Approval">
             <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
               <MappingFragment StoreEntitySet="GCA_Approval">
+                <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
+                <ScalarProperty Name="MinAltitude" ColumnName="MinAltitude" />
+                <ScalarProperty Name="BoundaryInMeters" ColumnName="BoundaryInMeters" />
+                <ScalarProperty Name="InnerBoundaryCoord" ColumnName="InnerBoundaryCoord" />
+                <ScalarProperty Name="InnerBoundary" ColumnName="InnerBoundary" />
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
                 <ScalarProperty Name="ApprovalFileUrl" ColumnName="ApprovalFileUrl" />
