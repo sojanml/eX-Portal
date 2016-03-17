@@ -765,7 +765,7 @@ namespace eX_Portal.Controllers
 
                                     int Uid = Util.doSQL(SQL);
                                     {
-                                        return RedirectToAction("Index", "Home");
+                                        return View("ChangedSuccessfully");
                                     }
                                 }
 
