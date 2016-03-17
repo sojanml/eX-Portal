@@ -13,13 +13,13 @@ namespace eX_Portal.exLogic {
     private const string PublicKeySetting = "AWSAccessKey";
     private const string PrivateKeySetting = "AWSSecretKey";
     private const string BucketNameSetting = "AWSBucket";
-
+ 
     public static String getURL(String TheKey) {
       String AWSAccessKey = ConfigurationManager.AppSettings[PublicKeySetting];
       String AWSSecretKey = ConfigurationManager.AppSettings[PrivateKeySetting];
       String BucketName = ConfigurationManager.AppSettings[BucketNameSetting];
 
-      TheKey = TheKey.Replace("https://exponent-s3.s3-us-west-2.amazonaws.com/", "");
+      TheKey = TheKey.Replace("https://exponent-s3.s3-us-west-2.amazonaws.com/",  "");
       
       AmazonS3Client client = new AmazonS3Client(
               AWSAccessKey,
