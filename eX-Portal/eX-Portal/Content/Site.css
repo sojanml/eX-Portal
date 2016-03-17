@@ -988,3 +988,9 @@ div#grid-holder-content table tr th {
 div#grid-holder-content table tr th {
   background-color: rgba(234, 5, 14, 0.5);
 }
+
+div.map-toolbar {
+background-color: #dddada;
+border-top:2px gray solid;
+padding:5px 10px 5px 10px;
+}

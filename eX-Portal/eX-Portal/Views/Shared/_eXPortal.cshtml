@@ -18,7 +18,7 @@
 
   <header class="clearfix">
     <section class="layout">
-      @if(!String.IsNullOrEmpty(Session["BrandLogo"].ToString())) { 
+      @if(Session["BrandLogo"] != null) { 
       <div class="logo">
         <img alt="" src="~/Upload/Brand-Logo/@Session["BrandLogo"]" width="300">
       </div>

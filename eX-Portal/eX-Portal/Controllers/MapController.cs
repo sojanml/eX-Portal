@@ -24,6 +24,7 @@ namespace eX_Portal.Controllers {
       Drones thisDrone = new Drones();
       ViewBag.AllowedLocation = thisDrone.getAllowedLocation(id);
       ViewBag.DroneID = thisDrone.DroneID;
+      ViewBag.VideoURL = thisDrone.getVideoURL(id);
       return View();
     }
 
@@ -185,10 +186,10 @@ namespace eX_Portal.Controllers {
     }
 
     [System.Web.Mvc.HttpGet]
-    public JsonResult GetFlightData(int FlightID = 0, int LastFlightDataID = 0, int MaxRecords = 1) {
+    public JsonResult GetFlightData(int FlightID = 0, int LastFlightDataID = 0, int MaxRecords = 1, int Replay = 0) {
 
       ViewBag.FlightID = FlightID;
-      IList<FlightMapData> DroneDataList = Util.GetDroneData(FlightID, LastFlightDataID, MaxRecords);
+      IList<FlightMapData> DroneDataList = Util.GetDroneData(FlightID, LastFlightDataID, MaxRecords, Replay);
       //  LiveDrones.SQL = ;
       //string JsonData=Json(LiveDrones)
       // return Json(JsonData);

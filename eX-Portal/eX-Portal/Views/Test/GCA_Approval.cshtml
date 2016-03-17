@@ -1,0 +1,37 @@
+﻿@model eX_Portal.Models.GCA_Approval
+@section toolbar {
+  <a href="#" id="get-boundary">Boundary</a>
+}
+<div id="cord"></div>
+<div id="map_canvas" style="width: 100%; height: 480px;"></div>
+<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>
+
+@section scripts {
+  <script type="text/javascript">
+    var Poly1 = '@Model.Coordinates';
+
+    var map = null;
+    $(document).ready(function () {
+      initialize();
+      var PolyCord = toCord(Poly1);
+    });
+
+    function toCord(Poly) {
+      var Items = Poly.split(/,/);
+      for (var i = 0; i < Items.length; i++) {
+        var 
+      }
+    }
+
+
+    function initialize() {
+      // map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions)
+      var myLatLng =  {lat: 0, lng: 0};
+      map = new google.maps.Map(mapDiv, {
+        center: myLatLng,
+        zoom: 18
+      });
+    }
+
+  </script>
+}
