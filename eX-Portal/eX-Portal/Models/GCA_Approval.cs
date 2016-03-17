@@ -27,5 +27,10 @@ namespace eX_Portal.Models
         public string ApprovalFileUrl { get; set; }
         public string EndTime { get; set; }
         public string StartTime { get; set; }
+        public System.Data.Entity.Spatial.DbGeography InnerBoundary { get; set; }
+        public string InnerBoundaryCoord { get; set; }
+        public Nullable<int> BoundaryInMeters { get; set; }
+        public Nullable<int> MinAltitude { get; set; }
+        public Nullable<int> MaxAltitude { get; set; }
     }
 }

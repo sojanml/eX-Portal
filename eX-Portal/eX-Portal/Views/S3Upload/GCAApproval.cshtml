@@ -73,6 +73,27 @@
             @Html.ValidationMessageFor(model => model.EndTime)
         </div>
         <div class="editor-label">
+            @Html.LabelFor(model => model.MinAltitude,"Minimum Altitude")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.MinAltitude)
+            @Html.ValidationMessageFor(model => model.MinAltitude)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.MaxAltitude, "Maximum Altitude")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.MaxAltitude)
+            @Html.ValidationMessageFor(model => model.MaxAltitude)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BoundaryInMeters, "Boundary(in meters)")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.BoundaryInMeters)
+            @Html.ValidationMessageFor(model => model.BoundaryInMeters)
+        </div>
+        <div class="editor-label">
             @Html.LabelFor(model => model.ApprovalFileUrl, "Upload Document")
         </div>
         <div class="editor-field" id="file-input">
