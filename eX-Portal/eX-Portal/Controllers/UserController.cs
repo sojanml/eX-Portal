@@ -14,13 +14,13 @@ using System.Data;
 using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Configuration;
-
+using System.Web.SessionState;
 namespace eX_Portal.Controllers
 {
-
     public class UserController : Controller
     {
         // GET: UserLogin
+        int uid;
         public ExponentPortalEntities db = new ExponentPortalEntities();
         static String RootUploadDir = "~/Upload/User/";
         public object EntityState { get; private set; }
@@ -119,9 +119,17 @@ namespace eX_Portal.Controllers
                 Session["BrandLogo"] = thisUser.BrandLogo;
                 Session["BrandColor"] = thisUser.BrandColor;
                 Session["AccountID"] = thisUser.AccountID;
+                Session["userIpAddress"] = Request.ServerVariables["REMOTE_ADDR"];
+                var browser = Request.Browser.Browser;
+
+                string sessionId = this.Session.SessionID;
+                string sql = "insert into userlog(UserID,loggedintime,UserIPAddress,Browser,SessionID) values('" + thisUser.UserID + "',getdate(),'" + Session["userIpAddress"] + "','" + browser + "','" + sessionId + "') Select @@Identity";
+                Session["uid"] = Util.InsertSQL(sql);
                 return RedirectToAction("Index", "Home");
 
             }
+
+
             else {
                 ViewBag.Message = 0;
             }
@@ -130,8 +138,17 @@ namespace eX_Portal.Controllers
 
         public ActionResult Logout()
         {
+
+            string sql = "update UserLog set loggedoftime=getdate() where ID=" + Session["uid"];
+
+            int log = Util.doSQL(sql);
+
             ViewBag.Title = "Logout";
+            Session.Clear();
+            Session.Abandon();
             Session.RemoveAll();
+            Response.Cookies.Add(new HttpCookie("ASP.NET_SessionId", ""));
+
             return View();
         }//Login()
 
@@ -728,7 +745,7 @@ namespace eX_Portal.Controllers
         [HttpPost]
         public ActionResult ResetPassword(ChangePasswordViewModel password)
         {
-            
+
             if (ModelState.IsValid)
             {
                 if (String.IsNullOrEmpty(password.OldPassword) && String.IsNullOrEmpty(password.NewPassword) && String.IsNullOrEmpty(password.ConfirmPassword)) ModelState.AddModelError("Error", "Enter password");
@@ -777,9 +794,27 @@ namespace eX_Portal.Controllers
                     }
                 }
             }
-                return View();
+            return View();
+        }
+
+
+        public ActionResult UserLogList()
+        {
+            String SQL = "SELECT [ID]\n ,[UserID]\n,[LoggedInTime]\n,[LoggedOfTime]\n ,[UserIPAddress]\n ,[Browser]\n,[SessionID]\n,Count(*) Over() as _TotalRecords,ID as _PKey FROM [ExponentPortal].[dbo].[UserLog]";
+            qView nView = new qView(SQL);
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else {
+                return View(nView);
             }
         }
+
     }
+
+
+}
 
 
