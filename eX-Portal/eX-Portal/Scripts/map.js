@@ -30,6 +30,7 @@ var geocoder;
 var LastDroneDataID = 0;
 var INTERVAL = 100;
 var poly;
+var HiddenPoly;
 var TimerValue = 0;
 var LastDatas = [];
 var i = 0;
@@ -59,6 +60,14 @@ $(document).ready(function () {
   initialize();
   setPolygon();
   setAlertTimer();
+
+  $('#chkShowFullPath').on("change", function (e) {
+    if (this.checked) {
+      HiddenPoly.setMap(map);
+    } else {
+      HiddenPoly.setMap(null);
+    }
+  })
 });
 
 function setAlertTimer() {
@@ -90,15 +99,21 @@ function alertBox(Message) {
 }
 
 var BoundaryBox = null;
+var FillOptions = [
+  { fillColor: '#55FF55', strokeWeight: 0, fillOpacity: 0.2 },
+  { fillColor: 'yellow', strokeWeight: 1, fillOpacity: 0 }
+];
+
 function setPolygon() {
   for (var i = 0; i < AllowedLocation.length; i++) {
     var paths = AllowedLocation[i];
     BoundaryBox = new google.maps.Polygon({
       paths: paths,
-      strokeOpacity: 0,
-      strokeWeight: 0,
-      fillColor: '#55FF55',
-      fillOpacity: 0.15,
+      strokeOpacity: 1,
+      strokeColor: 'red',
+      strokeWeight: FillOptions[i]['strokeWeight'],
+      fillColor: FillOptions[i]['fillColor'],
+      fillOpacity: FillOptions[i]['fillOpacity'],
       editable: false,
       draggable: false
     });
@@ -183,10 +198,18 @@ function initialize() {
 
   poly = new google.maps.Polyline({
     strokeColor: '#000000',
-    strokeOpacity: 0.7,
+    strokeOpacity:1,
     strokeWeight: 2
   });
   poly.setMap(map);
+
+  HiddenPoly = new google.maps.Polyline({
+    strokeColor: '#000000',
+    strokeOpacity: 0.5,
+    strokeWeight: 2
+  });
+  HiddenPoly.setMap(map);
+
   var loctr = '<thead>' + 
               '<tr>' 
               + '<th>ReadTime (UTC)</th>'
@@ -248,7 +271,10 @@ function GetDrones() {
   var _locVal = [];
   $.ajax({
     type: "GET",
-    url: MapDataURL + "&LastFlightDataID=" + LastDroneDataID + '&MaxRecords=' + MaxRecords,
+    url: MapDataURL +
+      "&LastFlightDataID=" + LastDroneDataID +
+      '&MaxRecords=' + MaxRecords +
+      '&Replay=' + (isReplayMode ? 1 : 0),
     contentType: "application/json;charset=utf-8",
     dataType: "json",
     async: true,
@@ -351,7 +377,16 @@ function setMarker(map, loc) {
 function createMarker(map, latlng, heading, body, zindex, IsOutSide) {
   if (poly.map == null) { addLines(); }
   var path = poly.getPath();
+  if (path && path.length >= 20) {
+    var LastItem = path.removeAt(0);
+    var HiddenPath = HiddenPoly.getPath();
+    if (!HiddenPath.length) HiddenPath.push(LastItem);
 
+    //get the next item and add to hidden path
+    var FirstItem = path.getAt(0);
+    HiddenPath.push(FirstItem);
+
+  }
   path.push(latlng);
   var image = '/bullet_red.png';
   var marker = new google.maps.Marker({
@@ -385,9 +420,10 @@ function createMarker(map, latlng, heading, body, zindex, IsOutSide) {
   //set opacity of marker
   var initOpacity = 1;
   for (var i = livemarkers.length - 1; i > 0; i--) {
+    if (initOpacity < 0) initOpacity = 0;
     livemarkers[i].setOpacity(initOpacity);
     initOpacity = initOpacity - 0.05;
-    if (initOpacity < 0.4) return;
+    if (initOpacity < 0) return;
   }
 }
 
@@ -436,6 +472,9 @@ function clearMarkers(map) {
 function removeLines() {
   poly.setMap(null);
   poly.latLngs.clear();
+
+  path = new google.maps.MVCArray();
+  HiddenPoly.setPath(path);
   // path = [];
   //    setTimeout()
   // flightPath.setMap(null);

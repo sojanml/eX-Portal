@@ -308,6 +308,17 @@ namespace eX_Portal.exLogic {
       return getDBVal(SQL);
     }
 
+    public static String getDroneNameByFlight(int FlightID) {
+      String SQL = "SELECT \n" +
+     "  [DroneName]\n" +
+     "FROM\n" +
+     "  [MSTR_Drone], DroneFlight\n" +
+     "WHERE\n" +
+     "  [MSTR_Drone].[DroneId]= DroneFlight.DroneID AND\n" +
+     "  DroneFlight.ID=" + FlightID;
+      return getDBVal(SQL);
+    }
+
     public static void ErrorHandler(Exception ex = null) {
       /*
       //Reference - http://stackoverflow.com/questions/3328990/c-sharp-get-line-number-which-threw-exception
@@ -411,6 +422,9 @@ namespace eX_Portal.exLogic {
         //nothing
       }
       return sTheDate;
+    }
+    public static String toSQLDate(DateTime theDate) {
+      return theDate.ToString("yyyy-MM-dd HH:mm:ss");
     }
 
     public static String getFilePart(String FullFile) {

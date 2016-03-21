@@ -326,6 +326,39 @@ nav.user-management {
 
 }
 
+#user-menu {
+  position:relative;
+}
+
+#user-menu-items {
+  position:absolute;
+  right:0px;
+  top:30px;
+  width:auto;
+  border:2px #ea050e solid;
+  padding:0px 0px 0px 0px;
+  margin:0px;
+  overflow:hidden;
+  display:none;
+}
+#user-menu-items li {
+  white-space: nowrap;
+  border: none;
+  width:100%;
+  padding:0px;
+}
+#user-menu-items li a {
+  display:block;
+  padding:5px 10px 5px 10px;
+  width:100%;
+  color:black;
+}
+
+#user-menu-items li a:hover {
+background-color: rgba(100,100,100,0.5);
+color:white;
+}
+
 table.report,
 table.cheklist {
  width: 100%;
@@ -954,4 +987,10 @@ div#grid-holder-content table tr th {
 }
 div#grid-holder-content table tr th {
   background-color: rgba(234, 5, 14, 0.5);
+}
+
+div.map-toolbar {
+background-color: #dddada;
+border-top:2px gray solid;
+padding:5px 10px 5px 10px;
 }

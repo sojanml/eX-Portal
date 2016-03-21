@@ -1,0 +1,47 @@
+﻿@model List<eX_Portal.Models.DroneDocument>
+@using eX_Portal.exLogic;
+@{  
+  int FlightID = ViewBag.FlightID;
+  ViewBag.Title = "GPS Tagging";
+  String DroneName = Util.getDroneNameByFlight(FlightID);
+}
+@Html.Action("DroneFlightDetail", new { ID = FlightID })
+<h2>GEO Tagged Images</h2>
+<ul id="GPS-Images">
+@foreach(var item in Model) {
+  var GPS = new GPSInfo {
+    Latitude = (double)item.Latitude,
+    Longitude = (double)item.Longitude,
+    Altitude = (double)item.Altitude
+  };
+  <li>
+    <div class="delete-icon"><a href="#" class="delete"  data-file="@item.DocumentName"><span class="delete icon">&#xf057;</span></a></div>
+    <div class="thumbnail">
+      <img src="/upload/drone/@DroneName/@FlightID/@item.DocumentName.Replace(".jpg", ".t.png")" />
+    </div>
+    <div class="gps">@GPS.getInfo()</div>
+  </li>
+}
+
+</ul>
+<div style="clear:both"></div>
+
+<h2>Upload Images for GPS Tagging</h2>
+<ul id="FileUploadProgress"></ul>
+<div>Choose the files that you like to upload for above flight using the option bellow.</div>
+<div><input type="file" multiple name="fileinput" id="fileinput" /></div>
+
+
+
+@section header{
+  <link href="~/Content/black-box.css" rel="stylesheet" />
+}
+@section Scripts{
+  <script type="text/javascript">
+    var UploadURL = '@Url.Action("UploadFile", new { ID = ViewBag.FlightID, DocumentType="Geo Tag"})';
+    var DeleteURL = '@Url.Action("DeleteFile", new { ID = ViewBag.FlightID, DocumentType="Geo Tag"})';
+  </script>
+  <script type="text/javascript" src="~/Scripts/flight-gps-tag.js"></script>
+}
+
+

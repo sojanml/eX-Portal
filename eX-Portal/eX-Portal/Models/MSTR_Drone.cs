@@ -47,5 +47,6 @@ namespace eX_Portal.Models
         public string UATReportNote { get; set; }
         public string IncidentReportNote { get; set; }
         public string ModelName { get; set; }
+        public Nullable<int> IsLiveVideo { get; set; }
     }
 }

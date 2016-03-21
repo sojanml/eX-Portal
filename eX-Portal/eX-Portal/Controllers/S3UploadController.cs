@@ -144,7 +144,13 @@ namespace eX_Portal.Controllers {
             string[] Coord = GCA.Coordinates.Split(',');
            string Poly= GCA.Coordinates + ","+Coord[0];
 
-            String SQL = @" insert into [GCA_Approval]
+            if (string.IsNullOrEmpty(GCA.BoundaryInMeters.ToString().Trim()))
+                GCA.BoundaryInMeters = 0;
+
+           
+
+
+            string SQL = @" insert into [GCA_Approval]
                          ([ApprovalName]
                         ,[ApprovalDate]
                         ,[StartDate]
@@ -152,26 +158,42 @@ namespace eX_Portal.Controllers {
                         ,[StartTime]
                         ,[EndTime]
                         ,[Coordinates]
-                         ,[Polygon]
-                         ,DroneID
-                          ,ApprovalFileUrl  )
+                        ,[Polygon]
+                        ,DroneID
+                        ,ApprovalFileUrl
+                        ,MinAltitude
+                        ,MaxAltitude
+                        ,BoundaryInMeters)
                       values
-                      ('"+GCA.ApprovalName+@"',
+                      ('" + GCA.ApprovalName+@"',
                       '"+GCA.ApprovalDate+@"',
                       '"+GCA.StartDate+@"',
                       '"+GCA.EndDate+ @"',
                       '"+GCA.StartTime+ @"',
                       '"+GCA.EndTime+ @"',
                       '" + GCA.Coordinates + @"',
-                      geography::STGeomFromText('POLYGON(("+ Poly+ "))',4326).MakeValid()," 
-                      + GCA.DroneID+@",
-                        '"+GCA.S3Url+"')";
+                      geography::STGeomFromText('POLYGON(("+ Poly+@"))',4326).MakeValid(),
+                      "+GCA.DroneID+@",
+                      '"+GCA.S3Url+ @"',
+                     " + GCA.MinAltitude + @",
+                     " + GCA.MaxAltitude + @",                      
+                    -" + GCA.BoundaryInMeters+@")";
 
             GCA.ApprovalID = Util.InsertSQL(SQL);
 
-            string UpdateRingQuery = "Update [GCA_Approval] set Polygon=Polygon.ReorientObject().MakeValid()  where Polygon.STArea()>999999 and ApprovalID=" + GCA.ApprovalID;
+     /**   string UpdateRingQuery = "Update [GCA_Approval] set Polygon=Polygon.ReorientObject().MakeValid()  where Polygon.STArea()>999999 and ApprovalID=" + GCA.ApprovalID;
 
             int res= Util.doSQL(SQL);
+
+            UpdateRingQuery = @"Update [GCA_Approval]  set 
+                            InnerBoundary=Polygon.STBuffer(BoundaryInMeters),
+                            InnerBoundaryCoord = Polygon.STBuffer(BoundaryInMeters).ToString() where ApprovalID=" + GCA.ApprovalID;
+
+       **/   
+
+
+
+
             return null;
         }
 

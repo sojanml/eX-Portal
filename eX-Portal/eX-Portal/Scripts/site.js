@@ -10,6 +10,7 @@ $(document).ready(function () {
 
   $(document).on("click", function () {
     $('UL.qViewMenu').fadeOut();
+    $('#user-menu-items').slideUp();
   });
 
   $(document).on('click', 'span.refresh', function (e) {
@@ -28,6 +29,12 @@ $(document).ready(function () {
     //Btn.parent().find('UL').remove();
     Btn.parent().append(getqViewMenu(data));
     //alert('Key: ' + pKey)
+  });
+
+  $('#user-menu-link').on("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $('#user-menu-items').slideToggle();
   });
 
   $('table.report').on('click', 'a._delete', function (e) {

@@ -40,5 +40,6 @@ namespace eX_Portal.Models
         public string ActionTaken { get; set; }
         public Nullable<byte> IsLogged { get; set; }
         public Nullable<bool> IsFlightOutside { get; set; }
+        public string RecordedVideoURL { get; set; }
     }
 }

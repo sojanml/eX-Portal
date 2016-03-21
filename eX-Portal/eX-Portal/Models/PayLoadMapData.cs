@@ -46,5 +46,9 @@ namespace eX_Portal.Models
         public Nullable<decimal> ColPointLon { get; set; }
         public Nullable<decimal> RowPointLat { get; set; }
         public Nullable<decimal> RowPointLon { get; set; }
+        public Nullable<int> RowFixExecuted { get; set; }
+        public Nullable<int> ColFixExecuted { get; set; }
+        public Nullable<int> AutoFixCol1 { get; set; }
+        public Nullable<int> AutoFixGap { get; set; }
     }
 }

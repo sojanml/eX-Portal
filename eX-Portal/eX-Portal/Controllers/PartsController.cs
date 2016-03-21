@@ -110,7 +110,6 @@ namespace eX_Portal.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    int ID = 0;
                     Parts.CreatedBy = Util.getLoginUserID();
                     Parts.CreatedOn = DateTime.Now;
                     db.MSTR_Parts.Add(Parts);

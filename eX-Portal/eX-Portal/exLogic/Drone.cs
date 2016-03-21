@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
+
 namespace eX_Portal.exLogic {
   public class Drones {
     private int _DroneID = 0;
@@ -30,7 +31,8 @@ namespace eX_Portal.exLogic {
       StringBuilder Cord = new StringBuilder();
       String SQL = @"SELECT 
         ApprovalID,
-        Coordinates
+        Coordinates,
+        InnerBoundaryCoord
       FROM
         [GCA_Approval]
       WHERE
@@ -39,23 +41,40 @@ namespace eX_Portal.exLogic {
 
       var Rows = Util.getDBRows(SQL);
       foreach (var Row in Rows) {
-        StringBuilder thisCord = new StringBuilder();
-        String Coordinates = Row["Coordinates"].ToString();
-        if (Cord.Length > 0) Cord.Append(",");
-        Cord.Append("[");
 
-        foreach(String LatLng in Coordinates.Split(',')) {
-          var tLatLng = LatLng.Trim();
-          String[] temp = tLatLng.Split(' ');
-          if (thisCord.Length > 0) thisCord.Append(",");
-          thisCord.Append("new google.maps.LatLng(" + temp[0] + "," + temp[1] + ")");
-        }
-        Cord.Append(thisCord);
-        Cord.Append("]");
+        String Coordinates = Row["Coordinates"].ToString();
+        if (Cord.Length > 0) Cord.AppendLine(",");
+        Cord.AppendLine("[");
+        Cord.Append(toScriptArray(Coordinates));
+        Cord.AppendLine("]");
+
+        //Inner cordinates
+        String InnerCoordinates = Row["InnerBoundaryCoord"].ToString();
+        if (Cord.Length > 0) Cord.AppendLine(",");
+        Cord.AppendLine("[");
+        Cord.Append(toScriptArray(InnerCoordinates));
+        Cord.AppendLine("]");
       }
 
       return Cord.ToString();
     }
+
+
+    private StringBuilder toScriptArray(String Coordinates) {
+      Coordinates = Coordinates.Replace("POLYGON ((", "");
+      Coordinates = Coordinates.Replace("))", "");
+
+      StringBuilder thisCord = new StringBuilder();
+      foreach (String LatLng in Coordinates.Split(',')) {
+        var tLatLng = LatLng.Trim();
+        String[] temp = tLatLng.Split(' ');
+        if (thisCord.Length > 0) thisCord.Append(",");
+        thisCord.Append("new google.maps.LatLng(" + temp[0] + "," + temp[1] + ")");
+      }
+
+      return thisCord;
+    }
+
     public List<DroneFlight> getLogFlights(List<DroneFlight> Flights, int FlightID = 0) {
       String SQL = FlightID == 0 ?
         "SELECT\n" +
@@ -227,6 +246,32 @@ namespace eX_Portal.exLogic {
       }//foreach(Index)
     }//saveTechnicalLog()
 
+
+    public String getVideoURL(int FlightID) {
+      String SQL;
+      String VideoURL;
+
+      if(_DroneID == 0) _DroneID = getDroneIDForFlight(FlightID);
+
+      //Find the drone is live
+      SQL = "SELECT IsLiveVideo FROM MSTR_Drone WHERE DroneID=" + _DroneID;
+      int IsLiveVideo = Util.getDBInt(SQL);
+      if(IsLiveVideo > 0) {
+        VideoURL = "rtmp://52.29.242.123/live/drone" + _DroneID;
+        return VideoURL;
+      }
+
+      //get the Recorded Video URL
+      SQL = "SELECT RecordedVideoURL FROM DroneFlight WHERE ID=" + FlightID;
+      VideoURL = Util.getDBVal(SQL);
+      if (!String.IsNullOrEmpty(VideoURL)) {
+        return S3Download.getURL(VideoURL);
+        //return VideoURL;
+      }
+
+      return "";
+
+    }
 
   }//class Drone
 }//namespace eX_Portal.exLogic

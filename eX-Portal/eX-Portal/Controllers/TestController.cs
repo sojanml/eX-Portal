@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using eX_Portal.exLogic;
+using eX_Portal.Models;
 using System.Text;
 
 namespace eX_Portal.Controllers {
@@ -12,6 +13,14 @@ namespace eX_Portal.Controllers {
     public ActionResult Index(int id = 9) {
       GeoGrid Info = new GeoGrid(id);
       return View(Info);
+    }
+
+    public ActionResult GCA_Approval(int id = 9) {
+      ExponentPortalEntities DB = new ExponentPortalEntities();
+      var Row = (from m in DB.GCA_Approval
+                where m.ApprovalID == id
+                select m).First();
+      return View(Row);
     }
 
     public ActionResult Video() {
