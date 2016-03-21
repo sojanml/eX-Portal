@@ -35,10 +35,12 @@ namespace eX_Portal.ViewModel
 
        public string Lattitude { get; set; }
        public string Longitude { get; set; }
+       public string Region { get; set; }
+       public string Country { get; set; }
 
-       
 
-      
+
+
 
 
 
