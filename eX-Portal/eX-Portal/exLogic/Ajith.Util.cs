@@ -9,11 +9,18 @@ using System.Web.Mvc;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Configuration;
+using System.Xml;
+using System.Net;
+using System.IO;
+
 namespace eX_Portal.exLogic
 {
+    
+
     public partial class Util
     {
-
+        static IEnumerable<SelectListItem> ChartList = Enumerable.Empty<SelectListItem>();
         static IEnumerable<SelectListItem> DropDownLists = Enumerable.Empty<SelectListItem>();
         //private static ExponentPortalEntities cotx;
 
@@ -68,6 +75,70 @@ namespace eX_Portal.exLogic
             return new string(list.ToArray());
         }
 
+      
+
+
+
+
+        public static IList<ChartViewModel> getCurrentFlightChartData()
+        {
+                      
+            IList<ChartViewModel> ChartList = new List<ChartViewModel>();
+                       
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+                    string SQL;
+                    SQL = @"select t.DroneId,
+                           v.DroneName,max(t.ReadTime) as readtime ,
+                            max(T.TotalFlightTime) as TotalFlightTime,
+                            min(k.FlightTime)as Monthtime,
+                            CASE WHEN  max(T.TotalFlightTime) - min(k.FlightTime)IS NULL or 
+                            max(T.TotalFlightTime) - min(k.FlightTime) = 0 
+                            THEN max(T.TotalFlightTime) ELSE max(T.TotalFlightTime) - min(k.FlightTime) END as CurrentFlightTime
+                            from MSTR_Drone v
+                            join FlightMapData t on v.DroneId = t.DroneId 
+                            left join(select u.DroneId, min(u.ReadTime) as ReadTime,
+                            max(u.TotalFlightTime) as FlightTime
+                            from FlightMapData u
+                            where
+                            convert(nvarchar(30), u.ReadTime, 120)
+                            BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) 
+                            AND  GETDATE()
+                            group by  u.DroneId )k on t.DroneId = k.DroneId
+                            group by t.DroneId,v.DroneName";
+
+
+                  cmd.CommandText = SQL;
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                            ChartViewModel dd = new ChartViewModel();
+                            dd.DroneName = reader["DroneName"].ToString();
+                            dd.TotalFightTime = Util.toInt(reader["TotalFlightTime"].ToString());
+                            dd.CurrentFlightTime =Util.toInt( reader["CurrentFlightTime"].ToString());
+                         
+                            ChartList.Add(dd);
+                           
+                }
+            }
+
+            ctx.Database.Connection.Close();
+
+         
+                        }
+
+
+                    }
+
+               
+            
+                     return ChartList;
+            //return the list objects
+        }
         public static IEnumerable<SelectListItem> GetLookup(string type)
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();
@@ -156,6 +227,267 @@ namespace eX_Portal.exLogic
             return SelectList; //return the list objects
         }//function GetDropDowntList
 
+        public static string GetWOEID(string City)
+        {
+            string WeatherWOEID=null, HttpSQL;
+            System.Net.HttpWebRequest request = default(HttpWebRequest);
+            HttpWebResponse response = null;          
+            string json = null;
+
+            HttpSQL = " http://query.yahooapis.com/v1/public/yql?q=select woeid from geo.places where text=" + City;
+           
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(HttpSQL);
+            WeatherWOEID = doc.GetElementsByTagName("woeid")[0].InnerText;
+
+          
+
+
+            return WeatherWOEID;
+
+        }
+        public static string GetLocation(string lat, string lng)
+        {
+            string AddStart = null;
+            System.Net.HttpWebRequest request = default(HttpWebRequest);
+            HttpWebResponse response = null;
+            StreamReader reader = default(StreamReader);
+            string json = null;
+            lat = "25.2048";
+            lng = "55.2708";
+            try
+            {
+                //Create the web request   
+                request = (HttpWebRequest)WebRequest.Create("http://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng + "&sensor=false");
+                //Get response   
+                response = (HttpWebResponse)request.GetResponse();
+                //Get the response stream into a reader   
+                reader = new StreamReader(response.GetResponseStream());
+                json = reader.ReadToEnd();
+                response.Close();
+                // textBox1.Text = json;
+                if (json.Contains("ZERO_RESULTS"))
+                {
+                    // CurrentAddress.Text = "No Address Available";
+                };
+                if (json.Contains("formatted_address"))
+                {
+                    //CurrentAddress.Text = "Address Available";
+                    int start = json.IndexOf("formatted_address");
+                    int end = json.IndexOf(", USA");
+                    AddStart = json.Substring(start + 21);
+                    // string EndStart = json.Substring(end);
+                    //  FinalAddress = AddStart.Replace(EndStart, ""); //Gives Full Address, One Line
+
+                    //  CurrentAddress.Text = FinalAddress;
+
+                };
+            }
+            catch (Exception ex)
+            {
+                string Message = "Error: " + ex.ToString();
+            }
+            finally
+            {
+                if ((response != null))
+                    response.Close();
+            }
+            if (AddStart != null)
+            {
+                AddStart = AddStart.Split(',')[0];
+               // AddStart = AddStart.Substring(1);
+              
+            }
+            else
+            {
+                AddStart = "";
+            }
+
+            return AddStart;
+
+        }
+        public static WeatherViewModel GetCurrentConditions(string Location)
+
+        {
+            bool isInGeoLongitude=false, isInGeoLattitude=false;
+           string low, high,  conditionCode;
+            int rising;
+            string date;
+            string text, temp;
+            IList<Forcast> ForcastList = new List<Forcast>();
+          
+            WeatherViewModel Weather = new WeatherViewModel();
+            // string forecastUrl = "http://weather.yahooapis.com/forecastrss?&" + "p=" + Location + "&u=c";
+            string forecastUrl = "http://weather.yahooapis.com/forecastrss?w=" + Location + "&u=c"; ;
+         // open a XmlTextReader object using the constructed url
+        XmlTextReader reader = new XmlTextReader(forecastUrl);
+            // loop through xml result node by node
+            while (reader.Read())
+            {
+                // decide which type of node us currently being read
+                switch (reader.NodeType)
+                {
+                    // xml start element
+                    case XmlNodeType.Element:
+                        // read the tag name and decide which objects to load
+                        if (reader.Name.ToLower() == "yweather:location")
+                        {
+                           // Location.City = reader.GetAttribute("city");
+                           // Location.Region = reader.GetAttribute("region");
+                            //Location.Country = reader.GetAttribute("country");
+                        }
+                        if (reader.Name.ToLower() == "yweather:units")
+                        {
+                            // store in temporary variable
+                            temp = reader.GetAttribute("temperature").ToLower();
+                            // put it into the correct units
+                      
+                            if (temp == "c")
+                            {
+                                Weather.TemperatureUnit = "Celcius";
+                            }
+                            else
+                            {
+                                Weather.TemperatureUnit = "Fahrenheit";
+                            }
+
+                            temp = reader.GetAttribute("distance");
+                            if (temp == "km")
+                            {
+                                Weather.DistanceUnit = "Kilometeres";
+                               
+                            }
+                            else
+                            {
+                                Weather.DistanceUnit = "Miles";
+                                
+                            }
+
+                            temp = reader.GetAttribute("pressure");
+                            if (temp == "mb")
+                            {
+                                Weather.PressureUnit = "Millibars";
+                            }
+                            else
+                            {
+                               Weather.PressureUnit = "PoundsPerSquareInch";
+                            }
+
+                            temp = reader.GetAttribute("speed");
+                            if (temp == "kph")
+                            {
+                                Weather.SpeedUnit = "KilometersPerHour";
+                               
+                            }
+                            else
+                            {
+                                Weather.SpeedUnit ="MilesPerHour";
+                            }
+                        }
+                        if (reader.Name.ToLower() == "yweather:wind")
+                        {
+                            Weather.Chill = reader.GetAttribute("chill").ToString();
+                            Weather.Direction = reader.GetAttribute("direction").ToString();
+                            Weather.Speed = reader.GetAttribute("speed").ToString();
+                        }
+                        if (reader.Name.ToLower() == "yweather:atmosphere")
+                        {
+                            Weather.Humidity = reader.GetAttribute("humidity").ToString();
+                            Weather.Visibility =reader.GetAttribute("visibility").ToString();
+                            Weather.Pressure = reader.GetAttribute("pressure").ToString();
+                           rising = Convert.ToInt32( reader.GetAttribute("rising"));
+                           
+                            rising = Convert.ToInt32(reader.GetAttribute("rising"));
+                           
+                            if (rising==0)
+                            {
+                                Weather.PressureStatus = "Steady";
+                            }
+                            else if (rising==1)
+                            {
+                                Weather.PressureStatus = "Rising";
+                            }
+                            else if (rising == 2)
+                            {
+                                Weather.PressureStatus = "Falling";
+                            }
+                              
+                        }
+                        if (reader.Name.ToLower() == "yweather:astronomy")
+                        {
+                            Weather.Sunrise =reader.GetAttribute("sunrise");
+                            Weather.Sunset = reader.GetAttribute("sunset");
+                        }
+                        if (reader.Name.ToLower() == "yweather:condition")
+                        {
+                            Weather.ConditionText= reader.GetAttribute("text");
+                            Weather.ConditionCode = reader.GetAttribute("code");
+                          //  Weather.c = (ConditionCodes)conditionCode;
+                           Weather.ConditionTemperature= reader.GetAttribute("temp");
+                            Weather.ConditionDate =reader.GetAttribute("date");
+                        }
+                        if (reader.Name.ToLower() == "yweather:forecast")
+                        {
+                            Forcast fcast = new Forcast();
+                         fcast.Date = reader.GetAttribute("date");
+                          fcast.TempLow = reader.GetAttribute("low");
+                          fcast.TempHigh = reader.GetAttribute("high");
+                          fcast.status = reader.GetAttribute("text");
+
+                            ForcastList.Add(fcast);
+                            // code = (ConditionCodes)Convert.ToInt32(reader.GetAttribute("code"));
+                          
+                          
+                        }
+                        // set the flag if we're in the geo:long tag
+                                         
+                          
+                        if (reader.Name.ToLower() == "geo:long")
+                        {
+                         isInGeoLongitude = true;
+                        }
+                        // set the flag if we're in the geo:lat tag
+                        if (reader.Name.ToLower() == "geo:lat")
+                        {
+                            isInGeoLattitude = true;
+                        }
+                        break;
+                    // xml element text
+                    case XmlNodeType.Text:
+                        // if we're currently in the geo:lat tag
+                        if (isInGeoLattitude)
+                        {
+                            // read the value from the node
+                            Weather.Lattitude = reader.Value;
+                        }
+                        // if we're currently in the geo:long tag
+                        if (isInGeoLongitude)
+                        {
+                            // read the value from the node
+                            Weather.Longitude = reader.Value;
+                        }
+                        break;
+                    // xml end element
+                    case XmlNodeType.EndElement:
+                        // clear the flag once we leave the geo:long tag
+                        if (reader.Name.ToLower() == "geo:long")
+                        {
+                            isInGeoLongitude = false;
+                        }
+                        // clear the flag once we leave the geo:lat tag
+                        if (reader.Name.ToLower() == "geo:lat")
+                        {
+                            isInGeoLattitude = false;
+                        }
+                        break;
+                }
+            }
+
+            Weather.Forecast = ForcastList;
+            return Weather;
+
+        }
 
         public static Int32 toInt(String sItem)
         {
