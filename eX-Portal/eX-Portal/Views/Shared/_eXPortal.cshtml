@@ -71,14 +71,15 @@
   </div>
 
   <div id="alert-box" title="Notification" style="display:none;">
-    <p>
-      <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-      <span id="alert-message"></span>
-    </p>
+    <div class="alert-box-icon"><span class="icon">&#xf05a;</span></div>
+    <div style="margin-left: 30px;" id="alert-message"></div>
+    <div style="clear:both"></div>
   </div>
 
 
-
+  <script type="text/javascript">
+    var LoginUserID = '@Session["UserID"]';
+  </script>
   @Scripts.Render("~/bundles/dataTableScript")
   @RenderSection("scripts", required: false)
 

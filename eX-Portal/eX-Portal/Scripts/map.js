@@ -59,7 +59,6 @@ var lineChartLegend = new Object();
 $(document).ready(function () {
   initialize();
   setPolygon();
-  setAlertTimer();
 
   $('#chkShowFullPath').on("change", function (e) {
     if (this.checked) {
@@ -69,34 +68,6 @@ $(document).ready(function () {
     }
   })
 });
-
-function setAlertTimer() {
-  window.setInterval(checkAlert, 10 * 1000);
-}
-
-function checkAlert() {
-  var URL = '/map/checkalert/' + UserID;
-  $.ajax({
-    url: URL
-  }).done(function (data) {
-    if (data != "") alertBox(data);
-  });
-}
-
-function alertBox(Message) {
-  $('#alert-message').html(Message);
-  $("#alert-box").dialog({
-    resizable: false,
-    height: 200,
-    minWidth: 400,
-    modal: true,
-    buttons: {
-      Cancel: function () {
-        $(this).dialog("close");
-      }
-    }
-  });
-}
 
 var BoundaryBox = null;
 var FillOptions = [

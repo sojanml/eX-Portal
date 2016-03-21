@@ -1,5 +1,8 @@
 ﻿@model eX_Portal.Models.GCA_Approval
 @using eX_Portal.exLogic
+@{ 
+  ViewBag.Title = "DGCAA Approval";
+}
 
 <form id="formS3" name="formS3" action="@ViewBag.FormAction" method="@ViewBag.FormMethod" enctype="@ViewBag.FormEnclosureType">
     <section class="general-form" id="loginForm">
@@ -9,8 +12,6 @@
         <input type="hidden" name="policy" value="@ViewBag.Base64EncodedPolicy" />
         <input type="hidden" name="signature" value="@ViewBag.Signature" />
         <input type="hidden" name="redirect" value="@ViewBag.RedirectUrl" />
-
-        
 
         <div class="editor-label">
             Select the Drone for Uploading the document
@@ -28,7 +29,8 @@
             @Html.ValidationMessageFor(model => model.ApprovalName)
         </div>
         <div class="editor-label">
-            @Html.LabelFor(model => model.Coordinates, "Coordinates")
+            <input class="button" style="float:right; margin-bottom:5px;" type="button" id="btnCoordinates" name="btnCoordinates" value="Show Map" />
+            @Html.LabelFor(model => model.Coordinates, "Coordinates")          
         </div>
 
         <div class="editor-field">
@@ -40,26 +42,27 @@
             @Html.LabelFor(model => model.ApprovalDate)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.ApprovalDate)
+            @Html.TextBoxFor(model => model.ApprovalDate, new { @class = "date-picker" })
             @Html.ValidationMessageFor(model => model.ApprovalDate)
         </div>
         <div class="editor-label">
             @Html.LabelFor(model => model.StartDate)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.StartDate)
-            @Html.ValidationMessageFor(model => model.StartDate)
-
+            
+            @Html.TextBoxFor(model => model.StartDate, new { @class = "date-picker" })
+          @Html.ValidationMessageFor(model => model.StartDate)
         </div>
         <div class="editor-label">
             @Html.LabelFor(model => model.EndDate)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.EndDate)
-            @Html.ValidationMessageFor(model => model.EndDate)
+            @Html.TextBoxFor(model => model.EndDate, new { @class = "date-picker" })
+          @Html.ValidationMessageFor(model => model.EndDate)
         </div>
         <div class="editor-label">
             @Html.LabelFor(model => model.StartTime)
+          @Html.ValidationMessageFor(model => model.StartTime)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.StartTime)
@@ -111,16 +114,50 @@
 </form>
 
 
+<div id="map-dialog" style="display:none;" title="Select Cordinates for the Approval">
+  <iframe id="iFrameMap" name="iFrameMap" src="/Map/Select" style="width:100%; height:100%; border:0px"></iframe>
+  
+</div>
+
+
 @section header{
     <link href="~/Content/black-box.css" rel="stylesheet" />
+  <script type="text/javascript">
+    function getCoordinates() {
+      return $('#Coordinates').val();
+    }
+    function setCoordinates(Cord) {
+      $('#Coordinates').val(Cord);
+    }
 
+  </script>
 }
 @section Scripts{
-    @Scripts.Render("~/bundles/jqueryval")
 <script type="text/javascript">
     var UploadUrl = '/S3Upload/UploadGCA';
     var DocType ='Approval';
-    
+    $(document).ready(function () {
+      // Create a map object and specify the DOM element for display.
+      var map = null;
+      $('#btnCoordinates').on("click", function () {
+        var iFrame = window.frames['iFrameMap']
+        if (iFrame.updateCordinates) iFrame.updateCordinates();
+        $("#map-dialog").dialog({
+          resizable: false,
+          height: 600,
+          minWidth: 1000,
+          modal: true,
+          buttons: {
+            Close: function () {
+              $(this).dialog("close");
+            }
+          }
+        });
+      })
+    });
+
+
+
     </script>
     <script type="text/javascript" src="~/Scripts/S3Upload.js"></script>
 }
