@@ -150,8 +150,7 @@ namespace eX_Portal.Controllers {
                             AND  GETDATE()
                             group by  u.DroneId )k on t.DroneId = k.DroneId
                             group by t.DroneId,v.DroneName";
-
-
+            
             qView nView = new qView(SQL);
             if (Request.IsAjaxRequest())
             {
