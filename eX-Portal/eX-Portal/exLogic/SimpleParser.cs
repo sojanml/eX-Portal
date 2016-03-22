@@ -98,6 +98,7 @@ namespace eX_Portal.exLogic {
     }
 
     private void PrintSelectScalarExperssionRecurse(int aSelectElementID, ScalarExpression aScalarExpression) {
+      aColumnInfoList.AddExpression(aSelectElementID, aScalarExpression);
       if (aScalarExpression.GetType() == typeof(ColumnReferenceExpression)) {
         ColumnReferenceExpression aColumnReferenceExpression = (ColumnReferenceExpression)aScalarExpression;
         AddLogText(string.Format("ColumnType={0}", aColumnReferenceExpression.ColumnType));
@@ -156,6 +157,7 @@ namespace eX_Portal.exLogic {
       private string _ReferencedTableServer = String.Empty;
       private string _TableAlias = String.Empty;
       private string _TableColumnName = String.Empty;
+      private string _Expression = String.Empty;
 
       public string Alias {
         get { return _Alias; }
@@ -191,6 +193,12 @@ namespace eX_Portal.exLogic {
         get { return _ReferencedTableName; }
         set { _ReferencedTableName = value; }
       }
+
+      public string Expression {
+        get { return _Expression; }
+        set { _Expression = value; }
+      }
+
     }
 
     public class ColumnInfoList {
@@ -272,6 +280,19 @@ namespace eX_Portal.exLogic {
           }
         }
       }
+
+      internal void AddExpression(Int32 aSelectElementID, ScalarExpression aScalarExpression) {
+        if (ColumnList.Count > aSelectElementID) {
+          ColumnInfo aColumnInfo = ColumnList[aSelectElementID];
+          StringBuilder TheExpression = new StringBuilder();
+          for(int i = aScalarExpression.FirstTokenIndex; i <= aScalarExpression.LastTokenIndex; i++) {
+            TheExpression.Append(aScalarExpression.ScriptTokenStream[i].Text);
+          }//for
+          aColumnInfo.Expression = TheExpression.ToString();
+        }
+      }//internal void AddExpressio
+
+
     }
   }
 }
