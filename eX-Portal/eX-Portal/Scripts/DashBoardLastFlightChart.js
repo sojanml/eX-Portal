@@ -24,7 +24,7 @@ $(document).ready(function () {
             var aData = reponse;
             var aLabels = aData[0];
             var aDatasets1 = aData[1];
-           // var aDatasets2 = aData[2];
+          //  var aDatasets2 = aData[2];
            // var aDatasets3 = aData[3];
             //var aDatasets4 = aData[4];
             //var aDatasets5 = aData[5];
