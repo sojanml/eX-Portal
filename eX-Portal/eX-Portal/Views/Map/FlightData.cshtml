@@ -172,7 +172,7 @@
     $(document).ready(function () {
       playerInstance = jwplayer("myElement");
       playerInstance.setup({
-        file: "@ViewBag.VideoURL",
+        file: "@Html.Raw(ViewBag.VideoURL)",
         width: 256,
         height: 192,
         title: '@(ViewBag.VideoURL.Substring(0, 5) == "rtmp:" ? "Live Video" : "Recorded Video")',
