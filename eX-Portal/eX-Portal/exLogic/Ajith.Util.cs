@@ -75,9 +75,113 @@ namespace eX_Portal.exLogic
             return new string(list.ToArray());
         }
 
-      
+        public static IList<ChartViewModel> getCurrentPilotChartData()
+        {
+
+            IList<ChartViewModel> ChartList = new List<ChartViewModel>();
+
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+                    string SQL;
+                    SQL = @" select a.PilotId,c.FirstName,sum(a.FixedWing) + sum(a.multiDashRotor) as Ptotal
+                         , CASE WHEN 
+                           MIN(b.PCurrentMonth) IS NULL then 0
+                           else min(b.PCurrentMonth) end as pCurrent
+                           from MSTR_User c left
+                           join MSTR_Pilot_Log a on a.PilotId = c.UserId
+                           left join(select PilotId,sum(FixedWing) + sum(multiDashRotor) as PCurrentMonth
+                           from MSTR_Pilot_Log
+                           where
+                           convert(nvarchar(30), date, 120)
+                            BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) 
+                            AND GETDATE()
+                            group by  PilotId )
+                            b on a.PilotId = b.PilotId  group by a.PilotId ,c.FirstName
+                           having   sum(a.FixedWing) + sum(a.multiDashRotor) > 0";
 
 
+                    cmd.CommandText = SQL;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ChartViewModel dd = new ChartViewModel();
+                            dd.PilotName = reader["FirstName"].ToString();
+                            dd.PilotTotalHrs = Util.toInt(reader["Ptotal"].ToString());
+                            dd.PilotCurrentMonthHrs = Util.toInt(reader["PCurrent"].ToString());
+
+                            ChartList.Add(dd);
+
+                        }
+                    }
+
+                    ctx.Database.Connection.Close();
+
+
+                }
+
+
+            }
+
+
+
+            return ChartList;
+            //return the list objects
+        }
+
+        public static IList<ChartViewModel> getUASLastFlightChartData()
+        {
+
+            IList<ChartViewModel> ChartList = new List<ChartViewModel>();
+
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+                    string SQL;
+                    SQL = @"select MAX(b.ReadTime),
+                            max(b.TotalFlightTime)as TotalFlightTime,
+                            b.DroneId,a.DroneName 
+                            from MSTR_Drone a
+                            join 
+                            FlightMapData b 
+                            on a.DroneId=b.DroneId 
+                            group by 
+                            b.DroneId,a.DroneName";
+
+
+                    cmd.CommandText = SQL;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ChartViewModel dd = new ChartViewModel();
+                            dd.DroneName = reader["DroneName"].ToString();
+                            dd.TotalFightTime = Util.toInt(reader["TotalFlightTime"].ToString());
+                           
+
+                            ChartList.Add(dd);
+
+                        }
+                    }
+
+                    ctx.Database.Connection.Close();
+
+
+                }
+
+
+            }
+
+
+
+            return ChartList;
+            //return the list objects
+        }
 
 
         public static IList<ChartViewModel> getCurrentFlightChartData()
@@ -230,9 +334,8 @@ namespace eX_Portal.exLogic
         public static string GetWOEID(string City)
         {
             string WeatherWOEID=null, HttpSQL;
-            System.Net.HttpWebRequest request = default(HttpWebRequest);
-            HttpWebResponse response = null;          
-            string json = null;
+           
+           
 
             HttpSQL = " http://query.yahooapis.com/v1/public/yql?q=select woeid from geo.places where text=" + City;
            
@@ -254,8 +357,7 @@ namespace eX_Portal.exLogic
             HttpWebResponse response = null;
             StreamReader reader = default(StreamReader);
             string json = null;
-            lat = "25.2048";
-            lng = "55.2708";
+          
             try
             {
                 //Create the web request   
@@ -310,11 +412,12 @@ namespace eX_Portal.exLogic
         public static WeatherViewModel GetCurrentConditions(string Location)
 
         {
+            //code for parsing the api xml data from yahoo
+
             bool isInGeoLongitude=false, isInGeoLattitude=false;
-           string low, high,  conditionCode;
+            string  temp;
             int rising;
-            string date;
-            string text, temp;
+           
             IList<Forcast> ForcastList = new List<Forcast>();
           
             WeatherViewModel Weather = new WeatherViewModel();
@@ -333,9 +436,9 @@ namespace eX_Portal.exLogic
                         // read the tag name and decide which objects to load
                         if (reader.Name.ToLower() == "yweather:location")
                         {
-                           // Location.City = reader.GetAttribute("city");
-                           // Location.Region = reader.GetAttribute("region");
-                            //Location.Country = reader.GetAttribute("country");
+                            Weather.City = reader.GetAttribute("city");
+                           Weather.Region = reader.GetAttribute("region");
+                            Weather.Country = reader.GetAttribute("country");
                         }
                         if (reader.Name.ToLower() == "yweather:units")
                         {
