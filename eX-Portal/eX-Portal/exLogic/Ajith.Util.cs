@@ -208,7 +208,7 @@ namespace eX_Portal.exLogic
                             max(u.TotalFlightTime) as FlightTime
                             from FlightMapData u
                             where
-                            convert(nvarchar(30), u.ReadTime, 120)
+                             u.ReadTime
                             BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) 
                             AND  GETDATE()
                             group by  u.DroneId )k on t.DroneId = k.DroneId
