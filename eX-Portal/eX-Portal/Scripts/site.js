@@ -68,7 +68,50 @@ $(document).ready(function () {
     dateFormat: 'dd-M-yy',
   });
 
+  setAlertTimer();
+
+
 });
+
+
+
+function setAlertTimer() {
+  window.setInterval(checkAlert, 10 * 1000);
+}
+
+function checkAlert() {
+  var URL = '/map/checkalert/' + LoginUserID;
+  $.ajax({
+    url: URL
+  }).done(function (data) {
+    if (data != "") alertBox(data);
+  });
+}
+
+function alertBox(Message) {
+  $('#alert-message').html('<ul id="alert-drone">' + Message + '</ul>' +
+  '<audio id="alert-audio" style="display:none" controls autoplay=true>\n' +
+  '<source src="/audio/notify.mp3" type="audio/mpeg">\n' +
+  'Your browser does not support the audio element.\n' +
+  '</audio>\n');
+
+  $("#alert-box").dialog({
+    resizable: false,
+    height: 400,
+    minWidth: 600,
+    modal: true,
+    buttons: {
+      Cancel: function () {
+        $(this).dialog("close");
+      }
+    }
+  });
+
+  var Alert = document.getElementById('alert-audio');
+  Alert.autoplay = true;
+  Alert.load();
+
+}
 
 
 function processDelete(Link) {

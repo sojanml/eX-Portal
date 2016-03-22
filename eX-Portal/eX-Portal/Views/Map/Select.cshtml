@@ -1,0 +1,110 @@
+﻿@{
+  Layout = null;
+}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <title>@ViewBag.Title</title>
+  <style type="text/css">
+    html, body {
+    margin:0px;
+    padding:0px;
+    width:100%;
+    height:100%;
+    }
+  </style>
+
+  <script src="~/Scripts/jquery-1.11.3.js"></script>
+  <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>
+
+  <script type="text/javascript">
+      var map = null;
+      $(document).ready(function () {
+        initialize();
+        updateCordinates();
+      });
+
+      function initialize() {
+        // map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions)
+        var myLatLng = { lat: 25, lng: 55 };
+        var mapDiv = document.getElementById('map_canvas');
+        map = new google.maps.Map(mapDiv, {
+          center: myLatLng,
+          zoom: 10
+        });
+
+
+        var BoxCord = setBoundary(getCoordinates());
+        // Construct the polygon.
+        BoundaryBox = new google.maps.Polygon({
+          paths: BoxCord,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.7,
+          strokeWeight: 1,
+          fillColor: '#FF0000',
+          fillOpacity: 0.1,
+          editable: true,
+          draggable: true
+        });
+        BoundaryBox.setMap(map);
+
+        google.maps.event.addListener(BoundaryBox.getPath(), 'set_at', setCoordinates);
+        google.maps.event.addListener(BoundaryBox.getPath(), 'insert_at', setCoordinates);
+
+        $('#get-boundary').on("click", function(e){
+          getBoundary();
+        });
+
+      };
+
+
+      function getBoundary() {
+        var Bounds = BoundaryBox.getPath().getArray();
+        var LatLng = '';
+        for (var i = 0; i < Bounds.length; i++) {
+          if (LatLng != '') LatLng += ',';
+          LatLng = LatLng + Bounds[i].lat() + ' ' + Bounds[i].lng()
+        }
+        return LatLng;
+      }
+
+      function setBoundary(Cordinates) {
+        var Bounds = [];
+        var LatLng = Cordinates.split(',');
+        for (var i = 0; i < LatLng.length; i++) {
+          var Bound = LatLng[i].split(" ");
+          Bounds.push({ lat: parseFloat(Bound[0]), lng: parseFloat(Bound[1]) });
+        }
+        return Bounds;
+      }
+
+      function getCoordinates() {
+        var Cordinates = parent.getCoordinates ? parent.getCoordinates() : "";
+        if (Cordinates == "") Cordinates = "24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375";
+        return Cordinates;
+      }
+
+      function updateCordinates() {
+        var Cordinates = getCoordinates();
+        var Bounds = setBoundary(Cordinates);
+        BoundaryBox.setPath(Bounds);
+        google.maps.event.addListener(BoundaryBox.getPath(), 'set_at', setCoordinates);
+        google.maps.event.addListener(BoundaryBox.getPath(), 'insert_at', setCoordinates);
+      }
+
+      function setCoordinates() {
+        var Cord = getBoundary();
+        parent.setCoordinates(Cord);
+      }
+
+  </script>
+</head>
+
+<body>  
+  <div id="map_canvas" style="width: 100%; height: 100%;"></div>
+</body>
+
+</html>

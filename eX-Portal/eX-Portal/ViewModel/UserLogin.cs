@@ -34,5 +34,7 @@ namespace eX_Portal.ViewModel
         public Nullable<System.DateTime> LastModifiedOn { get; set; }
         public Nullable<System.DateTime> ApprovedOn { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
+        public string Lat { get; set; }
+        public string Lng { get; set; }
     }
 }

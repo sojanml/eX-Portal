@@ -14,19 +14,19 @@ namespace eX_Portal.Models
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
     using System.Linq;
-    
+
     public partial class ExponentPortalEntities : DbContext
     {
         public ExponentPortalEntities()
             : base("name=ExponentPortalEntities")
         {
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-    
+
         public virtual DbSet<DroneData> DroneDatas { get; set; }
         public virtual DbSet<DroneDefinition> DroneDefinitions { get; set; }
         public virtual DbSet<LUP_Drone> LUP_Drone { get; set; }
@@ -71,87 +71,87 @@ namespace eX_Portal.Models
         public virtual DbSet<PortalAlert> PortalAlerts { get; set; }
         public virtual DbSet<PayLoad_AutoFix> PayLoad_AutoFix { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
-    
+
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {
             var ownerIDParameter = ownerID.HasValue ?
                 new ObjectParameter("OwnerID", ownerID) :
                 new ObjectParameter("OwnerID", typeof(int));
-    
+
             var manufacturerIDParameter = manufacturerID.HasValue ?
                 new ObjectParameter("ManufacturerID", manufacturerID) :
                 new ObjectParameter("ManufacturerID", typeof(int));
-    
+
             var uAVTypeIDParameter = uAVTypeID.HasValue ?
                 new ObjectParameter("UAVTypeID", uAVTypeID) :
                 new ObjectParameter("UAVTypeID", typeof(int));
-    
+
             var commissionDateParameter = commissionDate.HasValue ?
                 new ObjectParameter("CommissionDate", commissionDate) :
                 new ObjectParameter("CommissionDate", typeof(System.DateTime));
-    
+
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Portal_CreateDrone_Result>("usp_Portal_CreateDrone", ownerIDParameter, manufacturerIDParameter, uAVTypeIDParameter, commissionDateParameter);
         }
-    
+
         public virtual ObjectResult<usp_Portal_GetDroneDropDown_Result> usp_Portal_GetDroneDropDown(string type)
         {
             var typeParameter = type != null ?
                 new ObjectParameter("Type", type) :
                 new ObjectParameter("Type", typeof(string));
-    
+
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Portal_GetDroneDropDown_Result>("usp_Portal_GetDroneDropDown", typeParameter);
         }
-    
+
         public virtual ObjectResult<usp_Portal_DroneNameList_Result> usp_Portal_DroneNameList()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Portal_DroneNameList_Result>("usp_Portal_DroneNameList");
         }
-    
+
         public virtual ObjectResult<usp_Portal_DroneServiceType_Result> usp_Portal_DroneServiceType(string type)
         {
             var typeParameter = type != null ?
                 new ObjectParameter("Type", type) :
                 new ObjectParameter("Type", typeof(string));
-    
+
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Portal_DroneServiceType_Result>("usp_Portal_DroneServiceType", typeParameter);
         }
-    
+
         public virtual ObjectResult<usp_Portal_GetDroneParts_Result> usp_Portal_GetDroneParts()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_Portal_GetDroneParts_Result>("usp_Portal_GetDroneParts");
         }
-    
+
         public virtual int Recover_Dropped_Objects_Proc(string database_Name, Nullable<System.DateTime> date_From, Nullable<System.DateTime> date_To)
         {
             var database_NameParameter = database_Name != null ?
                 new ObjectParameter("Database_Name", database_Name) :
                 new ObjectParameter("Database_Name", typeof(string));
-    
+
             var date_FromParameter = date_From.HasValue ?
                 new ObjectParameter("Date_From", date_From) :
                 new ObjectParameter("Date_From", typeof(System.DateTime));
-    
+
             var date_ToParameter = date_To.HasValue ?
                 new ObjectParameter("Date_To", date_To) :
                 new ObjectParameter("Date_To", typeof(System.DateTime));
-    
+
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Recover_Dropped_Objects_Proc", database_NameParameter, date_FromParameter, date_ToParameter);
         }
-    
+
         public virtual int sp_Recover_Dropped_Objects(string database_Name, Nullable<System.DateTime> date_From, Nullable<System.DateTime> date_To)
         {
             var database_NameParameter = database_Name != null ?
                 new ObjectParameter("Database_Name", database_Name) :
                 new ObjectParameter("Database_Name", typeof(string));
-    
+
             var date_FromParameter = date_From.HasValue ?
                 new ObjectParameter("Date_From", date_From) :
                 new ObjectParameter("Date_From", typeof(System.DateTime));
-    
+
             var date_ToParameter = date_To.HasValue ?
                 new ObjectParameter("Date_To", date_To) :
                 new ObjectParameter("Date_To", typeof(System.DateTime));
-    
+
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Recover_Dropped_Objects", database_NameParameter, date_FromParameter, date_ToParameter);
         }
     }

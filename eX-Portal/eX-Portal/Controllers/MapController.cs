@@ -7,6 +7,7 @@ using eX_Portal.Models;
 using eX_Portal.exLogic;
 using System.Data;
 using System.Data.Entity;
+using System.Text;
 
 namespace eX_Portal.Controllers {
   public class MapController : Controller {
@@ -18,6 +19,9 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
+    public ActionResult Select() {
+      return View();
+    }
     public ActionResult FlightData(int id = 0) {
       ViewBag.Title = "Flight Map";
       ViewBag.FlightID = id;
@@ -29,11 +33,12 @@ namespace eX_Portal.Controllers {
     }
 
     public String CheckAlert(int id = 0) {
-      String AlertMsg = "";
+      StringBuilder AlertMsg = new StringBuilder();
       int AccountID = Util.getDBInt("SELECT AccountID From MSTR_User WHERE UserID=" + id);
       String SQL = @"SELECT
           PortalAlert.AlertID,
-          PortalAlert.AlertMessage
+          PortalAlert.AlertMessage,
+          PortalAlert.AlertType
         FROM
           PortalAlert
       LEFT JOIN DroneFlight ON
@@ -47,17 +52,25 @@ namespace eX_Portal.Controllers {
         WHERE
           MSTR_Drone.DroneID IS NOT NULL AND
           PortalAlert_User.UserID IS NULL AND
-          PortalAlert.CreatedOn > DATEADD(minute,-30,GETDATE())";
+          PortalAlert.CreatedOn > DATEADD(minute, -30, GETDATE())";
       var Rows = Util.getDBRows(SQL);
       foreach(var Row in Rows) {
-        if (!String.IsNullOrWhiteSpace(AlertMsg)) AlertMsg = AlertMsg + "<br>\n";
-        AlertMsg = AlertMsg + Row["AlertMessage"];
+        String AlertType = Row["AlertType"].ToString();
+        if (String.IsNullOrEmpty(AlertType)) AlertType = "High";
+        AlertMsg.Append("<LI");
+        AlertMsg.Append(" class=\"");
+        AlertMsg.Append(AlertType.ToLower());
+        AlertMsg.Append("\">");
+
+        AlertMsg.Append(Row["AlertMessage"]);
+        AlertMsg.Append("</LI>");
+
         SQL = "INSERT INTO PortalAlert_User(UserID, AlertID) VALUES( " +
           id + ", " + Row["AlertID"] + ")";
         Util.doSQL(SQL);
       }
-
-      return AlertMsg;
+      
+      return AlertMsg.ToString();
     }
 
     public ActionResult FlightChart(int id = 0) {
