@@ -12,14 +12,18 @@ using System.Text;
 using System.IO;
 using System.Xml;
 
-namespace eX_Portal.Controllers {
-    public class DashBoardController : Controller {
+namespace eX_Portal.Controllers
+{
+    public class DashBoardController : Controller
+    {
         // GET: DashBoard
-        public ActionResult Default() {
+        public ActionResult Default()
+        {
             return View();
         }
 
-        public ActionResult Dewa() {
+        public ActionResult Dewa()
+        {
             String SQL = @"Select 
         Max(DroneDocuments.ID) as LastID,
         DroneDocuments.DocumentType,
@@ -47,7 +51,8 @@ namespace eX_Portal.Controllers {
             return View(Rows);
         }
 
-        public ActionResult SubSection(int DocumentID = 0) {
+        public ActionResult SubSection(int DocumentID = 0)
+        {
             var DB = new ExponentPortalEntities();
             var Doc = DB.DroneDocuments.Find(DocumentID);
 
@@ -128,9 +133,9 @@ namespace eX_Portal.Controllers {
             return View(Weather);
         }
 
-    
-    public ActionResult ChartDetails()
-    {
+
+        public ActionResult ChartDetails()
+        {
             String SQL = @"select t.DroneId,
                            v.DroneName,
                             max(T.TotalFlightTime) as TotalFlightTime,
@@ -150,7 +155,7 @@ namespace eX_Portal.Controllers {
                             AND  GETDATE()
                             group by  u.DroneId )k on t.DroneId = k.DroneId
                             group by t.DroneId,v.DroneName";
-            
+
             qView nView = new qView(SQL);
             if (Request.IsAjaxRequest())
             {
@@ -163,5 +168,5 @@ namespace eX_Portal.Controllers {
         }
 
 
-} 
+    }
 }
