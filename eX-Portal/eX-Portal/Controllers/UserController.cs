@@ -33,6 +33,7 @@ namespace eX_Portal.Controllers
         }//Login()
 
 
+       
         public string ExponentCertificateDetails([Bind(Prefix = "ID")] int PilotID)
         {
             if (!exLogic.User.hasAccess("EXPCERT.VIEW")) return "Access Denied";
@@ -120,6 +121,8 @@ namespace eX_Portal.Controllers
                 Session["BrandColor"] = thisUser.BrandColor;
                 Session["AccountID"] = thisUser.AccountID;
                 Session["userIpAddress"] = Request.ServerVariables["REMOTE_ADDR"];
+                Session["Lat"] = _objuserlogin.Lat;
+                Session["Lng"]= _objuserlogin.Lng;
                 var browser = Request.Browser.Browser;
 
                 string sessionId = this.Session.SessionID;
