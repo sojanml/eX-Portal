@@ -53,13 +53,37 @@ namespace eX_Portal.Controllers {
 
       return View(Doc);
     }
+
+
         [System.Web.Mvc.HttpGet]
-        public void getWeatherData(string Location)
+        public JsonResult getUASLastFlightChartData()
         {
+            List<object> iData = new List<object>();
+            List<string> labels = new List<string>();
+            List<int> lst_dataItem_2 = new List<int>();
+            List<int> lst_dataItem_1 = new List<int>();
+            List<int> lst_dataItem_3 = new List<int>();
+            List<int> lst_dataItem_4 = new List<int>();
+            List<int> lst_dataItem_5 = new List<int>();
 
-            
-        Util.GetCurrentConditions("AEXX0004" );
 
+            IList<ChartViewModel> ChartList = Util.getUASLastFlightChartData();
+            foreach (ChartViewModel FMD in ChartList)
+            {
+                labels.Add(FMD.DroneName);
+                lst_dataItem_1.Add(Convert.ToInt32(FMD.TotalFightTime / 60));
+              
+
+
+            }
+            iData.Add(labels);
+            iData.Add(lst_dataItem_1);
+          //  iData.Add(lst_dataItem_2);
+            //iData.Add(lst_dataItem_3);
+            //iData.Add(lst_dataItem_4);
+            //iData.Add(lst_dataItem_5);
+
+            return Json(iData, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -81,6 +105,38 @@ namespace eX_Portal.Controllers {
                 labels.Add(FMD.DroneName);
                 lst_dataItem_1.Add(Convert.ToInt32(FMD.TotalFightTime/60));
                 lst_dataItem_2.Add(Convert.ToInt32(FMD.CurrentFlightTime/60));              
+
+
+            }
+            iData.Add(labels);
+            iData.Add(lst_dataItem_1);
+            iData.Add(lst_dataItem_2);
+            //iData.Add(lst_dataItem_3);
+            //iData.Add(lst_dataItem_4);
+            //iData.Add(lst_dataItem_5);
+
+            return Json(iData, JsonRequestBehavior.AllowGet);
+
+        }
+
+        [System.Web.Mvc.HttpGet]
+        public JsonResult getCurrentPilotChartData()
+        {
+            List<object> iData = new List<object>();
+            List<string> labels = new List<string>();
+            List<int> lst_dataItem_2 = new List<int>();
+            List<int> lst_dataItem_1 = new List<int>();
+            List<int> lst_dataItem_3 = new List<int>();
+            List<int> lst_dataItem_4 = new List<int>();
+            List<int> lst_dataItem_5 = new List<int>();
+
+
+            IList<ChartViewModel> ChartList = Util.getCurrentPilotChartData();
+            foreach (ChartViewModel FMD in ChartList)
+            {
+                labels.Add(FMD.PilotName);
+                lst_dataItem_1.Add(Convert.ToInt32(FMD.PilotTotalHrs));
+                lst_dataItem_2.Add(Convert.ToInt32(FMD.PilotCurrentMonthHrs));
 
 
             }
