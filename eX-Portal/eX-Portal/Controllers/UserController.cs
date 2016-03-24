@@ -236,7 +236,8 @@ namespace eX_Portal.Controllers
                 Pilot = new MSTR_User_Pilot(),
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
-                AccountList = Util.GetAccountList()
+                AccountList = Util.GetAccountList(),
+                DashboardList=Util.GetDashboardLists()
 
             };
             return View(viewModel);
@@ -334,6 +335,7 @@ namespace eX_Portal.Controllers
         // GET: DroneService/Edit/5
         public ActionResult Edit(int id)
         {
+            
 
             if (!exLogic.User.hasAccess("USER.EDIT")) return RedirectToAction("NoAccess", "Home");
             var viewModel = new ViewModel.UserViewModel
@@ -342,7 +344,8 @@ namespace eX_Portal.Controllers
                 Pilot = db.MSTR_User_Pilot.Find(id),
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
-                AccountList = Util.GetAccountList()
+                AccountList = Util.GetAccountList(),
+                DashboardList = Util.GetDashboardLists()
             };
             return View(viewModel);
         }
@@ -383,6 +386,7 @@ namespace eX_Portal.Controllers
                   "  HomeNo='" + UserModel.User.HomeNo + "',\n" +
                   "  IsActive='" + UserModel.User.IsActive + "', \n" +
                   "  IsPilot='" + UserModel.User.IsPilot + "',\n" +
+                  "  Dashboard= '" + UserModel.User.Dashboard.ToString() +"',\n"+
                   "  PhotoUrl='" + UserModel.User.PhotoUrl + "'\n" +
                   Pass_SQL +
                   "where\n" +
@@ -411,7 +415,8 @@ namespace eX_Portal.Controllers
 
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
-                AccountList = Util.GetAccountList()
+                AccountList = Util.GetAccountList(),
+                DashboardList = Util.GetDashboardLists()
             };
             return View(viewModel);
 
@@ -471,7 +476,8 @@ namespace eX_Portal.Controllers
                   "  CreatedOn,\n" +
                   "  AccountId,\n" +
                   "  IsPilot, \n" +
-                  "  PhotoUrl\n" +
+                  "  PhotoUrl,\n" +
+                  " Dashboard\n"+
                   ") values(\n" +
                   "  '" + UserModel.User.UserName + "',\n" +
                   "  '" + Password + "',\n" +
@@ -490,7 +496,8 @@ namespace eX_Portal.Controllers
                   "  GETDATE(),\n" +
                   "  " + Util.toInt(UserModel.User.AccountId.ToString()) + ",\n" +
                   "  '" + UserModel.User.IsPilot + "',\n" +
-                  "  '" + UserModel.User.PhotoUrl + "'\n" +
+                  "  '" + UserModel.User.PhotoUrl + "',\n" +
+                  "  '" +(UserModel.User.Dashboard).ToString()+ "'\n" +
                   ")";
                 //inserting pilot information to the pilot table
                 int id = Util.InsertSQL(SQL);
@@ -531,7 +538,8 @@ namespace eX_Portal.Controllers
                 Pilot = UserModel.Pilot,
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
-                AccountList = Util.GetAccountList()
+                AccountList = Util.GetAccountList(),
+                DashboardList = Util.GetDashboardLists()
 
             };
             return View(viewModel);
@@ -776,13 +784,15 @@ namespace eX_Portal.Controllers
                                 {
                                     ViewBag.Message = 0;
                                     ViewBag.MessageText = "Password Does not match....";
-
+ 
                                 }
                             }
                             catch (Exception ex)
                             {
+                               
                                 ViewBag.Message = 0;
                                 ViewBag.MessageText = "Please Enter NewPassword and ConfirmPassword";
+                                Console.WriteLine("{0} Exception caught.", ex);
 
                             }
                             //}
