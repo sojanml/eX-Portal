@@ -283,7 +283,7 @@ namespace eX_Portal.Controllers
             qDetailView nView = new qDetailView(SQL);
             //this part for adding link to requred fields in the details
             OwnerId = Util.GetAccountIDFromDrone(DroneID);
-            OwnerFormat = "<a  href='/Admin/AccountDetail/" + OwnerId + "'>$OwnerName</a>";//url
+            OwnerFormat = "<a  href='/Admin/AccountDetail/" + OwnerId + "'>$OwnerName$</a>";//url
 
             nView.FormatCols.Add("OwnerName", OwnerFormat); //Adding the Column required for formatting  
             return ReassignDetail(DroneID) + DecommissionDetail(DroneID) + nView.getTable();

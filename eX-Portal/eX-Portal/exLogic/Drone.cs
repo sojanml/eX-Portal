@@ -269,7 +269,7 @@ namespace eX_Portal.exLogic {
         //return VideoURL;
       }
 
-      return "";
+      return "rtmp://52.29.242.123/live/drone" + _DroneID; 
 
     }
 
