@@ -162,9 +162,11 @@ namespace eX_Portal.Controllers
             string SQL = "select a.UserName,a.FirstName,a.MobileNo,b.ProfileName, Count(*) Over() as _TotalRecords ,  a.UserId as _PKey " +
                 " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId  ";
 
-
             qView nView = new qView(SQL);
-
+            if (!exLogic.User.hasAccess("USER.VIEW")) return RedirectToAction("NoAccess", "Home");
+            
+                nView.addMenu("Session Log", Url.Action("UserLogList", new { ID = "_PKey" }));
+            
             if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
@@ -177,8 +179,6 @@ namespace eX_Portal.Controllers
             else {
                 return View(nView);
             }//if(IsAjaxRequest)
-
-
 
         }
         public ActionResult PilotList()
@@ -205,7 +205,6 @@ namespace eX_Portal.Controllers
             }
 
             qView nView = new qView(SQL);
-
             if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
@@ -811,9 +810,9 @@ namespace eX_Portal.Controllers
         }
 
 
-        public ActionResult UserLogList()
+        public ActionResult UserLogList([Bind(Prefix = "ID")]int UserID = 0)
         {
-            String SQL = "SELECT [ID]\n ,[UserID]\n,[LoggedInTime]\n,[LoggedOfTime]\n ,[UserIPAddress]\n ,[Browser]\n,[SessionID]\n,Count(*) Over() as _TotalRecords,ID as _PKey FROM [ExponentPortal].[dbo].[UserLog]";
+            String SQL = "SELECT [ID]\n ,[UserID]\n,[LoggedInTime]\n,[LoggedOfTime]\n ,[UserIPAddress]\n ,[Browser]\n,[SessionID]\n,Count(*) Over() as _TotalRecords,ID as _PKey FROM [ExponentPortal].[dbo].[UserLog] Where UserID = "+ UserID;
             qView nView = new qView(SQL);
             if (Request.IsAjaxRequest())
             {
