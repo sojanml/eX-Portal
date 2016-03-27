@@ -163,9 +163,9 @@ namespace eX_Portal.Controllers
                 " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId  ";
 
             qView nView = new qView(SQL);
-            if (!exLogic.User.hasAccess("USER.VIEW")) return RedirectToAction("NoAccess", "Home");
+           if (!exLogic.User.hasAccess("USER.SESSIONLOG")) return RedirectToAction("NoAccess", "Home");
             
-                nView.addMenu("Session Log", Url.Action("UserLogList", new { ID = "_PKey" }));
+               nView.addMenu("Session Log", Url.Action("UserLogList", new { ID = "_PKey" }));
             
             if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
