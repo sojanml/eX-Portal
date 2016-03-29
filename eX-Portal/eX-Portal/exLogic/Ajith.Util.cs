@@ -422,9 +422,10 @@ namespace eX_Portal.exLogic
           
             WeatherViewModel Weather = new WeatherViewModel();
             // string forecastUrl = "http://weather.yahooapis.com/forecastrss?&" + "p=" + Location + "&u=c";
-            string forecastUrl = "http://weather.yahooapis.com/forecastrss?w=" + Location + "&u=c"; ;
-         // open a XmlTextReader object using the constructed url
-        XmlTextReader reader = new XmlTextReader(forecastUrl);
+          //  string forecastUrl = "http://weather.yahooapis.com/forecastrss?w=" + Location + "&u=c";
+            string forecastUrl = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid=" + Location;
+            // open a XmlTextReader object using the constructed url
+            XmlTextReader reader = new XmlTextReader(forecastUrl);
             // loop through xml result node by node
             while (reader.Read())
             {
