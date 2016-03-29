@@ -164,7 +164,7 @@
     var UserID = '@Session["UserID"]';
   </script>
   <script type="text/javascript" src="~/Scripts/map.js"></script>
-  @if (!String.IsNullOrEmpty(ViewBag.VideoURL)) {
+
   <script src="~/jwplayer/jwplayer.js"></script>
   <script>jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";</script>
   <script type="text/javascript">
@@ -172,20 +172,19 @@
     $(document).ready(function () {
       playerInstance = jwplayer("myElement");
       playerInstance.setup({
-        file: "@ViewBag.VideoURL",
+        @Html.Raw(ViewBag.PlayerURL),
         width: 256,
         height: 192,
-        title: '@(ViewBag.VideoURL.Substring(0, 5) == "rtmp:" ? "Live Video" : "Recorded Video")',
         description: 'Click on play to start video.',
         mediaid: '123456',
         rtmp: {
           bufferlength: @Buffer
           }
-      });
+        });
     })
 
   </script>
-    }
+    
   }
 
 

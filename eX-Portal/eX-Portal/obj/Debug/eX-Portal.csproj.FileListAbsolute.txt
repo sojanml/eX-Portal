@@ -173,6 +173,8 @@ C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\eX-Portal.dll.config
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\eX-Portal.dll
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\eX-Portal.pdb
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\Antlr3.Runtime.dll
+C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.Core.dll
+C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.S3.dll
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\EntityFramework.dll
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\EntityFramework.SqlServer.dll
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\FileStorageUtils.dll
@@ -201,6 +203,10 @@ C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\System.Web.WebPages.Deploymen
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\System.Web.WebPages.dll
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\System.Web.WebPages.Razor.dll
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\WebGrease.dll
+C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.Core.pdb
+C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.Core.xml
+C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.S3.pdb
+C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.S3.xml
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\FileStorageUtils.pdb
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\System.Web.Helpers.xml
@@ -229,9 +235,3 @@ C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\Microsoft.Owin.Security.Micro
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.dll
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.pdb
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache
-C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.Core.dll
-C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.S3.dll
-C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.Core.pdb
-C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.Core.xml
-C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.S3.pdb
-C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\AWSSDK.S3.xml

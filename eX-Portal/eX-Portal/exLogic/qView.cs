@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace eX_Portal.exLogic {
@@ -90,6 +91,8 @@ namespace eX_Portal.exLogic {
       foreach (var col in DataColumns.aColumnInfoList.ColumnList) {
         String ColName = col.Alias;
         String FieldName = (col.TableAlias == "" ? "" : col.TableAlias + ".") + col.TableColumnName;
+        if (String.IsNullOrEmpty(FieldName)) FieldName = col.Expression;
+        //                   (String.IsNullOrEmpty(col.TableColumnName) ? col.Alias : );
         ColumnMapping.Add(ColName, FieldName);
       }
     }
@@ -154,8 +157,14 @@ namespace eX_Portal.exLogic {
       int RowLength = Util.toInt(Request["length"]);
       myParser.OrderByClause = "";
       SQL = myParser.ToText();
+
+      //Replace only first instance of SQL with RowNumber()
+      var regex = new Regex(Regex.Escape("SELECT"));
+      String RowNumber = "SELECT ROW_NUMBER() OVER (ORDER BY " + ColumnMapping[OrderField] + " " + OrderDir + ") AS _RowNumber,\n";
+      SQL = regex.Replace(SQL, RowNumber, 1);
+
       String newSQL = "SELECT * FROM (\n" +
-        SQL.Replace("SELECT ", "SELECT ROW_NUMBER() OVER (ORDER BY " + ColumnMapping[OrderField] + " " + OrderDir + ") AS _RowNumber,\n") +
+        SQL +
         ") as QueryTable\n" +
         "WHERE\n" +
         "  _RowNumber > " + StartAt + " AND _RowNumber <= " + (RowLength + StartAt) + "\n" +
