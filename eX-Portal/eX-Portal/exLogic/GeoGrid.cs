@@ -55,7 +55,8 @@ namespace eX_Portal.exLogic {
       } 
     }
 
-    public Yard getYard() {
+    public Yard getYard(int thisYardID = 0) {
+      if (thisYardID == 0) thisYardID = _YardID;
       String SQL = @"SELECT
         [AccountID],
         [YardName],
@@ -75,11 +76,11 @@ namespace eX_Portal.exLogic {
       FROM 
         [PayLoadYard]
       WHERE
-        YardID=" + _YardID;
+        YardID=" + thisYardID;
       var Row = Util.getDBRow(SQL);
       var theYard = new Yard();
       if(Row["hasRows"].ToString() == "True") theYard = new Yard {
-        YardID = _YardID,
+        YardID = thisYardID,
         AccountID = Util.toInt(Row["AccountID"]),
         YardName = Row["YardName"].ToString(),
         VechileOrientation = Row["VechileOrientation"].ToString(),

@@ -11,6 +11,8 @@ namespace eX_Portal.ViewModel {
     public IEnumerable<SelectListItem> ProfileList { get; set; }
     public IEnumerable<SelectListItem> CountryList { get; set; }
     public IEnumerable<SelectListItem> AccountList { get; set; }
+    public IEnumerable<SelectListItem> DashboardList { get; set; }
+    
 
   }
 

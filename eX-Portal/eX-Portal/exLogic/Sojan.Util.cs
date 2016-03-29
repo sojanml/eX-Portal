@@ -153,6 +153,8 @@ namespace eX_Portal.exLogic {
       return Result;
     }
 
+    
+
     public static Dictionary<String, Object> getDBRow(String SQL) {
       var Result = new Dictionary<String, Object>();
       Result["hasRows"] = false;
@@ -451,6 +453,24 @@ namespace eX_Portal.exLogic {
       if (TildAt > 0) return FullFile.Substring(TildAt + 1);
       return FullFile;
     }
+
+
+    public static String getAllYardsAsOptions(String YardID) {
+      String SQL = "SELECT YardID, YardName FROM PayLoadYard ORDER BY YardName";
+      StringBuilder Options = new StringBuilder();
+      var Rows = getDBRows(SQL);
+      foreach(var row in Rows) {
+        Options.Append("<option");
+        if(YardID == row["YardID"].ToString()) Options.Append(" selected");
+        Options.Append(" value=\"");
+        Options.Append(row["YardID"].ToString());
+        Options.Append("\">");
+        Options.Append(row["YardName"].ToString());
+        Options.AppendLine("</option>");
+      }
+      return Options.ToString();
+    }
+
 
   }//class Util
 }

@@ -128,21 +128,29 @@ namespace eX_Portal.Controllers {
 
     }
 
+    public JsonResult getYard([Bind(Prefix = "ID")] int YardID = 0) {
+      GeoGrid theYard = new GeoGrid(0);
+      return Json(theYard.getYard(YardID), JsonRequestBehavior.AllowGet); 
+    }
+
     [System.Web.Mvc.HttpPost]
     public JsonResult setYard(PayLoadYard Yard) {
       ExponentPortalEntities DB = new ExponentPortalEntities();
+      String SQL;
       if (Request["chkNewSetting"] == "1") {
         DB.PayLoadYards.Add(Yard);
         DB.SaveChanges();
       } else {
-        DB.Entry(Yard).State = EntityState.Modified;
+        var entry = DB.Entry(Yard);
+        entry.State = EntityState.Modified;
+        entry.Property("YardName").IsModified = false;
         DB.SaveChanges();
       }
 
       //If created a new Yard, then set the Yard ID
       //of current Payload Flight to new one
-      if (Request["chkNewSetting"] == "1") {
-        String SQL;
+      //if (Request["chkNewSetting"] == "1") {
+
         SQL = "UPDATE PayLoadMapData SET YardID=" + Yard.YardID +
         " WHERE FlightUniqueID='" + Request["FlightUniqueID"] + "'";
         Util.doSQL(SQL);
@@ -150,10 +158,9 @@ namespace eX_Portal.Controllers {
         SQL = "UPDATE PayLoadFlight SET YardID=" + Yard.YardID +
         " WHERE FlightUniqueID='" + Request["FlightUniqueID"] + "'";
         Util.doSQL(SQL);
-      }
+      //}
 
       if(Request["chkReProcess"] == "1") {
-        String SQL;
         SQL = "UPDATE PayLoadMapData SET \n" + 
         " YardID=" + Yard.YardID + ",\n" +
         " RowNumber= -1,\n" +

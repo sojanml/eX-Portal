@@ -4,21 +4,9 @@
 
 <div id="rfid-settings-layer" style="display:none">
   <form method="post" name="setYard" id="setYard" action="/Map/setYard">
-  <input type="hidden" name="FlightUniqueID" value="@ViewBag.FlightUniqueID" />
+    <input type="hidden" name="FlightUniqueID" value="@ViewBag.FlightUniqueID" />
     <input type="hidden" name="YardID" value="@ViewBag.Yard.YardID" />
 
-    <table style="width: 100%">
-      <tr>
-        <td style="white-space: nowrap;">Change Yard to</td>
-        <td style="width: 100%">
-          <select name="loadYardID">
-            <option></option>
-          </select>
-        </td>
-        <td style="white-space: nowrap;">(This will process the grid again)</td>
-        <td><input type="button" name="btnLoadYard" value="Load"></td>
-      </tr>
-    </table>
 
     <table style="width: 100%">
       <tr>
@@ -61,7 +49,7 @@
         <td>
           <input name="BottomLeftLon" type="text">
         </td>
-        <td><input type="button" id="btnAutoSet" class="button" value="Auto Set"/></td>
+        <td><input type="button" id="btnAutoSet" class="button" value="Auto Set" /></td>
       </tr>
     </table>
 
@@ -71,11 +59,14 @@
         <td>Width</td>
         <td>Height</td>
         <td>Save Yard Setting as</td>
-        <td><input  id="chkNewSetting" 
-         @ViewBag.Yard.isChecked("new")
-        name="chkNewSetting" value="1" type="checkbox" /></td>
+        <td>
+          <input id="chkNewSetting"
+                 @ViewBag.Yard.isChecked("new")
+                 name="chkNewSetting" value="1" type="checkbox" />
+        </td>
         <td style="white-space:nowrap">
-          <label for="chkNewSetting">Save as New Setting</label></td>
+          <label for="chkNewSetting">Save as New Setting</label>
+        </td>
         <td>&nbsp;</td>
       </tr>
       <tr>
@@ -93,12 +84,25 @@
           <input style="width:100px;" name="VechileWidth" value="@ViewBag.Yard.VechileWidth" type="text">
         </td>
         <td>
-          <input style="width:100px;"  name="VechileLength" value="@ViewBag.Yard.VechileLength" type="text">
+          <input style="width:100px;" name="VechileLength" value="@ViewBag.Yard.VechileLength" type="text">
         </td>
         <td>
-          <input name="YardName" value="@ViewBag.Yard.YardName" type="text">
+          <div id="YardName-list"
+            @if (String.IsNullOrEmpty(ViewBag.Yard.YardID.ToString())) { 
+                @: style="display:none;"
+            }>
+            <select style="width:200px;" id="loadYardID" name="loadYardID">
+              @Html.Raw(Util.getAllYardsAsOptions(ViewBag.Yard.YardID.ToString()))
+            </select>
+          </div>
+          <div id="YardName-text"
+            @if (!String.IsNullOrEmpty(ViewBag.Yard.YardID.ToString())) { 
+                @: style="display:none;"
+            }>
+            <input style="width:200px;" name="YardName" value="@ViewBag.Yard.YardName" type="text">
+          </div>
         </td>
-        <td><input id="chkReProcess" checked="checked"  name="chkReProcess" type="checkbox"  value="1"/></td>
+        <td><input id="chkReProcess" checked="checked" name="chkReProcess" type="checkbox" value="1" /></td>
         <td style="white-space:nowrap"><label for="chkReProcess">Process Row/Column again</label></td>
         <td><input class="button" type="submit" id="btnSubmit" name="btnSubmit" value="Save"></td>
       </tr>

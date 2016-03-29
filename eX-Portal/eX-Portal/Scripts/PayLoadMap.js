@@ -28,6 +28,28 @@ $(document).ready(function () {
   setCordinatesEditable();
 
 
+  $('#chkNewSetting').on("click", function (e) {
+    if ($(this).is(":checked")) {
+      $('#YardName-list').slideUp();
+      $('#YardName-text').slideDown();
+    } else {
+      $('#YardName-list').slideDown();
+      $('#YardName-text').slideUp();
+    }
+  });
+
+  $('#loadYardID').on("change", function (e) {
+    var value = $(this).val();
+    var URL = '/Map/getYard/' + value;
+    $.ajax({
+      url: URL,
+      method: 'GET'
+    }).done(function (data) {
+      setYard(data);
+    });
+    //alert('Value=' + value);
+  });
+
   $('#rfid-settings').on("click", rfid_settings);
 
   $('#rfid-virtual-grid').on("click", function (e) {
@@ -49,7 +71,45 @@ $(document).ready(function () {
   $('#setYard').on("submit", setYard_post);
   $('#btnAutoSet').on("click", btnAutoSet_click);
 
+
+
 });
+
+function setYard(theYard) {
+  var Form = document.forms['setYard'];
+  Form['TopLeftLat'].value  = theYard.Bounds.TopLeft.Latitude;
+  Form['TopLeftLon'].value  = theYard.Bounds.TopLeft.Longitude;
+  Form['TopRightLat'].value = theYard.Bounds.TopRight.Latitude;
+  Form['TopRightLon'].value = theYard.Bounds.TopRight.Longitude;
+
+  Form['BottomLeftLat'].value  = theYard.Bounds.BottomLeft.Latitude;
+  Form['BottomLeftLon'].value  = theYard.Bounds.BottomLeft.Longitude;
+  Form['BottomRightLat'].value = theYard.Bounds.BottomRight.Latitude;
+  Form['BottomRightLon'].value = theYard.Bounds.BottomRight.Longitude;
+
+  Form['VechileOrientation_H'].checked = (theYard.VechileOrientation == 'H');
+  Form['VechileOrientation_V'].checked = (theYard.VechileOrientation == 'V');
+
+  Form['VechileWidth'].value = theYard.VechileWidth;
+  Form['VechileLength'].value = theYard.VechileLength;
+
+  Form['YardID'].value = theYard.YardID;
+
+
+  var Cord = ['TopLeft', 'TopRight', 'BottomRight', 'BottomLeft'];
+  for (var i = 0; i < Cord.length; i++) {
+    var Lat = parseFloat(Form[Cord[i] + 'Lat'].value);
+    var Lon = parseFloat(Form[Cord[i] + 'Lon'].value);
+    if (isNaN(Lat) || isNaN(Lon)) {
+      alert('invalid point at:' + i);
+      return;
+    }
+    var Point = new google.maps.LatLng(Lat, Lon);
+    BoundaryBox.getPath().setAt(i, Point);
+    BoundaryMarker[i].setPosition(Point);
+  }
+
+}
 
 function btnAutoSet_click(e) {
   //auto border set
@@ -638,8 +698,8 @@ function setYard_post(e) {
 function setYard_post_done(data, textStatus, jqXHR) {
   $('#rfid-settings-layer').slideUp();
   $('#btnSubmit').val("Save");
-  dorument.forms['setYard']['YardID'].value = data.YardID;
-  dorument.forms['setYard']['chkNewSetting'].checked = false;
+  document.forms['setYard']['YardID'].value = data.YardID;
+  document.forms['setYard']['chkNewSetting'].checked = false;
 }
 
 function btnAutoSet_click(e) {
