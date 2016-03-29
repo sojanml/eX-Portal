@@ -162,9 +162,11 @@ namespace eX_Portal.Controllers
             string SQL = "select a.UserName,a.FirstName,a.MobileNo,b.ProfileName, Count(*) Over() as _TotalRecords ,  a.UserId as _PKey " +
                 " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId  ";
 
-
             qView nView = new qView(SQL);
-
+           if (!exLogic.User.hasAccess("USER.SESSIONLOG")) return RedirectToAction("NoAccess", "Home");
+            
+               nView.addMenu("Session Log", Url.Action("UserLogList", new { ID = "_PKey" }));
+            
             if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
@@ -177,8 +179,6 @@ namespace eX_Portal.Controllers
             else {
                 return View(nView);
             }//if(IsAjaxRequest)
-
-
 
         }
         public ActionResult PilotList()
@@ -205,7 +205,6 @@ namespace eX_Portal.Controllers
             }
 
             qView nView = new qView(SQL);
-
             if (exLogic.User.hasAccess("USER.VIEW")) nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("USER.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("USER.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
@@ -236,7 +235,8 @@ namespace eX_Portal.Controllers
                 Pilot = new MSTR_User_Pilot(),
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
-                AccountList = Util.GetAccountList()
+                AccountList = Util.GetAccountList(),
+                DashboardList=Util.GetDashboardLists()
 
             };
             return View(viewModel);
@@ -334,6 +334,7 @@ namespace eX_Portal.Controllers
         // GET: DroneService/Edit/5
         public ActionResult Edit(int id)
         {
+            
 
             if (!exLogic.User.hasAccess("USER.EDIT")) return RedirectToAction("NoAccess", "Home");
             var viewModel = new ViewModel.UserViewModel
@@ -342,7 +343,8 @@ namespace eX_Portal.Controllers
                 Pilot = db.MSTR_User_Pilot.Find(id),
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
-                AccountList = Util.GetAccountList()
+                AccountList = Util.GetAccountList(),
+                DashboardList = Util.GetDashboardLists()
             };
             return View(viewModel);
         }
@@ -383,6 +385,7 @@ namespace eX_Portal.Controllers
                   "  HomeNo='" + UserModel.User.HomeNo + "',\n" +
                   "  IsActive='" + UserModel.User.IsActive + "', \n" +
                   "  IsPilot='" + UserModel.User.IsPilot + "',\n" +
+                  "  Dashboard= '" + UserModel.User.Dashboard.ToString() +"',\n"+
                   "  PhotoUrl='" + UserModel.User.PhotoUrl + "'\n" +
                   Pass_SQL +
                   "where\n" +
@@ -411,7 +414,8 @@ namespace eX_Portal.Controllers
 
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
-                AccountList = Util.GetAccountList()
+                AccountList = Util.GetAccountList(),
+                DashboardList = Util.GetDashboardLists()
             };
             return View(viewModel);
 
@@ -471,7 +475,8 @@ namespace eX_Portal.Controllers
                   "  CreatedOn,\n" +
                   "  AccountId,\n" +
                   "  IsPilot, \n" +
-                  "  PhotoUrl\n" +
+                  "  PhotoUrl,\n" +
+                  " Dashboard\n"+
                   ") values(\n" +
                   "  '" + UserModel.User.UserName + "',\n" +
                   "  '" + Password + "',\n" +
@@ -490,7 +495,8 @@ namespace eX_Portal.Controllers
                   "  GETDATE(),\n" +
                   "  " + Util.toInt(UserModel.User.AccountId.ToString()) + ",\n" +
                   "  '" + UserModel.User.IsPilot + "',\n" +
-                  "  '" + UserModel.User.PhotoUrl + "'\n" +
+                  "  '" + UserModel.User.PhotoUrl + "',\n" +
+                  "  '" +(UserModel.User.Dashboard).ToString()+ "'\n" +
                   ")";
                 //inserting pilot information to the pilot table
                 int id = Util.InsertSQL(SQL);
@@ -531,7 +537,8 @@ namespace eX_Portal.Controllers
                 Pilot = UserModel.Pilot,
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
-                AccountList = Util.GetAccountList()
+                AccountList = Util.GetAccountList(),
+                DashboardList = Util.GetDashboardLists()
 
             };
             return View(viewModel);
@@ -776,13 +783,15 @@ namespace eX_Portal.Controllers
                                 {
                                     ViewBag.Message = 0;
                                     ViewBag.MessageText = "Password Does not match....";
-
+ 
                                 }
                             }
                             catch (Exception ex)
                             {
+                               
                                 ViewBag.Message = 0;
                                 ViewBag.MessageText = "Please Enter NewPassword and ConfirmPassword";
+                                Console.WriteLine("{0} Exception caught.", ex);
 
                             }
                             //}
@@ -801,9 +810,9 @@ namespace eX_Portal.Controllers
         }
 
 
-        public ActionResult UserLogList()
+        public ActionResult UserLogList([Bind(Prefix = "ID")]int UserID = 0)
         {
-            String SQL = "SELECT [ID]\n ,[UserID]\n,[LoggedInTime]\n,[LoggedOfTime]\n ,[UserIPAddress]\n ,[Browser]\n,[SessionID]\n,Count(*) Over() as _TotalRecords,ID as _PKey FROM [ExponentPortal].[dbo].[UserLog]";
+            String SQL = "SELECT [ID]\n ,[UserID]\n,[LoggedInTime]\n,[LoggedOfTime]\n ,[UserIPAddress]\n ,[Browser]\n,[SessionID]\n,Count(*) Over() as _TotalRecords,ID as _PKey FROM [ExponentPortal].[dbo].[UserLog] Where UserID = "+ UserID;
             qView nView = new qView(SQL);
             if (Request.IsAjaxRequest())
             {
