@@ -27,9 +27,14 @@ namespace eX_Portal.exLogic {
     public static int doSQL(String SQL) {
       int result = 0;
       using (var ctx = new ExponentPortalEntities()) {
+        ctx.Database.Connection.Open();
         result = ctx.Database.ExecuteSqlCommand(SQL);
       }
       return result;
+    }
+
+    public static int doSQL(String SQL, ExponentPortalEntities ctx) {
+      return ctx.Database.ExecuteSqlCommand(SQL);
     }
 
     public static int InsertSQL(String SQL) {
@@ -168,10 +173,18 @@ namespace eX_Portal.exLogic {
       return Result;
     }//function
 
+
     public static String getDBRowsJson(String SQL) {
+      using (var ctx = new ExponentPortalEntities()) {
+        ctx.Database.Connection.Open();
+        return getDBRowsJson(SQL, ctx);
+      }
+    }
+
+    public static String getDBRowsJson(String SQL, ExponentPortalEntities ctx) {
       StringBuilder SB = new StringBuilder();
       StringBuilder sRow = new StringBuilder();
-      List<Dictionary<String, Object>> Rows = getDBRows(SQL);
+      List<Dictionary<String, Object>> Rows = getDBRows(SQL, ctx);
       foreach (var Row in Rows) {
         if (SB.Length > 0) SB.AppendLine(",");
         sRow.Clear();
@@ -208,11 +221,17 @@ namespace eX_Portal.exLogic {
     }
 
     public static List<Dictionary<String, Object>> getDBRows(String SQL) {
+      using (var ctx = new ExponentPortalEntities()) {
+        ctx.Database.Connection.Open();
+        return getDBRows(SQL, ctx);
+      }
+    }
+    public static List<Dictionary<String, Object>> getDBRows(String SQL, ExponentPortalEntities ctx) {
       var Rows = new List<Dictionary<String, Object>>();
       var Result = new Dictionary<String, Object>();
-      using (var ctx = new ExponentPortalEntities()) {
+      
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
-          ctx.Database.Connection.Open();
+          //ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
@@ -225,7 +244,7 @@ namespace eX_Portal.exLogic {
             }//while
           }//using reader
         }//using ctx.Database.Connection.CreateCommand
-      }//using ExponentPortalEntities
+      
       return Rows;
     }//function
 

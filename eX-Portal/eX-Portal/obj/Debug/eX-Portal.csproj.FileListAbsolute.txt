@@ -234,3 +234,4 @@ C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\Microsoft.Owin.Security.Twitt
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.dll
 C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.pdb
+C:\Web\eX-Portal\eX-Portal\eX-Portal\eX-Portal\obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache

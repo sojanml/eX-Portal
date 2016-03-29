@@ -1,0 +1,88 @@
+﻿@model eX_Portal.ViewModel.WeatherViewModel
+
+<div style="
+     margin 10px;
+     padding 10px;
+     width 500px;
+     height 300px;
+     border 1px solid black;">
+
+
+  <div>
+    <label>@Html.DisplayFor(Model => Model.City)</label><br>
+    <img src="~/images/fonts/sunshine.png" />
+
+    <label>@Html.DisplayFor(Model => Model.ConditionTemperature)</label>
+    <label>@Html.DisplayFor(Model => Model.TemperatureUnit)</label>
+
+
+  </div>
+  <div>
+
+    <table>
+      <thead>ForeCast</thead>
+      <tr>
+        <td>Date </td>
+        <td>Low</td>
+        <td>High</td>
+        <td>Status</td>
+      </tr>
+
+
+      @foreach (var item in Model.Forecast) {
+          <tr>
+            <td>@item.Date</td>
+            <td>@item.TempLow</td>
+            <td>@item.TempHigh</td>
+            <td>@item.status</td>
+          </tr>
+
+      }
+    </table>
+  </div>
+  <h6>Atmosphere</h6>
+  <div>
+    @Html.LabelFor(model => model.Humidity, "Humidity:")
+    <label>@Html.DisplayFor(Model => Model.Humidity)%</label>
+
+
+
+
+    @Html.LabelFor(model => model.Visibility, "Visibility:")
+    <label>@Html.DisplayFor(Model => Model.Visibility)KM</label><br>
+    @Html.LabelFor(model => model.Visibility, "Pressure:")
+    <label>@Html.DisplayFor(Model => Model.Pressure)MB</label><br>
+    @Html.LabelFor(model => model.Visibility, "Status:")
+    <label>@Html.DisplayFor(Model => Model.PressureStatus)</label><br>
+
+  </div>
+  <div>
+    <h6>Wind</h6>
+    @Html.LabelFor(model => model.Chill, "Chill:")
+    <label>@Html.DisplayFor(Model => Model.Chill) C</label><br>
+    @Html.LabelFor(model => model.Direction, "Direction:")
+    <label>@Html.DisplayFor(Model => Model.Direction) Degrees</label><br>
+    @Html.LabelFor(model => model.Direction, "Speed:")
+    <label>@Html.DisplayFor(Model => Model.Speed) MPH</label><br>
+  </div>
+  <div style="float:left">
+    <h6>Astronomy</h6>
+    @Html.LabelFor(model => model.Sunrise, "Sun Rise:")
+    <label>@Html.DisplayFor(Model => Model.Sunrise) AM</label><br>
+    @Html.LabelFor(model => model.Sunrise, "Sun Set:")
+    <label>@Html.DisplayFor(Model => Model.Sunset) PM</label><br>
+  </div>
+
+  <div style="float:left">
+    <h6>WeatherCondition</h6>
+    @Html.LabelFor(model => model.ConditionDate, "Date:")
+    <label>@Html.DisplayFor(Model => Model.ConditionDate) </label><br>
+    @Html.LabelFor(model => model.ConditionTemperature, "Temperature:")
+    <label>@Html.DisplayFor(Model => Model.ConditionTemperature) C</label><br>
+    @Html.LabelFor(model => model.ConditionText, "Condition:")
+    <label>@Html.DisplayFor(Model => Model.ConditionText)</label><br>
+
+  </div>
+
+</div>
+
