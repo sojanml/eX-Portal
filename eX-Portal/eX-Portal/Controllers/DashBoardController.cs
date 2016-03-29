@@ -60,6 +60,7 @@ namespace eX_Portal.Controllers
     }
 
 
+
         [System.Web.Mvc.HttpGet]
         public JsonResult getUASLastFlightChartData()
         {
@@ -71,8 +72,7 @@ namespace eX_Portal.Controllers
             List<int> lst_dataItem_4 = new List<int>();
             List<int> lst_dataItem_5 = new List<int>();
 
-            
-            Util.GetCurrentConditions("AEXX0004");
+
             IList<ChartViewModel> ChartList = Util.getUASLastFlightChartData();
             foreach (ChartViewModel FMD in ChartList)
             {
@@ -81,10 +81,10 @@ namespace eX_Portal.Controllers
 
 
 
-        }
+            }
             iData.Add(labels);
             iData.Add(lst_dataItem_1);
-          //  iData.Add(lst_dataItem_2);
+            //  iData.Add(lst_dataItem_2);
             //iData.Add(lst_dataItem_3);
             //iData.Add(lst_dataItem_4);
             //iData.Add(lst_dataItem_5);
@@ -103,8 +103,8 @@ namespace eX_Portal.Controllers
             List<int> lst_dataItem_3 = new List<int>();
             List<int> lst_dataItem_4 = new List<int>();
             List<int> lst_dataItem_5 = new List<int>();
-          
-           
+
+
             IList<ChartViewModel> ChartList = Util.getCurrentFlightChartData();
             foreach (ChartViewModel FMD in ChartList)
             {
@@ -179,7 +179,7 @@ namespace eX_Portal.Controllers
             {
                 Lng = "55.2708";
             }
-          
+
             WeatherViewModel Weather = new WeatherViewModel();
             //getting the exact place from lat and long
             City = Util.GetLocation(Lat, Lng);
@@ -189,6 +189,7 @@ namespace eX_Portal.Controllers
             Weather = Util.GetCurrentConditions(woeid);
             return View(Weather);
         }
+
 
 
         public ActionResult ChartDetails()
