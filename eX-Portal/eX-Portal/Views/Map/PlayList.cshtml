@@ -1,0 +1,24 @@
+﻿@using eX_Portal.Models
+@using eX_Portal.exLogic
+@model List<Dictionary<String, Object>>
+@{ 
+  
+  Layout = null;
+}
+<rss version="2.0"
+     xmlns:media="http://search.yahoo.com/mrss/"
+     xmlns:jwplayer="http://developer.longtailvideo.com/trac/wiki/FlashFormats">
+  <channel>
+    <title>Example media RSS playlist</title>
+    @foreach(var Row in Model) { 
+    <item>
+      <title>@Row["VideoURL"]</title>
+      <media:group>
+        <media:content url="@S3Download.getURL("VOD/" + Row["VideoURL"].ToString())"></media:content>
+      </media:group>
+    </item>
+    }
+
+
+  </channel>
+</rss>

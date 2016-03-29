@@ -12,18 +12,12 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PortalAlert
+    public partial class PortalAuth
     {
-        public int AlertID { get; set; }
-        public Nullable<int> FlightID { get; set; }
-        public Nullable<System.DateTime> FlightReadTime { get; set; }
-        public Nullable<decimal> Latitude { get; set; }
-        public Nullable<decimal> Longitude { get; set; }
-        public Nullable<int> Altitude { get; set; }
-        public Nullable<int> FlightDataID { get; set; }
-        public string AlertMessage { get; set; }
+        public int AuthID { get; set; }
+        public int UserID { get; set; }
+        public string AuthKey { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
-        public Nullable<int> SMSSend { get; set; }
-        public string AlertType { get; set; }
+        public Nullable<System.DateTime> ExpiredOn { get; set; }
     }
 }

@@ -41,5 +41,8 @@ namespace eX_Portal.Models
         public Nullable<byte> IsLogged { get; set; }
         public Nullable<bool> IsFlightOutside { get; set; }
         public string RecordedVideoURL { get; set; }
+        public Nullable<int> IsFlightSoftFence { get; set; }
+        public Nullable<int> LowerLimit { get; set; }
+        public Nullable<int> HigherLimit { get; set; }
     }
 }

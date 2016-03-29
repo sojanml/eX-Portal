@@ -1,0 +1,33 @@
+﻿@using eX_Portal.Models;
+@{
+  ViewBag.Title = "SMS Numbers";
+}
+@if(ViewBag.Mode == "edit") { 
+
+using (Html.BeginForm()) {
+
+@Html.AntiForgeryToken()
+  <div class="form-group">
+    <div>Enter the SMS Numbers, in each line<br />
+    (Do not include leading 0 or +, but inlude country code for example: 971501234567)</div>
+    <div class="col-md-10">
+      <textarea style="height:200px" name="CellNumber">@ViewBag.SMS</textarea>
+    </div>
+  </div>
+  
+
+  <div class="form-toolbar">
+    <input type="submit" value="Create" />
+  </div>
+
+}
+
+} else {
+<div>
+  Following are the modified SMS numbers on system
+</div>
+<pre>
+@ViewBag.SMS
+
+</pre>
+}

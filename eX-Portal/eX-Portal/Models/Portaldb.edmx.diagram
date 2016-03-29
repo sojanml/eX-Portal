@@ -42,6 +42,8 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PortalAlert" Width="1.5" PointX="19.375" PointY="5.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.PayLoad_AutoFix" Width="1.5" PointX="19.375" PointY="9.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.UserLog" Width="1.5" PointX="19.375" PointY="12.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneFlightVideo" Width="1.5" PointX="19.75" PointY="16.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PortalAuth" Width="1.5" PointX="0.75" PointY="20.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

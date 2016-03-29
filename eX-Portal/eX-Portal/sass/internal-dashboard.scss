@@ -3,7 +3,8 @@
 // first we set the variables:
 @import "_colors.scss";
 $BaseColor: gray;
-$HiliteColor: #005b90;
-$SparkColor: rgb(1,192,116);
+$HiliteColor: red;
+$SparkColor: rgba(234, 5, 14,0.6);
+
 
 @import "dashboard.scss";

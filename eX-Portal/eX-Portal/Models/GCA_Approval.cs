@@ -32,5 +32,7 @@ namespace eX_Portal.Models
         public Nullable<int> BoundaryInMeters { get; set; }
         public Nullable<int> MinAltitude { get; set; }
         public Nullable<int> MaxAltitude { get; set; }
+        public Nullable<int> MinDefault { get; set; }
+        public Nullable<int> MaxDefault { get; set; }
     }
 }
