@@ -1,0 +1,19 @@
+﻿  ul#live-drones {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    width: 100%;
+  }
+
+    ul#live-drones LI {
+      padding: 0px;
+      list-style: none;
+      width: 30%;
+      float: left;
+      margin:0px 5% 0px 0px;
+      border:1px red solid;
+    }
+
+    ul#live-drones LI:nth-child(3n+3) {
+      margin:0px;
+    }

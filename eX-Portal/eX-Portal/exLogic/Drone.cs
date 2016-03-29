@@ -270,7 +270,95 @@ namespace eX_Portal.exLogic {
       }
 
       return "rtmp://52.29.242.123/live/drone" + _DroneID; 
+    }
 
+    public String getPlayerURL(int FlightID) {
+      String VideoURL;
+      int MovieCount = getPlayListCount(FlightID);
+      if(MovieCount <= 0) {
+        VideoURL = "file:'" + getVideoURL(FlightID) + "'";
+      } else {
+        VideoURL = "playlist:'/Map/PlayList/" + FlightID + "'";
+      }
+      return VideoURL;
+    }
+
+    public String getPlayList(int FlightID) {
+      String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + FlightID;
+
+      StringBuilder JSon = new StringBuilder();
+      using (var ctx = new ExponentPortalEntities()) {
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          using (var reader = cmd.ExecuteReader()) {
+            while (reader.Read()) {
+              if (JSon.Length > 0) JSon.AppendLine(",");
+              JSon.Append("{");
+              JSon.Append("\"file\":\"");
+              JSon.Append(reader["VideoURL"].ToString());
+              JSon.Append("\",\n");
+              JSon.Append("\"title\":\"");
+              JSon.Append("https://exponent-s3.s3-us-west-2.amazonaws.com/VOD/" + reader["VideoURL"].ToString());
+              JSon.Append("\"}\n");
+            }//if
+          }//using reader
+        }//using ctx.Database.Connection.CreateCommand
+      }//using ExponentPortalEntities
+      return JSon.ToString();
+    }
+
+    public int getPlayListCount(int FlightID) {
+      String SQL = "select Count(*) from DroneFlightVideo WHERE FlightID=" + FlightID;
+      return Util.getDBInt(SQL);
+    }
+
+    public String getLiveUAS() {
+      String SQL;
+      using (var ctx = new ExponentPortalEntities()) {
+        ctx.Database.Connection.Open();
+        SQL = @"IF OBJECT_ID('tempdb..#TempLiveDrons') IS NOT NULL
+        DROP TABLE #TempLiveDrons;";
+        Util.doSQL(SQL, ctx);
+
+        SQL = @"select 
+        DroneID,
+        max(FlightMapDataID) as FlightMapDataID
+      INTO 
+        #TempLiveDrons
+      from 
+        FlightMapData
+      WHERE
+        CreatedTime > DATEADD(month, -1, GETDATE())
+      Group BY
+        DroneID";
+        Util.doSQL(SQL, ctx);
+
+        SQL = @"SELECT 
+        MSTR_Drone.DroneID,
+        FlightMapData.FlightID,
+        MSTR_Drone.AccountID,
+        MSTR_Drone.DroneName,
+        UAVType.Name as UAVType,
+        FlightMapData.Latitude,
+        FlightMapData.Longitude,
+        FlightMapData.ReadTime,
+        FlightMapData.Speed,
+        FlightMapData.Altitude,
+        FlightMapData.TotalFlightTime
+      FROM
+        FlightMapData,
+        #TempLiveDrons,
+        MSTR_Drone
+      LEFT JOIN LUP_Drone AS UAVType ON
+        UAVType.Type='UAVType' AND
+        MSTR_Drone.UavTypeId = UAVType.TypeID
+      WHERE
+        FlightMapData.FlightMapDataID = #TempLiveDrons.FlightMapDataID AND
+        MSTR_Drone.DroneID = FlightMapData.DroneID
+      ";
+        return Util.getDBRowsJson(SQL, ctx);
+      }
     }
 
   }//class Drone

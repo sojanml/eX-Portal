@@ -5,7 +5,9 @@
     Double.TryParse(sBuffer, out Buffer);
   }
 }
+
 <h1>The Video</h1>
+<h2 id="VideoURL">video url</h2>
 <div id="myElement">Loading the player...</div>
 @section scripts {
 <script src="~/jwplayer/jwplayer.js"></script>
@@ -13,18 +15,24 @@
 <script type="text/javascript">
   var playerInstance = null;
   $(document).ready(function () {
+    var VideoURL = 'flv:VOD/drone100-1458557134.flv'
+    var StreamURL = 'rtmp://s2rpa1y1xc5k55.cloudfront.net/cfx/st/' + VideoURL;
+    $('#VideoURL').html(StreamURL);
     playerInstance = jwplayer("myElement");
+
     playerInstance.setup({
-      file: "rtmp://52.29.242.123/live/drone1",
+      file: StreamURL,
       width: 640,
       height: 360,
       title: 'Basic Video Embed',
       description: 'A video with a basic title and description!',
       mediaid: '123456',
       rtmp: {
-        bufferlength: @Buffer
+        bufferlength: 3
       }
-    });
+  });
+
+  
   })
 
 </script>

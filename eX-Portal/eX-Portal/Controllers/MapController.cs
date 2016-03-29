@@ -23,13 +23,22 @@ namespace eX_Portal.Controllers {
       return View();
     }
     public ActionResult FlightData(int id = 0) {
+
       ViewBag.Title = "Flight Map";
       ViewBag.FlightID = id;
       Drones thisDrone = new Drones();
       ViewBag.AllowedLocation = thisDrone.getAllowedLocation(id);
       ViewBag.DroneID = thisDrone.DroneID;
-      ViewBag.VideoURL = thisDrone.getVideoURL(id);
+      //ViewBag.VideoURL = thisDrone.getVideoURL(id);
+      ViewBag.PlayerURL = thisDrone.getPlayerURL(id);
       return View();
+    }
+
+    public ActionResult PlayList(int id = 0) {
+      String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + id;
+      var Rows = Util.getDBRows(SQL);
+      Response.ContentType = "text/json";
+      return View(Rows);
     }
 
     public String CheckAlert(int id = 0) {
