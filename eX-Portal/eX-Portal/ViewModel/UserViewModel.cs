@@ -5,15 +5,14 @@ using System.Web.Mvc;
 
 namespace eX_Portal.ViewModel {
   public class UserViewModel {
-
     public MSTR_User User { get; set; }
     public MSTR_User_Pilot Pilot { get; set; }
     public IEnumerable<SelectListItem> ProfileList { get; set; }
     public IEnumerable<SelectListItem> CountryList { get; set; }
     public IEnumerable<SelectListItem> AccountList { get; set; }
     public IEnumerable<SelectListItem> DashboardList { get; set; }
-    
 
+        //hudha chanded
   }
 
 
