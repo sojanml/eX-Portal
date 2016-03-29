@@ -1,0 +1,36 @@
+﻿@model IEnumerable<eX_Portal.Models.DroneFlightVideo>
+
+<table class="table">
+    <tr>
+        <th>
+          
+            @Html.DisplayNameFor(model => model.DroneID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FlightID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VideoURL)
+        </th>
+        
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DroneID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FlightID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VideoURL)
+        </td>   
+        <td>    
+            @Html.ActionLink("Delete", "Deleted", new { id=item.VideoID })
+        </td>
+    </tr>
+}
+
+</table>
