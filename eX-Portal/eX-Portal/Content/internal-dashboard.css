@@ -1,3 +1,7 @@
+@font-face {
+  font-family: "Weather";
+  src: url("/fonts/weathericons-regular-webfont.eot?") format("eot"), url("/fonts/weathericons-regular-webfont.woff2") format("woff2"), url("/fonts/weathericons-regular-webfont.woff") format("woff"), url("/fonts/weathericons-regular-webfont.ttf") format("truetype"), url("/fonts/weathericons-regular-webfont.svg#Weather") format("svg");
+}
 /* line 3, ../sass/dashboard.scss */
 div.dash-row {
   width: 100%;

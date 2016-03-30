@@ -1,4 +1,5 @@
 ﻿@import "compass";
+@import "_mixin.scss";
 
 // first we set the variables:
 @import "_colors.scss";
@@ -6,5 +7,6 @@ $BaseColor: gray;
 $HiliteColor: red;
 $SparkColor: rgba(234, 5, 14,0.6);
 
+@include font-face(Weather, /fonts/weathericons-regular-webfont);
 
 @import "dashboard.scss";
