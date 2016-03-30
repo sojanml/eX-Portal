@@ -25,13 +25,14 @@ $(document).ready(function () {
             var aLabels = aData[0];
             var aDatasets1 = aData[1];
             var aDatasets2 = aData[2];
+            var aLabels1 = aData[3];
            // var aDatasets3 = aData[3];
             //var aDatasets4 = aData[4];
             //var aDatasets5 = aData[5];
 
 
             var data = {
-                labels: aLabels,
+                labels: aLabels1,
                 datasets: [{
         label: "Total Flight Time",
                   //  fillColor: "rgba(220,220,220,0.2)",
@@ -46,7 +47,7 @@ $(document).ready(function () {
                     highlightStroke: "rgba(255,102,102,1)",
                     data: aDatasets1
                 }, {
-                    label: "Current Flight Time",
+                    label: "Current Month Flight Time",
                     // fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",
@@ -62,7 +63,7 @@ $(document).ready(function () {
             };
 
             var ctx = $("#DsChart1").get(0).getContext('2d');
-            ctx.canvas.height = 300;  // setting height of canvas
+            ctx.canvas.height = 235;  // setting height of canvas
             ctx.canvas.width = 500; // setting width of canvas
     lineChart = new Chart(ctx).Bar(data, {
                 //bezierCurve: true,
