@@ -8,7 +8,7 @@
   <div class="dash-column col1">
     <div class="dash-content">
       <h3>UAS Flight Chart</h3>
-      <canvas id="DsChart1" style="width:50px;height:250px"> </canvas>
+      <canvas id="DsChart1" style="width:50px;height:200px"> </canvas>
       <a href="@Url.Action("ChartDetails", "DashBoard")">Chart Details</a>
     </div>
   </div>
@@ -25,7 +25,7 @@
       <h3>EnvironmentalData</h3>
       <div>
         <label>@Html.DisplayFor(Model => Model.City)</label><br>
-        <img src="~/images/fonts/sunshine.png" />
+        <img src="~/images/fonts/sunshine.png" style="width:15px;height:15px"/>
 
         <label>@Html.DisplayFor(Model => Model.ConditionTemperature)</label>
         <label>@Html.DisplayFor(Model => Model.TemperatureUnit)</label>
@@ -45,13 +45,14 @@
 
 
           @foreach (var item in Model.Forecast) {
-                    <tr>
+             
+                 <tr>
                       <td>@item.Date</td>
                       <td>@item.TempLow</td>
                       <td>@item.TempHigh</td>
                       <td>@item.status</td>
                     </tr>
-
+             
           }
         </table>
       </div>
@@ -104,7 +105,7 @@
   <div class="dash-column col2">
     <div class="dash-content">
       <h3>Total Pilot Hours</h3>
-      <canvas id="myChart" style="width:50px;height:250px"> </canvas>
+      <canvas id="DsChart2" style="width:50px;height:250px"> </canvas>
     </div>
   </div>
 </div>
