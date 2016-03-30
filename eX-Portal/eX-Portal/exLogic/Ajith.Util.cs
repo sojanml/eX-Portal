@@ -415,14 +415,14 @@ namespace eX_Portal.exLogic
 
             bool isInGeoLongitude=false, isInGeoLattitude=false;
             string  temp;
-            int rising;
+            int rising,count=0;
            
             IList<Forcast> ForcastList = new List<Forcast>();
           
             WeatherViewModel Weather = new WeatherViewModel();
             // string forecastUrl = "http://weather.yahooapis.com/forecastrss?&" + "p=" + Location + "&u=c";
-          //  string forecastUrl = "http://weather.yahooapis.com/forecastrss?w=" + Location + "&u=c";
-            string forecastUrl = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid=" + Location;
+            //  string forecastUrl = "http://weather.yahooapis.com/forecastrss?w=" + Location + "&u=c";
+            string forecastUrl = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid=" + Location + " AND u='c'";
             // open a XmlTextReader object using the constructed url
             XmlTextReader reader = new XmlTextReader(forecastUrl);
             // loop through xml result node by node
@@ -448,11 +448,11 @@ namespace eX_Portal.exLogic
                       
                             if (temp == "c")
                             {
-                                Weather.TemperatureUnit = "Celcius";
+                                Weather.TemperatureUnit = "°C";
                             }
                             else
                             {
-                                Weather.TemperatureUnit = "Fahrenheit";
+                                Weather.TemperatureUnit = "ºF";
                             }
 
                             temp = reader.GetAttribute("distance");
@@ -537,10 +537,12 @@ namespace eX_Portal.exLogic
                           fcast.TempLow = reader.GetAttribute("low");
                           fcast.TempHigh = reader.GetAttribute("high");
                           fcast.status = reader.GetAttribute("text");
-
-                            ForcastList.Add(fcast);
+                            if (count <= 2)
+                            {
+                                ForcastList.Add(fcast);
+                            }
                             // code = (ConditionCodes)Convert.ToInt32(reader.GetAttribute("code"));
-                          
+                            count++;
                           
                         }
                         // set the flag if we're in the geo:long tag
