@@ -111,20 +111,12 @@ $(document).ready(function () {
 
       //Number - Spacing between data sets within X values
       barDatasetSpacing: 1,
+      
       customTooltips: function (tooltip) {
         customToolTip(tooltip, event);
       },
-      /*
-      tooltipTemplate:
-      "xxx<ul class=\"<%=name.toLowerCase()%>-legend\">" +
-      "<% for (var i=0; i<datasets.length; i++){%>" +
-      "<li>xxxyy" +
-      "  <span style=\"background-color:<%=datasets[i].strokeColor%>\"></span>" +
-      "  <%if(datasets[i].datasetLabel){%><%=xLabel[i]%><%}%>" +
-      "</li>" +
-      "<%}%>" +
-      "</ul>",
-      */
+      
+      tooltipTemplate: _tooltipTemplate,      
       //String - A legend template
       multiTooltipTemplate: "<%= datasetLabel %> : <%= value %>",
       legendTemplate:
@@ -143,13 +135,27 @@ $(document).ready(function () {
     $('#map-legent').append(legend);
   }
 
+  function _tooltipTemplate(Label) {
+    alert(Label);
+  return
+  "xxx<ul class=\"<%=name.toLowerCase()%>-legend\">" +
+  "<% for (var i=0; i<datasets.length; i++){%>" +
+  "<li>xxxyy" +
+  "  <span style=\"background-color:<%=datasets[i].strokeColor%>\"></span>" +
+  "  <%if(datasets[i].datasetLabel){%><%=xLabel[i]%><%}%>" +
+  "</li>" +
+  "<%}%>" +
+  "</ul>";
+  
+  }
+
   function customToolTip(tooltip, e) {
     var tooltipEl = $('#chartjs-tooltip');
     if (ToolTipTimeout) window.clearTimeout(ToolTipTimeout);
     if (!tooltip) {
       ToolTipTimeout = window.setTimeout(function () {
-        $('#chartjs-tooltip').fadeOut();
-      }, 500);
+        $('#chartjs-tooltip').fadeOut("fast");
+      }, 100);
       return false;
     }
 
@@ -160,13 +166,19 @@ $(document).ready(function () {
       '<span style="font-weight:bold; color:' + tooltip.legendColors[i].fill + '">' + tooltip.labels[i] + '</span>\n';
     }
     tooltipEl.html(HTML);
-    
-
+    /*
+    console.log(
+    tooltip.title +
+    " - x: " + tooltip.x + ", y: " + tooltip.y +
+    " - xPadding: " + tooltip.xPadding + ", yPadding: " + tooltip.yPadding +
+    " - xOffset: " + tooltip.xOffset + ", yOffset: " + tooltip.yOffset
+    );
+    */
     tooltipEl.css({
       display: 'block',
       opacity: 1,
-      left: e.layerX + 'px',
-      top: e.layerY + 'px',
+      left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
+      top: tooltip.chart.canvas.offsetTop + tooltip.y + 'px'
     });
 
   }
