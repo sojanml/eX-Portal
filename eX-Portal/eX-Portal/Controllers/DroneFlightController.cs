@@ -15,7 +15,7 @@ namespace eX_Portal.Controllers
     public class DroneFlightController : Controller
     {
         static String RootUploadDir = "~/Upload/Drone/";
-
+        ExponentPortalEntities db = new ExponentPortalEntities();
         // GET: DroneFlight
         public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0)
         {
@@ -64,13 +64,12 @@ namespace eX_Portal.Controllers
                 SQL += "\n WHERE\n" + SQLFilter;
             }
             qView nView = new qView(SQL);
+            // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
             if (exLogic.User.hasAccess("FLIGHT.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("FLIGHT.VIEW")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
-            if (!exLogic.User.hasAccess("FLIGHT.MAP"))
-                nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
+            if (!exLogic.User.hasAccess("FLIGHT.MAP")) nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
             nView.addMenu("Flight Data", Url.Action("FlightDataView", "Map", new { ID = "_PKey" }));
-
-            if (exLogic.User.hasAccess("FLIGHT.VIDEOS")) nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
+            nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("FLIGHT.GEOTAG")) nView.addMenu("GEO Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("FLIGHT.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 
@@ -504,7 +503,7 @@ namespace eX_Portal.Controllers
                 }//if(System.IO.File.Exists
             }//foreach (String file in Files)
         }//MoveUploadFileTo
-       public ActionResult UASFiles(int FlightID = 0)
+        public ActionResult UASFiles(int FlightID = 0)
         {
             ExponentPortalEntities db = new ExponentPortalEntities();
             List<DroneDocument> Docs = (from r in db.DroneDocuments
@@ -529,15 +528,17 @@ namespace eX_Portal.Controllers
 
         public ActionResult List([Bind(Prefix = "ID")]int FlightID = 0)
         {
-            using (var ctx = new ExponentPortalEntities())
+            if (!exLogic.User.hasAccess("FLIGHT.VIDEOS")) return RedirectToAction("NoAccess", "Home");
+            //using (var  = new ExponentPortalEntities())
             {
-                var List = ctx.DroneFlightVideos.ToList();
+                var List = db.DroneFlightVideos.ToList();
                 var vlist = (from p in List where p.FlightID == FlightID && p.IsDeleted == 0 select p).ToList();
                 return View(vlist);
             }
         }
         public ActionResult Deleted([Bind(Prefix = "ID")]int FlightID = 0)
         {
+            if (!exLogic.User.hasAccess("FLIGHT.VIDEOS")) return RedirectToAction("NoAccess", "Home");
             String SQL = "";
             using (var ctx = new ExponentPortalEntities())
                 if (exLogic.User.hasAccess("FLIGHT.VIDEOS"))
