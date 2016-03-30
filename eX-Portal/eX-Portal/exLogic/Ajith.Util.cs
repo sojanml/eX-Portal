@@ -448,8 +448,10 @@ namespace eX_Portal.exLogic {
           fcast.Date = reader.GetAttribute("date");
           fcast.TempLow = reader.GetAttribute("low");
           fcast.TempHigh = reader.GetAttribute("high");
-          fcast.status = reader.GetAttribute("text");
-          if (count <= 2) {
+          fcast.status = reader.GetAttribute(6);
+          fcast.Code = int.Parse(reader.GetAttribute("code"));
+          fcast.Date = fcast.Date.Remove(fcast.Date.LastIndexOf(" "));
+          if (count <= 5) {
             ForcastList.Add(fcast);
           }
           // code = (ConditionCodes)Convert.ToInt32(reader.GetAttribute("code"));

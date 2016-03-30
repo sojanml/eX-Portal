@@ -12,16 +12,17 @@ div.dash-row div.dash-column {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   margin-top: 10px;
+  position: relative;
 }
-/* line 12, ../sass/dashboard.scss */
+/* line 13, ../sass/dashboard.scss */
 div.dash-row div.dash-column:nth-child(odd) {
   padding-right: 5px;
 }
-/* line 16, ../sass/dashboard.scss */
+/* line 17, ../sass/dashboard.scss */
 div.dash-row div.dash-column:nth-child(even) {
   padding-left: 5px;
 }
-/* line 21, ../sass/dashboard.scss */
+/* line 22, ../sass/dashboard.scss */
 div.dash-row div.dash-content {
   width: 100%;
   border: 1px rgba(0, 91, 144, 0.2) solid;
@@ -33,27 +34,27 @@ div.dash-row div.dash-content {
   max-height: 300px;
   overflow: hidden;
 }
-/* line 31, ../sass/dashboard.scss */
+/* line 32, ../sass/dashboard.scss */
 div.dash-row h2 {
   color: #005b90;
 }
-/* line 34, ../sass/dashboard.scss */
+/* line 35, ../sass/dashboard.scss */
 div.dash-row h3 {
   color: #01c074;
   margin: 0px 0px 10px 0px;
   padding: 0px;
   font-size: 12pt;
 }
-/* line 41, ../sass/dashboard.scss */
+/* line 42, ../sass/dashboard.scss */
 div.dash-row a {
   color: #005b90;
   text-decoration: none;
 }
-/* line 46, ../sass/dashboard.scss */
+/* line 47, ../sass/dashboard.scss */
 div.dash-row div.jwplayer {
   margin-bottom: 10px;
 }
-/* line 50, ../sass/dashboard.scss */
+/* line 51, ../sass/dashboard.scss */
 div.dash-row div.content-inner {
   width: 100%;
   height: 200px;
