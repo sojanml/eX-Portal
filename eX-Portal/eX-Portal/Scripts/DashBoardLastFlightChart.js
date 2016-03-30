@@ -24,7 +24,7 @@ $(document).ready(function () {
             var aData = reponse;
             var aLabels = aData[0];
             var aDatasets1 = aData[1];
-          //  var aDatasets2 = aData[2];
+            var aDatasets2 = aData[2];
            // var aDatasets3 = aData[3];
             //var aDatasets4 = aData[4];
             //var aDatasets5 = aData[5];
@@ -85,8 +85,8 @@ $(document).ready(function () {
 
         //Number - Spacing between data sets within X values
         barDatasetSpacing: 1,
-
-                tooltipTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>",
+        tooltipTemplate: "<%if (label){%><%=label %>: <%}%><%= value   %>",
+               // tooltipTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>",
                 //String - A legend template
                 multiTooltipTemplate: "<%= datasetLabel %> : <%= value %>",
       legendTemplate: 

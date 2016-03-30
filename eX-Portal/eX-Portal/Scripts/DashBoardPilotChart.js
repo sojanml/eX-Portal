@@ -62,7 +62,7 @@ $(document).ready(function () {
             };
 
             var ctx = $("#DsChart2").get(0).getContext('2d');
-            ctx.canvas.height = 300;  // setting height of canvas
+            ctx.canvas.height = 235;  // setting height of canvas
             ctx.canvas.width = 500; // setting width of canvas
     lineChart = new Chart(ctx).Bar(data, {
                 //bezierCurve: true,
