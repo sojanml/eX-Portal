@@ -12,6 +12,8 @@ namespace eX_Portal.ViewModel
         public string TempLow { get; set; }
         public string TempHigh { get; set; }
         public string status { get; set; }
+
+        public int Code { get; set; }
         //public  Forcast(string date, string low, string high, string text)
         //{
         //    Date = date;

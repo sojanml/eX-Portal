@@ -8,6 +8,7 @@ div.dash-row {
     float: left;
     @include box-sizing(border-box);
     margin-top: 10px;
+    position: relative;
 
     &:nth-child(odd) {
       padding-right: 5px;

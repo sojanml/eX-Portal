@@ -1,3 +1,7 @@
+@font-face {
+  font-family: "Weather";
+  src: url("/fonts/weathericons-regular-webfont.eot?") format("eot"), url("/fonts/weathericons-regular-webfont.woff2") format("woff2"), url("/fonts/weathericons-regular-webfont.woff") format("woff"), url("/fonts/weathericons-regular-webfont.ttf") format("truetype"), url("/fonts/weathericons-regular-webfont.svg#Weather") format("svg");
+}
 /* line 3, ../sass/dashboard.scss */
 div.dash-row {
   width: 100%;
@@ -12,16 +16,17 @@ div.dash-row div.dash-column {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   margin-top: 10px;
+  position: relative;
 }
-/* line 12, ../sass/dashboard.scss */
+/* line 13, ../sass/dashboard.scss */
 div.dash-row div.dash-column:nth-child(odd) {
   padding-right: 5px;
 }
-/* line 16, ../sass/dashboard.scss */
+/* line 17, ../sass/dashboard.scss */
 div.dash-row div.dash-column:nth-child(even) {
   padding-left: 5px;
 }
-/* line 21, ../sass/dashboard.scss */
+/* line 22, ../sass/dashboard.scss */
 div.dash-row div.dash-content {
   width: 100%;
   border: 1px rgba(255, 0, 0, 0.2) solid;
@@ -33,29 +38,121 @@ div.dash-row div.dash-content {
   max-height: 300px;
   overflow: hidden;
 }
-/* line 31, ../sass/dashboard.scss */
+/* line 32, ../sass/dashboard.scss */
 div.dash-row h2 {
   color: red;
 }
-/* line 34, ../sass/dashboard.scss */
+/* line 35, ../sass/dashboard.scss */
 div.dash-row h3 {
   color: rgba(234, 5, 14, 0.6);
   margin: 0px 0px 10px 0px;
   padding: 0px;
   font-size: 12pt;
 }
-/* line 41, ../sass/dashboard.scss */
+/* line 42, ../sass/dashboard.scss */
 div.dash-row a {
   color: red;
   text-decoration: none;
 }
-/* line 46, ../sass/dashboard.scss */
+/* line 47, ../sass/dashboard.scss */
 div.dash-row div.jwplayer {
   margin-bottom: 10px;
 }
-/* line 50, ../sass/dashboard.scss */
+/* line 51, ../sass/dashboard.scss */
 div.dash-row div.content-inner {
   width: 100%;
   height: 200px;
   overflow: auto;
+}
+
+/* line 14, ../sass/internal-dashboard.scss */
+#chartjs-tooltip {
+  opacity: 0;
+  position: absolute;
+  color: white;
+  padding: 8px;
+  border-radius: 3px;
+  -webkit-transition: all .1s ease;
+  transition: all .1s ease;
+  pointer-events: none;
+  background-color: black;
+  white-space: nowrap;
+  z-index: 999;
+  line-height: 20px;
+}
+/* line 28, ../sass/internal-dashboard.scss */
+#chartjs-tooltip span.box {
+  display: inline-block;
+  width: 16px;
+}
+
+/* line 34, ../sass/internal-dashboard.scss */
+td.spacer {
+  width: 20px;
+}
+
+/* line 39, ../sass/internal-dashboard.scss */
+div.weather {
+  text-align: left;
+  font-size: 10pt;
+}
+/* line 43, ../sass/internal-dashboard.scss */
+div.weather span.icon {
+  font-family: Weather;
+  font-size: 30px;
+  color: silver;
+}
+/* line 48, ../sass/internal-dashboard.scss */
+div.weather span.icon.big {
+  font-size: 35px;
+}
+/* line 52, ../sass/internal-dashboard.scss */
+div.weather span.icon.small {
+  font-size: 25px;
+}
+/* line 56, ../sass/internal-dashboard.scss */
+div.weather span.icon.tiny {
+  font-size: 15px;
+}
+/* line 61, ../sass/internal-dashboard.scss */
+div.weather .condition {
+  color: #ea050e;
+  font-weight: bold;
+}
+/* line 62, ../sass/internal-dashboard.scss */
+div.weather .condition span.icon {
+  color: #ea050e;
+  font-size: 60px;
+}
+/* line 71, ../sass/internal-dashboard.scss */
+div.weather span.caption {
+  font-size: 8pt;
+}
+/* line 76, ../sass/internal-dashboard.scss */
+div.weather span.text.big {
+  font-size: 40px;
+}
+
+/* line 82, ../sass/internal-dashboard.scss */
+ul#forecast {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+/* line 87, ../sass/internal-dashboard.scss */
+ul#forecast li {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  float: left;
+  margin: 0px 15px 0px 0px;
+}
+/* line 94, ../sass/internal-dashboard.scss */
+ul#forecast li span.icon {
+  color: #F58387;
+}
+/* line 98, ../sass/internal-dashboard.scss */
+ul#forecast li .status {
+  font-size: 8pt;
+  color: red;
 }

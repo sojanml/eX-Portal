@@ -1,4 +1,5 @@
 ﻿@model eX_Portal.ViewModel.WeatherViewModel
+@using eX_Portal.exLogic
 @{
   Layout = null;
   ViewBag.Title = "Internal Dashboard";
@@ -6,9 +7,10 @@
 
 <div class="dash-row">
   <div class="dash-column col1">
-    <div class="dash-content">
+    <div class="dash-content" style="position:relative;">
+      <div id="chartjs-tooltip">data</div>
       <h3>UAS Flight Chart</h3>
-      <canvas id="DsChart1" style="width:50px;height:250px"> </canvas>
+      <canvas id="DsChart1" style="width:50px;height:200px"> </canvas>
       <a href="@Url.Action("ChartDetails", "DashBoard")">Chart Details</a>
     </div>
   </div>
@@ -21,90 +23,92 @@
   </div>
 
   <div class="dash-column col1">
-    <div class="dash-content">
-      <h3>EnvironmentalData</h3>
+    <div class="dash-content weather">
+      <h3>Weather in @Html.DisplayFor(Model => Model.City)</h3>
       <div>
-        <label>@Html.DisplayFor(Model => Model.City)</label><br>
-        <img src="~/images/fonts/sunshine.png" />
-
-        <label>@Html.DisplayFor(Model => Model.ConditionTemperature)</label>
-        <label>@Html.DisplayFor(Model => Model.TemperatureUnit)</label>
-
-
-      </div>
-      <div>
-
-        <table>
-          <thead>ForeCast</thead>
+        <table cellpadding="0" cellspacing="0">
           <tr>
-            <td>Date </td>
-            <td>Low</td>
-            <td>High</td>
-            <td>Status</td>
+            <td rowspan="2" class="condition">
+              <span class="icon big">@Html.Raw(Weather.WeatherIcons[int.Parse(Model.ConditionCode)])</span><br />
+              @Model.ConditionText
+            </td>
+            <td class="spacer"></td>
+            <td>
+              <span class="icon">&#xf055;</span>
+            </td>
+            <td>
+              <span class="text">
+                @Html.DisplayFor(Model => Model.ConditionTemperature)
+                @Html.DisplayFor(Model => Model.TemperatureUnit)
+              </span>
+            </td>
+            <td class="spacer"></td>
+            <td>
+              <span style="display:inline-block; transform: rotate(@(Model.Direction)deg);" class="icon">&#xf0b1;</span>
+              <label>@Html.DisplayFor(Model => Model.Direction) &deg;</label><br>
+              <span>@Html.DisplayFor(Model => Model.Speed) MPH</span><br>
+            </td>
+            <td class="spacer"></td>
+            <td>
+
+              <div>
+                <span class="icon tiny">&#xf07a;</span>
+                <label>Humidity: @Html.DisplayFor(Model => Model.Humidity)%</label>
+              </div>
+              <div>
+                <span class="icon tiny">&#xf075;</span>
+                <label>Visibility: @Html.DisplayFor(Model => Model.Visibility) KM</label>
+              </div>
+              <div>
+                <span class="icon tiny">&#xf079;</span>
+                <label>
+                  Pressure: @Html.DisplayFor(Model => Model.Pressure) MB
+                  (@Model.PressureStatus)
+                </label>
+              </div>
+
+            </td>
           </tr>
+          <tr>
 
-
-          @foreach (var item in Model.Forecast) {
-                    <tr>
-                      <td>@item.Date</td>
-                      <td>@item.TempLow</td>
-                      <td>@item.TempHigh</td>
-                      <td>@item.status</td>
-                    </tr>
-
-          }
+            <td class="spacer"></td>
+            <td colspan="2"><span class="caption">Temperature</span></td>
+            <td class="spacer"></td>
+            <td><span class="caption">Wind</span></td>
+            <td class="spacer"></td>
+            <td><span class="caption">Atmosphere</span></td>
+          </tr>
         </table>
-      </div>
-      <h6>Atmosphere</h6>
-      <div>
-        @Html.LabelFor(model => model.Humidity, "Humidity:")
-        <label>@Html.DisplayFor(Model => Model.Humidity)%</label>
 
 
-
-
-        @Html.LabelFor(model => model.Visibility, "Visibility:")
-        <label>@Html.DisplayFor(Model => Model.Visibility)KM</label><br>
-        @Html.LabelFor(model => model.Visibility, "Pressure:")
-        <label>@Html.DisplayFor(Model => Model.Pressure)MB</label><br>
-        @Html.LabelFor(model => model.Visibility, "Status:")
-        <label>@Html.DisplayFor(Model => Model.PressureStatus)</label><br>
 
       </div>
-      <div>
-        <h6>Wind</h6>
-        @Html.LabelFor(model => model.Chill, "Chill:")
-        <label>@Html.DisplayFor(Model => Model.Chill) C</label><br>
-        @Html.LabelFor(model => model.Direction, "Direction:")
-        <label>@Html.DisplayFor(Model => Model.Direction) Degrees</label><br>
-        @Html.LabelFor(model => model.Direction, "Speed:")
-        <label>@Html.DisplayFor(Model => Model.Speed) MPH</label><br>
-      </div>
-      <div style="float:left">
-        <h6>Astronomy</h6>
-        @Html.LabelFor(model => model.Sunrise, "Sun Rise:")
-        <label>@Html.DisplayFor(Model => Model.Sunrise) AM</label><br>
-        @Html.LabelFor(model => model.Sunrise, "Sun Set:")
-        <label>@Html.DisplayFor(Model => Model.Sunset) PM</label><br>
+      <div style="margin-top:20px;">
+        <ul id="forecast">
+          @foreach (var item in Model.Forecast) {
+          <li>
+            <span class="icon big">@Html.Raw(Weather.WeatherIcons[item.Code])</span><br />
+            <div class="status">@item.status</div>
+            <div class="date">@item.Date</div>
+            <div class="temp">
+              <span class="tiny icon">&#xf058;</span>
+              @item.TempLow&deg;
+              <span class="tiny icon">&#xf044;</span>
+              @item.TempHigh&deg;
+            </div>
+          </li>
+          }
+        </ul>
       </div>
 
-      <div style="float:left">
-        <h6>WeatherCondition</h6>
-        @Html.LabelFor(model => model.ConditionDate, "Date:")
-        <label>@Html.DisplayFor(Model => Model.ConditionDate) </label><br>
-        @Html.LabelFor(model => model.ConditionTemperature, "Temperature:")
-        <label>@Html.DisplayFor(Model => Model.ConditionTemperature) C</label><br>
-        @Html.LabelFor(model => model.ConditionText, "Condition:")
-        <label>@Html.DisplayFor(Model => Model.ConditionText)</label><br>
 
-      </div>
     </div>
   </div>
 
   <div class="dash-column col2">
     <div class="dash-content">
       <h3>Total Pilot Hours</h3>
-      <canvas id="myChart" style="width:50px;height:250px"> </canvas>
+      <canvas id="DsChart2" style="width:50px;height:250px"> </canvas>
     </div>
   </div>
 </div>
