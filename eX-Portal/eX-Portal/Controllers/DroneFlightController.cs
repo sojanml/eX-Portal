@@ -67,7 +67,7 @@ namespace eX_Portal.Controllers
             // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
             if (exLogic.User.hasAccess("FLIGHT.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("FLIGHT.VIEW")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
-            if (!exLogic.User.hasAccess("FLIGHT.MAP")) nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
+             nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
             nView.addMenu("Flight Data", Url.Action("FlightDataView", "Map", new { ID = "_PKey" }));
             nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("FLIGHT.GEOTAG")) nView.addMenu("GEO Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
@@ -531,9 +531,12 @@ namespace eX_Portal.Controllers
             if (!exLogic.User.hasAccess("FLIGHT.VIDEOS")) return RedirectToAction("NoAccess", "Home");
             //using (var  = new ExponentPortalEntities())
             {
+                
                 var List = db.DroneFlightVideos.ToList();
                 var vlist = (from p in List where p.FlightID == FlightID && p.IsDeleted == 0 select p).ToList();
                 return View(vlist);
+               
+               
             }
         }
         public ActionResult Deleted([Bind(Prefix = "ID")]int FlightID = 0)
@@ -547,6 +550,62 @@ namespace eX_Portal.Controllers
 
             return RedirectToAction("Index");
 
+        }
+        public ActionResult PlayVideo([Bind(Prefix = "ID")]int id= 0)
+        {
+            ViewBag.Title = "Flight Data";
+            ViewBag.VideoID = id;
+            Drones thisDrone = new Drones();
+            ViewBag.AllowedLocation = thisDrone.getAllowedLocation(id);
+            ViewBag.DroneID = thisDrone.DroneID;
+            ViewBag.VideoURL = thisDrone.getVideoURL(id);
+            ViewBag.PlayerURL = thisDrone.getPlayerURL(id);
+          
+            return View();
+
+        }
+       
+        public String CheckAlert(int id = 0)
+        {
+            StringBuilder AlertMsg = new StringBuilder();
+            int AccountID = Util.getDBInt("SELECT AccountID From MSTR_User WHERE UserID=" + id);
+            String SQL = @"SELECT
+          PortalAlert.AlertID,
+          PortalAlert.AlertMessage,
+          PortalAlert.AlertType
+        FROM
+          PortalAlert
+      LEFT JOIN DroneFlight ON
+          DroneFlight.ID = PortalAlert.FlightID
+      LEFT JOIN MSTR_Drone ON
+          MSTR_Drone.DroneID = DroneFlight.DroneID AND
+          MSTR_Drone.AccountID = " + AccountID + @"
+        LEFT JOIN PortalAlert_User ON
+          PortalAlert_User.AlertID = PortalAlert.AlertID and
+          PortalAlert_User.UserID =  " + id + @"
+        WHERE
+          MSTR_Drone.DroneID IS NOT NULL AND
+          PortalAlert_User.UserID IS NULL AND
+          PortalAlert.CreatedOn > DATEADD(minute, -30, GETDATE())";
+            var Rows = Util.getDBRows(SQL);
+            foreach (var Row in Rows)
+            {
+                String AlertType = Row["AlertType"].ToString();
+                if (String.IsNullOrEmpty(AlertType)) AlertType = "High";
+                AlertMsg.Append("<LI");
+                AlertMsg.Append(" class=\"");
+                AlertMsg.Append(AlertType.ToLower());
+                AlertMsg.Append("\">");
+
+                AlertMsg.Append(Row["AlertMessage"]);
+                AlertMsg.Append("</LI>");
+
+                SQL = "INSERT INTO PortalAlert_User(UserID, AlertID) VALUES( " +
+                  id + ", " + Row["AlertID"] + ")";
+                Util.doSQL(SQL);
+            }
+
+            return AlertMsg.ToString();
         }
     }//class
 }//namespace

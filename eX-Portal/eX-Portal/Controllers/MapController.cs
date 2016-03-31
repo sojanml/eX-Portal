@@ -29,8 +29,7 @@ namespace eX_Portal.Controllers
         }
         public ActionResult FlightData(int id = 0)
         {
-            if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
-
+            if (!exLogic.User.hasAccess("FLIGHT.MAPVIEW")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Flight Map";
             ViewBag.FlightID = id;
             Drones thisDrone = new Drones();
@@ -332,7 +331,7 @@ namespace eX_Portal.Controllers
 
         public ActionResult FlightDataView([Bind(Prefix = "ID")] String FlightID = "")
         {
-            if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
+            if (!exLogic.User.hasAccess("FLIGHT.DATA")) return RedirectToAction("NoAccess", "Home");
             ViewBag.FlightID = FlightID;
             int FID = Util.toInt(FlightID);
             if (FID < 1) return RedirectToAction("Error");
