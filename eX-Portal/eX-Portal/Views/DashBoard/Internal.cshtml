@@ -29,7 +29,12 @@
         <table cellpadding="0" cellspacing="0">
           <tr>
             <td rowspan="2" class="condition">
+                @if(Model.ConditionCode!=null)
+                {
+                    
+                
               <span class="icon big">@Html.Raw(Weather.WeatherIcons[int.Parse(Model.ConditionCode)])</span><br />
+                }
               @Model.ConditionText
             </td>
             <td class="spacer"></td>
