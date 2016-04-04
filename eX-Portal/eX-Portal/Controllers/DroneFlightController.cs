@@ -31,6 +31,11 @@ namespace eX_Portal.Controllers
             "   tblGSC.FirstName as GSCName,\n" +
             "   tblCreated.FirstName as CreatedBy,\n" +
             "   FlightDate,\n" +
+            "   CASE(SELECT Count(*) FROM DroneFlightVideo WHERE\n" +
+            "       DroneFlightVideo.FlightID = DroneFlight.ID)\n" +
+            "   WHEN 0 Then ''\n" +
+            "   ELSE '<span class=icon>&#xf03d;</span>'\n" +
+            "   END as Video,\n" +
             "   Count(*) Over() as _TotalRecords,\n" +
             "   DroneFlight.ID as _PKey\n" +
             "FROM\n" +
@@ -64,10 +69,12 @@ namespace eX_Portal.Controllers
                 SQL += "\n WHERE\n" + SQLFilter;
             }
             qView nView = new qView(SQL);
+      
+      
             // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
-            if (exLogic.User.hasAccess("FLIGHT.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("FLIGHT.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("FLIGHT.VIEW")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
-            if (!exLogic.User.hasAccess("FLIGHT.MAP")) nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("FLIGHT.MAP")) nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
             nView.addMenu("Flight Data", Url.Action("FlightDataView", "Map", new { ID = "_PKey" }));
             nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("FLIGHT.GEOTAG")) nView.addMenu("GEO Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
