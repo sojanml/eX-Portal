@@ -9,6 +9,16 @@ using System.Web;
 namespace eX_Portal.exLogic {
   public class Drones {
     private int _DroneID = 0;
+    private ExponentPortalEntities ctx = new ExponentPortalEntities();
+
+    public Drones() {
+      ctx.Database.Connection.Open();
+    }
+
+    ~Drones() {
+      //ctx.Database.Connection.Close();
+      ctx.Dispose();
+    }
     public int DroneID
     {
       get
@@ -22,7 +32,7 @@ namespace eX_Portal.exLogic {
     }
     public int getDroneIDForFlight(int FlightID) {
       String SQL = "Select DroneID From DroneFlight WHERE ID=" + FlightID;
-      return Util.getDBInt(SQL);
+      return Util.getDBInt(SQL, ctx);
     }
 
     public String getAllowedLocation(int FlightID) {
@@ -39,7 +49,7 @@ namespace eX_Portal.exLogic {
         DroneID = " + _DroneID + @" AND
         GETDATE() BETWEEN StartDate and EndDate";
 
-      var Rows = Util.getDBRows(SQL);
+      var Rows = Util.getDBRows(SQL, ctx);
       foreach (var Row in Rows) {
 
         String Coordinates = Row["Coordinates"].ToString();
@@ -136,7 +146,7 @@ namespace eX_Portal.exLogic {
         "WHERE\n" +
         "  ID=" + FlightID;
 
-       var Rows = Util.getDBRows(SQL);
+       var Rows = Util.getDBRows(SQL, ctx);
       foreach (var Row in Rows) {
         DroneFlight Flight = new DroneFlight() {
           ID = Util.toInt(Row["ID"].ToString()),
@@ -248,35 +258,33 @@ namespace eX_Portal.exLogic {
 
 
     public String getVideoURL(int FlightID) {
-      String SQL;
-      String VideoURL;
-
+      String VideoURL = String.Empty;
       if(_DroneID == 0) _DroneID = getDroneIDForFlight(FlightID);
-
       //Find the drone is live
-      SQL = "SELECT IsLiveVideo FROM MSTR_Drone WHERE DroneID=" + _DroneID;
-      int IsLiveVideo = Util.getDBInt(SQL);
+
+      String SQL = "SELECT IsLiveVideo FROM MSTR_Drone WHERE DroneID=" + _DroneID;
+      int IsLiveVideo = Util.getDBInt(SQL, ctx);
       if(IsLiveVideo > 0) {
-        VideoURL = "rtmp://52.29.242.123/live/drone" + _DroneID;
-        return VideoURL;
-      }
+        int LastFlightID = getLastFlightID(DroneID);
+        if(LastFlightID == FlightID)
+          VideoURL = "rtmp://52.29.242.123/live/drone" + _DroneID;
+      }//if(IsLiveVideo > 0) 
 
-      //get the Recorded Video URL
-      SQL = "SELECT RecordedVideoURL FROM DroneFlight WHERE ID=" + FlightID;
-      VideoURL = Util.getDBVal(SQL);
-      if (!String.IsNullOrEmpty(VideoURL)) {
-        return S3Download.getURL(VideoURL);
-        //return VideoURL;
-      }
+      return VideoURL;
+    }
 
-      return "rtmp://52.29.242.123/live/drone" + _DroneID; 
+
+    public int getLastFlightID(int DroneID) {
+      String SQL = "SELECT Max(ID) FROM DroneFlight WHERE DroneID=" + DroneID;
+      return Util.getDBInt(SQL, ctx);
     }
 
     public String getPlayerURL(int FlightID) {
-      String VideoURL;
+      String VideoURL = String.Empty;
       int MovieCount = getPlayListCount(FlightID);
       if(MovieCount <= 0) {
-        VideoURL = "file:'" + getVideoURL(FlightID) + "'";
+        VideoURL = getVideoURL(FlightID);
+        if (!String.IsNullOrEmpty(VideoURL)) VideoURL = "file:'" + VideoURL + "'";
       } else {
         VideoURL = "playlist:'/Map/PlayList/" + FlightID + "'";
       }
@@ -287,9 +295,8 @@ namespace eX_Portal.exLogic {
       String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + FlightID;
 
       StringBuilder JSon = new StringBuilder();
-      using (var ctx = new ExponentPortalEntities()) {
+      
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
-          ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
@@ -304,19 +311,18 @@ namespace eX_Portal.exLogic {
             }//if
           }//using reader
         }//using ctx.Database.Connection.CreateCommand
-      }//using ExponentPortalEntities
+
       return JSon.ToString();
     }
 
     public int getPlayListCount(int FlightID) {
       String SQL = "select Count(*) from DroneFlightVideo WHERE FlightID=" + FlightID;
-      return Util.getDBInt(SQL);
+      return Util.getDBInt(SQL, ctx);
     }
 
     public String getLiveUAS() {
       String SQL;
-      using (var ctx = new ExponentPortalEntities()) {
-        ctx.Database.Connection.Open();
+
         SQL = @"IF OBJECT_ID('tempdb..#TempLiveDrons') IS NOT NULL
         DROP TABLE #TempLiveDrons;";
         Util.doSQL(SQL, ctx);
@@ -358,7 +364,6 @@ namespace eX_Portal.exLogic {
         MSTR_Drone.DroneID = FlightMapData.DroneID
       ";
         return Util.getDBRowsJson(SQL, ctx);
-      }
     }
 
   }//class Drone

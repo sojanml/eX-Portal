@@ -9,27 +9,21 @@ using System.Data;
 using System.Data.Entity;
 using System.Text;
 
-namespace eX_Portal.Controllers
-{
-    public class MapController : Controller
-    {
+namespace eX_Portal.Controllers {
+  public class MapController : Controller {
         // GET: Map
-        public ActionResult Index()
-        {
+    public ActionResult Index() {
             return View();
         }
-        public ActionResult FightMap()
-        {
+    public ActionResult FightMap() {
             return View();
         }
 
-        public ActionResult Select()
-        {
+    public ActionResult Select() {
             return View();
         }
-        public ActionResult FlightData(int id = 0)
-        {
-            if (!exLogic.User.hasAccess("FLIGHT.MAPVIEW")) return RedirectToAction("NoAccess", "Home");
+    public ActionResult FlightData(int id = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Flight Map";
             ViewBag.FlightID = id;
             Drones thisDrone = new Drones();
@@ -40,16 +34,14 @@ namespace eX_Portal.Controllers
             return View();
         }
 
-        public ActionResult PlayList(int id = 0)
-        {
+    public ActionResult PlayList(int id = 0) {
             String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + id;
             var Rows = Util.getDBRows(SQL);
             Response.ContentType = "text/json";
             return View(Rows);
         }
 
-        public String CheckAlert(int id = 0)
-        {
+    public String CheckAlert(int id = 0) {
             StringBuilder AlertMsg = new StringBuilder();
             int AccountID = Util.getDBInt("SELECT AccountID From MSTR_User WHERE UserID=" + id);
             String SQL = @"SELECT
@@ -71,8 +63,7 @@ namespace eX_Portal.Controllers
           PortalAlert_User.UserID IS NULL AND
           PortalAlert.CreatedOn > DATEADD(minute, -30, GETDATE())";
             var Rows = Util.getDBRows(SQL);
-            foreach (var Row in Rows)
-            {
+      foreach (var Row in Rows) {
                 String AlertType = Row["AlertType"].ToString();
                 if (String.IsNullOrEmpty(AlertType)) AlertType = "High";
                 AlertMsg.Append("<LI");
@@ -91,14 +82,12 @@ namespace eX_Portal.Controllers
             return AlertMsg.ToString();
         }
 
-        public ActionResult FlightChart(int id = 0)
-        {
+    public ActionResult FlightChart(int id = 0) {
             ViewBag.FlightID = id;
             return View();
         }
 
-        public ActionResult PayLoad([Bind(Prefix = "ID")] String FlightUniqueID = "")
-        {
+    public ActionResult PayLoad([Bind(Prefix = "ID")] String FlightUniqueID = "") {
             if (!exLogic.User.hasAccess("PAYLOAD.MAP")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Payload Data";
 
@@ -125,12 +114,10 @@ namespace eX_Portal.Controllers
             nView.addMenu("Detail", Url.Action("Detail", "Payload", new { ID = "_Pkey" }));
             ViewBag.FlightUniqueID = FlightUniqueID;
 
-            if (Request.IsAjaxRequest())
-            {
+      if (Request.IsAjaxRequest()) {
                 Response.ContentType = "text/javascript";
                 return PartialView("qViewData", nView);
-            }
-            else {
+      } else {
 
                 //get yard information for FlightUniqueID
                 GeoGrid theYard = new GeoGrid(FlightUniqueID);
@@ -141,23 +128,19 @@ namespace eX_Portal.Controllers
 
         }
 
-        public JsonResult getYard([Bind(Prefix = "ID")] int YardID = 0)
-        {
+    public JsonResult getYard([Bind(Prefix = "ID")] int YardID = 0) {
             GeoGrid theYard = new GeoGrid(0);
             return Json(theYard.getYard(YardID), JsonRequestBehavior.AllowGet);
         }
 
         [System.Web.Mvc.HttpPost]
-        public JsonResult setYard(PayLoadYard Yard)
-        {
+    public JsonResult setYard(PayLoadYard Yard) {
             ExponentPortalEntities DB = new ExponentPortalEntities();
             String SQL;
-            if (Request["chkNewSetting"] == "1")
-            {
+      if (Request["chkNewSetting"] == "1") {
                 DB.PayLoadYards.Add(Yard);
                 DB.SaveChanges();
-            }
-            else {
+      } else {
                 var entry = DB.Entry(Yard);
                 entry.State = EntityState.Modified;
                 entry.Property("YardName").IsModified = false;
@@ -177,8 +160,7 @@ namespace eX_Portal.Controllers
             Util.doSQL(SQL);
             //}
 
-            if (Request["chkReProcess"] == "1")
-            {
+      if (Request["chkReProcess"] == "1") {
                 SQL = "UPDATE PayLoadMapData SET \n" +
                 " YardID=" + Yard.YardID + ",\n" +
                 " RowNumber= -1,\n" +
@@ -197,8 +179,7 @@ namespace eX_Portal.Controllers
         }
 
         [System.Web.Mvc.HttpGet]
-        public JsonResult GetDrones()
-        {
+    public JsonResult GetDrones() {
             string SQL =
             "SELECT\n" +
             "  [LastLatitude],\n" +
@@ -234,8 +215,7 @@ namespace eX_Portal.Controllers
         }
 
         [System.Web.Mvc.HttpGet]
-        public JsonResult GetFlightData(int FlightID = 0, int LastFlightDataID = 0, int MaxRecords = 1, int Replay = 0)
-        {
+    public JsonResult GetFlightData(int FlightID = 0, int LastFlightDataID = 0, int MaxRecords = 1, int Replay = 0) {
 
             ViewBag.FlightID = FlightID;
             IList<FlightMapData> DroneDataList = Util.GetDroneData(FlightID, LastFlightDataID, MaxRecords, Replay);
@@ -247,13 +227,11 @@ namespace eX_Portal.Controllers
         }
 
 
-        public string Send()
-        {
+    public string Send() {
 
             string reuestquery = Request.QueryString["Message"];
             string[] data = reuestquery.Split('|');
-            try
-            {
+      try {
                 string SQL = "INSERT INTO [DroneData] (\n" +
                   "  [CreatedDate], \n" +
                   "  [QueueMessage],\n" +              // 1
@@ -289,17 +267,14 @@ namespace eX_Portal.Controllers
                   ")";
                 Util.doSQL(SQL);
                 return "OK";
-            }
-            catch (Exception ex)
-            {
+      } catch (Exception ex) {
                 return "ERROR - " + ex.Message;
             }
 
 
         }
         [System.Web.Mvc.HttpGet]
-        public JsonResult getLineChartData(int FlightID = 80, int LastFlightDataID = 0, int MaxRecords = 20)
-        {
+    public JsonResult getLineChartData(int FlightID = 80, int LastFlightDataID = 0, int MaxRecords = 20) {
             List<object> iData = new List<object>();
             List<string> labels = new List<string>();
             List<int> lst_dataItem_2 = new List<int>();
@@ -308,15 +283,13 @@ namespace eX_Portal.Controllers
             List<int> lst_dataItem_4 = new List<int>();
             List<int> lst_dataItem_5 = new List<int>();
             IList<FlightMapData> DroneDataList = Util.GetFlightChartData(FlightID, LastFlightDataID, MaxRecords);
-            foreach (FlightMapData FMD in DroneDataList)
-            {
+      foreach (FlightMapData FMD in DroneDataList) {
                 labels.Add(FMD.ReadTime.Value.Hour + ":" + FMD.ReadTime.Value.Minute + ":" + FMD.ReadTime.Value.Second);
                 lst_dataItem_1.Add(Convert.ToInt32(FMD.Altitude));
                 lst_dataItem_2.Add(Convert.ToInt32(FMD.Satellites));
                 lst_dataItem_3.Add(Convert.ToInt32(FMD.Pitch));
                 lst_dataItem_4.Add(Convert.ToInt32(FMD.Roll));
                 lst_dataItem_5.Add(Convert.ToInt32(FMD.Speed));
-
             }
             iData.Add(labels);
             iData.Add(lst_dataItem_1);
@@ -329,9 +302,8 @@ namespace eX_Portal.Controllers
 
         }
 
-        public ActionResult FlightDataView([Bind(Prefix = "ID")] String FlightID = "")
-        {
-            if (!exLogic.User.hasAccess("FLIGHT.DATA")) return RedirectToAction("NoAccess", "Home");
+    public ActionResult FlightDataView([Bind(Prefix = "ID")] String FlightID = "") {
+      if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
             ViewBag.FlightID = FlightID;
             int FID = Util.toInt(FlightID);
             if (FID < 1) return RedirectToAction("Error");
@@ -360,19 +332,16 @@ namespace eX_Portal.Controllers
 
             qView nView = new qView(SQL);
             nView.IsFormatDate = false;
-            if (Request.IsAjaxRequest())
-            {
+      if (Request.IsAjaxRequest()) {
                 Response.ContentType = "text/javascript";
                 return PartialView("qViewData", nView);
-            }
-            else {
+      } else {
                 return View(nView);
             }//if(IsAjaxRequest)
         }
 
         [System.Web.Mvc.HttpGet]
-        public JsonResult GetPayLoadData(string FlightUniqueID = "", int LastFlightDataID = 0, int MaxRecords = 1)
-        {
+    public JsonResult GetPayLoadData(string FlightUniqueID = "", int LastFlightDataID = 0, int MaxRecords = 1) {
             ViewBag.FlightUniqueID = FlightUniqueID;
             IList<PayLoadMapData> PayLoadDataList = Util.GetPayLoadData(FlightUniqueID, LastFlightDataID, MaxRecords);
             //  LiveDrones.SQL = ;
