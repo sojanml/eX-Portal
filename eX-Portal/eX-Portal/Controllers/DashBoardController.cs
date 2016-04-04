@@ -64,8 +64,10 @@ namespace eX_Portal.Controllers
         [System.Web.Mvc.HttpGet]
         public JsonResult getUASLastFlightChartData()
         {
+            string DroneName;
             List<object> iData = new List<object>();
             List<string> labels = new List<string>();
+            List<string> labelsShort = new List<string>();
             List<int> lst_dataItem_2 = new List<int>();
             List<int> lst_dataItem_1 = new List<int>();
             List<int> lst_dataItem_3 = new List<int>();
@@ -76,7 +78,9 @@ namespace eX_Portal.Controllers
             IList<ChartViewModel> ChartList = Util.getUASLastFlightChartData();
             foreach (ChartViewModel FMD in ChartList)
             {
+                DroneName = FMD.DroneName;
                 labels.Add(FMD.DroneName);
+                labelsShort.Add(DroneName.Split('-').Last());
                 lst_dataItem_1.Add(Convert.ToInt32(FMD.TotalFightTime / 60));
 
 
@@ -84,6 +88,8 @@ namespace eX_Portal.Controllers
             }
             iData.Add(labels);
             iData.Add(lst_dataItem_1);
+            iData.Add(labelsShort);
+           
             //  iData.Add(lst_dataItem_2);
             //iData.Add(lst_dataItem_3);
             //iData.Add(lst_dataItem_4);

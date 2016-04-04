@@ -47,30 +47,23 @@ $(document).ready(function () {
     var data = {
       labels: aLabels1,
       datasets: [{
-        label: "Total Flight Time",
-        //  fillColor: "rgba(220,220,220,0.2)",
-        strokeColor: "rgba(220,220,220,1)",
-        pointColor: "rgba(220,220,220,1)",
-        pointStrokeColor: "#fff",
-        //  pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(220,220,220,1)",
-        fillColor: "rgba(255,102,102,0.5)",
-        strokeColor: "rgba(255,102,102,0.8)",
-        highlightFill: "rgba(255,102,102,0.75)",
-        highlightStroke: "rgba(255,102,102,1)",
+          label: "Total Flight Time",
+          //
+          fillColor: "rgba(151,187,205,0.5)",
+          strokeColor: "rgba(151,187,205,0.8)",
+          highlightFill: "rgba(151,187,205,0.75)",
+          highlightStroke: "rgba(151,187,205,1)",
+
+
+          
+       
         data: aDatasets1
       }, {
         label: "Current Month Flight Time",
-        // fillColor: "rgba(151,187,205,0.2)",
-        strokeColor: "rgba(151,187,205,1)",
-        pointColor: "rgba(151,187,205,1)",
-        pointStrokeColor: "#fff",
-        // pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(151,187,205,1)",
-        fillColor: "rgba(153,255,51,0.5)",
-        strokeColor: "rgba(153,255,51,0.8)",
-        highlightFill: "rgba(153,255,51,0.75)",
-        highlightStroke: "rgba(153,255,51,1)",
+        fillColor: "rgba(220,220,220,0.5)",
+        strokeColor: "rgba(220,220,220,0.8)",
+        highlightFill: "rgba(220,220,220,0.75)",
+        highlightStroke: "rgba(220,220,220,1)",
         data: aDatasets2
       }]
     };
