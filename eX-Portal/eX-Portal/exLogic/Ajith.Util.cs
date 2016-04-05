@@ -89,9 +89,25 @@ namespace eX_Portal.exLogic {
                             group by  PilotId )
                             b on a.PilotId = b.PilotId  group by a.PilotId ,c.FirstName
                            having   sum(a.FixedWing) + sum(a.multiDashRotor) > 0";
-
-
-          cmd.CommandText = SQL;
+                    if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                    {
+                        SQL = @" select a.PilotId,c.FirstName,sum(a.FixedWing) + sum(a.multiDashRotor) as Ptotal
+                         , CASE WHEN 
+                           MIN(b.PCurrentMonth) IS NULL then 0
+                           else min(b.PCurrentMonth) end as pCurrent
+                           from MSTR_User c left
+                           join MSTR_Pilot_Log a on a.PilotId = c.UserId
+                           left join(select PilotId,sum(FixedWing) + sum(multiDashRotor) as PCurrentMonth
+                           from MSTR_Pilot_Log
+                           where
+                           convert(nvarchar(30), date, 120)
+                            BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) 
+                            AND GETDATE()
+                            group by  PilotId )
+                            b on a.PilotId = b.PilotId  where c.accountId='"+ Util.getAccountID() + "' group by a.PilotId ,c.FirstName " +
+                         "  having   sum(a.FixedWing) + sum(a.multiDashRotor) > 0";
+                    }
+                    cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
               ChartViewModel dd = new ChartViewModel();
@@ -135,7 +151,19 @@ namespace eX_Portal.exLogic {
                             on a.DroneId=b.DroneId 
                             group by 
                             b.DroneId,a.DroneName";
-
+                    if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                    {
+                        SQL = @"select MAX(b.ReadTime),
+                            max(b.TotalFlightTime) as TotalFlightTime,
+                            b.DroneId,a.DroneName
+                            from MSTR_Drone a
+                            join
+                            FlightMapData b
+                            on a.DroneId = b.DroneId
+                             where a.AccountID='" + Util.getAccountID() +
+                           "' group by " +
+                           " b.DroneId,a.DroneName  ";
+                    }
 
           cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {
@@ -191,9 +219,30 @@ namespace eX_Portal.exLogic {
                             AND  GETDATE()
                             group by  u.DroneId )k on t.DroneId = k.DroneId
                             group by t.DroneId,v.DroneName";
+                    if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                    {
+                        SQL = @"select t.DroneId,
+                           v.DroneName,max(t.ReadTime) as readtime ,
+                            max(T.TotalFlightTime) as TotalFlightTime,
+                            min(k.FlightTime)as Monthtime,
+                            CASE WHEN  max(T.TotalFlightTime) - min(k.FlightTime)IS NULL or 
+                            max(T.TotalFlightTime) - min(k.FlightTime) = 0 
+                            THEN max(T.TotalFlightTime) ELSE max(T.TotalFlightTime) - min(k.FlightTime) END as CurrentFlightTime
+                            from MSTR_Drone v
+                            join FlightMapData t on v.DroneId = t.DroneId 
+                            left join(select u.DroneId, min(u.ReadTime) as ReadTime,
+                            max(u.TotalFlightTime) as FlightTime
+                            from FlightMapData u
+                            where    u.ReadTime
+                            BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)  
+                            AND  GETDATE() 
+                            group by  u.DroneId )k on t.DroneId = k.DroneId 
+                            where v.AccountID='"+ Util.getAccountID() +"' group by t.DroneId,v.DroneName";
+                      
+                    }
 
 
-          cmd.CommandText = SQL;
+                    cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
               ChartViewModel dd = new ChartViewModel();

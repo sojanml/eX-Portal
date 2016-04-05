@@ -101,7 +101,7 @@ $(document).ready(function () {
         // tooltipTemplate: _tooltipTemplate,
         // tooltipTemplate:    "<ul <li><span style=\"background-color:blue\"></span>'abcd'</li</ul>",
 
-   tooltipTemplate: "<%if (label){%><%=xLabel[label]%>   Total Flight Time: <%}%><%= value   %>",
+   tooltipTemplate: "<%if (label){%><%=xLabel[label]%>   Total Flight Time: <%}%><%= value   %>(Minutes)",
       // tooltipTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>",
       //String - A legend template
       multiTooltipTemplate: "<%= value %>",
