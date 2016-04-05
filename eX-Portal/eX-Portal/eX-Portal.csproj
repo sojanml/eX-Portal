@@ -44,11 +44,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.Core.3.2.0.0-beta\lib\net45\AWSSDK.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AWSSDK.S3, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.S3.3.1.4.0\lib\net45\AWSSDK.S3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.TransactSql.ScriptDom.12.0.1\lib\net40\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -112,6 +125,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -173,6 +187,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AutoCompleteController.cs" />
     <Compile Include="Controllers\BlackBoxController.cs" />
+    <Compile Include="Controllers\DashBoardController.cs" />
     <Compile Include="Controllers\DesignController.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\DroneCheckListController.cs" />
@@ -191,12 +206,21 @@
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="exLogic\Ajith.Util.cs" />
+    <Compile Include="exLogic\BlackBox.cs" />
     <Compile Include="exLogic\Cathey.Util.cs" />
+    <Compile Include="exLogic\Drone.cs" />
     <Compile Include="exLogic\DroneCheckListForm.cs" />
+    <Compile Include="exLogic\ExifLib.cs" />
+    <Compile Include="exLogic\GeoGrid.cs" />
+    <Compile Include="exLogic\HtmlHelperExtensions.cs" />
+    <Compile Include="exLogic\Listing.cs" />
     <Compile Include="exLogic\qDetailView.cs" />
     <Compile Include="exLogic\qView.cs" />
+    <Compile Include="exLogic\S3Download.cs" />
+    <Compile Include="exLogic\SimpleParser.cs" />
     <Compile Include="exLogic\Sojan.Util.cs" />
     <Compile Include="exLogic\User.cs" />
+    <Compile Include="exLogic\Weather.Util.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -220,7 +244,9 @@
     <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DroneFlightVideo.cs" />
     <Compile Include="Models\FlightMapData.cs" />
+    <Compile Include="Models\GCA_Approval.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LiveDrone.cs" />
     <Compile Include="Models\LUP_Drone.cs">
@@ -240,9 +266,6 @@
     </Compile>
     <Compile Include="Models\M2M_ProfileMenu.cs" />
     <Compile Include="Models\M2M_UserAccount.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\M2M_UserProfile.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
@@ -284,6 +307,11 @@
     <Compile Include="Models\PayLoadFlight.cs" />
     <Compile Include="Models\PayLoadImageData.cs" />
     <Compile Include="Models\PayLoadMapData.cs" />
+    <Compile Include="Models\PayLoadYard.cs" />
+    <Compile Include="Models\PayLoadYardGrid.cs" />
+    <Compile Include="Models\PayLoad_AutoFix.cs" />
+    <Compile Include="Models\PortalAlert.cs" />
+    <Compile Include="Models\PortalAuth.cs" />
     <Compile Include="Models\Portaldb.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -308,6 +336,7 @@
     <Compile Include="Models\ProductTransaction.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserLog.cs" />
     <Compile Include="Models\usp_Portal_CreateDrone_Result.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -338,13 +367,17 @@
     <Compile Include="SqlParser\WhereTag.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\AccountViewModel.cs" />
+    <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\DroneServiceViewModel.cs" />
     <Compile Include="ViewModel\DroneView.cs" />
+    <Compile Include="ViewModel\Forcast.cs" />
     <Compile Include="ViewModel\ListViewModel.cs" />
     <Compile Include="ViewModel\MenuModel.cs" />
+    <Compile Include="ViewModel\S3Upload.cs" />
     <Compile Include="ViewModel\Summary.cs" />
     <Compile Include="ViewModel\UserLogin.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
+    <Compile Include="ViewModel\WeatherViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Antlr3.Runtime.dll" />
@@ -493,6 +526,9 @@
     <Content Include="sass\print.scss" />
     <Content Include="sass\screen.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\DashBoardFlightChart.js" />
+    <Content Include="Scripts\DashBoardLastFlightChart.js" />
+    <Content Include="Scripts\DashBoardPilotChart.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -695,6 +731,14 @@
     <Content Include="Views\Document\PowerPlant.cshtml" />
     <Content Include="Views\Document\SpillDetection.cshtml" />
     <Content Include="Views\Document\WaterSampling.cshtml" />
+    <Content Include="Views\DashBoard\ChartDetails.cshtml" />
+    <Content Include="Views\DashBoard\Default.cshtml" />
+    <Content Include="Views\DashBoard\Dewa.cshtml" />
+    <Content Include="Views\DashBoard\Internal.cshtml" />
+    <Content Include="Views\DashBoard\SubSection.cshtml" />
+    <Content Include="Views\DashBoard\Weather.cshtml" />
+    <Content Include="Views\User\Create.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -709,6 +753,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\AWSSDK.S3.3.1.4.0\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
