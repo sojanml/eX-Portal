@@ -142,7 +142,7 @@ namespace eX_Portal.exLogic {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           string SQL;
-          SQL = @"select MAX(b.ReadTime),
+          SQL = @"select MAX(b.ReadTime) as ReadTime,
                             max(b.TotalFlightTime)as TotalFlightTime,
                             b.DroneId,a.DroneName 
                             from MSTR_Drone a
@@ -153,7 +153,7 @@ namespace eX_Portal.exLogic {
                             b.DroneId,a.DroneName";
                     if (!exLogic.User.hasAccess("DRONE.MANAGE"))
                     {
-                        SQL = @"select MAX(b.ReadTime),
+                        SQL = @"select MAX(b.ReadTime) as ReadTime,
                             max(b.TotalFlightTime) as TotalFlightTime,
                             b.DroneId,a.DroneName
                             from MSTR_Drone a
@@ -171,8 +171,7 @@ namespace eX_Portal.exLogic {
               ChartViewModel dd = new ChartViewModel();
               dd.DroneName = reader["DroneName"].ToString();
               dd.TotalFightTime = Util.toInt(reader["TotalFlightTime"].ToString());
-
-
+              dd.LastFlightTime = Util.toDate(reader["ReadTime"].ToString());
               ChartList.Add(dd);
 
             }

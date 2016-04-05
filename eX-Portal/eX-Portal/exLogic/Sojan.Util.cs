@@ -153,7 +153,7 @@ namespace eX_Portal.exLogic {
       return Result;
     }
 
-    
+
 
     public static Dictionary<String, Object> getDBRow(String SQL) {
       var Result = new Dictionary<String, Object>();
@@ -231,22 +231,22 @@ namespace eX_Portal.exLogic {
     public static List<Dictionary<String, Object>> getDBRows(String SQL, ExponentPortalEntities ctx) {
       var Rows = new List<Dictionary<String, Object>>();
       var Result = new Dictionary<String, Object>();
-      
-        using (var cmd = ctx.Database.Connection.CreateCommand()) {
-          //ctx.Database.Connection.Open();
-          cmd.CommandText = SQL;
-          using (var reader = cmd.ExecuteReader()) {
-            while (reader.Read()) {
-              Result = new Dictionary<String, Object>();
-              Result["hasRows"] = true;
-              for (int i = 0; i < reader.FieldCount; i++) {
-                Result[reader.GetName(i)] = reader.GetValue(i);
-              }//for
-              Rows.Add(Result);
-            }//while
-          }//using reader
-        }//using ctx.Database.Connection.CreateCommand
-      
+
+      using (var cmd = ctx.Database.Connection.CreateCommand()) {
+        //ctx.Database.Connection.Open();
+        cmd.CommandText = SQL;
+        using (var reader = cmd.ExecuteReader()) {
+          while (reader.Read()) {
+            Result = new Dictionary<String, Object>();
+            Result["hasRows"] = true;
+            for (int i = 0; i < reader.FieldCount; i++) {
+              Result[reader.GetName(i)] = reader.GetValue(i);
+            }//for
+            Rows.Add(Result);
+          }//while
+        }//using reader
+      }//using ctx.Database.Connection.CreateCommand
+
       return Rows;
     }//function
 
@@ -459,9 +459,9 @@ namespace eX_Portal.exLogic {
       String SQL = "SELECT YardID, YardName FROM PayLoadYard ORDER BY YardName";
       StringBuilder Options = new StringBuilder();
       var Rows = getDBRows(SQL);
-      foreach(var row in Rows) {
+      foreach (var row in Rows) {
         Options.Append("<option");
-        if(YardID == row["YardID"].ToString()) Options.Append(" selected");
+        if (YardID == row["YardID"].ToString()) Options.Append(" selected");
         Options.Append(" value=\"");
         Options.Append(row["YardID"].ToString());
         Options.Append("\">");
