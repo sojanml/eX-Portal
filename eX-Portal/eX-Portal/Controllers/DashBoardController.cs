@@ -68,6 +68,7 @@ namespace eX_Portal.Controllers
             List<object> iData = new List<object>();
             List<string> labels = new List<string>();
             List<string> labelsShort = new List<string>();
+            List<string> labelsLastDate = new List<string>();
             List<int> lst_dataItem_2 = new List<int>();
             List<int> lst_dataItem_1 = new List<int>();
             List<int> lst_dataItem_3 = new List<int>();
@@ -82,6 +83,7 @@ namespace eX_Portal.Controllers
                 labels.Add(FMD.DroneName);
                 labelsShort.Add(DroneName.Split('-').Last());
                 lst_dataItem_1.Add(Convert.ToInt32(FMD.TotalFightTime / 60));
+                labelsLastDate.Add(FMD.LastFlightTime.ToString());
 
 
 
