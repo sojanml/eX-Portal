@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "Content/dashboard.css",
+    "inputFile": "Content/dashboard.less"
+  },
+  {
+    "outputFile": "Content/dewa-dashboard.css",
+    "inputFile": "Content/dewa-dashboard.scss"
+  },
+  {
+    "outputFile": "sass/dewa-dashboard.css",
+    "inputFile": "sass/dewa-dashboard.scss"
+  }
+]

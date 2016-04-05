@@ -44,11 +44,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.Core.3.2.3.0-beta\lib\net45\AWSSDK.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AWSSDK.S3, Version=3.2.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.S3.3.2.3.0-beta\lib\net45\AWSSDK.S3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FileStorageUtils">
+      <HintPath>..\..\..\..\FileStorageUtils\bin\Debug\FileStorageUtils.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.SqlServer.TransactSql.ScriptDom.12.0.1\lib\net40\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -112,6 +129,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -173,6 +191,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AutoCompleteController.cs" />
     <Compile Include="Controllers\BlackBoxController.cs" />
+    <Compile Include="Controllers\DashBoardController.cs" />
     <Compile Include="Controllers\DesignController.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\DroneCheckListController.cs" />
@@ -187,21 +206,31 @@
     <Compile Include="Controllers\PayLoadController.cs" />
     <Compile Include="Controllers\PilotLogController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
-    <Compile Include="Controllers\SummaryController.cs" />
+    <Compile Include="Controllers\S3UploadController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="exLogic\Ajith.Util.cs" />
+    <Compile Include="exLogic\BlackBox.cs" />
     <Compile Include="exLogic\Cathey.Util.cs" />
+    <Compile Include="exLogic\Drone.cs" />
     <Compile Include="exLogic\DroneCheckListForm.cs" />
+    <Compile Include="exLogic\ExifLib.cs" />
+    <Compile Include="exLogic\GeoGrid.cs" />
+    <Compile Include="exLogic\HtmlHelperExtensions.cs" />
+    <Compile Include="exLogic\Listing.cs" />
     <Compile Include="exLogic\qDetailView.cs" />
     <Compile Include="exLogic\qView.cs" />
+    <Compile Include="exLogic\SimpleParser.cs" />
     <Compile Include="exLogic\Sojan.Util.cs" />
     <Compile Include="exLogic\User.cs" />
+    <Compile Include="exLogic\Weather.Util.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\BlackBoxData.cs" />
+    <Compile Include="Models\BlackBoxData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataAnnotationsHelper.cs" />
     <Compile Include="Models\DroneCheckList.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
@@ -209,20 +238,34 @@
     <Compile Include="Models\DroneCheckListItem.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DroneCheckListValidation.cs" />
+    <Compile Include="Models\DroneCheckListValidation.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DroneData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DroneDefinition.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DroneDocument.cs" />
+    <Compile Include="Models\DroneDocument.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FlightMapData.cs" />
+    <Compile Include="Models\DroneFlightVideo.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FlightMapData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GCA_Approval.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\LiveDrone.cs" />
+    <Compile Include="Models\LiveDrone.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LUP_Drone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -238,11 +281,10 @@
     <Compile Include="Models\M2M_DroneServiceParts.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M2M_ProfileMenu.cs" />
-    <Compile Include="Models\M2M_UserAccount.cs">
+    <Compile Include="Models\M2M_ProfileMenu.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M2M_UserProfile.cs">
+    <Compile Include="Models\M2M_UserAccount.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
@@ -267,7 +309,9 @@
     <Compile Include="Models\MSTR_Parts.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MSTR_Pilot_Log.cs" />
+    <Compile Include="Models\MSTR_Pilot_Log.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MSTR_Product.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -277,27 +321,56 @@
     <Compile Include="Models\MSTR_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MSTR_User_Pilot.cs" />
-    <Compile Include="Models\MSTR_User_Pilot_Certification.cs" />
-    <Compile Include="Models\MSTR_User_Pilot_ExponentUAS.cs" />
-    <Compile Include="Models\PayLoadData.cs" />
-    <Compile Include="Models\PayLoadFlight.cs" />
-    <Compile Include="Models\PayLoadImageData.cs" />
-    <Compile Include="Models\PayLoadMapData.cs" />
-    <Compile Include="Models\Portaldb.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Portaldb.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Portaldb.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
+    <Compile Include="Models\MSTR_User_Pilot.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Portaldb.Designer.cs">
-      <AutoGen>True</AutoGen>
+    <Compile Include="Models\MSTR_User_Pilot_Certification.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MSTR_User_Pilot_ExponentUAS.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadFlight.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadImageData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadMapData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadYard.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadYardGrid.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoad_AutoFix.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PortalAlert.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PortalAuth.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Portaldb.Context.cs">
+      <DependentUpon>Portaldb.Context.tt</DependentUpon>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\Portaldb.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\Portaldb.Designer.cs">
       <DependentUpon>Portaldb.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Models\ProductDefinition.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
@@ -308,18 +381,24 @@
     <Compile Include="Models\ProductTransaction.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserLog.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\usp_Portal_CreateDrone_Result.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\usp_Portal_DroneNameList_Result.cs" />
-    <Compile Include="Models\usp_Portal_DroneServiceType_Result.cs" />
+    <Compile Include="Models\usp_Portal_DroneNameList_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\usp_Portal_DroneServiceType_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\usp_Portal_GetDroneDropDown_Result.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\usp_Portal_GetDroneParts_Result.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="Models\usp_Portal_GetDroneParts_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlParser\BracesTag.cs" />
     <Compile Include="SqlParser\ForUpdateTag.cs" />
@@ -338,79 +417,41 @@
     <Compile Include="SqlParser\WhereTag.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\AccountViewModel.cs" />
+    <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\DroneServiceViewModel.cs" />
     <Compile Include="ViewModel\DroneView.cs" />
+    <Compile Include="ViewModel\Forcast.cs" />
     <Compile Include="ViewModel\ListViewModel.cs" />
     <Compile Include="ViewModel\MenuModel.cs" />
+    <Compile Include="exLogic\S3Download.cs" />
+    <Compile Include="ViewModel\S3Upload.cs" />
     <Compile Include="ViewModel\Summary.cs" />
     <Compile Include="ViewModel\UserLogin.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
+    <Compile Include="ViewModel\WeatherViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Antlr3.Runtime.dll" />
-    <Content Include="bin\Antlr3.Runtime.pdb" />
-    <Content Include="bin\EntityFramework.dll" />
-    <Content Include="bin\EntityFramework.SqlServer.dll" />
-    <Content Include="bin\EntityFramework.SqlServer.xml" />
-    <Content Include="bin\EntityFramework.xml" />
-    <Content Include="bin\eX-Portal.dll" />
-    <Content Include="bin\eX-Portal.pdb" />
-    <Content Include="bin\Microsoft.AspNet.Identity.Core.dll" />
-    <Content Include="bin\Microsoft.AspNet.Identity.Core.xml" />
-    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.dll" />
-    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.xml" />
-    <Content Include="bin\Microsoft.AspNet.Identity.Owin.dll" />
-    <Content Include="bin\Microsoft.AspNet.Identity.Owin.xml" />
-    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
-    <Content Include="bin\Microsoft.Owin.dll" />
-    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.dll" />
-    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.Cookies.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Cookies.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Facebook.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Facebook.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.Google.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Google.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.OAuth.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.OAuth.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.Twitter.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Twitter.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.xml" />
-    <Content Include="bin\Microsoft.Owin.xml" />
-    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
-    <Content Include="bin\Newtonsoft.Json.dll" />
-    <Content Include="bin\Newtonsoft.Json.xml" />
-    <Content Include="bin\Owin.dll" />
-    <Content Include="bin\roslyn\csc.exe" />
-    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
-    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
-    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
-    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
-    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
-    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
-    <Content Include="bin\roslyn\vbc.exe" />
-    <Content Include="bin\roslyn\VBCSCompiler.exe" />
-    <Content Include="bin\System.Web.Helpers.dll" />
-    <Content Include="bin\System.Web.Helpers.xml" />
-    <Content Include="bin\System.Web.Mvc.dll" />
-    <Content Include="bin\System.Web.Mvc.xml" />
-    <Content Include="bin\System.Web.Optimization.dll" />
-    <Content Include="bin\System.Web.Optimization.xml" />
-    <Content Include="bin\System.Web.Razor.dll" />
-    <Content Include="bin\System.Web.Razor.xml" />
-    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
-    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
-    <Content Include="bin\System.Web.WebPages.dll" />
-    <Content Include="bin\System.Web.WebPages.Razor.dll" />
-    <Content Include="bin\System.Web.WebPages.Razor.xml" />
-    <Content Include="bin\System.Web.WebPages.xml" />
-    <Content Include="bin\WebGrease.dll" />
+    <Content Include=".gitattributes" />
+    <Content Include=".gitignore" />
+    <Content Include="audio\notify.mp3" />
+    <Content Include="Blue.png" />
+    <Content Include="Blue1.png" />
+    <Content Include="bullet_blue.png" />
+    <Content Include="bullet_green.png" />
+    <Content Include="bullet_red.png" />
+    <Content Include="Content\black-box.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\dashboard.css" />
+    <Content Include="Content\dewa-dashboard.css" />
+    <Content Include="Content\drone-live.css" />
+    <Content Include="Content\flight-data.css" />
+    <Content Include="Content\ie.css" />
+    <Content Include="Content\internal-dashboard.css" />
     <Content Include="Content\jqsimplemenu.css" />
+    <Content Include="Content\map.css" />
+    <Content Include="Content\print.css" />
+    <Content Include="Content\screen.css" />
     <Content Include="dataTable\css\dataTables.bootstrap.css" />
     <Content Include="dataTable\css\dataTables.bootstrap.min.css" />
     <Content Include="dataTable\css\dataTables.foundation.css" />
@@ -436,12 +477,43 @@
     <Content Include="dataTable\js\jquery.dataTables.js" />
     <Content Include="dataTable\js\jquery.dataTables.min.js" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\DINNextLTPro-Light.eot" />
     <Content Include="fonts\DINNextLTPro-Light.svg" />
+    <Content Include="fonts\DINNextLTPro-Light.ttf" />
+    <Content Include="fonts\DINNextLTPro-Light.woff" />
+    <Content Include="fonts\DINNextLTPro-LightCondensed.eot" />
     <Content Include="fonts\DINNextLTPro-LightCondensed.svg" />
+    <Content Include="fonts\DINNextLTPro-LightCondensed.ttf" />
+    <Content Include="fonts\DINNextLTPro-LightCondensed.woff" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\weathericons-regular-webfont.eot" />
+    <Content Include="fonts\weathericons-regular-webfont.svg" />
+    <Content Include="fonts\weathericons-regular-webfont.ttf" />
+    <Content Include="fonts\weathericons-regular-webfont.woff" />
+    <Content Include="fonts\weathericons-regular-webfont.woff2" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\bullet.png" />
+    <Content Include="images\cal-icon.png" />
+    <Content Include="images\drop-down.png" />
+    <Content Include="images\image10.png" />
+    <Content Include="images\image11.png" />
+    <Content Include="images\image12.png" />
+    <Content Include="images\image5.png" />
+    <Content Include="images\image6.png" />
+    <Content Include="images\image7.png" />
+    <Content Include="images\image8.png" />
+    <Content Include="images\image9.png" />
     <Content Include="images\logo.png" />
+    <Content Include="images\map\bottom-left.png" />
+    <Content Include="images\map\bottom-right.png" />
+    <Content Include="images\map\top-left.png" />
+    <Content Include="images\map\top-right.png" />
+    <Content Include="images\world.jpg" />
     <Content Include="jquery-ui\index.html" />
     <Content Include="jquery-ui\jquery-ui.css" />
     <Content Include="jquery-ui\jquery-ui.js" />
@@ -451,63 +523,147 @@
     <Content Include="jquery-ui\jquery-ui.structure.min.css" />
     <Content Include="jquery-ui\jquery-ui.theme.css" />
     <Content Include="jquery-ui\jquery-ui.theme.min.css" />
+    <Content Include="jwplayer\jwplayer.flash.swf" />
+    <Content Include="jwplayer\jwplayer.js" />
+    <Content Include="jwplayer\polyfills.base64.js" />
+    <Content Include="jwplayer\polyfills.promise.js" />
+    <Content Include="jwplayer\provider.cast.js" />
+    <Content Include="jwplayer\provider.shaka.js" />
+    <Content Include="jwplayer\provider.youtube.js" />
+    <Content Include="jwplayer\simple.mp4" />
+    <Content Include="jwplayer\skins\beelden.css" />
+    <Content Include="jwplayer\skins\bekle.css" />
+    <Content Include="jwplayer\skins\five.css" />
+    <Content Include="jwplayer\skins\glow.css" />
+    <Content Include="jwplayer\skins\roundster.css" />
+    <Content Include="jwplayer\skins\seven.css" />
+    <Content Include="jwplayer\skins\six.css" />
+    <Content Include="jwplayer\skins\stormtrooper.css" />
+    <Content Include="jwplayer\skins\vapor.css" />
     <Content Include="Models\Portaldb.Context.tt">
+      <DependentUpon>Portaldb.edmx</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Portaldb.Context.cs</LastGenOutput>
-      <DependentUpon>Portaldb.edmx</DependentUpon>
     </Content>
     <Content Include="Models\Portaldb.tt">
+      <DependentUpon>Portaldb.edmx</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Portaldb.cs</LastGenOutput>
-      <DependentUpon>Portaldb.edmx</DependentUpon>
     </Content>
-    <Content Include="obj\Debug\eX-Portal.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\eX-Portal.dll" />
-    <Content Include="obj\Debug\eX-Portal.pdb" />
-    <Content Include="obj\Debug\TempPE\Models.Portaldb.cs.dll" />
-    <Content Include="obj\Debug\TempPE\Models.Portaldb.Designer.cs.dll" />
+    <Content Include="sass\dewa-dashboard.scss" />
+    <Content Include="Scripts\black-box.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="fonts\DINNextLTPro-Light.eot" />
-    <Content Include="fonts\DINNextLTPro-Light.ttf" />
-    <Content Include="fonts\DINNextLTPro-Light.woff" />
-    <Content Include="fonts\DINNextLTPro-LightCondensed.eot" />
-    <Content Include="fonts\DINNextLTPro-LightCondensed.ttf" />
-    <Content Include="fonts\DINNextLTPro-LightCondensed.woff" />
-    <EntityDeploy Include="Models\Portaldb.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Portaldb.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <Content Include="dataTable\images\Sorting icons.psd" />
-    <Content Include="bin\eX-Portal.dll.config" />
-    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
-    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
-    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
-    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\Portaldb.csdl" />
-    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\Portaldb.msl" />
-    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\Portaldb.ssdl" />
-    <Content Include="obj\Debug\eX-Portal.csprojResolveAssemblyReference.cache" />
-    <Content Include="sass\dewa-dashboard.scss" />
+    <Content Include="Models\Portaldb.edmx.diagram">
+      <DependentUpon>Portaldb.edmx</DependentUpon>
+    </Content>
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <Content Include="sass\ie.scss" />
     <Content Include="sass\print.scss" />
     <Content Include="sass\screen.scss" />
+    <Content Include="sass\internal-dashboard.scss" />
+    <Content Include="sass\dashboard.scss" />
+    <Content Include="sass\_colors.scss" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="sass\_mixin.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\DashBoardFlightChart.js" />
+    <Content Include="Scripts\DashBoardLastFlightChart.js" />
+    <Content Include="Scripts\DashBoardPilotChart.js" />
+    <Content Include="Scripts\drone-live.js" />
+    <Content Include="Scripts\drone.js" />
+    <Content Include="Scripts\flight-gps-tag.js" />
+    <Content Include="Scripts\FlightChart.js" />
+    <Content Include="Scripts\GoogleMapLabel.js" />
+    <Content Include="Scripts\HomeMap.js" />
+    <Content Include="Scripts\infobox.js" />
+    <Content Include="Scripts\JavaScript.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-1.11.3.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\map.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\PayLoadMap.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\S3Upload.js" />
+    <Content Include="Scripts\site.js" />
+    <Content Include="Scripts\user.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Upload\Brand-Logo\dewa-logo.png" />
-    <Content Include="Upload\Brand-Logo\DpWorld-logo.png" />
-    <Content Include="Upload\Brand-Logo\exponent-logo.png" />
+    <Content Include="stylesheets\dewa-dashboard.css" />
+    <Content Include="stylesheets\ie.css" />
+    <Content Include="stylesheets\print.css" />
+    <Content Include="stylesheets\screen.css" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Admin\Account.cshtml" />
+    <Content Include="Views\Admin\AccountCreate.cshtml" />
+    <Content Include="Views\Admin\AccountDetail.cshtml" />
+    <Content Include="Views\Admin\AccountEdit.cshtml" />
+    <Content Include="Views\BlackBox\Decommission.cshtml" />
+    <Content Include="Views\BlackBox\Detail.cshtml" />
+    <Content Include="Views\BlackBox\Index.cshtml" />
+    <Content Include="Views\BlackBox\Live.cshtml" />
+    <Content Include="Views\BlackBox\Upload.cshtml" />
+    <Content Include="Views\Design\SystemMenu.cshtml" />
+    <Content Include="Views\DroneCheckList\Complete.cshtml" />
+    <Content Include="Views\DroneCheckList\Create.cshtml" />
+    <Content Include="Views\DroneCheckList\CreateCheckList.cshtml" />
+    <Content Include="Views\DroneCheckList\Details.cshtml" />
+    <Content Include="Views\DroneCheckList\Index.cshtml" />
+    <Content Include="Views\DroneFlight\Detail.cshtml" />
+    <Content Include="Views\DroneFlight\Index.cshtml" />
+    <Content Include="Views\DroneService\Create.cshtml" />
+    <Content Include="Views\DroneService\Details.cshtml" />
+    <Content Include="Views\DroneService\Index.cshtml" />
+    <Content Include="Views\Drone\Create.cshtml" />
+    <Content Include="Views\Drone\Decommission.cshtml" />
+    <Content Include="Views\Drone\Detail.cshtml" />
+    <Content Include="Views\Drone\DroneParts.cshtml" />
+    <Content Include="Views\Drone\Edit.cshtml" />
+    <Content Include="Views\Drone\FileDetail.cshtml" />
+    <Content Include="Views\Drone\getDroneParts.cshtml" />
+    <Content Include="Views\Drone\Index.cshtml" />
+    <Content Include="Views\Drone\Manage.cshtml" />
+    <Content Include="Views\Drone\ReAssign.cshtml" />
+    <Content Include="Views\Drone\TechnicalLog.cshtml" />
+    <Content Include="Views\Drone\TechnicalLogAdd.cshtml" />
+    <Content Include="Views\Drone\UploadDocument.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Map\images\add.png" />
     <Content Include="Views\Map\images\ajax-loader.gif" />
     <Content Include="Views\Map\images\arrow-down.png" />
@@ -601,114 +757,120 @@
     <Content Include="Views\Map\images\Trucks\yellow32.png" />
     <Content Include="Views\Map\images\Trucks\yellow48.png" />
     <Content Include="Views\Map\images\Trucks\yellow64.png" />
-    <Content Include="Views\Map\test.html" />
-    <Content Include="Web.config" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\qViewData.cshtml" />
+    <Content Include="Views\Shared\_eXPortal.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Shared\qViewData.cshtml" />
-    <Content Include="Views\Shared\_eXPortal.cshtml" />
-    <Content Include="Views\Drone\Create.cshtml" />
-    <Content Include="Views\Drone\Index.cshtml" />
-    <Content Include="Views\DroneCheckList\Create.cshtml" />
-    <Content Include="Views\DroneCheckList\CreateCheckList.cshtml" />
-    <Content Include="Views\DroneCheckList\Details.cshtml" />
-    <Content Include="Views\DroneCheckList\Index.cshtml" />
-    <Content Include="Views\DroneFlight\Detail.cshtml" />
-    <Content Include="Views\DroneFlight\Index.cshtml" />
-    <Content Include="Views\Product\Index.cshtml" />
-    <Content Include="Views\UserLogin\Login.cshtml" />
-    <Content Include="Views\User\Login.cshtml" />
-    <Content Include="Views\DroneService\Create.cshtml" />
-    <Content Include="Views\Design\SystemMenu.cshtml" />
-    <Content Include="Views\DroneService\Index.cshtml" />
-    <Content Include="Views\DroneService\Details.cshtml" />
-    <Content Include="Views\DroneCheckList\Complete.cshtml" />
-    <Content Include="Views\Summary\FlightHistorySummary.cshtml" />
-    <Content Include="Views\Summary\PilotList.cshtml" />
-    <Content Include="Views\Summary\UASFlightSummary.cshtml" />
-    <Content Include="Views\Summary\UASServiceHistory.cshtml" />
-    <Content Include="Views\Summary\UASSummary.cshtml" />
-    <Content Include="Views\Summary\UserList.cshtml" />
     <Content Include="SqlParser\ClassDiagram.cd" />
-    <Content Include="Views\Admin\Account.cshtml" />
-    <Content Include="Views\Admin\AccountCreate.cshtml" />
-    <Content Include="Views\Admin\AccountDetail.cshtml" />
-    <Content Include="Views\Admin\AccountEdit.cshtml" />
-    <Content Include="Views\Admin\ProfileMenu.cshtml" />
-    <Content Include="Views\Admin\ProfileMenuGen.cshtml" />
-    <Content Include="Views\Admin\Profiles.cshtml" />
-    <Content Include="Views\BlackBox\Decommission.cshtml" />
-    <Content Include="Views\BlackBox\Detail.cshtml" />
-    <Content Include="Views\BlackBox\Index.cshtml" />
-    <Content Include="Views\BlackBox\Live.cshtml" />
-    <Content Include="Views\BlackBox\Upload.cshtml" />
+    <Content Include="Views\Design\CustomCss.cshtml" />
+    <Content Include="Views\DroneCheckList\Validation.cshtml" />
+    <Content Include="Views\DroneCheckList\ValidationList.cshtml" />
+    <Content Include="Views\DroneCheckList\View.cshtml" />
+    <Content Include="Views\DroneFlight\Create.cshtml" />
+    <Content Include="Views\DroneFlight\Edit.cshtml" />
+    <Content Include="Views\DroneService\Edit.cshtml" />
+    <Content Include="Views\DroneService\ServicePartsRefurbished.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Home\NoAccess.cshtml" />
     <Content Include="Views\List\Create.cshtml" />
     <Content Include="Views\List\LookupDetails.cshtml" />
     <Content Include="Views\Map\FightMap.cshtml" />
-    <Content Include="Views\Map\FlightChart.cshtml" />
     <Content Include="Views\Map\FlightData.cshtml" />
-    <Content Include="Views\Map\FlightDataView.cshtml" />
-    <Content Include="Views\Map\PayLoad.cshtml" />
-    <Content Include="Views\Map\PayLoadDataView.cshtml" />
-    <Content Include="Views\Parts\Create.cshtml" />
-    <Content Include="Views\Parts\Detail.cshtml" />
-    <Content Include="Views\Parts\Edit.cshtml" />
-    <Content Include="Views\Parts\PartsList.cshtml" />
-    <Content Include="Views\PayLoad\Index.cshtml" />
     <Content Include="Views\PilotLog\Create.cshtml" />
     <Content Include="Views\PilotLog\Detail.cshtml" />
     <Content Include="Views\PilotLog\Edit.cshtml" />
     <Content Include="Views\PilotLog\PilotLogDetails.cshtml" />
+    <Content Include="Views\Shared\Details.cshtml" />
+    <Content Include="Views\Shared\LookupDetails.cshtml" />
+    <Content Include="Views\Shared\Menu.cshtml" />
+    <Content Include="Views\Shared\ServicePartsReplaced.cshtml" />
+    <Content Include="Views\Shared\_BreadCrumbs.cshtml" />
+    <Content Include="Views\Shared\_eXPortalBeforeLogin.cshtml" />
+    <Content Include="Views\User\Create.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\ExponentCertificateDetails.cshtml" />
+    <Content Include="Views\User\ExponentCertificationCreate.cshtml" />
+    <Content Include="Views\User\ExponentCertificationEdit.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Logout.cshtml" />
+    <Content Include="Views\User\PilotCertificateDetails.cshtml" />
+    <Content Include="Views\User\PilotCertificationCreate.cshtml" />
+    <Content Include="Views\User\PilotCertificationEdit.cshtml" />
+    <Content Include="Views\User\UserDetail.cshtml" />
+    <Content Include="Views\User\UserDetailView.cshtml" />
+    <Content Include="Views\User\UserList.cshtml" />
+    <Content Include="Views\User\PilotList.cshtml" />
+    <Content Include="Views\Parts\Create.cshtml" />
+    <Content Include="Views\Parts\Detail.cshtml" />
+    <Content Include="Views\Parts\Edit.cshtml" />
+    <Content Include="Views\Parts\PartsList.cshtml" />
+    <Content Include="Views\DroneFlight\UASFiles.cshtml" />
+    <Content Include="Views\Map\FlightChart.cshtml" />
+    <Content Include="Views\Map\FlightDataView.cshtml" />
+    <Content Include="Views\Map\PayLoadDataView.cshtml" />
+    <Content Include="Views\PayLoad\Index.cshtml" />
+    <Content Include="Views\Map\PayLoad.cshtml" />
+    <Content Include="Views\Admin\ProfileMenu.cshtml" />
+    <Content Include="Views\Admin\Profiles.cshtml" />
+    <Content Include="Views\Admin\ProfileMenuGen.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Test\Video.cshtml" />
     <Content Include="Views\Test\CompareGraph.cshtml" />
-    <Content Include="Views\Document\PowerLine.cshtml" />
-    <Content Include="Views\Document\PowerPlant.cshtml" />
-    <Content Include="Views\Document\SpillDetection.cshtml" />
-    <Content Include="Views\Document\WaterSampling.cshtml" />
+    <Content Include="Views\DashBoard\Default.cshtml" />
+    <Content Include="Views\PayLoad\Detail.cshtml" />
+    <Content Include="Views\DashBoard\Dewa.cshtml" />
+    <Content Include="Views\S3Upload\Index.cshtml" />
+    <Content Include="Views\S3Upload\Complete.cshtml" />
+    <Content Include="Views\Test\Analysis.cshtml" />
+    <Content Include="Views\S3Upload\Upload.cshtml" />
+    <Content Include="Views\DashBoard\SubSection.cshtml" />
+    <Content Include="Views\PayLoad\Table.cshtml" />
+    <Content Include="Views\S3Upload\GCAApproval.cshtml" />
+    <Content Include="Views\Admin\SMS.cshtml" />
+    <Content Include="Views\Test\dt.cshtml" />
+    <Content Include="Views\DroneFlight\GeoTag.cshtml" />
+    <Content Include="Views\Test\GCA_Approval.cshtml" />
+    <Content Include="Views\Map\Select.cshtml" />
+    <Content Include="Views\DashBoard\Internal.cshtml" />
+    <Content Include="Views\DashBoard\Weather.cshtml" />
+    <Content Include="Views\Drone\Live.cshtml" />
+    <Content Include="Views\Map\PlayList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="images\512px\" />
+    <Folder Include="obj\" />
+    <Folder Include="Views\AutoComplete\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Models\Portaldb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Portaldb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\AWSSDK.S3.3.2.3.0-beta\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
