@@ -156,7 +156,7 @@ $(document).ready(function () {
     for (var i = 0; i < tooltip.labels.length; i++) {
       HTML += "<br>\n" +
       '<span class="icon" style="color:' + tooltip.legendColors[i].fill + '">&#xf111;</span>\n' +
-      '<span style="font-weight:bold; color:' + tooltip.legendColors[i].fill + '">' + tooltip.labels[i] + '</span>\n';
+      '<span style="font-weight:bold; color:' + tooltip.legendColors[i].fill + '">' + tooltip.labels[i] + '(Minutes)</span>\n';
     }
     tooltipEl.html(HTML);
     /*
