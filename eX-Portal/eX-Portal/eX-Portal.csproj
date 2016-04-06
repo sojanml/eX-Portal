@@ -685,10 +685,14 @@
     <Content Include="Views\User\UserDetailView.cshtml" />
     <Content Include="Views\User\UserList.cshtml" />
     <Content Include="Views\User\UserLogList.cshtml" />
+    <Content Include="Views\PayLoad\OutDoor.cshtml" />
+    <Content Include="Views\PayLoad\InDoor.cshtml" />
+    <Content Include="Views\PayLoad\InDoorFlightDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="images\weather\" />
+    <Folder Include="Weather\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -705,7 +709,7 @@
     <Analyzer Include="..\packages\AWSSDK.S3.3.2.3.0-beta\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\FileStorageUtils\FileStorageUtils.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\FileStorageUtils\FileStorageUtils.csproj">
       <Project>{6cabaa57-63d3-446f-b44c-6ffa9acb1367}</Project>
       <Name>FileStorageUtils</Name>
     </ProjectReference>
