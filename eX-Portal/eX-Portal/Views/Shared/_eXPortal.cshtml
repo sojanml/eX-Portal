@@ -50,6 +50,7 @@
         <div class="form-toolbar" style="float:right;">
           @RenderSection("toolbar", required: false)
         </div>
+          <div id="Clock" ></div>    
         <h1>@ViewBag.Title</h1>
         <div style="clear:both"></div>
       </div>
@@ -62,6 +63,8 @@
   <footer>
     <section class="layout">
       <P>&copy; @DateTime.Now.Year -  Exponent TS All rights reserved.</P>
+        
+      
     </section>
   </footer>
 
@@ -78,6 +81,7 @@
 
 
   <script type="text/javascript">
+      var ClockTime = '';
     var LoginUserID = '@Session["UserID"]';
   </script>
   @Scripts.Render("~/bundles/dataTableScript")
