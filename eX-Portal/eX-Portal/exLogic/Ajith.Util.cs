@@ -13,6 +13,9 @@ using System.Configuration;
 using System.Xml;
 using System.Net;
 using System.IO;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace eX_Portal.exLogic {
 
@@ -406,12 +409,14 @@ namespace eX_Portal.exLogic {
       IList<Forcast> ForcastList = new List<Forcast>();
 
       WeatherViewModel Weather = new WeatherViewModel();
+      WeatherViewModel WeatherFromFile = new WeatherViewModel();
       // string forecastUrl = "http://weather.yahooapis.com/forecastrss?&" + "p=" + Location + "&u=c";
       //  string forecastUrl = "http://weather.yahooapis.com/forecastrss?w=" + Location + "&u=c";
       string forecastUrl = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid=" + Location + " AND u='c'";
       // open a XmlTextReader object using the constructed url
       XmlTextReader reader = new XmlTextReader(forecastUrl);
       // loop through xml result node by node
+     
       while (reader.Read()) {
         // decide which type of node us currently being read
         switch (reader.NodeType) {
@@ -545,14 +550,77 @@ namespace eX_Portal.exLogic {
       }
 
       Weather.Forecast = ForcastList;
+            //Checking the records if exist write to the file
+            if (ForcastList.Count>0)
+            {
+                WriteToFile(Weather,Location);
+            }
+            else
+            {
+                //not exist read from the file and display that
+                WeatherFromFile = ReadFromFile(Location);
+                if(WeatherFromFile!= null)
+                {
+                    Weather = WeatherFromFile;
+                }
+            }
+            
+           
       return Weather;
 
     }
 
+        
 
-    
+        public static string WriteToFile(WeatherViewModel  Weather,string FileName)
+        {
+            string Path = HttpContext.Current.Server.MapPath("/Upload/" + FileName+".txt");
+          
+                // String UploadPath = HttpContext.Current.Server.MapPath(Url.Content(RootUploadDir) + UserID + "/");
+                //string SubPath = "~/Weather/";
+                //string SubPath = HttpContext.Current.Server.MapPath("~/Weather/");
 
-    public static Int32 toInt(String sItem) {
+              
+                //bool exists = System.IO.Directory.Exists(HttpContext.Current.Server.MapPath(SubPath));
+               // if (!exists)
+                  //  System.IO.Directory.CreateDirectory(SubPath);
+              //  if (File.Exists(Path))
+               // {
+                 //   File.Delete(Path);
+              //  }
+           
+
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+
+                string output = jss.Serialize(Weather);
+
+                System.IO.File.WriteAllText(@Path, output);
+              //  System.IO.File.Create(Path).Close();
+           
+            return output;
+        }
+
+
+        public static WeatherViewModel ReadFromFile(string FileName)
+        {
+            try {
+                string Path = HttpContext.Current.Server.MapPath("/Upload/" + FileName + ".txt");
+
+                StreamReader sr = new StreamReader(Path);
+                string jsonString = sr.ReadToEnd();
+                JavaScriptSerializer ser = new JavaScriptSerializer();
+                WeatherViewModel Weather = ser.Deserialize<WeatherViewModel>(jsonString);
+
+                return Weather;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+            
+        }
+
+        public static Int32 toInt(String sItem) {
       int Temp;
       if (Int32.TryParse(sItem, out Temp)) {
         return Int32.Parse(sItem);
