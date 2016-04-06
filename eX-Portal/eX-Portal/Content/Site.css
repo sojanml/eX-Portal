@@ -1032,3 +1032,8 @@ ul#alert-drone li.critical {
   background-color: rgba(234, 5, 14, 0.2);
   border:1px rgb(234, 5, 14) solid;
 }
+
+#Clock{
+    float:right;
+    color:gray
+}

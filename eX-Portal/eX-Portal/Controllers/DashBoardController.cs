@@ -101,6 +101,8 @@ namespace eX_Portal.Controllers
 
         }
 
+        
+
         [System.Web.Mvc.HttpGet]
         public JsonResult getCurrentFlightChartData()
         {
@@ -173,8 +175,12 @@ namespace eX_Portal.Controllers
 
         }
 
-
-
+        [System.Web.Mvc.HttpGet]
+        public JsonResult getCurrentTime()
+        {
+          //  TimeSpan t = new TimeSpan(0, addMinutes, 0);
+            return Json(System.DateTime.Now.ToString(), JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Internal()
 
         {
