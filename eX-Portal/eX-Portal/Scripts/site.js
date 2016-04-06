@@ -8,6 +8,7 @@ $(document).ready(function () {
   //console.log(data);
   // });
 
+ 
   $(document).on("click", function () {
     $('UL.qViewMenu').fadeOut();
     $('#user-menu-items').slideUp();
@@ -68,15 +69,17 @@ $(document).ready(function () {
     dateFormat: 'dd-M-yy',
   });
 
+  checkTime();
   setAlertTimer();
-
+  
 
 });
 
 
 
 function setAlertTimer() {
-  window.setInterval(checkAlert, 10 * 1000);
+    window.setInterval(checkAlert, 10 * 1000);
+    window.setInterval(setClockTime,60* 1000);
 }
 
 function checkAlert() {
@@ -86,6 +89,59 @@ function checkAlert() {
   }).done(function (data) {
     if (data != "") alertBox(data);
   });
+}
+
+function checkTime() {
+    var URL = '/Dashboard/getCurrentTime';
+    var d=''
+    $.ajax({
+        url: URL
+    }).done(function (data) {
+        var dt = new Date(data);
+        d = data;
+        ClockTime = dt;
+      //  var t = dt.getHours() + ':' + dt.getMinutes();
+      
+        $("#Clock").html(dt.toDateString() +' '+formatDate(dt));
+    });
+}
+
+
+function setClockTime()
+{
+    var dt = new Date(ClockTime);
+    
+    dt.setMinutes(dt.getMinutes() + 1, 0, 0);
+    ClockTime = dt;
+  //  var t = dt.getHours() + ':' + dt.getMinutes();
+    $("#Clock").html(dt.toDateString() +' '+ formatDate(dt));
+}
+
+function formatDate(currentTime)
+{
+    var currentHours = currentTime.getHours();
+    var currentMinutes = currentTime.getMinutes();
+    var currentSeconds = currentTime.getSeconds();
+    var currentDay = currentTime.getDay();
+    var currentMonth = currentTime.getMonth();
+
+    // Pad the minutes and seconds with leading zeros, if required
+    currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+    currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+
+    // Choose either "AM" or "PM" as appropriate
+    var timeOfDay = (currentHours < 12) ? "AM" : "PM";
+
+    // Convert the hours component to 12-hour format if needed
+    currentHours = (currentHours > 12) ? currentHours - 12 : currentHours;
+
+    // Convert an hours component of "0" to "12"
+    currentHours = (currentHours == 0) ? 12 : currentHours;
+
+    // Compose the string for display
+    var currentTimeString = currentHours + ":" + currentMinutes+ " " + timeOfDay;
+
+    return currentTimeString;
 }
 
 function alertBox(Message) {
