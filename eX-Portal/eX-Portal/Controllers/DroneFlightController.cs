@@ -565,8 +565,8 @@ namespace eX_Portal.Controllers
             Drones thisDrone = new Drones();
             ViewBag.AllowedLocation = thisDrone.getAllowedLocation(id);
             ViewBag.DroneID = thisDrone.DroneID;
-            ViewBag.VideoURL = thisDrone.getVideoURL(id);
-            ViewBag.PlayerURL = thisDrone.getPlayerURL(id);
+            //ViewBag.VideoURL = thisDrone.getVideoURL(id);
+            //ViewBag.PlayerURL = thisDrone.getPlayerURL(id);
           
             return View();
 

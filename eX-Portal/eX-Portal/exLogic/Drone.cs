@@ -245,36 +245,37 @@ namespace eX_Portal.exLogic {
     }//saveTechnicalLog()
 
 
-    public String getVideoURL(int FlightID) {
+    public String getLiveURL(int FlightID) {
       String VideoURL = String.Empty;
       if (_DroneID == 0) _DroneID = getDroneIDForFlight(FlightID);
       //Find the drone is live
-
-      String SQL = "SELECT IsLiveVideo FROM MSTR_Drone WHERE DroneID=" + _DroneID;
-      int IsLiveVideo = Util.getDBInt(SQL);
-      if (IsLiveVideo > 0) {
-        int LastFlightID = getLastFlightID(DroneID);
-        if (LastFlightID == FlightID)
-          VideoURL = "rtmp://52.29.242.123/live/drone" + _DroneID;
-      }//if(IsLiveVideo > 0) 
-
+      VideoURL = "rtmp://52.29.242.123/live/drone" + _DroneID;
       return VideoURL;
     }
 
+    public bool isLive(int FlightID) {
+      if (_DroneID == 0) _DroneID = getDroneIDForFlight(FlightID);
+
+      String SQL = "SELECT IsLiveVideo FROM MSTR_Drone WHERE DroneID=" + _DroneID;
+      int IsLiveVideo = Util.getDBInt(SQL);
+      if (IsLiveVideo == 1) {
+        int LastFlightID = getLastFlightID(_DroneID);
+        if (LastFlightID == FlightID) return true;
+      }
+      return false;
+    }
 
     public int getLastFlightID(int DroneID) {
       String SQL = "SELECT Max(ID) FROM DroneFlight WHERE DroneID=" + DroneID;
       return Util.getDBInt(SQL);
     }
 
-    public String getPlayerURL(int FlightID) {
+  
+    public String getPlayListURL(int FlightID) {
       String VideoURL = String.Empty;
       int MovieCount = getPlayListCount(FlightID);
-      if (MovieCount <= 0) {
-        VideoURL = getVideoURL(FlightID);
-        if (!String.IsNullOrEmpty(VideoURL)) VideoURL = "file:'" + VideoURL + "'";
-      } else {
-        VideoURL = "playlist:'/Map/PlayList/" + FlightID + "'";
+      if (MovieCount > 0) {
+        VideoURL = "'/Map/PlayList/" + FlightID + "'";
       }
       return VideoURL;
     }
