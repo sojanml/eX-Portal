@@ -21,10 +21,10 @@ var BoundaryMarker = [null, null, null, null];
 $(document).ready(function () {
   initialize();
   setGridBox();
-  //drawGridLines(GridLinesRows);
-  //drawGridLines(GridLinesCols);
+  drawGridLines(GridLinesRows);
+  drawGridLines(GridLinesCols);
   //drawLabels();
-  drawProducts();
+  //drawProducts();
   setCordinatesEditable();
 
 
@@ -120,7 +120,7 @@ function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
   //alert('Start at: ' + iStart);
   deleteMarkers();
   setMarker(map, aData)
-  setGridHilite(aData);
+  //setGridHilite(aData);
 }
 
 function setGridHilite(aData) {
@@ -144,8 +144,21 @@ function setGridHilite(aData) {
 function rfid_settings(e) {
   e.stopPropagation();
   e.preventDefault();
-  $('#rfid-settings-layer').slideToggle();
- 
+  if($('#rfid-settings-layer').css('display') == 'none') {
+    $('#rfid-settings-layer').slideDown();
+    BoundaryBox.setDraggable(true);
+    for (var i = 0; i < BoundaryMarker.length; i++) {
+      BoundaryMarker[i].setMap(map);
+      BoundaryMarker[i].setDraggable(true);
+    }
+  } else {
+    $('#rfid-settings-layer').slideUp();
+    BoundaryBox.setDraggable(false);
+    for (var i = 0; i < BoundaryMarker.length; i++) {
+      BoundaryMarker[i].setMap(null);
+      BoundaryMarker[i].setDraggable(false);
+    }
+  }
 }
 
 function setGridBox() {
@@ -163,8 +176,7 @@ function setGridBox() {
     strokeOpacity: 0.7,
     strokeWeight: 1,
     fillColor: '#FF0000',
-    fillOpacity: 0.03,
-    draggable: true
+    fillOpacity: 0.03
   });
   BoundaryBox.setMap(map);
 
@@ -647,9 +659,7 @@ function setCordinatesEditable() {
   for (var i = 0; i < Bounds.length; i++) {
     BoundaryMarker[i] = new google.maps.Marker({
       position: Bounds[i],
-      map: map,
-      icon: '/images/map/' + Icons[i],
-      draggable: true
+      icon: '/images/map/' + Icons[i]
     });
     resetCordinateEdit(i, Bounds[i]);
     google.maps.event.addListener(BoundaryMarker[i], "drag", dragCordinatesEditable(i));
