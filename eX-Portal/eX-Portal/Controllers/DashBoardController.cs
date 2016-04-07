@@ -127,14 +127,16 @@ namespace eX_Portal.Controllers
                 labelsShort.Add(DroneName.Split('-').Last());
                 lst_dataItem_1.Add(Convert.ToInt32(FMD.TotalFightTime / 60));
                 lst_dataItem_2.Add(Convert.ToInt32(FMD.CurrentFlightTime / 60));
-
+                lst_dataItem_3.Add(Convert.ToInt32(FMD.LastFlightTime / 60));
 
             }
             iData.Add(labels);
             
             iData.Add(lst_dataItem_1);
             iData.Add(lst_dataItem_2);
+            
             iData.Add(labelsShort);
+            iData.Add(lst_dataItem_3);
             //iData.Add(lst_dataItem_3);
             //iData.Add(lst_dataItem_4);
             //iData.Add(lst_dataItem_5);
