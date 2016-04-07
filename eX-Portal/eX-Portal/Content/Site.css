@@ -467,7 +467,7 @@ div.form-toolbar {
 }
 
 div.header-bar div.form-toolbar {
-  margin:0px;
+  margin: 0px 0px 0px 20px;
 }
 
 input.button,
