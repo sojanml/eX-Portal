@@ -142,7 +142,17 @@ namespace eX_Portal.Controllers {
       }//if(IsAjaxRequest)
     }//ActionResult Index()
 
-    public String getRFID(int Row, int Column, String FlightUniqueID) {
+
+        public ActionResult InfraRed()
+        {
+            return View();
+        }
+
+        public ActionResult Videography()
+        {
+            return View();
+        }
+        public String getRFID(int Row, int Column, String FlightUniqueID) {
       StringBuilder theRow = new StringBuilder();
       String SQL = @"SELECT RFID, RSSI FROM PayLoadMapData
       WHERE
