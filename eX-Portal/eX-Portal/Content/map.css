@@ -1,4 +1,4 @@
-﻿
+
 #map-holder {
   position: relative;
 }
@@ -51,6 +51,8 @@ table.detail-info {
   float:left;
   /* font-size:0px; */
   /* line-height:50px; */
+  height: 60px;
+  margin-bottom: 0px;
 }
 
 
@@ -153,4 +155,21 @@ form#setYard > table {
 form#setYard > table > tbody > tr > td {
 border-bottom:1px red solid;
 padding:5px 10px 5px 0px;
+}
+
+@media screen and (max-width: 700px) {
+  #drone-map-info div.col-4 div.data {
+    font-size: 30px;
+    line-height: 30px;
+  }
+
+  #drone-map-info div.col-4 div.unit {
+    font-size: 12px;
+  }
+
+  div.more-info {
+    font-size: 11px;
+    padding-top: 5px;
+    padding-left: 20px;
+  }
 }
