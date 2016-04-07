@@ -155,4 +155,5 @@ ul#forecast li span.icon {
 ul#forecast li .status {
   font-size: 8pt;
   color: red;
+  width: 60px;
 }

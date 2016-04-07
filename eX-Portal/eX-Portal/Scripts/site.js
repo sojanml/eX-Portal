@@ -102,7 +102,7 @@ function checkTime() {
         ClockTime = dt;
       //  var t = dt.getHours() + ':' + dt.getMinutes();
       
-        $("#Clock").html(dt.toDateString() +' '+formatDate(dt));
+        $("#Clock").html(dt.toDateString() +' '+formatDate(dt) + ' UTC');
     });
 }
 
@@ -114,7 +114,7 @@ function setClockTime()
     dt.setMinutes(dt.getMinutes() + 1, 0, 0);
     ClockTime = dt;
   //  var t = dt.getHours() + ':' + dt.getMinutes();
-    $("#Clock").html(dt.toDateString() +' '+ formatDate(dt));
+    $("#Clock").html(dt.toDateString() + ' ' + formatDate(dt) + ' UTC');
 }
 
 function formatDate(currentTime)
