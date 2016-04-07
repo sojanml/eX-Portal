@@ -145,35 +145,58 @@ namespace eX_Portal.exLogic {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           string SQL;
-          SQL = @"select MAX(b.ReadTime) as ReadTime,
-                            max(b.TotalFlightTime)as TotalFlightTime,
-                            b.DroneId,a.DroneName 
-                            from MSTR_Drone a
-                            join 
-                            FlightMapData b 
-                            on a.DroneId=b.DroneId 
-                            group by 
-                            b.DroneId,a.DroneName";
-                    if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                    {
-                        SQL = @"select MAX(b.ReadTime) as ReadTime,
-                            max(b.TotalFlightTime) as TotalFlightTime,
-                            b.DroneId,a.DroneName
-                            from MSTR_Drone a
+                    SQL = @"select MAX(d.flightHours) as LastFlightHours,                            
+                            d.DroneId,c.DroneName
+                            from MSTR_Drone c
                             join
-                            FlightMapData b
-                            on a.DroneId = b.DroneId
-                             where a.AccountID='" + Util.getAccountID() +
-                           "' group by " +
-                           " b.DroneId,a.DroneName  ";
-                    }
+                           (SELECT DroneId, flighthours
+                              FROM
+                               (select a.DroneId,
+                                 b.flighthours as flighthours,
+                                 a.ReadTime,
+                                 ROW_NUMBER() OVER(PARTITION BY a.DroneId
+                                ORDER BY b.flightdate DESC
+                             ) AS RN
+                          from flightmapdata a
+                         left
+                          join
+                         droneflight b on a.DroneId = b.DroneID
 
-          cmd.CommandText = SQL;
+                         )Sub
+                        WHERE rn = 1) d
+                            on c.DroneId = d.DroneId
+                            group by
+                            d.DroneId,c.DroneName";
+
+          //SQL = @"select MAX(b.ReadTime) as ReadTime,
+          //                  max(b.TotalFlightTime)as TotalFlightTime,
+          //                  b.DroneId,a.DroneName 
+          //                  from MSTR_Drone a
+          //                  join 
+          //                  FlightMapData b 
+          //                  on a.DroneId=b.DroneId 
+          //                  group by 
+          //                  b.DroneId,a.DroneName";
+          //          if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+          //          {
+          //              SQL = @"select MAX(b.ReadTime) as ReadTime,
+          //                  max(b.TotalFlightTime) as TotalFlightTime,
+          //                  b.DroneId,a.DroneName
+          //                  from MSTR_Drone a
+          //                  join
+          //                  FlightMapData b
+          //                  on a.DroneId = b.DroneId
+          //                   where a.AccountID='" + Util.getAccountID() +
+          //                 "' group by " +
+          //                 " b.DroneId,a.DroneName  ";
+          //          }
+
+                    cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
               ChartViewModel dd = new ChartViewModel();
               dd.DroneName = reader["DroneName"].ToString();
-              dd.TotalFightTime = Util.toInt(reader["TotalFlightTime"].ToString());
+              dd.TotalFightTime = Util.toInt(reader["LastFlightHours"].ToString());
               
               ChartList.Add(dd);
 
