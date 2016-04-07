@@ -14,9 +14,45 @@ var bounds = new google.maps.LatLngBounds();
 var infowindow = new google.maps.InfoWindow();
 var ProductGrid = new Object();
 var IsGridInitilized = false;
+var RefreshTimer = null;
 
 var BoundaryBox = null;
 var BoundaryMarker = [null, null, null, null];
+
+function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
+  //alert('Start at: ' + iStart);
+  deleteMarkers();
+  setMarker(map, aData)
+  //setGridHilite(aData);
+
+
+}
+
+function chkAutoRefresh_click(evt) {
+  if (RefreshTimer) window.clearTimeout(RefreshTimer);
+  RefreshTimer = null;
+  refreshData(false);
+}
+
+function refreshData(IsForceRefresh) {
+  if (IsForceRefresh || $('#chkAutoRefresh').is(':checked')) {
+    RefreshTimer = window.setTimeout(function () {
+      qViewDataTable.ajax.reload(null, false);
+    }, 2 * 1000);
+  }
+}
+
+
+function _fnDrawCallback() {
+  $('#qViewTable_paginate').append('<span class="refresh">&#xf021;</span>');
+  if ($('#qViewTable_filter').find('.refresh').length <= 0)
+    $('#qViewTable_filter').append('<span class="refresh">&#xf021;</span>\n' +
+    '<span><input id="chkAutoRefresh" checked type="checkbox">Auto Refresh</span>');
+
+  //add a refresh counter
+  refreshData(false);
+  $('#chkAutoRefresh').on("click", chkAutoRefresh_click)
+}
 
 $(document).ready(function () {
   initialize();
@@ -71,7 +107,7 @@ $(document).ready(function () {
   $('#setYard').on("submit", setYard_post);
   $('#btnAutoSet').on("click", btnAutoSet_click);
 
-
+ 
 
 });
 
@@ -116,12 +152,7 @@ function btnAutoSet_click(e) {
 
 }
 
-function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
-  //alert('Start at: ' + iStart);
-  deleteMarkers();
-  setMarker(map, aData)
-  //setGridHilite(aData);
-}
+
 
 function setGridHilite(aData) {
   for (var r = 0; r < Grid.length; r++) {

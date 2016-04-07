@@ -174,7 +174,7 @@ namespace eX_Portal.exLogic {
               ChartViewModel dd = new ChartViewModel();
               dd.DroneName = reader["DroneName"].ToString();
               dd.TotalFightTime = Util.toInt(reader["TotalFlightTime"].ToString());
-              dd.LastFlightTime = Util.toDate(reader["ReadTime"].ToString());
+              
               ChartList.Add(dd);
 
             }
@@ -203,45 +203,82 @@ namespace eX_Portal.exLogic {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           string SQL;
-          SQL = @"select t.DroneId,
-                           v.DroneName,max(t.ReadTime) as readtime ,
+
+          SQL= @"select     t.DroneId,MAX(j.flighthours) as LastFlightTime,
+                            v.DroneName,max(t.ReadTime) as readtime ,
                             max(T.TotalFlightTime) as TotalFlightTime,
-                            min(k.FlightTime)as Monthtime,
-                            CASE WHEN  max(T.TotalFlightTime) - min(k.FlightTime)IS NULL or 
-                            max(T.TotalFlightTime) - min(k.FlightTime) = 0 
+                            min(k.FlightTime) as Monthtime, 
+                            CASE WHEN  max(T.TotalFlightTime) - min(k.FlightTime)IS NULL or
+                            max(T.TotalFlightTime) - min(k.FlightTime) = 0
                             THEN max(T.TotalFlightTime) ELSE max(T.TotalFlightTime) - min(k.FlightTime) END as CurrentFlightTime
-                            from MSTR_Drone v
-                            join FlightMapData t on v.DroneId = t.DroneId 
-                            left join(select u.DroneId, min(u.ReadTime) as ReadTime,
-                            max(u.TotalFlightTime) as FlightTime
-                            from FlightMapData u
-                            where
-                             u.ReadTime
-                            BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) 
+                 from MSTR_Drone v
+                 join
+                          FlightMapData t on v.DroneId = t.DroneId
+                 left  join  
+                            (SELECT DroneId, flighthours
+                              FROM 
+                               (select a.DroneId,
+                                 b.flighthours as flighthours,
+                                 a.ReadTime,
+                                 ROW_NUMBER() OVER(PARTITION BY a.DroneId
+                                ORDER BY b.flightdate DESC
+                             ) AS RN
+                          from flightmapdata a
+                         left  join 
+                              droneflight b on a.DroneId = b.DroneID
+
+                         )Sub
+                        WHERE rn = 1 )j on t.DroneId = j.DroneId
+                        left join(select u.DroneId, min(u.ReadTime) as ReadTime,
+                        max(u.TotalFlightTime) as FlightTime
+                        from FlightMapData u
+                           where
+                            u.ReadTime
+                            BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)
                             AND  GETDATE()
                             group by  u.DroneId )k on t.DroneId = k.DroneId
-                            group by t.DroneId,v.DroneName";
-                    if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                    {
-                        SQL = @"select t.DroneId,
-                           v.DroneName,max(t.ReadTime) as readtime ,
-                            max(T.TotalFlightTime) as TotalFlightTime,
-                            min(k.FlightTime)as Monthtime,
-                            CASE WHEN  max(T.TotalFlightTime) - min(k.FlightTime)IS NULL or 
-                            max(T.TotalFlightTime) - min(k.FlightTime) = 0 
-                            THEN max(T.TotalFlightTime) ELSE max(T.TotalFlightTime) - min(k.FlightTime) END as CurrentFlightTime
-                            from MSTR_Drone v
-                            join FlightMapData t on v.DroneId = t.DroneId 
-                            left join(select u.DroneId, min(u.ReadTime) as ReadTime,
-                            max(u.TotalFlightTime) as FlightTime
-                            from FlightMapData u
-                            where    u.ReadTime
-                            BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)  
-                            AND  GETDATE() 
-                            group by  u.DroneId )k on t.DroneId = k.DroneId 
-                            where v.AccountID='"+ Util.getAccountID() +"' group by t.DroneId,v.DroneName";
-                      
-                    }
+
+                  group by  t.DroneId,v.DroneName";
+
+          //SQL = @"select t.DroneId,
+          //                 v.DroneName,max(t.ReadTime) as readtime ,
+          //                  max(T.TotalFlightTime) as TotalFlightTime,
+          //                  min(k.FlightTime)as Monthtime,
+          //                  CASE WHEN  max(T.TotalFlightTime) - min(k.FlightTime)IS NULL or 
+          //                  max(T.TotalFlightTime) - min(k.FlightTime) = 0 
+          //                  THEN max(T.TotalFlightTime) ELSE max(T.TotalFlightTime) - min(k.FlightTime) END as CurrentFlightTime
+          //                  from MSTR_Drone v
+          //                  join FlightMapData t on v.DroneId = t.DroneId 
+          //                  left join(select u.DroneId, min(u.ReadTime) as ReadTime,
+          //                  max(u.TotalFlightTime) as FlightTime
+          //                  from FlightMapData u
+          //                  where
+          //                   u.ReadTime
+          //                  BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) 
+          //                  AND  GETDATE()
+          //                  group by  u.DroneId )k on t.DroneId = k.DroneId
+          //                  group by t.DroneId,v.DroneName";
+          //          if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+          //          {
+          //              SQL = @"select t.DroneId,
+          //                 v.DroneName,max(t.ReadTime) as readtime ,
+          //                  max(T.TotalFlightTime) as TotalFlightTime,
+          //                  min(k.FlightTime)as Monthtime,
+          //                  CASE WHEN  max(T.TotalFlightTime) - min(k.FlightTime)IS NULL or 
+          //                  max(T.TotalFlightTime) - min(k.FlightTime) = 0 
+          //                  THEN max(T.TotalFlightTime) ELSE max(T.TotalFlightTime) - min(k.FlightTime) END as CurrentFlightTime
+          //                  from MSTR_Drone v
+          //                  join FlightMapData t on v.DroneId = t.DroneId 
+          //                  left join(select u.DroneId, min(u.ReadTime) as ReadTime,
+          //                  max(u.TotalFlightTime) as FlightTime
+          //                  from FlightMapData u
+          //                  where    u.ReadTime
+          //                  BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)  
+          //                  AND  GETDATE() 
+          //                  group by  u.DroneId )k on t.DroneId = k.DroneId 
+          //                  where v.AccountID='"+ Util.getAccountID() +"' group by t.DroneId,v.DroneName";
+
+                    //          }
 
 
                     cmd.CommandText = SQL;
@@ -251,7 +288,7 @@ namespace eX_Portal.exLogic {
               dd.DroneName = reader["DroneName"].ToString();
               dd.TotalFightTime = Util.toInt(reader["TotalFlightTime"].ToString());
               dd.CurrentFlightTime = Util.toInt(reader["CurrentFlightTime"].ToString());
-
+              dd.LastFlightTime = Util.toInt(reader["LastFlightTime"].ToString());
               ChartList.Add(dd);
 
             }

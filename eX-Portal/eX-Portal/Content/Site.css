@@ -467,7 +467,7 @@ div.form-toolbar {
 }
 
 div.header-bar div.form-toolbar {
-  margin:0px;
+  margin: 0px 0px 0px 20px;
 }
 
 input.button,
@@ -1036,4 +1036,13 @@ ul#alert-drone li.critical {
 #Clock{
     float:right;
     color:gray
+}
+
+input#chkAutoRefresh {
+    margin: 0px 5px 0px 10px;
+    padding: 0px 0px 0px 0px;
+    /* width: 40px; */
+    height: auto !important;
+    display: inline-block;
+    transform: scale(1.3);
 }

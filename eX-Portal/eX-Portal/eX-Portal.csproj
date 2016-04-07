@@ -967,7 +967,7 @@
     <Analyzer Include="..\packages\AWSSDK.S3.3.2.3.0-beta\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\FileStorageUtils\FileStorageUtils.csproj">
+    <ProjectReference Include="..\..\..\..\FileStorageUtils\FileStorageUtils.csproj">
       <Project>{6cabaa57-63d3-446f-b44c-6ffa9acb1367}</Project>
       <Name>FileStorageUtils</Name>
     </ProjectReference>
