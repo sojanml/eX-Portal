@@ -614,6 +614,10 @@
       <LastGenOutput>Portaldb.cs</LastGenOutput>
       <DependentUpon>Portaldb.edmx</DependentUpon>
     </Content>
+    <Content Include="red.png" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="GreenDrone.png" />
     <EntityDeploy Include="Models\Portaldb.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Portaldb.Designer.cs</LastGenOutput>
@@ -963,7 +967,7 @@
     <Analyzer Include="..\packages\AWSSDK.S3.3.2.3.0-beta\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\FileStorageUtils\FileStorageUtils.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\FileStorageUtils\FileStorageUtils.csproj">
       <Project>{6cabaa57-63d3-446f-b44c-6ffa9acb1367}</Project>
       <Name>FileStorageUtils</Name>
     </ProjectReference>
