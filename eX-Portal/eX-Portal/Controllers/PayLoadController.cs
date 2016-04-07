@@ -8,12 +8,11 @@ using System.Web.Mvc;
 
 namespace eX_Portal.Controllers {
   public class PayLoadController : Controller {
-public ActionResult InDoorFlightDetails([Bind(Prefix = "ID")] String FlightUniqueID)
-        {
-            // if (!exLogic.User.hasAccess("PAYLOAD.VIEW")) return RedirectToAction("NoAccess", "Home");
-            ViewBag.Title = "In Door Flight Details";
+    public ActionResult InDoorFlightDetails([Bind(Prefix = "ID")] String FlightUniqueID) {
+      // if (!exLogic.User.hasAccess("PAYLOAD.VIEW")) return RedirectToAction("NoAccess", "Home");
+      ViewBag.Title = "In Door Flight Details";
 
-            String SQL = @"SELECT
+      String SQL = @"SELECT
               PayLoadFlight.FlightUniqueID, 
               PayLoadMapData.RFID ,            
               [RFIDCount],
@@ -29,32 +28,28 @@ public ActionResult InDoorFlightDetails([Bind(Prefix = "ID")] String FlightUniqu
      WHERE
               PayLoadFlight.Processingmodel= 1
      AND PayLoadFlight.FlightUniqueID= " + FlightUniqueID +
-     " AND PayLoadMapData.IsValid= 0";
-            qView nView = new qView(SQL);
-        
+" AND PayLoadMapData.IsValid= 0";
+      qView nView = new qView(SQL);
 
-            if (Request.IsAjaxRequest())
-            {
-                Response.ContentType = "text/javascript";
-                return PartialView("qViewData", nView);
-            }
-            else
-            {
-                return View(nView);
-            }//if(IsAjaxRequest)
 
-        }
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
+
+    }
 
 
 
-    
 
-    public ActionResult OutDoor()
-        {
-            if (!exLogic.User.hasAccess("OUTDOOR.VIEW")) return RedirectToAction("NoAccess", "Home");
-            ViewBag.Title = "Out Door Flights";
-            String SQL =
-            @"SELECT
+
+    public ActionResult OutDoor() {
+      if (!exLogic.User.hasAccess("OUTDOOR.VIEW")) return RedirectToAction("NoAccess", "Home");
+      ViewBag.Title = "Out Door Flights";
+      String SQL =
+      @"SELECT
         PayLoadFlightID, 
         FlightUniqueID,
         PayLoadYard.YardName,
@@ -69,29 +64,25 @@ public ActionResult InDoorFlightDetails([Bind(Prefix = "ID")] String FlightUniqu
      WHERE
         PayLoadFlight.Processingmodel=0";
 
-            qView nView = new qView(SQL);
-            nView.addMenu("PayLoad Data", Url.Action("PayLoad", "Map", new { ID = "_PKey" }));
+      qView nView = new qView(SQL);
+      nView.addMenu("PayLoad Data", Url.Action("PayLoad", "Map", new { ID = "_PKey" }));
 
-            if (Request.IsAjaxRequest())
-            {
-                Response.ContentType = "text/javascript";
-                return PartialView("qViewData", nView);
-            }
-            else
-            {
-                return View(nView);
-            }//if(IsAjaxRequest)
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
 
-        }
+    }
 
 
-        //InDoor
-public ActionResult InDoor()
-        {
-             if (!exLogic.User.hasAccess("INDOOR.VIEW")) return RedirectToAction("NoAccess", "Home");
-            ViewBag.Title = "In Door Flights";
-            String SQL =
-            @"SELECT
+    //InDoor
+    public ActionResult InDoor() {
+      if (!exLogic.User.hasAccess("INDOOR.VIEW")) return RedirectToAction("NoAccess", "Home");
+      ViewBag.Title = "In Door Flights";
+      String SQL =
+      @"SELECT
         PayLoadFlightID, 
         FlightUniqueID,
         PayLoadYard.YardName,
@@ -106,27 +97,24 @@ public ActionResult InDoor()
      WHERE
         PayLoadFlight.Processingmodel=1";
 
-            qView nView = new qView(SQL);
-            nView.addMenu("InDoor Flight Details", Url.Action( "InDoorFlightDetails","PayLoad", new { ID = "_PKey" }));
+      qView nView = new qView(SQL);
+      nView.addMenu("InDoor Flight Details", Url.Action("InDoorFlightDetails", "PayLoad", new { ID = "_PKey" }));
 
-            if (Request.IsAjaxRequest())
-            {
-                Response.ContentType = "text/javascript";
-                return PartialView("qViewData", nView);
-            }
-            else
-            {
-                return View(nView);
-            }//if(IsAjaxRequest)
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
 
-        }
+    }
 
 
 
-        // GET: PayLoad
+    // GET: PayLoad
 
 
-        public ActionResult Index() {
+    public ActionResult Index() {
       if (!exLogic.User.hasAccess("PAYLOAD.VIEW")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "PayLoad Flights";
       String SQL =
@@ -142,7 +130,7 @@ public ActionResult InDoor()
         PayLoadFlight
       LEFT JOIN PayLoadYard ON
         PayLoadYard.YardID = PayLoadFlight.YardID";
-      
+
       qView nView = new qView(SQL);
       nView.addMenu("PayLoad Data", Url.Action("PayLoad", "Map", new { ID = "_PKey" }));
 
@@ -160,9 +148,9 @@ public ActionResult InDoor()
       WHERE
         FlightUniqueID='" + FlightUniqueID + @"' AND
         RowNumber=" + (Row - 1) + @" AND
-        ColumnNumber=" + (Column - 1);      
+        ColumnNumber=" + (Column - 1);
       var Rows = Util.getDBRows(SQL);
-      foreach(var Record in Rows) {
+      foreach (var Record in Rows) {
         if (theRow.Length > 0) theRow.Append(", ");
         theRow.Append(Record["RFID"]);
         theRow.Append(" [");
@@ -216,5 +204,5 @@ public ActionResult InDoor()
       }//if(IsAjaxRequest)
     }
 
-    }//class PayLoadController
+  }//class PayLoadController
 }//namespace eX_Portal.Controllers

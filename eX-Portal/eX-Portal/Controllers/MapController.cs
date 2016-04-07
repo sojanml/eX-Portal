@@ -112,8 +112,8 @@ namespace eX_Portal.Controllers {
       "  [RSSI], \n" +
       "  [ReadTime], \n" +
       "  [ReadCount], \n" +
-      "  [Latitude], \n" +
-      "  [Longitude],\n" +
+      "  CASE WHEN [GridLat] = 0 THEN [Latitude] ELSE [GridLat] END  as [Latitude], \n" +
+      "  CASE WHEN [GridLng] = 0 THEN [Longitude] ELSE [GridLng] END  as [Longitude],\n" +
       "  [RowNumber] as [Row], \n" +
       "  [ColumnNumber]  as [Col],\n" +
       "  Count(*) Over() as _TotalRecords,\n" +
@@ -173,17 +173,22 @@ namespace eX_Portal.Controllers {
       Util.doSQL(SQL);
       //}
 
+      SQL = "DELETE from PayLoadYardGrid where Yardid = " + Yard.YardID;
+      Util.doSQL(SQL);
+
       if (Request["chkReProcess"] == "1") {
-        SQL = "UPDATE PayLoadMapData SET \n" +
-        " YardID=" + Yard.YardID + ",\n" +
-        " RowNumber= -1,\n" +
-        " ColumnNumber= -1,\n" +
-        " IsProcessed= 0,\n" +
-        " RowFixExecuted= 0,\n" +
-        " ColFixExecuted= 0,\n" +
-        " AutoFixGap= 0\n" +
-        "WHERE\n" +
-        "  FlightUniqueID='" + Request["FlightUniqueID"] + "'";
+        SQL = @"UPDATE PayLoadMapData SET 
+          YardID=" + Yard.YardID + @",
+          RowNumber= -1,
+          ColumnNumber= -1,
+          IsProcessed= 0,
+          RowFixExecuted= 0,
+          ColFixExecuted= 0,
+          AutoFixGap= 0,
+          GridLat = 0,
+          GridLng = 0
+        WHERE
+          FlightUniqueID='" + Request["FlightUniqueID"] + "'";
         Util.doSQL(SQL);
       }
 
