@@ -211,7 +211,7 @@ namespace eX_Portal.Controllers {
        DroneID,
         LastFlightID,
         DATEDIFF(mi,FlightTime,GetDate()),
-       case when DATEDIFF(mi,GetDate(),FlightTime)<5 then 1 else 0 end as Live
+       case when DATEDIFF(mi,FlightTime,GetDate())<5 then 1 else 0 end as Live
       from [MSTR_Drone]
           LEFT JOIN [MSTR_Account]
         ON [MSTR_Drone].AccountID = [MSTR_Account].AccountID
