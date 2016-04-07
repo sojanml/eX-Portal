@@ -193,30 +193,35 @@ namespace eX_Portal.Controllers {
 
     [System.Web.Mvc.HttpGet]
     public JsonResult GetDrones() {
-      string SQL =
-      "SELECT\n" +
-      "  [LastLatitude],\n" +
-      "  [LastLongitude],\n" +
-      "  IsNull([MSTR_Drone].[DroneName], 'Drone ' + Convert(varchar, [LiveDrone].DroneID)) as DroneName,\n" +
-      "  [MSTR_Drone].[ModelName] AS Description,\n" +
-      "  [MSTR_Drone].[CommissionDate],\n" +
-      "  [MSTR_Account].NAME AS OwnerName,\n" +
-      "  M.NAME AS Manufacture,\n" +
-      "  U.NAME AS UAVType\n" +
-      "FROM\n" +
-      "  [LiveDrone]\n" +
-      "LEFT JOIN [MSTR_Drone]\n" +
-      "  ON [MSTR_Drone].DroneID = [LiveDrone].DroneID\n" +
-      "LEFT JOIN [MSTR_Account]\n" +
-      "  ON [MSTR_Drone].AccountID = [MSTR_Account].AccountID\n" +
-      "LEFT JOIN LUP_Drone M\n" +
-      "  ON [MSTR_Drone].ManufactureID = M.TypeID\n" +
-      "    AND M.Type = 'Manufacturer'\n" +
-      "LEFT JOIN LUP_Drone U\n" +
-      "  ON [MSTR_Drone].UAVTypeID = U.TypeID\n" +
-      "    AND U.Type = 'UAVType'\n" +
-      "WHERE\n" +
-      "  [MSTR_Drone].AccountID=" + Util.getAccountID();
+            string SQL =
+            @"SELECT
+       [Latitude] AS LastLatitude,
+       [Longitude] as LastLongitude,
+       IsNull([MSTR_Drone].[DroneName], 'Drone ' + Convert(varchar, [MSTR_Drone].DroneID)) as DroneName,
+       [MSTR_Drone].[ModelName] AS Description,
+       [MSTR_Drone].[CommissionDate],
+       [MSTR_Account].NAME AS OwnerName,
+       M.NAME AS Manufacture,
+       FlightTime,
+       DroneID,
+        LastFlightID,
+        DATEDIFF(mi,FlightTime,GetDate()),
+       case when DATEDIFF(mi,GetDate(),FlightTime)<5 then 1 else 0 end as Live
+      from [MSTR_Drone]
+          LEFT JOIN [MSTR_Account]
+        ON [MSTR_Drone].AccountID = [MSTR_Account].AccountID
+      LEFT JOIN LUP_Drone M
+        ON [MSTR_Drone].ManufactureID = M.TypeID
+          AND M.Type = 'Manufacturer'
+      LEFT JOIN LUP_Drone U
+        ON [MSTR_Drone].UAVTypeID = U.TypeID
+          AND U.Type = 'UAVType'
+      WHERE
+         FlightTime >= DATEADD(month,-1,GETDATE())";
+
+
+   if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                SQL= SQL+ " AND [MSTR_Drone].AccountID ="+ Util.getAccountID();
 
 
       var LiveDrones = Util.getDBRows(SQL);
