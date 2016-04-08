@@ -25,7 +25,7 @@ $(document).ready(function () {
             var aLabels = aData[0];
             var aDatasets1 = aData[1];
             var aDatasets2 = aData[2];
-           // var aDatasets3 = aData[3];
+            var aDatasets3 = aData[3];
             //var aDatasets4 = aData[4];
             //var aDatasets5 = aData[5];
 
@@ -33,21 +33,30 @@ $(document).ready(function () {
             var data = {
                 labels: aLabels,
                 datasets: [{
-                    label: "Total Flight Time",
+                    label:"Total Flight Time (Minutes)",
                     fillColor: "rgba(151,187,205,0.5)",
                     strokeColor: "rgba(151,187,205,0.8)",
                     highlightFill: "rgba(151,187,205,0.75)",
                     highlightStroke: "rgba(151,187,205,1)",
 
+
                 
                     data: aDatasets1
                 }, {
-                    label: "Current Flight Time",
-                    fillColor: "rgba(220,220,220,0.5)",
-                    strokeColor: "rgba(220,220,220,0.8)",
-                    highlightFill: "rgba(220,220,220,0.75)",
-                    highlightStroke: "rgba(220,220,220,1)",
+                    label:"Current Month Flight Time (Minutes)",
+                    fillColor: "rgba(255,119,119,0.5)",
+                    strokeColor: "rgba(255,119,119,0.8)",
+                    highlightFill: "rgba(255,119,119,0.75)",
+                    highlightStroke: "rgba(255,119,119,1)",
                     data: aDatasets2
+                },
+                {
+                    label: "Last Flight Time (Minutes)",
+                    fillColor: "rgba(236,215,101,0.5)",
+                    strokeColor: "rgba(236,215,101,0.8)",
+                    highlightFill: "rgba(236,215,101,0.75)",
+                    highlightStroke: "rgba(236,215,101,1)",
+                    data: aDatasets3
                 }]
             };
 
@@ -88,7 +97,7 @@ $(document).ready(function () {
         //Number - Spacing between data sets within X values
         barDatasetSpacing: 1,
 
-                tooltipTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%></li><%}%></ul>",
+                tooltipTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].datasetLabel){%><%=datasets[i].value%><%}%>(Minutes)</li><%}%></ul>",
                 //String - A legend template
                 multiTooltipTemplate: "<%= datasetLabel %> : <%= value %>",
       legendTemplate: 
