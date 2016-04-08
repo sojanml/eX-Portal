@@ -69,11 +69,11 @@ namespace eX_Portal.Controllers
             List<string> labels = new List<string>();
             List<string> labelsShort = new List<string>();
             List<string> labelsLastDate = new List<string>();
-            List<int> lst_dataItem_2 = new List<int>();
-            List<int> lst_dataItem_1 = new List<int>();
-            List<int> lst_dataItem_3 = new List<int>();
-            List<int> lst_dataItem_4 = new List<int>();
-            List<int> lst_dataItem_5 = new List<int>();
+            List<double> lst_dataItem_2 = new List<double>();
+            List<double> lst_dataItem_1 = new List<double>();
+            List<double> lst_dataItem_3 = new List<double>();
+            List<double> lst_dataItem_4 = new List<double>();
+            List<double> lst_dataItem_5 = new List<double>();
 
 
             IList<ChartViewModel> ChartList = Util.getUASLastFlightChartData();
@@ -82,7 +82,7 @@ namespace eX_Portal.Controllers
                 DroneName = FMD.DroneName;
                 labels.Add(FMD.DroneName);
                 labelsShort.Add(DroneName.Split('-').Last());
-                lst_dataItem_1.Add(Convert.ToInt32(FMD.TotalFightTime / 60));
+                lst_dataItem_1.Add(Math.Round((FMD.TotalFightTime / 60),2));
                 labelsLastDate.Add(FMD.LastFlightTime.ToString());
 
 
@@ -111,11 +111,11 @@ namespace eX_Portal.Controllers
             List<string> labels = new List<string>();
             List<string> labelsShort = new List<string>();
             
-            List<int> lst_dataItem_2 = new List<int>();
-            List<int> lst_dataItem_1 = new List<int>();
-            List<int> lst_dataItem_3 = new List<int>();
-            List<int> lst_dataItem_4 = new List<int>();
-            List<int> lst_dataItem_5 = new List<int>();
+            List<double> lst_dataItem_2 = new List<double>();
+            List<double> lst_dataItem_1 = new List<double>();
+            List<double> lst_dataItem_3 = new List<double>();
+            List<double> lst_dataItem_4 = new List<double>();
+            List<double> lst_dataItem_5 = new List<double>();
 
 
             IList<ChartViewModel> ChartList = Util.getCurrentFlightChartData();
@@ -125,9 +125,9 @@ namespace eX_Portal.Controllers
                 DroneName = FMD.DroneName;
                 labels.Add(FMD.DroneName);
                 labelsShort.Add(DroneName.Split('-').Last());
-                lst_dataItem_1.Add(Convert.ToInt32(FMD.TotalFightTime / 60));
-                lst_dataItem_2.Add(Convert.ToInt32(FMD.CurrentFlightTime / 60));
-                lst_dataItem_3.Add(Convert.ToInt32(FMD.LastFlightTime / 60));
+                lst_dataItem_1.Add(Math.Round((FMD.TotalFightTime / 60),2));
+                lst_dataItem_2.Add(Math.Round((FMD.CurrentFlightTime / 60),2));
+                lst_dataItem_3.Add(Math.Round((FMD.LastFlightTime / 60),2));
 
             }
             iData.Add(labels);
@@ -163,12 +163,13 @@ namespace eX_Portal.Controllers
                 labels.Add(FMD.PilotName);
                 lst_dataItem_1.Add(Convert.ToInt32(FMD.PilotTotalHrs));
                 lst_dataItem_2.Add(Convert.ToInt32(FMD.PilotCurrentMonthHrs));
-
+                lst_dataItem_3.Add(Convert.ToInt32(FMD.PilotLastFlightHrs));
 
             }
             iData.Add(labels);
             iData.Add(lst_dataItem_1);
             iData.Add(lst_dataItem_2);
+            iData.Add(lst_dataItem_3);
             //iData.Add(lst_dataItem_3);
             //iData.Add(lst_dataItem_4);
             //iData.Add(lst_dataItem_5);

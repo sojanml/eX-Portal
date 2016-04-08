@@ -10,6 +10,7 @@ namespace eX_Portal.ViewModel {
     public double CurrentFlightTime { set; get; }
         public string PilotName { set; get; }
         public double PilotTotalHrs { set; get; }
+        public double PilotLastFlightHrs { set; get; }
         public double PilotCurrentMonthHrs { set; get; }
         public double LastFlightTime { set; get; }
     }

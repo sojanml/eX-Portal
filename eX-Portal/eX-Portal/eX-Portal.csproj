@@ -949,6 +949,8 @@
     <Content Include="Views\Test\GCA_Approval.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Test\Video.cshtml" />
+    <Content Include="Views\PayLoad\InfraRed.cshtml" />
+    <Content Include="Views\PayLoad\Videography.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
