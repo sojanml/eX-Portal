@@ -804,7 +804,7 @@ namespace eX_Portal.exLogic {
 
                 return Weather;
             }
-            catch(Exception ex)
+            catch 
             {
                 return null;
             }
