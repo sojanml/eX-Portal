@@ -163,12 +163,13 @@ namespace eX_Portal.Controllers
                 labels.Add(FMD.PilotName);
                 lst_dataItem_1.Add(Convert.ToInt32(FMD.PilotTotalHrs));
                 lst_dataItem_2.Add(Convert.ToInt32(FMD.PilotCurrentMonthHrs));
-
+                lst_dataItem_3.Add(Convert.ToInt32(FMD.PilotLastFlightHrs));
 
             }
             iData.Add(labels);
             iData.Add(lst_dataItem_1);
             iData.Add(lst_dataItem_2);
+            iData.Add(lst_dataItem_3);
             //iData.Add(lst_dataItem_3);
             //iData.Add(lst_dataItem_4);
             //iData.Add(lst_dataItem_5);
