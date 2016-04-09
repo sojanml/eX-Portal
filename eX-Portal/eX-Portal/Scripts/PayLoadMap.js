@@ -38,7 +38,7 @@ function refreshData(IsForceRefresh) {
   if (IsForceRefresh || $('#chkAutoRefresh').is(':checked')) {
     RefreshTimer = window.setTimeout(function () {
       qViewDataTable.ajax.reload(null, false);
-    }, 2 * 1000);
+    }, 10 * 1000);
   }
 }
 
@@ -107,9 +107,23 @@ $(document).ready(function () {
   $('#setYard').on("submit", setYard_post);
   $('#btnAutoSet').on("click", btnAutoSet_click);
 
- 
+  $(document).on("click", ".more-detail-info", function () {
+    more_detail_info($(this));
+  })
 
 });
+
+function more_detail_info(Obj) {
+  var RFID = Obj.attr('data-rfid');
+  Obj.html("Loading...");
+  $.ajax({
+    method: 'get',
+    url: '/Map/RFID/' + RFID
+  }).done(function (data) {
+    Obj.html(data);
+  });
+
+}
 
 function setYard(theYard) {
   var Form = document.forms['setYard'];
@@ -512,16 +526,17 @@ function setMarker(map, _Location) {
     var body = '' +
         '<b>' + location['RFID'] + '</b><br>\n' +
         'RSSI: ' + location['RSSI'] + '<br>\n' +
-        location['Latitude'] + ", " + location['Longitude'];
+        location['Latitude'] + ", " + location['Longitude'] +
+      '<div id="RFID-' + location['RFID'] + '" class="more-detail-info" data-rfid="' + location['RFID'] + '"><span class="link">Detail</div></div>';
 
     var myLatLng = new google.maps.LatLng(location['Latitude'], location['Longitude']);
-    var marker = createMarker(map, myLatLng, location['DroneName'], body);
+    var marker = createMarker(map, myLatLng, location['DroneName'], body, location['RFID']);
 
   });
   map.fitBounds(bounds);
 }
 
-function createMarker(map, latlng, heading, body) {
+function createMarker(map, latlng, heading, body, RFID) {
   var image = '/images/car-icon.png';
   var marker = new google.maps.Marker({
     position: latlng,
