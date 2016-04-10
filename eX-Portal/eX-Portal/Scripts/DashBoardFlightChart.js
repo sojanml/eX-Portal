@@ -138,7 +138,7 @@ $(document).ready(function () {
   }
 
   function _tooltipTemplate(Label) {
-    alert(Label);
+   // alert(Label);
   return
   "xxx<ul class=\"<%=name.toLowerCase()%>-legend\">" +
   "<% for (var i=0; i<datasets.length; i++){%>" +
