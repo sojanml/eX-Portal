@@ -119,8 +119,8 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "PayLoad Flights";
       String SQL =
       @"SELECT
-        PayLoadFlightID, 
-        FlightUniqueID,
+        PayLoadFlightID as ID, 
+        FlightID,
         PayLoadYard.YardName,
         [RFIDCount],
         [CreatedTime],
