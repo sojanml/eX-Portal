@@ -535,7 +535,7 @@ namespace eX_Portal.exLogic {
 
     public static string GetWOEID(string City) {
       string WeatherWOEID = null, HttpSQL;
-      HttpSQL = " http://query.yahooapis.com/v1/public/yql?q=select woeid from geo.places where text=" + City;
+      HttpSQL = " http://query.yahooapis.com/v1/public/yql?q=select woeid from geo.places where text='" + City +"'";
       XmlDocument doc = new XmlDocument();
       doc.Load(HttpSQL);
       WeatherWOEID = doc.GetElementsByTagName("woeid")[0].InnerText;
@@ -580,10 +580,13 @@ namespace eX_Portal.exLogic {
           response.Close();
       }
       if (AddStart != null) {
-        AddStart = AddStart.Split(',')[0];
-        // AddStart = AddStart.Substring(1);
-
-      } else {
+         AddStart = AddStart.Split(',')[0];
+               // s.Replace("\"", "");
+                AddStart = AddStart.Replace("\"", "");
+                // AddStart = AddStart.Replace("\n", String.Empty);
+               // AddStart = AddStart.TrimEnd('\r', '\n');
+               // AddStart= AddStart.TrimStart('\r', '\n');
+            } else {
         AddStart = "";
       }
 
