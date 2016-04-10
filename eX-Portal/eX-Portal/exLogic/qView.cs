@@ -242,7 +242,8 @@ namespace eX_Portal.exLogic {
         FieldValue = "Invalid";
       } else {
         if (IsFormatDate) {
-          FieldValue = String.Format("{0:dd-MMM-yyyy hh:mm tt}", reader.GetDateTime(i));
+          //FieldValue = String.Format("{0:dd-MMM-yyyy hh:mm tt}", reader.GetDateTime(i));
+          FieldValue = String.Format("{0:dd-MMM-yyyy HH:mm}", reader.GetDateTime(i));
         } else {
           FieldValue = String.Format("{0:dd-MMM-yyyy HH:mm:ss}", reader.GetDateTime(i));
         }

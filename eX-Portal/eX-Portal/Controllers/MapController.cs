@@ -42,6 +42,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult FlightDataLiveVideo(int ID = 0) {
       Drones thisDrone = new Drones();
+      ViewBag.AllowedLocation = thisDrone.getAllowedLocation(ID);
       ViewBag.PlayerURL = thisDrone.getLiveURL(ID);
       return View();
     }
