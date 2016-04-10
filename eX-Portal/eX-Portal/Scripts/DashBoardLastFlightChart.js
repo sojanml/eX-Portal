@@ -156,7 +156,7 @@ $(document).ready(function () {
   }
 
   function OnErrorCall_(repo) {
-    alert("Woops something went wrong, pls try later !");
+   // alert("Woops something went wrong, pls try later !");
   }
 
   $(document).on("click", "ul#line-legend li", function () {
