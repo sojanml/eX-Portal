@@ -299,6 +299,7 @@ namespace eX_Portal.Controllers
 
         public String UploadFile([Bind(Prefix = "ID")] int UserID = 0)
         {
+           
             String UploadPath = Server.MapPath(Url.Content(RootUploadDir) + UserID + "/");
             //send information in JSON Format always
             StringBuilder JsonText = new StringBuilder();
