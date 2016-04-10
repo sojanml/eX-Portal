@@ -191,6 +191,7 @@ namespace eX_Portal.Controllers
             if (Session["Lat"] != null)
             {
                 Lat = Session["Lat"].ToString();
+               
             }
             else
             {
@@ -198,7 +199,9 @@ namespace eX_Portal.Controllers
             }
             if (Session["Long"] != null)
             {
+                
                 Lng = Session["Long"].ToString();
+               
             }
             else
             {
