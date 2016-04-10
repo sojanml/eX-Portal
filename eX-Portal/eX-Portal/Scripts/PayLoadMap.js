@@ -38,7 +38,7 @@ function refreshData(IsForceRefresh) {
   if (IsForceRefresh || $('#chkAutoRefresh').is(':checked')) {
     RefreshTimer = window.setTimeout(function () {
       qViewDataTable.ajax.reload(null, false);
-    }, 10 * 1000);
+    }, 4 * 1000);
   }
 }
 
