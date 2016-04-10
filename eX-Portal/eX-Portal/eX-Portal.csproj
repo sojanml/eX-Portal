@@ -851,6 +851,8 @@
     <Content Include="Views\Parts\Edit.cshtml" />
     <Content Include="Views\Parts\PartsList.cshtml" />
     <Content Include="Views\PayLoad\Index.cshtml" />
+    <Content Include="Views\PayLoad\InfraRed.cshtml" />
+    <Content Include="Views\PayLoad\OutDoor.cshtml" />
     <Content Include="Views\PilotLog\Create.cshtml" />
     <Content Include="Views\PilotLog\Detail.cshtml" />
     <Content Include="Views\PilotLog\Edit.cshtml" />
@@ -932,7 +934,6 @@
     <Content Include="Views\PayLoad\Detail.cshtml" />
     <Content Include="Views\PayLoad\InDoor.cshtml" />
     <Content Include="Views\PayLoad\InDoorFlightDetails.cshtml" />
-    <Content Include="Views\PayLoad\OutDoor.cshtml" />
     <Content Include="Views\PayLoad\Table.cshtml" />
     <Content Include="Views\S3Upload\Complete.cshtml" />
     <Content Include="Views\S3Upload\GCAApproval.cshtml" />
@@ -949,11 +950,11 @@
     <Content Include="Views\Test\GCA_Approval.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Test\Video.cshtml" />
-    <Content Include="Views\PayLoad\InfraRed.cshtml" />
     <Content Include="Views\PayLoad\Videography.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\AutoComplete\" />
     <Folder Include="Weather\" />
   </ItemGroup>
   <ItemGroup>
