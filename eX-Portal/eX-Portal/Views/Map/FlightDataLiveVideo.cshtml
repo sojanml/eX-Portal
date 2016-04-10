@@ -172,7 +172,7 @@
     $(document).ready(function () {
       playerInstance = jwplayer("myElement");
       playerInstance.setup({
-        file: @Html.Raw(ViewBag.PlayerURL),
+        file: '@Html.Raw(ViewBag.PlayerURL)',
         width: 256,
         height: 192,
         description: 'Click on play to start video.',

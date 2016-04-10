@@ -851,6 +851,8 @@
     <Content Include="Views\Parts\Edit.cshtml" />
     <Content Include="Views\Parts\PartsList.cshtml" />
     <Content Include="Views\PayLoad\Index.cshtml" />
+    <Content Include="Views\PayLoad\InfraRed.cshtml" />
+    <Content Include="Views\PayLoad\OutDoor.cshtml" />
     <Content Include="Views\PilotLog\Create.cshtml" />
     <Content Include="Views\PilotLog\Detail.cshtml" />
     <Content Include="Views\PilotLog\Edit.cshtml" />
@@ -932,7 +934,6 @@
     <Content Include="Views\PayLoad\Detail.cshtml" />
     <Content Include="Views\PayLoad\InDoor.cshtml" />
     <Content Include="Views\PayLoad\InDoorFlightDetails.cshtml" />
-    <Content Include="Views\PayLoad\OutDoor.cshtml" />
     <Content Include="Views\PayLoad\Table.cshtml" />
     <Content Include="Views\S3Upload\Complete.cshtml" />
     <Content Include="Views\S3Upload\GCAApproval.cshtml" />
@@ -949,11 +950,11 @@
     <Content Include="Views\Test\GCA_Approval.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Test\Video.cshtml" />
-    <Content Include="Views\PayLoad\InfraRed.cshtml" />
     <Content Include="Views\PayLoad\Videography.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\AutoComplete\" />
     <Folder Include="Weather\" />
   </ItemGroup>
   <ItemGroup>
@@ -969,7 +970,7 @@
     <Analyzer Include="..\packages\AWSSDK.S3.3.2.3.0-beta\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\FileStorageUtils\FileStorageUtils.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\..\Cathey\amazonfileupload-master\amazonfileupload-master\FileStorageUtils\FileStorageUtils.csproj">
       <Project>{6cabaa57-63d3-446f-b44c-6ffa9acb1367}</Project>
       <Name>FileStorageUtils</Name>
     </ProjectReference>

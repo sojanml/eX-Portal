@@ -20,7 +20,6 @@ namespace eX_Portal.Controllers
     public class UserController : Controller
     {
         // GET: UserLogin
-        int uid;
         public ExponentPortalEntities db = new ExponentPortalEntities();
         static String RootUploadDir = "~/Upload/User/";
         public object EntityState { get; private set; }

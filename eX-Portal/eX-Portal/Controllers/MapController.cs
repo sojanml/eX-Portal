@@ -46,6 +46,31 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
+    public String RFID([Bind(Prefix = "ID")]String RFID = "") {
+      String SQL = @"SELECT 
+        [VIN]
+        ,[CarMake]
+        ,[Model]
+        ,[Year]
+        ,[Color]
+      FROM 
+        [MSTR_Product]
+      WHERE
+        RFID='" + RFID + "'";
+      var Row = Util.getDBRow(SQL);
+      if(Row.Count == 1) {
+        return "<br>Vechile not accociated";
+      }
+
+      return
+      "<br>\n" +
+      "VIN: <b>" + Row["VIN"].ToString().ToUpper() + "</b><br>\n" +
+      "Make: <b>" + Row["CarMake"].ToString() + "</b><br>\n" +
+      "Model: <b>" + Row["Model"].ToString() + "</b><br>\n" +
+      "Year: <b>" + Row["Year"].ToString() + "</b><br>\n" +
+      "Color: <b>" + Row["Color"].ToString() + "</b>";
+
+    }
 
     public ActionResult PlayList(int id = 0) {
       String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + id;
