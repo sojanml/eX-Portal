@@ -180,7 +180,7 @@ $(document).ready(function () {
       display: 'block',
       opacity: 1,
       left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
-      top: tooltip.chart.canvas.offsetTop + tooltip.y + 'px'
+      top: tooltip.chart.canvas.offsetTop + tooltip.y-30 + 'px'
     });
 
   }
