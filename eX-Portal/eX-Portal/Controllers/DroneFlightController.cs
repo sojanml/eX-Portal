@@ -76,7 +76,7 @@ namespace eX_Portal.Controllers
             if (exLogic.User.hasAccess("FLIGHT.VIEW")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("FLIGHT.MAP")) nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
             nView.addMenu("Flight Data", Url.Action("FlightDataView", "Map", new { ID = "_PKey" }));
-            nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
+            //nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("FLIGHT.GEOTAG")) nView.addMenu("GEO Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("FLIGHT.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 

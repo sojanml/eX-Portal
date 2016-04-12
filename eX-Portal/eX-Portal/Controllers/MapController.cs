@@ -27,6 +27,7 @@ namespace eX_Portal.Controllers {
       ViewBag.FlightID = FlightID;
       Drones thisDrone = new Drones();
       if(thisDrone.isLive(FlightID)) {
+        ViewBag.AllowedLocation = thisDrone.getAllowedLocation(FlightID);
         ViewBag.PlayerURL = thisDrone.getLiveURL(FlightID);
         ViewBag.Title = "Flight Map (Live)";
         return View("FlightDataLiveVideo", new {ID = FlightID });
