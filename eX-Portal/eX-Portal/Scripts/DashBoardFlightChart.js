@@ -138,7 +138,7 @@ $(document).ready(function () {
   }
 
   function _tooltipTemplate(Label) {
-    alert(Label);
+   // alert(Label);
   return
   "xxx<ul class=\"<%=name.toLowerCase()%>-legend\">" +
   "<% for (var i=0; i<datasets.length; i++){%>" +
@@ -180,13 +180,13 @@ $(document).ready(function () {
       display: 'block',
       opacity: 1,
       left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
-      top: tooltip.chart.canvas.offsetTop + tooltip.y + 'px'
+      top: tooltip.chart.canvas.offsetTop + tooltip.y-30 + 'px'
     });
 
   }
 
   function OnErrorCall_(repo) {
-    alert("Woops something went wrong, pls try later !");
+   // alert("Woops something went wrong, pls try later !");
   }
 
   $(document).on("click", "ul#line-legend li", function () {

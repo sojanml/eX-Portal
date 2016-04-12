@@ -347,6 +347,9 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\usp_Portal_GetDroneParts_Result.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlParser\BracesTag.cs" />
     <Compile Include="SqlParser\ForUpdateTag.cs" />
@@ -379,6 +382,79 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="audio\notify.mp3" />
+    <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\Antlr3.Runtime.pdb" />
+    <Content Include="bin\AWSSDK.Core.dll" />
+    <Content Include="bin\AWSSDK.Core.pdb" />
+    <Content Include="bin\AWSSDK.Core.xml" />
+    <Content Include="bin\AWSSDK.dll" />
+    <Content Include="bin\AWSSDK.S3.dll" />
+    <Content Include="bin\AWSSDK.S3.pdb" />
+    <Content Include="bin\AWSSDK.S3.xml" />
+    <Content Include="bin\de\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll" />
+    <Content Include="bin\EntityFramework.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.xml" />
+    <Content Include="bin\EntityFramework.xml" />
+    <Content Include="bin\es\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll" />
+    <Content Include="bin\eX-Portal.dll" />
+    <Content Include="bin\eX-Portal.pdb" />
+    <Content Include="bin\FileStorageUtils.dll" />
+    <Content Include="bin\FileStorageUtils.pdb" />
+    <Content Include="bin\fr\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll" />
+    <Content Include="bin\it\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll" />
+    <Content Include="bin\ja\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll" />
+    <Content Include="bin\ko\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.xml" />
+    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.xml" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Owin.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Owin.xml" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
+    <Content Include="bin\Microsoft.Owin.dll" />
+    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.dll" />
+    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.Cookies.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Cookies.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Facebook.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Facebook.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.Google.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Google.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.OAuth.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.OAuth.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.Twitter.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Twitter.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.xml" />
+    <Content Include="bin\Microsoft.Owin.xml" />
+    <Content Include="bin\Microsoft.SqlServer.TransactSql.ScriptDom.dll" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Newtonsoft.Json.xml" />
+    <Content Include="bin\Owin.dll" />
+    <Content Include="bin\pt\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll" />
+    <Content Include="bin\ru\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Helpers.xml" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Mvc.xml" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Optimization.xml" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.xml" />
+    <Content Include="bin\WebGrease.dll" />
+    <Content Include="bin\zh-Hans\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll" />
+    <Content Include="bin\zh-Hant\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll" />
     <Content Include="Blue.png" />
     <Content Include="Blue1.png" />
     <Content Include="bullet_blue.png" />
@@ -679,6 +755,7 @@
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\user.js" />
+    <Content Include="bin\eX-Portal.dll.config" />
     <None Include="Scripts\_references.js" />
     <Content Include="stylesheets\dewa-dashboard.css" />
     <Content Include="stylesheets\ie.css" />
@@ -851,8 +928,6 @@
     <Content Include="Views\Parts\Edit.cshtml" />
     <Content Include="Views\Parts\PartsList.cshtml" />
     <Content Include="Views\PayLoad\Index.cshtml" />
-    <Content Include="Views\PayLoad\InfraRed.cshtml" />
-    <Content Include="Views\PayLoad\OutDoor.cshtml" />
     <Content Include="Views\PilotLog\Create.cshtml" />
     <Content Include="Views\PilotLog\Detail.cshtml" />
     <Content Include="Views\PilotLog\Edit.cshtml" />
@@ -934,6 +1009,7 @@
     <Content Include="Views\PayLoad\Detail.cshtml" />
     <Content Include="Views\PayLoad\InDoor.cshtml" />
     <Content Include="Views\PayLoad\InDoorFlightDetails.cshtml" />
+    <Content Include="Views\PayLoad\OutDoor.cshtml" />
     <Content Include="Views\PayLoad\Table.cshtml" />
     <Content Include="Views\S3Upload\Complete.cshtml" />
     <Content Include="Views\S3Upload\GCAApproval.cshtml" />
@@ -950,11 +1026,12 @@
     <Content Include="Views\Test\GCA_Approval.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Test\Video.cshtml" />
+    <Content Include="Views\PayLoad\InfraRed.cshtml" />
     <Content Include="Views\PayLoad\Videography.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\AutoComplete\" />
+    <Folder Include="bin\roslyn\" />
     <Folder Include="Weather\" />
   </ItemGroup>
   <ItemGroup>
