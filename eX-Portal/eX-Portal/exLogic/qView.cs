@@ -393,8 +393,15 @@ namespace eX_Portal.exLogic {
 
     private void setColumDef() {
       int ColumnCounter = 0;
-      String mySQL = isFilterByTop ?
-      SQL.Replace("SELECT ", "SELECT TOP 1 ") : SQL;
+      String mySQL = SQL;  
+
+      if(!isFilterByTop) { 
+        string pattern = @"SELECT[\s\n]";
+        Regex rgx = new Regex(pattern);
+        mySQL = rgx.Replace(SQL, "SELECT TOP 1 ");
+      }
+
+
       /*
       //can not use the none filter, we need to find is there any rows
       //exists to build the list
