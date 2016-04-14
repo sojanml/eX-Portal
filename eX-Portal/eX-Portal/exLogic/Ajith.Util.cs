@@ -436,8 +436,9 @@ namespace eX_Portal.exLogic {
         }
         if (reader.Name.ToLower() == "yweather:atmosphere") {
           Weather.Humidity = reader.GetAttribute("humidity").ToString();
-          Weather.Visibility = reader.GetAttribute("visibility").ToString();
-          Weather.Pressure = reader.GetAttribute("pressure").ToString();
+                            Weather.Visibility = Math.Round((double.Parse(reader.GetAttribute("visibility")) / 1.60934),0);
+
+          Weather.Pressure = Math.Round( double.Parse(reader.GetAttribute("pressure"))* 0.0295301 , 0);
           rising = Convert.ToInt32(reader.GetAttribute("rising"));
 
           rising = Convert.ToInt32(reader.GetAttribute("rising"));
