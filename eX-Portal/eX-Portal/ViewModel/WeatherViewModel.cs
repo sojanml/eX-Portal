@@ -19,9 +19,9 @@ namespace eX_Portal.ViewModel
         public string Direction { get; set; }
         public string Speed { get; set; }
         public string Humidity { get; set; }
-        public string Visibility { get; set; }
+        public double Visibility { get; set; }
         public string Condition { get; set; }
-        public string Pressure { get; set; }
+        public Double Pressure { get; set; }
         public string PressureStatus { get; set; }
         public string Sunrise { get; set; }
         public string Sunset { get; set; }
