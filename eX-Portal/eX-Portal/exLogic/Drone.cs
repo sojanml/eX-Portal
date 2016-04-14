@@ -79,7 +79,7 @@ namespace eX_Portal.exLogic {
         "  DroneFlight.ID,\n" +
         "  LogFrom,\n" +
         "  LogTo,\n" +
-        "  Convert(Varchar, Min(FlightMapData.ReadTime), 111) as FlightDate,\n" +
+        "  Convert(Varchar, Min(FlightMapData.ReadTime), 111) as 'FlightDate(UTC)',\n" +
         "  Convert(Varchar, Min(FlightMapData.ReadTime), 108) as LogTakeOffTime,\n" +
         "  Convert(Varchar, Max(FlightMapData.ReadTime), 108) as LogLandingTime,\n" +
         "  Convert(Varchar, DATEADD(\n" +
@@ -113,7 +113,7 @@ namespace eX_Portal.exLogic {
         "  DroneFlight.ID,\n" +
         "  LogFrom,\n" +
         "  LogTo,\n" +
-        "  Convert(Varchar(11), FlightDate, 111) as FlightDate,\n" +
+        "  Convert(Varchar(11), FlightDate, 111) as 'FlightDate(UTC)',\n" +
         "  Convert(Varchar, LogTakeOffTime, 108) as LogTakeOffTime,\n" +
         "  Convert(Varchar, LogLandingTime, 108) as LogLandingTime,\n" +
         "  Convert(Varchar, DATEADD(\n" +

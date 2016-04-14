@@ -772,7 +772,57 @@ namespace eX_Portal.exLogic {
       return result;
     }
 
-    public static int GetPilotIdFromFlight(int FlightId) {
+
+        public static string GetUASFromFlight(int FlightId)
+        {
+            string result = "";
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL = @"SELECT
+                           MSTR_Drone.DroneName as UAS
+                        FROM
+                          DroneFlight
+                        LEFT JOIN MSTR_Drone ON
+                          MSTR_Drone.DroneId = DroneFlight.DroneID
+                        LEFT JOIN MSTR_User as tblPilot ON
+                          tblPilot.UserID = DroneFlight.PilotID
+                        LEFT JOIN MSTR_User as tblGSC ON
+                          tblGSC.UserID = DroneFlight.GSCID
+                        LEFT JOIN MSTR_User as tblCreated ON
+                          tblCreated.UserID = DroneFlight.CreatedBy
+                          where DroneFlight.ID = " + FlightId;
+                result = Util.getDBVal(SQL);
+
+            }
+
+            return result;
+        }
+
+        public static string GetPilotFromFlight(int FlightId)
+        {
+            string result = "";
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL = @"SELECT
+                           tblPilot.FirstName as PilotName
+                        FROM
+                          DroneFlight
+                        LEFT JOIN MSTR_Drone ON
+                          MSTR_Drone.DroneId = DroneFlight.DroneID
+                        LEFT JOIN MSTR_User as tblPilot ON
+                          tblPilot.UserID = DroneFlight.PilotID
+                        LEFT JOIN MSTR_User as tblGSC ON
+                          tblGSC.UserID = DroneFlight.GSCID
+                        LEFT JOIN MSTR_User as tblCreated ON
+                          tblCreated.UserID = DroneFlight.CreatedBy
+                          where DroneFlight.ID = " + FlightId;
+                result = Util.getDBVal(SQL);
+
+            }
+
+            return result;
+        }
+        public static int GetPilotIdFromFlight(int FlightId) {
       int result = 0;
       using (var cotx = new ExponentPortalEntities()) {
         String SQL = "select PilotID from DroneFlight where  ID=" + FlightId;
