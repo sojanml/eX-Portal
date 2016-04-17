@@ -29,8 +29,8 @@ namespace eX_Portal.Controllers
             "   MSTR_Drone.DroneName as UAS,\n" +
             "   tblPilot.FirstName as PilotName,\n" +
             "   tblGSC.FirstName as GSCName,\n" +
-            "   tblCreated.FirstName as CreatedBy,\n" +
-            "   FlightDate,\n" +
+            "   tblPilot.FirstName as CreatedBy,\n" +
+            "   FlightDate as 'FlightDate(UTC)',\n" +
             "   CASE(SELECT Count(*) FROM DroneFlightVideo WHERE\n" +
             "       DroneFlightVideo.FlightID = DroneFlight.ID)\n" +
             "   WHEN 0 Then ''\n" +
@@ -242,8 +242,8 @@ namespace eX_Portal.Controllers
             "   MSTR_Drone.DroneName as UAS,\n" +
             "   tblPilot.FirstName + ' ' + tblPilot.MiddleName + ' ' + tblPilot.LastName  as PilotName,\n" +
             "   tblGSC.FirstName as [GroundStation],\n" +
-            "   tblCreated.FirstName as CreatedBy,\n" +
-            "   FORMAT(FlightDate, 'dd-MMM-yyyy HH:mm:ss', 'en-US' ) as FlightDate\n" +
+            "   tblPilot.FirstName as CreatedBy,\n" +
+            "   FORMAT(FlightDate, 'dd-MMM-yyyy HH:mm:ss', 'en-US' ) as 'FlightDate(UTC)'\n" +
             "FROM\n" +
             "  DroneFlight\n" +
             "LEFT JOIN MSTR_Drone ON\n" +
@@ -262,8 +262,9 @@ namespace eX_Portal.Controllers
             //this part for adding link to requred fields in the details
             DroneId = Util.GetDroneIdFromFlight(ID);
             UserId = Util.GetPilotIdFromFlight(ID);
-            UASFormat = "<a href='/Drone/Detail/" + DroneId + "'>$UAS</a>";//url
-            PilotFormat = "<a href='/User/UserDetail/" + UserId + "'>$PilotName</a>";//url
+
+            UASFormat = "<a href='/Drone/Detail/" + DroneId + "'> "+ Util.GetUASFromFlight(ID) + "</a>";//url
+            PilotFormat = "<a href='/User/UserDetail/" + UserId + "'> "+ Util.GetPilotFromFlight(ID) + "</a>";//url
             theView.FormatCols.Add("UAS", UASFormat); //Adding the Column required for formatting  
             theView.FormatCols.Add("PilotName", PilotFormat); // //Adding the Column required for formatting  
 
@@ -347,7 +348,7 @@ namespace eX_Portal.Controllers
             "   tblPilot.FirstName as PilotName,\n" +
             "   tblGSC.FirstName as GSCName,\n" +
             "   tblCreated.FirstName as CreatedBy,\n" +
-            "   FlightDate\n" +
+            "   FlightDate as 'FlightDate(UTC)'\n" +
             "FROM\n" +
             "  DroneFlight\n" +
             "LEFT JOIN MSTR_Drone ON\n" +

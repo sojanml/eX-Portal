@@ -652,7 +652,7 @@ namespace eX_Portal.Controllers {
       "SELECT\n" +
       "  LogFrom,\n" +
       "  LogTo,\n" +
-      "  Convert(Varchar(11), FlightDate, 9) as FlightDate,\n" +
+      "  Convert(Varchar(11), FlightDate, 9) as 'FlightDate(UTC)',\n" +
       "  Convert(Varchar, LogTakeOffTime, 108) as TakeOff,\n" +
       "  Convert(Varchar, LogLandingTime, 108) as Landing,\n" +
       "  Convert(Varchar, DATEADD(\n" +
