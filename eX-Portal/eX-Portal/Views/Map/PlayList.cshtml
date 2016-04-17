@@ -1,24 +1,32 @@
 ﻿@using eX_Portal.Models
 @using eX_Portal.exLogic
 @model List<Dictionary<String, Object>>
-@{ 
-  
+@{   
   Layout = null;
+  var thisDrone = new eX_Portal.exLogic.Drones();
 }
-<rss version="2.0"
-     xmlns:media="http://search.yahoo.com/mrss/"
-     xmlns:jwplayer="http://developer.longtailvideo.com/trac/wiki/FlashFormats">
-  <channel>
-    <title>Example media RSS playlist</title>
-    @foreach(var Row in Model) { 
-    <item>
-      <title>@Row["VideoURL"]</title>
-      <media:group>
-        <media:content url="@S3Download.getURL("VOD/" + Row["VideoURL"].ToString())"></media:content>
-      </media:group>
-    </item>
-    }
+@*
+  <rss version="2.0"
+       xmlns:media="http://search.yahoo.com/mrss/"
+       xmlns:jwplayer="http://developer.longtailvideo.com/trac/wiki/FlashFormats">
+    <channel>
+      <title>Example media RSS playlist</title>
+      @foreach(var Row in Model) {
+      <item>
+        <title>@Row["VideoURL"]</title>
+        <media:group>
+          <media:content url="@S3Download.getStreamURL("VOD/" + Row["VideoURL"].ToString())"></media:content>
+        </media:group>
+      </item>
+      }
+    </channel>
+  </rss>
+
+*@
+  @foreach (var Row in Model) {
+    @:{sources: [{ file: "@Html.Raw(S3Download.getStreamURL("VOD/" + Row["VideoURL"].ToString()))", type: "flv"}],
+    @:  title: '@thisDrone.parseDate(Row["VideoURL"].ToString())',
+    @:},
+  }
 
 
-  </channel>
-</rss>

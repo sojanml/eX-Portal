@@ -32,10 +32,13 @@ namespace eX_Portal.Controllers {
         ViewBag.Title = "Flight Map (Live)";
         return View("FlightDataLiveVideo", new {ID = FlightID });
       } else {
+        //String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + FlightID;
+        //ViewBag.PlayList = Util.getDBRows(SQL);
         ViewBag.Title = "Flight Map";
         ViewBag.AllowedLocation = thisDrone.getAllowedLocation(FlightID);
         ViewBag.DroneID = thisDrone.DroneID;
-        //ViewBag.VideoURL = thisDrone.getPlayListURL(FlightID);
+        ViewBag.VideoStartAt = thisDrone.getVideoStartDate(FlightID);
+        ViewBag.VideoURL = thisDrone.getPlayListURL(FlightID);
         ViewBag.PlayerURL = thisDrone.getPlayListURL(FlightID);
         return View();
       }
@@ -77,7 +80,7 @@ namespace eX_Portal.Controllers {
     public ActionResult PlayList(int id = 0) {
       String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + id;
       var Rows = Util.getDBRows(SQL);
-      Response.ContentType = "text/json";
+     // Response.ContentType = "text/json";
       return View(Rows);
     }
 

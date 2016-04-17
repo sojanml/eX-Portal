@@ -1,6 +1,9 @@
 ﻿var MaxRecords = 2000;
 var map;
 var _Location = [];
+var _SavedLocation = [];
+var isAutoQuery = true;
+
 var PlotTimer = null;
 var PlotTimerDelay = 500;
 var isReplayMode = false;
