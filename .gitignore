@@ -47,7 +47,7 @@ Temporary Items
 *.suo
 *.user
 _ReSharper!.*
-Upload
+Upload/
 Packages
 
 # Build results
