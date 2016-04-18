@@ -235,7 +235,7 @@ namespace eX_Portal.Controllers
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-              //  DashboardList=Util.GetDashboardLists()
+               DashboardList=Util.GetDashboardLists()
 
             };
             return View(viewModel);
@@ -344,7 +344,7 @@ namespace eX_Portal.Controllers
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-                //DashboardList = Util.GetDashboardLists()
+                DashboardList = Util.GetDashboardLists()
             };
             return View(viewModel);
         }
@@ -415,7 +415,7 @@ namespace eX_Portal.Controllers
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-                //DashboardList = Util.GetDashboardLists()
+                DashboardList = Util.GetDashboardLists()
             };
             return View(viewModel);
 
@@ -538,7 +538,7 @@ namespace eX_Portal.Controllers
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-                //DashboardList = Util.GetDashboardLists()
+                DashboardList = Util.GetDashboardLists()
 
             };
             return View(viewModel);
