@@ -52,9 +52,6 @@
       <HintPath>..\packages\AWSSDK.S3.3.2.3.0-beta\lib\net45\AWSSDK.S3.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FileStorageUtils">
-      <HintPath>..\FileStorageUtils\bin\Debug\FileStorageUtils.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -954,6 +951,7 @@
     <Content Include="Views\Test\Video.cshtml" />
     <Content Include="Views\PayLoad\InfraRed.cshtml" />
     <Content Include="Views\PayLoad\Videography.cshtml" />
+    <Content Include="Views\Map\PayLoadIndoor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -973,6 +971,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\FileStorageUtils\FileStorageUtils.csproj">
+      <Project>{6cabaa57-63d3-446f-b44c-6ffa9acb1367}</Project>
+      <Name>FileStorageUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\FileStorageUtils\FileStorageUtils.csproj">
       <Project>{6cabaa57-63d3-446f-b44c-6ffa9acb1367}</Project>
       <Name>FileStorageUtils</Name>
     </ProjectReference>

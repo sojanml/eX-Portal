@@ -44,9 +44,9 @@ $(document).ready(function () {
 
   $('#chkShowFullPath').on("change", function (e) {
     if (this.checked) {
-      HiddenPoly.setMap(map);
+      OldLine.setMap(map);
     } else {
-      HiddenPoly.setMap(null);
+      OldLine.setMap(null);
     }
   })
 });
@@ -69,10 +69,11 @@ function Replay() {
   //Clear the Graph
   drawLineChart(1);
 
-
   //Start the timer
   _LocationIndex = -1;
   startReplayTimer();
+
+
 }
 
 
@@ -207,20 +208,25 @@ function getLocationPoints() {
       if (msg.length > 0) {
         window.setTimeout(getLocationPoints, 1000);
       } else {
-        if (_LocationPoints.length > 1) {
-          var loc = _LocationPoints[0];
-          var myLatLng = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
-          var iDt = parseInt(loc['ReadTime'].substr(6));
-          _BlackBoxStartAt = new Date(iDt);
-          map.setCenter(myLatLng)
-          drawLocationPoints();
-        }
+        setDrawIntilize();
       }
     },
     failure: function (msg) {
       alert('Live Drone Position Error' + msg);
     }
   });
+}
+
+function setDrawIntilize() {
+  if (_LocationPoints.length > 1) {
+    var loc = _LocationPoints[0];
+    var myLatLng = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
+    var iDt = parseInt(loc['ReadTime'].substr(6));
+    _BlackBoxStartAt = new Date(iDt);
+    map.setCenter(myLatLng)
+    drawLocationPoints();
+    $('#clickReplay').css({ display: 'block' });
+  }
 }
 
 function drawLocationPoints() {
@@ -254,6 +260,7 @@ function drawLocationPointsTimer() {
   var locationLength = _LocationPoints.length;
   if (locationLength < 1) return;
   //When the item reaches the end
+
 
   if (_LocationIndex < locationLength - 1) {    
     //Check if the last point time is ready to ploat, then
@@ -297,7 +304,6 @@ function drawLocationAtIndexTimer() {
   addDataToChartTimer();
   setInformationAtIntex();
 
-
   //set opacity of marker
   var initOpacity = 1;
   for (var i = _AllMarkers.length - 1; i > 0; i--) {
@@ -319,7 +325,6 @@ function drawLocationAtIndexTimer() {
     var LastPoint = LatestLine.getPath().getAt(0);
     OldLine.getPath().push(LastPoint);
   }
-
 }
 
 
@@ -523,6 +528,12 @@ function setFormatData(_LastValue) {
         value = parseInt(value);
         if (isNaN(value)) value = 0;
         break;
+      case "Latitude":
+      case "Longitude":
+        value = parseFloat(value);
+        if (isNaN(value)) value = 0;
+        value = value.toFixed(5);
+        break;
       case "avg_Altitude":
       case "Min_Altitude":
       case "Max_Altitude":
@@ -569,6 +580,18 @@ function setFormatData(_LastValue) {
   // var oCompaniesTable = $('#MapData Table')
 }
 
+
+function setMapInfo() {
+  //Show the information of drawing
+  if (_LocationIndex < 0) return;
+  var loc = _LocationPoints[_LocationIndex];
+  var sDate = fmtDt(_ReplayTimeAt);
+  $('#map-info').html(
+    '<span class="date">' + sDate + '</span> ' +
+    '<span class="gps">' + Math.abs(loc['Latitude']) + '<span>&deg;' + (loc['Latitude'] > 0 ? 'N' : 'S') + '</span></span> ' +
+    '<span class="gps">' + Math.abs(loc['Longitude']) + '<span>&deg;' + (loc['Longitude'] > 0 ? 'E' : 'W') + '</span></span> ' + ''
+  );
+}
 
 function fmtDt(date) {
   if (date instanceof Date) {
@@ -624,7 +647,11 @@ function startReplayTimer() {
     if (playerInstance) {
       payState = playerInstance.getState();
       if (_ReplayTimeAt >= _VideoStartTime) {
-        if (payState == 'playing') _ElapsedTime++;
+        if (payState == 'playing') {
+          _ElapsedTime++;
+        } else if (payState != 'buffering') {
+          playerInstance.play();
+        }
       } else {
         _ElapsedTime++;
       }
@@ -633,8 +660,7 @@ function startReplayTimer() {
     }
     _ReplayTimeAt = new Date(_BlackBoxStartAt.toString());
     _ReplayTimeAt.setSeconds(_ReplayTimeAt.getSeconds() + _ElapsedTime);
-    var sDate = fmtDt(_ReplayTimeAt);
-    $('#map-info').html(sDate + ' ' + payState);
+    setMapInfo();
     drawLocationPointsTimer();
   }, 1000);
 }

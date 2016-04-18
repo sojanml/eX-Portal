@@ -469,6 +469,7 @@ function SetCurrentValues(_LastValue) {
         value = parseInt(value);
         if (isNaN(value)) value = 0;
         break;
+
       case "avg_Altitude":
       case "Min_Altitude":
       case "Max_Altitude":

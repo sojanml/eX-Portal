@@ -62,7 +62,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 .vs/
-
+*.sln
 
 #Files
 *.csproj

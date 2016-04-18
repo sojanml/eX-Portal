@@ -122,6 +122,7 @@ namespace eX_Portal.Controllers {
         PayLoadFlightID as ID, 
         FlightID,
         PayLoadYard.YardName,
+        (CASE Processingmodel WHEN 1 Then 'Outdoor' ELSE 'Indoor' END) as Processingmodel,
         [RFIDCount],
         [CreatedTime],
         Count(*) Over() as _TotalRecords,

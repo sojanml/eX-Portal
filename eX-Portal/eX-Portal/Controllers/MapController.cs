@@ -134,8 +134,6 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("PAYLOAD.MAP")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Payload Data";
 
-
-
       String SQL =
       "SELECT \n" +
       "  [RFID], \n" +
@@ -153,6 +151,25 @@ namespace eX_Portal.Controllers {
       "WHERE\n" +
       "  FlightUniqueID='" + FlightUniqueID + "'";
 
+      int ProcessingModel = Util.getDBInt("Select ProcessingModel From PayloadMapData where FlightUniqueID='" + FlightUniqueID + "'");
+      if(ProcessingModel == 1) {
+        ViewBag.Title = "Indoor Payload Data";
+        SQL =
+        "SELECT \n" +
+        "  [ShelfID], \n" +
+        "  [RFID], \n" +
+        "  [ReadTime], \n" +
+        "  [ReadCount], \n" +
+        "  Count(*) Over() as _TotalRecords,\n" +
+        "  Concat([RFID],',',FlightUniqueID) as _PKey\n" +
+        "FROM \n" +
+        "  [PayLoadMapData] \n" +
+        "WHERE\n" +
+        "  FlightUniqueID='" + FlightUniqueID + "'";
+        //return View("PayLoadIndoor", new { ID = FlightUniqueID });
+      }
+
+
       qView nView = new qView(SQL);
       nView.addMenu("Detail", Url.Action("Detail", "Payload", new { ID = "_Pkey" }));
       ViewBag.FlightUniqueID = FlightUniqueID;
@@ -162,13 +179,24 @@ namespace eX_Portal.Controllers {
         return PartialView("qViewData", nView);
       } else {
 
-        //get yard information for FlightUniqueID
-        GeoGrid theYard = new GeoGrid(FlightUniqueID);
-        ViewBag.Yard = theYard.getYard();
+        if (ProcessingModel == 0) {
+          //get yard information for FlightUniqueID
+          GeoGrid theYard = new GeoGrid(FlightUniqueID);
+          ViewBag.Yard = theYard.getYard();
 
-        return View(nView);
+          return View(nView);
+        } else {
+          return View("PayLoadIndoor", nView);
+        }
+
       }//if(IsAjaxRequest)
 
+    }
+
+
+    [ChildActionOnly]
+    public ActionResult PayLoadIndoor([Bind(Prefix = "ID")] String FlightUniqueID = "") {
+      return View();
     }
 
     public JsonResult getYard([Bind(Prefix = "ID")] int YardID = 0) {

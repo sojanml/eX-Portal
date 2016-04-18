@@ -121,7 +121,7 @@
   <label for="chkShowFullPath">Show Full Path</label>
 </td>
   <td style="width:100%;"></td>
-<td><input class="button" id="clickReplay" type="button" value="Replay" onclick="Replay();" /></td>
+<td><input class="button" id="clickReplay" style="display:none" type="button" value="Replay" onclick="Replay();" /></td>
 </tr>
 
 </table>
@@ -131,16 +131,14 @@
   <div id="map_canvas" style="width: 100%; height: 480px;">
 
   </div>
-  <div id="map-info">-</div>
+  <div id="map-info">Wait...</div>
 
   @if (!String.IsNullOrEmpty(ViewBag.PlayerURL)) {
   <div id="map-video">
     <div id="myElement">Loading the player...</div>
   </div>
   }
-
 </div>
-<div id="TheTimer">Wait</div>
 
 <div style="width:100%">
     <canvas id="myChart" style="width:100%; height:200px;"> </canvas>
