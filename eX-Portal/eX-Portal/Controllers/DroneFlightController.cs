@@ -343,7 +343,7 @@ namespace eX_Portal.Controllers
         {
             if (!exLogic.User.hasAccess("FLIGHT")) return "Access Denied";
             String SQL =
-            "SELECT TOP 5" +
+            "SELECT " +
             "   MSTR_Drone.DroneName as UAS,\n" +
             "   tblPilot.FirstName as PilotName,\n" +
             "   tblGSC.FirstName as GSCName,\n" +
