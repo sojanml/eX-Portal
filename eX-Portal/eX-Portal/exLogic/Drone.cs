@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 
@@ -18,6 +19,51 @@ namespace eX_Portal.exLogic {
         _DroneID = value;
       }
     }
+
+    public String getVideoStartDate(int FlightID) {
+      String SQL = "select TOP 1 VideoURL from DroneFlightVideo WHERE FlightID=" + FlightID + " ORDER BY VideoURL ASC";
+      String VideoURL = Util.getDBVal(SQL);
+      return getVideoDate(VideoURL);
+
+    }
+
+
+    public String getVideoDate(String VideoFileName) {
+      String TheDate = "new Date(1970,0,0,24,0,0)"; 
+      //drone100-2016-03-24T10-38-47.flv
+      Match m = Regex.Match(VideoFileName, @"\-(\d+)-(\d+)-(\d+)T(\d+)-(\d+)-(\d+)");
+      if (m.Groups.Count == 7) {
+        TheDate = "new Date(" +
+        int.Parse(m.Groups[1].Value) + "," +
+        (int.Parse(m.Groups[2].Value) - 1) + "," +
+        int.Parse(m.Groups[3].Value) + "," +
+        int.Parse(m.Groups[4].Value) + "," +
+        int.Parse(m.Groups[5].Value) + "," +
+        int.Parse(m.Groups[6].Value) +
+        ")";
+      }
+      return TheDate;
+    }
+
+    public String parseDate(String VideoFileName) {
+
+      String TheDate = DateTime.Now.AddMinutes(-10).ToString("yyyy-MM-dd HH:mm:ss");
+      //drone100-2016-03-24T10-38-47.flv
+      Match m = Regex.Match(VideoFileName, @"\-(\d+)-(\d+)-(\d+)T(\d+)-(\d+)-(\d+)");
+      if (m.Groups.Count == 7) {
+        TheDate = m.Groups[1].Value + "-" +
+        m.Groups[2].Value + "-" +
+        m.Groups[3].Value +
+        " " +
+        m.Groups[4].Value + ":" +
+        m.Groups[5].Value + ":" +
+        m.Groups[6].Value;
+      }
+
+      return TheDate;
+    }
+
+
     public int getDroneIDForFlight(int FlightID) {
       String SQL = "Select DroneID From DroneFlight WHERE ID=" + FlightID;
       return Util.getDBInt(SQL);

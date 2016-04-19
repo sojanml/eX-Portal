@@ -47,7 +47,7 @@ Temporary Items
 *.suo
 *.user
 _ReSharper!.*
-Upload
+Upload/
 Packages
 
 # Build results
@@ -62,7 +62,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 .vs/
-
+*.sln
 
 #Files
 *.csproj

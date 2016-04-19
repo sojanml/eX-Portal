@@ -213,6 +213,10 @@ header {
 header div.logo {
  float: left;
 }
+div.logo img {
+  width: auto !important;
+  max-width: 500px;
+}
 header nav {
  float: right;
 }
@@ -356,6 +360,7 @@ nav.user-management {
   border: none;
   width:100%;
   padding:0px;
+  background-color: white;
 }
 #user-menu-items li a {
   display:block;

@@ -1,6 +1,9 @@
 ﻿var MaxRecords = 2000;
 var map;
 var _Location = [];
+var _SavedLocation = [];
+var isAutoQuery = true;
+
 var PlotTimer = null;
 var PlotTimerDelay = 500;
 var isReplayMode = false;
@@ -466,6 +469,7 @@ function SetCurrentValues(_LastValue) {
         value = parseInt(value);
         if (isNaN(value)) value = 0;
         break;
+
       case "avg_Altitude":
       case "Min_Altitude":
       case "Max_Altitude":
