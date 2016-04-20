@@ -50,5 +50,10 @@ namespace eX_Portal.Models
         public Nullable<int> ColFixExecuted { get; set; }
         public Nullable<int> AutoFixCol1 { get; set; }
         public Nullable<int> AutoFixGap { get; set; }
+        public string ShelfID { get; set; }
+        public Nullable<int> IsValid { get; set; }
+        public Nullable<int> ProcessingModel { get; set; }
+        public Nullable<decimal> GridLat { get; set; }
+        public Nullable<decimal> GridLng { get; set; }
     }
 }

@@ -11,7 +11,7 @@ using System.Web;
 namespace eX_Portal.exLogic {
 
   public class qView {
-    private bool _isFilterByTop = false;
+    private bool _isFilterByTop = true;
     private ExponentPortalEntities ctx;
     public String SQL { get; set; }
     public List<String> ColumDef = new List<String>();
@@ -52,11 +52,12 @@ namespace eX_Portal.exLogic {
     private bool IsPrimaryKey = false;
     public bool IsFormatDate = true;
 
-    public qView(String sSQL = "") {
+    public qView(String sSQL = "", bool isFilterByTop = true) {
       if (sSQL != "") SQL = sSQL;
       _TotalRecords = 0;
       ctx = new ExponentPortalEntities();
-      setColumDef();
+      _isFilterByTop = isFilterByTop;
+      if (!String.IsNullOrEmpty(SQL)) setColumDef();
     } //qView
 
     public bool addMenu(String Caption, String URL, String Icon = "") {
@@ -395,9 +396,10 @@ namespace eX_Portal.exLogic {
       int ColumnCounter = 0;
       String mySQL = SQL;  
 
-      if(!isFilterByTop) { 
+      if(isFilterByTop) { 
         string pattern = @"SELECT[\s\n]";
-        Regex rgx = new Regex(pattern);
+        Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+        
         mySQL = rgx.Replace(SQL, "SELECT TOP 1 ");
       }
 

@@ -21,10 +21,14 @@
   font-style: normal;
 }
 span.refresh,
-span.icon {
+span.icon,
+span.green_icon {
   font-family: FontAwesome;
   cursor: pointer;
   color: gray;
+}
+span.green_icon {
+color: #12b91f
 }
 
 div.form-toolbar > a > span.icon {

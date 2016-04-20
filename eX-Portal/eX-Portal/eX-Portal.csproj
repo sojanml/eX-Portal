@@ -226,7 +226,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\BlackBoxData.cs" />
+    <Compile Include="Models\BlackBoxData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataAnnotationsHelper.cs" />
     <Compile Include="Models\DroneCheckList.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
@@ -234,22 +236,34 @@
     <Compile Include="Models\DroneCheckListItem.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DroneCheckListValidation.cs" />
+    <Compile Include="Models\DroneCheckListValidation.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DroneData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DroneDefinition.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DroneDocument.cs" />
+    <Compile Include="Models\DroneDocument.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DroneFlightVideo.cs" />
-    <Compile Include="Models\FlightMapData.cs" />
-    <Compile Include="Models\GCA_Approval.cs" />
+    <Compile Include="Models\DroneFlightVideo.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FlightMapData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GCA_Approval.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\LiveDrone.cs" />
+    <Compile Include="Models\LiveDrone.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LUP_Drone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -265,7 +279,9 @@
     <Compile Include="Models\M2M_DroneServiceParts.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\M2M_ProfileMenu.cs" />
+    <Compile Include="Models\M2M_ProfileMenu.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\M2M_UserAccount.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -291,7 +307,9 @@
     <Compile Include="Models\MSTR_Parts.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MSTR_Pilot_Log.cs" />
+    <Compile Include="Models\MSTR_Pilot_Log.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MSTR_Product.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -301,18 +319,42 @@
     <Compile Include="Models\MSTR_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MSTR_User_Pilot.cs" />
-    <Compile Include="Models\MSTR_User_Pilot_Certification.cs" />
-    <Compile Include="Models\MSTR_User_Pilot_ExponentUAS.cs" />
-    <Compile Include="Models\PayLoadData.cs" />
-    <Compile Include="Models\PayLoadFlight.cs" />
-    <Compile Include="Models\PayLoadImageData.cs" />
-    <Compile Include="Models\PayLoadMapData.cs" />
-    <Compile Include="Models\PayLoadYard.cs" />
-    <Compile Include="Models\PayLoadYardGrid.cs" />
-    <Compile Include="Models\PayLoad_AutoFix.cs" />
-    <Compile Include="Models\PortalAlert.cs" />
-    <Compile Include="Models\PortalAuth.cs" />
+    <Compile Include="Models\MSTR_User_Pilot.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MSTR_User_Pilot_Certification.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MSTR_User_Pilot_ExponentUAS.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadFlight.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadImageData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadMapData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadYard.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadYardGrid.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoad_AutoFix.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PortalAlert.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PortalAuth.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Portaldb.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -337,16 +379,27 @@
     <Compile Include="Models\ProductTransaction.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\UserLog.cs" />
+    <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserLog.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\usp_Portal_CreateDrone_Result.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\usp_Portal_DroneNameList_Result.cs" />
-    <Compile Include="Models\usp_Portal_DroneServiceType_Result.cs" />
+    <Compile Include="Models\usp_Portal_DroneNameList_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\usp_Portal_DroneServiceType_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\usp_Portal_GetDroneDropDown_Result.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\usp_Portal_GetDroneParts_Result.cs" />
+    <Compile Include="Models\usp_Portal_GetDroneParts_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlParser\BracesTag.cs" />
     <Compile Include="SqlParser\ForUpdateTag.cs" />
@@ -672,6 +725,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\map-replay.js" />
+    <Content Include="Scripts\map.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\PayLoadMap.js" />
     <Content Include="Scripts\respond.js" />

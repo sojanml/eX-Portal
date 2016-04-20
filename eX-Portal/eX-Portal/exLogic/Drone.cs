@@ -320,7 +320,7 @@ namespace eX_Portal.exLogic {
       WHERE
         DroneID = " + _DroneID + @" and
         LastFlightID=" + FlightID + @" AND
-        FlightTime > DATEADD(SECOND, -30, GETDATE())";
+        FlightTime > DATEADD(MINUTE, -1, GETDATE())";
       int LiveCount = Util.getDBInt(SQL);
       return (LiveCount > 0);
   }

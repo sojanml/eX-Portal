@@ -103,6 +103,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="IsProcessed" Type="int" />
           <Property Name="QueueMessage" Type="nvarchar(max)" />
           <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="Voltage" Type="nvarchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -175,6 +176,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="IsFlightSoftFence" Type="int" />
           <Property Name="LowerLimit" Type="int" />
           <Property Name="HigherLimit" Type="int" />
+          <Property Name="GridLat" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="GridLng" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="FlightHours" Type="int" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -230,6 +234,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="IsOutSide" Type="bit" />
           <Property Name="GCAID" Type="int" />
           <Property Name="IsSoftFence" Type="int" />
+          <Property Name="voltage" Type="decimal" Precision="18" Scale="5" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'ExponentPortal.dbo.GCA_Approval' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -457,6 +462,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.GCA_Approval' does not have a p
           <Property Name="IncidentReportNote" Type="nvarchar(max)" />
           <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
           <Property Name="IsLiveVideo" Type="int" />
+          <Property Name="Latitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Longitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="FlightTime" Type="datetime" />
+          <Property Name="LastFlightID" Type="int" />
         </EntityType>
         <EntityType Name="MSTR_DroneCheckList">
           <Key>
@@ -576,6 +585,11 @@ warning 6002: The table/view 'ExponentPortal.dbo.GCA_Approval' does not have a p
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="VIN" Type="nvarchar" MaxLength="50" />
+          <Property Name="CarMake" Type="nvarchar" MaxLength="50" />
+          <Property Name="Model" Type="nvarchar" MaxLength="50" />
+          <Property Name="Year" Type="int" />
+          <Property Name="Color" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MSTR_Profile">
           <Key>
@@ -699,6 +713,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadData' does not have a pr
           <Property Name="FlightID" Type="int" />
           <Property Name="GPSFix" Type="nvarchar" MaxLength="25" />
           <Property Name="YardID" Type="int" />
+          <Property Name="ProcessingModel" Type="int" />
           <Property Name="IsProcessed" Type="bit" />
           <Property Name="RowNumber" Type="int" />
           <Property Name="ColumnNumber" Type="int" />
@@ -717,6 +732,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadFlight' does not have a 
           <Property Name="RFIDCount" Type="int" />
           <Property Name="PayLoadImageFolder" Type="nvarchar" MaxLength="50" />
           <Property Name="YardID" Type="int" />
+          <Property Name="ShelfID" Type="varchar" MaxLength="20" />
+          <Property Name="Processingmodel" Type="int" />
+          <Property Name="IsFlightSync" Type="int" />
+          <Property Name="PayLoadDroneID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'ExponentPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -779,6 +798,11 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <Property Name="ColFixExecuted" Type="int" />
           <Property Name="AutoFixCol1" Type="int" />
           <Property Name="AutoFixGap" Type="int" />
+          <Property Name="ShelfID" Type="varchar" MaxLength="20" />
+          <Property Name="IsValid" Type="int" />
+          <Property Name="ProcessingModel" Type="int" />
+          <Property Name="GridLat" Type="numeric" Precision="18" Scale="6" />
+          <Property Name="GridLng" Type="numeric" Precision="18" Scale="6" />
         </EntityType>
         <EntityType Name="PayLoadYard">
           <Key>
@@ -908,6 +932,16 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
         <EntityType Name="SMSTable">
           <Property Name="CellNumber" Type="nvarchar" MaxLength="20" />
         </EntityType>-->
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
         <EntityType Name="UserLog">
           <Key>
             <PropertyRef Name="ID" />
@@ -1006,6 +1040,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserLog" EntityType="Self.UserLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxData" EntityType="Self.BlackBoxData" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1078,6 +1113,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
     [PayLoadData].[FlightID] AS [FlightID], 
     [PayLoadData].[GPSFix] AS [GPSFix], 
     [PayLoadData].[YardID] AS [YardID], 
+    [PayLoadData].[ProcessingModel] AS [ProcessingModel], 
     [PayLoadData].[IsProcessed] AS [IsProcessed], 
     [PayLoadData].[RowNumber] AS [RowNumber], 
     [PayLoadData].[ColumnNumber] AS [ColumnNumber], 
@@ -1092,7 +1128,11 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
     [PayLoadFlight].[FlightID] AS [FlightID], 
     [PayLoadFlight].[RFIDCount] AS [RFIDCount], 
     [PayLoadFlight].[PayLoadImageFolder] AS [PayLoadImageFolder], 
-    [PayLoadFlight].[YardID] AS [YardID]
+    [PayLoadFlight].[YardID] AS [YardID], 
+    [PayLoadFlight].[ShelfID] AS [ShelfID], 
+    [PayLoadFlight].[Processingmodel] AS [Processingmodel], 
+    [PayLoadFlight].[IsFlightSync] AS [IsFlightSync], 
+    [PayLoadFlight].[PayLoadDroneID] AS [PayLoadDroneID]
     FROM [dbo].[PayLoadFlight] AS [PayLoadFlight]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadImageData" EntityType="Self.PayLoadImageData" store:Type="Tables" store:Schema="dbo">
@@ -1148,7 +1188,12 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
     [PayLoadMapData].[RowFixExecuted] AS [RowFixExecuted], 
     [PayLoadMapData].[ColFixExecuted] AS [ColFixExecuted], 
     [PayLoadMapData].[AutoFixCol1] AS [AutoFixCol1], 
-    [PayLoadMapData].[AutoFixGap] AS [AutoFixGap]
+    [PayLoadMapData].[AutoFixGap] AS [AutoFixGap], 
+    [PayLoadMapData].[ShelfID] AS [ShelfID], 
+    [PayLoadMapData].[IsValid] AS [IsValid], 
+    [PayLoadMapData].[ProcessingModel] AS [ProcessingModel], 
+    [PayLoadMapData].[GridLat] AS [GridLat], 
+    [PayLoadMapData].[GridLng] AS [GridLng]
     FROM [dbo].[PayLoadMapData] AS [PayLoadMapData]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadYardGrid" EntityType="Self.PayLoadYardGrid" store:Type="Tables" store:Schema="dbo">
@@ -1224,6 +1269,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="IsProcessed" Type="Int32" />
           <Property Name="QueueMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Voltage" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -1388,6 +1434,10 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="IncidentReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsLiveVideo" Type="Int32" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="FlightTime" Type="DateTime" Precision="3" />
+          <Property Name="LastFlightID" Type="Int32" />
         </EntityType>
         <EntityType Name="MSTR_DroneService">
           <Key>
@@ -1470,6 +1520,11 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="VIN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CarMake" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_Profile">
           <Key>
@@ -1591,6 +1646,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="UserLogs" EntityType="ExponentPortalModel.UserLog" />
           <EntitySet Name="DroneFlightVideos" EntityType="ExponentPortalModel.DroneFlightVideo" />
           <EntitySet Name="PortalAuths" EntityType="ExponentPortalModel.PortalAuth" />
+          <EntitySet Name="sysdiagrams" EntityType="ExponentPortalModel.sysdiagram" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -1820,6 +1876,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="IsOutSide" Type="Boolean" />
           <Property Name="GCAID" Type="Int32" />
           <Property Name="IsSoftFence" Type="Int32" />
+          <Property Name="voltage" Type="Decimal" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -1917,6 +1974,9 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="IsFlightSoftFence" Type="Int32" />
           <Property Name="LowerLimit" Type="Int32" />
           <Property Name="HigherLimit" Type="Int32" />
+          <Property Name="GridLat" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="GridLng" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="FlightHours" Type="Int32" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -2004,6 +2064,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="RowNumber" Type="Int32" />
           <Property Name="ColumnNumber" Type="Int32" />
           <Property Name="CellID" Type="Int32" />
+          <Property Name="ProcessingModel" Type="Int32" />
         </EntityType>
         <EntityType Name="PayLoadMapData">
           <Key>
@@ -2045,6 +2106,11 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="ColFixExecuted" Type="Int32" />
           <Property Name="AutoFixCol1" Type="Int32" />
           <Property Name="AutoFixGap" Type="Int32" />
+          <Property Name="ShelfID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IsValid" Type="Int32" />
+          <Property Name="ProcessingModel" Type="Int32" />
+          <Property Name="GridLat" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="GridLng" Type="Decimal" Precision="18" Scale="6" />
         </EntityType>
         <EntityType Name="PayLoadYard">
           <Key>
@@ -2078,6 +2144,10 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="RFIDCount" Type="Int32" />
           <Property Name="PayLoadImageFolder" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="YardID" Type="Int32" />
+          <Property Name="ShelfID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Processingmodel" Type="Int32" />
+          <Property Name="IsFlightSync" Type="Int32" />
+          <Property Name="PayLoadDroneID" Type="Int32" />
         </EntityType>
         <EntityType Name="PayLoadImageData">
           <Key>
@@ -2201,6 +2271,16 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="ExpiredOn" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2210,6 +2290,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="DroneDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneData">
               <MappingFragment StoreEntitySet="DroneData">
+                <ScalarProperty Name="Voltage" ColumnName="Voltage" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="QueueMessage" ColumnName="QueueMessage" />
                 <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
@@ -2371,6 +2452,10 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="MSTR_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
               <MappingFragment StoreEntitySet="MSTR_Drone">
+                <ScalarProperty Name="LastFlightID" ColumnName="LastFlightID" />
+                <ScalarProperty Name="FlightTime" ColumnName="FlightTime" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
                 <ScalarProperty Name="IsLiveVideo" ColumnName="IsLiveVideo" />
                 <ScalarProperty Name="ModelName" ColumnName="ModelName" />
                 <ScalarProperty Name="IncidentReportNote" ColumnName="IncidentReportNote" />
@@ -2474,6 +2559,11 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="MSTR_Product">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Product">
               <MappingFragment StoreEntitySet="MSTR_Product">
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="CarMake" ColumnName="CarMake" />
+                <ScalarProperty Name="VIN" ColumnName="VIN" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="RFID" ColumnName="RFID" />
                 <ScalarProperty Name="DecimalCode" ColumnName="DecimalCode" />
@@ -2749,6 +2839,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="FlightMapDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.FlightMapData">
               <MappingFragment StoreEntitySet="FlightMapData">
+                <ScalarProperty Name="voltage" ColumnName="voltage" />
                 <ScalarProperty Name="IsSoftFence" ColumnName="IsSoftFence" />
                 <ScalarProperty Name="GCAID" ColumnName="GCAID" />
                 <ScalarProperty Name="IsOutSide" ColumnName="IsOutSide" />
@@ -2859,6 +2950,9 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="FlightHours" ColumnName="FlightHours" />
+                <ScalarProperty Name="GridLng" ColumnName="GridLng" />
+                <ScalarProperty Name="GridLat" ColumnName="GridLat" />
                 <ScalarProperty Name="HigherLimit" ColumnName="HigherLimit" />
                 <ScalarProperty Name="LowerLimit" ColumnName="LowerLimit" />
                 <ScalarProperty Name="IsFlightSoftFence" ColumnName="IsFlightSoftFence" />
@@ -2959,6 +3053,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="PayLoadDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadData">
               <MappingFragment StoreEntitySet="PayLoadData">
+                <ScalarProperty Name="ProcessingModel" ColumnName="ProcessingModel" />
                 <ScalarProperty Name="CellID" ColumnName="CellID" />
                 <ScalarProperty Name="ColumnNumber" ColumnName="ColumnNumber" />
                 <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
@@ -2985,6 +3080,11 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="PayLoadMapDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadMapData">
               <MappingFragment StoreEntitySet="PayLoadMapData">
+                <ScalarProperty Name="GridLng" ColumnName="GridLng" />
+                <ScalarProperty Name="GridLat" ColumnName="GridLat" />
+                <ScalarProperty Name="ProcessingModel" ColumnName="ProcessingModel" />
+                <ScalarProperty Name="IsValid" ColumnName="IsValid" />
+                <ScalarProperty Name="ShelfID" ColumnName="ShelfID" />
                 <ScalarProperty Name="AutoFixGap" ColumnName="AutoFixGap" />
                 <ScalarProperty Name="AutoFixCol1" ColumnName="AutoFixCol1" />
                 <ScalarProperty Name="ColFixExecuted" ColumnName="ColFixExecuted" />
@@ -3051,6 +3151,10 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="PayLoadFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadFlight">
               <MappingFragment StoreEntitySet="PayLoadFlight">
+                <ScalarProperty Name="PayLoadDroneID" ColumnName="PayLoadDroneID" />
+                <ScalarProperty Name="IsFlightSync" ColumnName="IsFlightSync" />
+                <ScalarProperty Name="Processingmodel" ColumnName="Processingmodel" />
+                <ScalarProperty Name="ShelfID" ColumnName="ShelfID" />
                 <ScalarProperty Name="YardID" ColumnName="YardID" />
                 <ScalarProperty Name="PayLoadImageFolder" ColumnName="PayLoadImageFolder" />
                 <ScalarProperty Name="RFIDCount" ColumnName="RFIDCount" />
@@ -3186,6 +3290,17 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
                 <ScalarProperty Name="AuthKey" ColumnName="AuthKey" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="AuthID" ColumnName="AuthID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="ExponentPortalModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

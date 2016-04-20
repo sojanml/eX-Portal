@@ -21,5 +21,9 @@ namespace eX_Portal.Models
         public Nullable<int> RFIDCount { get; set; }
         public string PayLoadImageFolder { get; set; }
         public Nullable<int> YardID { get; set; }
+        public string ShelfID { get; set; }
+        public Nullable<int> Processingmodel { get; set; }
+        public Nullable<int> IsFlightSync { get; set; }
+        public Nullable<int> PayLoadDroneID { get; set; }
     }
 }

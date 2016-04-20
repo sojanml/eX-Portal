@@ -132,6 +132,7 @@ function initilizeTable() {
               + '<th>Pitch</th>'
               + '<th>RollData</th>'
               + '<th>Heading</th>'
+              + '<th>Volt</th>'
               + '</tr></thead>';
   $('#TableMapData').append(TableHeader);
 }
@@ -412,6 +413,7 @@ function addDataToTableAtIntex() {
   tPitchData +
   tRollData +
   tHeadData +
+  '<td>' + _LastValue['voltage'] + '</td>\n' +
   tTotFlightTimeData +
   '</tr>';
   if ($('#TableMapData tbody tr').length > 20) {
@@ -547,6 +549,7 @@ function setFormatData(_LastValue) {
       case "Avg_Speed":
       case "Min_Speed":
       case "Max_Speed":
+      case "voltage":
         value = parseFloat(value);
         if (isNaN(value)) value = 0;
         //if (value > 0) value = value / (60 * 60) * 1000;

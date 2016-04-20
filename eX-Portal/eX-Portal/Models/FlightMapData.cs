@@ -52,5 +52,6 @@ namespace eX_Portal.Models
         public Nullable<bool> IsOutSide { get; set; }
         public Nullable<int> GCAID { get; set; }
         public Nullable<int> IsSoftFence { get; set; }
+        public Nullable<decimal> voltage { get; set; }
     }
 }
