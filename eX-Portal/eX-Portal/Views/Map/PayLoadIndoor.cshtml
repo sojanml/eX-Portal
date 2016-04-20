@@ -1,13 +1,43 @@
 ﻿@using eX_Portal.exLogic;
+@model List<Dictionary<String, Object>>
 
-@model eX_Portal.exLogic.qView
+  @foreach (var Row in Model) {
+  <div class="shelf">
+    <div class="header">Shelf: <span>@Row["ShelfName"]</span></div>
+    @Html.Action("PayLoadIndoorShelf", new { ShelfID = Row["ShelfID"].ToString(), FlightUniqueID = ViewBag.FlightUniqueID })
+    <div style="clear:both"></div>
+  </div>
+  }
 
-@Html.Raw(Model.getDataTable())
+@section header {
+  <style type="text/css">
+    div.shelf {
+    border-bottom:1px #757474 solid;
+    padding:0px;
+    margin:10px 0px 30px 0px;
+    width:100%;
+    }
+    div.shelf div.header {
+    background-color: rgba(177, 177, 177, 0.37);
+    /*border-bottom: 1px #ea050e solid;*/
+    padding: 5px 10px 5px 10px;
+    color:black;
+    font-weight:bold;
+    width:100%;
+    box-sizing: border-box;
+    }
 
-@section scripts {
-  <script type="text/javascript">
-    @Html.Raw(Model.getScripts())
-  </script>
-}
-
-
+    ul.data {
+    margin:0px;
+    padding:0px;
+    list-style:none;
+    width:100%;
+    box-sizing: border-box;
+    }
+    ul.data li {
+      float:left;
+      width:150px;
+          padding: 5px 0px 5px 10px;
+    }
+  </style>
+  }

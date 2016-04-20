@@ -28,7 +28,7 @@ namespace eX_Portal.Controllers {
      WHERE
               PayLoadFlight.Processingmodel= 1
      AND PayLoadFlight.FlightUniqueID= " + FlightUniqueID +
-" AND PayLoadMapData.IsValid= 0";
+     " AND PayLoadMapData.IsValid= 0";
       qView nView = new qView(SQL);
 
 

@@ -235,6 +235,7 @@ function drawLocationPoints() {
   if (_LocationIndex == locationLength - 1) {
     drawLineChart(0);
     setInformationAtIntex();
+    map.fitBounds(_ZoomBounds);
     return;
   }
   if (locationLength > 0 && _LocationIndex < locationLength - 1) {
@@ -353,7 +354,7 @@ function drawMarkerAtIndex(Opacity) {
   });
   map.setCenter(myLatLng);
   _ZoomBounds.extend(myLatLng);
-  map.fitBounds(_ZoomBounds);
+
 
   //Add to global marker array
   _AllMarkers.push(marker);
@@ -600,9 +601,9 @@ function fmtDt(date) {
     return 'Invalid';
   }
   var day = date.getDate();
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var seconds = date.getSeconds();
+  var hours = date.getUTCHours();
+  var minutes = date.getUTCMinutes();
+  var seconds = date.getUTCSeconds();
   var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   //var ampm = hours >= 12 ? 'pm' : 'am';
   //hours = hours % 12;
@@ -622,9 +623,9 @@ function fmtTime(date) {
     return 'Invalid';
   }
 
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var seconds = date.getSeconds();
+  var hours = date.getUTCHours();
+  var minutes = date.getUTCMinutes();
+  var seconds = date.getUTCSeconds();
   hours = hours < 10 ? '0' + hours : hours;
   minutes = minutes < 10 ? '0' + minutes : minutes;
   seconds = seconds < 10 ? '0' + seconds : seconds;

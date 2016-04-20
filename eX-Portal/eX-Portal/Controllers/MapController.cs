@@ -22,19 +22,19 @@ namespace eX_Portal.Controllers {
     public ActionResult Select() {
       return View();
     }
-    public ActionResult FlightData([Bind(Prefix= "ID")] int FlightID = 0) {
+    public ActionResult FlightData([Bind(Prefix = "ID")] int FlightID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       ViewBag.FlightID = FlightID;
       Drones thisDrone = new Drones();
-      if(thisDrone.isLive(FlightID)) {
+      if (thisDrone.isLiveFlight(FlightID)) {
         ViewBag.AllowedLocation = thisDrone.getAllowedLocation(FlightID);
         ViewBag.PlayerURL = thisDrone.getLiveURL(FlightID);
         ViewBag.Title = "Flight Map (Live)";
-        return View("FlightDataLiveVideo", new {ID = FlightID });
+        return View("FlightDataLiveVideo", new { ID = FlightID });
       } else {
         //String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + FlightID;
         //ViewBag.PlayList = Util.getDBRows(SQL);
-        ViewBag.Title = "Flight Map";
+        ViewBag.Title = "Flight Map (Replay)";
         ViewBag.AllowedLocation = thisDrone.getAllowedLocation(FlightID);
         ViewBag.DroneID = thisDrone.DroneID;
         ViewBag.VideoStartAt = thisDrone.getVideoStartDate(FlightID);
@@ -43,13 +43,14 @@ namespace eX_Portal.Controllers {
         return View();
       }
     }
-
+    /*
     public ActionResult FlightDataLiveVideo(int ID = 0) {
       Drones thisDrone = new Drones();
       ViewBag.AllowedLocation = thisDrone.getAllowedLocation(ID);
       ViewBag.PlayerURL = thisDrone.getLiveURL(ID);
       return View();
     }
+    */
 
     public String RFID([Bind(Prefix = "ID")]String RFID = "") {
       String SQL = @"SELECT 
@@ -63,7 +64,7 @@ namespace eX_Portal.Controllers {
       WHERE
         RFID='" + RFID + "'";
       var Row = Util.getDBRow(SQL);
-      if(Row.Count == 1) {
+      if (Row.Count == 1) {
         return "<br>Vechile not accociated";
       }
 
@@ -80,7 +81,7 @@ namespace eX_Portal.Controllers {
     public ActionResult PlayList(int id = 0) {
       String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + id;
       var Rows = Util.getDBRows(SQL);
-     // Response.ContentType = "text/json";
+      // Response.ContentType = "text/json";
       return View(Rows);
     }
 
@@ -132,6 +133,10 @@ namespace eX_Portal.Controllers {
 
     public ActionResult PayLoad([Bind(Prefix = "ID")] String FlightUniqueID = "") {
       if (!exLogic.User.hasAccess("PAYLOAD.MAP")) return RedirectToAction("NoAccess", "Home");
+      int ProcessingModel = Util.getDBInt("Select ProcessingModel From PayloadMapData where FlightUniqueID='" + FlightUniqueID + "'");
+      if (ProcessingModel == 1) {
+        return RedirectToAction("PayLoadIndoor", new { ID = FlightUniqueID });
+      }
       ViewBag.Title = "Payload Data";
 
       String SQL =
@@ -151,25 +156,6 @@ namespace eX_Portal.Controllers {
       "WHERE\n" +
       "  FlightUniqueID='" + FlightUniqueID + "'";
 
-      int ProcessingModel = Util.getDBInt("Select ProcessingModel From PayloadMapData where FlightUniqueID='" + FlightUniqueID + "'");
-      if(ProcessingModel == 1) {
-        ViewBag.Title = "Indoor Payload Data";
-        SQL =
-        "SELECT \n" +
-        "  [ShelfID], \n" +
-        "  [RFID], \n" +
-        "  [ReadTime], \n" +
-        "  [ReadCount], \n" +
-        "  Count(*) Over() as _TotalRecords,\n" +
-        "  Concat([RFID],',',FlightUniqueID) as _PKey\n" +
-        "FROM \n" +
-        "  [PayLoadMapData] \n" +
-        "WHERE\n" +
-        "  FlightUniqueID='" + FlightUniqueID + "'";
-        //return View("PayLoadIndoor", new { ID = FlightUniqueID });
-      }
-
-
       qView nView = new qView(SQL);
       nView.addMenu("Detail", Url.Action("Detail", "Payload", new { ID = "_Pkey" }));
       ViewBag.FlightUniqueID = FlightUniqueID;
@@ -178,25 +164,59 @@ namespace eX_Portal.Controllers {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
+        //get yard information for FlightUniqueID
+        GeoGrid theYard = new GeoGrid(FlightUniqueID);
+        ViewBag.Yard = theYard.getYard();
 
-        if (ProcessingModel == 0) {
-          //get yard information for FlightUniqueID
-          GeoGrid theYard = new GeoGrid(FlightUniqueID);
-          ViewBag.Yard = theYard.getYard();
-
-          return View(nView);
-        } else {
-          return View("PayLoadIndoor", nView);
-        }
+        return View(nView);
 
       }//if(IsAjaxRequest)
 
     }
 
 
-    [ChildActionOnly]
     public ActionResult PayLoadIndoor([Bind(Prefix = "ID")] String FlightUniqueID = "") {
-      return View();
+
+      ViewBag.Title = "Indoor Payload Data";
+      String SQL =
+      @"SELECT DISTINCT
+        [ShelfID],
+        ISNULL(MSTR_Product.Product_Name, [ShelfID]) as ShelfName
+      FROM 
+        [PayLoadMapData]
+      LEFT JOIN MSTR_Product ON
+        MSTR_Product.RFID = [PayLoadMapData].[ShelfID]
+      WHERE
+        IsValid = 1 AND
+        FlightUniqueID='" + FlightUniqueID + @"'
+      ORDER BY
+         [PayLoadMapData].[ShelfID]";
+      //return View("PayLoadIndoor", new { ID = FlightUniqueID });
+      var Rows = Util.getDBRows(SQL);
+      ViewBag.FlightUniqueID = FlightUniqueID;
+        return View(Rows);
+
+    }
+
+    public ActionResult PayLoadIndoorShelf(String ShelfID, String FlightUniqueID) {
+      String SQL =
+    @"SELECT DISTINCT
+        [PayLoadMapData].[RFID],
+        ISNULL(MSTR_Product.Product_Name, [PayLoadMapData].[RFID]) as ProductName
+      FROM 
+        [PayLoadMapData]
+      LEFT JOIN MSTR_Product ON
+        MSTR_Product.RFID = [PayLoadMapData].[RFID]
+      WHERE
+        [PayLoadMapData].ShelfID='" + ShelfID + @"' AND 
+        IsValid = 1 AND
+        FlightUniqueID='" + FlightUniqueID + @"'
+      ORDER BY
+        [PayLoadMapData].[RFID]";
+      //return View("PayLoadIndoor", new { ID = FlightUniqueID });
+      var Rows = Util.getDBRows(SQL);
+
+      return PartialView(Rows);
     }
 
     public JsonResult getYard([Bind(Prefix = "ID")] int YardID = 0) {
@@ -256,8 +276,8 @@ namespace eX_Portal.Controllers {
 
     [System.Web.Mvc.HttpGet]
     public JsonResult GetDrones() {
-            string SQL =
-            @"SELECT
+      string SQL =
+      @"SELECT
        [Latitude] AS LastLatitude,
        [Longitude] as LastLongitude,
        IsNull([MSTR_Drone].[DroneName], 'Drone ' + Convert(varchar, [MSTR_Drone].DroneID)) as DroneName,
@@ -283,8 +303,8 @@ namespace eX_Portal.Controllers {
          FlightTime >= DATEADD(month,-1,GETDATE())";
 
 
-   if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                SQL= SQL+ " AND [MSTR_Drone].AccountID ="+ Util.getAccountID();
+      if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+        SQL = SQL + " AND [MSTR_Drone].AccountID =" + Util.getAccountID();
 
 
       var LiveDrones = Util.getDBRows(SQL);

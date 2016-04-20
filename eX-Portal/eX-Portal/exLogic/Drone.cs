@@ -311,6 +311,20 @@ namespace eX_Portal.exLogic {
       return false;
     }
 
+    public bool isLiveFlight(int FlightID) {
+      if (_DroneID == 0) _DroneID = getDroneIDForFlight(FlightID);
+      String SQL = @"select 
+        Count(*) 
+      FROM 
+        [MSTR_Drone]
+      WHERE
+        DroneID = " + _DroneID + @" and
+        LastFlightID=" + FlightID + @" AND
+        FlightTime > DATEADD(SECOND, -30, GETDATE())";
+      int LiveCount = Util.getDBInt(SQL);
+      return (LiveCount > 0);
+  }
+
     public int getLastFlightID(int DroneID) {
       String SQL = "SELECT Max(ID) FROM DroneFlight WHERE DroneID=" + DroneID;
       return Util.getDBInt(SQL);
