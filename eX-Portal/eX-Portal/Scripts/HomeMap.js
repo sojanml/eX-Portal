@@ -67,24 +67,27 @@ function setMarker(map, _Location) {
         '<b>' + location['DroneName'] + '</b><br>\n' +
         'Owner: ' + location['OwnerName'] + '<br>\n' +
         'Manufacture: ' + location['Manufacture'] + '<br>\n' +
-        'UAV Type: ' + location['UAVType'];
+        'UAV Type: ' + location['UAVType'] +'<br>\n'+
+        '<a href="/Map/FlightData/' + location['LastFlightID'] + '">View Flight</a>';
 
     var myLatLng = new google.maps.LatLng(location['LastLatitude'], location['LastLongitude']);
-    var marker = createMarker(map, myLatLng, location['DroneName'], body);
+    var marker = createMarker(map, myLatLng, location['DroneName'], body, location['Live']);
 
   });
   map.fitBounds(bounds);
 }
 
-function createMarker(map, latlng, heading, body) {
-  var image = '/Blue.png';
+function createMarker(map, latlng, heading, body, live) {
+    var image = '/Blue.png';
+    if (live == '1')
+        image = '/GreenDrone.png';
   var marker = new google.maps.Marker({
     position: latlng,
     map: map,
     icon: image,
     title: heading
   });
-
+    
   var myOptions = {
     content: heading,
     boxStyle: {

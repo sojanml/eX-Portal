@@ -48,5 +48,9 @@ namespace eX_Portal.Models
         public string IncidentReportNote { get; set; }
         public string ModelName { get; set; }
         public Nullable<int> IsLiveVideo { get; set; }
+        public Nullable<decimal> Latitude { get; set; }
+        public Nullable<decimal> Longitude { get; set; }
+        public Nullable<System.DateTime> FlightTime { get; set; }
+        public Nullable<int> LastFlightID { get; set; }
     }
 }

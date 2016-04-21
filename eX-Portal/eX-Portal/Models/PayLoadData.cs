@@ -34,5 +34,6 @@ namespace eX_Portal.Models
         public Nullable<int> RowNumber { get; set; }
         public Nullable<int> ColumnNumber { get; set; }
         public Nullable<int> CellID { get; set; }
+        public Nullable<int> ProcessingModel { get; set; }
     }
 }

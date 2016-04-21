@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 
@@ -19,9 +20,51 @@ namespace eX_Portal.exLogic {
       }
     }
 
-       
+    public String getVideoStartDate(int FlightID) {
+      String SQL = "select TOP 1 VideoURL from DroneFlightVideo WHERE FlightID=" + FlightID + " ORDER BY VideoURL ASC";
+      String VideoURL = Util.getDBVal(SQL);
+      return getVideoDate(VideoURL);
 
-        public int getDroneIDForFlight(int FlightID) {
+    }
+
+
+    public String getVideoDate(String VideoFileName) {
+      String TheDate = "new Date(1970,0,0,24,0,0)"; 
+      //drone100-2016-03-24T10-38-47.flv
+      Match m = Regex.Match(VideoFileName, @"\-(\d+)-(\d+)-(\d+)T(\d+)-(\d+)-(\d+)");
+      if (m.Groups.Count == 7) {
+        TheDate = "new Date(" +
+        int.Parse(m.Groups[1].Value) + "," +
+        (int.Parse(m.Groups[2].Value) - 1) + "," +
+        int.Parse(m.Groups[3].Value) + "," +
+        int.Parse(m.Groups[4].Value) + "," +
+        int.Parse(m.Groups[5].Value) + "," +
+        int.Parse(m.Groups[6].Value) +
+        ")";
+      }
+      return TheDate;
+    }
+
+    public String parseDate(String VideoFileName) {
+
+      String TheDate = DateTime.Now.AddMinutes(-10).ToString("yyyy-MM-dd HH:mm:ss");
+      //drone100-2016-03-24T10-38-47.flv
+      Match m = Regex.Match(VideoFileName, @"\-(\d+)-(\d+)-(\d+)T(\d+)-(\d+)-(\d+)");
+      if (m.Groups.Count == 7) {
+        TheDate = m.Groups[1].Value + "-" +
+        m.Groups[2].Value + "-" +
+        m.Groups[3].Value +
+        " " +
+        m.Groups[4].Value + ":" +
+        m.Groups[5].Value + ":" +
+        m.Groups[6].Value;
+      }
+
+      return TheDate;
+    }
+
+
+    public int getDroneIDForFlight(int FlightID) {
       String SQL = "Select DroneID From DroneFlight WHERE ID=" + FlightID;
       return Util.getDBInt(SQL);
     }
@@ -82,7 +125,7 @@ namespace eX_Portal.exLogic {
         "  DroneFlight.ID,\n" +
         "  LogFrom,\n" +
         "  LogTo,\n" +
-        "  Convert(Varchar, Min(FlightMapData.ReadTime), 111) as FlightDate,\n" +
+        "  Convert(Varchar, Min(FlightMapData.ReadTime), 111) as 'FlightDate(UTC)',\n" +
         "  Convert(Varchar, Min(FlightMapData.ReadTime), 108) as LogTakeOffTime,\n" +
         "  Convert(Varchar, Max(FlightMapData.ReadTime), 108) as LogLandingTime,\n" +
         "  Convert(Varchar, DATEADD(\n" +
@@ -116,7 +159,7 @@ namespace eX_Portal.exLogic {
         "  DroneFlight.ID,\n" +
         "  LogFrom,\n" +
         "  LogTo,\n" +
-        "  Convert(Varchar(11), FlightDate, 111) as FlightDate,\n" +
+        "  Convert(Varchar(11), FlightDate, 111) as 'FlightDate(UTC)',\n" +
         "  Convert(Varchar, LogTakeOffTime, 108) as LogTakeOffTime,\n" +
         "  Convert(Varchar, LogLandingTime, 108) as LogLandingTime,\n" +
         "  Convert(Varchar, DATEADD(\n" +
@@ -256,18 +299,7 @@ namespace eX_Portal.exLogic {
       return VideoURL;
     }
 
-        public string FlightDataVideo(int ID = 0)
-        {
-            //to get the url of the video
-            //Drones thisDrone = new Drones();
-            string sql = "select VideoURL from DroneFlightVideo where videoId=151 ";
-            string videourl = Util.getDBVal(sql);
-            return videourl;
-           // ViewBag.PlayerURL = videourl; //thisDrone.getLiveURL(ID);
-           
-        }
-
-        public bool isLive(int FlightID) {
+    public bool isLive(int FlightID) {
       if (_DroneID == 0) _DroneID = getDroneIDForFlight(FlightID);
 
       String SQL = "SELECT IsLiveVideo FROM MSTR_Drone WHERE DroneID=" + _DroneID;
@@ -278,6 +310,20 @@ namespace eX_Portal.exLogic {
       }
       return false;
     }
+
+    public bool isLiveFlight(int FlightID) {
+      if (_DroneID == 0) _DroneID = getDroneIDForFlight(FlightID);
+      String SQL = @"select 
+        Count(*) 
+      FROM 
+        [MSTR_Drone]
+      WHERE
+        DroneID = " + _DroneID + @" and
+        LastFlightID=" + FlightID + @" AND
+        FlightTime > DATEADD(MINUTE, -1, GETDATE())";
+      int LiveCount = Util.getDBInt(SQL);
+      return (LiveCount > 0);
+  }
 
     public int getLastFlightID(int DroneID) {
       String SQL = "SELECT Max(ID) FROM DroneFlight WHERE DroneID=" + DroneID;

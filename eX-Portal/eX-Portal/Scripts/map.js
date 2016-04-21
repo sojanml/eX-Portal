@@ -1,6 +1,9 @@
 ﻿var MaxRecords = 2000;
 var map;
 var _Location = [];
+var _SavedLocation = [];
+var isAutoQuery = true;
+
 var PlotTimer = null;
 var PlotTimerDelay = 500;
 var isReplayMode = false;
@@ -193,6 +196,7 @@ function initialize() {
               + '<th>Pitch</th>'
               + '<th>RollData</th>'
               + '<th>Heading</th>'
+              + '<th>Volt</th>'
               + '</tr></thead>';
   var firsttr = '<tr style="display:none"><td></td><td></td>'
              + '<td></td><td></td>'
@@ -466,6 +470,7 @@ function SetCurrentValues(_LastValue) {
         value = parseInt(value);
         if (isNaN(value)) value = 0;
         break;
+
       case "avg_Altitude":
       case "Min_Altitude":
       case "Max_Altitude":
@@ -478,6 +483,7 @@ function SetCurrentValues(_LastValue) {
       case "Avg_Speed":
       case "Min_Speed":
       case "Max_Speed":
+      case "voltage":
         value = parseFloat(value);
         if (isNaN(value)) value = 0;
         //if (value > 0) value = value / (60 * 60) * 1000;
@@ -502,7 +508,6 @@ function SetCurrentValues(_LastValue) {
         if (value < 0) value = value + 360;
         value = value.toFixed(2);
         break;
-
 
     }
     _LastValue[key] = value;
@@ -529,6 +534,7 @@ function SetMapTable(_LastValue) {
     var tPitchData = '<td>' + _LastValue['Pitch'] + '</td>';
     var tRollData = '<td>' + _LastValue['Roll'] + '</td>';
     var tHeadData = '<td>' + _LastValue['Heading'] + '</td>';
+
     var tTotFlightTimeData = '';// '<td>' + _LastValue['TotalFlightTime'] + '</td>';
     var loctr = '<tr>' +
     tDrTime +
@@ -542,6 +548,7 @@ function SetMapTable(_LastValue) {
     tRollData +
     tHeadData +
     tTotFlightTimeData +
+    '<td>' + _LastValue['voltage'] + '</td>' +
     '</tr>';
     $('#MapData table > tbody > tr:first').after(loctr);
 

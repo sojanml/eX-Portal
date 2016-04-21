@@ -112,7 +112,7 @@
 
 <div id="map-holder">
   <div id="map_canvas" style="width: 100%; height: 480px;"></div>
-  <div id="map-info">Click on a block for information</div>
+  <div style="display:none;" id="map-info">Click on a block for information</div>
 </div>
 <div id="grid-holder" style="display:none;">
   <div id="grid-holder-content"></div>
@@ -153,9 +153,12 @@
 @section header{
   <link href="~/Content/map.css" rel="stylesheet" />
 }
+
 @section toolbar {
+  <!--
   <a href="#" class="button" id="rfid-virtual-grid">Virtual Grid</a>
   <a href="#" class="button" id="rfid-google-map">Google Map</a>
+  -->
   <a href="#" class="button" id="rfid-settings">
     <span class="icon ">&#xf085;</span> Settings
   </a>

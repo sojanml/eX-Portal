@@ -150,7 +150,7 @@ namespace eX_Portal.Controllers {
           " b.DroneID = " + DroneID + "\n" +
           "ORDER BY\n" +
           "  a.DateOfService DESC";
-      qView nView = new qView(SQL);
+      qView nView = new qView(SQL, false);
       return
         (nView.HasRows ? "<h2>Recent Services</h2>" + nView.getDataTable(true, false) : "");
     }

@@ -44,5 +44,8 @@ namespace eX_Portal.Models
         public Nullable<int> IsFlightSoftFence { get; set; }
         public Nullable<int> LowerLimit { get; set; }
         public Nullable<int> HigherLimit { get; set; }
+        public Nullable<decimal> GridLat { get; set; }
+        public Nullable<decimal> GridLng { get; set; }
+        public Nullable<int> FlightHours { get; set; }
     }
 }

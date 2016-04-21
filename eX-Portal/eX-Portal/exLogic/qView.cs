@@ -11,7 +11,7 @@ using System.Web;
 namespace eX_Portal.exLogic {
 
   public class qView {
-    private bool _isFilterByTop = false;
+    private bool _isFilterByTop = true;
     private ExponentPortalEntities ctx;
     public String SQL { get; set; }
     public List<String> ColumDef = new List<String>();
@@ -52,11 +52,12 @@ namespace eX_Portal.exLogic {
     private bool IsPrimaryKey = false;
     public bool IsFormatDate = true;
 
-    public qView(String sSQL = "") {
+    public qView(String sSQL = "", bool isFilterByTop = true) {
       if (sSQL != "") SQL = sSQL;
       _TotalRecords = 0;
       ctx = new ExponentPortalEntities();
-      setColumDef();
+      _isFilterByTop = isFilterByTop;
+      if (!String.IsNullOrEmpty(SQL)) setColumDef();
     } //qView
 
     public bool addMenu(String Caption, String URL, String Icon = "") {
@@ -242,7 +243,8 @@ namespace eX_Portal.exLogic {
         FieldValue = "Invalid";
       } else {
         if (IsFormatDate) {
-          FieldValue = String.Format("{0:dd-MMM-yyyy hh:mm tt}", reader.GetDateTime(i));
+          //FieldValue = String.Format("{0:dd-MMM-yyyy hh:mm tt}", reader.GetDateTime(i));
+          FieldValue = String.Format("{0:dd-MMM-yyyy HH:mm}", reader.GetDateTime(i));
         } else {
           FieldValue = String.Format("{0:dd-MMM-yyyy HH:mm:ss}", reader.GetDateTime(i));
         }
@@ -392,8 +394,16 @@ namespace eX_Portal.exLogic {
 
     private void setColumDef() {
       int ColumnCounter = 0;
-      String mySQL = isFilterByTop ?
-      SQL.Replace("SELECT ", "SELECT TOP 1 ") : SQL;
+      String mySQL = SQL;  
+
+      if(isFilterByTop) { 
+        string pattern = @"SELECT[\s\n]";
+        Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+        
+        mySQL = rgx.Replace(SQL, "SELECT TOP 1 ");
+      }
+
+
       /*
       //can not use the none filter, we need to find is there any rows
       //exists to build the list

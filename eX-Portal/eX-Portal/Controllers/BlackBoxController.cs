@@ -67,12 +67,12 @@ namespace eX_Portal.Controllers {
         "  [DroneDataId] as UASDataId ," +
         "  MSTR_Drone.DroneName as UAS,\n" +
         "  [ReadTime] as [Date],\n" +
-        "  CASE ISNUMERIC([Latitude])\n" +
-        "		 WHEN  1 THEN CONVERT(numeric(12, 3),[Latitude])\n" +
+        "  CASE ISNUMERIC([DroneData].[Latitude])\n" +
+        "		 WHEN  1 THEN CONVERT(numeric(12, 3),[DroneData].[Latitude])\n" +
         "		 ELSE 0.00\n" +
         "   END as [Latitude] ,\n" +
-        "  CASE ISNUMERIC([Longitude])\n" +
-        "    WHEN  1 THEN  CONVERT(numeric(12, 3),[Longitude])\n" +
+        "  CASE ISNUMERIC([DroneData].[Longitude])\n" +
+        "    WHEN  1 THEN  CONVERT(numeric(12, 3),[DroneData].[Longitude])\n" +
         "    ELSE 0.00\n" +
         "  END as [Longitude],\n" +
         "  [Altitude] as [Altitude],\n" +

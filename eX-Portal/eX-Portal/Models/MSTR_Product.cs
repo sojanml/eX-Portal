@@ -31,5 +31,10 @@ namespace eX_Portal.Models
         public Nullable<int> ModifiedBy { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> ModifiedOn { get; set; }
+        public string VIN { get; set; }
+        public string CarMake { get; set; }
+        public string Model { get; set; }
+        public Nullable<int> Year { get; set; }
+        public string Color { get; set; }
     }
 }

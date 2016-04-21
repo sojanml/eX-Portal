@@ -29,7 +29,7 @@ $(document).ready(function () {
     var aDatasets1 = aData[1];
     var aDatasets2 = aData[2];
     var aLabels1 = aData[3];
-
+    var aDatasets3 = aData[4];
     //long name stored in global variable
     for (var i = 0; i < aData[0].length; i++) {
       var name = aLabels1[i];
@@ -60,12 +60,21 @@ $(document).ready(function () {
         data: aDatasets1
       }, {
         label: "Current Month Flight Time",
-        fillColor: "rgba(220,220,220,0.5)",
-        strokeColor: "rgba(220,220,220,0.8)",
-        highlightFill: "rgba(220,220,220,0.75)",
-        highlightStroke: "rgba(220,220,220,1)",
+        fillColor: "rgba(255,119,119,0.5)",
+        strokeColor: "rgba(255,119,119,0.8)",
+        highlightFill: "rgba(255,119,119,0.75)",
+        highlightStroke: "rgba(255,119,119,1)",
         data: aDatasets2
-      }]
+      },
+      {
+          label: "Last Flight Time",
+          fillColor: "rgba(236,215,101,0.5)",
+          strokeColor: "rgba(236,215,101,0.8)",
+          highlightFill: "rgba(236,215,101,0.75)",
+          highlightStroke: "rgba(236,215,101,1)",
+          data: aDatasets3
+      }
+      ]
     };
 
     var ctx = $("#DsChart1").get(0).getContext('2d');
@@ -129,7 +138,7 @@ $(document).ready(function () {
   }
 
   function _tooltipTemplate(Label) {
-    alert(Label);
+   // alert(Label);
   return
   "xxx<ul class=\"<%=name.toLowerCase()%>-legend\">" +
   "<% for (var i=0; i<datasets.length; i++){%>" +
@@ -171,13 +180,13 @@ $(document).ready(function () {
       display: 'block',
       opacity: 1,
       left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
-      top: tooltip.chart.canvas.offsetTop + tooltip.y + 'px'
+      top: tooltip.chart.canvas.offsetTop + tooltip.y-30 + 'px'
     });
 
   }
 
   function OnErrorCall_(repo) {
-    alert("Woops something went wrong, pls try later !");
+   // alert("Woops something went wrong, pls try later !");
   }
 
   $(document).on("click", "ul#line-legend li", function () {

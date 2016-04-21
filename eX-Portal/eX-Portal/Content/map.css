@@ -1,20 +1,26 @@
-﻿
+
 #map-holder {
   position: relative;
 }
 
 #map-info {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  height: auto;
-  width: auto;
-  padding: 5px 10px 5px 10px;
-  background-color: #ea050e;
-  font-weight: bold;
-  color: white;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    height: auto;
+    width: auto;
+    padding: 5px 10px 5px 10px;
+    background-color: rgba(152, 46, 50, 0.83);
+    font-weight: bold;
+    color: #060606;
 }
 
+#map-info span.date {
+  color: #ADA9A9;
+}
+#map-info span.gps span {
+    color: #509898;
+}
 table.detail-info {
   border-bottom: 1px #ea050e solid;
 }
@@ -46,111 +52,134 @@ table.detail-info {
 }
 
 
-#drone-map-info div.col-4 {
-  width:25%;
-  float:left;
-  /* font-size:0px; */
-  /* line-height:50px; */
+  #drone-map-info div.col-4 {
+    width: 25%;
+    float: left;
+    /* font-size:0px; */
+    /* line-height:50px; */
+    height: 60px;
+    margin-bottom: 0px;
+  }
+
+
+    #drone-map-info div.col-4 div.title span {
+      -webkit-transform: rotate(270deg);
+      -moz-transform: rotate(270deg);
+      -o-transform: rotate(270deg);
+      -ms-transform: rotate(270deg);
+      transform: rotate(270deg);
+      text-align: center;
+      font-size: 12px;
+      display: block;
+      width: 50px;
+    }
+
+    #drone-map-info div.col-4 div.title {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
+
+    #drone-map-info div.col-4 div.unit {
+      font-weight: bolder;
+      color: #5b5b5b;
+      font-size: 18px;
+      line-height: normal;
+      padding: 0px 0px 10px 0px;
+    }
+
+    #drone-map-info div.col-4 div.data {
+      font-size: 40px;
+      line-height: 40px;
+      font-family: Conv_DINNextLTPro-LightCondensed,Arial;
+      color: #ea050e;
+      font-weight: bold;
+    }
+
+
+.dash-image {
+  width: 30px;
+  height: 30px;
+  background-color: #565555;
+  -webkit-mask-size: 30px 30px;
+  display: block;
+  margin: 0px 10px 0px 0px;
 }
 
-
-#drone-map-info div.col-4 div.title span {
-  -webkit-transform: rotate(270deg);
-  -moz-transform: rotate(270deg);
-  -o-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
+.verticalTableHeader {
+  text-align: center;
+  white-space: nowrap;
   transform: rotate(270deg);
-  text-align:center;
-  font-size:12px;
-  display:block;
-  width:50px;
+  font-size: 12px;
+  line-height: normal;
+  width: 20;
 }
 
-#drone-map-info div.col-4 div.title {
-  position:absolute;
-  left:0px;
-  top:0px;
-}
-
-#drone-map-info div.col-4 div.unit {
-  font-weight:bolder;
-  color:#5b5b5b;
-  font-size:18px;
-  line-height:normal;
-  padding:0px 0px 10px 0px;
-}
-
-  #drone-map-info div.col-4 div.data {
-    font-size: 40px;
-    line-height: 40px;
-    font-family: Conv_DINNextLTPro-LightCondensed,Arial;
-    color: #ea050e;
-    font-weight: bold;
-  }
-
-
-  .dash-image {
+  .verticalTableHeader p {
+    margin: 0 -100%;
+    display: inline-block;
     width: 30px;
-    height: 30px;
-    background-color: #565555;
-    -webkit-mask-size: 30px 30px;
-    display:block;
-    margin:0px 10px 0px 0px;
   }
 
-  .verticalTableHeader {
-    text-align:center;
-    white-space:nowrap;
-    transform: rotate(270deg);
-    font-size:12px;
-    line-height:normal;
-    width: 20;
-}
-.verticalTableHeader p {
-    margin:0 -100% ;
-    display:inline-block;
-    width:30px;
-}
-.verticalTableHeader p:before{
-    content:'';
-    width:0;
-    display:inline-block;
-    vertical-align:middle;
-}
+    .verticalTableHeader p:before {
+      content: '';
+      width: 0;
+      display: inline-block;
+      vertical-align: middle;
+    }
 
 div.image span.icon {
-    font-size: 40px;
-    padding: 0px 10px 0px 0px;
-    color: black;
+  font-size: 40px;
+  padding: 0px 10px 0px 0px;
+  color: black;
 }
+
 div.more-info {
-  font-size:13px;
-  color:#7D7B7B;
+  font-size: 13px;
+  color: #7D7B7B;
   white-space: nowrap;
   padding-left: 30px;
 }
-div.more-info span {
-padding-right:3px;
-}
 
-form#setYard > table { 
-    border-spacing: 0px;
-    border-collapse: collapse;
+  div.more-info span {
+    padding-right: 3px;
+  }
+
+form#setYard > table {
+  border-spacing: 0px;
+  border-collapse: collapse;
 }
 
 #rfid-settings-layer table input {
-  width:100%;
+  width: 100%;
 }
 
-#rfid-settings-layer  table input[type=radio],
-#rfid-settings-layer table input[type=checkbox] {
-  width:1.5em !important;
-  height:1.5em !important;
-}
+  #rfid-settings-layer table input[type=radio],
+  #rfid-settings-layer table input[type=checkbox] {
+    width: 1.5em !important;
+    height: 1.5em !important;
+  }
 
 
 
 form#setYard > table > tbody > tr > td {
-border-bottom:1px red solid;
-padding:5px 10px 5px 0px;
+  border-bottom: 1px red solid;
+  padding: 5px 10px 5px 0px;
+}
+
+@media screen and (max-width: 700px) {
+  #drone-map-info div.col-4 div.data {
+    font-size: 30px;
+    line-height: 30px;
+  }
+
+  #drone-map-info div.col-4 div.unit {
+    font-size: 12px;
+  }
+
+  div.more-info {
+    font-size: 11px;
+    padding-top: 5px;
+    padding-left: 20px;
+  }
 }

@@ -20,7 +20,6 @@ namespace eX_Portal.Controllers
     public class UserController : Controller
     {
         // GET: UserLogin
-        int uid;
         public ExponentPortalEntities db = new ExponentPortalEntities();
         static String RootUploadDir = "~/Upload/User/";
         public object EntityState { get; private set; }
@@ -236,7 +235,7 @@ namespace eX_Portal.Controllers
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-              //  DashboardList=Util.GetDashboardLists()
+               DashboardList=Util.GetDashboardLists()
 
             };
             return View(viewModel);
@@ -299,6 +298,7 @@ namespace eX_Portal.Controllers
 
         public String UploadFile([Bind(Prefix = "ID")] int UserID = 0)
         {
+           
             String UploadPath = Server.MapPath(Url.Content(RootUploadDir) + UserID + "/");
             //send information in JSON Format always
             StringBuilder JsonText = new StringBuilder();
@@ -344,7 +344,7 @@ namespace eX_Portal.Controllers
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-                //DashboardList = Util.GetDashboardLists()
+                DashboardList = Util.GetDashboardLists()
             };
             return View(viewModel);
         }
@@ -415,7 +415,7 @@ namespace eX_Portal.Controllers
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-                //DashboardList = Util.GetDashboardLists()
+                DashboardList = Util.GetDashboardLists()
             };
             return View(viewModel);
 
@@ -538,7 +538,7 @@ namespace eX_Portal.Controllers
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-                //DashboardList = Util.GetDashboardLists()
+                DashboardList = Util.GetDashboardLists()
 
             };
             return View(viewModel);

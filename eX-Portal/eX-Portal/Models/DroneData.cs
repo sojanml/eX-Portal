@@ -39,5 +39,6 @@ namespace eX_Portal.Models
         public Nullable<int> IsProcessed { get; set; }
         public string QueueMessage { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
+        public string Voltage { get; set; }
     }
 }

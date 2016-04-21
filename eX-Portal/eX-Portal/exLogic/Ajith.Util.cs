@@ -13,6 +13,9 @@ using System.Configuration;
 using System.Xml;
 using System.Net;
 using System.IO;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace eX_Portal.exLogic {
 
@@ -71,50 +74,37 @@ namespace eX_Portal.exLogic {
       IList<ChartViewModel> ChartList = new List<ChartViewModel>();
 
       using (var ctx = new ExponentPortalEntities()) {
-        using (var cmd = ctx.Database.Connection.CreateCommand()) {
-          ctx.Database.Connection.Open();
-          string SQL;
-          SQL = @" select a.PilotId,c.FirstName,sum(a.FixedWing) + sum(a.multiDashRotor) as Ptotal
-                         , CASE WHEN 
-                           MIN(b.PCurrentMonth) IS NULL then 0
-                           else min(b.PCurrentMonth) end as pCurrent
-                           from MSTR_User c left
-                           join MSTR_Pilot_Log a on a.PilotId = c.UserId
-                           left join(select PilotId,sum(FixedWing) + sum(multiDashRotor) as PCurrentMonth
-                           from MSTR_Pilot_Log
-                           where
-                           convert(nvarchar(30), date, 120)
-                            BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) 
-                            AND GETDATE()
-                            group by  PilotId )
-                            b on a.PilotId = b.PilotId  group by a.PilotId ,c.FirstName
-                           having   sum(a.FixedWing) + sum(a.multiDashRotor) > 0";
+                using (var cmd = ctx.Database.Connection.CreateCommand()) {
+                    ctx.Database.Connection.Open();
+
+                    cmd.CommandText = "usp_Portal_GetPilotChartData";
+                    DbParameter Param1 = cmd.CreateParameter();
+                    Param1.ParameterName = "@AccountID";
+                    Param1.Value = Util.getAccountID();
+                    DbParameter Param2 = cmd.CreateParameter();
+                    Param2.ParameterName = "@IsAccess";
                     if (!exLogic.User.hasAccess("DRONE.MANAGE"))
                     {
-                        SQL = @" select a.PilotId,c.FirstName,sum(a.FixedWing) + sum(a.multiDashRotor) as Ptotal
-                         , CASE WHEN 
-                           MIN(b.PCurrentMonth) IS NULL then 0
-                           else min(b.PCurrentMonth) end as pCurrent
-                           from MSTR_User c left
-                           join MSTR_Pilot_Log a on a.PilotId = c.UserId
-                           left join(select PilotId,sum(FixedWing) + sum(multiDashRotor) as PCurrentMonth
-                           from MSTR_Pilot_Log
-                           where
-                           convert(nvarchar(30), date, 120)
-                            BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) 
-                            AND GETDATE()
-                            group by  PilotId )
-                            b on a.PilotId = b.PilotId  where c.accountId='"+ Util.getAccountID() + "' group by a.PilotId ,c.FirstName " +
-                         "  having   sum(a.FixedWing) + sum(a.multiDashRotor) > 0";
+
+                        Param2.Value = 1;
                     }
-                    cmd.CommandText = SQL;
-          using (var reader = cmd.ExecuteReader()) {
+                    else
+                    {
+                        Param2.Value = 0;
+                    }
+                    cmd.Parameters.Add(Param1);
+                    cmd.Parameters.Add(Param2);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+
+                    using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
               ChartViewModel dd = new ChartViewModel();
               dd.PilotName = reader["FirstName"].ToString();
-              dd.PilotTotalHrs = Util.toInt(reader["Ptotal"].ToString());
-              dd.PilotCurrentMonthHrs = Util.toInt(reader["PCurrent"].ToString());
-
+              dd.PilotTotalHrs = Util.toInt(reader["TotalPilotHours"].ToString());
+              dd.PilotCurrentMonthHrs = Util.toInt(reader["LastMonthPilotHours"].ToString());
+              dd.PilotLastFlightHrs = Util.toInt(reader["LastPilottHours"].ToString());
+                         
               ChartList.Add(dd);
 
             }
@@ -141,37 +131,34 @@ namespace eX_Portal.exLogic {
       using (var ctx = new ExponentPortalEntities()) {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
-          string SQL;
-          SQL = @"select MAX(b.ReadTime) as ReadTime,
-                            max(b.TotalFlightTime)as TotalFlightTime,
-                            b.DroneId,a.DroneName 
-                            from MSTR_Drone a
-                            join 
-                            FlightMapData b 
-                            on a.DroneId=b.DroneId 
-                            group by 
-                            b.DroneId,a.DroneName";
+          
+                    cmd.CommandText = "usp_Portal_GetLastFlightChartData";
+                    DbParameter Param1 = cmd.CreateParameter();
+                    Param1.ParameterName = "@AccountID";
+                    Param1.Value = Util.getAccountID();
+                    DbParameter Param2 = cmd.CreateParameter();
+                    Param2.ParameterName = "@IsAccess";
                     if (!exLogic.User.hasAccess("DRONE.MANAGE"))
                     {
-                        SQL = @"select MAX(b.ReadTime) as ReadTime,
-                            max(b.TotalFlightTime) as TotalFlightTime,
-                            b.DroneId,a.DroneName
-                            from MSTR_Drone a
-                            join
-                            FlightMapData b
-                            on a.DroneId = b.DroneId
-                             where a.AccountID='" + Util.getAccountID() +
-                           "' group by " +
-                           " b.DroneId,a.DroneName  ";
-                    }
 
-          cmd.CommandText = SQL;
-          using (var reader = cmd.ExecuteReader()) {
+                        Param2.Value = 1;
+                    }
+                    else
+                    {
+                        Param2.Value = 0;
+                    }
+                    cmd.Parameters.Add(Param1);
+                    cmd.Parameters.Add(Param2);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+
+
+                    using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
               ChartViewModel dd = new ChartViewModel();
               dd.DroneName = reader["DroneName"].ToString();
-              dd.TotalFightTime = Util.toInt(reader["TotalFlightTime"].ToString());
-              dd.LastFlightTime = Util.toDate(reader["ReadTime"].ToString());
+              dd.TotalFightTime = Util.toInt(reader["LastFlightHours"].ToString());
+              
               ChartList.Add(dd);
 
             }
@@ -199,56 +186,35 @@ namespace eX_Portal.exLogic {
       using (var ctx = new ExponentPortalEntities()) {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
-          string SQL;
-          SQL = @"select t.DroneId,
-                           v.DroneName,max(t.ReadTime) as readtime ,
-                            max(T.TotalFlightTime) as TotalFlightTime,
-                            min(k.FlightTime)as Monthtime,
-                            CASE WHEN  max(T.TotalFlightTime) - min(k.FlightTime)IS NULL or 
-                            max(T.TotalFlightTime) - min(k.FlightTime) = 0 
-                            THEN max(T.TotalFlightTime) ELSE max(T.TotalFlightTime) - min(k.FlightTime) END as CurrentFlightTime
-                            from MSTR_Drone v
-                            join FlightMapData t on v.DroneId = t.DroneId 
-                            left join(select u.DroneId, min(u.ReadTime) as ReadTime,
-                            max(u.TotalFlightTime) as FlightTime
-                            from FlightMapData u
-                            where
-                             u.ReadTime
-                            BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) 
-                            AND  GETDATE()
-                            group by  u.DroneId )k on t.DroneId = k.DroneId
-                            group by t.DroneId,v.DroneName";
+        
+                   
+                    cmd.CommandText = "usp_Portal_GetFlightChartData";
+                    DbParameter Param1 = cmd.CreateParameter();
+                    Param1.ParameterName = "@AccountID";
+                    Param1.Value = Util.getAccountID();
+                    DbParameter Param2 = cmd.CreateParameter();
+                    Param2.ParameterName = "@IsAccess";
                     if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                    {
-                        SQL = @"select t.DroneId,
-                           v.DroneName,max(t.ReadTime) as readtime ,
-                            max(T.TotalFlightTime) as TotalFlightTime,
-                            min(k.FlightTime)as Monthtime,
-                            CASE WHEN  max(T.TotalFlightTime) - min(k.FlightTime)IS NULL or 
-                            max(T.TotalFlightTime) - min(k.FlightTime) = 0 
-                            THEN max(T.TotalFlightTime) ELSE max(T.TotalFlightTime) - min(k.FlightTime) END as CurrentFlightTime
-                            from MSTR_Drone v
-                            join FlightMapData t on v.DroneId = t.DroneId 
-                            left join(select u.DroneId, min(u.ReadTime) as ReadTime,
-                            max(u.TotalFlightTime) as FlightTime
-                            from FlightMapData u
-                            where    u.ReadTime
-                            BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)  
-                            AND  GETDATE() 
-                            group by  u.DroneId )k on t.DroneId = k.DroneId 
-                            where v.AccountID='"+ Util.getAccountID() +"' group by t.DroneId,v.DroneName";
-                      
+                    {                       
+                        Param2.Value = 1;
                     }
-
-
-                    cmd.CommandText = SQL;
-          using (var reader = cmd.ExecuteReader()) {
-            while (reader.Read()) {
+                    else
+                    {
+                        Param2.Value = 0;
+                    }
+                    cmd.Parameters.Add(Param1);
+                    cmd.Parameters.Add(Param2);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            
               ChartViewModel dd = new ChartViewModel();
               dd.DroneName = reader["DroneName"].ToString();
-              dd.TotalFightTime = Util.toInt(reader["TotalFlightTime"].ToString());
-              dd.CurrentFlightTime = Util.toInt(reader["CurrentFlightTime"].ToString());
-
+              dd.TotalFightTime = Util.toInt(reader["TotalFlightHours"].ToString());
+              dd.CurrentFlightTime = Util.toInt(reader["LastMonthHours"].ToString());
+              dd.LastFlightTime = Util.toInt(reader["LastFlightHours"].ToString());
               ChartList.Add(dd);
 
             }
@@ -341,7 +307,7 @@ namespace eX_Portal.exLogic {
 
     public static string GetWOEID(string City) {
       string WeatherWOEID = null, HttpSQL;
-      HttpSQL = " http://query.yahooapis.com/v1/public/yql?q=select woeid from geo.places where text=" + City;
+      HttpSQL = " http://query.yahooapis.com/v1/public/yql?q=select woeid from geo.places where text='" + City +"'";
       XmlDocument doc = new XmlDocument();
       doc.Load(HttpSQL);
       WeatherWOEID = doc.GetElementsByTagName("woeid")[0].InnerText;
@@ -386,10 +352,13 @@ namespace eX_Portal.exLogic {
           response.Close();
       }
       if (AddStart != null) {
-        AddStart = AddStart.Split(',')[0];
-        // AddStart = AddStart.Substring(1);
-
-      } else {
+         AddStart = AddStart.Split(',')[0];
+               // s.Replace("\"", "");
+                AddStart = AddStart.Replace("\"", "");
+                // AddStart = AddStart.Replace("\n", String.Empty);
+               // AddStart = AddStart.TrimEnd('\r', '\n');
+               // AddStart= AddStart.TrimStart('\r', '\n');
+            } else {
         AddStart = "";
       }
 
@@ -406,12 +375,14 @@ namespace eX_Portal.exLogic {
       IList<Forcast> ForcastList = new List<Forcast>();
 
       WeatherViewModel Weather = new WeatherViewModel();
+      WeatherViewModel WeatherFromFile = new WeatherViewModel();
       // string forecastUrl = "http://weather.yahooapis.com/forecastrss?&" + "p=" + Location + "&u=c";
       //  string forecastUrl = "http://weather.yahooapis.com/forecastrss?w=" + Location + "&u=c";
       string forecastUrl = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid=" + Location + " AND u='c'";
       // open a XmlTextReader object using the constructed url
       XmlTextReader reader = new XmlTextReader(forecastUrl);
       // loop through xml result node by node
+     
       while (reader.Read()) {
         // decide which type of node us currently being read
         switch (reader.NodeType) {
@@ -465,8 +436,9 @@ namespace eX_Portal.exLogic {
         }
         if (reader.Name.ToLower() == "yweather:atmosphere") {
           Weather.Humidity = reader.GetAttribute("humidity").ToString();
-          Weather.Visibility = reader.GetAttribute("visibility").ToString();
-          Weather.Pressure = reader.GetAttribute("pressure").ToString();
+                            Weather.Visibility = Math.Round((double.Parse(reader.GetAttribute("visibility")) / 1.60934),0);
+
+          Weather.Pressure = Math.Round( double.Parse(reader.GetAttribute("pressure"))* 0.0295301 , 0);
           rising = Convert.ToInt32(reader.GetAttribute("rising"));
 
           rising = Convert.ToInt32(reader.GetAttribute("rising"));
@@ -545,14 +517,76 @@ namespace eX_Portal.exLogic {
       }
 
       Weather.Forecast = ForcastList;
+            //Checking the records if exist write to the file
+            if (ForcastList.Count>0)
+            {
+                WriteToFile(Weather,Location);
+            }
+            else
+            {
+                //not exist read from the file and display that
+                WeatherFromFile = ReadFromFile(Location);
+                if(WeatherFromFile!= null)
+                {
+                    Weather = WeatherFromFile;
+                }
+            }
+            
+           
       return Weather;
 
     }
 
+        
 
-    
+        public static string WriteToFile(WeatherViewModel  Weather,string FileName)
+        {
+            string Path = HttpContext.Current.Server.MapPath("/Upload/" + FileName+".txt");
+          
+                // String UploadPath = HttpContext.Current.Server.MapPath(Url.Content(RootUploadDir) + UserID + "/");
+                //string SubPath = "~/Weather/";
+                //string SubPath = HttpContext.Current.Server.MapPath("~/Weather/");
 
-    public static Int32 toInt(String sItem) {
+              
+                //bool exists = System.IO.Directory.Exists(HttpContext.Current.Server.MapPath(SubPath));
+               // if (!exists)
+                  //  System.IO.Directory.CreateDirectory(SubPath);
+              //  if (File.Exists(Path))
+               // {
+                 //   File.Delete(Path);
+              //  }
+           
+
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+
+                string output = jss.Serialize(Weather);
+
+                System.IO.File.WriteAllText(@Path, output);
+              //  System.IO.File.Create(Path).Close();
+           
+            return output;
+        }
+
+
+        public static WeatherViewModel ReadFromFile(string FileName)
+        {
+            try {
+                string Path = HttpContext.Current.Server.MapPath("/Upload/" + FileName + ".txt");
+
+                StreamReader sr = new StreamReader(Path);
+                string jsonString = sr.ReadToEnd();
+                JavaScriptSerializer ser = new JavaScriptSerializer();
+                WeatherViewModel Weather = ser.Deserialize<WeatherViewModel>(jsonString);
+
+                return Weather;
+            }
+            catch  {
+                return null;
+            }
+            
+        }
+
+        public static Int32 toInt(String sItem) {
       int Temp;
       if (Int32.TryParse(sItem, out Temp)) {
         return Int32.Parse(sItem);
@@ -738,7 +772,57 @@ namespace eX_Portal.exLogic {
       return result;
     }
 
-    public static int GetPilotIdFromFlight(int FlightId) {
+
+        public static string GetUASFromFlight(int FlightId)
+        {
+            string result = "";
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL = @"SELECT
+                           MSTR_Drone.DroneName as UAS
+                        FROM
+                          DroneFlight
+                        LEFT JOIN MSTR_Drone ON
+                          MSTR_Drone.DroneId = DroneFlight.DroneID
+                        LEFT JOIN MSTR_User as tblPilot ON
+                          tblPilot.UserID = DroneFlight.PilotID
+                        LEFT JOIN MSTR_User as tblGSC ON
+                          tblGSC.UserID = DroneFlight.GSCID
+                        LEFT JOIN MSTR_User as tblCreated ON
+                          tblCreated.UserID = DroneFlight.CreatedBy
+                          where DroneFlight.ID = " + FlightId;
+                result = Util.getDBVal(SQL);
+
+            }
+
+            return result;
+        }
+
+        public static string GetPilotFromFlight(int FlightId)
+        {
+            string result = "";
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL = @"SELECT
+                           tblPilot.FirstName as PilotName
+                        FROM
+                          DroneFlight
+                        LEFT JOIN MSTR_Drone ON
+                          MSTR_Drone.DroneId = DroneFlight.DroneID
+                        LEFT JOIN MSTR_User as tblPilot ON
+                          tblPilot.UserID = DroneFlight.PilotID
+                        LEFT JOIN MSTR_User as tblGSC ON
+                          tblGSC.UserID = DroneFlight.GSCID
+                        LEFT JOIN MSTR_User as tblCreated ON
+                          tblCreated.UserID = DroneFlight.CreatedBy
+                          where DroneFlight.ID = " + FlightId;
+                result = Util.getDBVal(SQL);
+
+            }
+
+            return result;
+        }
+        public static int GetPilotIdFromFlight(int FlightId) {
       int result = 0;
       using (var cotx = new ExponentPortalEntities()) {
         String SQL = "select PilotID from DroneFlight where  ID=" + FlightId;
@@ -773,7 +857,7 @@ namespace eX_Portal.exLogic {
 
 
     public static String GetEncryptedPassword(String Password) {
-
+      if (String.IsNullOrEmpty(Password)) Password = "";
       String EncrptedPassword;
       String SQL = "SELECT CONVERT(NVARCHAR(32), HASHBYTES('MD5', '" + Password.ToLower() + "'),2)";
       using (var cotx = new ExponentPortalEntities()) {

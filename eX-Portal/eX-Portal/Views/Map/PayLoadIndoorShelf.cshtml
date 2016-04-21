@@ -1,0 +1,8 @@
+﻿@model List<Dictionary<String, Object>>
+
+<ul class="data">
+  @foreach (var Row in Model) {
+  <li>@Row["ProductName"]</li>
+  }
+</ul>
+

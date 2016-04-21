@@ -22,35 +22,66 @@ namespace eX_Portal.Controllers {
     public ActionResult Select() {
       return View();
     }
-    public ActionResult FlightData([Bind(Prefix= "ID")] int FlightID = 0) {
+    public ActionResult FlightData([Bind(Prefix = "ID")] int FlightID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       ViewBag.FlightID = FlightID;
       Drones thisDrone = new Drones();
-      if(thisDrone.isLive(FlightID)) {
+      if (thisDrone.isLiveFlight(FlightID)) {
+        ViewBag.AllowedLocation = thisDrone.getAllowedLocation(FlightID);
         ViewBag.PlayerURL = thisDrone.getLiveURL(FlightID);
         ViewBag.Title = "Flight Map (Live)";
-        return View("FlightDataLiveVideo", new {ID = FlightID });
+        return View("FlightDataLiveVideo", new { ID = FlightID });
       } else {
-        ViewBag.Title = "Flight Map";
+        //String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + FlightID;
+        //ViewBag.PlayList = Util.getDBRows(SQL);
+        ViewBag.Title = "Flight Map (Replay)";
         ViewBag.AllowedLocation = thisDrone.getAllowedLocation(FlightID);
         ViewBag.DroneID = thisDrone.DroneID;
-        //ViewBag.VideoURL = thisDrone.getPlayListURL(FlightID);
+        ViewBag.VideoStartAt = thisDrone.getVideoStartDate(FlightID);
+        ViewBag.VideoURL = thisDrone.getPlayListURL(FlightID);
         ViewBag.PlayerURL = thisDrone.getPlayListURL(FlightID);
         return View();
       }
     }
-
+    /*
     public ActionResult FlightDataLiveVideo(int ID = 0) {
       Drones thisDrone = new Drones();
+      ViewBag.AllowedLocation = thisDrone.getAllowedLocation(ID);
       ViewBag.PlayerURL = thisDrone.getLiveURL(ID);
       return View();
     }
+    */
 
+    public String RFID([Bind(Prefix = "ID")]String RFID = "") {
+      String SQL = @"SELECT 
+        [VIN]
+        ,[CarMake]
+        ,[Model]
+        ,[Year]
+        ,[Color]
+      FROM 
+        [MSTR_Product]
+      WHERE
+        RFID='" + RFID + "'";
+      var Row = Util.getDBRow(SQL);
+      if (Row.Count == 1) {
+        return "<br>Vechile not accociated";
+      }
+
+      return
+      "<br>\n" +
+      "VIN: <b>" + Row["VIN"].ToString().ToUpper() + "</b><br>\n" +
+      "Make: <b>" + Row["CarMake"].ToString() + "</b><br>\n" +
+      "Model: <b>" + Row["Model"].ToString() + "</b><br>\n" +
+      "Year: <b>" + Row["Year"].ToString() + "</b><br>\n" +
+      "Color: <b>" + Row["Color"].ToString() + "</b>";
+
+    }
 
     public ActionResult PlayList(int id = 0) {
       String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + id;
       var Rows = Util.getDBRows(SQL);
-      Response.ContentType = "text/json";
+      // Response.ContentType = "text/json";
       return View(Rows);
     }
 
@@ -102,9 +133,11 @@ namespace eX_Portal.Controllers {
 
     public ActionResult PayLoad([Bind(Prefix = "ID")] String FlightUniqueID = "") {
       if (!exLogic.User.hasAccess("PAYLOAD.MAP")) return RedirectToAction("NoAccess", "Home");
+      int ProcessingModel = Util.getDBInt("Select ProcessingModel From PayloadMapData where FlightUniqueID='" + FlightUniqueID + "'");
+      if (ProcessingModel == 1) {
+        return RedirectToAction("PayLoadIndoor", new { ID = FlightUniqueID });
+      }
       ViewBag.Title = "Payload Data";
-
-
 
       String SQL =
       "SELECT \n" +
@@ -112,8 +145,8 @@ namespace eX_Portal.Controllers {
       "  [RSSI], \n" +
       "  [ReadTime], \n" +
       "  [ReadCount], \n" +
-      "  [Latitude], \n" +
-      "  [Longitude],\n" +
+      "  CASE WHEN [GridLat] = 0 THEN [Latitude] ELSE [GridLat] END  as [Latitude], \n" +
+      "  CASE WHEN [GridLng] = 0 THEN [Longitude] ELSE [GridLng] END  as [Longitude],\n" +
       "  [RowNumber] as [Row], \n" +
       "  [ColumnNumber]  as [Col],\n" +
       "  Count(*) Over() as _TotalRecords,\n" +
@@ -131,14 +164,59 @@ namespace eX_Portal.Controllers {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
-
         //get yard information for FlightUniqueID
         GeoGrid theYard = new GeoGrid(FlightUniqueID);
         ViewBag.Yard = theYard.getYard();
 
         return View(nView);
+
       }//if(IsAjaxRequest)
 
+    }
+
+
+    public ActionResult PayLoadIndoor([Bind(Prefix = "ID")] String FlightUniqueID = "") {
+
+      ViewBag.Title = "Indoor Payload Data";
+      String SQL =
+      @"SELECT DISTINCT
+        [ShelfID],
+        ISNULL(MSTR_Product.Product_Name, [ShelfID]) as ShelfName
+      FROM 
+        [PayLoadMapData]
+      LEFT JOIN MSTR_Product ON
+        MSTR_Product.RFID = [PayLoadMapData].[ShelfID]
+      WHERE
+        IsValid = 1 AND
+        FlightUniqueID='" + FlightUniqueID + @"'
+      ORDER BY
+         [PayLoadMapData].[ShelfID]";
+      //return View("PayLoadIndoor", new { ID = FlightUniqueID });
+      var Rows = Util.getDBRows(SQL);
+      ViewBag.FlightUniqueID = FlightUniqueID;
+        return View(Rows);
+
+    }
+
+    public ActionResult PayLoadIndoorShelf(String ShelfID, String FlightUniqueID) {
+      String SQL =
+    @"SELECT DISTINCT
+        [PayLoadMapData].[RFID],
+        ISNULL(MSTR_Product.Product_Name, [PayLoadMapData].[RFID]) as ProductName
+      FROM 
+        [PayLoadMapData]
+      LEFT JOIN MSTR_Product ON
+        MSTR_Product.RFID = [PayLoadMapData].[RFID]
+      WHERE
+        [PayLoadMapData].ShelfID='" + ShelfID + @"' AND 
+        IsValid = 1 AND
+        FlightUniqueID='" + FlightUniqueID + @"'
+      ORDER BY
+        [PayLoadMapData].[RFID]";
+      //return View("PayLoadIndoor", new { ID = FlightUniqueID });
+      var Rows = Util.getDBRows(SQL);
+
+      return PartialView(Rows);
     }
 
     public JsonResult getYard([Bind(Prefix = "ID")] int YardID = 0) {
@@ -173,17 +251,22 @@ namespace eX_Portal.Controllers {
       Util.doSQL(SQL);
       //}
 
+      SQL = "DELETE from PayLoadYardGrid where Yardid = " + Yard.YardID;
+      Util.doSQL(SQL);
+
       if (Request["chkReProcess"] == "1") {
-        SQL = "UPDATE PayLoadMapData SET \n" +
-        " YardID=" + Yard.YardID + ",\n" +
-        " RowNumber= -1,\n" +
-        " ColumnNumber= -1,\n" +
-        " IsProcessed= 0,\n" +
-        " RowFixExecuted= 0,\n" +
-        " ColFixExecuted= 0,\n" +
-        " AutoFixGap= 0\n" +
-        "WHERE\n" +
-        "  FlightUniqueID='" + Request["FlightUniqueID"] + "'";
+        SQL = @"UPDATE PayLoadMapData SET 
+          YardID=" + Yard.YardID + @",
+          RowNumber= -1,
+          ColumnNumber= -1,
+          IsProcessed= 0,
+          RowFixExecuted= 0,
+          ColFixExecuted= 0,
+          AutoFixGap= 0,
+          GridLat = 0,
+          GridLng = 0
+        WHERE
+          FlightUniqueID='" + Request["FlightUniqueID"] + "'";
         Util.doSQL(SQL);
       }
 
@@ -194,29 +277,34 @@ namespace eX_Portal.Controllers {
     [System.Web.Mvc.HttpGet]
     public JsonResult GetDrones() {
       string SQL =
-      "SELECT\n" +
-      "  [LastLatitude],\n" +
-      "  [LastLongitude],\n" +
-      "  IsNull([MSTR_Drone].[DroneName], 'Drone ' + Convert(varchar, [LiveDrone].DroneID)) as DroneName,\n" +
-      "  [MSTR_Drone].[ModelName] AS Description,\n" +
-      "  [MSTR_Drone].[CommissionDate],\n" +
-      "  [MSTR_Account].NAME AS OwnerName,\n" +
-      "  M.NAME AS Manufacture,\n" +
-      "  U.NAME AS UAVType\n" +
-      "FROM\n" +
-      "  [LiveDrone]\n" +
-      "LEFT JOIN [MSTR_Drone]\n" +
-      "  ON [MSTR_Drone].DroneID = [LiveDrone].DroneID\n" +
-      "LEFT JOIN [MSTR_Account]\n" +
-      "  ON [MSTR_Drone].AccountID = [MSTR_Account].AccountID\n" +
-      "LEFT JOIN LUP_Drone M\n" +
-      "  ON [MSTR_Drone].ManufactureID = M.TypeID\n" +
-      "    AND M.Type = 'Manufacturer'\n" +
-      "LEFT JOIN LUP_Drone U\n" +
-      "  ON [MSTR_Drone].UAVTypeID = U.TypeID\n" +
-      "    AND U.Type = 'UAVType'\n" +
-      "WHERE\n" +
-      "  [MSTR_Drone].AccountID=" + Util.getAccountID();
+      @"SELECT
+       [Latitude] AS LastLatitude,
+       [Longitude] as LastLongitude,
+       IsNull([MSTR_Drone].[DroneName], 'Drone ' + Convert(varchar, [MSTR_Drone].DroneID)) as DroneName,
+       [MSTR_Drone].[ModelName] AS Description,
+       [MSTR_Drone].[CommissionDate],
+       [MSTR_Account].NAME AS OwnerName,
+       M.NAME AS Manufacture,
+       FlightTime,
+       DroneID,
+        LastFlightID,
+        DATEDIFF(mi,FlightTime,GetDate()),
+       case when DATEDIFF(mi,FlightTime,GetDate())<5 then 1 else 0 end as Live
+      from [MSTR_Drone]
+          LEFT JOIN [MSTR_Account]
+        ON [MSTR_Drone].AccountID = [MSTR_Account].AccountID
+      LEFT JOIN LUP_Drone M
+        ON [MSTR_Drone].ManufactureID = M.TypeID
+          AND M.Type = 'Manufacturer'
+      LEFT JOIN LUP_Drone U
+        ON [MSTR_Drone].UAVTypeID = U.TypeID
+          AND U.Type = 'UAVType'
+      WHERE
+         FlightTime >= DATEADD(month,-1,GETDATE())";
+
+
+      if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+        SQL = SQL + " AND [MSTR_Drone].AccountID =" + Util.getAccountID();
 
 
       var LiveDrones = Util.getDBRows(SQL);

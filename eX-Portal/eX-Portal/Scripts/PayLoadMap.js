@@ -14,17 +14,53 @@ var bounds = new google.maps.LatLngBounds();
 var infowindow = new google.maps.InfoWindow();
 var ProductGrid = new Object();
 var IsGridInitilized = false;
+var RefreshTimer = null;
 
 var BoundaryBox = null;
 var BoundaryMarker = [null, null, null, null];
 
+function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
+  //alert('Start at: ' + iStart);
+  deleteMarkers();
+  setMarker(map, aData)
+  //setGridHilite(aData);
+
+
+}
+
+function chkAutoRefresh_click(evt) {
+  if (RefreshTimer) window.clearTimeout(RefreshTimer);
+  RefreshTimer = null;
+  refreshData(false);
+}
+
+function refreshData(IsForceRefresh) {
+  if (IsForceRefresh || $('#chkAutoRefresh').is(':checked')) {
+    RefreshTimer = window.setTimeout(function () {
+      qViewDataTable.ajax.reload(null, false);
+    }, 4 * 1000);
+  }
+}
+
+
+function _fnDrawCallback() {
+  $('#qViewTable_paginate').append('<span class="refresh">&#xf021;</span>');
+  if ($('#qViewTable_filter').find('.refresh').length <= 0)
+    $('#qViewTable_filter').append('<span class="refresh">&#xf021;</span>\n' +
+    '<span><input id="chkAutoRefresh" checked type="checkbox">Auto Refresh</span>');
+
+  //add a refresh counter
+  refreshData(false);
+  $('#chkAutoRefresh').on("click", chkAutoRefresh_click)
+}
+
 $(document).ready(function () {
   initialize();
   setGridBox();
-  //drawGridLines(GridLinesRows);
-  //drawGridLines(GridLinesCols);
+  drawGridLines(GridLinesRows);
+  drawGridLines(GridLinesCols);
   //drawLabels();
-  drawProducts();
+  //drawProducts();
   setCordinatesEditable();
 
 
@@ -71,9 +107,23 @@ $(document).ready(function () {
   $('#setYard').on("submit", setYard_post);
   $('#btnAutoSet').on("click", btnAutoSet_click);
 
-
+  $(document).on("click", ".more-detail-info", function () {
+    more_detail_info($(this));
+  })
 
 });
+
+function more_detail_info(Obj) {
+  var RFID = Obj.attr('data-rfid');
+  Obj.html("Loading...");
+  $.ajax({
+    method: 'get',
+    url: '/Map/RFID/' + RFID
+  }).done(function (data) {
+    Obj.html(data);
+  });
+
+}
 
 function setYard(theYard) {
   var Form = document.forms['setYard'];
@@ -116,12 +166,7 @@ function btnAutoSet_click(e) {
 
 }
 
-function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
-  //alert('Start at: ' + iStart);
-  deleteMarkers();
-  setMarker(map, aData)
-  setGridHilite(aData);
-}
+
 
 function setGridHilite(aData) {
   for (var r = 0; r < Grid.length; r++) {
@@ -144,8 +189,21 @@ function setGridHilite(aData) {
 function rfid_settings(e) {
   e.stopPropagation();
   e.preventDefault();
-  $('#rfid-settings-layer').slideToggle();
- 
+  if($('#rfid-settings-layer').css('display') == 'none') {
+    $('#rfid-settings-layer').slideDown();
+    BoundaryBox.setDraggable(true);
+    for (var i = 0; i < BoundaryMarker.length; i++) {
+      BoundaryMarker[i].setMap(map);
+      BoundaryMarker[i].setDraggable(true);
+    }
+  } else {
+    $('#rfid-settings-layer').slideUp();
+    BoundaryBox.setDraggable(false);
+    for (var i = 0; i < BoundaryMarker.length; i++) {
+      BoundaryMarker[i].setMap(null);
+      BoundaryMarker[i].setDraggable(false);
+    }
+  }
 }
 
 function setGridBox() {
@@ -163,8 +221,7 @@ function setGridBox() {
     strokeOpacity: 0.7,
     strokeWeight: 1,
     fillColor: '#FF0000',
-    fillOpacity: 0.03,
-    draggable: true
+    fillOpacity: 0.03
   });
   BoundaryBox.setMap(map);
 
@@ -469,16 +526,17 @@ function setMarker(map, _Location) {
     var body = '' +
         '<b>' + location['RFID'] + '</b><br>\n' +
         'RSSI: ' + location['RSSI'] + '<br>\n' +
-        location['Latitude'] + ", " + location['Longitude'];
+        location['Latitude'] + ", " + location['Longitude'] +
+      '<div id="RFID-' + location['RFID'] + '" class="more-detail-info" data-rfid="' + location['RFID'] + '"><span class="link">Detail</div></div>';
 
     var myLatLng = new google.maps.LatLng(location['Latitude'], location['Longitude']);
-    var marker = createMarker(map, myLatLng, location['DroneName'], body);
+    var marker = createMarker(map, myLatLng, location['DroneName'], body, location['RFID']);
 
   });
   map.fitBounds(bounds);
 }
 
-function createMarker(map, latlng, heading, body) {
+function createMarker(map, latlng, heading, body, RFID) {
   var image = '/images/car-icon.png';
   var marker = new google.maps.Marker({
     position: latlng,
@@ -647,9 +705,7 @@ function setCordinatesEditable() {
   for (var i = 0; i < Bounds.length; i++) {
     BoundaryMarker[i] = new google.maps.Marker({
       position: Bounds[i],
-      map: map,
-      icon: '/images/map/' + Icons[i],
-      draggable: true
+      icon: '/images/map/' + Icons[i]
     });
     resetCordinateEdit(i, Bounds[i]);
     google.maps.event.addListener(BoundaryMarker[i], "drag", dragCordinatesEditable(i));
