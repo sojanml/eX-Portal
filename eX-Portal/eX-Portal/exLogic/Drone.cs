@@ -18,7 +18,10 @@ namespace eX_Portal.exLogic {
         _DroneID = value;
       }
     }
-    public int getDroneIDForFlight(int FlightID) {
+
+       
+
+        public int getDroneIDForFlight(int FlightID) {
       String SQL = "Select DroneID From DroneFlight WHERE ID=" + FlightID;
       return Util.getDBInt(SQL);
     }
@@ -253,7 +256,18 @@ namespace eX_Portal.exLogic {
       return VideoURL;
     }
 
-    public bool isLive(int FlightID) {
+        public string FlightDataVideo(int ID = 0)
+        {
+            //to get the url of the video
+            //Drones thisDrone = new Drones();
+            string sql = "select VideoURL from DroneFlightVideo where videoId=151 ";
+            string videourl = Util.getDBVal(sql);
+            return videourl;
+           // ViewBag.PlayerURL = videourl; //thisDrone.getLiveURL(ID);
+           
+        }
+
+        public bool isLive(int FlightID) {
       if (_DroneID == 0) _DroneID = getDroneIDForFlight(FlightID);
 
       String SQL = "SELECT IsLiveVideo FROM MSTR_Drone WHERE DroneID=" + _DroneID;
