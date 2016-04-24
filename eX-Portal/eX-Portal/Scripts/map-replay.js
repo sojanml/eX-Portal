@@ -1,5 +1,6 @@
 ﻿var MaxRecords = 2000;
 var map;
+var Now = new Date();
 var LatestLine = null;
 var OldLine = null;
 var playerInstance = null;
@@ -7,6 +8,7 @@ var FillOptions = [
   { fillColor: '#55FF55', strokeWeight: 0, fillOpacity: 0.2 },
   { fillColor: 'yellow', strokeWeight: 1, fillOpacity: 0 }
 ];
+var _isUTCFormat = false;
 var _ElapsedTime = 0;
 var _LastDroneDataID = 0;
 var _LocationPoints = [];
@@ -224,6 +226,7 @@ function setDrawIntilize() {
     var myLatLng = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
     var iDt = parseInt(loc['ReadTime'].substr(6));
     _BlackBoxStartAt = new Date(iDt);
+    _BlackBoxStartAt.setMinutes(_BlackBoxStartAt.getMinutes() + Now.getTimezoneOffset());
     map.setCenter(myLatLng)
     drawLocationPoints();
     $('#clickReplay').css({ display: 'block' });
@@ -523,6 +526,7 @@ function setFormatData(_LastValue) {
       case "ReadTime":
         var iDt = parseInt(_LastValue['ReadTime'].substr(6));
         var theDate = new Date(iDt);
+        theDate.setMinutes(theDate.getMinutes() + Now.getTimezoneOffset());
         value = fmtDt(theDate);
         _LastValue['fReadTime'] = fmtTime(theDate);
         _LastValue['ReadTimeObject'] = theDate;
@@ -604,9 +608,9 @@ function fmtDt(date) {
     return 'Invalid';
   }
   var day = date.getDate();
-  var hours = date.getUTCHours();
-  var minutes = date.getUTCMinutes();
-  var seconds = date.getUTCSeconds();
+  var hours = _isUTCFormat ? date.getUTCHours() : date.getHours();
+  var minutes = _isUTCFormat ? date.getUTCMinutes() : date.getMinutes();
+  var seconds = _isUTCFormat ? date.getUTCSeconds() : date.getSeconds();
   var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   //var ampm = hours >= 12 ? 'pm' : 'am';
   //hours = hours % 12;
@@ -626,9 +630,9 @@ function fmtTime(date) {
     return 'Invalid';
   }
 
-  var hours = date.getUTCHours();
-  var minutes = date.getUTCMinutes();
-  var seconds = date.getUTCSeconds();
+  var hours = _isUTCFormat ? date.getUTCHours() : date.getHours();
+  var minutes = _isUTCFormat ? date.getUTCMinutes() : date.getMinutes();
+  var seconds = _isUTCFormat ? date.getUTCSeconds() : date.getSeconds();
   hours = hours < 10 ? '0' + hours : hours;
   minutes = minutes < 10 ? '0' + minutes : minutes;
   seconds = seconds < 10 ? '0' + seconds : seconds;
@@ -662,8 +666,8 @@ function startReplayTimer() {
     } else {
       _ElapsedTime++;
     }
-    _ReplayTimeAt = new Date(_BlackBoxStartAt.toString());
-    _ReplayTimeAt.setSeconds(_ReplayTimeAt.getSeconds() + _ElapsedTime);
+    _ReplayTimeAt = new Date(_BlackBoxStartAt);
+    _ReplayTimeAt.setSeconds(_BlackBoxStartAt.getSeconds() + _ElapsedTime);
     setMapInfo();
     drawLocationPointsTimer();
   }, 1000);

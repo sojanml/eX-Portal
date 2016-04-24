@@ -8,6 +8,36 @@ using System.Web.Mvc;
 
 namespace eX_Portal.Controllers {
   public class PayLoadController : Controller {
+
+    public ActionResult RawData(String ID = "") {
+      if (!exLogic.User.hasAccess("PAYLOAD.RAW")) return RedirectToAction("NoAccess", "Home");
+      ViewBag.Title = "Payload RAW Data";
+      String SQL = @"SELECT  
+          PayLoadDataID as ID,
+          FlightUniqueID as UID,
+          RFID,
+          RSSI,
+          ReadTime,
+          ReadCount,
+          ProcessingModel as PModel,
+          CreatedTime,
+            Count(*) Over() as _TotalRecords,
+            PayLoadDataID as _PKey
+      FROM 
+        [PayLoadData]";
+      if (!String.IsNullOrEmpty(ID)) SQL = SQL + "\n" +
+      " WHERE FlightUniqueID='" + ID + "'";
+
+      qView nView = new qView(SQL);
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
+
+    }
+
     public ActionResult InDoorFlightDetails([Bind(Prefix = "ID")] String FlightUniqueID) {
       // if (!exLogic.User.hasAccess("PAYLOAD.VIEW")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "In Door Flight Details";
@@ -134,6 +164,8 @@ namespace eX_Portal.Controllers {
 
       qView nView = new qView(SQL);
       nView.addMenu("PayLoad Data", Url.Action("PayLoad", "Map", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("PAYLOAD.RAW"))
+        nView.addMenu("Raw Data", Url.Action("RawData", "Payload", new { ID = "_Pkey" }));
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -144,16 +176,14 @@ namespace eX_Portal.Controllers {
     }//ActionResult Index()
 
 
-        public ActionResult InfraRed()
-        {
-            return View();
-        }
+    public ActionResult InfraRed() {
+      return View();
+    }
 
-        public ActionResult Videography()
-        {
-            return View();
-        }
-        public String getRFID(int Row, int Column, String FlightUniqueID) {
+    public ActionResult Videography() {
+      return View();
+    }
+    public String getRFID(int Row, int Column, String FlightUniqueID) {
       StringBuilder theRow = new StringBuilder();
       String SQL = @"SELECT RFID, RSSI FROM PayLoadMapData
       WHERE

@@ -1007,6 +1007,7 @@
     <Content Include="Views\PayLoad\Videography.cshtml" />
     <Content Include="Views\Map\PayLoadIndoor.cshtml" />
     <Content Include="Views\Map\PayLoadIndoorShelf.cshtml" />
+    <Content Include="Views\PayLoad\RawData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

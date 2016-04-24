@@ -43,14 +43,6 @@ namespace eX_Portal.Controllers {
         return View();
       }
     }
-    /*
-    public ActionResult FlightDataLiveVideo(int ID = 0) {
-      Drones thisDrone = new Drones();
-      ViewBag.AllowedLocation = thisDrone.getAllowedLocation(ID);
-      ViewBag.PlayerURL = thisDrone.getLiveURL(ID);
-      return View();
-    }
-    */
 
     public String RFID([Bind(Prefix = "ID")]String RFID = "") {
       String SQL = @"SELECT 
@@ -133,7 +125,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult PayLoad([Bind(Prefix = "ID")] String FlightUniqueID = "") {
       if (!exLogic.User.hasAccess("PAYLOAD.MAP")) return RedirectToAction("NoAccess", "Home");
-      int ProcessingModel = Util.getDBInt("Select ProcessingModel From PayloadMapData where FlightUniqueID='" + FlightUniqueID + "'");
+      int ProcessingModel = Util.getDBInt("Select ISNULL(ProcessingModel,1) From PayLoadFlight where FlightUniqueID='" + FlightUniqueID + "'");
       if (ProcessingModel == 1) {
         return RedirectToAction("PayLoadIndoor", new { ID = FlightUniqueID });
       }
@@ -158,7 +150,10 @@ namespace eX_Portal.Controllers {
 
       qView nView = new qView(SQL);
       nView.addMenu("Detail", Url.Action("Detail", "Payload", new { ID = "_Pkey" }));
+
       ViewBag.FlightUniqueID = FlightUniqueID;
+
+
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -195,7 +190,6 @@ namespace eX_Portal.Controllers {
       var Rows = Util.getDBRows(SQL);
       ViewBag.FlightUniqueID = FlightUniqueID;
         return View(Rows);
-
     }
 
     public ActionResult PayLoadIndoorShelf(String ShelfID, String FlightUniqueID) {
@@ -269,9 +263,7 @@ namespace eX_Portal.Controllers {
           FlightUniqueID='" + Request["FlightUniqueID"] + "'";
         Util.doSQL(SQL);
       }
-
       return Json(Yard, JsonRequestBehavior.AllowGet);
-
     }
 
     [System.Web.Mvc.HttpGet]
@@ -302,10 +294,8 @@ namespace eX_Portal.Controllers {
       WHERE
          FlightTime >= DATEADD(month,-1,GETDATE())";
 
-
       if (!exLogic.User.hasAccess("DRONE.MANAGE"))
         SQL = SQL + " AND [MSTR_Drone].AccountID =" + Util.getAccountID();
-
 
       var LiveDrones = Util.getDBRows(SQL);
       //  LiveDrones.SQL = ;
