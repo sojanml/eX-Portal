@@ -77,8 +77,9 @@ namespace eX_Portal.Controllers {
       if (exLogic.User.hasAccess("FLIGHT.VIEW")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.MAP")) nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
       nView.addMenu("Flight Data", Url.Action("FlightDataView", "Map", new { ID = "_PKey" }));
-      //nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
-      if (exLogic.User.hasAccess("FLIGHT.GEOTAG")) nView.addMenu("GEO Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("FLIGHT.VIDEOS")) nView.addMenu("Flight Videos", Url.Action("ListVdeos", "DroneFlight", new { ID = "_PKey" }));
+            //nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("FLIGHT.GEOTAG")) nView.addMenu("GEO Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 
       if (Request.IsAjaxRequest()) {
@@ -128,7 +129,11 @@ namespace eX_Portal.Controllers {
         //Move the uploaded file to correct path
         MoveUploadFileTo((int)theFlight.DroneID, theFlight.ID);
 
-        return RedirectToAction("Detail", new { ID = ID });
+                //insert into log table
+                string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + theFlight.DroneID + ",'" + System.DateTime.Now + "'," + theFlight.PilotID + "," + (theFlight.FlightHours == null ? 0 : (theFlight.FlightHours / 60)) + "," + ID + ")";
+                Util.doSQL(sql);
+
+                return RedirectToAction("Detail", new { ID = ID });
       } else {
         ViewBag.Title = "Create UAS Flight";
         return View(theFlight);
@@ -153,7 +158,21 @@ namespace eX_Portal.Controllers {
       ExponentPortalEntities db = new ExponentPortalEntities();
       db.Entry(InitialData).State = EntityState.Modified;
       db.SaveChanges();
-      return RedirectToAction("Detail", new { ID = InitialData.ID });
+            //insert/update in log table
+            string sqlcheck = "select Id from MSTR_Pilot_Log where FlightID=" + InitialData.ID;
+            int result = Convert.ToInt32(Util.getDBInt(sqlcheck));
+            if (result > 0)
+            {
+                string sql = "update MSTR_Pilot_Log set DroneId=" + InitialData.DroneID + ",PilotId=" + InitialData.PilotID + ",MultiDashRotor=" + (InitialData.FlightHours == null ? 0 : (InitialData.FlightHours / 60)) + "where FlightID=" + InitialData.ID;
+                Util.doSQL(sql);
+            }
+            else
+            {
+                string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + (InitialData.DroneID == null ? 0 : InitialData.DroneID) + ",'" + System.DateTime.Now + "'," + (InitialData.PilotID == null ? 0 : InitialData.PilotID) + "," + (InitialData.FlightHours == null ? 0 : (InitialData.FlightHours / 60)) + "," + InitialData.ID + ")";
+                Util.doSQL(sql);
+            }
+
+            return RedirectToAction("Detail", new { ID = InitialData.ID });
     }
 
 
@@ -176,6 +195,8 @@ namespace eX_Portal.Controllers {
       SQL = "DELETE FROM [DroneFlight] WHERE ID = " + FlightID;
       Util.doSQL(SQL);
 
+      string sqldeltlog = "delete from MSTR_Pilot_Log where FlightID=" + FlightID;
+      Util.doSQL(sqldeltlog);
 
       return Util.jsonStat("OK");
     }
@@ -522,15 +543,16 @@ namespace eX_Portal.Controllers {
             return View(Videos);
         }
 
-        public ActionResult DeleteVdeo([Bind(Prefix = "ID")]int id = 0)
+        public string DeleteVdeo([Bind(Prefix = "ID")]int id = 0)
         {
-            if (!exLogic.User.hasAccess("FLIGHT.DELTVIDEOS")) return RedirectToAction("NoAccess", "Home");
-
+            if (!exLogic.User.hasAccess("FLIGHT.DELTVIDEOS")) return "Access Denied";
+            Response.ContentType = "text/json";
             string sql = "Update DroneFlightVideo set IsDeleted=1 where VideoID=" + id;
             Util.doSQL(sql);
             string sql1 = "select FlightID from DroneFlightVideo where VideoID=" + id;
             int flightid = Util.getDBInt(sql1);
-            return RedirectToAction("ListVdeos", "DroneFlight", new { id = flightid });
+            // return RedirectToAction("ListVdeos", "DroneFlight", new { id = flightid });
+            return Util.jsonStat("OK");
         }
 
         public ActionResult FlightDataVideo(int ID = 0)
