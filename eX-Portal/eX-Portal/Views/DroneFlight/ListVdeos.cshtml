@@ -1,0 +1,46 @@
+﻿@using eX_Portal.exLogic;
+@model List<eX_Portal.Models.DroneFlightVideo>
+
+@if (ViewBag.DroneID > 0)
+{
+    @Html.Action("DroneDetail", "Drone", new { ID = ViewBag.DroneID })
+}
+
+@{
+    ViewBag.Title = "Videos List";
+    Layout = "~/Views/Shared/_exPortal.cshtml";
+}
+
+<script src="~/jwplayer/jwplayer.js"></script>
+<script>jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";</script>
+
+
+<div id="main"  class="myOuterDivWithBorder" style="min-height:500px;">
+    @foreach (var video in Model)
+    {
+        <div id="map-video" style="float:left;padding:10px;">
+            <div id="Player_@video.VideoID">
+                the player...
+            </div>
+            <div id="deletable" style="float:left;padding:10px;">
+                <a class="_delete" href="/DroneFlight/DeleteVdeo/@video.VideoID"  onclick="return confirm('Are you sure you want to delete this video?')">Delete</a>               
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var playerInstance_@video.VideoID = null;
+            $(document).ready(function () {
+                playerInstance_@video.VideoID = jwplayer('Player_@video.VideoID');
+                playerInstance_@(video.VideoID).setup({
+                    file: '@Html.Raw(S3Download.getURL("VOD/" + video.VideoURL))',
+                    width: 256,
+                    height: 192,
+                    description: 'Click on play to start video.',
+                    mediaid: '123456',
+                });
+            })
+        </script>
+
+    }
+</div>
+

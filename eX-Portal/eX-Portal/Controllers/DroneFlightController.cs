@@ -507,7 +507,44 @@ namespace eX_Portal.Controllers {
 
       }
     }
-    public ActionResult Deleted([Bind(Prefix = "ID")]int FlightID = 0) {
+
+
+        public ActionResult ListVdeos([Bind(Prefix = "ID")]int FlightID = 0)
+        {
+            if (!exLogic.User.hasAccess("FLIGHT.VIDEOS")) return RedirectToAction("NoAccess", "Home");
+
+            ViewBag.FlightID = FlightID;
+            var Videos = (from n in db.DroneFlightVideos
+                          where n.FlightID == FlightID && n.IsDeleted == 0
+                          select n).ToList();
+
+
+            return View(Videos);
+        }
+
+        public ActionResult DeleteVdeo([Bind(Prefix = "ID")]int id = 0)
+        {
+            if (!exLogic.User.hasAccess("FLIGHT.DELTVIDEOS")) return RedirectToAction("NoAccess", "Home");
+
+            string sql = "Update DroneFlightVideo set IsDeleted=1 where VideoID=" + id;
+            Util.doSQL(sql);
+            string sql1 = "select FlightID from DroneFlightVideo where VideoID=" + id;
+            int flightid = Util.getDBInt(sql1);
+            return RedirectToAction("ListVdeos", "DroneFlight", new { id = flightid });
+        }
+
+        public ActionResult FlightDataVideo(int ID = 0)
+        {
+            //to get the url of the video
+            Drones thisDrone = new Drones();
+            string sql = "select VideoURL from DroneFlightVideo where videoId=" + ID;
+            string videourl = Util.getDBVal(sql);
+            ViewBag.PlayerURL = videourl; //thisDrone.getLiveURL(ID);
+            return View();
+        }
+        
+
+        public ActionResult Deleted([Bind(Prefix = "ID")]int FlightID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.VIDEOS")) return RedirectToAction("NoAccess", "Home");
       String SQL = "";
       using (var ctx = new ExponentPortalEntities())
