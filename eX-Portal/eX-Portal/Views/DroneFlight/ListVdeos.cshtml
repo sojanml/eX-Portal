@@ -18,12 +18,12 @@
 <div id="main"  class="myOuterDivWithBorder" style="min-height:500px;">
     @foreach (var video in Model)
     {
-        <div id="map-video" style="float:left;padding:10px;">
+        <div id="map-video_@video.VideoID" style="float:left;padding:10px;">
             <div id="Player_@video.VideoID">
                 the player...
             </div>
             <div id="deletable" style="float:left;padding:10px;">
-                <a class="_delete" href="/DroneFlight/DeleteVdeo/@video.VideoID"  onclick="return confirm('Are you sure you want to delete this video?')">Delete</a>               
+                <a class="video-delete" data-id="@video.VideoID" href="/DroneFlight/DeleteVdeo/@video.VideoID" onclick="">Delete</a>               
             </div>
         </div>
 
@@ -38,9 +38,35 @@
                     description: 'Click on play to start video.',
                     mediaid: '123456',
                 });
+
             })
         </script>
 
     }
 </div>
 
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("a.video-delete").click(function (e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to delete this video?')) {
+                    var id = $(this).attr("data-id");
+                    var href = $(this).attr("href");
+
+                    $.ajax({
+                        type: "GET",
+                        url: href,
+                        success: function (msg) {
+                            $("#map-video_" + id).slideUp();
+                        }
+                    });
+                }
+                else
+                {
+                    
+                }
+            });
+    })
+    </script>
+    }
