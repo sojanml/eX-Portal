@@ -129,11 +129,11 @@ namespace eX_Portal.Controllers {
         //Move the uploaded file to correct path
         MoveUploadFileTo((int)theFlight.DroneID, theFlight.ID);
 
-                //insert into log table
-                string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + theFlight.DroneID + ",'" + System.DateTime.Now + "'," + theFlight.PilotID + "," + (theFlight.FlightHours == null ? 0 : (theFlight.FlightHours / 60)) + "," + ID + ")";
-                Util.doSQL(sql);
+        //insert into log table
+        string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + theFlight.DroneID + ",'" + System.DateTime.Now + "'," + theFlight.PilotID + "," + (theFlight.FlightHours == null ? 0 : (theFlight.FlightHours / 60)) + "," + ID + ")";
+        Util.doSQL(sql);
 
-                return RedirectToAction("Detail", new { ID = ID });
+      return RedirectToAction("Detail", new { ID = ID });
       } else {
         ViewBag.Title = "Create UAS Flight";
         return View(theFlight);
