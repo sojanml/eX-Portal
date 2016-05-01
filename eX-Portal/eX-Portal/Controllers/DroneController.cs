@@ -62,7 +62,7 @@ namespace eX_Portal.Controllers {
           "  D.AccountID=" + Util.getAccountID();
       }
       qView nView = new qView(SQL);
-      nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
+      if (!exLogic.User.hasAccess("DRONE")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("DRONE.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("FLIGHT.CREATE")) nView.addMenu("Create Flight", Url.Action("Create", "DroneFlight", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("FLIGHT")) nView.addMenu("Flights", Url.Action("Index", "DroneFlight", new { ID = "_Pkey" }));
@@ -288,7 +288,8 @@ namespace eX_Portal.Controllers {
 
 
     public String ReassignDetail(int DroneID) {
-      StringBuilder Detail = new StringBuilder();
+    if (!exLogic.User.hasAccess("DRONE")) return "Access Denied";
+    StringBuilder Detail = new StringBuilder();
 
       string SQL = "select\n" +
           "  ISNULL(a.isactive, 'True') as IsActive,\n" +
@@ -323,7 +324,8 @@ namespace eX_Portal.Controllers {
       return Detail.ToString();
     } //Decommission()
     public String DecommissionDetail(int DroneID) {
-      StringBuilder Detail = new StringBuilder();
+    if (!exLogic.User.hasAccess("DRONE")) return "Access Denied";
+    StringBuilder Detail = new StringBuilder();
       String SQL = "SELECT\n" +
          "  ISNULL(Mstr_drone.isactive ,'True') as isactive,\n" +
          "  Convert(varchar, [DecommissionDate], 9) as DecommissionDate,\n" +
@@ -624,7 +626,8 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult TechnicalLogAdd([Bind(Prefix = "ID")] int DroneID = 0, int FlightID = 0) {
-      ViewBag.Title = "Technical Log";
+            if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
+            ViewBag.Title = "Technical Log";
       Drones theDrone = new Drones() { DroneID = DroneID };
       List<DroneFlight> Flights = new List<DroneFlight>() {
         new DroneFlight{
@@ -642,13 +645,15 @@ namespace eX_Portal.Controllers {
     [HttpPost]
     [ActionName("TechnicalLogAdd")]
     public ActionResult PostTechnicalLogAdd(List<DroneFlight> theFlight, [Bind(Prefix = "ID")] int DroneID = 0) {
-      Drones theDrone = new Drones() { DroneID = DroneID };
+            if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
+            Drones theDrone = new Drones() { DroneID = DroneID };
       theDrone.saveTechnicalLog(Request);
       return RedirectToAction("Manage", new { ID = DroneID });
     }//TechnicalLogAdd
 
     public ActionResult TechnicalLog([Bind(Prefix = "ID")] int DroneID = 0) {
-      String SQL =
+            if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
+            String SQL =
       "SELECT\n" +
       "  LogFrom,\n" +
       "  LogTo,\n" +
