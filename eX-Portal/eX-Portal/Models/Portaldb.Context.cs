@@ -74,6 +74,7 @@ namespace eX_Portal.Models
         public virtual DbSet<DroneFlightVideo> DroneFlightVideos { get; set; }
         public virtual DbSet<PortalAuth> PortalAuths { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<MSTR_Drone_Setup> MSTR_Drone_Setup { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {
