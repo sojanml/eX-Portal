@@ -630,5 +630,14 @@ namespace eX_Portal.Controllers {
 
       return AlertMsg.ToString();
     }
+
+
+    public ActionResult FlightSetup()
+    {
+            return View();
+    }
+
+
+
   }//class
 }//namespace
