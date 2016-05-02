@@ -1,4 +1,4 @@
-﻿var MaxRecords = 500;
+﻿var MaxRecords = 2000;
 var map;
 var Now = new Date();
 var LatestLine = null;
@@ -48,7 +48,9 @@ function Replay() {
 
   //Start the timer
   _LocationIndex = -1;
+  _IsLiveMode = false;
   startReplayTimer();
+
 
 }
 
@@ -70,12 +72,19 @@ function getLocationPoints() {
         _LastDroneDataID = obj['FlightMapDataID'];
       });
       //if any pending records try to get that as well
-      
-        window.setTimeout(getLocationPoints, 100);     
-        if(!_IsDrawInitilized) setDrawIntilize();
-      
-
-        MaxRecords = 10;
+      if (_IsLiveMode && msg.length <= 20) {
+        if (!_IsDrawInitilized) {
+          setDrawIntilize();
+        } else {
+          window.setTimeout(getLocationPoints, 1000);
+        }
+      } else {//if (_IsLiveMode)
+        if (msg.length > 0) {
+          getLocationPoints();
+        } else {
+          setDrawIntilize();
+        }
+      }//if (_IsLiveMode)
 
     },
     failure: function (msg) {
@@ -92,28 +101,56 @@ function setDrawIntilize() {
     _BlackBoxStartAt = new Date(iDt);
     _BlackBoxStartAt.setMinutes(_BlackBoxStartAt.getMinutes() + Now.getTimezoneOffset());
     map.setCenter(myLatLng)
-    drawLocationPoints();
-    $('#clickReplay').css({ display: 'block' });
+    drawLocationPoints();    
     _IsDrawInitilized = true;
+
   }
 }
 
 function drawLocationPoints() {
   var locationLength = _LocationPoints.length;
   //When the item reaches the end
+  if (locationLength > 0 && _LocationIndex < locationLength - 1) {
+    _LocationIndex++;
+    _LocationPoints[_LocationIndex] = setFormatData(_LocationPoints[_LocationIndex]);
+    drawLocationAtIndex();
+  }
+
   if (_LocationIndex == locationLength - 1) {
     drawLineChart(0);
     setInformationAtIntex();
     map.fitBounds(_ZoomBounds);
+    $('#clickReplay').css({ display: 'block' });
+
+    //Here, the first set from the server is completed
+    //Run the timer
+    if(_IsLiveMode) {
+      if (thePlayTimer) window.clearInterval(thePlayTimer);
+      thePlayTimer = window.setInterval(drawNextSetFromServer, 100);
+      //get the next set of points from server
+      getLocationPoints();
+    }
     return;
   }
-  if (locationLength > 0 && _LocationIndex < locationLength - 1) {
-    _LocationIndex++;
-    _LocationPoints[_LocationIndex] = setFormatData(_LocationPoints[_LocationIndex]);
 
-    drawLocationAtIndex();
-  }
   window.setTimeout(drawLocationPoints, 10);
+}
+
+
+function drawNextSetFromServer() {
+  var locationLength = _LocationPoints.length;
+  if (locationLength < 1) return;
+  //When the item reaches the end
+
+
+  if (_LocationIndex < locationLength - 1) {
+    //Check if the last point time is ready to ploat, then
+    //ploat it and move to next index
+    _LocationPoints[_LocationIndex] = setFormatData(_LocationPoints[_LocationIndex]);
+    if (_LocationIndex < 0) _LocationIndex = 0;
+    drawLocationAtIndexTimer();
+    _LocationIndex++;
+  }
 }
 
 function drawLocationPointsTimer() {
@@ -296,6 +333,7 @@ function addDataToChartTimer() {
   var aData = _LocationPoints[_LocationIndex];
   var LineData = [];
   var Label = aData['fReadTime'];
+
   if (_lineChartLegend['Altitude']) LineData.push(aData['Altitude']);
   if (_lineChartLegend['Satellites']) LineData.push(aData['Satellites']);
   if (_lineChartLegend['Pitch']) LineData.push(aData['Pitch']);
@@ -339,6 +377,11 @@ function fn_on_pause(theData) {
 }
 
 function startReplayTimer() {
+  if (thePlayTimer) {
+    window.clearInterval(thePlayTimer);
+    window.clearTimeout(thePlayTimer);
+  }
+
   thePlayTimer = window.setInterval(function () {
     var payState = 'playing';
     if (playerInstance) {

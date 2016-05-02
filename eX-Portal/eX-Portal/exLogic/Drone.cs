@@ -322,6 +322,8 @@ namespace eX_Portal.exLogic {
     }
 
     public bool isLiveFlight(int FlightID) {
+      //return true;
+
       if (_DroneID == 0) _DroneID = getDroneIDForFlight(FlightID);
       String SQL = @"select 
         Count(*) 
