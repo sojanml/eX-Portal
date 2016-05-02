@@ -1,45 +1,23 @@
-﻿var MaxRecords = 2000;
+﻿var MaxRecords = 500;
 var map;
 var Now = new Date();
 var LatestLine = null;
 var OldLine = null;
 var playerInstance = null;
 
-var _isUTCFormat = false;
-var _ElapsedTime = 0;
-var _LastDroneDataID = 0;
-var _LocationPoints = [];
-var _LocationIndex = -1;
-var _ZoomBounds = new google.maps.LatLngBounds();
-var _AllMarkers = [];
-var _FirstTotalFlightTime = -100;
 var _BlackBoxStartAt = null;
 var _ReplayTimeAt = null;
 var _VideoStartTime = new Date(1970, 0, 0, 24, 0, 0);
-var _lineChart = null;
-var _lineChartLegend = {
-  'Altitude': true,
-  'Satellites': true,
-  'Pitch': true,
-  'Roll': true,
-  'Speed': true
-};
-var _lineChartData = {
-  'Labels': [],
-  'Altitude': [],
-  'Satellites': [],
-  'Pitch': [],
-  'Roll': [],
-  'Speed': []
-};
+var _IsDrawInitilized = false;
 
 $(document).ready(function () {
   initializeMap();
   setAllowedRegion();
-  getLocationPoints();
   //drawLocationPoints();
   initilizeTable();
   initilizeChart();
+
+  getLocationPoints();
 
   $('#chkShowFullPath').on("change", function (e) {
     if (this.checked) {
@@ -72,51 +50,7 @@ function Replay() {
   _LocationIndex = -1;
   startReplayTimer();
 
-
 }
-
-
-function initializeMap() {
-  var mapOptions = {
-    zoom: 10,
-    center: {lat: -34.397, lng: 150.644},
-    panControl: false,
-    mapTypeControl: true,
-    mapTypeControlOptions: {
-      position: google.maps.ControlPosition.RIGHT_TOP,
-    },
-    zoomControl: true,
-    zoomControlOptions: {
-      style: google.maps.ZoomControlStyle.LARGE,
-      position: google.maps.ControlPosition.LEFT_TOP,
-    },
-    scaleControl: false,
-    streetViewControl: true,
-    overviewMapControl: false,
-
-    mapTypeId: google.maps.MapTypeId.HYBRID
-  };
-
-  map = new google.maps.Map(document.getElementById('map_canvas'),
-      mapOptions);
-
-  LatestLine = new google.maps.Polyline({
-    strokeColor: '#000000',
-    strokeOpacity: 1,
-    strokeWeight: 2
-  });
-  LatestLine.setMap(map);
-
-  OldLine = new google.maps.Polyline({
-    strokeColor: '#000000',
-    strokeOpacity: 0.5,
-    strokeWeight: 2
-  });
-  OldLine.setMap(map);
-
-  //  myInterval = setInterval(function () { }, 500);
-
-};
 
 
 function getLocationPoints() {
@@ -136,11 +70,13 @@ function getLocationPoints() {
         _LastDroneDataID = obj['FlightMapDataID'];
       });
       //if any pending records try to get that as well
-      if (msg.length > 0) {
-        window.setTimeout(getLocationPoints, 1000);
-      } else {
-        setDrawIntilize();
-      }
+      
+        window.setTimeout(getLocationPoints, 100);     
+        if(!_IsDrawInitilized) setDrawIntilize();
+      
+
+        MaxRecords = 10;
+
     },
     failure: function (msg) {
       alert('Live Drone Position Error' + msg);
@@ -158,6 +94,7 @@ function setDrawIntilize() {
     map.setCenter(myLatLng)
     drawLocationPoints();
     $('#clickReplay').css({ display: 'block' });
+    _IsDrawInitilized = true;
   }
 }
 
@@ -216,8 +153,6 @@ function drawLocationAtIndex() {
     drawPolyLineAtIndex(OldLine);
   }
 }
-
-
 
 function drawLocationAtIndexTimer() {
 
@@ -371,60 +306,6 @@ function addDataToChartTimer() {
   _lineChart.addData(LineData, Label);
 }
 
-function getChartData() {
-  var ChartDataSet = [];
-  if (_lineChartLegend['Altitude']) ChartDataSet.push({
-    label: "Altitude",
-    strokeColor: "rgb(236, 215, 101)",
-    pointColor: "rgb(236, 215, 101)",
-    pointStrokeColor: "#fff",
-    pointHighlightStroke: "rgb(236, 215, 101)",
-    data: _lineChartData['Altitude']
-  });
-
-  if (_lineChartLegend['Satellites']) ChartDataSet.push({
-    label: "Satellites",
-    strokeColor: "rgba(151,187,205,1)",
-    pointColor: "rgba(151,187,205,1)",
-    pointStrokeColor: "#fff",
-    pointHighlightStroke: "rgba(151,187,205,1)",
-    data: _lineChartData['Satellites']
-  });
-
-  if (_lineChartLegend['Pitch']) ChartDataSet.push({
-    label: "Pitch",
-    strokeColor: "rgba(255,119,119,1)",
-    pointColor: "rgba(255,119,119,1)",
-    pointStrokeColor: "#fff",
-    pointHighlightStroke: "rgba(255,119,119,1)",
-    data: _lineChartData['Pitch']
-  });
-
-  if (_lineChartLegend['Roll']) ChartDataSet.push({
-    label: "Roll",
-    strokeColor: "rgb(153, 131, 199)",
-    pointColor: "rgb(153, 131, 199)",
-    pointStrokeColor: "#fff",
-    pointHighlightStroke: "rgb(153, 131, 199)",
-    data: _lineChartData['Roll']
-  });
-
-  if (_lineChartLegend['Speed']) ChartDataSet.push({
-    label: "Speed",
-    strokeColor: "rgb(117, 237, 251)",
-    pointColor: "rgb(117, 237, 251)",
-    pointStrokeColor: "#fff",
-    pointHighlightStroke: "rgba(187,17,17,1)",
-    data: _lineChartData['Speed']
-  });
-
-  data = {
-    labels: _lineChartData['Labels'],
-    datasets: ChartDataSet
-  };
-  return data;
-}
-
 function setInformationAtIntex() {
   var _LastValue = _LocationPoints[_LocationIndex];
   $.each(_LastValue, function (key, value) {
@@ -433,8 +314,6 @@ function setInformationAtIntex() {
   
 
 }
-
-
 
 function setMapInfo() {
   //Show the information of drawing
