@@ -1,0 +1,161 @@
+﻿@model eX_Portal.Models.MSTR_Drone_Setup
+@using eX_Portal.exLogic
+@{ 
+    ViewBag.Title = "Flight Setup";
+}
+@using (Html.BeginForm())
+{
+    
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">                
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.DroneId, "UAS Name")
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DroneId, DroneFlightSetup.GetDdListDrone(Convert.ToInt32(Session["AccountID"].ToString())),             
+                "--Select Drone--",
+                new { @class = "form-control", @onchange = "FillPilot()" })
+                @Html.ValidationMessageFor(model => model.DroneId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PilotUserId,"Pilot")
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.PilotUserId, new SelectList(Enumerable.Empty<SelectListItem>(), "UserId", "FirstName"),
+              "--Select Pilot--",
+              new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PilotUserId, "", new { @class = "text-danger" })
+            </div>
+            <div>
+                <input id="ispilot" name="ispilot" type="checkbox" />
+                <label for="ispilot">I am the pilot</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GroundStaffUserId,"Ground Staff")
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.GroundStaffUserId, new SelectList(Enumerable.Empty<SelectListItem>(), "UserId", "FirstName"),
+              "--Select Ground Staff--",
+              new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GroundStaffUserId, "", new { @class = "text-danger" })
+            </div>
+            <div>
+                <input id="isgroundstaff" name="isgroundstaff" type="checkbox"/>
+                <label for="isgroundstaff">I am the ground staff</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BatteryVoltage, "Battery Voltage")
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BatteryVoltage, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BatteryVoltage, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Weather, "Weather Condition")
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Weather,DroneFlightSetup.GetOptions(),"--Select Weather Condition--",new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Weather, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UasPhysicalCondition, "UAS Physical Condition")
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.UasPhysicalCondition, DroneFlightSetup.GetOptions(), "--Select UAS Physical Condition--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.UasPhysicalCondition, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.CreatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CreatedOn, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CreatedOn, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CreatedOn, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ModifiedBy, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ModifiedBy, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ModifiedBy, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ModifiedOn, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ModifiedOn, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ModifiedOn, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="submitButton" type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    <script>
+        function FillPilot() {                        
+            var accountid=@Html.Raw(Json.Encode(ViewData["accountid"]));   
+            var droneeid=$("#DroneId").val();            
+    $.ajax({
+        url: '/DroneFlight/FillPilot',
+        type: "GET",
+        dataType: "JSON",
+        data: { id:accountid,droneid:droneeid },
+        success: function (pilotname) {
+            $("#PilotUserId").html(""); // clear before appending new list
+            $("#PilotUserId").append(
+            $('<option></option>').val('--Select Pilot--').html('--Select Pilot--'));
+            $.each(pilotname, function (i, pilots) {
+
+                    $("#PilotUserId").append(
+                    $('<option></option>').val(pilots.UserId).html(pilots.FirstName));
+            });
+
+            $("#GroundStaffUserId").html(""); // clear before appending new list
+            $("#GroundStaffUserId").append(
+            $('<option></option>').val('--Select Ground Staff--').html('--Select Ground Staff--'));
+            $.each(pilotname, function (i, pilots) {                     
+                    $("#GroundStaffUserId").append(
+                    $('<option></option>').val(pilots.UserId).html(pilots.FirstName));                              
+            });
+        }
+    });
+  }
+    </script>
+<script>
+ $(document).ready(function(){
+  $("#submitButton").on("click",function()
+  {
+      alert('butn click');
+      @Html.Raw(TempData["msg"]);
+  });
+
+});
+</script>
+
+}
