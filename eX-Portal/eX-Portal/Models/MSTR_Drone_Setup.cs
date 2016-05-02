@@ -12,13 +12,18 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PortalAuth
+    public partial class MSTR_Drone_Setup
     {
-        public int AuthID { get; set; }
-        public int UserID { get; set; }
-        public string AuthKey { get; set; }
+        public int DroneSetupId { get; set; }
+        public int DroneId { get; set; }
+        public Nullable<int> PilotUserId { get; set; }
+        public Nullable<int> GroundStaffUserId { get; set; }
+        public Nullable<decimal> BatteryVoltage { get; set; }
+        public string Weather { get; set; }
+        public string UasPhysicalCondition { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
-        public Nullable<System.DateTime> ExpiredOn { get; set; }
-        public string RequestIP { get; set; }
+        public Nullable<int> ModifiedBy { get; set; }
+        public Nullable<System.DateTime> ModifiedOn { get; set; }
     }
 }

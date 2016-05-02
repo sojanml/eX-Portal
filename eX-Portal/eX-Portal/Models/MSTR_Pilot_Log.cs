@@ -27,5 +27,6 @@ namespace eX_Portal.Models
         public Nullable<int> PilotId { get; set; }
         public Nullable<int> FixedWing { get; set; }
         public Nullable<int> MultiDashRotor { get; set; }
+        public Nullable<int> FlightID { get; set; }
     }
 }

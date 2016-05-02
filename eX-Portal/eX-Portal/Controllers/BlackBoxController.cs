@@ -102,9 +102,9 @@ namespace eX_Portal.Controllers {
       }
 
       qView nView = new qView(SQL);
-      //nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
+      //if (!exLogic.User.hasAccess("BLACKBOX.LIVE")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
 
-      if (Request.IsAjaxRequest()) {
+            if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
