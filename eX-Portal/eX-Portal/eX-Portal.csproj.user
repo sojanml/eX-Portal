@@ -12,6 +12,7 @@
     <ProjectView>ShowAllFiles</ProjectView>
     <WebStackScaffolding_DbContextTypeFullName>eX_Portal.Models.ExponentPortalEntities</WebStackScaffolding_DbContextTypeFullName>
     <NameOfLastUsedPublishProfile>exPortal</NameOfLastUsedPublishProfile>
+    <UseIISExpress>true</UseIISExpress>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

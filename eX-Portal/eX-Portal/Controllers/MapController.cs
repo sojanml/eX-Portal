@@ -89,8 +89,10 @@ namespace eX_Portal.Controllers {
       LEFT JOIN DroneFlight ON
           DroneFlight.ID = PortalAlert.FlightID
       LEFT JOIN MSTR_Drone ON
-          MSTR_Drone.DroneID = DroneFlight.DroneID AND
-          MSTR_Drone.AccountID = " + AccountID + @"
+          MSTR_Drone.DroneID = DroneFlight.DroneID";
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) SQL = SQL + @" AND
+          MSTR_Drone.AccountID = " + AccountID;
+      SQL= SQL + @"
         LEFT JOIN PortalAlert_User ON
           PortalAlert_User.AlertID = PortalAlert.AlertID and
           PortalAlert_User.UserID =  " + id + @"
@@ -194,7 +196,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult PayLoadIndoorShelf(String ShelfID, String FlightUniqueID) {
       String SQL =
-    @"SELECT DISTINCT
+    @"SELECT
         [PayLoadMapData].[RFID],
         ISNULL(MSTR_Product.Product_Name, [PayLoadMapData].[RFID]) as ProductName
       FROM 
@@ -206,6 +208,7 @@ namespace eX_Portal.Controllers {
         IsValid = 1 AND
         FlightUniqueID='" + FlightUniqueID + @"'
       ORDER BY
+         [PayLoadMapData].readtime, 
         [PayLoadMapData].[RFID]";
       //return View("PayLoadIndoor", new { ID = FlightUniqueID });
       var Rows = Util.getDBRows(SQL);

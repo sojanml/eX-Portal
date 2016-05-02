@@ -152,7 +152,7 @@ namespace eX_Portal.Controllers {
         PayLoadFlightID as ID, 
         FlightID,
         PayLoadYard.YardName,
-        (CASE Processingmodel WHEN 1 Then 'Outdoor' ELSE 'Indoor' END) as Processingmodel,
+        (CASE Processingmodel WHEN 1 Then 'Indoor' ELSE 'Outdoor' END) as Processingmodel,
         [RFIDCount],
         [CreatedTime],
         Count(*) Over() as _TotalRecords,
@@ -160,7 +160,17 @@ namespace eX_Portal.Controllers {
       FROM
         PayLoadFlight
       LEFT JOIN PayLoadYard ON
-        PayLoadYard.YardID = PayLoadFlight.YardID";
+        PayLoadYard.YardID = PayLoadFlight.YardID
+      LEFT JOIN [MSTR_Drone] ON
+        [MSTR_Drone].DroneId = PayLoadFlight.PayLoadDroneID
+      ";
+
+
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+        SQL +=
+          "WHERE\n" +
+          "  [MSTR_Drone].AccountID=" + Util.getAccountID();
+      }
 
       qView nView = new qView(SQL);
       nView.addMenu("PayLoad Data", Url.Action("PayLoad", "Map", new { ID = "_PKey" }));

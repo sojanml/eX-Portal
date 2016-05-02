@@ -49,21 +49,32 @@
   */
 
 #drone-map-info div.col-4.item2 div.data {
-  color: rgb(117, 237, 251);
+  color: rgb(44, 141, 152);
 }
 
 #drone-map-info div.col-4.item3 div.data {
-  color: rgb(236, 215, 101);
+  color: rgb(10, 101, 10);
+}
+
+
+#drone-map-info div.col-4.item4 div.data {
+  color: rgb(255, 106, 0)
 }
 
 #drone-map-info div.col-4.item5 div.data {
-  color: rgb(153, 131, 199);
+  color: rgb(86, 65, 128)
 }
-
 #drone-map-info div.col-4.item6 div.data {
-  color: rgba(255,119,119,1);
+  color: rgb(150, 114, 46);
 }
 
+#drone-map-info div.col-4.item7 div.data {
+  color: rgb(37, 81, 87);
+}
+
+#drone-map-info div.col-4.item8 div.data {
+  color: rgb(102, 32, 122);
+}
 ul#line-legend {
   margin: 0px;
   padding: 0px;
