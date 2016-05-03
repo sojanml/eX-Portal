@@ -206,6 +206,7 @@
     <Compile Include="Controllers\PayLoadController.cs" />
     <Compile Include="Controllers\PilotLogController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\S3UploadController.cs" />
     <Compile Include="Controllers\SummaryController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -732,6 +733,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\map-common.js" />
     <Content Include="Scripts\map-replay.js" />
     <Content Include="Scripts\map.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
@@ -1021,6 +1023,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Report\" />
     <Folder Include="Weather\" />
   </ItemGroup>
   <ItemGroup>

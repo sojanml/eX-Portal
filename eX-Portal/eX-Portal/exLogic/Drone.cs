@@ -71,6 +71,13 @@ namespace eX_Portal.exLogic {
 
     public String getAllowedLocation(int FlightID) {
       _DroneID = getDroneIDForFlight(FlightID);
+      String dateSQL = @"select 
+        CONVERT(VARCHAR, FlightDate ,20) as FlightDate 
+      from 
+        DroneFlight 
+      where 
+        ID=" + FlightID;
+      String CheckDate = Util.getDBVal(dateSQL);
 
       StringBuilder Cord = new StringBuilder();
       String SQL = @"SELECT 
@@ -81,23 +88,26 @@ namespace eX_Portal.exLogic {
         [GCA_Approval]
       WHERE
         DroneID = " + _DroneID + @" AND
-        GETDATE() BETWEEN StartDate and EndDate";
+        '" + CheckDate + "' BETWEEN StartDate and EndDate";
 
       var Rows = Util.getDBRows(SQL);
       foreach (var Row in Rows) {
 
         String Coordinates = Row["Coordinates"].ToString();
         if (Cord.Length > 0) Cord.AppendLine(",");
-        Cord.AppendLine("[");
+        Cord.AppendLine("{");
+        Cord.AppendLine("Outer: [");
         Cord.Append(toScriptArray(Coordinates));
         Cord.AppendLine("]");
 
         //Inner cordinates
         String InnerCoordinates = Row["InnerBoundaryCoord"].ToString();
-        if (Cord.Length > 0) Cord.AppendLine(",");
-        Cord.AppendLine("[");
+        Cord.AppendLine(",");
+        Cord.AppendLine("Inner: [");
         Cord.Append(toScriptArray(InnerCoordinates));
         Cord.AppendLine("]");
+        Cord.AppendLine("}");
+
       }
 
       return Cord.ToString();
@@ -312,6 +322,8 @@ namespace eX_Portal.exLogic {
     }
 
     public bool isLiveFlight(int FlightID) {
+      //return true;
+
       if (_DroneID == 0) _DroneID = getDroneIDForFlight(FlightID);
       String SQL = @"select 
         Count(*) 

@@ -1,5 +1,5 @@
 ﻿@{
-  ViewBag.Title = "Flight Data (Replay)";
+  //ViewBag.Title = "Flight Data (Replay)";
   Layout = "~/Views/Shared/_exPortal.cshtml";
 
   Double Buffer = 3;
@@ -121,7 +121,9 @@
   <label for="chkShowFullPath">Show Full Path</label>
 </td>
   <td style="width:100%;"></td>
-<td><input class="button" id="clickReplay" style="display:none" type="button" value="Replay" onclick="Replay();" /></td>
+  @if(!ViewBag.IsLive) {
+  <td><input class="button" id="clickReplay" style="display:none" type="button" value="Replay" onclick="Replay();" /></td>
+  }
 </tr>
 
 </table>
@@ -160,12 +162,15 @@
   ];
   var BlackBoxStartAt = '';
   var VideoStartAt = '';
+  var _IsLiveMode = @ViewBag.IsLive;
 </script>
 <script src="~/Scripts/Chart.js" type="text/javascript"></script>
 <script type="text/javascript" src="~/Scripts/map-replay.js"></script>
+<script type="text/javascript" src="~/Scripts/map-common.js"></script>
   @if(!String.IsNullOrEmpty(ViewBag.PlayerURL)) {
   <script src="~/jwplayer/jwplayer.js"></script>
   <script>jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";</script>
+  if(!ViewBag.IsLive) { 
   <script type="text/javascript">   
     _VideoStartTime = @(ViewBag.VideoStartAt);
     var thePlayTimer = null;
@@ -184,10 +189,26 @@
       playerInstance.on("play", fn_on_play);
       playerInstance.on("pause", fn_on_pause);
     })
-
-
   </script>
-  }
+  } else {
+  <script type="text/javascript">
+    var playerInstance = null;
+    $(document).ready(function () {
+      playerInstance = jwplayer("myElement");
+      playerInstance.setup({
+        file: '@Html.Raw(ViewBag.PlayerURL)',
+        width: 256,
+        height: 192,
+        description: 'Click on play to start video.',
+        mediaid: '123456',
+        rtmp: {
+          bufferlength: @Buffer
+          }
+        });
+    })
+  </script>
+  }@*if(ViewBag.IsLive)*@
+  }@*if(String.IsNullOrEmpty(ViewBag.PlayerURL))*@
 
 }
 

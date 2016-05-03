@@ -25,8 +25,7 @@ namespace eX_Portal {
 
       bundles.Add(new ScriptBundle("~/bundles/dataTableScript").Include(
                 "~/jquery-ui/jquery-ui.min.js",
-                "~/dataTable/js/jquery.dataTables.js",
-                "~/Scripts/site.js"
+                "~/dataTable/js/jquery.dataTables.js"
                 ));
       bundles.Add(new StyleBundle("~/bundles/dataTableCss").Include(
                 "~/dataTable/css/jquery.dataTables.custom.css",

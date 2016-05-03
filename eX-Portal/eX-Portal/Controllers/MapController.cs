@@ -26,22 +26,21 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       ViewBag.FlightID = FlightID;
       Drones thisDrone = new Drones();
+
+      ViewBag.AllowedLocation = thisDrone.getAllowedLocation(FlightID);
+      ViewBag.DroneID = thisDrone.DroneID;
+
       if (thisDrone.isLiveFlight(FlightID)) {
-        ViewBag.AllowedLocation = thisDrone.getAllowedLocation(FlightID);
+        ViewBag.IsLive = true;
         ViewBag.PlayerURL = thisDrone.getLiveURL(FlightID);
         ViewBag.Title = "Flight Map (Live)";
-        return View("FlightDataLiveVideo", new { ID = FlightID });
       } else {
-        //String SQL = "select VideoURL from DroneFlightVideo WHERE FlightID=" + FlightID;
-        //ViewBag.PlayList = Util.getDBRows(SQL);
+        ViewBag.IsLive = false;
         ViewBag.Title = "Flight Map (Replay)";
-        ViewBag.AllowedLocation = thisDrone.getAllowedLocation(FlightID);
-        ViewBag.DroneID = thisDrone.DroneID;
         ViewBag.VideoStartAt = thisDrone.getVideoStartDate(FlightID);
-        ViewBag.VideoURL = thisDrone.getPlayListURL(FlightID);
-        ViewBag.PlayerURL = thisDrone.getPlayListURL(FlightID);
-        return View();
+        ViewBag.PlayerURL = thisDrone.getPlayListURL(FlightID);      
       }
+      return View();
     }
 
     public String RFID([Bind(Prefix = "ID")]String RFID = "") {
@@ -89,8 +88,10 @@ namespace eX_Portal.Controllers {
       LEFT JOIN DroneFlight ON
           DroneFlight.ID = PortalAlert.FlightID
       LEFT JOIN MSTR_Drone ON
-          MSTR_Drone.DroneID = DroneFlight.DroneID AND
-          MSTR_Drone.AccountID = " + AccountID + @"
+          MSTR_Drone.DroneID = DroneFlight.DroneID";
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) SQL = SQL + @" AND
+          MSTR_Drone.AccountID = " + AccountID;
+      SQL= SQL + @"
         LEFT JOIN PortalAlert_User ON
           PortalAlert_User.AlertID = PortalAlert.AlertID and
           PortalAlert_User.UserID =  " + id + @"
@@ -194,7 +195,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult PayLoadIndoorShelf(String ShelfID, String FlightUniqueID) {
       String SQL =
-    @"SELECT DISTINCT
+    @"SELECT
         [PayLoadMapData].[RFID],
         ISNULL(MSTR_Product.Product_Name, [PayLoadMapData].[RFID]) as ProductName
       FROM 
@@ -206,6 +207,7 @@ namespace eX_Portal.Controllers {
         IsValid = 1 AND
         FlightUniqueID='" + FlightUniqueID + @"'
       ORDER BY
+         [PayLoadMapData].readtime, 
         [PayLoadMapData].[RFID]";
       //return View("PayLoadIndoor", new { ID = FlightUniqueID });
       var Rows = Util.getDBRows(SQL);
@@ -309,12 +311,46 @@ namespace eX_Portal.Controllers {
     public JsonResult GetFlightData(int FlightID = 0, int LastFlightDataID = 0, int MaxRecords = 1, int Replay = 0) {
 
       ViewBag.FlightID = FlightID;
-      IList<FlightMapData> DroneDataList = Util.GetDroneData(FlightID, LastFlightDataID, MaxRecords, Replay);
-      //  LiveDrones.SQL = ;
-      //string JsonData=Json(LiveDrones)
-      // return Json(JsonData);
-      return Json(DroneDataList, JsonRequestBehavior.AllowGet);
-      // return LiveDrones;
+
+      using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
+        List < Object > TheList = new List<Object>();
+        var FlightMapDataList = (
+          from FlightMapData in ctx.FlightMapDatas
+          where FlightMapData.FlightID == FlightID &&
+                FlightMapData.FlightMapDataID > LastFlightDataID
+          select FlightMapData
+          )
+          .OrderBy(x => x.FlightMapDataID)
+          .Take(MaxRecords).ToList();
+
+        foreach(var Row in FlightMapDataList) {
+          DateTime ReadTime = (DateTime)Row.ReadTime;
+          DateTime fReadTime = ReadTime.AddMinutes(-3);
+          DateTime tReadTime = ReadTime.AddMinutes(3);
+          var FlightIDs = (
+            from FlightMapData in ctx.FlightMapDatas
+            where
+              FlightMapData.DroneId != Row.DroneId &&
+              FlightMapData.FlightID != Row.FlightID &&
+              FlightMapData.ReadTime >= fReadTime &&
+              FlightMapData.ReadTime <= tReadTime
+            select
+              FlightMapData.FlightID
+            ).ToArray();
+
+          var thisRow = new {
+            FlightDetail = Row,
+            OtherFlights = FlightIDs
+          };
+          TheList.Add(thisRow);
+        }
+
+        return Json(TheList, JsonRequestBehavior.AllowGet);
+        // return LiveDrones;
+
+      }
+
+
     }
 
 
