@@ -7,7 +7,7 @@
 {
     
     @Html.AntiForgeryToken()
-    
+  
     <div class="form-horizontal">                
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -72,37 +72,7 @@
             </div>
         </div>
 
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.CreatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CreatedOn, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CreatedOn, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CreatedOn, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ModifiedBy, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ModifiedBy, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ModifiedBy, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ModifiedOn, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ModifiedOn, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ModifiedOn, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
+     
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -112,9 +82,7 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 @section Scripts {
     <script>
@@ -126,33 +94,42 @@
         type: "GET",
         dataType: "JSON",
         data: { id:accountid,droneid:droneeid },
-        success: function (pilotname) {
+        success: function (datas) {
             $("#PilotUserId").html(""); // clear before appending new list
-            $("#PilotUserId").append(
-            $('<option></option>').val('--Select Pilot--').html('--Select Pilot--'));
-            $.each(pilotname, function (i, pilots) {
+           
+            $.each(datas.pname, function (i, pilots) {
 
                     $("#PilotUserId").append(
                     $('<option></option>').val(pilots.UserId).html(pilots.FirstName));
             });
 
             $("#GroundStaffUserId").html(""); // clear before appending new list
-            $("#GroundStaffUserId").append(
-            $('<option></option>').val('--Select Ground Staff--').html('--Select Ground Staff--'));
-            $.each(pilotname, function (i, pilots) {                     
+          
+            $.each(datas.gname, function (i, pilots) {                     
                     $("#GroundStaffUserId").append(
                     $('<option></option>').val(pilots.UserId).html(pilots.FirstName));                              
             });
         }
     });
   }
-    </script>
-<script>
+</script>
+
+<script type="text/javascript">
  $(document).ready(function(){
-  $("#submitButton").on("click",function()
+  $("#submitButton").on("click",function(e)
   {
-      alert('butn click');
-      @Html.Raw(TempData["msg"]);
+      e.preventDefault();
+      $.ajax({
+          type: 'POST',
+          url: '/DroneFlight/FlightSetup',
+          data: $('form').serialize(),
+          success: function () {
+             alert('Data Successfully Updated!')
+          },
+          error: function(){
+              alert('Data Updation Failed!')
+          }
+      });
   });
 
 });
