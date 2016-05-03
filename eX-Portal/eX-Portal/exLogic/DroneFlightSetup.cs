@@ -53,15 +53,11 @@ namespace eX_Portal.exLogic
         public static IEnumerable<SelectListItem> GetOptions()
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();
-            //SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
+        
             SelectList.Add(new SelectListItem { Text = "Good", Value = "Good" });
             SelectList.Add(new SelectListItem { Text = "Bad", Value = "Bad" });
-            SelectList.Add(new SelectListItem { Text = "Ok", Value = "Ok" });
-
-            //SelectList.Add(new SelectListItem { Text = "Good", Value = "Good" });        
-            //SelectList.Add(new SelectListItem { Text = "Bad", Value = "Bad" });
-            //SelectList.Add(new SelectListItem { Text = "Ok", Value = "Ok" });
-
+            SelectList.Add(new SelectListItem { Text = "Ok", Value = "Ok" });        
+          
             DDoptions = SelectList.ToList();
             return DDoptions; //return the list objects
         }
