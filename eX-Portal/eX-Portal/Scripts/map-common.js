@@ -294,8 +294,6 @@ function setFormatData(_LastValue) {
         if (value < 0) value = value + 360;
         value = value.toFixed(2);
         break;
-
-
     }
     _LastValue[key] = value;
   });

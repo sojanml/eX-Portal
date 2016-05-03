@@ -235,6 +235,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="GCAID" Type="int" />
           <Property Name="IsSoftFence" Type="int" />
           <Property Name="voltage" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="OtherFlightIDs" Type="varchar(max)" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'ExponentPortal.dbo.GCA_Approval' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1897,6 +1898,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="GCAID" Type="Int32" />
           <Property Name="IsSoftFence" Type="Int32" />
           <Property Name="voltage" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="OtherFlightIDs" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -2877,6 +2879,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="FlightMapDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.FlightMapData">
               <MappingFragment StoreEntitySet="FlightMapData">
+                <ScalarProperty Name="OtherFlightIDs" ColumnName="OtherFlightIDs" />
                 <ScalarProperty Name="voltage" ColumnName="voltage" />
                 <ScalarProperty Name="IsSoftFence" ColumnName="IsSoftFence" />
                 <ScalarProperty Name="GCAID" ColumnName="GCAID" />

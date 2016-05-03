@@ -53,5 +53,6 @@ namespace eX_Portal.Models
         public Nullable<int> GCAID { get; set; }
         public Nullable<int> IsSoftFence { get; set; }
         public Nullable<decimal> voltage { get; set; }
+        public string OtherFlightIDs { get; set; }
     }
 }

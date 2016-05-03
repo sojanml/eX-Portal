@@ -302,7 +302,9 @@
     <Compile Include="Models\MSTR_DroneService.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MSTR_Drone_Setup.cs" />
+    <Compile Include="Models\MSTR_Drone_Setup.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MSTR_Menu.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
