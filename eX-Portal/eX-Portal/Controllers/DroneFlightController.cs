@@ -631,13 +631,81 @@ namespace eX_Portal.Controllers {
       return AlertMsg.ToString();
     }
 
-
+    
     public ActionResult FlightSetup()
-    {
+  {
+            if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return RedirectToAction("NoAccess", "Home");
+           
+            ViewData["accountid"] = Convert.ToInt32(Session["AccountID"].ToString());           
             return View();
     }
+    [HttpPost]
+    public ActionResult FlightSetup(MSTR_Drone_Setup droneSetup)
+    {
+            if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return RedirectToAction("NoAccess", "Home");
+            if (droneSetup.DroneId < 1 ) ModelState.AddModelError("DroneId", "You must select a Drone.");
+            if (droneSetup.PilotUserId < 1 || droneSetup.PilotUserId == null) ModelState.AddModelError("PilotUserId", "You must select a pilot.");
+            if (droneSetup.GroundStaffUserId < 1 || droneSetup.GroundStaffUserId == null) ModelState.AddModelError("GroundStaffUserId", "A Ground staff should be selected.");
+            string sqlcheck = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + droneSetup.DroneId;
+            int result = Util.getDBInt(sqlcheck);
+            if (result > 0)
+            {
+                string sqlupdate = @"update MSTR_Drone_Setup set PilotUserId=" + droneSetup.PilotUserId + ",GroundStaffUserId=" + droneSetup.GroundStaffUserId +
+                ",[BatteryVoltage]=" + droneSetup.BatteryVoltage + ",[Weather]='" + droneSetup.Weather + "',[UasPhysicalCondition]='" + droneSetup.UasPhysicalCondition
+                + "',[ModifiedBy]=" + Convert.ToInt32(Session["UserID"].ToString()) + ",[ModifiedOn]='" + System.DateTime.Now + "' where [DroneId]=" + droneSetup.DroneId;
+                int result1 = Util.doSQL(sqlupdate);
+                if (result1 > 0)
+                {
+                    TempData["msg"] = "<script>alert('Updated succesfully');</script>";
+                }
+                else
+                {
+                    TempData["msg"] = "<script>alert('Updation failed');</script>";
+                }
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    int ID = 0;
+                    ExponentPortalEntities db = new ExponentPortalEntities();
+                    droneSetup.CreatedBy = Convert.ToInt32(Session["UserID"].ToString());
+                    droneSetup.CreatedOn = System.DateTime.Now;
+                    db.MSTR_Drone_Setup.Add(droneSetup);
+                    db.SaveChanges();
+                    TempData["msg"] = "<script>alert('Data Entered Successfully!!');</script>";
+                    ID = droneSetup.DroneSetupId;
+                    db.Dispose();
+                }
+            }
+            return View();
+        }
 
 
+    [HttpGet]
+    public ActionResult FillPilot(int? id,int?droneid)
+    {
+            
+            var pilotname = (IQueryable)null;
+           
+            string sqlcheck = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + droneid;
+            int result = Util.getDBInt(sqlcheck);
+            if (result > 0)
+            {
+                string sqlpilotid = "select [PilotUserId] from [MSTR_Drone_Setup] where DroneId=" + droneid;
+                int pilotid = Util.getDBInt(sqlpilotid);
+                string sqlgroundstaffid = "select [GroundStaffUserId] from [MSTR_Drone_Setup] where DroneId=" + droneid;
+                int groundstaffid = Util.getDBInt(sqlpilotid);
+                pilotname = db.MSTR_User.Where(c => c.UserId == pilotid);
+                //groundstaffname= db.MSTR_User.Where(c => c.UserId == groundstaffid);
+            }
+            else
+            {
+                pilotname = db.MSTR_User.Where(c => c.AccountId == id);
+            }
+      
+       return Json(pilotname, JsonRequestBehavior.AllowGet);
+    }
 
-  }//class
+    }//class
 }//namespace
