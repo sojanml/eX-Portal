@@ -640,7 +640,7 @@ namespace eX_Portal.Controllers {
             return View();
     }
     [HttpPost]
-    public ActionResult FlightSetup(MSTR_Drone_Setup droneSetup)
+    public ActionResult FlightSetup(Models.MSTR_Drone_Setup droneSetup)
     {
             if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return RedirectToAction("NoAccess", "Home");
             if (droneSetup.DroneId < 1 ) ModelState.AddModelError("DroneId", "You must select a Drone.");
@@ -672,13 +672,13 @@ namespace eX_Portal.Controllers {
             return View();
         }
 
-
-    [HttpGet]
+        
+        [HttpGet]
     public ActionResult FillPilot(int? id,int?droneid)
-    {
-            
+       {            
             var pilotname = (IQueryable)null;
-            var groundstaffname = (IQueryable)null;
+            var groundstaffname = (IQueryable)null;            
+            var check = (IQueryable)null;
             string sqlcheck = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + droneid;
             int result = Util.getDBInt(sqlcheck);
             if (result > 0)
@@ -686,18 +686,31 @@ namespace eX_Portal.Controllers {
                 string sqlpilotid = "select [PilotUserId] from [MSTR_Drone_Setup] where DroneId=" + droneid;
                 int pilotid = Util.getDBInt(sqlpilotid);
                 string sqlgroundstaffid = "select [GroundStaffUserId] from [MSTR_Drone_Setup] where DroneId=" + droneid;
-                int groundstaffid = Util.getDBInt(sqlgroundstaffid);
+                int groundstaffid = Util.getDBInt(sqlgroundstaffid);                
                 pilotname = db.MSTR_User.Where(c => c.UserId == pilotid);
                 groundstaffname= db.MSTR_User.Where(c => c.UserId == groundstaffid);
+             
+                check = (from p in db.GCA_Approval where p.DroneID == droneid select new
+                {
+                    ApprovalID = p.ApprovalID,
+                    ApprovalName = p.ApprovalName
+                });
+
             }
             else
-            {
+            {                
                 pilotname = db.MSTR_User.Where(c => c.AccountId == id);
-                groundstaffname = db.MSTR_User.Where(c => c.AccountId == id);
+                groundstaffname = db.MSTR_User.Where(c => c.AccountId == id);                
+
             }
-            var datas = new { pname = pilotname, gname = groundstaffname };
+            var datas = new { pname = pilotname, gname = groundstaffname, gca = check };
             return Json(datas, JsonRequestBehavior.AllowGet);
     }
+
+        public ActionResult FlightSetupMap()
+        {
+            return View();
+        }
 
     }//class
 }//namespace
