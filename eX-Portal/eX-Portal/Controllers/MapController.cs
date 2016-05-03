@@ -313,7 +313,6 @@ namespace eX_Portal.Controllers {
       ViewBag.FlightID = FlightID;
 
       using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
-        List < Object > TheList = new List<Object>();
         var FlightMapDataList = (
           from FlightMapData in ctx.FlightMapDatas
           where FlightMapData.FlightID == FlightID &&
@@ -323,29 +322,7 @@ namespace eX_Portal.Controllers {
           .OrderBy(x => x.FlightMapDataID)
           .Take(MaxRecords).ToList();
 
-        foreach(var Row in FlightMapDataList) {
-          DateTime ReadTime = (DateTime)Row.ReadTime;
-          DateTime fReadTime = ReadTime.AddMinutes(-3);
-          DateTime tReadTime = ReadTime.AddMinutes(3);
-          var FlightIDs = (
-            from FlightMapData in ctx.FlightMapDatas
-            where
-              FlightMapData.DroneId != Row.DroneId &&
-              FlightMapData.FlightID != Row.FlightID &&
-              FlightMapData.ReadTime >= fReadTime &&
-              FlightMapData.ReadTime <= tReadTime
-            select
-              FlightMapData.FlightID
-            ).ToArray();
-
-          var thisRow = new {
-            FlightDetail = Row,
-            OtherFlights = FlightIDs
-          };
-          TheList.Add(thisRow);
-        }
-
-        return Json(TheList, JsonRequestBehavior.AllowGet);
+        return Json(FlightMapDataList, JsonRequestBehavior.AllowGet);
         // return LiveDrones;
 
       }
