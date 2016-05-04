@@ -50,7 +50,28 @@ namespace eX_Portal.exLogic
             }
         }
 
-        public static IEnumerable<SelectListItem> GetOptions()
+
+
+    public static IEnumerable<SelectListItem> getAllUsers(Object accountid) {
+      
+      int iAccountID = 0;
+      int.TryParse(accountid.ToString(), out iAccountID);
+
+      var ctx=new ExponentPortalEntities();
+      List<SelectListItem> SelectList = (
+        from m in ctx.MSTR_User
+        where m.AccountId == iAccountID
+        select new SelectListItem {
+          Text = m.FirstName + " " + m.LastName,
+          Value = m.UserId.ToString()
+        }
+      ).ToList();
+
+      return SelectList;
+      }
+    
+
+    public static IEnumerable<SelectListItem> GetOptions()
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();
         

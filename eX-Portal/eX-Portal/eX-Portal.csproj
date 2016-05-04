@@ -430,6 +430,7 @@
     <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\DroneServiceViewModel.cs" />
     <Compile Include="ViewModel\DroneView.cs" />
+    <Compile Include="ViewModel\FlightSetupViewModel.cs" />
     <Compile Include="ViewModel\Forcast.cs" />
     <Compile Include="ViewModel\ListViewModel.cs" />
     <Compile Include="ViewModel\MenuModel.cs" />

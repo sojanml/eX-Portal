@@ -6,6 +6,7 @@ var _LocationPoints = [];
 var _LocationIndex = -1;
 var _ZoomBounds = new google.maps.LatLngBounds();
 var _AllMarkers = [];
+
 var _FirstTotalFlightTime = -100;
 var _lineChart = null;
 var _lineChartLegend = {
@@ -25,7 +26,7 @@ var _lineChartData = {
 };
 
 var FillOptions = {
-  Outer: { fillColor: 'orange' , strokeWeight: 1, fillOpacity: 0.3 },
+  Outer: { fillColor: 'orange', strokeWeight: 1, fillOpacity: 0.3 },
   Inner: { fillColor: '#55FF55', strokeWeight: 0, fillOpacity: 0.3 }
 };
 
@@ -186,7 +187,7 @@ function setAllowedRegion() {
   for (var i = 0; i < AllowedLocation.length; i++) {
     var OuterPath = [];
     //Add outer area
-    for (var j = 0;  j < AllowedLocation[i].Outer.length; j++) {
+    for (var j = 0; j < AllowedLocation[i].Outer.length; j++) {
       OuterPath.push(AllowedLocation[i].Outer[j])
     }
     //close the polygon - add the last first point again
@@ -222,7 +223,7 @@ function setAllowedRegion() {
       strokeOpacity: 1,
       strokeColor: 'red',
       strokeWeight: FillOptions['Outer']['strokeWeight'],
-      fillOpacity:0,
+      fillOpacity: 0,
       editable: false,
       draggable: false
     });
@@ -294,6 +295,12 @@ function setFormatData(_LastValue) {
         if (value < 0) value = value + 360;
         value = value.toFixed(2);
         break;
+      case "OtherFlightIDs":
+        if (value == "") {
+          _LastValue['OtherFlight'] = [];
+        } else {
+          _LastValue['OtherFlight'] = parseFlight(value);
+        }
     }
     _LastValue[key] = value;
   });
@@ -302,6 +309,21 @@ function setFormatData(_LastValue) {
   // var oCompaniesTable = $('#MapData Table')
 }
 
+function parseFlight(FlightInfo) {
+  var ReturnObject = [];
+  var aFlight = FlightInfo.split("|");
+  for (var i = 0; i < aFlight.length; i++) {
+    var Data = aFlight[i].split(",");
+    var thisObj = {
+      "FlightID":  parseInt(Data[0]),
+      "Lat": parseFloat(Data[1]),
+      "Lng": parseFloat(Data[2]),
+      "Distance": parseFloat(Data[3])
+    };
+    if (thisObj['FlightID'] != FlightID) ReturnObject.push(thisObj);
+  }
+  return ReturnObject;
+}
 
 
 function fmtDt(date) {
