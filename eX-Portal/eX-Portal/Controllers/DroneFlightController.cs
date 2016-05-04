@@ -701,7 +701,6 @@ namespace eX_Portal.Controllers {
             {                
                 pilotname = db.MSTR_User.Where(c => c.AccountId == id);
                 groundstaffname = db.MSTR_User.Where(c => c.AccountId == id);                
-
             }
             var datas = new { pname = pilotname, gname = groundstaffname, gca = check };
             return Json(datas, JsonRequestBehavior.AllowGet);
