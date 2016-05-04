@@ -1,160 +1,204 @@
 ﻿@model eX_Portal.ViewModel.FlightSetupViewModel
 
 @using eX_Portal.exLogic
-@{ 
-    ViewBag.Title = "Flight Setup";
+@{
+  ViewBag.Title = "Flight Setup";
 }
-@using (Html.BeginForm())
-{
-    
-    @Html.AntiForgeryToken()
-  
-    <div class="form-horizontal">                
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.DroneSetup.DroneId, "UAS Name")
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.DroneSetup.DroneId, DroneFlightSetup.GetDdListDrone(Convert.ToInt32(Session["AccountID"].ToString())),             
-                "--Select Drone--",
-                new { @class = "form-control", @onchange = "FillPilot()" })
-                @Html.ValidationMessageFor(model => model.DroneSetup.DroneId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+@using (Html.BeginForm(null, null, FormMethod.Get, new { name = "frmDroneSetup", id = "frmDroneSetup" })) {
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DroneSetup.PilotUserId,"Pilot")
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.DroneSetup.PilotUserId, new SelectList(Enumerable.Empty<SelectListItem>(), "UserId", "FirstName"),
-              "--Select Pilot--",
-              new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.DroneSetup.PilotUserId, "", new { @class = "text-danger" })
-            </div>
-            <div>
-                <input id="ispilot" name="ispilot" type="checkbox" />
-                <label for="ispilot">I am the pilot</label>
-            </div>
-        </div>
+@Html.AntiForgeryToken()
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DroneSetup.GroundStaffUserId,"Ground Staff")
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.DroneSetup.GroundStaffUserId, new SelectList(Enumerable.Empty<SelectListItem>(), "UserId", "FirstName"),
-              "--Select Ground Staff--",
-              new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.DroneSetup.GroundStaffUserId, "", new { @class = "text-danger" })
-            </div>
-            <div>
-                <input id="isgroundstaff" name="isgroundstaff" type="checkbox"/>
-                <label for="isgroundstaff">I am the ground staff</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DroneSetup.BatteryVoltage, "Battery Voltage")
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DroneSetup.BatteryVoltage, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DroneSetup.BatteryVoltage, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DroneSetup.Weather, "Weather Condition")
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.DroneSetup.Weather, DroneFlightSetup.GetOptions(),"--Select Weather Condition--",new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.DroneSetup.Weather, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DroneSetup.UasPhysicalCondition, "UAS Physical Condition")
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.DroneSetup.UasPhysicalCondition, DroneFlightSetup.GetOptions(), "--Select UAS Physical Condition--", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.DroneSetup.UasPhysicalCondition, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.GcaApproval.ApprovalID, "GCA Approvals")
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.GcaApproval.ApprovalID, new SelectList(Enumerable.Empty<SelectListItem>(), "ApprovalID", "ApprovalName"), "--Select GCA Approval--", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div id="polygonmap" class="form-group" style="visibility:hidden">
-            <iframe id="iFrameMap" name="iFrameMap" src="/DroneFlight/FlightSetupMap" style="width:100%; height:100%; border:1px solid black"></iframe>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input id="submitButton" type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
+  <div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+      @Html.LabelFor(model => model.DroneSetup.DroneId, "UAS Name")
+      <div class="col-md-10">
+        @Html.DropDownListFor(model => model.DroneSetup.DroneId, DroneFlightSetup.GetDdListDrone(Convert.ToInt32(Session["AccountID"].ToString())),
+        "--Select Drone--",
+        new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DroneSetup.DroneId, "", new { @class = "text-danger" })
+      </div>
     </div>
-}
 
+    <div class="form-group">
+      @Html.LabelFor(model => model.DroneSetup.PilotUserId, "Pilot")
+      <div class="col-md-10">
+        @Html.DropDownListFor(model => model.DroneSetup.PilotUserId, DroneFlightSetup.getAllUsers(Session["AccountID"]),
+         "--Select Pilot--",
+          new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DroneSetup.PilotUserId, "", new { @class = "text-danger" })
+      </div>
+      <div>
+        <input id="ispilot" value="1" name="ispilot" type="checkbox" />
+        <label for="ispilot">I am the pilot</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.DroneSetup.GroundStaffUserId, "Ground Staff")
+      <div class="col-md-10">
+        @Html.DropDownListFor(model => model.DroneSetup.GroundStaffUserId, 
+          DroneFlightSetup.getAllUsers(Session["AccountID"]),
+          "--Select Ground Staff--",
+          new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DroneSetup.GroundStaffUserId, "", new { @class = "text-danger" })
+      </div>
+      <div>
+        <input id="isgroundstaff" name="isgroundstaff" type="checkbox" />
+        <label for="isgroundstaff">I am the ground staff</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.DroneSetup.BatteryVoltage, "Battery Voltage")
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.DroneSetup.BatteryVoltage, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.DroneSetup.BatteryVoltage, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.DroneSetup.Weather, "Weather Condition")
+      <div class="col-md-10">
+        @Html.DropDownListFor(model => model.DroneSetup.Weather, DroneFlightSetup.GetOptions(), "--Select Weather Condition--", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DroneSetup.Weather, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.DroneSetup.UasPhysicalCondition, "UAS Physical Condition")
+      <div class="col-md-10">
+        @Html.DropDownListFor(model => model.DroneSetup.UasPhysicalCondition, DroneFlightSetup.GetOptions(), "--Select UAS Physical Condition--", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DroneSetup.UasPhysicalCondition, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.GcaApproval.ApprovalID, "GCA Approvals")
+      <div class="col-md-10">
+        @Html.DropDownListFor(model => model.GcaApproval.ApprovalID, new SelectList(Enumerable.Empty<SelectListItem>(), "ApprovalID", "ApprovalName"), "--Select GCA Approval--", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalID, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div id="polygonmap" class="form-group" style="visibility:hidden">
+      <iframe id="iFrameMap" name="iFrameMap" src="/DroneFlight/FlightSetupMap" style="width:100%; height:100%; border:1px solid black"></iframe>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <input id="submitButton" type="submit" value="Create" class="button btn-default" />
+      </div>
+    </div>
+
+  </div>
+}
 
 
 @section Scripts {
-    <script>
-        function FillPilot() {                        
-            var accountid=@Html.Raw(Json.Encode(ViewData["accountid"]));   
-            var droneeid=$("#DroneSetup_DroneId").val();
-                        
-    $.ajax({
+  <script>
+    function FillPilot() {
+      var accountid=@Html.Raw(Json.Encode(ViewData["accountid"]));
+      var droneeid=$("#DroneSetup_DroneId").val();
+
+      $.ajax({
         url: '/DroneFlight/FillPilot',
         type: "GET",
         dataType: "JSON",
         data: { id:accountid,droneid:droneeid },
         success: function (datas) {
-            $("#DroneSetup_PilotUserId").html(""); // clear before appending new list
-           
-            $.each(datas.pname, function (i, pilots) {
+          $("#DroneSetup_PilotUserId").html(""); // clear before appending new list
 
-                    $("#DroneSetup_PilotUserId").append(
-                    $('<option></option>').val(pilots.UserId).html(pilots.FirstName));
-            });
+          $.each(datas.pname, function (i, pilots) {
 
-            $("#DroneSetup_GroundStaffUserId").html(""); // clear before appending new list
-          
-            $.each(datas.gname, function (i, pilots) {                     
-                    $("#DroneSetup_GroundStaffUserId").append(
-                    $('<option></option>').val(pilots.UserId).html(pilots.FirstName));                              
-            });
-          
-            $("#GcaApproval_ApprovalID").html(""); // clear before appending new list
-          
-            $.each(datas.gca, function (i, pilots) {                     
-                $("#GcaApproval_ApprovalID").append(
-                $('<option></option>').val(pilots.ApprovalID).html(pilots.ApprovalName));                              
-            });
-            
-            $("#polygonmap").css("visibility", "visible");
-            
+            $("#DroneSetup_PilotUserId").append(
+            $('<option></option>').val(pilots.UserId).html(pilots.FirstName));
+          });
+
+          $("#DroneSetup_GroundStaffUserId").html(""); // clear before appending new list
+
+          $.each(datas.gname, function (i, pilots) {
+            $("#DroneSetup_GroundStaffUserId").append(
+            $('<option></option>').val(pilots.UserId).html(pilots.FirstName));
+          });
+
+          $("#GcaApproval_ApprovalID").html(""); // clear before appending new list
+
+          $.each(datas.gca, function (i, pilots) {
+            $("#GcaApproval_ApprovalID").append(
+            $('<option></option>').val(pilots.ApprovalID).html(pilots.ApprovalName));
+          });
+
+          $("#polygonmap").css("visibility", "visible");
+
         }
-    });
-  }
-</script>
+      });
+    }
 
-<script type="text/javascript">
- $(document).ready(function(){
-  $("#submitButton").on("click",function(e)
-  {
-      e.preventDefault();
-      $.ajax({
+
+    $(document).ready(function(){
+      $("#submitButton").on("click",function(e) {
+        e.preventDefault();
+        $.ajax({
           type: 'POST',
           url: '/DroneFlight/FlightSetup',
           data: $('form').serialize(),
           success: function () {
-             alert('Data Successfully Updated!')
+            alert('Data Successfully Updated!')
           },
           error: function(){
-              alert('Data Updation Failed!')
+            alert('Data Updation Failed!')
           }
+        });
       });
-  });
 
-});
-</script>
+      $('#ispilot').on("change", function(e) {
+        if($(this).prop('checked')) {
+          document.forms['frmDroneSetup']['DroneSetup.PilotUserId'].value = '@Session["UserID"]';
+        }
+      })
+
+      $('#isgroundstaff').on("change", function(e) {
+        if($(this).prop('checked')) {
+          document.forms['frmDroneSetup']['DroneSetup.GroundStaffUserId'].value = '@Session["UserID"]';
+        }
+      })
+
+
+      $('#DroneSetup_GroundStaffUserId').on("change", function(e) {
+        $('#isgroundstaff').prop('checked', false);
+      })
+
+      $('#DroneSetup_PilotUserId').on("change", function(e) {
+        $('#ispilot').prop('checked', false);
+      })
+
+      $('#DroneSetup_DroneId').on("change", function() {
+        var accountid=@Html.Raw(Json.Encode(ViewData["accountid"]));
+        var droneeid=$("#DroneSetup_DroneId").val();
+        $.ajax({
+          url: '/DroneFlight/FillPilot',
+          type: "GET",
+          dataType: "JSON",
+          data: { id:accountid,droneid:droneeid },
+          success: DroneID_Success
+        });
+      });// $('#DroneSetup_DroneId').on("change")
+    });//$(document).ready()
+
+
+
+    function DroneID_Success(Row) {
+      console.log(Row);
+      if(Row.hasRows) {
+        document.forms['frmDroneSetup']['DroneSetup.PilotUserId'].value = Row.PilotUserId;
+        document.forms['frmDroneSetup']['DroneSetup.GroundStaffUserId'].value = Row.GroundStaffUserId;
+      } else {//if(Row.hasRows)
+        document.forms['frmDroneSetup']['DroneSetup.PilotUserId'].value = 0;
+        document.forms['frmDroneSetup']['DroneSetup.GroundStaffUserId'].value = 0;
+      }
+    }//DroneID_Success
+
+  </script>
 
 }

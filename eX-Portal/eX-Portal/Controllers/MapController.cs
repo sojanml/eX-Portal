@@ -314,14 +314,14 @@ namespace eX_Portal.Controllers {
 
       using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
         var FlightMapDataList = (
-          from FlightMapData in ctx.FlightMapDatas
-          where FlightMapData.FlightID == FlightID &&
-                FlightMapData.FlightMapDataID > LastFlightDataID
-          select FlightMapData
+          from d in ctx.FlightMapDatas
+          where d.FlightID == FlightID &&
+                d.FlightMapDataID > LastFlightDataID
+          select d
           )
           .OrderBy(x => x.FlightMapDataID)
           .Take(MaxRecords).ToList();
-
+        
         return Json(FlightMapDataList, JsonRequestBehavior.AllowGet);
         // return LiveDrones;
 

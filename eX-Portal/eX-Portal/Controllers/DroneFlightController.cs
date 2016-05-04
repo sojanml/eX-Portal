@@ -674,36 +674,23 @@ namespace eX_Portal.Controllers {
 
         
         [HttpGet]
-    public ActionResult FillPilot(int? id,int?droneid)
-       {            
-            var pilotname = (IQueryable)null;
-            var groundstaffname = (IQueryable)null;            
-            var check = (IQueryable)null;
-            string sqlcheck = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + droneid;
-            int result = Util.getDBInt(sqlcheck);
-            if (result > 0)
-            {
-                string sqlpilotid = "select [PilotUserId] from [MSTR_Drone_Setup] where DroneId=" + droneid;
-                int pilotid = Util.getDBInt(sqlpilotid);
-                string sqlgroundstaffid = "select [GroundStaffUserId] from [MSTR_Drone_Setup] where DroneId=" + droneid;
-                int groundstaffid = Util.getDBInt(sqlgroundstaffid);                
-                pilotname = db.MSTR_User.Where(c => c.UserId == pilotid);
-                groundstaffname= db.MSTR_User.Where(c => c.UserId == groundstaffid);
-             
-                check = (from p in db.GCA_Approval where p.DroneID == droneid select new
-                {
-                    ApprovalID = p.ApprovalID,
-                    ApprovalName = p.ApprovalName
-                });
+    public ActionResult FillPilot(int? id,int?droneid){            
 
-            }
-            else
-            {                
-                pilotname = db.MSTR_User.Where(c => c.AccountId == id);
-                groundstaffname = db.MSTR_User.Where(c => c.AccountId == id);                
-            }
-            var datas = new { pname = pilotname, gname = groundstaffname, gca = check };
-            return Json(datas, JsonRequestBehavior.AllowGet);
+      String SQL = "SELECT * FROM MSTR_Drone_Setup where DroneId=" + droneid;
+      var Row = Util.getDBRow(SQL);
+      var Approavals = (
+        from p in db.GCA_Approval
+        where p.DroneID == droneid
+        select new {
+          ApprovalID = p.ApprovalID,
+          ApprovalName = p.ApprovalName,
+          Cordinates = p.Coordinates
+        }
+      ).ToList();
+
+      Row.Add("Approvals", Approavals);
+      
+      return Json(Row, JsonRequestBehavior.AllowGet);
     }
 
         public ActionResult FlightSetupMap()

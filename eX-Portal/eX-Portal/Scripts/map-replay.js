@@ -1,16 +1,20 @@
-﻿var MaxRecords = 2000;
+﻿var MaxRecords = 500;
 var map;
 var Now = new Date();
 var LatestLine = null;
 var OldLine = null;
 var playerInstance = null;
+var thePlayTimer = null;
 
 var _BlackBoxStartAt = null;
 var _ReplayTimeAt = null;
 var _VideoStartTime = new Date(1970, 0, 0, 24, 0, 0);
 var _IsDrawInitilized = false;
+var _OtherFlights = {};
+
 
 $(document).ready(function () {
+
   initializeMap();
   setAllowedRegion();
   //drawLocationPoints();
@@ -71,6 +75,7 @@ function getLocationPoints() {
         _LocationPoints.push(obj);
         _LastDroneDataID = obj['FlightMapDataID'];
       });
+      //if (_IsLiveMode) MaxRecords = 1;
       //if any pending records try to get that as well
       if (_IsLiveMode && msg.length <= 20) {
         if (!_IsDrawInitilized) {
@@ -121,6 +126,9 @@ function drawLocationPoints() {
     setInformationAtIntex();
     map.fitBounds(_ZoomBounds);
     $('#clickReplay').css({ display: 'block' });
+
+    //Show Other Flight info at end of drawing
+    addOtherFlightInfoAtIndex();
 
     //Here, the first set from the server is completed
     //Run the timer
@@ -189,6 +197,58 @@ function drawLocationAtIndex() {
   } else {
     drawPolyLineAtIndex(OldLine);
   }
+
+  //Add Other Flight Info as Intex
+  //addOtherFlightInfoAtIndex();
+}
+
+function addOtherFlightInfoAtIndex() {
+  var loc = _LocationPoints[_LocationIndex];
+  var OtherFlight = loc['OtherFlight'];
+  var ProcessedIDs = {};
+  for(var i = 0; i < OtherFlight.length; i++) {    
+    var FlightID = OtherFlight[i]['FlightID'];
+    var Center = new google.maps.LatLng(OtherFlight[i]['Lat'], OtherFlight[i]['Lng']);
+    if (_OtherFlights[FlightID] + '' == 'undefined') {
+      _OtherFlights[FlightID] = new google.maps.Circle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35,
+        center: Center,
+        radius: 10
+      });
+    }
+    var Options = {};
+
+    if (OtherFlight[i]['Distance'] < 0.3) {
+      Options.fillColor = 'red';
+      Options.strokeColor = 'red';
+    } else if (OtherFlight[i]['Distance'] < 2) {
+      Options.fillColor = 'orange';
+      Options.strokeColor = 'orange';
+    } else {
+      Options.fillColor = 'green';
+      Options.strokeColor = 'green';
+    }
+    Options.center = Center;
+    Options.map = map;
+
+    _OtherFlights[FlightID].setOptions(Options);
+    //_OtherFlights[FlightID].setMap(map);
+    ProcessedIDs[FlightID] = true;
+    console.log("Flight ID: " + FlightID + ", Distance: " + OtherFlight[i]['Distance']);
+  }
+
+  //Hide if the flight is not available anymore
+  for (var FlightID in _OtherFlights) {
+    if (ProcessedIDs[FlightID]) {
+      //nothing
+    } else {
+      _OtherFlights[FlightID].setMap(null);
+    }
+  }
 }
 
 function drawLocationAtIndexTimer() {
@@ -198,6 +258,7 @@ function drawLocationAtIndexTimer() {
   addDataToTableAtIntex();
   addDataToChartTimer();
   setInformationAtIntex();
+  addOtherFlightInfoAtIndex();
 
   //set opacity of marker
   var initOpacity = 1;
