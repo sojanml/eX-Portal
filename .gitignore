@@ -44,7 +44,7 @@ Temporary Items
 .apdisk
 
 #Directories
-*.suo
+\.vs\
 *.user
 _ReSharper!.*
 Upload/

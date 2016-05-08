@@ -1,4 +1,4 @@
-﻿var MaxRecords = 500;
+﻿var MaxRecords = 2000;
 var map;
 var Now = new Date();
 var LatestLine = null;
@@ -11,7 +11,13 @@ var _ReplayTimeAt = null;
 var _VideoStartTime = new Date(1970, 0, 0, 24, 0, 0);
 var _IsDrawInitilized = false;
 var _OtherFlights = {};
+var _FlightOra = null
 
+var DistanceOptions = {
+  Radius: 10,
+  Critical: 100,
+  Warning: 200
+};
 
 $(document).ready(function () {
 
@@ -105,8 +111,10 @@ function setDrawIntilize() {
     var iDt = parseInt(loc['ReadTime'].substr(6));
     _BlackBoxStartAt = new Date(iDt);
     _BlackBoxStartAt.setMinutes(_BlackBoxStartAt.getMinutes() + Now.getTimezoneOffset());
-    map.setCenter(myLatLng)
-    drawLocationPoints();    
+    map.setCenter(myLatLng);
+    map.setZoom(20);
+    drawLocationPoints();
+
     _IsDrawInitilized = true;
 
   }
@@ -206,6 +214,7 @@ function addOtherFlightInfoAtIndex() {
   var loc = _LocationPoints[_LocationIndex];
   var OtherFlight = loc['OtherFlight'];
   var ProcessedIDs = {};
+  var thisFlightDistance = 2000;
   for(var i = 0; i < OtherFlight.length; i++) {    
     var FlightID = OtherFlight[i]['FlightID'];
     var Center = new google.maps.LatLng(OtherFlight[i]['Lat'], OtherFlight[i]['Lng']);
@@ -213,19 +222,33 @@ function addOtherFlightInfoAtIndex() {
       _OtherFlights[FlightID] = new google.maps.Circle({
         strokeColor: '#FF0000',
         strokeOpacity: 0.8,
-        strokeWeight: 2,
+        strokeWeight: 0,
         fillColor: '#FF0000',
-        fillOpacity: 0.35,
+        fillOpacity: 0.3,
         center: Center,
-        radius: 10
+        radius: DistanceOptions['Radius']
       });
+     var InfoWindow = new google.maps.InfoWindow({
+        content: '<a href="/Map/FlightData/' + FlightID + '">View Flight ' + FlightID + '</a>',
+        position: Center
+      });
+
+      _OtherFlights[FlightID].addListener('click', function () {
+        InfoWindow.open(map);
+      });
+      _OtherFlights[FlightID + 'Info'] = InfoWindow;
+    }
+    _OtherFlights[FlightID + 'Info'].setPosition(Center);
+
+    if (OtherFlight[i]['Distance'] < thisFlightDistance) {
+      thisFlightDistance = OtherFlight[i]['Distance'];
     }
     var Options = {};
 
-    if (OtherFlight[i]['Distance'] < 0.3) {
+    if (OtherFlight[i]['Distance'] <= DistanceOptions['Critical']) {
       Options.fillColor = 'red';
       Options.strokeColor = 'red';
-    } else if (OtherFlight[i]['Distance'] < 2) {
+    } else if (OtherFlight[i]['Distance'] <= DistanceOptions['Warning']) {
       Options.fillColor = 'orange';
       Options.strokeColor = 'orange';
     } else {
@@ -238,6 +261,7 @@ function addOtherFlightInfoAtIndex() {
     _OtherFlights[FlightID].setOptions(Options);
     //_OtherFlights[FlightID].setMap(map);
     ProcessedIDs[FlightID] = true;
+    ProcessedIDs[FlightID + 'Info'] = true;
     console.log("Flight ID: " + FlightID + ", Distance: " + OtherFlight[i]['Distance']);
   }
 
@@ -245,10 +269,45 @@ function addOtherFlightInfoAtIndex() {
   for (var FlightID in _OtherFlights) {
     if (ProcessedIDs[FlightID]) {
       //nothing
+
     } else {
       _OtherFlights[FlightID].setMap(null);
     }
   }
+  addThisFlightInfoAtIndex(thisFlightDistance);
+}
+
+function addThisFlightInfoAtIndex(MinDistance) {
+  var loc = _LocationPoints[_LocationIndex];
+  var thisFlight = 'thisFlight';
+  var Center = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
+  if (_OtherFlights[thisFlight] + '' == 'undefined') {
+    _OtherFlights[thisFlight] = new google.maps.Circle({
+      strokeColor: null,
+      strokeOpacity: 0.8,
+      strokeWeight: 0,
+      fillColor: '#FF0000',
+      fillOpacity: 0.3,
+      center: Center,
+      radius: DistanceOptions['Radius']
+    });
+  }
+
+  var Options = {
+    map: map,
+    center: Center
+  };
+  if (MinDistance <= DistanceOptions['Critical']) {
+    Options.fillColor = null;
+    Options.strokeColor = 'blue';
+  } else if (MinDistance <= DistanceOptions['Warning']) {
+    Options.fillColor = null;
+    Options.strokeColor = 'blue';
+  } else {
+    Options.map = null;
+  }
+  _OtherFlights[thisFlight].setOptions(Options);
+
 }
 
 function drawLocationAtIndexTimer() {

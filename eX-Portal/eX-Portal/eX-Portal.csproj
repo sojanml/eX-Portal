@@ -52,9 +52,9 @@
       <HintPath>..\packages\AWSSDK.S3.3.2.3.0-beta\lib\net45\AWSSDK.S3.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FileStorageUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\FileStorageUtils\bin\Debug\FileStorageUtils.dll</HintPath>
+    <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -71,6 +71,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web.DataVisualization" />
+    <Reference Include="System.Web.DataVisualization.Design" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -431,6 +433,7 @@
     <Compile Include="ViewModel\DroneServiceViewModel.cs" />
     <Compile Include="ViewModel\DroneView.cs" />
     <Compile Include="ViewModel\FlightSetupViewModel.cs" />
+    <Compile Include="ViewModel\FlightViewModel.cs" />
     <Compile Include="ViewModel\Forcast.cs" />
     <Compile Include="ViewModel\ListViewModel.cs" />
     <Compile Include="ViewModel\MenuModel.cs" />
@@ -749,9 +752,17 @@
     <Content Include="stylesheets\ie.css" />
     <Content Include="stylesheets\print.css" />
     <Content Include="stylesheets\screen.css" />
+    <Content Include="Upload\1940345.txt" />
+    <Content Include="Upload\Brand-Logo\dcca-logo-02.png" />
+    <Content Include="Upload\Brand-Logo\dcca-logo-03.png" />
+    <Content Include="Upload\Brand-Logo\dcca-logo.png" />
     <Content Include="Upload\Brand-Logo\dewa-logo.png" />
     <Content Include="Upload\Brand-Logo\DpWorld-logo.png" />
     <Content Include="Upload\Brand-Logo\exponent-logo.png" />
+    <Content Include="Upload\Drone\EXP-ALG-F6-00366-007\DocType\20160303115514291_kareniabloom.jpg" />
+    <Content Include="Upload\Drone\EXP-ALG-F6-00366-007\DocType\20160303115621334_power2.jpg" />
+    <Content Include="Upload\Drone\EXP-ALG-F6-00366-007\DocType\20160306073122963_port_track.png" />
+    <Content Include="Upload\Drone\EXP-ALG-F6-00366-007\DocType\20160306073122963_Rfid1.jpg" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
@@ -771,6 +782,7 @@
     <Content Include="Views\Admin\ProfileMenu.cshtml" />
     <Content Include="Views\Admin\ProfileMenuGen.cshtml" />
     <Content Include="Views\Admin\Profiles.cshtml" />
+    <Content Include="Views\Admin\SMS.cshtml" />
     <Content Include="Views\BlackBox\Decommission.cshtml" />
     <Content Include="Views\BlackBox\Detail.cshtml" />
     <Content Include="Views\BlackBox\Index.cshtml" />
@@ -782,7 +794,9 @@
     <Content Include="Views\DashBoard\Internal.cshtml" />
     <Content Include="Views\DashBoard\SubSection.cshtml" />
     <Content Include="Views\DashBoard\Weather.cshtml" />
+    <Content Include="Views\Design\CustomCss.cshtml" />
     <Content Include="Views\Design\SystemMenu.cshtml" />
+    <Content Include="Views\Document\Details.cshtml" />
     <Content Include="Views\Document\PowerLine.cshtml" />
     <Content Include="Views\Document\PowerPlant.cshtml" />
     <Content Include="Views\Document\SpillDetection.cshtml" />
@@ -792,16 +806,46 @@
     <Content Include="Views\DroneCheckList\CreateCheckList.cshtml" />
     <Content Include="Views\DroneCheckList\Details.cshtml" />
     <Content Include="Views\DroneCheckList\Index.cshtml" />
+    <Content Include="Views\DroneCheckList\Validation.cshtml" />
+    <Content Include="Views\DroneCheckList\ValidationList.cshtml" />
+    <Content Include="Views\DroneCheckList\View.cshtml" />
+    <Content Include="Views\DroneFlight\Create.cshtml" />
     <Content Include="Views\DroneFlight\Detail.cshtml" />
+    <Content Include="Views\DroneFlight\Edit.cshtml" />
+    <Content Include="Views\DroneFlight\FlightSetup.cshtml" />
+    <Content Include="Views\DroneFlight\GeoTag.cshtml" />
     <Content Include="Views\DroneFlight\Index.cshtml" />
+    <Content Include="Views\DroneFlight\List.cshtml" />
+    <Content Include="Views\DroneFlight\ListVdeos.cshtml" />
+    <Content Include="Views\DroneFlight\PortalAlert.cshtml" />
+    <Content Include="Views\DroneFlight\UASFiles.cshtml" />
     <Content Include="Views\DroneService\Create.cshtml" />
     <Content Include="Views\DroneService\Details.cshtml" />
+    <Content Include="Views\DroneService\Edit.cshtml" />
     <Content Include="Views\DroneService\Index.cshtml" />
+    <Content Include="Views\DroneService\ServicePartsRefurbished.cshtml" />
     <Content Include="Views\Drone\Create.cshtml" />
+    <Content Include="Views\Drone\Decommission.cshtml" />
+    <Content Include="Views\Drone\Detail.cshtml" />
+    <Content Include="Views\Drone\Document.cshtml" />
+    <Content Include="Views\Drone\DroneParts.cshtml" />
+    <Content Include="Views\Drone\Edit.cshtml" />
+    <Content Include="Views\Drone\FileDetail.cshtml" />
+    <Content Include="Views\Drone\GCAApproval.cshtml" />
+    <Content Include="Views\Drone\GCADetails.cshtml" />
+    <Content Include="Views\Drone\getDroneParts.cshtml" />
     <Content Include="Views\Drone\Index.cshtml" />
+    <Content Include="Views\Drone\Live.cshtml" />
+    <Content Include="Views\Drone\Manage.cshtml" />
+    <Content Include="Views\Drone\ReAssign.cshtml" />
+    <Content Include="Views\Drone\TechnicalLog.cshtml" />
+    <Content Include="Views\Drone\TechnicalLogAdd.cshtml" />
+    <Content Include="Views\Drone\UploadDocument.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\NoAccess.cshtml" />
     <Content Include="Views\List\Create.cshtml" />
     <Content Include="Views\List\LookupDetails.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
@@ -910,21 +954,44 @@
     <Content Include="Views\Map\images\Trucks\yellow64.png" />
     <Content Include="Views\Map\PayLoad.cshtml" />
     <Content Include="Views\Map\PayLoadDataView.cshtml" />
+    <Content Include="Views\Map\PayLoadIndoor.cshtml" />
+    <Content Include="Views\Map\PayLoadIndoorShelf.cshtml" />
+    <Content Include="Views\Map\PlayList.cshtml" />
+    <Content Include="Views\Map\Select.cshtml" />
     <Content Include="Views\Map\test.html" />
     <Content Include="Views\Parts\Create.cshtml" />
     <Content Include="Views\Parts\Detail.cshtml" />
     <Content Include="Views\Parts\Edit.cshtml" />
     <Content Include="Views\Parts\PartsList.cshtml" />
+    <Content Include="Views\PayLoad\Detail.cshtml" />
     <Content Include="Views\PayLoad\Index.cshtml" />
+    <Content Include="Views\PayLoad\InDoor.cshtml" />
+    <Content Include="Views\PayLoad\InDoorFlightDetails.cshtml" />
+    <Content Include="Views\PayLoad\InfraRed.cshtml" />
+    <Content Include="Views\PayLoad\OutDoor.cshtml" />
+    <Content Include="Views\PayLoad\RawData.cshtml" />
+    <Content Include="Views\PayLoad\Table.cshtml" />
+    <Content Include="Views\PayLoad\Videography.cshtml" />
     <Content Include="Views\PilotLog\Create.cshtml" />
     <Content Include="Views\PilotLog\Detail.cshtml" />
     <Content Include="Views\PilotLog\Edit.cshtml" />
     <Content Include="Views\PilotLog\PilotLogDetails.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Report\FlightReport.cshtml" />
+    <Content Include="Views\S3Upload\Complete.cshtml" />
+    <Content Include="Views\S3Upload\GCAApproval.cshtml" />
+    <Content Include="Views\S3Upload\Index.cshtml" />
+    <Content Include="Views\S3Upload\Upload.cshtml" />
+    <Content Include="Views\Shared\Details.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\LookupDetails.cshtml" />
+    <Content Include="Views\Shared\Menu.cshtml" />
     <Content Include="Views\Shared\qViewData.cshtml" />
+    <Content Include="Views\Shared\ServicePartsReplaced.cshtml" />
+    <Content Include="Views\Shared\_BreadCrumbs.cshtml" />
     <Content Include="Views\Shared\_eXPortal.cshtml" />
+    <Content Include="Views\Shared\_eXPortalBeforeLogin.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Summary\FlightHistorySummary.cshtml" />
@@ -933,7 +1000,12 @@
     <Content Include="Views\Summary\UASServiceHistory.cshtml" />
     <Content Include="Views\Summary\UASSummary.cshtml" />
     <Content Include="Views\Summary\UserList.cshtml" />
+    <Content Include="Views\Test\Analysis.cshtml" />
     <Content Include="Views\Test\CompareGraph.cshtml" />
+    <Content Include="Views\Test\dt.cshtml" />
+    <Content Include="Views\Test\GCA_Approval.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Test\Video.cshtml" />
     <Content Include="Views\User\ChangedSuccessfully.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
@@ -961,70 +1033,11 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="SqlParser\ClassDiagram.cd" />
-    <Content Include="Views\Admin\SMS.cshtml" />
-    <Content Include="Views\Design\CustomCss.cshtml" />
-    <Content Include="Views\Document\Details.cshtml" />
-    <Content Include="Views\DroneCheckList\Validation.cshtml" />
-    <Content Include="Views\DroneCheckList\ValidationList.cshtml" />
-    <Content Include="Views\DroneCheckList\View.cshtml" />
-    <Content Include="Views\DroneFlight\Create.cshtml" />
-    <Content Include="Views\DroneFlight\Edit.cshtml" />
-    <Content Include="Views\DroneFlight\GeoTag.cshtml" />
-    <Content Include="Views\DroneFlight\List.cshtml" />
-    <Content Include="Views\DroneFlight\PortalAlert.cshtml" />
-    <Content Include="Views\DroneFlight\UASFiles.cshtml" />
-    <Content Include="Views\DroneService\Edit.cshtml" />
-    <Content Include="Views\DroneService\ServicePartsRefurbished.cshtml" />
-    <Content Include="Views\Drone\Decommission.cshtml" />
-    <Content Include="Views\Drone\Detail.cshtml" />
-    <Content Include="Views\Drone\Document.cshtml" />
-    <Content Include="Views\Drone\DroneParts.cshtml" />
-    <Content Include="Views\Drone\Edit.cshtml" />
-    <Content Include="Views\Drone\FileDetail.cshtml" />
-    <Content Include="Views\Drone\GCAApproval.cshtml" />
-    <Content Include="Views\Drone\GCADetails.cshtml" />
-    <Content Include="Views\Drone\getDroneParts.cshtml" />
-    <Content Include="Views\Drone\Live.cshtml" />
-    <Content Include="Views\Drone\Manage.cshtml" />
-    <Content Include="Views\Drone\ReAssign.cshtml" />
-    <Content Include="Views\Drone\TechnicalLog.cshtml" />
-    <Content Include="Views\Drone\TechnicalLogAdd.cshtml" />
-    <Content Include="Views\Drone\UploadDocument.cshtml" />
-    <Content Include="Views\Home\Error.cshtml" />
-    <Content Include="Views\Home\NoAccess.cshtml" />
-    <Content Include="Views\Map\PlayList.cshtml" />
-    <Content Include="Views\Map\Select.cshtml" />
-    <Content Include="Views\PayLoad\Detail.cshtml" />
-    <Content Include="Views\PayLoad\InDoor.cshtml" />
-    <Content Include="Views\PayLoad\InDoorFlightDetails.cshtml" />
-    <Content Include="Views\PayLoad\OutDoor.cshtml" />
-    <Content Include="Views\PayLoad\Table.cshtml" />
-    <Content Include="Views\S3Upload\Complete.cshtml" />
-    <Content Include="Views\S3Upload\GCAApproval.cshtml" />
-    <Content Include="Views\S3Upload\Index.cshtml" />
-    <Content Include="Views\S3Upload\Upload.cshtml" />
-    <Content Include="Views\Shared\Details.cshtml" />
-    <Content Include="Views\Shared\LookupDetails.cshtml" />
-    <Content Include="Views\Shared\Menu.cshtml" />
-    <Content Include="Views\Shared\ServicePartsReplaced.cshtml" />
-    <Content Include="Views\Shared\_BreadCrumbs.cshtml" />
-    <Content Include="Views\Shared\_eXPortalBeforeLogin.cshtml" />
-    <Content Include="Views\Test\Analysis.cshtml" />
-    <Content Include="Views\Test\dt.cshtml" />
-    <Content Include="Views\Test\GCA_Approval.cshtml" />
-    <Content Include="Views\Test\Index.cshtml" />
-    <Content Include="Views\Test\Video.cshtml" />
-    <Content Include="Views\PayLoad\InfraRed.cshtml" />
-    <Content Include="Views\PayLoad\Videography.cshtml" />
-    <Content Include="Views\Map\PayLoadIndoor.cshtml" />
-    <Content Include="Views\Map\PayLoadIndoorShelf.cshtml" />
-    <Content Include="Views\PayLoad\RawData.cshtml" />
-    <Content Include="Views\DroneFlight\ListVdeos.cshtml" />
-    <Content Include="Views\DroneFlight\FlightSetup.cshtml" />
+    <Content Include="Views\DroneFlight\FlightSetupMap.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Report\" />
+    <Folder Include="Views\UserLogin\" />
     <Folder Include="Weather\" />
   </ItemGroup>
   <ItemGroup>
@@ -1038,6 +1051,12 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.S3.3.2.3.0-beta\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\Cathey\amazonfileupload-master\amazonfileupload-master\FileStorageUtils\FileStorageUtils.csproj">
+      <Project>{6cabaa57-63d3-446f-b44c-6ffa9acb1367}</Project>
+      <Name>FileStorageUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
