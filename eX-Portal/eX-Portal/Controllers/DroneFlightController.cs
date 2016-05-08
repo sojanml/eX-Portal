@@ -647,6 +647,38 @@ namespace eX_Portal.Controllers {
             if (flightsetupvm.DroneSetup.DroneId < 1 ) ModelState.AddModelError("DroneId", "You must select a Drone.");
             if (flightsetupvm.DroneSetup.PilotUserId < 1 || flightsetupvm.DroneSetup.PilotUserId == null) ModelState.AddModelError("PilotUserId", "You must select a pilot.");
             if (flightsetupvm.DroneSetup.GroundStaffUserId < 1 || flightsetupvm.DroneSetup.GroundStaffUserId == null) ModelState.AddModelError("GroundStaffUserId", "A Ground staff should be selected.");
+            string[] Coord = flightsetupvm.GcaApproval.Coordinates.Split(',');
+            string Poly = flightsetupvm.GcaApproval.Coordinates + "," + Coord[0];
+            DateTime todaydate = System.DateTime.Now;
+            if (flightsetupvm.GcaApproval.ApprovalName == null)
+            {
+                if (flightsetupvm.GcaApproval.Coordinates == null)
+                { }
+                else
+                {
+                    //To update in GCA_Approval table
+                    string sqlgcaapprovalupdate = @"Update [GCA_Approval] set Polygon=geography::STGeomFromText('POLYGON((" + Poly + "))', 4326).MakeValid(),"
+                    + "Coordinates ='" + flightsetupvm.GcaApproval.Coordinates + "',BoundaryInMeters=50"
+                    + "where ApprovalID=" + flightsetupvm.GcaApproval.ApprovalID;
+                    int result3 = Util.doSQL(sqlgcaapprovalupdate);
+                }
+            }
+            else
+            {
+                if (flightsetupvm.GcaApproval.Coordinates == null)
+                { }
+                else
+                {
+                    //To insert in GCA_Approval table
+                    string sqlinsertgca = @"insert into GCA_Approval(ApprovalName,ApprovalDate,StartDate,EndDate,Coordinates,Polygon,CreatedOn,CreatedBy,DroneID,EndTime,StartTime,BoundaryInMeters)
+                    values('" + flightsetupvm.GcaApproval.ApprovalName + "','" + System.DateTime.Now + "','" + System.DateTime.Now + "','" + todaydate.AddDays(90) + "','" +
+                    flightsetupvm.GcaApproval.Coordinates + "',geography::STGeomFromText('POLYGON((" + Poly + "))', 4326).MakeValid(),'" +
+                    System.DateTime.Now + "'," + Convert.ToInt32(Session["UserID"].ToString()) + "," + flightsetupvm.DroneSetup.DroneId +
+                    ",'6:00pm','8:00am'" + ",50" + ")";
+                    int result2 = Util.doSQL(sqlinsertgca);
+                }               
+            }           
+            
             string sqlcheck = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + flightsetupvm.DroneSetup.DroneId;
             int result = Util.getDBInt(sqlcheck);
             if (result > 0)
@@ -654,25 +686,13 @@ namespace eX_Portal.Controllers {
                 string sqlupdate = @"update MSTR_Drone_Setup set PilotUserId=" + flightsetupvm.DroneSetup.PilotUserId + ",GroundStaffUserId=" + flightsetupvm.DroneSetup.GroundStaffUserId +
                 ",[BatteryVoltage]=" + flightsetupvm.DroneSetup.BatteryVoltage + ",[Weather]='" + flightsetupvm.DroneSetup.Weather + "',[UasPhysicalCondition]='" + flightsetupvm.DroneSetup.UasPhysicalCondition
                 + "',[ModifiedBy]=" + Convert.ToInt32(Session["UserID"].ToString()) + ",[ModifiedOn]='" + System.DateTime.Now + "' where [DroneId]=" + flightsetupvm.DroneSetup.DroneId;
-                int result1 = Util.doSQL(sqlupdate);
-
-                //To update in GCA_Approval table
-                string sqlgcaapprovalupdate = @"Update [GCA_Approval] set Polygon=Polygon.ReorientObject().MakeValid(),
-                                              Coordinates=" + flightsetupvm.GcaApproval.Coordinates +
-                                              "where Polygon.STArea()>999999999999 and ApprovalID=" + flightsetupvm.GcaApproval.ApprovalID;
-                int result2 = Util.doSQL(sqlgcaapprovalupdate);
+                int result1 = Util.doSQL(sqlupdate);               
             }
             else
             {
                 if (ModelState.IsValid)
                 {
-                    int ID = 0;
-                    //To update in GCA_Approval table
-                    string sqlgcaapprovalupdate = @"Update [GCA_Approval] set Polygon=Polygon.ReorientObject().MakeValid(),
-                                              Coordinates=" + flightsetupvm.GcaApproval.Coordinates +
-                                              "where Polygon.STArea()>999999999999 and ApprovalID=" + flightsetupvm.GcaApproval.ApprovalID;
-                    int result2 = Util.doSQL(sqlgcaapprovalupdate);
-
+                    int ID = 0;                                   
                     ExponentPortalEntities db = new ExponentPortalEntities();
                     flightsetupvm.DroneSetup.CreatedBy = Convert.ToInt32(Session["UserID"].ToString());
                     flightsetupvm.DroneSetup.CreatedOn = System.DateTime.Now;
