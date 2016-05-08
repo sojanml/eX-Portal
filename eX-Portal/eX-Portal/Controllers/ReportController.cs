@@ -167,11 +167,12 @@ namespace eX_Portal.Controllers {
             var chart = new Chart
             {
                 Width = 1000,
-                Height = 450,
+                Height = 300,
                 RenderType = RenderType.ImageTag,
                 AntiAliasing = AntiAliasingStyles.All,
                 TextAntiAliasingQuality = TextAntiAliasingQuality.High
             };
+      
 
             chart.Titles.Add("Values");
             chart.Titles[0].Font = new Font("Arial", 16f);
@@ -185,8 +186,10 @@ namespace eX_Portal.Controllers {
             chart.ChartAreas[0].AxisX.LabelStyle.Font = new Font("Arial", 10f);
             chart.ChartAreas[0].AxisX.LabelStyle.Angle = -90;
             chart.ChartAreas[0].BackColor = Color.White;
+            chart.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.Silver;
+      chart.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.Silver;
 
-            chart.Series.Add("Altitude");
+      chart.Series.Add("Altitude");
             chart.Series.Add("Speed");
 
             chart.Series[0].ChartType = SeriesChartType.Line;
