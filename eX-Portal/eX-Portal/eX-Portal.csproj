@@ -1021,7 +1021,6 @@
     <Content Include="Views\PayLoad\RawData.cshtml" />
     <Content Include="Views\DroneFlight\ListVdeos.cshtml" />
     <Content Include="Views\DroneFlight\FlightSetup.cshtml" />
-    <Content Include="Views\DroneFlight\FlightSetupMap.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
