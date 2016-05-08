@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using eX_Portal.ViewModel;
 
 namespace eX_Portal.Controllers {
   public class DroneFlightController : Controller {
@@ -640,32 +641,44 @@ namespace eX_Portal.Controllers {
             return View();
     }
     [HttpPost]
-    public ActionResult FlightSetup(Models.MSTR_Drone_Setup droneSetup)
+    public ActionResult FlightSetup(FlightSetupViewModel flightsetupvm)//Models.MSTR_Drone_Setup droneSetup)
     {
             if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return RedirectToAction("NoAccess", "Home");
-            if (droneSetup.DroneId < 1 ) ModelState.AddModelError("DroneId", "You must select a Drone.");
-            if (droneSetup.PilotUserId < 1 || droneSetup.PilotUserId == null) ModelState.AddModelError("PilotUserId", "You must select a pilot.");
-            if (droneSetup.GroundStaffUserId < 1 || droneSetup.GroundStaffUserId == null) ModelState.AddModelError("GroundStaffUserId", "A Ground staff should be selected.");
-            string sqlcheck = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + droneSetup.DroneId;
+            if (flightsetupvm.DroneSetup.DroneId < 1 ) ModelState.AddModelError("DroneId", "You must select a Drone.");
+            if (flightsetupvm.DroneSetup.PilotUserId < 1 || flightsetupvm.DroneSetup.PilotUserId == null) ModelState.AddModelError("PilotUserId", "You must select a pilot.");
+            if (flightsetupvm.DroneSetup.GroundStaffUserId < 1 || flightsetupvm.DroneSetup.GroundStaffUserId == null) ModelState.AddModelError("GroundStaffUserId", "A Ground staff should be selected.");
+            string sqlcheck = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + flightsetupvm.DroneSetup.DroneId;
             int result = Util.getDBInt(sqlcheck);
             if (result > 0)
             {
-                string sqlupdate = @"update MSTR_Drone_Setup set PilotUserId=" + droneSetup.PilotUserId + ",GroundStaffUserId=" + droneSetup.GroundStaffUserId +
-                ",[BatteryVoltage]=" + droneSetup.BatteryVoltage + ",[Weather]='" + droneSetup.Weather + "',[UasPhysicalCondition]='" + droneSetup.UasPhysicalCondition
-                + "',[ModifiedBy]=" + Convert.ToInt32(Session["UserID"].ToString()) + ",[ModifiedOn]='" + System.DateTime.Now + "' where [DroneId]=" + droneSetup.DroneId;
-                int result1 = Util.doSQL(sqlupdate);               
+                string sqlupdate = @"update MSTR_Drone_Setup set PilotUserId=" + flightsetupvm.DroneSetup.PilotUserId + ",GroundStaffUserId=" + flightsetupvm.DroneSetup.GroundStaffUserId +
+                ",[BatteryVoltage]=" + flightsetupvm.DroneSetup.BatteryVoltage + ",[Weather]='" + flightsetupvm.DroneSetup.Weather + "',[UasPhysicalCondition]='" + flightsetupvm.DroneSetup.UasPhysicalCondition
+                + "',[ModifiedBy]=" + Convert.ToInt32(Session["UserID"].ToString()) + ",[ModifiedOn]='" + System.DateTime.Now + "' where [DroneId]=" + flightsetupvm.DroneSetup.DroneId;
+                int result1 = Util.doSQL(sqlupdate);
+
+                //To update in GCA_Approval table
+                string sqlgcaapprovalupdate = @"Update [GCA_Approval] set Polygon=Polygon.ReorientObject().MakeValid(),
+                                              Coordinates=" + flightsetupvm.GcaApproval.Coordinates +
+                                              "where Polygon.STArea()>999999999999 and ApprovalID=" + flightsetupvm.GcaApproval.ApprovalID;
+                int result2 = Util.doSQL(sqlgcaapprovalupdate);
             }
             else
             {
                 if (ModelState.IsValid)
                 {
                     int ID = 0;
+                    //To update in GCA_Approval table
+                    string sqlgcaapprovalupdate = @"Update [GCA_Approval] set Polygon=Polygon.ReorientObject().MakeValid(),
+                                              Coordinates=" + flightsetupvm.GcaApproval.Coordinates +
+                                              "where Polygon.STArea()>999999999999 and ApprovalID=" + flightsetupvm.GcaApproval.ApprovalID;
+                    int result2 = Util.doSQL(sqlgcaapprovalupdate);
+
                     ExponentPortalEntities db = new ExponentPortalEntities();
-                    droneSetup.CreatedBy = Convert.ToInt32(Session["UserID"].ToString());
-                    droneSetup.CreatedOn = System.DateTime.Now;
-                    db.MSTR_Drone_Setup.Add(droneSetup);
+                    flightsetupvm.DroneSetup.CreatedBy = Convert.ToInt32(Session["UserID"].ToString());
+                    flightsetupvm.DroneSetup.CreatedOn = System.DateTime.Now;
+                    db.MSTR_Drone_Setup.Add(flightsetupvm.DroneSetup);
                     db.SaveChanges();                    
-                    ID = droneSetup.DroneSetupId;
+                    ID = flightsetupvm.DroneSetup.DroneSetupId;
                     db.Dispose();
                 }
             }
@@ -678,7 +691,7 @@ namespace eX_Portal.Controllers {
 
       String SQL = "SELECT * FROM MSTR_Drone_Setup where DroneId=" + droneid;
       var Row = Util.getDBRow(SQL);
-      var Approavals = (
+      var Approvals = (
         from p in db.GCA_Approval
         where p.DroneID == droneid
         select new {
@@ -688,15 +701,32 @@ namespace eX_Portal.Controllers {
         }
       ).ToList();
 
-      Row.Add("Approvals", Approavals);
+      Row.Add("Approvals", Approvals);
       
       return Json(Row, JsonRequestBehavior.AllowGet);
     }
 
-        public ActionResult FlightSetupMap()
+        [HttpGet]
+        public ActionResult FillCordinates(int? ApprovalID)
         {
-            return View();
+
+              var olistCoordinates = (
+              from p in db.GCA_Approval
+              where p.ApprovalID == ApprovalID
+              select new
+              {
+                  Cordinates = p.Coordinates
+              }
+            ).ToList();
+            
+            return Json(olistCoordinates, JsonRequestBehavior.AllowGet);
         }
+
+
+        //public ActionResult FlightSetupMap()
+        //{
+        //    return View();
+        //}
 
     }//class
 }//namespace
