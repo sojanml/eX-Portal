@@ -81,22 +81,33 @@
       </div>
     </div>
 
-      <div id="gcacoordinates" class="editor-field" style="visibility:hidden;">         
-          @Html.EditorFor(model => model.GcaApproval.Coordinates)
-          @Html.ValidationMessageFor(model => model.GcaApproval.Coordinates)
+      <div id="gcacoordinates" class="form-group" style="visibility:hidden;">
+          @Html.LabelFor(model => model.GcaApproval.Coordinates, "Coordinates")
+          <div class="editor-field">
+              @Html.EditorFor(model => model.GcaApproval.Coordinates)
+              @Html.ValidationMessageFor(model => model.GcaApproval.Coordinates)
+          </div>
       </div>
 
-    <div id="polygonmap" class="form-group" style="visibility:hidden;height:500px;width:600px;">    
-        <div id="map_canvas" style="width: 100%; height: 100%;border:1px solid black;"></div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-offset-2 col-md-10">
-        <input id="submitButton" type="submit" value="Create" class="button btn-default" />
+      <div id="newgcaapproval" class="form-group" style="visibility:hidden;">
+          @Html.LabelFor(model => model.GcaApproval.ApprovalName, "New GCA Approval Name")
+          <div class="editor-field">
+              @Html.EditorFor(model => model.GcaApproval.ApprovalName)
+              @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalName)
+          </div>
       </div>
-    </div>
 
-  </div>
+          <div id="polygonmap" class="form-group" style="visibility:hidden;height:500px;width:600px;">
+              <div id="map_canvas" style="width: 100%; height: 100%;border:1px solid black;"></div>
+          </div>
+
+          <div class="form-group">
+              <div class="col-md-offset-2 col-md-10">
+                  <input id="submitButton" type="submit" value="Create" class="button btn-default" />
+              </div>
+          </div>
+
+      </div>
 }
 <style type="text/css">
     html, body {
@@ -221,6 +232,7 @@
           if(olistCoordinates.length>0) {
               document.forms['frmDroneSetup']['GcaApproval.Coordinates'].value = olistCoordinates[0].Cordinates;     
               $("#gcacoordinates").css("visibility","visible");
+              $("#newgcaapproval").css("visibility","visible");              
               $("#polygonmap").css("visibility", "visible");
               initialize();
               updateCordinates();
