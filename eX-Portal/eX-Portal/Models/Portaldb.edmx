@@ -235,10 +235,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="GCAID" Type="int" />
           <Property Name="IsSoftFence" Type="int" />
           <Property Name="voltage" Type="decimal" Precision="18" Scale="5" />
-          <Property Name="OtherFlightIDs" Type="varchar(max)" />
+          <Property Name="OtherFlightIDs" Type="varchar" MaxLength="500" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.GCA_Approval' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="GCA_Approval">
           <Key>
             <PropertyRef Name="ApprovalID" />
@@ -251,7 +249,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.GCA_Approval' does not have a p
           <Property Name="Coordinates" Type="nvarchar" MaxLength="750" />
           <Property Name="Polygon" Type="geography" />
           <Property Name="CreatedOn" Type="datetime" />
-          <Property Name="CreatedBy" Type="datetime" />
           <Property Name="DroneID" Type="int" />
           <Property Name="ApprovalFileUrl" Type="nvarchar" MaxLength="250" />
           <Property Name="EndTime" Type="nvarchar" MaxLength="10" />
@@ -263,6 +260,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.GCA_Approval' does not have a p
           <Property Name="MaxAltitude" Type="int" />
           <Property Name="MinDefault" Type="int" />
           <Property Name="MaxDefault" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
         </EntityType>
         <EntityType Name="LiveDrone">
           <Key>
@@ -885,12 +883,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="SMSSend" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PortalAlert_User">
-          <Property Name="AlertID" Type="int" />
-          <Property Name="UserID" Type="int" />
-        </EntityType>-->
         <EntityType Name="PortalAuth">
           <Key>
             <PropertyRef Name="AuthID" />
@@ -946,11 +938,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have
           <Property Name="IsActive" Type="bit" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SMSTable">
-          <Property Name="CellNumber" Type="nvarchar" MaxLength="20" />
-        </EntityType>-->
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -1031,6 +1018,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="DroneFlight" EntityType="Self.DroneFlight" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneFlightVideo" EntityType="Self.DroneFlightVideo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FlightMapData" EntityType="Self.FlightMapData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GCA_Approval" EntityType="Self.GCA_Approval" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LiveDrone" EntityType="Self.LiveDrone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LUP_Drone" EntityType="Self.LUP_Drone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LUP_Product" EntityType="Self.LUP_Product" Schema="dbo" store:Type="Tables" />
@@ -1090,30 +1078,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
     [BlackBoxData].[FlightID] AS [FlightID], 
     [BlackBoxData].[BBFlightID] AS [BBFlightID]
     FROM [dbo].[BlackBoxData] AS [BlackBoxData]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="GCA_Approval" EntityType="Self.GCA_Approval" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [GCA_Approval].[ApprovalID] AS [ApprovalID], 
-    [GCA_Approval].[ApprovalName] AS [ApprovalName], 
-    [GCA_Approval].[ApprovalDate] AS [ApprovalDate], 
-    [GCA_Approval].[StartDate] AS [StartDate], 
-    [GCA_Approval].[EndDate] AS [EndDate], 
-    [GCA_Approval].[Coordinates] AS [Coordinates], 
-    [GCA_Approval].[Polygon] AS [Polygon], 
-    [GCA_Approval].[CreatedOn] AS [CreatedOn], 
-    [GCA_Approval].[CreatedBy] AS [CreatedBy], 
-    [GCA_Approval].[DroneID] AS [DroneID], 
-    [GCA_Approval].[ApprovalFileUrl] AS [ApprovalFileUrl], 
-    [GCA_Approval].[EndTime] AS [EndTime], 
-    [GCA_Approval].[StartTime] AS [StartTime], 
-    [GCA_Approval].[InnerBoundary] AS [InnerBoundary], 
-    [GCA_Approval].[InnerBoundaryCoord] AS [InnerBoundaryCoord], 
-    [GCA_Approval].[BoundaryInMeters] AS [BoundaryInMeters], 
-    [GCA_Approval].[MinAltitude] AS [MinAltitude], 
-    [GCA_Approval].[MaxAltitude] AS [MaxAltitude], 
-    [GCA_Approval].[MinDefault] AS [MinDefault], 
-    [GCA_Approval].[MaxDefault] AS [MaxDefault]
-    FROM [dbo].[GCA_Approval] AS [GCA_Approval]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadData" EntityType="Self.PayLoadData" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1898,7 +1862,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="GCAID" Type="Int32" />
           <Property Name="IsSoftFence" Type="Int32" />
           <Property Name="voltage" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="OtherFlightIDs" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OtherFlightIDs" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -2223,7 +2187,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="Coordinates" Type="String" MaxLength="750" FixedLength="false" Unicode="true" />
           <Property Name="Polygon" Type="Geography" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="CreatedBy" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
           <Property Name="DroneID" Type="Int32" />
           <Property Name="ApprovalFileUrl" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="EndTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
