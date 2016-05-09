@@ -1,4 +1,5 @@
-﻿@{ 
+﻿@model eX_Portal.ViewModel.FlightViewModel
+@{ 
   Layout = null;
 }
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -44,7 +45,7 @@
   </tr>
 </table>
 <p class="auto-style4">
-    <span class="auto-style5"><strong>DEWA-MFD-FW-00721-03EB </strong></span><strong><br class="auto-style5" />
+    <span class="auto-style5"><strong>@Html.DisplayFor(Model => Model.DroneName) </strong></span><strong><br class="auto-style5" />
     </strong>
     <span class="auto-style2">Flight ID: 323</span></p>
 <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e" >
@@ -55,13 +56,13 @@
     <td class="auto-style2">
     <table style="width: 100%">
       <tr>
-        <td>ID:</td>
-        <td>Pilot:</td>
-        <td>Ground Staff:</td>
+        <td>ID: @Html.DisplayFor(Model =>Model.ID)</td>
+        <td>Pilot: @Html.DisplayFor(Model => Model.PilotName)</td>
+        <td>Ground Staff: @Html.DisplayFor(Model => Model.GSCName)</td>
       </tr>
       <tr>
-        <td>UAS ID:</td>
-        <td>Created On:</td>
+        <td>UAS ID:@Html.DisplayFor(Model => Model.DroneName)</td>
+        <td>Created On: </td>
         <td>Flight Date:</td>
       </tr>
     </table>
@@ -101,25 +102,35 @@
     <td bgcolor="#ea050e" class="auto-style7"><strong>Chart &amp; Flight Parameters</strong></td>
   </tr>
   <tr>
-    <td class="auto-style2"><img src="/Report/GetChart/@ViewBag.FlightID" /></td>
+    <td class="auto-style2"><img src="http://localhost:2727/Report/GetChart/@ViewBag.FlightID" /></td>
   </tr>
 </table>
+
+@Html.Action("DroneCheckWarning", "Report", new { ID = ViewBag.FlightID })
+
 <p class="auto-style6">&nbsp;</p>
 <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e" >
   <tr>
     <td bgcolor="#ea050e"><font face="Arial, Helvetica, sans-serif" color="white"><strong>Warning/Alerts</strong></font></td>
   </tr>
-  <tr>
-    <td class="auto-style2">
-    <ul>
-      <li><p>Alert 001</p></li>
-      <li><p>Alert 002</p></li>
-    </ul>
-    </td>
-  </tr>
+  
+                    @foreach (var element in Model.PortalAlerts)
+                    {
+                        <tr>
+                            <td class="auto-style2">
+                                @Html.DisplayFor(m => element.AlertType)
+                            </td>
+                            <td class="auto-style2">
+                                @Html.DisplayFor(m => element.AlertMessage)
+                            </td>
+                         
+                        </tr>
+                    }
+    
 </table>
 
 
 </body>
 
 </html>
+

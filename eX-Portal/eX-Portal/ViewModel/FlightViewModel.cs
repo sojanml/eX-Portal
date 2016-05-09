@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using eX_Portal.Models;
 
 namespace eX_Portal.ViewModel
 {
@@ -41,10 +42,11 @@ namespace eX_Portal.ViewModel
         public Nullable<decimal> GridLng { get; set; }
         public Nullable<int> FlightHours { get; set; }
 
-        public string PilotName { get; set;}
+        public string PilotName { get; set; }
         public string GSCName { get; set; }
         public int ZoneId { get; set; }
         public string ZoneCoordinates { get; set; }
-
+        public string DroneName { get; set; }
+        public IList<PortalAlert> PortalAlerts {get;set;}
     }
 }
