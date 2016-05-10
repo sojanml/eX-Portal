@@ -269,12 +269,14 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult SMS() {
+      if (!exLogic.User.hasAccess("ADMIN.SMS")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Mode = "edit";
       ViewBag.SMS = getSMS();
       return View();
     }
 
     private String getSMS() {
+      if (!exLogic.User.hasAccess("ADMIN.SMS")) return "Access Denied";
       String SMS = "";
       String SQL = "SELECT CellNumber FROM SMSTable";
       var Rows = Util.getDBRows(SQL);
