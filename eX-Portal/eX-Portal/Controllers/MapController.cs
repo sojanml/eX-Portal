@@ -172,7 +172,7 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult PayLoadIndoor([Bind(Prefix = "ID")] String FlightUniqueID = "") {
-
+      if (!exLogic.User.hasAccess("PAYLOAD.INDOOR")) return RedirectToAction("NoAccess", "Home"); 
       ViewBag.Title = "Indoor Payload Data";
       String SQL =
       @"SELECT DISTINCT
@@ -194,7 +194,8 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult PayLoadIndoorShelf(String ShelfID, String FlightUniqueID) {
-      String SQL =
+    if (!exLogic.User.hasAccess("PAYLOAD.INDOOR")) return RedirectToAction("NoAccess", "Home");
+    String SQL =
     @"SELECT
         [PayLoadMapData].[RFID],
         ISNULL(MSTR_Product.Product_Name, [PayLoadMapData].[RFID]) as ProductName
@@ -309,7 +310,7 @@ namespace eX_Portal.Controllers {
 
     [System.Web.Mvc.HttpGet]
     public JsonResult GetFlightData(int FlightID = 0, int LastFlightDataID = 0, int MaxRecords = 1, int Replay = 0) {
-
+      //if (!exLogic.User.hasAccess("FLIGHT.MAP")) return "NoAccess", "Home";
       ViewBag.FlightID = FlightID;
 
       using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
