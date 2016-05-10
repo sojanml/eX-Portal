@@ -204,6 +204,7 @@
     <Compile Include="Controllers\DroneController.cs" />
     <Compile Include="Controllers\DroneFlightController.cs" />
     <Compile Include="Controllers\DroneServiceController.cs" />
+    <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -1038,6 +1039,9 @@
     </Content>
     <Content Include="SqlParser\ClassDiagram.cd" />
     <Content Include="Views\DroneFlight\FlightSetupMap.cshtml" />
+    <Content Include="Views\Email\Index.cshtml" />
+    <Content Include="Views\Shared\_Email.cshtml" />
+    <Content Include="Views\Email\ForgotPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
