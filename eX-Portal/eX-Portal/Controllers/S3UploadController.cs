@@ -101,6 +101,8 @@ namespace eX_Portal.Controllers {
 
         public ActionResult GCAApproval()
         {
+            //to create gcaapproval
+            if (!exLogic.User.hasAccess("FLIGHT.GCAAPPROVAL")) return RedirectToAction("NoAccess", "Home");
             var fileStorageProvider = new AmazonS3FileStorageProvider();
 
             var fileUploadViewModel = new S3Upload(
@@ -135,6 +137,7 @@ namespace eX_Portal.Controllers {
         [HttpPost]
         public String UploadGCA(GCA_Approval GCA)
         {
+            
             //Doc.DocumentTitle = Doc.DocumentTitle.Trim();
             if (String.IsNullOrWhiteSpace(GCA.ApprovalName))
             {

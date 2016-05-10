@@ -39,6 +39,7 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult InDoorFlightDetails([Bind(Prefix = "ID")] String FlightUniqueID) {
+      if (!exLogic.User.hasAccess("INDOOR.VIEW")) return RedirectToAction("NoAccess", "Home");
       // if (!exLogic.User.hasAccess("PAYLOAD.VIEW")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "In Door Flight Details";
 
@@ -187,10 +188,12 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult InfraRed() {
-      return View();
+       if (!exLogic.User.hasAccess("PAYLOAD.INFRARED")) return RedirectToAction("NoAccess", "Home");
+       return View();
     }
 
     public ActionResult Videography() {
+      if (!exLogic.User.hasAccess("PAYLOAD.VIDEOGRAPHY")) return RedirectToAction("NoAccess", "Home");
       return View();
     }
     public String getRFID(int Row, int Column, String FlightUniqueID) {

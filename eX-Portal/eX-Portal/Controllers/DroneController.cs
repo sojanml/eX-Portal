@@ -690,7 +690,8 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult Document([Bind(Prefix = "ID")] int? DroneID) {
-      using (var ctx = new ExponentPortalEntities()) {
+            if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home");
+            using (var ctx = new ExponentPortalEntities()) {
         var List = ctx.DroneDocuments.ToList();
         var aa = (from p in List where p.DroneID == DroneID select p).ToList(); ;
         return View(aa);
@@ -700,6 +701,7 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult GCAApproval() {
+      if (!exLogic.User.hasAccess("FLIGHT.GCAAPPROVAL")) return RedirectToAction("NoAccess", "Home");
       String SQL = "SELECT [ApprovalID]\n ,[ApprovalName]\n,[ApprovalDate]\n,[StartDate]\n ,[EndDate]\n ,[StartTime]\n,[EndTime]\n,[ApprovalFileUrl]\n,Count(*) Over() as _TotalRecords,DroneID as _PKey FROM[ExponentPortal].[dbo].[GCA_Approval]";
       qView nView = new qView(SQL);
       if (Request.IsAjaxRequest()) {
@@ -711,7 +713,8 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult GCADetails([Bind(Prefix = "ID")] int? DroneID) {
-      using (var ctx = new ExponentPortalEntities()) {
+        if (!exLogic.User.hasAccess("FLIGHT.GCAAPPROVAL")) return RedirectToAction("NoAccess", "Home");
+        using (var ctx = new ExponentPortalEntities()) {
         var List = ctx.GCA_Approval.ToList();
         var aa = (from p in List where p.DroneID == DroneID select p).ToList();
         return View(aa);

@@ -94,6 +94,7 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult GeoTag([Bind(Prefix = "ID")] int FlightID = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT.GEOTAG")) return RedirectToAction("NoAccess", "Home");
       ExponentPortalEntities Db = new ExponentPortalEntities();
       ViewBag.FlightID = FlightID;
       List<DroneDocument> Docs = (from o in Db.DroneDocuments
@@ -647,28 +648,33 @@ namespace eX_Portal.Controllers {
             if (flightsetupvm.DroneSetup.DroneId < 1 ) ModelState.AddModelError("DroneId", "You must select a Drone.");
             if (flightsetupvm.DroneSetup.PilotUserId < 1 || flightsetupvm.DroneSetup.PilotUserId == null) ModelState.AddModelError("PilotUserId", "You must select a pilot.");
             if (flightsetupvm.DroneSetup.GroundStaffUserId < 1 || flightsetupvm.DroneSetup.GroundStaffUserId == null) ModelState.AddModelError("GroundStaffUserId", "A Ground staff should be selected.");
-            string[] Coord = flightsetupvm.GcaApproval.Coordinates.Split(',');
-            string Poly = flightsetupvm.GcaApproval.Coordinates + "," + Coord[0];
+
             DateTime todaydate = System.DateTime.Now;
+
             if (flightsetupvm.GcaApproval.ApprovalName == null)
             {
                 if (flightsetupvm.GcaApproval.Coordinates == null)
                 { }
                 else
                 {
+                    string[] Coord = flightsetupvm.GcaApproval.Coordinates.Split(',');
+                    string Poly = flightsetupvm.GcaApproval.Coordinates + "," + Coord[0];
                     //To update in GCA_Approval table
                     string sqlgcaapprovalupdate = @"Update [GCA_Approval] set Polygon=geography::STGeomFromText('POLYGON((" + Poly + "))', 4326).MakeValid(),"
                     + "Coordinates ='" + flightsetupvm.GcaApproval.Coordinates + "',BoundaryInMeters=50"
                     + "where ApprovalID=" + flightsetupvm.GcaApproval.ApprovalID;
                     int result3 = Util.doSQL(sqlgcaapprovalupdate);
+                     
                 }
             }
             else
             {
-                if (flightsetupvm.GcaApproval.Coordinates == null)
+                if(flightsetupvm.GcaApproval.Coordinates == null)
                 { }
                 else
                 {
+                    string[] Coord = flightsetupvm.GcaApproval.Coordinates.Split(',');
+                    string Poly = flightsetupvm.GcaApproval.Coordinates + "," + Coord[0];
                     //To insert in GCA_Approval table
                     string sqlinsertgca = @"insert into GCA_Approval(ApprovalName,ApprovalDate,StartDate,EndDate,Coordinates,Polygon,CreatedOn,CreatedBy,DroneID,EndTime,StartTime,BoundaryInMeters)
                     values('" + flightsetupvm.GcaApproval.ApprovalName + "','" + System.DateTime.Now + "','" + System.DateTime.Now + "','" + todaydate.AddDays(90) + "','" +
@@ -685,7 +691,8 @@ namespace eX_Portal.Controllers {
             {
                 string sqlupdate = @"update MSTR_Drone_Setup set PilotUserId=" + flightsetupvm.DroneSetup.PilotUserId + ",GroundStaffUserId=" + flightsetupvm.DroneSetup.GroundStaffUserId +
                 ",[BatteryVoltage]=" + flightsetupvm.DroneSetup.BatteryVoltage + ",[Weather]='" + flightsetupvm.DroneSetup.Weather + "',[UasPhysicalCondition]='" + flightsetupvm.DroneSetup.UasPhysicalCondition
-                + "',[ModifiedBy]=" + Convert.ToInt32(Session["UserID"].ToString()) + ",[ModifiedOn]='" + System.DateTime.Now + "' where [DroneId]=" + flightsetupvm.DroneSetup.DroneId;
+                + "',[ModifiedBy]=" + Convert.ToInt32(Session["UserID"].ToString()) + ",[ModifiedOn]='" + System.DateTime.Now + "',[NotEmails]='"+flightsetupvm.DroneSetup.NotEmails
+                +"' where [DroneId]=" + flightsetupvm.DroneSetup.DroneId;
                 int result1 = Util.doSQL(sqlupdate);               
             }
             else
