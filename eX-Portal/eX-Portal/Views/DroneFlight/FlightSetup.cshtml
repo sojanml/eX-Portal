@@ -73,6 +73,14 @@
       </div>
     </div>
 
+      <div class="form-group">
+          @Html.LabelFor(model => model.DroneSetup.NotEmails, "Flight Notification Emails")
+          <div class="col-md-10">              
+              @Html.EditorFor(model => model.DroneSetup.NotEmails, new { htmlAttributes = new { @class = "form-control" } })              
+              @Html.ValidationMessageFor(model => model.DroneSetup.NotEmails, "", new { @class = "text-danger" })
+          </div>
+      </div>
+
     <div class="form-group">
       @Html.LabelFor(model => model.GcaApproval.ApprovalID, "GCA Approvals")
       <div class="col-md-10">
@@ -204,8 +212,8 @@
               document.forms['frmDroneSetup']['DroneSetup.GroundStaffUserId'].value = Row.GroundStaffUserId;
               document.forms['frmDroneSetup']['DroneSetup.BatteryVoltage'].value=Row.BatteryVoltage;
               document.forms['frmDroneSetup']['DroneSetup.Weather'].value=Row.Weather;
-              document.forms['frmDroneSetup']['DroneSetup.UasPhysicalCondition'].value=Row.UasPhysicalCondition;
-              
+              document.forms['frmDroneSetup']['DroneSetup.UasPhysicalCondition'].value=Row.UasPhysicalCondition;              
+              document.forms['frmDroneSetup']['DroneSetup.NotEmails'].value=Row.NotEmails; 
               $("#GcaApproval_ApprovalID").html(""); // clear before appending new list
               $("#GcaApproval_ApprovalID").append(
                  $('<option></option>').val(0).html("--Select GCA Approval--"));
@@ -223,7 +231,7 @@
               document.forms['frmDroneSetup']['DroneSetup.BatteryVoltage'].value=0;
               document.forms['frmDroneSetup']['DroneSetup.Weather'].html="--Select Weather--";
               document.forms['frmDroneSetup']['DroneSetup.UasPhysicalCondition'].html="--Select UAS Physical Condition--";
-              
+              document.forms['frmDroneSetup']['DroneSetup.NotEmails'].html="--Enter Email id--";
           }
       }//DroneID_Success
 
