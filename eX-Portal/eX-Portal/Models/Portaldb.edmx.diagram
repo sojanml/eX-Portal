@@ -46,6 +46,9 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PortalAuth" Width="1.5" PointX="0.75" PointY="20.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.sysdiagram" Width="1.5" PointX="17.375" PointY="20.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone_Setup" Width="1.5" PointX="19.375" PointY="20.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.FlightInfo" Width="1.5" PointX="21.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PortalAlertEmail" Width="1.5" PointX="21.375" PointY="6.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PortalAlertRegistration" Width="1.5" PointX="7.375" PointY="21.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
