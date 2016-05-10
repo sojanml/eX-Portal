@@ -15,7 +15,33 @@ using System.Text;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
+    public static int EmailQue(
+      int UserID,
+      String ToAddress,
+      String EmailSubject,
+      String EmailURL) {
+      int QueID = 0;
+      using (var ctx = new ExponentPortalEntities()) {
+        var Email = new PortalAlertEmail { 
+          EmailSubject = EmailSubject,
+          EmailURL = EmailURL,
+          Body = null,
+          FromAddress = "info@exponent-ts.com",
+          ToAddress = ToAddress,
+          UserID = UserID,
+          //default values set for items
+          CreatedOn = DateTime.Now,
+          IsSend = 0,
+          SendOn = null,
+          SendStatus = "In Queue"
+        };
+        ctx.PortalAlertEmails.Add(Email);
+        ctx.SaveChanges();
+        QueID = Email.EmailID;
+      }
 
+      return QueID;
+    }
 
     public static String toCaption(String Title) {
       Title = Regex.Replace(Title, "([A-Z][a-z])", m => " " + m.Groups[1]);
@@ -509,6 +535,8 @@ namespace eX_Portal.exLogic {
       return str.ToString();
     }//static string gEncode
 
-  }
 
-}//class Util
+
+  }//class Util
+
+}//eX_Portal.exLogic
