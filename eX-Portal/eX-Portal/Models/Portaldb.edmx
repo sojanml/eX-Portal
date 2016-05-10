@@ -481,6 +481,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="NotEmails" Type="nvarchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="MSTR_DroneCheckList">
           <Key>
@@ -2284,6 +2285,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="NotEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3314,6 +3316,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="MSTR_Drone_Setup">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone_Setup">
               <MappingFragment StoreEntitySet="MSTR_Drone_Setup">
+                <ScalarProperty Name="NotEmails" ColumnName="NotEmails" />
                 <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
