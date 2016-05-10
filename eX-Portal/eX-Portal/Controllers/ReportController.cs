@@ -30,7 +30,7 @@ namespace eX_Portal.Controllers {
     public String GoogleMap([Bind(Prefix = "ID")]int FlightID = 0) {
       var GoogleAPI = ConfigurationManager.AppSettings["GoogleAPI"];
       var GeoPoints = (from n in db.FlightMapDatas
-                       where n.FlightID == 284
+                       where n.FlightID == FlightID
                        orderby n.FlightMapDataID
                        select new GeoLocation { 
                          Latitude = (Double)n.Latitude,
@@ -39,23 +39,28 @@ namespace eX_Portal.Controllers {
       var FirstPoint = GeoPoints.First();
       var GoogleURL = "https://maps.googleapis.com/maps/api/staticmap" +
       "?center=" + FirstPoint.Latitude + "," + FirstPoint.Longitude +
-      "&zoom=15&size=640x400" +
+      "&size=640x400" +
+      getGoogleBoundary(FlightID) +
       "&path=color:0x0000ff|weight:2|enc:" + gEncode(GeoPoints);
+       
 
       return GoogleURL;
 
     }//public ActionResult GoogleMap
 
-    public String Boundary([Bind(Prefix = "ID")]int FlightID = 0) {
+    public String getGoogleBoundary([Bind(Prefix = "ID")]int FlightID = 0) {
       /*select Coordinates, InnerBoundaryCoord  from GCA_Approval where droneid=50*/
+      StringBuilder GoogleURL = new StringBuilder();
       List<GeoLocation> 
         Inner = new List<GeoLocation>(), 
         Outer = new List<GeoLocation>(), 
         Polygon = new List<GeoLocation>();
 
       var GeoPoints = (from t1 in db.GCA_Approval
-                       join t2 in db.DroneFlights on t1.DroneID equals t2.DroneID
-                       where t2.ID == FlightID
+                       join t2 in db.DroneFlights on t1.DroneID equals t2.DroneID 
+                       where t2.ID == FlightID &&
+                       t2.CreatedOn >= t1.StartDate &&
+                       t2.CreatedOn <= t1.EndDate
                        select new {
                          Outer = t1.Polygon.AsText(),
                          Inner = t1.InnerBoundaryCoord
@@ -73,20 +78,16 @@ namespace eX_Portal.Controllers {
         }
         Polygon.AddRange(Outer);
 
-        break;
+
+        GoogleURL.Append("&path=fillcolor:0xFF9B5299|weight:0|enc:" + gEncode(Polygon));
+        GoogleURL.Append("&path=fillcolor:0x5AD74699|weight:0|enc:" + gEncode(Inner));
+        GoogleURL.Append("&path=color:0xF42D2DAA|weight:2|enc:" + gEncode(Outer));
 
       }
-      var FirstPoint = Outer.FirstOrDefault();
-
-      var GoogleURL = "https://maps.googleapis.com/maps/api/staticmap" +
-      "?center=" + FirstPoint.Latitude + "," + FirstPoint.Longitude +
-      "&zoom=15&size=640x400" +
-      "&path=color:0x0000ff|weight:2|enc:" + gEncode(Polygon);
 
       //remove the last point from Inner Polygon
 
-
-      return GoogleURL;
+      return GoogleURL.ToString();
 
     }//public ActionResult GoogleMap
 
@@ -110,6 +111,7 @@ namespace eX_Portal.Controllers {
         {
             // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
             ViewBag.FlightID = FlightID;
+            /*
             var GeoPoints = (from n in db.FlightMapDatas
                              where n.FlightID == FlightID
                              orderby n.FlightMapDataID
@@ -118,7 +120,7 @@ namespace eX_Portal.Controllers {
                                  Latitude = (Double)n.Latitude,
                                  Longitude = (Double)n.Longitude
                              }).ToList();
-
+*/
             var FlightData = (from n in db.DroneFlights
                               where n.ID == FlightID
                               select new FlightViewModel
@@ -187,9 +189,9 @@ namespace eX_Portal.Controllers {
         {
             String CheckListMessage = "";
            
-            int DroneId, UserId;
+            //int DroneId, UserId;
 
-            string UASFormat, PilotFormat;
+            //string UASFormat, PilotFormat;
             String UploadedDocs = "";
 
             String SQL = @"
