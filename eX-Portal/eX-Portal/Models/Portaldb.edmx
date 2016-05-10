@@ -179,6 +179,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="GridLat" Type="decimal" Precision="18" Scale="5" />
           <Property Name="GridLng" Type="decimal" Precision="18" Scale="5" />
           <Property Name="FlightHours" Type="int" />
+          <Property Name="HasFlightInfo" Type="int" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -655,6 +656,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="Dashboard" Type="nvarchar" MaxLength="50" />
           <Property Name="AccountId" Type="int" />
           <Property Name="IsPilot" Type="bit" />
+          <Property Name="GeneratedPassword" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -1965,6 +1967,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="GridLat" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="GridLng" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="FlightHours" Type="Int32" />
+          <Property Name="HasFlightInfo" Type="Int32" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -2027,6 +2030,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="IsPilot" Type="Boolean" />
           <Property Name="UserAccountId" Type="Int32" />
           <Property Name="Dashboard" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GeneratedPassword" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PayLoadData">
           <Key>
@@ -2958,6 +2962,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="HasFlightInfo" ColumnName="HasFlightInfo" />
                 <ScalarProperty Name="FlightHours" ColumnName="FlightHours" />
                 <ScalarProperty Name="GridLng" ColumnName="GridLng" />
                 <ScalarProperty Name="GridLat" ColumnName="GridLat" />
@@ -3027,6 +3032,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="MSTR_User">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
               <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="GeneratedPassword" ColumnName="GeneratedPassword" />
                 <ScalarProperty Name="Dashboard" ColumnName="Dashboard" />
                 <ScalarProperty Name="UserAccountId" ColumnName="UserAccountId" />
                 <ScalarProperty Name="IsPilot" ColumnName="IsPilot" />
