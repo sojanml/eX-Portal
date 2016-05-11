@@ -1053,6 +1053,8 @@
     <Content Include="SqlParser\ClassDiagram.cd" />
     <Content Include="Views\DroneFlight\FlightSetupMap.cshtml" />
     <Content Include="Views\User\ForgotPassword.cshtml" />
+    <Content Include="Views\Email\ForgotPassword.cshtml" />
+    <Content Include="Views\Email\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
