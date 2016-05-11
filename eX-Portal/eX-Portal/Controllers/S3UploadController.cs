@@ -99,7 +99,7 @@ namespace eX_Portal.Controllers {
       return FileOnly.Substring(UKeyEnd + 1);
     }
 
-        public ActionResult GCAApproval()
+        public ActionResult GCAApproval(int ID=0)
         {
             //to create gcaapproval
             if (!exLogic.User.hasAccess("FLIGHT.GCAAPPROVAL")) return RedirectToAction("NoAccess", "Home");
@@ -129,10 +129,53 @@ namespace eX_Portal.Controllers {
             ViewBag.Signature = fileUploadViewModel.Signature;
 
             var GCAApprovalDoc = new GCA_Approval();
+            if(ID != 0)
+            {
+                var olist = (from p in db.GCA_Approval where p.ApprovalID == ID select p).ToList();
+                if (olist.Count > 0)
+                {
+                    GCAApprovalDoc.DroneID = olist[0].DroneID;
+                    GCAApprovalDoc.ApprovalName = olist[0].ApprovalName;
+                    GCAApprovalDoc.Coordinates = olist[0].Coordinates;
+
+                    GCAApprovalDoc.ApprovalDate = olist[0].ApprovalDate;
+                    GCAApprovalDoc.StartDate = olist[0].StartDate;
+                    GCAApprovalDoc.EndDate = olist[0].EndDate;
+
+                    GCAApprovalDoc.StartTime = olist[0].StartTime;
+                    GCAApprovalDoc.EndTime = olist[0].EndTime;
+                    GCAApprovalDoc.MinAltitude = olist[0].MinAltitude;
+
+                    GCAApprovalDoc.MaxAltitude = olist[0].MaxAltitude;
+                    GCAApprovalDoc.BoundaryInMeters = olist[0].BoundaryInMeters;
+                }
+            }
             return View(GCAApprovalDoc);
 
         }//ActionResult GCAApproval()
 
+
+        public String DeleteGCAApproval(int? ID = 0)
+        {
+            //to create gcaapproval            
+            //using (ExponentPortalEntities Context = new ExponentPortalEntities())
+            //{
+            //    GCA_Approval ApprovalDelete = Context.GCA_Approval.Find(ID);
+            //    Context.GCA_Approval.Remove(ApprovalDelete);
+            //    Context.SaveChanges();
+            //}
+
+            String SQL = "";
+            Response.ContentType = "text/json";
+            if (!exLogic.User.hasAccess("DRONE.DELETE"))
+                return Util.jsonStat("ERROR", "Access Denied");
+            
+            SQL = "DELETE FROM [GCA_Approval] WHERE ApprovalID = " + ID;
+            Util.doSQL(SQL);
+
+            return Util.jsonStat("OK");
+
+        }
 
         [HttpPost]
         public String UploadGCA(GCA_Approval GCA)
