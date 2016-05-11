@@ -844,10 +844,13 @@ namespace eX_Portal.Controllers
                     if (Util.getDBRow(sqlcheck).Count > 0)
                     {
                         var Row = Util.getDBRow(sqlcheck);
-                        var obj = Row["EmailId"];
+                        var obj = Row["EmailId"].ToString();                
                         var newpaswd = DroneFlightSetup.RandomPassword();
                         string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + obj + "'";
                         int result = Util.doSQL(updatepswdsql);
+                        var mailurl = "~/";
+                        var mailsubject = "Confidential Mail from Exponent";
+                        Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), obj, mailsubject, mailurl);
                     }                
             }
             return "OK";
