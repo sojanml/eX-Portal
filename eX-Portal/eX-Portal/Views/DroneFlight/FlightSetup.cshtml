@@ -8,7 +8,7 @@
 
 @Html.AntiForgeryToken()
 
-  <div class="form-horizontal">
+  <div id="frm" class="form-horizontal">
    <div class="error" id="error-message" style="display:none"></div>
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -76,10 +76,10 @@
     </div>
 
       <div class="form-group">
-          @Html.LabelFor(model => model.DroneSetup.NotEmails, "Flight Notification Emails(separated by ,)")
+          @Html.LabelFor(model => model.DroneSetup.NotificationEmails, "Flight Notification Emails(separated by ,)")
           <div class="col-md-10">              
-              @Html.EditorFor(model => model.DroneSetup.NotEmails, new { htmlAttributes = new { @class = "form-control" } })              
-              @Html.ValidationMessageFor(model => model.DroneSetup.NotEmails, "", new { @class = "text-danger" })
+              @Html.EditorFor(model => model.DroneSetup.NotificationEmails, new { htmlAttributes = new { @class = "form-control" } })              
+              @Html.ValidationMessageFor(model => model.DroneSetup.NotificationEmails, "", new { @class = "text-danger" })
           </div>
       </div>
 
@@ -142,18 +142,29 @@
 
   <script>
       var map = null;
+      var Form = document.forms['frmDroneSetup'];
       $(document).ready(function(){
-          document.forms['frmDroneSetup']['GcaApproval.Coordinates'].value='24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375'; 
+          Form['GcaApproval.Coordinates'].value='24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375'; 
           initialize();
           updateCordinates();  
       $("#submitButton").on("click",function(e) {
           e.preventDefault();
           $("body").scrollTop(0);
+          var data=$('#frmDroneSetup').serialize();
+
+          $('#error-message')
+          .html("Updating....Please Wait.")
+          .show();         
+          
+          $("#frmDroneSetup :input").prop("disabled", true);
+
         $.ajax({
           type: 'POST',
           url: '/DroneFlight/FlightSetup',
-          data: $('form').serialize(),
+          data: data,
           success: function (data) {
+              $("#frmDroneSetup :input").prop("disabled", false);
+
               if(data=='OK')
               {
                 $('#error-message')
@@ -236,7 +247,7 @@
               document.forms['frmDroneSetup']['DroneSetup.BatteryVoltage'].value=Row.BatteryVoltage;
               document.forms['frmDroneSetup']['DroneSetup.Weather'].value=Row.Weather;
               document.forms['frmDroneSetup']['DroneSetup.UasPhysicalCondition'].value=Row.UasPhysicalCondition;              
-              document.forms['frmDroneSetup']['DroneSetup.NotEmails'].value=Row.NotEmails; 
+              document.forms['frmDroneSetup']['DroneSetup.NotificationEmails'].value=Row.NotificationEmails; 
               document.forms['frmDroneSetup']['GcaApproval.ApprovalName'].value='';
               document.forms['frmDroneSetup']['GcaApproval.Coordinates'].value='24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375'; 
               initialize();
@@ -258,7 +269,7 @@
               document.forms['frmDroneSetup']['DroneSetup.BatteryVoltage'].value=0;
               document.forms['frmDroneSetup']['DroneSetup.Weather'].value='';
               document.forms['frmDroneSetup']['DroneSetup.UasPhysicalCondition'].value='';
-              document.forms['frmDroneSetup']['DroneSetup.NotEmails'].value=''; 
+              document.forms['frmDroneSetup']['DroneSetup.NotificationEmails'].value=''; 
               document.forms['frmDroneSetup']['GcaApproval.ApprovalName'].value='';
               $("#map_canvas").empty();
               $("#GcaApproval_ApprovalID").html(""); // clear before appending new list
