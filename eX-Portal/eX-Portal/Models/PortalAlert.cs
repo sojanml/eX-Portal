@@ -25,5 +25,6 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<int> SMSSend { get; set; }
         public string AlertType { get; set; }
+        public string AlertCategory { get; set; }
     }
 }

@@ -17,12 +17,12 @@ namespace eX_Portal.Models
         public int ID { get; set; }
         public Nullable<int> FlightID { get; set; }
         public string Condition { get; set; }
-        public Nullable<decimal> WindSpeed { get; set; }
-        public Nullable<decimal> Humidity { get; set; }
+        public string WindSpeed { get; set; }
+        public string Humidity { get; set; }
         public Nullable<decimal> Visibility { get; set; }
         public Nullable<decimal> Pressure { get; set; }
-        public Nullable<decimal> Temperature { get; set; }
-        public Nullable<decimal> Wind { get; set; }
+        public string Temperature { get; set; }
+        public string Wind { get; set; }
         public Nullable<decimal> MaxAltiude { get; set; }
         public Nullable<decimal> MinAltitude { get; set; }
         public Nullable<decimal> AvgAltitude { get; set; }
