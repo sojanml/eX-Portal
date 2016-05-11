@@ -179,6 +179,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="GridLat" Type="decimal" Precision="18" Scale="5" />
           <Property Name="GridLng" Type="decimal" Precision="18" Scale="5" />
           <Property Name="FlightHours" Type="int" />
+          <Property Name="HasFlightInfo" Type="int" />
+          <Property Name="FlightDistance" Type="decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -191,6 +193,29 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="VideoDateTime" Type="datetime" />
           <Property Name="IsDeleted" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FlightInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FlightID" Type="int" />
+          <Property Name="Condition" Type="nvarchar" MaxLength="50" />
+          <Property Name="WindSpeed" Type="nvarchar" MaxLength="50" />
+          <Property Name="Humidity" Type="nvarchar" MaxLength="50" />
+          <Property Name="Visibility" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Pressure" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Temperature" Type="nvarchar" MaxLength="50" />
+          <Property Name="Wind" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaxAltiude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="MinAltitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="AvgAltitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="MaxSpeed" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="MinSpeed" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="AvgSpeed" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="MaxSatellites" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="MinSatellites" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="AvgSatellites" Type="decimal" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="FlightMapData">
           <Key>
@@ -481,7 +506,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedOn" Type="datetime" />
-          <Property Name="NotEmails" Type="nvarchar" MaxLength="300" />
+          <Property Name="NotificationEmails" Type="nvarchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="MSTR_DroneCheckList">
           <Key>
@@ -655,6 +680,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="Dashboard" Type="nvarchar" MaxLength="50" />
           <Property Name="AccountId" Type="int" />
           <Property Name="IsPilot" Type="bit" />
+          <Property Name="GeneratedPassword" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -883,6 +909,34 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="AlertType" Type="varchar" MaxLength="50" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="SMSSend" Type="int" />
+          <Property Name="AlertCategory" Type="nvarchar" MaxLength="25" />
+        </EntityType>
+        <EntityType Name="PortalAlertEmail">
+          <Key>
+            <PropertyRef Name="EmailID" />
+          </Key>
+          <Property Name="EmailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FromAddress" Type="varchar" MaxLength="120" />
+          <Property Name="ToAddress" Type="varchar" MaxLength="120" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="EmailSubject" Type="varchar" MaxLength="120" />
+          <Property Name="Body" Type="varchar(max)" />
+          <Property Name="EmailURL" Type="varchar" MaxLength="600" />
+          <Property Name="Attachments" Type="varchar(max)" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="IsSend" Type="tinyint" />
+          <Property Name="SendStatus" Type="varchar" MaxLength="250" />
+          <Property Name="SendOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PortalAlertRegistration">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountID" Type="int" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="Url" Type="varchar" MaxLength="200" Nullable="false" />
         </EntityType>
         <EntityType Name="PortalAuth">
           <Key>
@@ -1018,6 +1072,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySet Name="DroneDocuments" EntityType="Self.DroneDocuments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneFlight" EntityType="Self.DroneFlight" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneFlightVideo" EntityType="Self.DroneFlightVideo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FlightInfo" EntityType="Self.FlightInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FlightMapData" EntityType="Self.FlightMapData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GCA_Approval" EntityType="Self.GCA_Approval" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LiveDrone" EntityType="Self.LiveDrone" Schema="dbo" store:Type="Tables" />
@@ -1045,6 +1100,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySet Name="MSTR_User_Pilot_ExponentUAS" EntityType="Self.MSTR_User_Pilot_ExponentUAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoad_AutoFix" EntityType="Self.PayLoad_AutoFix" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoadYard" EntityType="Self.PayLoadYard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PortalAlertEmail" EntityType="Self.PortalAlertEmail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PortalAlertRegistration" EntityType="Self.PortalAlertRegistration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortalAuth" EntityType="Self.PortalAuth" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
@@ -1213,7 +1270,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
     [PortalAlert].[AlertMessage] AS [AlertMessage], 
     [PortalAlert].[AlertType] AS [AlertType], 
     [PortalAlert].[CreatedOn] AS [CreatedOn], 
-    [PortalAlert].[SMSSend] AS [SMSSend]
+    [PortalAlert].[SMSSend] AS [SMSSend], 
+    [PortalAlert].[AlertCategory] AS [AlertCategory]
     FROM [dbo].[PortalAlert] AS [PortalAlert]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
@@ -1633,6 +1691,9 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySet Name="PortalAuths" EntityType="ExponentPortalModel.PortalAuth" />
           <EntitySet Name="sysdiagrams" EntityType="ExponentPortalModel.sysdiagram" />
           <EntitySet Name="MSTR_Drone_Setup" EntityType="ExponentPortalModel.MSTR_Drone_Setup" />
+          <EntitySet Name="FlightInfoes" EntityType="ExponentPortalModel.FlightInfo" />
+          <EntitySet Name="PortalAlertEmails" EntityType="ExponentPortalModel.PortalAlertEmail" />
+          <EntitySet Name="PortalAlertRegistrations" EntityType="ExponentPortalModel.PortalAlertRegistration" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -1965,6 +2026,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="GridLat" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="GridLng" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="FlightHours" Type="Int32" />
+          <Property Name="HasFlightInfo" Type="Int32" />
+          <Property Name="FlightDistance" Type="Decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -2027,6 +2090,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="IsPilot" Type="Boolean" />
           <Property Name="UserAccountId" Type="Int32" />
           <Property Name="Dashboard" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GeneratedPassword" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PayLoadData">
           <Key>
@@ -2216,6 +2280,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="SMSSend" Type="Int32" />
           <Property Name="AlertType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AlertCategory" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PayLoad_AutoFix">
           <Key>
@@ -2285,7 +2350,57 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
-          <Property Name="NotEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="NotificationEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="FlightInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="Condition" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WindSpeed" Type="String" />
+          <Property Name="Humidity" Type="String" />
+          <Property Name="Visibility" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Pressure" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Temperature" Type="String" />
+          <Property Name="Wind" Type="String" />
+          <Property Name="MaxAltiude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MinAltitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="AvgAltitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MaxSpeed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MinSpeed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="AvgSpeed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MaxSatellites" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MinSatellites" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="AvgSatellites" Type="Decimal" Precision="18" Scale="5" />
+        </EntityType>
+        <EntityType Name="PortalAlertEmail">
+          <Key>
+            <PropertyRef Name="EmailID" />
+          </Key>
+          <Property Name="EmailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FromAddress" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="ToAddress" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="EmailSubject" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="EmailURL" Type="String" MaxLength="600" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="IsSend" Type="Byte" />
+          <Property Name="SendStatus" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="SendOn" Type="DateTime" Precision="3" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Attachments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PortalAlertRegistration">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountID" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2958,6 +3073,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="FlightDistance" ColumnName="FlightDistance" />
+                <ScalarProperty Name="HasFlightInfo" ColumnName="HasFlightInfo" />
                 <ScalarProperty Name="FlightHours" ColumnName="FlightHours" />
                 <ScalarProperty Name="GridLng" ColumnName="GridLng" />
                 <ScalarProperty Name="GridLat" ColumnName="GridLat" />
@@ -3027,6 +3144,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="MSTR_User">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
               <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="GeneratedPassword" ColumnName="GeneratedPassword" />
                 <ScalarProperty Name="Dashboard" ColumnName="Dashboard" />
                 <ScalarProperty Name="UserAccountId" ColumnName="UserAccountId" />
                 <ScalarProperty Name="IsPilot" ColumnName="IsPilot" />
@@ -3242,6 +3360,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="PortalAlerts">
             <EntityTypeMapping TypeName="ExponentPortalModel.PortalAlert">
               <MappingFragment StoreEntitySet="PortalAlert">
+                <ScalarProperty Name="AlertCategory" ColumnName="AlertCategory" />
                 <ScalarProperty Name="AlertType" ColumnName="AlertType" />
                 <ScalarProperty Name="SMSSend" ColumnName="SMSSend" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
@@ -3316,7 +3435,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="MSTR_Drone_Setup">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone_Setup">
               <MappingFragment StoreEntitySet="MSTR_Drone_Setup">
-                <ScalarProperty Name="NotEmails" ColumnName="NotEmails" />
+                <ScalarProperty Name="NotificationEmails" ColumnName="NotificationEmails" />
                 <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
@@ -3328,6 +3447,59 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
                 <ScalarProperty Name="PilotUserId" ColumnName="PilotUserId" />
                 <ScalarProperty Name="DroneId" ColumnName="DroneId" />
                 <ScalarProperty Name="DroneSetupId" ColumnName="DroneSetupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FlightInfoes">
+            <EntityTypeMapping TypeName="ExponentPortalModel.FlightInfo">
+              <MappingFragment StoreEntitySet="FlightInfo">
+                <ScalarProperty Name="AvgSatellites" ColumnName="AvgSatellites" />
+                <ScalarProperty Name="MinSatellites" ColumnName="MinSatellites" />
+                <ScalarProperty Name="MaxSatellites" ColumnName="MaxSatellites" />
+                <ScalarProperty Name="AvgSpeed" ColumnName="AvgSpeed" />
+                <ScalarProperty Name="MinSpeed" ColumnName="MinSpeed" />
+                <ScalarProperty Name="MaxSpeed" ColumnName="MaxSpeed" />
+                <ScalarProperty Name="AvgAltitude" ColumnName="AvgAltitude" />
+                <ScalarProperty Name="MinAltitude" ColumnName="MinAltitude" />
+                <ScalarProperty Name="MaxAltiude" ColumnName="MaxAltiude" />
+                <ScalarProperty Name="Wind" ColumnName="Wind" />
+                <ScalarProperty Name="Temperature" ColumnName="Temperature" />
+                <ScalarProperty Name="Pressure" ColumnName="Pressure" />
+                <ScalarProperty Name="Visibility" ColumnName="Visibility" />
+                <ScalarProperty Name="Humidity" ColumnName="Humidity" />
+                <ScalarProperty Name="WindSpeed" ColumnName="WindSpeed" />
+                <ScalarProperty Name="Condition" ColumnName="Condition" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PortalAlertEmails">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PortalAlertEmail">
+              <MappingFragment StoreEntitySet="PortalAlertEmail">
+                <ScalarProperty Name="Attachments" ColumnName="Attachments" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="SendOn" ColumnName="SendOn" />
+                <ScalarProperty Name="SendStatus" ColumnName="SendStatus" />
+                <ScalarProperty Name="IsSend" ColumnName="IsSend" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="EmailURL" ColumnName="EmailURL" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="EmailSubject" ColumnName="EmailSubject" />
+                <ScalarProperty Name="ToAddress" ColumnName="ToAddress" />
+                <ScalarProperty Name="FromAddress" ColumnName="FromAddress" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PortalAlertRegistrations">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PortalAlertRegistration">
+              <MappingFragment StoreEntitySet="PortalAlertRegistration">
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

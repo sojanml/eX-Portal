@@ -83,5 +83,10 @@ namespace eX_Portal.exLogic
             return DDoptions; //return the list objects
         }
 
+        public static string RandomPassword()
+        {
+            string paswd=System.Web.Security.Membership.GeneratePassword(7, 1).ToString();
+            return paswd;
+        }
     }
 }

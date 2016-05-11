@@ -42,5 +42,6 @@ namespace eX_Portal.Models
         public Nullable<bool> IsPilot { get; set; }
         public Nullable<int> UserAccountId { get; set; }
         public string Dashboard { get; set; }
+        public string GeneratedPassword { get; set; }
     }
 }

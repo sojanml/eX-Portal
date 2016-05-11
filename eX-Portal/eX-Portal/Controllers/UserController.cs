@@ -31,7 +31,7 @@ namespace eX_Portal.Controllers
             return View(_objuserlogin);
         }//Login()
 
-
+        
        
         public string ExponentCertificateDetails([Bind(Prefix = "ID")] int PilotID)
         {
@@ -822,6 +822,38 @@ namespace eX_Portal.Controllers
             else {
                 return View(nView);
             }
+        }
+
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public String ForgotPassword(MSTR_User mSTR_USER)
+        {
+            if(String.IsNullOrEmpty(mSTR_USER.UserName))
+            {
+                return  "Please enter your Username/Email";
+            }
+            else
+            {              
+                    string unamemail = mSTR_USER.UserName;
+                    string sqlcheck = "select EmailId from MSTR_User where UserName='" + mSTR_USER.UserName + "' or EmailId='" + mSTR_USER.UserName + "'";
+                    
+                    if (Util.getDBRow(sqlcheck).Count > 0)
+                    {
+                        var Row = Util.getDBRow(sqlcheck);
+                        var obj = Row["EmailId"].ToString();                
+                        var newpaswd = DroneFlightSetup.RandomPassword();
+                        string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + obj + "'";
+                        int result = Util.doSQL(updatepswdsql);
+                        var mailurl = "~/";
+                        var mailsubject = "Confidential Mail from Exponent";
+                        Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), obj, mailsubject, mailurl);
+                    }                
+            }
+            return "OK";
         }
 
     }

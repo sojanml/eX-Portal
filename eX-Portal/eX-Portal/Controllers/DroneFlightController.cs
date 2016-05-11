@@ -642,12 +642,12 @@ namespace eX_Portal.Controllers {
             return View();
     }
     [HttpPost]
-    public ActionResult FlightSetup(FlightSetupViewModel flightsetupvm)//Models.MSTR_Drone_Setup droneSetup)
+    public string FlightSetup(FlightSetupViewModel flightsetupvm)//Models.MSTR_Drone_Setup droneSetup)
     {
-            if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return RedirectToAction("NoAccess", "Home");
-            if (flightsetupvm.DroneSetup.DroneId < 1 ) ModelState.AddModelError("DroneId", "You must select a Drone.");
-            if (flightsetupvm.DroneSetup.PilotUserId < 1 || flightsetupvm.DroneSetup.PilotUserId == null) ModelState.AddModelError("PilotUserId", "You must select a pilot.");
-            if (flightsetupvm.DroneSetup.GroundStaffUserId < 1 || flightsetupvm.DroneSetup.GroundStaffUserId == null) ModelState.AddModelError("GroundStaffUserId", "A Ground staff should be selected.");
+            if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return "You do not have accesss to this page";
+            if (flightsetupvm.DroneSetup.DroneId < 1 || flightsetupvm.DroneSetup.DroneId == null) return "You must select a Drone.";
+            if (flightsetupvm.DroneSetup.PilotUserId < 1 || flightsetupvm.DroneSetup.PilotUserId == null) return "You must select a pilot.";
+            if (flightsetupvm.DroneSetup.GroundStaffUserId < 1 || flightsetupvm.DroneSetup.GroundStaffUserId == null) return "A Ground staff should be selected.";
 
             DateTime todaydate = System.DateTime.Now;
 
@@ -691,14 +691,12 @@ namespace eX_Portal.Controllers {
             {
                 string sqlupdate = @"update MSTR_Drone_Setup set PilotUserId=" + flightsetupvm.DroneSetup.PilotUserId + ",GroundStaffUserId=" + flightsetupvm.DroneSetup.GroundStaffUserId +
                 ",[BatteryVoltage]=" + flightsetupvm.DroneSetup.BatteryVoltage + ",[Weather]='" + flightsetupvm.DroneSetup.Weather + "',[UasPhysicalCondition]='" + flightsetupvm.DroneSetup.UasPhysicalCondition
-                + "',[ModifiedBy]=" + Convert.ToInt32(Session["UserID"].ToString()) + ",[ModifiedOn]='" + System.DateTime.Now + "',[NotEmails]='"+flightsetupvm.DroneSetup.NotEmails
+                + "',[ModifiedBy]=" + Convert.ToInt32(Session["UserID"].ToString()) + ",[ModifiedOn]='" + System.DateTime.Now + "',[NotificationEmails]='" + flightsetupvm.DroneSetup.NotificationEmails
                 +"' where [DroneId]=" + flightsetupvm.DroneSetup.DroneId;
                 int result1 = Util.doSQL(sqlupdate);               
             }
             else
-            {
-                if (ModelState.IsValid)
-                {
+            {              
                     int ID = 0;                                   
                     ExponentPortalEntities db = new ExponentPortalEntities();
                     flightsetupvm.DroneSetup.CreatedBy = Convert.ToInt32(Session["UserID"].ToString());
@@ -707,9 +705,9 @@ namespace eX_Portal.Controllers {
                     db.SaveChanges();                    
                     ID = flightsetupvm.DroneSetup.DroneSetupId;
                     db.Dispose();
-                }
+              
             }
-            return View();
+            return "OK";
         }
 
         
@@ -748,12 +746,6 @@ namespace eX_Portal.Controllers {
             
             return Json(olistCoordinates, JsonRequestBehavior.AllowGet);
         }
-
-
-        //public ActionResult FlightSetupMap()
-        //{
-        //    return View();
-        //}
 
     }//class
 }//namespace
