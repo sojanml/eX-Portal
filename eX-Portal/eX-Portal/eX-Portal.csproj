@@ -271,7 +271,9 @@
     <Compile Include="Models\DroneFlightVideo.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FlightInfo.cs" />
+    <Compile Include="Models\FlightInfo.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FlightMapData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -373,8 +375,12 @@
     <Compile Include="Models\PortalAlert.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PortalAlertEmail.cs" />
-    <Compile Include="Models\PortalAlertRegistration.cs" />
+    <Compile Include="Models\PortalAlertEmail.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PortalAlertRegistration.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PortalAuth.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
