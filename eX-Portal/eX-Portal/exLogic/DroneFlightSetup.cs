@@ -29,7 +29,7 @@ namespace eX_Portal.exLogic
                     parameter.Value = accountid;
                     cmd.Parameters.Add(parameter);
 
-                    cmd.CommandText = "Select [DroneName],[DroneId] from [MSTR_Drone] where [AccountID]=" + accountid;
+                    cmd.CommandText = "Select [DroneName],[DroneId] from [MSTR_Drone] where [AccountID]=" + accountid + " order by [DroneName] asc";
                     cmd.CommandType = CommandType.Text;
                    
                     
@@ -58,14 +58,15 @@ namespace eX_Portal.exLogic
       int.TryParse(accountid.ToString(), out iAccountID);
 
       var ctx=new ExponentPortalEntities();
-      List<SelectListItem> SelectList = (
-        from m in ctx.MSTR_User
-        where m.AccountId == iAccountID
-        select new SelectListItem {
-          Text = m.FirstName + " " + m.LastName,
-          Value = m.UserId.ToString()
-        }
-      ).ToList();
+            List<SelectListItem> SelectList = (
+              from m in ctx.MSTR_User
+              where m.AccountId == iAccountID orderby m.FirstName ascending
+              select new SelectListItem
+              {
+                  Text = m.FirstName + " " + m.LastName,
+                  Value = m.UserId.ToString()
+              }
+            ).ToList();
 
       return SelectList;
       }
@@ -83,5 +84,10 @@ namespace eX_Portal.exLogic
             return DDoptions; //return the list objects
         }
 
+        public static string RandomPassword()
+        {
+            string paswd=System.Web.Security.Membership.GeneratePassword(7, 1).ToString();
+            return paswd;
+        }
     }
 }

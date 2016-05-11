@@ -69,9 +69,10 @@ namespace eX_Portal.Controllers {
       if (exLogic.User.hasAccess("DRONE.MANAGE")) nView.addMenu("Manage", Url.Action("Manage", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("BLACKBOX")) nView.addMenu("FDR Data", Url.Action("Index", "BlackBox", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("DRONE.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_Pkey" }));
+      if (exLogic.User.hasAccess("FLIGHT.CREATE")) nView.addMenu("Zone Approval", Url.Action("Index", "Approval", new { ID = "_Pkey" }));
 
 
-      if (Request.IsAjaxRequest()) {
+            if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
