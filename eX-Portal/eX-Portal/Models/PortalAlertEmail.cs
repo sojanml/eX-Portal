@@ -25,5 +25,6 @@ namespace eX_Portal.Models
         public string SendStatus { get; set; }
         public Nullable<System.DateTime> SendOn { get; set; }
         public int UserID { get; set; }
+        public string Attachments { get; set; }
     }
 }

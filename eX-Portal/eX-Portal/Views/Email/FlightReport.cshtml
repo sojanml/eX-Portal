@@ -1,0 +1,74 @@
+﻿@model eX_Portal.ViewModel.FlightViewModel
+@using eX_Portal.exLogic;
+
+@{
+  Layout = "~/Views/Shared/_Email.cshtml";
+}
+
+@if (Model != null) {
+<p>Dear User,</p>
+
+<p>
+  Please find the attached report for the UAS <b>@Model.DroneName</b> generated
+  on @Model.getFlightDate().<br />
+  <br />
+  You can view the detail report and replay of the flight from our portal <a href="https://portal.exponent-ts.com/">portal.exponent-ts.com</a>
+</p>
+
+<hr />
+<P><b>Basic Flight Information</b></P>
+      <table style="width: 100%">
+        <tr>
+          <td>ID: <b>@Html.DisplayFor(Model => Model.ID)</b></td>
+          <td>Pilot: <b>@Html.DisplayFor(Model => Model.PilotName)</b></td>
+          <td>Ground Staff: <b>@Html.DisplayFor(Model => Model.GSCName)</b></td>
+        </tr>
+        <tr>
+          <td>UAS ID: <b>@Html.DisplayFor(Model => Model.DroneName)</b></td>
+          <td>Created On (UTC): <b>@Model.getCreatedOn()</b> </td>
+          <td>Flight Date (UTC): <b>@Model.getFlightDate()</b> </td>
+        </tr>
+      </table>
+      <hr />
+  <p><b>Flight Summary</b></p>
+  <table width="100%">
+    <tr>
+      <td valign="top">
+        <b>General</b><br />
+        &nbsp;<br />
+        Flight Time: <b>@Util.toFix((Double)Model.FlightHours) Minutes <br /></b>
+        Distance: <b>@Util.toFix(Model.FlightDistance) Meters</b><br />
+      </td>
+
+      <td valign="top">
+        <b>Speed</b> (Meter per Hour)<br />
+        &nbsp;<br />
+        Average: <b>@Util.toFix(Model.Info.AvgSpeed)</b> <br />
+        Minimum: <b>@Util.toFix(Model.Info.MinSpeed)</b> <br />
+        Maximum: <b>@Util.toFix(Model.Info.MaxSpeed)</b>
+      </td>
+
+      <td valign="top">
+        <b>Altitude</b> (Meters)<br />
+        &nbsp;<br />
+        Average: <b>@Util.toFix(Model.Info.AvgAltitude)</b> <br />
+        Minimum: <b>@Util.toFix(Model.Info.MinAltitude)</b> <br />
+        Maximum: <b>@Util.toFix(Model.Info.MaxAltiude) </b>
+      </td>
+
+      <td valign="top">
+        <b>Satellites</b><br />
+        &nbsp;<br />
+        Average: <b>@Util.toFix(Model.Info.AvgSatellites)</b> <br />
+        Minimum: <b>@Util.toFix(Model.Info.MinSatellites)</b> <br />
+        Maximum: <b>@Util.toFix(Model.Info.MaxSatellites)</b>
+      </td>
+
+    </tr>
+  </table>
+
+
+} else {
+  <p>Invalid User</p>
+
+}

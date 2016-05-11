@@ -180,6 +180,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="GridLng" Type="decimal" Precision="18" Scale="5" />
           <Property Name="FlightHours" Type="int" />
           <Property Name="HasFlightInfo" Type="int" />
+          <Property Name="FlightDistance" Type="decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -200,12 +201,12 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FlightID" Type="int" />
           <Property Name="Condition" Type="nvarchar" MaxLength="50" />
-          <Property Name="WindSpeed" Type="decimal" Precision="18" Scale="5" />
-          <Property Name="Humidity" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="WindSpeed" Type="nvarchar" MaxLength="50" />
+          <Property Name="Humidity" Type="nvarchar" MaxLength="50" />
           <Property Name="Visibility" Type="decimal" Precision="18" Scale="5" />
           <Property Name="Pressure" Type="decimal" Precision="18" Scale="5" />
-          <Property Name="Temperature" Type="decimal" Precision="18" Scale="5" />
-          <Property Name="Wind" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Temperature" Type="nvarchar" MaxLength="50" />
+          <Property Name="Wind" Type="nvarchar" MaxLength="50" />
           <Property Name="MaxAltiude" Type="decimal" Precision="18" Scale="5" />
           <Property Name="MinAltitude" Type="decimal" Precision="18" Scale="5" />
           <Property Name="AvgAltitude" Type="decimal" Precision="18" Scale="5" />
@@ -908,6 +909,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="AlertType" Type="varchar" MaxLength="50" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="SMSSend" Type="int" />
+          <Property Name="AlertCategory" Type="nvarchar" MaxLength="25" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
@@ -926,6 +928,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have
           <Property Name="EmailSubject" Type="varchar" MaxLength="120" />
           <Property Name="Body" Type="varchar(max)" />
           <Property Name="EmailURL" Type="varchar" MaxLength="600" />
+          <Property Name="Attachments" Type="varchar(max)" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="IsSend" Type="tinyint" />
           <Property Name="SendStatus" Type="varchar" MaxLength="250" />
@@ -1278,7 +1281,8 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
     [PortalAlert].[AlertMessage] AS [AlertMessage], 
     [PortalAlert].[AlertType] AS [AlertType], 
     [PortalAlert].[CreatedOn] AS [CreatedOn], 
-    [PortalAlert].[SMSSend] AS [SMSSend]
+    [PortalAlert].[SMSSend] AS [SMSSend], 
+    [PortalAlert].[AlertCategory] AS [AlertCategory]
     FROM [dbo].[PortalAlert] AS [PortalAlert]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
@@ -1698,9 +1702,9 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="PortalAuths" EntityType="ExponentPortalModel.PortalAuth" />
           <EntitySet Name="sysdiagrams" EntityType="ExponentPortalModel.sysdiagram" />
           <EntitySet Name="MSTR_Drone_Setup" EntityType="ExponentPortalModel.MSTR_Drone_Setup" />
-          <EntitySet Name="FlightInfoes" EntityType="ExponentPortalModel.FlightInfo" />
           <EntitySet Name="PortalAlertEmails" EntityType="ExponentPortalModel.PortalAlertEmail" />
           <EntitySet Name="PortalAlertRegistrations" EntityType="ExponentPortalModel.PortalAlertRegistration" />
+          <EntitySet Name="FlightInfoes" EntityType="ExponentPortalModel.FlightInfo" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2034,6 +2038,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="GridLng" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="FlightHours" Type="Int32" />
           <Property Name="HasFlightInfo" Type="Int32" />
+          <Property Name="FlightDistance" Type="Decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -2286,6 +2291,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="SMSSend" Type="Int32" />
           <Property Name="AlertType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AlertCategory" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PayLoad_AutoFix">
           <Key>
@@ -2357,29 +2363,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
           <Property Name="NotEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="FlightInfo">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FlightID" Type="Int32" />
-          <Property Name="Condition" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="WindSpeed" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Humidity" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Visibility" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Pressure" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Temperature" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Wind" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="MaxAltiude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="MinAltitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="AvgAltitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="MaxSpeed" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="MinSpeed" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="AvgSpeed" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="MaxSatellites" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="MinSatellites" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="AvgSatellites" Type="Decimal" Precision="18" Scale="5" />
-        </EntityType>
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -2395,6 +2378,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="SendStatus" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="SendOn" Type="DateTime" Precision="3" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Attachments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PortalAlertRegistration">
           <Key>
@@ -2405,6 +2389,29 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="CreatedBy" Type="Int32" Nullable="false" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Url" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="FlightInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="Condition" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WindSpeed" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Humidity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Visibility" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Pressure" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Temperature" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Wind" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaxAltiude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MinAltitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="AvgAltitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MaxSpeed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MinSpeed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="AvgSpeed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MaxSatellites" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="MinSatellites" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="AvgSatellites" Type="Decimal" Precision="18" Scale="5" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3077,6 +3084,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="FlightDistance" ColumnName="FlightDistance" />
                 <ScalarProperty Name="HasFlightInfo" ColumnName="HasFlightInfo" />
                 <ScalarProperty Name="FlightHours" ColumnName="FlightHours" />
                 <ScalarProperty Name="GridLng" ColumnName="GridLng" />
@@ -3363,6 +3371,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="PortalAlerts">
             <EntityTypeMapping TypeName="ExponentPortalModel.PortalAlert">
               <MappingFragment StoreEntitySet="PortalAlert">
+                <ScalarProperty Name="AlertCategory" ColumnName="AlertCategory" />
                 <ScalarProperty Name="AlertType" ColumnName="AlertType" />
                 <ScalarProperty Name="SMSSend" ColumnName="SMSSend" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
@@ -3452,33 +3461,10 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="FlightInfoes">
-            <EntityTypeMapping TypeName="ExponentPortalModel.FlightInfo">
-              <MappingFragment StoreEntitySet="FlightInfo">
-                <ScalarProperty Name="AvgSatellites" ColumnName="AvgSatellites" />
-                <ScalarProperty Name="MinSatellites" ColumnName="MinSatellites" />
-                <ScalarProperty Name="MaxSatellites" ColumnName="MaxSatellites" />
-                <ScalarProperty Name="AvgSpeed" ColumnName="AvgSpeed" />
-                <ScalarProperty Name="MinSpeed" ColumnName="MinSpeed" />
-                <ScalarProperty Name="MaxSpeed" ColumnName="MaxSpeed" />
-                <ScalarProperty Name="AvgAltitude" ColumnName="AvgAltitude" />
-                <ScalarProperty Name="MinAltitude" ColumnName="MinAltitude" />
-                <ScalarProperty Name="MaxAltiude" ColumnName="MaxAltiude" />
-                <ScalarProperty Name="Wind" ColumnName="Wind" />
-                <ScalarProperty Name="Temperature" ColumnName="Temperature" />
-                <ScalarProperty Name="Pressure" ColumnName="Pressure" />
-                <ScalarProperty Name="Visibility" ColumnName="Visibility" />
-                <ScalarProperty Name="Humidity" ColumnName="Humidity" />
-                <ScalarProperty Name="WindSpeed" ColumnName="WindSpeed" />
-                <ScalarProperty Name="Condition" ColumnName="Condition" />
-                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PortalAlertEmails">
             <EntityTypeMapping TypeName="ExponentPortalModel.PortalAlertEmail">
               <MappingFragment StoreEntitySet="PortalAlertEmail">
+                <ScalarProperty Name="Attachments" ColumnName="Attachments" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="SendOn" ColumnName="SendOn" />
                 <ScalarProperty Name="SendStatus" ColumnName="SendStatus" />
@@ -3500,6 +3486,30 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FlightInfoes">
+            <EntityTypeMapping TypeName="ExponentPortalModel.FlightInfo">
+              <MappingFragment StoreEntitySet="FlightInfo">
+                <ScalarProperty Name="AvgSatellites" ColumnName="AvgSatellites" />
+                <ScalarProperty Name="MinSatellites" ColumnName="MinSatellites" />
+                <ScalarProperty Name="MaxSatellites" ColumnName="MaxSatellites" />
+                <ScalarProperty Name="AvgSpeed" ColumnName="AvgSpeed" />
+                <ScalarProperty Name="MinSpeed" ColumnName="MinSpeed" />
+                <ScalarProperty Name="MaxSpeed" ColumnName="MaxSpeed" />
+                <ScalarProperty Name="AvgAltitude" ColumnName="AvgAltitude" />
+                <ScalarProperty Name="MinAltitude" ColumnName="MinAltitude" />
+                <ScalarProperty Name="MaxAltiude" ColumnName="MaxAltiude" />
+                <ScalarProperty Name="Wind" ColumnName="Wind" />
+                <ScalarProperty Name="Temperature" ColumnName="Temperature" />
+                <ScalarProperty Name="Pressure" ColumnName="Pressure" />
+                <ScalarProperty Name="Visibility" ColumnName="Visibility" />
+                <ScalarProperty Name="Humidity" ColumnName="Humidity" />
+                <ScalarProperty Name="WindSpeed" ColumnName="WindSpeed" />
+                <ScalarProperty Name="Condition" ColumnName="Condition" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
