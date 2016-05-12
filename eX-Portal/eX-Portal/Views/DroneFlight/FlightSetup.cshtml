@@ -147,6 +147,20 @@
   <script>
       var map = null;
       var Form = document.forms['frmDroneSetup'];
+    var showMsgTimer = null;
+
+    function showMsg(Message) {
+      if(showMsgTimer) {
+        window.clearTimeout(showMsgTimer);
+      }
+      $('#error-message').html(Message).show();
+
+      showMsgTimer = window.setTimeout(function () {
+        $('#error-message').slideUp();
+      }, 10000 );
+
+    }
+
       $(document).ready(function(){
           Form['GcaApproval.Coordinates'].value='24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375'; 
           initialize();
@@ -156,9 +170,7 @@
           $("body").scrollTop(0);
           var data=$('#frmDroneSetup').serialize();
 
-          $('#error-message')
-          .html("Updating....Please Wait.")
-          .show();         
+        showMsg("Updating....Please Wait.");
           
           $("#frmDroneSetup :input").prop("disabled", true);
 
@@ -168,18 +180,10 @@
           data: data,
           success: function (data) {
               $("#frmDroneSetup :input").prop("disabled", false);
-
-              if(data=='OK')
-              {
-                $('#error-message')
-                .html("Data has been updated.")
-                .show();
-              }
-              else
-              {
-                 $('#error-message')
-                 .html(data)
-                 .show();
+            if(data=='OK') {
+              showMsg("Data has been updated.")
+            } else {
+              showMsg(data);
               }
           },
           error: function(){
@@ -215,7 +219,7 @@
       })
 
       $('#DroneSetup_DroneId').on("change", function() {
-
+        $("#frmDroneSetup :input").prop("disabled", true);
           $('#error-message').html("").hide();
 
           var accountid=@Html.Raw(Json.Encode(ViewData["accountid"]));
@@ -244,6 +248,7 @@
     });//$(document).ready()
 
       function DroneID_Success(Row) {
+      $("#frmDroneSetup :input").prop("disabled", false);
           console.log(Row);
           if(Row.hasRows) {
               document.forms['frmDroneSetup']['DroneSetup.PilotUserId'].value = Row.PilotUserId;

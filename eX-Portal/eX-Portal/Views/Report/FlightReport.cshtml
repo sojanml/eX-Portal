@@ -1,5 +1,6 @@
 ﻿@model eX_Portal.ViewModel.FlightViewModel
-@{
+@using eX_Portal.exLogic;
+@{  
   Layout = null;
 }
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -13,14 +14,6 @@
       font-family: 'GeneralText';
       src: url('../fonts/DINNextLTPro-Light.eot');
       src: local('â˜º'), url('/fonts/DINNextLTPro-Light.woff') format('woff'), url('/fonts/DINNextLTPro-Light.ttf') format('truetype'), url('/fonts/DINNextLTPro-Light.svg') format('svg');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    @@font-face {
-      font-family: 'Heading';
-      src: url('/fonts/DINNextLTPro-LightCondensed.eot');
-      src: local('â˜º'), url('/fonts/DINNextLTPro-LightCondensed.woff') format('woff'), url('/fonts/DINNextLTPro-LightCondensed.ttf') format('truetype'), url('/fonts/DINNextLTPro-LightCondensed.svg') format('svg');
       font-weight: normal;
       font-style: normal;
     }
@@ -93,38 +86,7 @@
         margin-right: 10px;
       }
 
-    .auto-style1 {
-      text-align: right;
-    }
-
-    .auto-style3 {
-      font-family: GeneralText, Arial, Helvetica, sans-serif;
-      font-size: xx-large;
-      color: #EA050E;
-    }
-
-    .auto-style2 {
-      font-family: GeneralText, Arial, Helvetica, sans-serif;
-    }
-
-    .auto-style4 {
-      text-align: center;
-    }
-
-    .auto-style5 {
-      font-family: GeneralText, Arial, Helvetica, sans-serif;
-      font-size: large;
-      color: #EA050E;
-    }
-
-    .auto-style6 {
-      text-align: left;
-    }
-
-    .auto-style7 {
-      font-family: GeneralText, Arial, Helvetica, sans-serif;
-      color: #FFFFFF;
-    }
+   
 
     th {
       background-color: #ea050e;
@@ -137,54 +99,87 @@
   <table style="width: 100%">
     <tr>
       <td valign="top"><img alt="" height="62" src="../../images/logo.png" width="300" /></td>
-      <td class="auto-style1" valign="top"><span class="auto-style3"><strong>Post Flight Report</strong></span></td>
+      <td valign="top" align="right" color="#ea050e"><font size="12"><strong>Post Flight Report</strong></font></td>
     </tr>
   </table>
-  <p class="auto-style4">
-    <span class="auto-style5"><strong>@Html.DisplayFor(Model => Model.DroneName) </strong></span><strong>
-      <br class="auto-style5" />
-    </strong>
-    <span class="auto-style2">Flight ID: 323</span>
+  <p style="text-align:center">
+    <font color="#ea050e" size="6">@Html.DisplayFor(Model => Model.DroneName)</font><br />
+    <span>Flight ID: @ViewBag.FlightID</span>
   </p>
+
   <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
     <tr>
-      <td bgcolor="#ea050e"><font color="white"><strong>Basic Flight Information</strong></font></td>
+      <th>Basic Flight Information</th>
     </tr>
     <tr>
-      <td class="auto-style2">
+      <td>
         <table style="width: 100%">
           <tr>
-            <td>ID: @Html.DisplayFor(Model => Model.ID)</td>
-            <td>Pilot: @Html.DisplayFor(Model => Model.PilotName)</td>
-            <td>Ground Staff: @Html.DisplayFor(Model => Model.GSCName)</td>
+            <td>ID: <b>@Html.DisplayFor(Model => Model.ID)</b></td>
+            <td>Pilot: <b>@Html.DisplayFor(Model => Model.PilotName)</b></td>
+            <td>Ground Staff: <b>@Html.DisplayFor(Model => Model.GSCName)</b></td>
           </tr>
           <tr>
-            <td>UAS ID:@Html.DisplayFor(Model => Model.DroneName)</td>
-            <td>Created On: </td>
-            <td>Flight Date:</td>
+            <td>UAS ID: <b>@Html.DisplayFor(Model => Model.DroneName)</b></td>
+            <td>Created On (UTC): <b>@Model.getCreatedOn()</b> </td>
+            <td>Flight Date (UTC): <b>@Model.getFlightDate()</b> </td>
           </tr>
         </table>
       </td>
     </tr>
   </table>
-  <p class="auto-style6">&nbsp;</p>
+  <p>&nbsp;</p>
   <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
     <tr>
       <th>Flight Summary</th>
     </tr>
     <tr>
-      <td class="auto-style2">
-        &nbsp;
+      <td>
+        <table width="100%">
+          <tr>
+            <td valign="top">
+              <b>General</b><br />
+              &nbsp;<br />
+            Flight Time: <b>@Util.toFix((Double)Model.FlightHours) Minutes <br /></b>
+            Distance: <b>@Util.toFix(Model.FlightDistance) Meters</b><br />
+            </td>
+
+            <td valign="top">
+              <b>Speed</b> (Meter per Hour)<br />
+              &nbsp;<br />
+              Average: <b>@Util.toFix(Model.Info.AvgSpeed)</b> <br />
+              Minimum: <b>@Util.toFix(Model.Info.MinSpeed)</b> <br />
+              Maximum: <b>@Util.toFix(Model.Info.MaxSpeed)</b>
+            </td>
+
+            <td valign="top">
+              <b>Altitude</b> (Meters)<br />
+              &nbsp;<br />
+              Average: <b>@Util.toFix(Model.Info.AvgAltitude)</b> <br />
+              Minimum: <b>@Util.toFix(Model.Info.MinAltitude)</b> <br />
+              Maximum: <b>@Util.toFix(Model.Info.MaxAltiude) </b>
+            </td>
+
+            <td valign="top">
+              <b>Satellites</b><br />
+              &nbsp;<br />
+              Average: <b>@Util.toFix(Model.Info.AvgSatellites)</b> <br />
+              Minimum: <b>@Util.toFix(Model.Info.MinSatellites)</b> <br />
+              Maximum: <b>@Util.toFix(Model.Info.MaxSatellites)</b>
+            </td>
+
+          </tr>
+        </table>
       </td>
     </tr>
   </table>
-  <p class="auto-style6">&nbsp;</p>
+  <p>&nbsp;</p>
   <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
     <tr>
-      <td bgcolor="#ea050e" class="auto-style7"><strong>Flight Track</strong></td>
+      <th>Flight Track</th>
     </tr>
     <tr>
-      <td class="auto-style2">
+      <td>
         <table cellpadding="0" cellspacing="0">
           <tr>
             <td valign="top"><img src="@Html.Action("GoogleMap","Report", new { ID = ViewBag.FlightID })" /></td>
@@ -192,10 +187,12 @@
             <td valign="top">
               <p><b>Weahter</b></p>
               <p>
-                Wind:<br />
-                Visibility:<br />
-                Pressure:<br />
-                Temp:<br />
+                Condition: <b>@Model.Info.Condition</b><br />
+                Wind: <b>@Util.toFix(1.60934 * Util.toDouble(Model.Info.WindSpeed))</b> kph<br />
+                Humidity: <b>@Model.Info.Humidity</b> %<br />
+                Visibility: <b>@Util.toFix((Double)Model.Info.Visibility/100)</b> kilometers<br />
+                Pressure: <b>@((int)Model.Info.Pressure)</b> millibars<br />
+                Temperature: <b>@Model.Info.Temperature &deg;C</b>                
               </p>
 
             </td>
@@ -206,39 +203,96 @@
       </td>
     </tr>
   </table>
-  <p class="auto-style6">&nbsp;</p>
+  <p>&nbsp;</p>
   <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
     <tr>
-      <td bgcolor="#ea050e" class="auto-style7"><strong>Chart &amp; Flight Parameters</strong></td>
+      <th>Chart &amp; Flight Parameters</th>
     </tr>
     <tr>
-      <td class="auto-style2"><img src="http://localhost:2727/Report/GetChart/@ViewBag.FlightID" /></td>
+      <td><img src="http://localhost:2727/Report/GetChart/@ViewBag.FlightID" /></td>
     </tr>
   </table>
-  <p class="auto-style6">&nbsp;</p>
+  <p>&nbsp;</p>
   @Html.Action("DroneCheckWarning", "Report", new { ID = ViewBag.FlightID })
 
-  <div style="page-break-after : always;">&nbsp;</div>
-    <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
-      <tr>
-        <td bgcolor="#ea050e"><font color="white"><strong>Warning/Alerts</strong></font></td>
-      </tr>
-      <tr>
-        <td>
-          <ul>
-            @foreach (var element in Model.PortalAlerts) {
+  <div style="page-break-before: always;"></div>
+
+  @if(Model.PortalAlerts.Count > 0 ) { 
+  <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
+    <tr>
+      <th>Warning/Alerts</th>
+    </tr>
+    <tr>
+      <td>
+        <ul>
+          @foreach (var element in Model.PortalAlerts) {
             <li style="padding:10px 0px 10px 0px; ">
               <font>
                 <b>@Html.DisplayFor(m => element.AlertType)</b> -
                 @Html.DisplayFor(m => element.AlertMessage)
               </font>
             </li>
-            }
-          </ul>
-        </td>
-      </tr>
-    </table>
+          }
+        </ul>
+      </td>
+    </tr>
+  </table>
+  <p>&nbsp;</p>
+  }@*if (Model.PortalAlerts.Count > 0)*@
 
+@if (Model.Videos.Count > 0) {
+  <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
+    <tr>
+      <th>Recorded Videos</th>
+    </tr>
+    <tr>
+      <td>
+        <ul>
+          @foreach (var element in Model.Videos) {
+          <li style="padding:10px 0px 10px 0px; ">@element.VideoURL</li>
+          }
+        </ul>
+      </td>
+    </tr>
+  </table>
+  <p>&nbsp;</p>
+}@*if (Model.PortalAlerts.Count > 0)*@
+
+
+@if (Model.Approvals.Count > 0) {
+<table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
+  <tr>
+    <th>Zone Approvals</th>
+  </tr>
+  <tr>
+    <td>
+      <table width="100%" border="1" cellspacing="0" cellpadding="5">
+        <thead>
+          <tr>
+            <th>Approval Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Start Time</th>
+            <th>End Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var item in Model.Approvals) {
+          <tr>
+            <td>@item.ApprovalName</td>
+            <td>@Util.fmtDt(item.StartDate) UTC</td>
+            <td>@Util.fmtDt(item.EndDate) UTC</td>
+            <td>@item.StartTime</td>
+            <td>@item.EndTime</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</table>
+  <p>&nbsp;</p>
+}@*if (Model.PortalAlerts.Count > 0)*@
 
 </body>
 
