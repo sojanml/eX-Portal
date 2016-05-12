@@ -166,6 +166,20 @@ namespace eX_Portal.exLogic {
       return toInt(theStr);
     }
 
+    public static String toFix(String Num) {
+      Double dNum = 0;
+      Double.TryParse(Num, out dNum);
+      return dNum.ToString("#0.00");
+    }
+
+    public static String toFix(Double ?Num) {
+      Double dNum = Num == null ? 0 : (Double)Num;
+      return dNum.ToString("#0.00");
+    }
+    public static String toFix(Decimal? Num) {
+      Double dNum = Num == null ? 0 : (Double)Num;
+      return dNum.ToString("#0.00");
+    }
     public static int getDBInt(String SQL) {
       int Result = 0;
       using (var ctx = new ExponentPortalEntities()) {
@@ -459,6 +473,15 @@ namespace eX_Portal.exLogic {
       }
     }//fmtDt()
 
+
+    public static String fmtDt(DateTime ?theDt, bool isAddTime = true) {
+      DateTime dt = (theDt == null ? DateTime.MinValue : (DateTime)theDt);
+      if (isAddTime) {
+        return dt.ToString("dd-MMM-yyyy hh:mm tt");
+      } else {
+        return dt.ToString("dd-MMM-yyyy");
+      }
+    }//fmtDt()
 
     public static String toSQLDate(String sDate) {
       String sTheDate = "2001-01-01 00:00:01";

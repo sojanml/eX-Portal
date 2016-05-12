@@ -55,12 +55,16 @@ namespace eX_Portal.exLogic {
       int result = 0;
       using (var ctx = new ExponentPortalEntities()) {
         var _objuserdetail = (from data in ctx.MSTR_User
-                              where data.UserName == UserName
-                              && data.Password == PasswordCrypto
-
-                              select data);
-
-        result = _objuserdetail.Count();
+                              where (data.UserName == UserName
+                              && (data.Password == PasswordCrypto
+                              ||data.GeneratedPassword== PasswordCrypto))
+                              select data).ToList();
+        if(_objuserdetail[0].GeneratedPassword== PasswordCrypto)
+        {
+           string updatesql = "update MSTR_User set Password='" + PasswordCrypto + "',GeneratedPassword='' where UserId="+ _objuserdetail[0].UserId;
+           Util.doSQL(updatesql);
+        }
+                result = _objuserdetail.Count;
       }
 
       return result;
