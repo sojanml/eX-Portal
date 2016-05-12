@@ -9,7 +9,7 @@
 @Html.AntiForgeryToken()
 
   <div id="frm" class="form-horizontal">
-   <div class="error" id="error-message" style="display:none"></div>
+   <div class="error" id="error-message" style="display:none;margin-bottom:20px;"></div>
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
@@ -51,6 +51,8 @@
       </div>
     </div>
 
+      <h2>Flight Details</h2>
+      
     <div class="form-group">
       @Html.LabelFor(model => model.DroneSetup.BatteryVoltage, "Battery Voltage")
       <div class="col-md-10">
@@ -83,6 +85,8 @@
           </div>
       </div>
 
+      <h2>Zone Approval</h2>
+
     <div class="form-group">
       @Html.LabelFor(model => model.GcaApproval.ApprovalID, "GCA Approvals")
       <div class="col-md-10">
@@ -113,7 +117,7 @@
                       
           <div class="form-group">
               <div class="col-md-offset-2 col-md-10">
-                  <input id="submitButton" type="submit" value="Save" class="button btn-default" />
+                  <input id="submitButton" type="submit" value="Save" class="btn btn-default" style="width:60px;"/>
               </div>
           </div>
 
