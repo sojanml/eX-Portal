@@ -418,7 +418,9 @@ table.repeat-report input[type=text] {
 table.repeat-report input.date-picker {
       background-position: calc(100% - 0px) 0px;
 }
-
+table.repeat-report input.time-picker {
+      background-position: calc(100% - 0px) 0px;
+}
 table.report tr td,
 table.cheklist tr td
  {
@@ -677,6 +679,14 @@ input.date-picker{
   background-image:url('../images/cal-icon.png');
   background-position: calc(100% - 10px) 5px;
   background-repeat:no-repeat;
+}
+
+input.time-picker{
+  background-image:url('../images/image6.png');
+  resize:20px;
+  background-position: calc(100% - 10px) 5px;
+  background-repeat:no-repeat;
+    background-size:20px;
 }
 
 ul.checkpoints {

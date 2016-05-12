@@ -17,3 +17,7 @@
 @Html.Raw(Model.getScripts())
     </script>
 }
+
+@section toolbar {
+ <a href='@Url.Action("GCAApproval", "S3Upload",new { ID =  ViewBag.DroneID })' class="button">Create</a>   
+}

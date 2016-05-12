@@ -271,6 +271,7 @@
     <Compile Include="Models\DroneFlightVideo.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FlightInfo.cs" />
     <Compile Include="Models\FlightMapData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -372,6 +373,8 @@
     <Compile Include="Models\PortalAlert.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PortalAlertEmail.cs" />
+    <Compile Include="Models\PortalAlertRegistration.cs" />
     <Compile Include="Models\PortalAuth.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -390,6 +393,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Portaldb.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Portaldb1.Designer.cs" />
     <Compile Include="Models\ProductDefinition.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -662,6 +666,8 @@
     <Content Include="jquery-ui\jquery-ui.structure.min.css" />
     <Content Include="jquery-ui\jquery-ui.theme.css" />
     <Content Include="jquery-ui\jquery-ui.theme.min.css" />
+    <Content Include="jquery-ui\jquery.ui.timepicker.css" />
+    <Content Include="jquery-ui\jquery.ui.timepicker.js" />
     <Content Include="jwplayer\jwplayer.flash.swf" />
     <Content Include="jwplayer\jwplayer.js" />
     <Content Include="jwplayer\polyfills.base64.js" />
