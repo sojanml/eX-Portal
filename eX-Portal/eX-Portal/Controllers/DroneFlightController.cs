@@ -645,7 +645,7 @@ namespace eX_Portal.Controllers {
     public string FlightSetup(FlightSetupViewModel flightsetupvm)//Models.MSTR_Drone_Setup droneSetup)
     {
             if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return "You do not have accesss to this page";
-            if (flightsetupvm.DroneSetup.DroneId < 1 || flightsetupvm.DroneSetup.DroneId == null) return "You must select a Drone.";
+            if (flightsetupvm.DroneSetup == null || flightsetupvm.DroneSetup.DroneId < 1) return "You must select a Drone.";
             if (flightsetupvm.DroneSetup.PilotUserId < 1 || flightsetupvm.DroneSetup.PilotUserId == null) return "You must select a pilot.";
             if (flightsetupvm.DroneSetup.GroundStaffUserId < 1 || flightsetupvm.DroneSetup.GroundStaffUserId == null) return "A Ground staff should be selected.";
 

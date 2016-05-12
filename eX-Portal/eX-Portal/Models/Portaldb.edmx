@@ -911,6 +911,12 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="SMSSend" Type="int" />
           <Property Name="AlertCategory" Type="nvarchar" MaxLength="25" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="PortalAlert_User">
+          <Property Name="AlertID" Type="int" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -993,6 +999,11 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="IsActive" Type="bit" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="SMSTable">
+          <Property Name="CellNumber" Type="nvarchar" MaxLength="20" />
+        </EntityType>-->
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -2351,29 +2362,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
           <Property Name="NotificationEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="FlightInfo">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FlightID" Type="Int32" />
-          <Property Name="Condition" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="WindSpeed" Type="String" />
-          <Property Name="Humidity" Type="String" />
-          <Property Name="Visibility" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Pressure" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Temperature" Type="String" />
-          <Property Name="Wind" Type="String" />
-          <Property Name="MaxAltiude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="MinAltitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="AvgAltitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="MaxSpeed" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="MinSpeed" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="AvgSpeed" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="MaxSatellites" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="MinSatellites" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="AvgSatellites" Type="Decimal" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="PortalAlertEmail">
           <Key>

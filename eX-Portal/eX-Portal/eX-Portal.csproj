@@ -199,6 +199,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ApprovalController.cs" />
     <Compile Include="Controllers\AutoCompleteController.cs" />
     <Compile Include="Controllers\BlackBoxController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
@@ -1058,6 +1059,7 @@
     <Content Include="Views\Shared\_Email.cshtml" />
     <Content Include="Views\Email\ForgotPassword.cshtml" />
     <Content Include="Views\Email\FlightReport.cshtml" />
+    <Content Include="Views\Approval\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

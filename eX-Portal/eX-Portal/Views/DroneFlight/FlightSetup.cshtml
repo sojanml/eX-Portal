@@ -9,7 +9,7 @@
 @Html.AntiForgeryToken()
 
   <div id="frm" class="form-horizontal">
-   <div class="error" id="error-message" style="display:none"></div>
+    <div class="error" id="error-message" style="display:none"></div>
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
@@ -39,7 +39,7 @@
     <div class="form-group">
       @Html.LabelFor(model => model.DroneSetup.GroundStaffUserId, "Ground Staff")
       <div class="col-md-10">
-        @Html.DropDownListFor(model => model.DroneSetup.GroundStaffUserId, 
+        @Html.DropDownListFor(model => model.DroneSetup.GroundStaffUserId,
           DroneFlightSetup.getAllUsers(Session["AccountID"]),
           "--Select Ground Staff--",
           new { @class = "form-control" })
@@ -75,13 +75,13 @@
       </div>
     </div>
 
-      <div class="form-group">
-          @Html.LabelFor(model => model.DroneSetup.NotificationEmails, "Flight Notification Emails(separated by ,)")
-          <div class="col-md-10">              
-              @Html.EditorFor(model => model.DroneSetup.NotificationEmails, new { htmlAttributes = new { @class = "form-control" } })              
-              @Html.ValidationMessageFor(model => model.DroneSetup.NotificationEmails, "", new { @class = "text-danger" })
-          </div>
+    <div class="form-group">
+      @Html.LabelFor(model => model.DroneSetup.NotificationEmails, "Flight Notification Emails(separated by ,)")
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.DroneSetup.NotificationEmails, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.DroneSetup.NotificationEmails, "", new { @class = "text-danger" })
       </div>
+    </div>
 
     <div class="form-group">
       @Html.LabelFor(model => model.GcaApproval.ApprovalID, "GCA Approvals")
@@ -91,95 +91,99 @@
       </div>
     </div>
 
-      <div id="gcacoordinates" class="form-group" style="visibility:visible;">
-          @Html.LabelFor(model => model.GcaApproval.Coordinates, "Coordinates")
-          <div class="editor-field">
-              @Html.EditorFor(model => model.GcaApproval.Coordinates)
-              @Html.ValidationMessageFor(model => model.GcaApproval.Coordinates)
-          </div>
+    <div id="gcacoordinates" class="form-group" style="visibility:visible;">
+      @Html.LabelFor(model => model.GcaApproval.Coordinates, "Coordinates")
+      <div class="editor-field">
+        @Html.EditorFor(model => model.GcaApproval.Coordinates)
+        @Html.ValidationMessageFor(model => model.GcaApproval.Coordinates)
       </div>
+    </div>
 
-      <div id="newgcaapproval" class="form-group" style="visibility:visible;">
-          @Html.LabelFor(model => model.GcaApproval.ApprovalName, "New GCA Approval Name")
-          <div class="editor-field">
-              @Html.EditorFor(model => model.GcaApproval.ApprovalName)
-              @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalName)
-          </div>
+    <div id="newgcaapproval" class="form-group" style="visibility:visible;">
+      @Html.LabelFor(model => model.GcaApproval.ApprovalName, "New GCA Approval Name")
+      <div class="editor-field">
+        @Html.EditorFor(model => model.GcaApproval.ApprovalName)
+        @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalName)
       </div>
+    </div>
 
-          <div id="polygonmap" class="form-group" style="visibility:visible;height:500px;width:600px;">
-              <div id="map_canvas" style="width: 100%; height: 100%;border:1px solid black;"></div>
-          </div>
-                      
-          <div class="form-group">
-              <div class="col-md-offset-2 col-md-10">
-                  <input id="submitButton" type="submit" value="Save" class="button btn-default" />
-              </div>
-          </div>
+    <div id="polygonmap" class="form-group" style="visibility:visible;height:500px;width:600px;">
+      <div id="map_canvas" style="width: 100%; height: 100%;border:1px solid black;"></div>
+    </div>
 
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <input id="submitButton" type="submit" value="Save" class="button btn-default" />
       </div>
+    </div>
+
+  </div>
 }
 <style type="text/css">
-    html, body {
-        margin: 0px;
-        padding: 0px;
-        width: 100%;
-        height: 100%;
-    }
+  html, body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+  }
 </style>
 
 @section header{
-    <link href="~/Content/black-box.css" rel="stylesheet" />
-    <script type="text/javascript">
-   
+  <link href="~/Content/black-box.css" rel="stylesheet" />
+  <script type="text/javascript">
 
-    </script>
+
+  </script>
 }
 
 @section Scripts {
-<script src="~/Scripts/jquery-1.11.3.js"></script>
-<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>
+  <script src="~/Scripts/jquery-1.11.3.js"></script>
+  <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>
 
   <script>
-      var map = null;
-      var Form = document.forms['frmDroneSetup'];
-      $(document).ready(function(){
-          Form['GcaApproval.Coordinates'].value='24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375'; 
-          initialize();
-          updateCordinates();  
-      $("#submitButton").on("click",function(e) {
-          e.preventDefault();
-          $("body").scrollTop(0);
-          var data=$('#frmDroneSetup').serialize();
+    var map = null;
+    var Form = document.forms['frmDroneSetup'];
+    var showMsgTimer = null;
 
-          $('#error-message')
-          .html("Updating....Please Wait.")
-          .show();         
-          
-          $("#frmDroneSetup :input").prop("disabled", true);
+    function showMsg(Message) {
+      if(showMsgTimer) {
+        window.clearTimeout(showMsgTimer);
+      }
+      $('#error-message').html(Message).show();
+
+      showMsgTimer = window.setTimeout(function () {
+        $('#error-message').slideUp();
+      }, 10000 );
+
+    }
+
+    $(document).ready(function(){
+      Form['GcaApproval.Coordinates'].value='24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375';
+      initialize();
+      updateCordinates();
+      $("#submitButton").on("click",function(e) {
+        e.preventDefault();
+        $("body").scrollTop(0);
+        var data=$('#frmDroneSetup').serialize();
+
+        showMsg("Updating....Please Wait.");
+
+        $("#frmDroneSetup :input").prop("disabled", true);
 
         $.ajax({
           type: 'POST',
           url: '/DroneFlight/FlightSetup',
           data: data,
           success: function (data) {
-              $("#frmDroneSetup :input").prop("disabled", false);
-
-              if(data=='OK')
-              {
-                $('#error-message')
-                .html("Data has been updated.")
-                .show();
-              }
-              else
-              {
-                 $('#error-message')
-                 .html(data)
-                 .show();
-              }
+            $("#frmDroneSetup :input").prop("disabled", false);
+            if(data=='OK') {
+              showMsg("Data has been updated.")
+            } else {
+              showMsg(data);
+            }
           },
           error: function(){
-            
+
           }
         });
       });
@@ -200,179 +204,180 @@
 
 
       $('#DroneSetup_GroundStaffUserId').on("change", function(e) {
-          $('#isgroundstaff').prop('checked', false);
-          $('#error-message').html("").hide();
+        $('#isgroundstaff').prop('checked', false);
+        $('#error-message').html("").hide();
       })
 
 
       $('#DroneSetup_PilotUserId').on("change", function(e) {
-          $('#ispilot').prop('checked', false);
-          $('#error-message').html("").hide();
+        $('#ispilot').prop('checked', false);
+        $('#error-message').html("").hide();
       })
 
       $('#DroneSetup_DroneId').on("change", function() {
+        $("#frmDroneSetup :input").prop("disabled", true);
+        $('#error-message').html("").hide();
 
-          $('#error-message').html("").hide();
-
-          var accountid=@Html.Raw(Json.Encode(ViewData["accountid"]));
-          var droneeid=$("#DroneSetup_DroneId").val();
-          $.ajax({
-              url: '/DroneFlight/FillPilot',
-              type: "GET",
-              dataType: "JSON",
-              data: { id:accountid,droneid:droneeid },
-              success: DroneID_Success
-          });
+        var accountid=@Html.Raw(Json.Encode(ViewData["accountid"]));
+        var droneeid=$("#DroneSetup_DroneId").val();
+        $.ajax({
+          url: '/DroneFlight/FillPilot',
+          type: "GET",
+          dataType: "JSON",
+          data: { id:accountid,droneid:droneeid },
+          success: DroneID_Success
+        });
       });// $('#DroneSetup_DroneId').on("change")
 
-        $('#GcaApproval_ApprovalID').on("change", function() {
-            $('#error-message').html("").hide();
-            var ApprovalIDs=$("#GcaApproval_ApprovalID").val();
+      $('#GcaApproval_ApprovalID').on("change", function() {
+        $('#error-message').html("").hide();
+        var ApprovalIDs=$("#GcaApproval_ApprovalID").val();
         $.ajax({
-            url: '/DroneFlight/FillCordinates',
+          url: '/DroneFlight/FillCordinates',
           type: "GET",
           dataType: "JSON",
           data: { ApprovalID:ApprovalIDs },
           success: cordinates_Success
         });
-        });// $('#GcaApproval_ApprovalID').on("change")
-       
+      });// $('#GcaApproval_ApprovalID').on("change")
+
     });//$(document).ready()
 
-      function DroneID_Success(Row) {
-          console.log(Row);
-          if(Row.hasRows) {
-              document.forms['frmDroneSetup']['DroneSetup.PilotUserId'].value = Row.PilotUserId;
-              document.forms['frmDroneSetup']['DroneSetup.GroundStaffUserId'].value = Row.GroundStaffUserId;
-              document.forms['frmDroneSetup']['DroneSetup.BatteryVoltage'].value=Row.BatteryVoltage;
-              document.forms['frmDroneSetup']['DroneSetup.Weather'].value=Row.Weather;
-              document.forms['frmDroneSetup']['DroneSetup.UasPhysicalCondition'].value=Row.UasPhysicalCondition;              
-              document.forms['frmDroneSetup']['DroneSetup.NotificationEmails'].value=Row.NotificationEmails; 
-              document.forms['frmDroneSetup']['GcaApproval.ApprovalName'].value='';
-              document.forms['frmDroneSetup']['GcaApproval.Coordinates'].value='24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375'; 
-              initialize();
-              updateCordinates(); 
-              $("#GcaApproval_ApprovalID").html(""); // clear before appending new list
-              $("#GcaApproval_ApprovalID").append(
-                 $('<option></option>').val(0).html("--Select GCA Approval--"));
-              if(Row.Approvals.length>0)
-              {              
-                  $.each(Row.Approvals, function (i, approvl) {
-                      $("#GcaApproval_ApprovalID").append(
-                      $('<option></option>').val(approvl.ApprovalID).html(approvl.ApprovalName)                        
-                  )}); //each
-              }              
-           
-          } else {//if(Row.hasRows)
-              document.forms['frmDroneSetup']['DroneSetup.PilotUserId'].value='';
-              document.forms['frmDroneSetup']['DroneSetup.GroundStaffUserId'].value ='';
-              document.forms['frmDroneSetup']['DroneSetup.BatteryVoltage'].value=0;
-              document.forms['frmDroneSetup']['DroneSetup.Weather'].value='';
-              document.forms['frmDroneSetup']['DroneSetup.UasPhysicalCondition'].value='';
-              document.forms['frmDroneSetup']['DroneSetup.NotificationEmails'].value=''; 
-              document.forms['frmDroneSetup']['GcaApproval.ApprovalName'].value='';
-              $("#map_canvas").empty();
-              $("#GcaApproval_ApprovalID").html(""); // clear before appending new list
-              $("#GcaApproval_ApprovalID").append(
-              $('<option></option>').val(0).html("--Select GCA Approval--"));
-              document.forms['frmDroneSetup']['GcaApproval.Coordinates'].value='24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375'; 
-              initialize();
-              updateCordinates();              
-          }
-      }//DroneID_Success
+    function DroneID_Success(Row) {
+      $("#frmDroneSetup :input").prop("disabled", false);
+      console.log(Row);
+      if(Row.hasRows) {
+        document.forms['frmDroneSetup']['DroneSetup.PilotUserId'].value = Row.PilotUserId;
+        document.forms['frmDroneSetup']['DroneSetup.GroundStaffUserId'].value = Row.GroundStaffUserId;
+        document.forms['frmDroneSetup']['DroneSetup.BatteryVoltage'].value=Row.BatteryVoltage;
+        document.forms['frmDroneSetup']['DroneSetup.Weather'].value=Row.Weather;
+        document.forms['frmDroneSetup']['DroneSetup.UasPhysicalCondition'].value=Row.UasPhysicalCondition;
+        document.forms['frmDroneSetup']['DroneSetup.NotificationEmails'].value=Row.NotificationEmails;
+        document.forms['frmDroneSetup']['GcaApproval.ApprovalName'].value='';
+        document.forms['frmDroneSetup']['GcaApproval.Coordinates'].value='24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375';
+        initialize();
+        updateCordinates();
+        $("#GcaApproval_ApprovalID").html(""); // clear before appending new list
+        $("#GcaApproval_ApprovalID").append(
+           $('<option></option>').val(0).html("--Select GCA Approval--"));
+        if(Row.Approvals.length>0)
+        {
+          $.each(Row.Approvals, function (i, approvl) {
+            $("#GcaApproval_ApprovalID").append(
+            $('<option></option>').val(approvl.ApprovalID).html(approvl.ApprovalName)
+        )}); //each
+        }
 
-      function cordinates_Success(olistCoordinates) {
-          console.log(olistCoordinates);
-          if(olistCoordinates.length>0) {
-              document.forms['frmDroneSetup']['GcaApproval.Coordinates'].value = olistCoordinates[0].Cordinates;     
-              //$("#gcacoordinates").css("visibility","visible");
-              //$("#newgcaapproval").css("visibility","visible");              
-              //$("#polygonmap").css("visibility", "visible");
-              initialize();
-              updateCordinates();
-          } else {//if(Row.hasRows)
-              document.forms['frmDroneSetup']['GcaApproval.Coordinates'].value ='';             
-          }
-      }//cordinates_Success
-
-      function initialize() {
-          var myLatLng = { lat: 25, lng: 55 };
-          var mapDiv = document.getElementById('map_canvas');
-          map = new google.maps.Map(mapDiv, {
-              center: myLatLng,
-              zoom: 10
-          });
-
-          var BoxCord = setBoundary(getCoordinates1());
-          // Construct the polygon.
-          BoundaryBox = new google.maps.Polygon({
-              paths: BoxCord,
-              strokeColor: '#FF0000',
-              strokeOpacity: 0.7,
-              strokeWeight: 1,
-              fillColor: '#FF0000',
-              fillOpacity: 0.1,
-              editable: true,
-              draggable: true
-          });
-          BoundaryBox.setMap(map);
-
-          google.maps.event.addListener(BoundaryBox.getPath(), 'set_at', setCoordinates);
-          google.maps.event.addListener(BoundaryBox.getPath(), 'insert_at', setCoordinates);
-
-          $('#get-boundary').on("click", function(e){
-              getBoundary();
-          });
-
-      };
-
-      function updateCordinates() {
-          var Cordinates = getCoordinates1();
-          var Bounds = setBoundary(Cordinates);
-          BoundaryBox.setPath(Bounds);
-          google.maps.event.addListener(BoundaryBox.getPath(), 'set_at', setCoordinates);
-          google.maps.event.addListener(BoundaryBox.getPath(), 'insert_at', setCoordinates);
+      } else {//if(Row.hasRows)
+        document.forms['frmDroneSetup']['DroneSetup.PilotUserId'].value='';
+        document.forms['frmDroneSetup']['DroneSetup.GroundStaffUserId'].value ='';
+        document.forms['frmDroneSetup']['DroneSetup.BatteryVoltage'].value=0;
+        document.forms['frmDroneSetup']['DroneSetup.Weather'].value='';
+        document.forms['frmDroneSetup']['DroneSetup.UasPhysicalCondition'].value='';
+        document.forms['frmDroneSetup']['DroneSetup.NotificationEmails'].value='';
+        document.forms['frmDroneSetup']['GcaApproval.ApprovalName'].value='';
+        $("#map_canvas").empty();
+        $("#GcaApproval_ApprovalID").html(""); // clear before appending new list
+        $("#GcaApproval_ApprovalID").append(
+        $('<option></option>').val(0).html("--Select GCA Approval--"));
+        document.forms['frmDroneSetup']['GcaApproval.Coordinates'].value='24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375';
+        initialize();
+        updateCordinates();
       }
+    }//DroneID_Success
 
-      function getCoordinates() {
-          var Cordinates = getCoordinates ? getCoordinates1() : "";          
-          if (Cordinates == "") 
-                Cordinates = "24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375";          
-          return Cordinates;
+    function cordinates_Success(olistCoordinates) {
+      console.log(olistCoordinates);
+      if(olistCoordinates.length>0) {
+        document.forms['frmDroneSetup']['GcaApproval.Coordinates'].value = olistCoordinates[0].Cordinates;
+        //$("#gcacoordinates").css("visibility","visible");
+        //$("#newgcaapproval").css("visibility","visible");
+        //$("#polygonmap").css("visibility", "visible");
+        initialize();
+        updateCordinates();
+      } else {//if(Row.hasRows)
+        document.forms['frmDroneSetup']['GcaApproval.Coordinates'].value ='';
       }
+    }//cordinates_Success
 
-      function getCoordinates1() {
-          return $('#GcaApproval_Coordinates').val();
-      }
+    function initialize() {
+      var myLatLng = { lat: 25, lng: 55 };
+      var mapDiv = document.getElementById('map_canvas');
+      map = new google.maps.Map(mapDiv, {
+        center: myLatLng,
+        zoom: 10
+      });
 
-      function setCoordinates1(Cord) {
-          $('#GcaApproval_Coordinates').val(Cord);
-      }
-      
-      function setBoundary(Cordinates) {
-          var Bounds = [];
-          var LatLng = Cordinates.split(',');
-          for (var i = 0; i < LatLng.length; i++) {
-              var Bound = LatLng[i].split(" ");
-              Bounds.push({ lat: parseFloat(Bound[0]), lng: parseFloat(Bound[1]) });
-          }
-          return Bounds;
-      }
-      
-      function setCoordinates() {
-          var Cord = getBoundary();
-          setCoordinates1(Cord);
-      }
+      var BoxCord = setBoundary(getCoordinates1());
+      // Construct the polygon.
+      BoundaryBox = new google.maps.Polygon({
+        paths: BoxCord,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.7,
+        strokeWeight: 1,
+        fillColor: '#FF0000',
+        fillOpacity: 0.1,
+        editable: true,
+        draggable: true
+      });
+      BoundaryBox.setMap(map);
 
-      function getBoundary() {
-          var Bounds = BoundaryBox.getPath().getArray();
-          var LatLng = '';
-          for (var i = 0; i < Bounds.length; i++) {
-              if (LatLng != '') LatLng += ',';
-              LatLng = LatLng + Bounds[i].lat() + ' ' + Bounds[i].lng()
-          }
-          return LatLng;
+      google.maps.event.addListener(BoundaryBox.getPath(), 'set_at', setCoordinates);
+      google.maps.event.addListener(BoundaryBox.getPath(), 'insert_at', setCoordinates);
+
+      $('#get-boundary').on("click", function(e){
+        getBoundary();
+      });
+
+    };
+
+    function updateCordinates() {
+      var Cordinates = getCoordinates1();
+      var Bounds = setBoundary(Cordinates);
+      BoundaryBox.setPath(Bounds);
+      google.maps.event.addListener(BoundaryBox.getPath(), 'set_at', setCoordinates);
+      google.maps.event.addListener(BoundaryBox.getPath(), 'insert_at', setCoordinates);
+    }
+
+    function getCoordinates() {
+      var Cordinates = getCoordinates ? getCoordinates1() : "";
+      if (Cordinates == "")
+        Cordinates = "24.94990139051521 55.33758544921875,25.21855531449736 55.6209716796875,25.387706850526847 55.41497802734375,25.087092789448754 55.1370849609375";
+      return Cordinates;
+    }
+
+    function getCoordinates1() {
+      return $('#GcaApproval_Coordinates').val();
+    }
+
+    function setCoordinates1(Cord) {
+      $('#GcaApproval_Coordinates').val(Cord);
+    }
+
+    function setBoundary(Cordinates) {
+      var Bounds = [];
+      var LatLng = Cordinates.split(',');
+      for (var i = 0; i < LatLng.length; i++) {
+        var Bound = LatLng[i].split(" ");
+        Bounds.push({ lat: parseFloat(Bound[0]), lng: parseFloat(Bound[1]) });
       }
+      return Bounds;
+    }
+
+    function setCoordinates() {
+      var Cord = getBoundary();
+      setCoordinates1(Cord);
+    }
+
+    function getBoundary() {
+      var Bounds = BoundaryBox.getPath().getArray();
+      var LatLng = '';
+      for (var i = 0; i < Bounds.length; i++) {
+        if (LatLng != '') LatLng += ',';
+        LatLng = LatLng + Bounds[i].lat() + ' ' + Bounds[i].lng()
+      }
+      return LatLng;
+    }
 
   </script>
 }
