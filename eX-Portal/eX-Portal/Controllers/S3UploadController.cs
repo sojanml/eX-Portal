@@ -146,9 +146,9 @@ namespace eX_Portal.Controllers {
                     GCAApprovalDoc.ApprovalName = olist[0].ApprovalName;
                     GCAApprovalDoc.Coordinates = olist[0].Coordinates;
 
-                    GCAApprovalDoc.ApprovalDate = olist[0].ApprovalDate;
-                    GCAApprovalDoc.StartDate = olist[0].StartDate;
-                    GCAApprovalDoc.EndDate = olist[0].EndDate;
+                    GCAApprovalDoc.ApprovalDate = olist[0].ApprovalDate == null ? null : olist[0].ApprovalDate;
+                    GCAApprovalDoc.StartDate = olist[0].StartDate == null ? null : olist[0].StartDate; 
+                    GCAApprovalDoc.EndDate = olist[0].EndDate == null ? null : olist[0].EndDate;
 
                     GCAApprovalDoc.StartTime = olist[0].StartTime;
                     GCAApprovalDoc.EndTime = olist[0].EndTime;
