@@ -222,22 +222,35 @@ namespace eX_Portal.Controllers
         }
 
 
-        public ActionResult Create()
+        public ActionResult Create([Bind(Prefix = "ID")] int RPASID=0)
         {
 
             ViewBag.Title = "Create User";
             if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
+            MSTR_User EPASValues = new MSTR_User();
+            if (RPASID!=0)
+            {
+                var RPASoList = (from p in db.MSTR_RPAS_User where p.RpasId== RPASID select p).ToList();
+                EPASValues.FirstName = RPASoList[0].Name;
+                EPASValues.CountryId = Convert.ToInt16(RPASoList[0].NationalityId);
+                EPASValues.EmiratesID = RPASoList[0].EmiratesId;
+                EPASValues.EmailId = RPASoList[0].EmailId;
+                EPASValues.MobileNo = RPASoList[0].MobileNo;
 
+            }
+            
             var viewModel = new ViewModel.UserViewModel
             {
-                User = new MSTR_User(),
+                User = EPASValues,
                 Pilot = new MSTR_User_Pilot(),
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-               DashboardList=Util.GetDashboardLists()
-
+                DashboardList = Util.GetDashboardLists(),
+                PermitCategoryList = Util.GetLists("RPASCategory")
+       
             };
+            
             return View(viewModel);
         }
 
@@ -344,7 +357,8 @@ namespace eX_Portal.Controllers
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-                DashboardList = Util.GetDashboardLists()
+                DashboardList = Util.GetDashboardLists(),
+                PermitCategoryList = Util.GetLists("RPASCategory")
             };
             return View(viewModel);
         }
@@ -415,7 +429,8 @@ namespace eX_Portal.Controllers
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-                DashboardList = Util.GetDashboardLists()
+                DashboardList = Util.GetDashboardLists(),
+                PermitCategoryList = Util.GetLists("RPASCategory")
             };
             return View(viewModel);
 
@@ -538,9 +553,11 @@ namespace eX_Portal.Controllers
                 ProfileList = Util.GetProfileList(),
                 CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
                 AccountList = Util.GetAccountList(),
-                DashboardList = Util.GetDashboardLists()
+                DashboardList = Util.GetDashboardLists(),
+                PermitCategoryList = Util.GetLists("RPASCategory")
 
             };
+            
             return View(viewModel);
         }//Create() HTTPPost
 

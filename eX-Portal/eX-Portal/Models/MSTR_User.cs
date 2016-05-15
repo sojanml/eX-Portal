@@ -43,5 +43,14 @@ namespace eX_Portal.Models
         public Nullable<int> UserAccountId { get; set; }
         public string Dashboard { get; set; }
         public string GeneratedPassword { get; set; }
+        public string RPASPermitNo { get; set; }
+        public string PermitCategory { get; set; }
+        public string ContactAddress { get; set; }
+        public string RegRPASSerialNo { get; set; }
+        public string CompanyAddress { get; set; }
+        public string CompanyTelephone { get; set; }
+        public string CompanyEmail { get; set; }
+        public string TradeLicenceCopyUrl { get; set; }
+        public string EmiratesID { get; set; }
     }
 }

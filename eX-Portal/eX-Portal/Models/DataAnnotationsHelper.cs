@@ -420,4 +420,40 @@ namespace eX_Portal.Models {
     [DataType(DataType.MultilineText)]
     public string Coordinates { get; set; }
   }
+
+    [MetadataType(typeof(MSTR_RPAS_User_Helper))]
+    public partial class MSTR_RPAS_User
+    {        
+        public string confirmemailid { get; set; }
+        public string confirmmobno { get; set; }
+    }
+
+    public class MSTR_RPAS_User_Helper
+    {               
+        [Required(ErrorMessage = "Please Enter your Name")]
+        [Display(Name = "First Name")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Please Enter Emirates Id")]
+        [Display(Name = "Emirates ID")]
+        public string EmiratesId { get; set; }
+
+        [Required(ErrorMessage = "Please Enter Email Address")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        public string EmailId { get; set; }
+
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        [Compare("EmailId")]
+        [Display(Name = "Email Address")]
+        public string confirmemailid { get; set; }
+
+        [Required(ErrorMessage = "Please Enter Mobile Number")]
+        public string MobileNo { get; set; }
+
+        [Compare("MobileNo")]
+        [Display(Name = "Confirm Mobile No")]             
+        public string confirmmobno { get; set; }
+
+
+    }
 }

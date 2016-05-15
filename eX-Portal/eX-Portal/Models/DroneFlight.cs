@@ -49,5 +49,6 @@ namespace eX_Portal.Models
         public Nullable<int> FlightHours { get; set; }
         public Nullable<int> HasFlightInfo { get; set; }
         public Nullable<decimal> FlightDistance { get; set; }
+        public Nullable<bool> IsInsideTimeFrame { get; set; }
     }
 }

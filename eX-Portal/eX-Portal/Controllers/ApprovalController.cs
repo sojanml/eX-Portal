@@ -16,10 +16,10 @@ namespace eX_Portal.Controllers
         private ExponentPortalEntities db = new ExponentPortalEntities();
 
         // GET: Approval
-        public ActionResult Index(int ID=0)
+        public ActionResult Index(int ID = 0)
         {
             //if (!exLogic.User.hasAccess("DRONE.VIEW")) return RedirectToAction("NoAccess", "Home");
-            
+           
             ViewBag.Title = "View";
             string SQL = @"SELECT ";
             if (ID == 0) SQL +=

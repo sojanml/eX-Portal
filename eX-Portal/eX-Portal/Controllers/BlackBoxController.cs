@@ -13,7 +13,7 @@ namespace eX_Portal.Controllers {
     // GET: BlackBox
 
     public ActionResult Index() {
-      //if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "FDR Data";
 
@@ -113,6 +113,7 @@ namespace eX_Portal.Controllers {
     }//Index()
 
     public ActionResult Detail([Bind(Prefix = "ID")] String DroneID_BBFlightID = "") {
+      if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
       String[] SplitData = DroneID_BBFlightID.Split(',');
       if (SplitData.Length != 2) return RedirectToAction("Error");
       int DroneID = Util.toInt(SplitData[0]);
@@ -152,7 +153,8 @@ namespace eX_Portal.Controllers {
       }//if(IsAjaxRequest)
     }
 
-    public ActionResult Upload() {
+    public ActionResult Upload() {            
+      if (!exLogic.User.hasAccess("BLACKBOX.UPLOAD")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Upload";
       return View();
     }//upload()

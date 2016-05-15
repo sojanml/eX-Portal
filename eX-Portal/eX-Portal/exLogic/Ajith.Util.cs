@@ -629,7 +629,36 @@ namespace eX_Portal.exLogic {
         }
       }
     }
-    public static IEnumerable<SelectListItem> GetDashboardLists() {
+        public static IEnumerable<SelectListItem> GetLists(string Type)
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
+            String SQL = "SELECT 0 as Value, 'Not Available' as Name";
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+                    SQL = "SELECT [Name] as Value  ,[Name] as code FROM[LUP_Drone] where type = '" + Type + "' ";
+                    cmd.CommandText = SQL;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SelectList.Add(new SelectListItem { Text = reader["code"].ToString(), Value = reader["Value"].ToString() });
+                        }
+                        ctx.Database.Connection.Close();
+                    }
+
+
+                }
+
+                return SelectList; //return the list objects
+
+
+            }
+        }
+        public static IEnumerable<SelectListItem> GetDashboardLists() {
       List<SelectListItem> SelectList = new List<SelectListItem>();
       SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
       String SQL = "SELECT 0 as Value, 'Not Available' as Name";

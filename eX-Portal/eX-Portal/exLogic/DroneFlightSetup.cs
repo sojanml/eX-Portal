@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Web.Mvc;
 using eX_Portal.Models;
+using System.Data.Common;
 
 namespace eX_Portal.exLogic
 {
@@ -88,6 +89,43 @@ namespace eX_Portal.exLogic
         {
             string paswd=System.Web.Security.Membership.GeneratePassword(7, 1).ToString();
             return paswd;
+        }
+
+        public static IEnumerable<SelectListItem> GetDdListNationality(string TypeField, string NameField, string ValueField, string SPName)
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
+
+
+            using (var cotx = new ExponentPortalEntities())
+            {
+                using (var cmd = cotx.Database.Connection.CreateCommand())
+                {
+
+                    cotx.Database.Connection.Open();
+
+
+                    cmd.CommandText = "usp_Portal_GetDroneDropDown";
+                    DbParameter Param = cmd.CreateParameter();
+                    Param.ParameterName = "@Type";
+                    Param.Value = TypeField;
+                    cmd.Parameters.Add(Param);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+
+                            SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Code"].ToString() });
+
+                        }
+                    }
+                    DropDownList = SelectList.ToList();
+                    cotx.Database.Connection.Close();
+                    return DropDownList; //return the list objects
+
+                }
+            }
         }
     }
 }
