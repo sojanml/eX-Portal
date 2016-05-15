@@ -698,6 +698,15 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="AccountId" Type="int" />
           <Property Name="IsPilot" Type="bit" />
           <Property Name="GeneratedPassword" Type="nvarchar" MaxLength="200" />
+          <Property Name="RPASPermitNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PermitCategory" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactAddress" Type="nvarchar" MaxLength="200" />
+          <Property Name="RegRPASSerialNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="CompanyAddress" Type="nvarchar" MaxLength="200" />
+          <Property Name="CompanyTelephone" Type="nvarchar" MaxLength="50" />
+          <Property Name="CompanyEmail" Type="nvarchar" MaxLength="50" />
+          <Property Name="TradeLicenceCopyUrl" Type="nvarchar" MaxLength="150" />
+          <Property Name="EmiratesID" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -2111,6 +2120,15 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="UserAccountId" Type="Int32" />
           <Property Name="Dashboard" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GeneratedPassword" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RPASPermitNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PermitCategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RegRPASSerialNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyTelephone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TradeLicenceCopyUrl" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="EmiratesID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PayLoadData">
           <Key>
@@ -3181,6 +3199,15 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="MSTR_User">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
               <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="EmiratesID" ColumnName="EmiratesID" />
+                <ScalarProperty Name="TradeLicenceCopyUrl" ColumnName="TradeLicenceCopyUrl" />
+                <ScalarProperty Name="CompanyEmail" ColumnName="CompanyEmail" />
+                <ScalarProperty Name="CompanyTelephone" ColumnName="CompanyTelephone" />
+                <ScalarProperty Name="CompanyAddress" ColumnName="CompanyAddress" />
+                <ScalarProperty Name="RegRPASSerialNo" ColumnName="RegRPASSerialNo" />
+                <ScalarProperty Name="ContactAddress" ColumnName="ContactAddress" />
+                <ScalarProperty Name="PermitCategory" ColumnName="PermitCategory" />
+                <ScalarProperty Name="RPASPermitNo" ColumnName="RPASPermitNo" />
                 <ScalarProperty Name="GeneratedPassword" ColumnName="GeneratedPassword" />
                 <ScalarProperty Name="Dashboard" ColumnName="Dashboard" />
                 <ScalarProperty Name="UserAccountId" ColumnName="UserAccountId" />
