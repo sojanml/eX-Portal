@@ -21,7 +21,7 @@
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Product" Width="1.5" PointX="6.75" PointY="11.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Profile" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_User" Width="1.5" PointX="12.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.ProductDefinition" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ProductDefinition" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.ProductTransaction" Width="1.5" PointX="14.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" ManuallyRouted="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.ProductHistory" Width="1.5" PointX="14.75" PointY="4.75" />
