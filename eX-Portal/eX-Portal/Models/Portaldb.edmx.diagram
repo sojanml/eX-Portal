@@ -49,6 +49,7 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PortalAlertEmail" Width="1.5" PointX="21.375" PointY="6.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.PortalAlertRegistration" Width="1.5" PointX="7.375" PointY="21.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.FlightInfo" Width="1.5" PointX="21.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_RPAS_User" Width="1.5" PointX="21.375" PointY="11.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

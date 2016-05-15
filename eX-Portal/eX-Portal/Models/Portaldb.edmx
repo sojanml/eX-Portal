@@ -181,6 +181,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="FlightHours" Type="int" />
           <Property Name="HasFlightInfo" Type="int" />
           <Property Name="FlightDistance" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="IsInsideTimeFrame" Type="bit" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -648,6 +649,22 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="ApprovedBy" Type="int" />
           <Property Name="ApprovedOn" Type="datetime" />
         </EntityType>
+        <EntityType Name="MSTR_RPAS_User">
+          <Key>
+            <PropertyRef Name="RpasId" />
+          </Key>
+          <Property Name="RpasId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NationalityId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmiratesId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmailId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MobileNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="30" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" />
+        </EntityType>
         <EntityType Name="MSTR_User">
           <Key>
             <PropertyRef Name="UserId" />
@@ -911,12 +928,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="SMSSend" Type="int" />
           <Property Name="AlertCategory" Type="nvarchar" MaxLength="25" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PortalAlert_User">
-          <Property Name="AlertID" Type="int" />
-          <Property Name="UserID" Type="int" />
-        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -999,11 +1010,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have
           <Property Name="IsActive" Type="bit" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SMSTable">
-          <Property Name="CellNumber" Type="nvarchar" MaxLength="20" />
-        </EntityType>-->
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -1105,6 +1111,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="MSTR_Pilot_Log" EntityType="Self.MSTR_Pilot_Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Product" EntityType="Self.MSTR_Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Profile" EntityType="Self.MSTR_Profile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MSTR_RPAS_User" EntityType="Self.MSTR_RPAS_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User" EntityType="Self.MSTR_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot" EntityType="Self.MSTR_User_Pilot" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="Self.MSTR_User_Pilot_Certification" Schema="dbo" store:Type="Tables" />
@@ -1705,6 +1712,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="PortalAlertEmails" EntityType="ExponentPortalModel.PortalAlertEmail" />
           <EntitySet Name="PortalAlertRegistrations" EntityType="ExponentPortalModel.PortalAlertRegistration" />
           <EntitySet Name="FlightInfoes" EntityType="ExponentPortalModel.FlightInfo" />
+          <EntitySet Name="MSTR_RPAS_User" EntityType="ExponentPortalModel.MSTR_RPAS_User" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2039,6 +2047,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="FlightHours" Type="Int32" />
           <Property Name="HasFlightInfo" Type="Int32" />
           <Property Name="FlightDistance" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="IsInsideTimeFrame" Type="Boolean" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -2412,6 +2421,22 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="MaxSatellites" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="MinSatellites" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="AvgSatellites" Type="Decimal" Precision="18" Scale="5" />
+        </EntityType>
+        <EntityType Name="MSTR_RPAS_User">
+          <Key>
+            <PropertyRef Name="RpasId" />
+          </Key>
+          <Property Name="RpasId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NationalityId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmiratesId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmailId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3084,6 +3109,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="IsInsideTimeFrame" ColumnName="IsInsideTimeFrame" />
                 <ScalarProperty Name="FlightDistance" ColumnName="FlightDistance" />
                 <ScalarProperty Name="HasFlightInfo" ColumnName="HasFlightInfo" />
                 <ScalarProperty Name="FlightHours" ColumnName="FlightHours" />
@@ -3511,6 +3537,23 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
                 <ScalarProperty Name="Condition" ColumnName="Condition" />
                 <ScalarProperty Name="FlightID" ColumnName="FlightID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_RPAS_User">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_RPAS_User">
+              <MappingFragment StoreEntitySet="MSTR_RPAS_User">
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="MobileNo" ColumnName="MobileNo" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="EmiratesId" ColumnName="EmiratesId" />
+                <ScalarProperty Name="NationalityId" ColumnName="NationalityId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RpasId" ColumnName="RpasId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
