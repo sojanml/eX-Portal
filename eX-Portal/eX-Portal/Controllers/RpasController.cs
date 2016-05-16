@@ -18,6 +18,7 @@ namespace eX_Portal.Controllers
         // GET: Rpas
         public ActionResult Index()
         {
+            if (!exLogic.User.hasAccess("RPAS.VIEW")) return RedirectToAction("NoAccess", "Home");
             string SQL = "SELECT MSTR_RPAS_User.Name as [FullName],\n"+
                          "LUP_Drone.Name AS Nationality,\n"+
                          "MSTR_RPAS_User.EmiratesId as [EmiratesID],\n"+
@@ -62,6 +63,7 @@ namespace eX_Portal.Controllers
         // GET: Rpas/Create
         public ActionResult Create()
         {
+            if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
             return View();
         }
 
@@ -72,6 +74,7 @@ namespace eX_Portal.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult Create(MSTR_RPAS_User mSTR_RPAS_User)
         {
+            if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
             if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select your nationality..");
             if (ModelState.IsValid)
             {               
@@ -80,6 +83,10 @@ namespace eX_Portal.Controllers
                 mSTR_RPAS_User.CreatedOn = System.DateTime.Now;
                 db.MSTR_RPAS_User.Add(mSTR_RPAS_User);
                 db.SaveChanges();
+
+                var mailurl = Url.Action("RPASRegEmail", "Email", new { id = mSTR_RPAS_User.RpasId });
+                var mailsubject = "New User Creation Request From RPAS REgisteration";
+                Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
                 return RedirectToAction("Index");
             }
 
