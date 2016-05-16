@@ -5,7 +5,7 @@ var FileInfo = '';
 $(document).ready(function () {
     $(':input').on("change", checkForm);
 
-    $('#formS3').on("submit", function (e) {
+    $('#createForm').on("submit", function (e) {
         e.stopPropagation();
         e.preventDefault();
         if (!checkForm()) return false;
@@ -17,7 +17,7 @@ $(document).ready(function () {
 
 function checkForm() {
     var ReturnValue = true;
-    var Form = document.forms['formS3'];
+    var Form = document.forms['createForm'];
     var File = Form['file'];
     var DocumentType = DocType;
     if (Form['DocumentType']) DocumentType = Form['DocumentType'].value;
@@ -44,7 +44,7 @@ function checkForm() {
 
 
 function startUpload() {
-    var File = document.forms['formS3']['file'];
+    var File = document.forms['createForm']['file'];
     for (var i = 0; i < File.files.length; i++) {
         var file = File.files[i];
         if (file.name.length < 1) {
@@ -60,7 +60,7 @@ function startUpload() {
 function getKeyName(FileName) {
     var Dt = new Date();
     var KeyName = Dt.toISOString().replace(/[^0-9]/g, "");
-    var DroneName = fixName(Drone.options[Drone.selectedIndex].text);
+    //var DroneName = fixName(Drone.options[Drone.selectedIndex].text);
     DroneName = DroneName.replace(/\./g, '');
     return 'rpas/' + DocType + '/' + KeyName + "_" + fixName(FileName);
 
@@ -80,12 +80,12 @@ function SubmitFile(file) {
     var FileName = file.name;
     var FileInfo = FileName + ' (' + Math.floor(file.size / 1024) + ' KB)';
     var KeyName = getKeyName(file.name);
-    var FORM = document.forms['formS3'];
-    var S3UploadUrl = $('#formS3').prop("action");
+    var FORM = document.forms['createForm'];
+    var S3UploadUrl = $('#createForm').prop("action");
     var fd = new FormData();
-    var AjaxData = $('#formS3').serialize() + '&S3Url=' + KeyName;
+    var AjaxData = $('#createForm').serialize() + '&S3Url=' + KeyName;
 
-    $("#formS3 :input").prop("disabled", true);
+    $("#createForm :input").prop("disabled", true);
     $('#btn-submit').val("Uploading...");
 
     $('#file-input').hide();

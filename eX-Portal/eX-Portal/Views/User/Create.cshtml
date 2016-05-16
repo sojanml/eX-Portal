@@ -13,7 +13,7 @@
             <input type="hidden" name="policy" value="@ViewBag.Base64EncodedPolicy" />
             <input type="hidden" name="signature" value="@ViewBag.Signature" />
             <input type="hidden" name="redirect" value="@ViewBag.RedirectUrl" />*@
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "createForm" }))
 {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.User.PhotoUrl)
