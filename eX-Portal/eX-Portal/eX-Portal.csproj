@@ -218,6 +218,7 @@
     <Compile Include="Controllers\PilotLogController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\RpasController.cs" />
     <Compile Include="Controllers\S3UploadController.cs" />
     <Compile Include="Controllers\SummaryController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -768,6 +769,7 @@
     <Content Include="Scripts\PayLoadMap.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\user.js" />
@@ -1062,6 +1064,11 @@
     <Content Include="Views\Shared\_Email.cshtml" />
     <Content Include="Views\Email\ForgotPassword.cshtml" />
     <Content Include="Views\Approval\Index.cshtml" />
+    <Content Include="Views\Rpas\Create.cshtml" />
+    <Content Include="Views\Rpas\Delete.cshtml" />
+    <Content Include="Views\Rpas\Details.cshtml" />
+    <Content Include="Views\Rpas\Edit.cshtml" />
+    <Content Include="Views\Rpas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
