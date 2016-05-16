@@ -106,7 +106,7 @@ namespace eX_Portal.Controllers {
         {
             if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
             if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select your nationality..");
-      if (ModelState.IsValid) {
+            if (ModelState.IsValid) {
                 mSTR_RPAS_User.Status = "New User Request";
                 mSTR_RPAS_User.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
                 mSTR_RPAS_User.CreatedOn = System.DateTime.Now;
