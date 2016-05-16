@@ -937,6 +937,12 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="SMSSend" Type="int" />
           <Property Name="AlertCategory" Type="nvarchar" MaxLength="25" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="PortalAlert_User">
+          <Property Name="AlertID" Type="int" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -953,6 +959,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="IsSend" Type="tinyint" />
           <Property Name="SendStatus" Type="varchar" MaxLength="250" />
           <Property Name="SendOn" Type="datetime" />
+          <Property Name="SendType" Type="varchar" MaxLength="12" />
         </EntityType>
         <EntityType Name="PortalAlertRegistration">
           <Key>
@@ -1019,6 +1026,11 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="IsActive" Type="bit" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="SMSTable">
+          <Property Name="CellNumber" Type="nvarchar" MaxLength="20" />
+        </EntityType>-->
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -2406,6 +2418,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="SendOn" Type="DateTime" Precision="3" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="Attachments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SendType" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PortalAlertRegistration">
           <Key>
@@ -3517,6 +3530,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="PortalAlertEmails">
             <EntityTypeMapping TypeName="ExponentPortalModel.PortalAlertEmail">
               <MappingFragment StoreEntitySet="PortalAlertEmail">
+                <ScalarProperty Name="SendType" ColumnName="SendType" />
                 <ScalarProperty Name="Attachments" ColumnName="Attachments" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="SendOn" ColumnName="SendOn" />
