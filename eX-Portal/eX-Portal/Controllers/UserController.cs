@@ -918,7 +918,7 @@ namespace eX_Portal.Controllers
                         var newpaswd = Util.RandomPassword();
                         string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId="+ userid;
                         int result = Util.doSQL(updatepswdsql);
-                            var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
+                        var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
                         var mailsubject = "Confidential Mail from Exponent";
                         Util.EmailQue(userid, toaddress, mailsubject, mailurl);
                     }                
