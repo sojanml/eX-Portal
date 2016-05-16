@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using eX_Portal.exLogic;
 
 namespace eX_Portal.Controllers {
   public class EmailController : Controller {
@@ -69,5 +70,18 @@ namespace eX_Portal.Controllers {
       return View(FlightData);
     }//ActionResult FlightReport
 
-  }//public class EmailController
+
+        public ActionResult RPASRegEmail([Bind(Prefix = "ID")] int RpasID = 0)
+        {
+            var User = ctx.MSTR_RPAS_User.Find(RpasID);
+
+            ViewBag.Title = "New User Creation Request Mail";
+            string sql = "select [FirstName]+' '+LastName as Name from [MSTR_User] where [UserId]=" +Convert.ToInt32(Session["UserID"].ToString());
+            var Row=Util.getDBRow(sql);
+            ViewBag.Username = Row["Name"].ToString();                        
+            return View(User);
+     }//ActionResult RPASRegEmail
+
+
+    }//public class EmailController
 }//namespace eX_Portal.Controllers
