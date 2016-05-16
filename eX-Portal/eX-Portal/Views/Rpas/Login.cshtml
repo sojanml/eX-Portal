@@ -1,0 +1,86 @@
+﻿@model eX_Portal.ViewModel.UserLogin
+@{
+  Layout = "~/Views/Shared/_eXPortalBeforeLogin.cshtml";
+  ViewBag.Title = "RPAS Login";
+}
+
+<section class="general-form" id="loginForm">
+  @using (Html.BeginForm("Login", "RPAS", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post,
+   new { @class = "form-horizontal", role = "form", id="qLoginForm", name = "qLoginForm" })) {
+  @Html.AntiForgeryToken()
+    <div class="editor-field">
+      <img src="~/images/logo.png" />
+  </div>
+
+      <div class="editor-field">
+        Please use the password that you have received in your registered
+        mobile number. If you have not received your password yet,
+        <a href="@Url.Action("Login","RPAS", new { Force = 1 })">Please click here to send it again</a>.
+      </div>
+
+      <div class="error" id="ErrorMessage" style="display:none; margin-bottom:20px;"></div>
+
+      @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+      <div class="editor-label">
+        User Name or Email Address
+      </div>
+
+      <div class="editor-field">
+        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+      </div>
+
+      <div class="editor-label">
+        Password that you have received in your mobile
+      </div>
+      <div class="editor-field">
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+      </div>
+
+      <div class="form-toolbar">
+        <input type="submit" value="Login" />
+      </div>
+
+      }
+</section>
+@section scripts {
+  <script type="text/javascript">
+    $('#qLoginForm').on("submit", function (e) {
+      var ErrorHTML = '';
+      e.preventDefault();
+      if ($('#UserName').val() == '') {
+        ErrorHTML += 'You need to enter your Username to login.<br>';
+      }
+
+      if ($('#Password').val() == '') {
+        ErrorHTML += 'Password is required to login.<br>';
+      }
+
+      if (ErrorHTML != '') {
+        $('#UserName').focus();
+        $('#ErrorMessage').html(ErrorHTML).show();
+        return false;
+      }
+      
+      var TheData = $('#qLoginForm').serialize();
+      $('#qLoginForm :input').attr("disabled", true);
+
+      $.ajax({
+        url: '/RPAS/Login',
+        method: 'POST',
+        contentType: 'text/Json',
+      }).complete(function (data) {
+        var TheData = data.responseJSON;
+        if (TheData.Status == 'OK') {
+          //success
+        } else {
+          $('#ErrorMessage').html(TheData.Message).show();
+        }
+      }).done(function (e) {
+        $('#qLoginForm :input').attr("disabled", false);
+      });
+
+    });
+  </script>
+}

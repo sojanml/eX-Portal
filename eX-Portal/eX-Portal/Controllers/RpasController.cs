@@ -8,24 +8,48 @@ using System.Web;
 using System.Web.Mvc;
 using eX_Portal.Models;
 using eX_Portal.exLogic;
+using eX_Portal.ViewModel;
 
 namespace eX_Portal.Controllers {
   public class RpasController : Controller {
     private ExponentPortalEntities db = new ExponentPortalEntities();
 
+    public ActionResult Login(int Force = 1) {
+      //this option allow to register the user to the
+      //exponent portal
+
+
+
+
+      return View();
+    }
+
+    [HttpPost]
+    public JsonResult Login(UserLogin _objuserlogin) {
+      var theResult = new {
+        Status = "Error",
+        Message = "Username can not be found in the system"
+      };
+
+      //Check 1: Is username and password match the login
+
+
+      return Json(theResult);
+    }
+
     // GET: Rpas
     public ActionResult Index() {
       string SQL = "SELECT MSTR_RPAS_User.Name as [FullName],\n" +
-                   "LUP_Drone.Name AS Nationality,\n" +
-                   "MSTR_RPAS_User.EmiratesId as [EmiratesID],\n" +
-                   "MSTR_RPAS_User.EmailId as [Email],\n" +
-                   "MSTR_RPAS_User.MobileNo as [MobileNo],\n" +
-                   "MSTR_RPAS_User.Status,\n" +
-                   "Count(*) Over() as _TotalRecords,\n" +
-                   "RpasId as _PKey\n" +
-                   "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n" +
-                   "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n" +
-                   "where LUP_Drone.Type = 'Country'";
+                    "LUP_Drone.Name AS Nationality,\n" +
+                    "MSTR_RPAS_User.EmiratesId as [EmiratesID],\n" +
+                    "MSTR_RPAS_User.EmailId as [Email],\n" +
+                    "MSTR_RPAS_User.MobileNo as [MobileNo],\n" +
+                    "MSTR_RPAS_User.Status,\n" +
+                    "Count(*) Over() as _TotalRecords,\n" +
+                    "RpasId as _PKey\n" +
+                    "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n" +
+                    "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n" +
+                    "where LUP_Drone.Type = 'Country'";
 
       qView nView = new qView(SQL);
       //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
