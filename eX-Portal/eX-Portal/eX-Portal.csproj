@@ -218,6 +218,7 @@
     <Compile Include="Controllers\PilotLogController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\RpasController.cs" />
     <Compile Include="Controllers\S3UploadController.cs" />
     <Compile Include="Controllers\SummaryController.cs" />
     <Compile Include="Controllers\TestController.cs" />
