@@ -1,0 +1,34 @@
+﻿@model eX_Portal.Models.MSTR_RPAS_User
+@{
+    Layout = "~/Views/Shared/_Email.cshtml";
+}
+
+@if (Model != null)
+{
+    <p>Dear Exponent Support Member,</p>
+
+    <p>
+       New User Creation Request from @ViewBag.Username through RPAS User Registeration on @Model.CreatedOn
+    </p>
+
+    <p>
+        Details:
+
+        Full Name  : @Model.Name<br />
+        Nationality: @Model.NationalityId<br />
+        Emirates Id: @Model.EmiratesId<br />
+        EmailId    : @Model.EmailId<br />
+        Mobile No  : @Model.MobileNo<br /> 
+        Status     : @Model.Status
+    </p>
+
+    <p>
+       Thank you.
+    </p>
+
+
+}
+else {
+    <p>Invalid User</p>
+
+}

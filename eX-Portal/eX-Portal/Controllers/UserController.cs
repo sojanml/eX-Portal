@@ -225,7 +225,7 @@ namespace eX_Portal.Controllers
 
 
         public ActionResult Create([Bind(Prefix = "ID")] int RPASID=0)
-                    {
+        {
 
             ViewBag.Title = "Create User";
             if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
@@ -916,15 +916,23 @@ namespace eX_Portal.Controllers
                     if (Util.getDBRow(sqlcheck).Count > 0)
                     {
                         var Row = Util.getDBRow(sqlcheck);
+                        if (String.IsNullOrEmpty(Row["EmailId"].ToString()))
+                        {
+                            return "Your Email is not updated in the system,kindly update your Email Id.";
+                        }
+                        else
+                        {
                         var toaddress = Row["EmailId"].ToString();
                         int userid =Convert.ToInt32(Row["UserId"].ToString());              
                         var newpaswd = Util.RandomPassword();
                         string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId="+ userid;
                         int result = Util.doSQL(updatepswdsql);
-                        var mailurl = "~/Email/ForgotPassword/"+Session["UserID"]+"?newpassword="+ newpaswd;
+                            var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
                         var mailsubject = "Confidential Mail from Exponent";
                         Util.EmailQue(userid, toaddress, mailsubject, mailurl);
                     }                
+                    } 
+                        
             }
             return "OK";
         }
