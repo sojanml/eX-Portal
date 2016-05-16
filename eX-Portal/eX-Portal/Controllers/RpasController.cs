@@ -8,12 +8,47 @@ using System.Web;
 using System.Web.Mvc;
 using eX_Portal.Models;
 using eX_Portal.exLogic;
+using eX_Portal.ViewModel;
 
-namespace eX_Portal.Controllers
-{
-    public class RpasController : Controller
-    {
+namespace eX_Portal.Controllers {
+  public class RpasController : Controller {
         private ExponentPortalEntities db = new ExponentPortalEntities();
+
+    public ActionResult Login([Bind(Prefix="ID")]int UserID = 0, int Force = 1) {
+      //this option allow to register the user to the
+      //exponent portal
+      bool isPasswordSend = false;
+
+      var UserInfo = (
+        from n in db.MSTR_User
+        where n.UserId == UserID
+        select new {
+          Password = n.Password,
+          Mobile = n.MobileNo
+        }
+      ).First();
+      if(String.IsNullOrEmpty(UserInfo.Password) || Force == 1) {
+        isPasswordSend = true;
+        var NewPassword = Util.getNewPassword();
+        
+      }
+
+
+      return View();
+    }
+
+    [HttpPost]
+    public JsonResult Login(UserLogin _objuserlogin) {
+      var theResult = new {
+        Status = "Error",
+        Message = "Username can not be found in the system"
+      };
+
+      //Check 1: Is username and password match the login
+
+
+      return Json(theResult);
+    }
 
         // GET: Rpas
         public ActionResult Index()
@@ -34,27 +69,22 @@ namespace eX_Portal.Controllers
             qView nView = new qView(SQL);
             //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
             nView.addMenu("Create User", Url.Action("Create", "User", new { ID = "_PKey" }));
-            if (Request.IsAjaxRequest())
-            {
+      if (Request.IsAjaxRequest()) {
                 Response.ContentType = "text/javascript";
                 return PartialView("qViewData", nView);
-            }
-            else {
+      } else {
                 return View(nView);
             }//if(IsAjaxRequest)
             //return View(db.MSTR_RPAS_User.ToList());
         }
 
         // GET: Rpas/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
+    public ActionResult Details(int? id) {
+      if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
-            if (mSTR_RPAS_User == null)
-            {
+      if (mSTR_RPAS_User == null) {
                 return HttpNotFound();
             }
             return View(mSTR_RPAS_User);
@@ -76,8 +106,7 @@ namespace eX_Portal.Controllers
         {
             if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
             if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select your nationality..");
-            if (ModelState.IsValid)
-            {               
+      if (ModelState.IsValid) {
                 mSTR_RPAS_User.Status = "New User Request";
                 mSTR_RPAS_User.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
                 mSTR_RPAS_User.CreatedOn = System.DateTime.Now;
@@ -94,15 +123,12 @@ namespace eX_Portal.Controllers
         }
 
         // GET: Rpas/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
+    public ActionResult Edit(int? id) {
+      if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
-            if (mSTR_RPAS_User == null)
-            {
+      if (mSTR_RPAS_User == null) {
                 return HttpNotFound();
             }
             return View(mSTR_RPAS_User);
@@ -113,10 +139,8 @@ namespace eX_Portal.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RpasId,Name,NationalityId,EmiratesId,EmailId,MobileNo,Status,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn")] MSTR_RPAS_User mSTR_RPAS_User)
-        {
-            if (ModelState.IsValid)
-            {
+    public ActionResult Edit([Bind(Include = "RpasId,Name,NationalityId,EmiratesId,EmailId,MobileNo,Status,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn")] MSTR_RPAS_User mSTR_RPAS_User) {
+      if (ModelState.IsValid) {
                 db.Entry(mSTR_RPAS_User).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -125,15 +149,12 @@ namespace eX_Portal.Controllers
         }
 
         // GET: Rpas/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
+    public ActionResult Delete(int? id) {
+      if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
-            if (mSTR_RPAS_User == null)
-            {
+      if (mSTR_RPAS_User == null) {
                 return HttpNotFound();
             }
             return View(mSTR_RPAS_User);
@@ -142,18 +163,15 @@ namespace eX_Portal.Controllers
         // POST: Rpas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
+    public ActionResult DeleteConfirmed(int id) {
             MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
             db.MSTR_RPAS_User.Remove(mSTR_RPAS_User);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
+    protected override void Dispose(bool disposing) {
+      if (disposing) {
                 db.Dispose();
             }
             base.Dispose(disposing);

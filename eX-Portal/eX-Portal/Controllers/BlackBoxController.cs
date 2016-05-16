@@ -80,7 +80,7 @@ namespace eX_Portal.Controllers {
         "  [FixQuality],\n" +
         "  [Satellites],\n" +
         "  CASE ISNUMERIC([BBFlightID])\n" +
-        "    WHEN  1 THEN  CONVERT(numeric(12, 0),[BBFlightID])\n" +
+        "    WHEN  1 THEN  CONVERT(numeric(20, 0),[BBFlightID])\n" +
         "    ELSE 0.00\n" +
         "  END as [FDRFlightId],\n" + 
         "  Count(*) Over() as _TotalRecords,[DroneDataId] as _PKey\n" +

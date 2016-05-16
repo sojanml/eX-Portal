@@ -15,6 +15,8 @@ using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Web.SessionState;
+using FileStorageUtils;
+
 namespace eX_Portal.Controllers
 {
     public class UserController : Controller
@@ -227,6 +229,32 @@ namespace eX_Portal.Controllers
 
             ViewBag.Title = "Create User";
             if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
+
+
+            //var fileStorageProvider = new AmazonS3FileStorageProvider();
+            //var fileUploadViewModel = new S3Upload(
+            //  fileStorageProvider.PublicKey,
+            //  fileStorageProvider.PrivateKey,
+            //  fileStorageProvider.BucketName,
+            //  Url.Action("complete", "home", null, Request.Url.Scheme)
+            //);
+            //fileUploadViewModel.SetPolicy(
+            //  fileStorageProvider.GetPolicyString(
+            //    fileUploadViewModel.FileId,
+            //    fileUploadViewModel.RedirectUrl
+            //  )
+            //);
+
+
+            //ViewBag.FormAction = fileUploadViewModel.FormAction;
+            //ViewBag.FormMethod = fileUploadViewModel.FormMethod;
+            //ViewBag.FormEnclosureType = fileUploadViewModel.FormEnclosureType;
+            //ViewBag.AWSAccessKey = fileUploadViewModel.AWSAccessKey;
+            //ViewBag.Acl = fileUploadViewModel.Acl;
+            //ViewBag.Base64EncodedPolicy = fileUploadViewModel.Base64EncodedPolicy;
+            //ViewBag.Signature = fileUploadViewModel.Signature;
+
+
             MSTR_User EPASValues = new MSTR_User();
             if (RPASID!=0)
             {
@@ -491,7 +519,16 @@ namespace eX_Portal.Controllers
                   "  AccountId,\n" +
                   "  IsPilot, \n" +
                   "  PhotoUrl,\n" +
-                  " Dashboard\n"+
+                  " Dashboard,\n"+
+                  " RPASPermitNo,\n" +
+                  " PermitCategory,\n" +
+                  " ContactAddress,\n" +
+                  " RegRPASSerialNo,\n" +
+                  " CompanyAddress,\n" +
+                  " CompanyTelephone,\n" +
+                  " CompanyEmail,\n" +
+                  " TradeLicenceCopyUrl,\n" +
+                  " EmiratesID\n" +
                   ") values(\n" +
                   "  '" + UserModel.User.UserName + "',\n" +
                   "  '" + Password + "',\n" +
@@ -511,7 +548,16 @@ namespace eX_Portal.Controllers
                   "  " + Util.toInt(UserModel.User.AccountId.ToString()) + ",\n" +
                   "  '" + UserModel.User.IsPilot + "',\n" +
                   "  '" + UserModel.User.PhotoUrl + "',\n" +
-                  "  '" +(UserModel.User.Dashboard).ToString()+ "'\n" +
+                  "  '" +(UserModel.User.Dashboard).ToString()+ "',\n" +
+                  "  '" + (UserModel.User.RPASPermitNo) + "',\n" +
+                  "  '" + (UserModel.User.PermitCategory) + "',\n" +
+                  "  '" + (UserModel.User.ContactAddress) + "',\n" +
+                  "  '" + (UserModel.User.RegRPASSerialNo) + "',\n" +
+                  "  '" + (UserModel.User.ContactAddress) + "',\n" +
+                  "  '" + (UserModel.User.CompanyTelephone) + "',\n" +
+                  "  '" + (UserModel.User.CompanyEmail) + "',\n" +
+                  "  '" + (UserModel.User.TradeLicenceCopyUrl) + "',\n" +
+                  "  '" + (UserModel.User.EmiratesID) + "'\n" +
                   ")";
                 //inserting pilot information to the pilot table
                 int id = Util.InsertSQL(SQL);
@@ -867,15 +913,15 @@ namespace eX_Portal.Controllers
                         }
                         else
                         {
-                            var toaddress = Row["EmailId"].ToString();
-                            int userid = Convert.ToInt32(Row["UserId"].ToString());
-                            var newpaswd = DroneFlightSetup.RandomPassword();
-                            string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId=" + userid;
-                            int result = Util.doSQL(updatepswdsql);                 
+                        var toaddress = Row["EmailId"].ToString();
+                        int userid =Convert.ToInt32(Row["UserId"].ToString());              
+                        var newpaswd = Util.RandomPassword();
+                        string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId="+ userid;
+                        int result = Util.doSQL(updatepswdsql);
                             var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
-                            var mailsubject = "Confidential Mail from Exponent";
-                            Util.EmailQue(userid, toaddress, mailsubject, mailurl);
-                        }
+                        var mailsubject = "Confidential Mail from Exponent";
+                        Util.EmailQue(userid, toaddress, mailsubject, mailurl);
+                    }                
                     } 
                         
             }
