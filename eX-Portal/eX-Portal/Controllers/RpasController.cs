@@ -14,11 +14,24 @@ namespace eX_Portal.Controllers {
   public class RpasController : Controller {
     private ExponentPortalEntities db = new ExponentPortalEntities();
 
-    public ActionResult Login(int Force = 1) {
+    public ActionResult Login([Bind(Prefix="ID")]int UserID = 0, int Force = 1) {
       //this option allow to register the user to the
       //exponent portal
+      bool isPasswordSend = false;
 
-
+      var UserInfo = (
+        from n in db.MSTR_User
+        where n.UserId == UserID
+        select new {
+          Password = n.Password,
+          Mobile = n.MobileNo
+        }
+      ).First();
+      if(String.IsNullOrEmpty(UserInfo.Password) || Force == 1) {
+        isPasswordSend = true;
+        var NewPassword = Util.getNewPassword();
+        
+      }
 
 
       return View();

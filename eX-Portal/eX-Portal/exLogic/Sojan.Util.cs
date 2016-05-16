@@ -33,7 +33,8 @@ namespace eX_Portal.exLogic {
           CreatedOn = DateTime.Now,
           IsSend = 0,
           SendOn = null,
-          SendStatus = "In Queue"
+          SendStatus = "In Queue",
+          SendType = "EMAIL"
         };
         ctx.PortalAlertEmails.Add(Email);
         ctx.SaveChanges();
@@ -43,6 +44,34 @@ namespace eX_Portal.exLogic {
       return QueID;
     }
 
+
+    public static int SMSQue(
+      int UserID,
+      String ToAddress,
+      String Body) {
+      int QueID = 0;
+      using (var ctx = new ExponentPortalEntities()) {
+        var Email = new PortalAlertEmail {
+          EmailSubject = "SMS to " + ToAddress,
+          EmailURL = null,
+          Body = Body,
+          FromAddress = "info@exponent-ts.com",
+          ToAddress = ToAddress,
+          UserID = UserID,
+          //default values set for items
+          CreatedOn = DateTime.Now,
+          IsSend = 0,
+          SendOn = null,
+          SendStatus = "In Queue",
+          SendType = "SMS"
+        };
+        ctx.PortalAlertEmails.Add(Email);
+        ctx.SaveChanges();
+        QueID = Email.EmailID;
+      }
+
+      return QueID;
+    }
     public static String toCaption(String Title) {
       Title = Regex.Replace(Title, "([A-Z][a-z])", m => " " + m.Groups[1]);
       Title = Regex.Replace(Title, "_", " ");
