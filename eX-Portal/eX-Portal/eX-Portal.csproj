@@ -225,7 +225,6 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="exLogic\Ajith.Util.cs" />
     <Compile Include="exLogic\BlackBox.cs" />
-    <Compile Include="exLogic\Blessy.Util.cs" />
     <Compile Include="exLogic\Cathey.Util.cs" />
     <Compile Include="exLogic\Drone.cs" />
     <Compile Include="exLogic\DroneCheckListForm.cs" />
@@ -770,6 +769,7 @@
     <Content Include="Scripts\PayLoadMap.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\user.js" />
@@ -1069,12 +1069,9 @@
     <Content Include="Views\Rpas\Details.cshtml" />
     <Content Include="Views\Rpas\Edit.cshtml" />
     <Content Include="Views\Rpas\Index.cshtml" />
-    <Content Include="Views\Rpas\Register.cshtml" />
-    <Content Include="Views\Rpas\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\AutoComplete\" />
     <Folder Include="Views\UserLogin\" />
     <Folder Include="Weather\" />
   </ItemGroup>
