@@ -655,7 +655,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           </Key>
           <Property Name="RpasId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="NationalityId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NationalityId" Type="int" />
           <Property Name="EmiratesId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="EmailId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="MobileNo" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -2446,7 +2446,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           </Key>
           <Property Name="RpasId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="NationalityId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NationalityId" Type="Int32" />
           <Property Name="EmiratesId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EmailId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="MobileNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />

@@ -16,7 +16,7 @@ namespace eX_Portal.Models
     {
         public int RpasId { get; set; }
         public string Name { get; set; }
-        public string NationalityId { get; set; }
+        public Nullable<int> NationalityId { get; set; }
         public string EmiratesId { get; set; }
         public string EmailId { get; set; }
         public string MobileNo { get; set; }
