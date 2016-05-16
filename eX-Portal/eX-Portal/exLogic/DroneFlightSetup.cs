@@ -85,11 +85,7 @@ namespace eX_Portal.exLogic
             return DDoptions; //return the list objects
         }
 
-        public static string RandomPassword()
-        {
-            string paswd=System.Web.Security.Membership.GeneratePassword(7, 1).ToString();
-            return paswd;
-        }
+
 
         public static IEnumerable<SelectListItem> GetDdListNationality(string TypeField, string NameField, string ValueField, string SPName)
         {
