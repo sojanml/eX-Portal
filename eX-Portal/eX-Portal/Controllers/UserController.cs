@@ -428,7 +428,16 @@ namespace eX_Portal.Controllers
                   "  IsActive='" + UserModel.User.IsActive + "', \n" +
                   "  IsPilot='" + UserModel.User.IsPilot + "',\n" +
                   "  Dashboard= '" + UserModel.User.Dashboard.ToString() +"',\n"+
-                  "  PhotoUrl='" + UserModel.User.PhotoUrl + "'\n" +
+                  "  PhotoUrl='" + UserModel.User.PhotoUrl + "',\n" +
+                  "  RPASPermitNo='" + UserModel.User.RPASPermitNo + "',\n" +
+                  "  PermitCategory='" + UserModel.User.PermitCategory + "',\n" +
+                  "  ContactAddress='" + UserModel.User.ContactAddress + "',\n" +
+                  "  RegRPASSerialNo='" + UserModel.User.RegRPASSerialNo + "',\n" +
+                  "  CompanyAddress='" + UserModel.User.CompanyAddress + "',\n" +
+                  "  CompanyTelephone='" + UserModel.User.CompanyTelephone + "',\n" +
+                  "  CompanyEmail='" + UserModel.User.CompanyEmail + "',\n" +
+                  "  TradeLicenceCopyUrl='" + UserModel.User.TradeLicenceCopyUrl + "',\n" +
+                  "  EmiratesID='" + UserModel.User.EmiratesID + "'\n" +
                   Pass_SQL +
                   "where\n" +
                   "  UserId=" + UserModel.User.UserId;
