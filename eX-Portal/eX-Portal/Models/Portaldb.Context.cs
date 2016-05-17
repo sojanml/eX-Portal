@@ -53,7 +53,6 @@ namespace eX_Portal.Models
         public virtual DbSet<M2M_ProfileMenu> M2M_ProfileMenu { get; set; }
         public virtual DbSet<DroneDocument> DroneDocuments { get; set; }
         public virtual DbSet<BlackBoxData> BlackBoxDatas { get; set; }
-        public virtual DbSet<FlightMapData> FlightMapDatas { get; set; }
         public virtual DbSet<MSTR_User_Pilot> MSTR_User_Pilot { get; set; }
         public virtual DbSet<MSTR_User_Pilot_Certification> MSTR_User_Pilot_Certification { get; set; }
         public virtual DbSet<MSTR_User_Pilot_ExponentUAS> MSTR_User_Pilot_ExponentUAS { get; set; }
@@ -79,6 +78,7 @@ namespace eX_Portal.Models
         public virtual DbSet<PortalAlertRegistration> PortalAlertRegistrations { get; set; }
         public virtual DbSet<FlightInfo> FlightInfoes { get; set; }
         public virtual DbSet<MSTR_RPAS_User> MSTR_RPAS_User { get; set; }
+        public virtual DbSet<FlightMapData> FlightMapDatas { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {
