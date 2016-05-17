@@ -225,6 +225,7 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="exLogic\Ajith.Util.cs" />
     <Compile Include="exLogic\BlackBox.cs" />
+    <Compile Include="exLogic\Blessy.Util.cs" />
     <Compile Include="exLogic\Cathey.Util.cs" />
     <Compile Include="exLogic\Drone.cs" />
     <Compile Include="exLogic\DroneCheckListForm.cs" />
@@ -1071,6 +1072,8 @@
     <Content Include="Views\User\ForgotPassword.cshtml" />
     <Content Include="Views\Email\FlightReport.cshtml" />
     <Content Include="Views\Email\RPASRegEmail.cshtml" />
+    <Content Include="Views\Rpas\Login.cshtml" />
+    <Content Include="Views\Rpas\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
