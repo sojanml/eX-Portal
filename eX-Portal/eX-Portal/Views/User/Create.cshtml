@@ -285,16 +285,6 @@
                         @Html.ValidationMessageFor(model => model.User.CompanyEmail, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.User.TradeLicenceCopyUrl, htmlAttributes: new { @class = "control-label col-md-2" })
-                </div>
-                <div class="editor-field" id="file-input">
-                    <input name="file" type="file" />
-                    <span style="display:none;" id="file-Required" class="field-validation-error">Please select a file to upload...</span>
-                </div>
-                <div class="editor-field" id="file-info">
-                    <span id="file-info-name"></span><span id="file-info-status"></span>
-                </div>
             </div>
 
             <div class="form-toolbar">
