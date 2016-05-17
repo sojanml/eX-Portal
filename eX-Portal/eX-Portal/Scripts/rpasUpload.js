@@ -3,7 +3,7 @@ var ULElem = null;
 var FileInfo = '';
 
 $(document).ready(function () {
-    $(':input').on("change", checkForm);
+   // $(':input').on("change", checkForm);
 
     $('#createForm').on("submit", function (e) {
         e.stopPropagation();

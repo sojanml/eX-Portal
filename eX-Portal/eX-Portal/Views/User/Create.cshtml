@@ -290,7 +290,6 @@
                 </div>
                 <div class="editor-field" id="file-input">
                     <input name="file" type="file" />
-                    <input name="file1212" type="file" />
                     <span style="display:none;" id="file-Required" class="field-validation-error">Please select a file to upload...</span>
                 </div>
                 <div class="editor-field" id="file-info">
@@ -308,7 +307,7 @@
 }
 
     @section Scripts {
-<script type="text/javascript" src="~/Scripts/rpasUpload.js"></script>
+@*<script type="text/javascript" src="~/Scripts/rpasUpload.js"></script>*@
         @Scripts.Render("~/bundles/jqueryval")
         <script type="text/javascript">
     var PhotoUploadURL = '@Url.Action("UploadFile", new { ID = 0})';
