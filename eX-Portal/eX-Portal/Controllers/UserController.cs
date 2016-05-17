@@ -484,7 +484,6 @@ namespace eX_Portal.Controllers
             //int RPASID = string.IsNullOrEmpty(hdnRPASid) ? 0 : Convert.ToInt16(hdnRPASid);
             int RPASID = ID;
 
-
             if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
             //if (ModelState.IsValid) {
             if (exLogic.User.UserExist(UserModel.User.UserName) > 0)
