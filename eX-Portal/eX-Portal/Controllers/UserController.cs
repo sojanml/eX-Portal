@@ -574,13 +574,13 @@ namespace eX_Portal.Controllers
                   "  '" + UserModel.User.OfficeNo + "',\n" +
                   "  '" + UserModel.User.HomeNo + "',\n" +
                   "  '" + UserModel.User.EmailId + "',\n" +
-                  "  " + Util.toInt(UserModel.User.CountryId.ToString()) + ",\n" +
+                  "  " + Util.toInt(UserModel.User.CountryId) + ",\n" +
                   "  '" + UserModel.User.IsActive + "',\n" +
                   "  GETDATE(),\n" +
-                  "  " + Util.toInt(UserModel.User.AccountId.ToString()) + ",\n" +
+                  "  " + Util.toInt(UserModel.User.AccountId) + ",\n" +
                   "  '" + UserModel.User.IsPilot + "',\n" +
                   "  '" + UserModel.User.PhotoUrl + "',\n" +
-                  "  '" +(UserModel.User.Dashboard).ToString()+ "',\n" +
+                  "  '" + UserModel.User.Dashboard + "',\n" +
                   "  '" + (UserModel.User.RPASPermitNo) + "',\n" +
                   "  '" + (UserModel.User.PermitCategory) + "',\n" +
                   "  '" + (UserModel.User.ContactAddress) + "',\n" +
