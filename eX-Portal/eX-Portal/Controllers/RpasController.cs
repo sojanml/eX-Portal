@@ -140,19 +140,26 @@ namespace eX_Portal.Controllers {
         public ActionResult Create(MSTR_RPAS_User mSTR_RPAS_User)
         {
             if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
-            if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select your nationality..");
-            string sqlmailcheck = "select EmailId from MSTR_RPAS_User where [EmailId] ='" + mSTR_RPAS_User.EmailId.ToString()+"'";
-            var Row=Util.getDBRow(sqlmailcheck);
-            if (Row.Count>1)
+            if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select Nationality.");
+            if (mSTR_RPAS_User.EmailId == null)
             {
-                if (Row["EmailId"].ToString() == mSTR_RPAS_User.EmailId)
-                {
-                    ViewBag.message = "Registeration for this user is already done!!";
-                    return View(mSTR_RPAS_User);
-                }
-                else{}
+                ModelState.AddModelError("EmailId", "Please enter Email Id.");
             }
-            else{}
+            else
+            {
+                string sqlmailcheck = "select EmailId from MSTR_RPAS_User where [EmailId] ='" + mSTR_RPAS_User.EmailId.ToString() + "'";
+                var Row = Util.getDBRow(sqlmailcheck);
+                if (Row.Count > 1)
+                {
+                    if (Row["EmailId"].ToString() == mSTR_RPAS_User.EmailId)
+                    {
+                        ViewBag.message = "Registeration for this user is already done!!";
+                        return View(mSTR_RPAS_User);
+                    }
+                    else { }
+                }
+                else { }
+            }
             if (ModelState.IsValid)
             {
                     mSTR_RPAS_User.Status = "New User Request";

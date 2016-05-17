@@ -72,9 +72,43 @@ namespace eX_Portal.exLogic {
 
     }
 
+    public static int UserIsActive(String UserName, String Password)
+    {
+        try
+        {
+            string PasswordCrypto = Util.GetEncryptedPassword(Password);
+            int result = 0;
+                
+            using (var ctx = new ExponentPortalEntities())
+            {
+                var _objuserdetail = (from data in ctx.MSTR_User
+                                      where (data.UserName == UserName
+                                      && data.Password == PasswordCrypto)
+                                      select data.IsActive).ToList();
+                    
+                    string isactive = _objuserdetail[0].ToString();
+                    if(isactive == "True")
+                    {
+                        result = 1;
+                    }
+                    else
+                    {
+                        result = 0;
+                    }
+            }
+            return result;
+
+        }
+        catch (Exception ex)
+        {
+            Util.ErrorHandler(ex);
+            System.Web.HttpContext.Current.Response.Write("<script>alert('Please Check Database Connection');</script>");
+            return -1;
+        }
+   }
 
 
-    public static int UserExist(String UserName) {
+        public static int UserExist(String UserName) {
       try {
 
         int result = 0;
