@@ -64,7 +64,7 @@ namespace eX_Portal.Controllers {
                          "RpasId as _PKey\n"+
                          "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n"+
                          "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n"+
-                         "where LUP_Drone.Type = 'Country'";
+                         "where LUP_Drone.Type = 'Country' and MSTR_RPAS_User.Status='New User Request'";
 
             qView nView = new qView(SQL);
             //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
@@ -106,19 +106,32 @@ namespace eX_Portal.Controllers {
         {
             if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
             if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select your nationality..");
-            if (ModelState.IsValid) {
-                mSTR_RPAS_User.Status = "New User Request";
-                mSTR_RPAS_User.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
-                mSTR_RPAS_User.CreatedOn = System.DateTime.Now;
-                db.MSTR_RPAS_User.Add(mSTR_RPAS_User);
-                db.SaveChanges();
-
-                var mailurl = Url.Action("RPASRegEmail", "Email", new { id = mSTR_RPAS_User.RpasId });
-                var mailsubject = "New User Creation Request From RPAS REgisteration";
-                Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
-                return RedirectToAction("Index");
+            string sqlmailcheck = "select EmailId from MSTR_RPAS_User where [EmailId] ='" + mSTR_RPAS_User.EmailId.ToString()+"'";
+            var Row=Util.getDBRow(sqlmailcheck);
+            if (Row.Count>1)
+            {
+                if (Row["EmailId"].ToString() == mSTR_RPAS_User.EmailId)
+                {
+                    ViewBag.message = "Registeration for this user is already done!!";
+                    return View(mSTR_RPAS_User);
+                }
+                else{}
             }
-
+            else{}
+            if (ModelState.IsValid)
+            {
+                    mSTR_RPAS_User.Status = "New User Request";
+                    mSTR_RPAS_User.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
+                    mSTR_RPAS_User.CreatedOn = System.DateTime.Now;
+                    db.MSTR_RPAS_User.Add(mSTR_RPAS_User);
+                    db.SaveChanges();
+                    int id = mSTR_RPAS_User.RpasId;
+                    var mailurl = "~/Email/RPASRegEmail/" + id;  //"~/"+Url.Action("RPASRegEmail", "Email", new { id = mSTR_RPAS_User.RpasId });
+                    var mailsubject = "New User Creation Request From RPAS Registeration";
+                    Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
+                    return RedirectToAction("Index");
+            }
+            
             return View(mSTR_RPAS_User);
         }
 
