@@ -154,12 +154,19 @@ namespace eX_Portal.Controllers {
         .OrderBy(o => o.CreatedDate)
         .ToList();
 
+
       FlightData.Approvals = (
         from n in db.GCA_Approval
         where FlightData.FlightDate >= n.StartDate &&
               FlightData.FlightDate <= n.EndDate &&
               n.DroneID == FlightData.DroneID
-        select n
+        select new ApprovalInfo {
+          ApprovalName = n.ApprovalName,
+          StartDate = n.StartDate,
+          EndDate = n.EndDate,
+          StartTime = n.StartTime,
+          EndTime = n.EndTime
+        } 
       ).ToList();
 
       FlightData.Info = (
@@ -167,7 +174,7 @@ namespace eX_Portal.Controllers {
         where n.FlightID == FlightID
         select n).FirstOrDefault();
 
-      return View(FlightData);
+     return View(FlightData);
     }
 
     public ActionResult FlightPDF([Bind(Prefix = "ID")]int FlightID = 0) {

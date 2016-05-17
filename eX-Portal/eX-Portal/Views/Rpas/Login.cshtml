@@ -73,7 +73,7 @@
       }).complete(function (data) {
         var TheData = data.responseJSON;
         if (TheData.Status == 'OK') {
-          //success
+          top.location.href = '/RPAS/Register'
         } else {
           $('#ErrorMessage').html(TheData.Message).show();
         }
