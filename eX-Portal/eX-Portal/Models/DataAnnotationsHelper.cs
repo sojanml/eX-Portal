@@ -107,7 +107,11 @@ namespace eX_Portal.Models {
 
     [Display(Name = "Country")]
     public string CountryId { get; set; }
-  }//MSTR_UserHelper
+
+    [EmailAddress(ErrorMessage = "Invalid Email Address")]
+    public string CompanyEmail { get; set; }
+
+    }//MSTR_UserHelper
 
 
 

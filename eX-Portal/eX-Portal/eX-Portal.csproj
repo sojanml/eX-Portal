@@ -53,7 +53,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FileStorageUtils">
-      <HintPath>..\..\..\Storage\FileStorageUtils.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\FileStorageUtils\bin\Debug\FileStorageUtils.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
@@ -770,7 +770,6 @@
     <Content Include="Scripts\PayLoadMap.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\user.js" />
@@ -1070,6 +1069,10 @@
     <Content Include="Views\Rpas\Details.cshtml" />
     <Content Include="Views\Rpas\Edit.cshtml" />
     <Content Include="Views\Rpas\Index.cshtml" />
+    <Content Include="Views\User\ForgotPassword.cshtml" />
+    <Content Include="Views\Email\FlightReport.cshtml" />
+    <Content Include="Views\Email\RPASRegEmail.cshtml" />
+    <Content Include="Views\Email\RPASUserCreated.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

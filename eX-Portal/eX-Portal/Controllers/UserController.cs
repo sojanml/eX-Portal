@@ -225,7 +225,7 @@ namespace eX_Portal.Controllers
 
 
         public ActionResult Create([Bind(Prefix = "ID")] int RPASID=0)
-                    {
+        {
 
             ViewBag.Title = "Create User";
             if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
@@ -254,10 +254,12 @@ namespace eX_Portal.Controllers
             //ViewBag.Base64EncodedPolicy = fileUploadViewModel.Base64EncodedPolicy;
             //ViewBag.Signature = fileUploadViewModel.Signature;
 
-
+            ViewBag.IsPassowrdRequired = true;
             MSTR_User EPASValues = new MSTR_User();
             if (RPASID!=0)
             {
+                ViewBag.RPASid = RPASID;
+                ViewBag.IsPassowrdRequired = false;
                 var RPASoList = (from p in db.MSTR_RPAS_User where p.RpasId== RPASID select p).ToList();
                 EPASValues.FirstName = RPASoList[0].Name;
                 EPASValues.CountryId = Convert.ToInt16(RPASoList[0].NationalityId);
@@ -428,7 +430,16 @@ namespace eX_Portal.Controllers
                   "  IsActive='" + UserModel.User.IsActive + "', \n" +
                   "  IsPilot='" + UserModel.User.IsPilot + "',\n" +
                   "  Dashboard= '" + UserModel.User.Dashboard.ToString() +"',\n"+
-                  "  PhotoUrl='" + UserModel.User.PhotoUrl + "'\n" +
+                  "  PhotoUrl='" + UserModel.User.PhotoUrl + "',\n" +
+                  "  RPASPermitNo='" + UserModel.User.RPASPermitNo + "',\n" +
+                  "  PermitCategory='" + UserModel.User.PermitCategory + "',\n" +
+                  "  ContactAddress='" + UserModel.User.ContactAddress + "',\n" +
+                  "  RegRPASSerialNo='" + UserModel.User.RegRPASSerialNo + "',\n" +
+                  "  CompanyAddress='" + UserModel.User.CompanyAddress + "',\n" +
+                  "  CompanyTelephone='" + UserModel.User.CompanyTelephone + "',\n" +
+                  "  CompanyEmail='" + UserModel.User.CompanyEmail + "',\n" +
+                  "  TradeLicenceCopyUrl='" + UserModel.User.TradeLicenceCopyUrl + "',\n" +
+                  "  EmiratesID='" + UserModel.User.EmiratesID + "'\n" +
                   Pass_SQL +
                   "where\n" +
                   "  UserId=" + UserModel.User.UserId;
@@ -466,8 +477,11 @@ namespace eX_Portal.Controllers
 
 
         [HttpPost]
-        public ActionResult Create(ViewModel.UserViewModel UserModel)
+        public ActionResult Create(ViewModel.UserViewModel UserModel, int RPASID = 0)
         {
+            string hdnRPASid = Request["hdnRPASid"];
+            RPASID = ViewBag.RPASid == null ? 0 : ViewBag.RPASid;
+            
             if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
             //if (ModelState.IsValid) {
             if (exLogic.User.UserExist(UserModel.User.UserName) > 0)
@@ -475,7 +489,7 @@ namespace eX_Portal.Controllers
                 ModelState.AddModelError("User.UserName", "This username already exists.");
             }
 
-            if (String.IsNullOrEmpty(UserModel.User.Password))
+            if (String.IsNullOrEmpty(UserModel.User.Password) && RPASID!=0)
             {
                 ModelState.AddModelError("User.Password", "Invalid Password. Please enter again.");
             }
@@ -587,6 +601,12 @@ namespace eX_Portal.Controllers
                     System.IO.File.Exists(PhotoURL))
                 {
                     System.IO.File.Move(PhotoURL, newPath + UserModel.User.PhotoUrl);
+                }
+                if (RPASID != 0)
+                {
+                    var mailurl = Url.Action("RPASUserCreated", "Email", new { RpasID = 0, UserID = id });
+                    var mailsubject = "User has been created";
+                    Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
                 }
                 return RedirectToAction("UserDetail", new { ID = id });
 
@@ -907,15 +927,23 @@ namespace eX_Portal.Controllers
                     if (Util.getDBRow(sqlcheck).Count > 0)
                     {
                         var Row = Util.getDBRow(sqlcheck);
+                        if (String.IsNullOrEmpty(Row["EmailId"].ToString()))
+                        {
+                            return "Your Email is not updated in the system,kindly update your Email Id.";
+                        }
+                        else
+                        {
                         var toaddress = Row["EmailId"].ToString();
                         int userid =Convert.ToInt32(Row["UserId"].ToString());              
                         var newpaswd = Util.RandomPassword();
                         string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId="+ userid;
                         int result = Util.doSQL(updatepswdsql);
-                        var mailurl = "~/Email/ForgotPassword/"+Session["UserID"]+"?newpassword="+ newpaswd;
+                        var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
                         var mailsubject = "Confidential Mail from Exponent";
                         Util.EmailQue(userid, toaddress, mailsubject, mailurl);
                     }                
+                    } 
+                        
             }
             return "OK";
         }
