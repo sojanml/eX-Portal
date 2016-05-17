@@ -12,6 +12,7 @@ using System.Globalization;
 using System.IO;
 using System.Web.SessionState;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
@@ -107,6 +108,8 @@ namespace eX_Portal.exLogic {
       }
       return result;
     }
+
+
 
     public static String getDBVal(String SQL, ExponentPortalEntities ctx) {
       String Result = "";
@@ -587,6 +590,23 @@ namespace eX_Portal.exLogic {
       return str.ToString();
     }//static string gEncode
 
+    public static String MD5(String HasStr) {
+
+      // byte array representation of that string
+      byte[] encodedPassword = new UTF8Encoding().GetBytes(HasStr);
+
+      // need MD5 to calculate the hash
+      byte[] hash = ((HashAlgorithm)CryptoConfig.CreateFromName("MD5")).ComputeHash(encodedPassword);
+
+      // string representation (similar to UNIX format)
+      string encoded = BitConverter.ToString(hash)
+         // without dashes
+         .Replace("-", string.Empty)
+         // make lowercase
+         .ToLower();
+      return encoded;
+
+    }
 
 
   }//class Util

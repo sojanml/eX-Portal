@@ -84,7 +84,7 @@ namespace eX_Portal.exLogic {
       "Turquoise",      "Wheat",  "WhiteSmoke", "YellowGreen"
       };
 
-      var Symbols = "!@#$%^&*|".Split();
+      var Symbols = new String[] { "!", "@", "#", "$", "%", "^", "&", "*", "|" };
       var R = new Random();
       var Password = RColors[R.Next(RColors.Length)] +
          Animals[R.Next(Animals.Length)] +

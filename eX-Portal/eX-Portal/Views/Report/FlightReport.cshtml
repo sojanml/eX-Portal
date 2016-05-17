@@ -129,6 +129,7 @@
     </tr>
   </table>
   <p>&nbsp;</p>
+  @if(Model.Info != null) { 
   <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
     <tr>
       <th>Flight Summary</th>
@@ -174,6 +175,7 @@
     </tr>
   </table>
   <p>&nbsp;</p>
+  }
   <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
     <tr>
       <th>Flight Track</th>
@@ -209,13 +211,15 @@
       <th>Chart &amp; Flight Parameters</th>
     </tr>
     <tr>
-      <td><img src="http://localhost:2727/Report/GetChart/@ViewBag.FlightID" /></td>
+      <td><img src="/Report/GetChart/@ViewBag.FlightID" /></td>
     </tr>
   </table>
-  <p>&nbsp;</p>
-  @Html.Action("DroneCheckWarning", "Report", new { ID = ViewBag.FlightID })
 
   <div style="page-break-before: always;"></div>
+
+  @Html.Action("DroneCheckWarning", "Report", new { ID = ViewBag.FlightID })
+  
+  <p>&nbsp;</p>
 
   @if(Model.PortalAlerts.Count > 0 ) { 
   <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">

@@ -6,6 +6,15 @@ using eX_Portal.Models;
 using eX_Portal.exLogic;
 
 namespace eX_Portal.ViewModel {
+
+  public class ApprovalInfo {
+    public String ApprovalName { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
+    public String StartTime { get; set; }
+    public String EndTime { get; set; }
+  }
+
   public class FlightViewModel {
     public int ID { get; set; }
     public Nullable<int> PilotID { get; set; }
@@ -47,7 +56,7 @@ namespace eX_Portal.ViewModel {
     public string ZoneCoordinates { get; set; }
     public string DroneName { get; set; }
     public IList<PortalAlert> PortalAlerts { get; set; }
-    public IList<GCA_Approval> Approvals { get; set; }
+    public IList<ApprovalInfo> Approvals { get; set; }
     public IList<DroneFlightVideo> Videos { get; set; }
 
     public FlightInfo Info { get; set; }
