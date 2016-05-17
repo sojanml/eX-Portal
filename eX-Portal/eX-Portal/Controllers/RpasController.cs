@@ -24,16 +24,32 @@ namespace eX_Portal.Controllers {
         where n.UserId == UserID
         select new {
           Password = n.Password,
-          Mobile = n.MobileNo
+          Mobile = n.MobileNo,
+          FullName = n.FirstName
         }
-      ).First();
-      if(String.IsNullOrEmpty(UserInfo.Password) || Force == 1) {
-        isPasswordSend = true;
-        var NewPassword = Util.getNewPassword();
-        
+      ).ToList();
+
+      if (UserInfo.Count <= 0) {
+        //nothing
+      } else {
+        var thisUser = UserInfo.First();
+        if (String.IsNullOrEmpty(thisUser.Password) || Force == 1) {
+          isPasswordSend = true;
+          var NewPassword = Util.getNewPassword();
+          var PasswordMD5 = Util.MD5(NewPassword);
+          String Body = "Hi " + thisUser.FullName + ", Your password for " +
+          "exponent is " + NewPassword;
+          Util.SMSQue(UserID, thisUser.Mobile, Body);
+
+          //Save the password to the database, so it can be used to login
+          String SQL = "UPDATE MSTR_User Set GeneratedPassword='" + PasswordMD5 + "' " +
+          "WHERE UserID=" + UserID;
+          Util.doSQL(SQL);
+          isPasswordSend = true;
+        }
       }
 
-
+      ViewBag.isPasswordSend = isPasswordSend;
       return View();
     }
 
@@ -41,13 +57,32 @@ namespace eX_Portal.Controllers {
     public JsonResult Login(UserLogin _objuserlogin) {
       var theResult = new {
         Status = "Error",
-        Message = "Username can not be found in the system"
+        Message = "Username or Password does not match. Please Try again."
       };
 
       //Check 1: Is username and password match the login
+      var UserInfo = (
+        from n in db.MSTR_User
+        where (n.UserName == _objuserlogin.UserName ||
+        n.EmailId == _objuserlogin.UserName) &&
+        n.GeneratedPassword == Util.MD5(_objuserlogin.Password)
+        select new {
+          UserID = n.UserId,
+          Mobile = n.MobileNo,
+          FullName = n.FirstName
+        }
+      ).ToList();
+      if(UserInfo.Count < 1) return Json(theResult);
 
-
+      //Setp 2: If the user is found, then redirect the user to 
+      //        Registration page
+      Session["RegisterUserID"] = UserInfo.First().UserID;
+      theResult = new {
+        Status = "OK",
+        Message = "User logged in successfully. Contine to register..."
+      };
       return Json(theResult);
+
     }
 
         // GET: Rpas
