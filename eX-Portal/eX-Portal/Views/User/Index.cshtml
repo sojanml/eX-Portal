@@ -8,7 +8,11 @@
     @Html.AntiForgeryToken()
     if(ViewBag.Message == 0) {
       <p><span class="info">Invalid username or password. Please try again</span></p>
-    }
+      }
+      if (ViewBag.Message == 2)
+      {
+        <p><span class="info">Please Activate your Account to Login!</span></p>
+      }
       @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="editor-label">
       @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
