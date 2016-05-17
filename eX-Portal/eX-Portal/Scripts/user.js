@@ -7,7 +7,7 @@
     }//if
   })
 
-   $(':file').change(startUploadImage);
+  $('#fileinput').on("change", startUploadImage);
    //$("input[id^='fileinputs']").on('change', startUploadImage);
 
 });
