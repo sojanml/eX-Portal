@@ -770,6 +770,7 @@
     <Content Include="Scripts\PayLoadMap.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\user.js" />
