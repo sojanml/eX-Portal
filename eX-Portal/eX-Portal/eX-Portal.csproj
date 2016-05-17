@@ -1072,6 +1072,7 @@
     <Content Include="Views\User\ForgotPassword.cshtml" />
     <Content Include="Views\Email\FlightReport.cshtml" />
     <Content Include="Views\Email\RPASRegEmail.cshtml" />
+    <Content Include="Views\Email\RPASUserCreated.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
