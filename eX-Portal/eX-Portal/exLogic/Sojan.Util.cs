@@ -194,6 +194,7 @@ namespace eX_Portal.exLogic {
     }
 
     public static int toInt(Object Str) {
+      if (Str == null) Str = String.Empty;
       var theStr = Str.ToString();
       return toInt(theStr);
     }

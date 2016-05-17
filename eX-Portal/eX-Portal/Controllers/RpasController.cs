@@ -12,9 +12,25 @@ using eX_Portal.ViewModel;
 
 namespace eX_Portal.Controllers {
   public class RpasController : Controller {
-        private ExponentPortalEntities db = new ExponentPortalEntities();
+    private ExponentPortalEntities db = new ExponentPortalEntities();
 
-    public ActionResult Login([Bind(Prefix="ID")]int UserID = 0, int Force = 1) {
+    public ActionResult Register() {
+      int RegisterUserID = Util.toInt(Session["RegisterUserID"]);
+      if(RegisterUserID <= 0) return View("NoAcess");
+      var User = (from n in db.MSTR_User
+                  where n.UserId == RegisterUserID
+                  select n
+      ).FirstOrDefault();
+      if(User == null) return View("NoAcess");
+
+      return View(User);
+      
+    }
+    public ActionResult NoAccess() {
+      return View();
+    }
+
+    public ActionResult Login([Bind(Prefix = "ID")]int UserID = 0, int Force = 0) {
       //this option allow to register the user to the
       //exponent portal
       bool isPasswordSend = false;
@@ -54,25 +70,27 @@ namespace eX_Portal.Controllers {
     }
 
     [HttpPost]
-    public JsonResult Login(UserLogin _objuserlogin) {
+    public JsonResult Login(String UserName = "", String Password = "") {
+      //UserName = Request["UserName"];
+      //Password = Request["Password"];
       var theResult = new {
         Status = "Error",
         Message = "Username or Password does not match. Please Try again."
       };
-
+      String PasswordMD5 = Util.MD5(Password);
       //Check 1: Is username and password match the login
       var UserInfo = (
         from n in db.MSTR_User
-        where (n.UserName == _objuserlogin.UserName ||
-        n.EmailId == _objuserlogin.UserName) &&
-        n.GeneratedPassword == Util.MD5(_objuserlogin.Password)
+        where (n.UserName == UserName ||
+        n.EmailId == UserName) &&
+        n.GeneratedPassword == PasswordMD5
         select new {
           UserID = n.UserId,
           Mobile = n.MobileNo,
           FullName = n.FirstName
         }
       ).ToList();
-      if(UserInfo.Count < 1) return Json(theResult);
+      if (UserInfo.Count < 1) return Json(theResult);
 
       //Setp 2: If the user is found, then redirect the user to 
       //        Registration page
@@ -85,144 +103,136 @@ namespace eX_Portal.Controllers {
 
     }
 
-        // GET: Rpas
-        public ActionResult Index()
-        {
-            if (!exLogic.User.hasAccess("RPAS.VIEW")) return RedirectToAction("NoAccess", "Home");
-            string SQL = "SELECT MSTR_RPAS_User.Name as [FullName],\n"+
-                         "LUP_Drone.Name AS Nationality,\n"+
-                         "MSTR_RPAS_User.EmiratesId as [EmiratesID],\n"+
-                         "MSTR_RPAS_User.EmailId as [Email],\n"+
-                         "MSTR_RPAS_User.MobileNo as [MobileNo],\n"+
-                         "MSTR_RPAS_User.Status,\n"+
-                         "Count(*) Over() as _TotalRecords,\n"+
-                         "RpasId as _PKey\n"+
-                         "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n"+
-                         "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n"+
-                         "where LUP_Drone.Type = 'Country' and (MSTR_RPAS_User.Status='New User Request' or MSTR_RPAS_User.Status='User Created')";
+    // GET: Rpas
+    public ActionResult Index() {
+      if (!exLogic.User.hasAccess("RPAS.VIEW")) return RedirectToAction("NoAccess", "Home");
+      string SQL = "SELECT MSTR_RPAS_User.Name as [FullName],\n" +
+                   "LUP_Drone.Name AS Nationality,\n" +
+                   "MSTR_RPAS_User.EmiratesId as [EmiratesID],\n" +
+                   "MSTR_RPAS_User.EmailId as [Email],\n" +
+                   "MSTR_RPAS_User.MobileNo as [MobileNo],\n" +
+                   "MSTR_RPAS_User.Status,\n" +
+                   "Count(*) Over() as _TotalRecords,\n" +
+                   "RpasId as _PKey\n" +
+                   "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n" +
+                   "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n" +
+                   "where LUP_Drone.Type = 'Country' and (MSTR_RPAS_User.Status='New User Request' or MSTR_RPAS_User.Status='User Created')";
 
-            qView nView = new qView(SQL);
-            //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
-            nView.addMenu("Create User", Url.Action("Create", "User", new { ID = "_PKey" }));
+      qView nView = new qView(SQL);
+      //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
+      nView.addMenu("Create User", Url.Action("Create", "User", new { ID = "_PKey" }));
       if (Request.IsAjaxRequest()) {
-                Response.ContentType = "text/javascript";
-                return PartialView("qViewData", nView);
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
       } else {
-                return View(nView);
-            }//if(IsAjaxRequest)
-            //return View(db.MSTR_RPAS_User.ToList());
-        }
+        return View(nView);
+      }//if(IsAjaxRequest)
+       //return View(db.MSTR_RPAS_User.ToList());
+    }
 
-        // GET: Rpas/Details/5
+    // GET: Rpas/Details/5
     public ActionResult Details(int? id) {
       if (id == null) {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
+        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+      }
+      MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
       if (mSTR_RPAS_User == null) {
-                return HttpNotFound();
-            }
-            return View(mSTR_RPAS_User);
-        }
+        return HttpNotFound();
+      }
+      return View(mSTR_RPAS_User);
+    }
 
-        // GET: Rpas/Create
-        public ActionResult Create()
-        {
-            if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
-            return View();
-        }
+    // GET: Rpas/Create
+    public ActionResult Create() {
+      if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
+      return View();
+    }
 
-        // POST: Rpas/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public ActionResult Create(MSTR_RPAS_User mSTR_RPAS_User)
-        {
-            if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
-            if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select your nationality..");
-            string sqlmailcheck = "select EmailId from MSTR_RPAS_User where [EmailId] ='" + mSTR_RPAS_User.EmailId.ToString()+"'";
-            var Row=Util.getDBRow(sqlmailcheck);
-            if (Row.Count>1)
-            {
-                if (Row["EmailId"].ToString() == mSTR_RPAS_User.EmailId)
-                {
-                    ViewBag.message = "Registeration for this user is already done!!";
-                    return View(mSTR_RPAS_User);
-                }
-                else{}
-            }
-            else{}
-            if (ModelState.IsValid)
-            {
-                    mSTR_RPAS_User.Status = "New User Request";
-                    mSTR_RPAS_User.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
-                    mSTR_RPAS_User.CreatedOn = System.DateTime.Now;
-                    db.MSTR_RPAS_User.Add(mSTR_RPAS_User);
-                    db.SaveChanges();
-                    int id = mSTR_RPAS_User.RpasId;
-                    var mailurl = "~/Email/RPASRegEmail/" + id;  //"~/"+Url.Action("RPASRegEmail", "Email", new { id = mSTR_RPAS_User.RpasId });
-                    var mailsubject = "New User Creation Request From RPAS Registeration";
-                    Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
-                    return RedirectToAction("Index");
-            }
-            
-            return View(mSTR_RPAS_User);
-        }
+    // POST: Rpas/Create
+    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    //[ValidateAntiForgeryToken]
+    public ActionResult Create(MSTR_RPAS_User mSTR_RPAS_User) {
+      if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
+      if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select your nationality..");
+      string sqlmailcheck = "select EmailId from MSTR_RPAS_User where [EmailId] ='" + mSTR_RPAS_User.EmailId.ToString() + "'";
+      var Row = Util.getDBRow(sqlmailcheck);
+      if (Row.Count > 1) {
+        if (Row["EmailId"].ToString() == mSTR_RPAS_User.EmailId) {
+          ViewBag.message = "Registeration for this user is already done!!";
+          return View(mSTR_RPAS_User);
+        } else { }
+      } else { }
+      if (ModelState.IsValid) {
+        mSTR_RPAS_User.Status = "New User Request";
+        mSTR_RPAS_User.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
+        mSTR_RPAS_User.CreatedOn = System.DateTime.Now;
+        db.MSTR_RPAS_User.Add(mSTR_RPAS_User);
+        db.SaveChanges();
+        int id = mSTR_RPAS_User.RpasId;
+        var mailurl = "~/Email/RPASRegEmail/" + id;  //"~/"+Url.Action("RPASRegEmail", "Email", new { id = mSTR_RPAS_User.RpasId });
+        var mailsubject = "New User Creation Request From RPAS Registeration";
+        Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
+        return RedirectToAction("Index");
+      }
 
-        // GET: Rpas/Edit/5
+      return View(mSTR_RPAS_User);
+    }
+
+    // GET: Rpas/Edit/5
     public ActionResult Edit(int? id) {
       if (id == null) {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
+        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+      }
+      MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
       if (mSTR_RPAS_User == null) {
-                return HttpNotFound();
-            }
-            return View(mSTR_RPAS_User);
-        }
+        return HttpNotFound();
+      }
+      return View(mSTR_RPAS_User);
+    }
 
-        // POST: Rpas/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+    // POST: Rpas/Edit/5
+    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public ActionResult Edit([Bind(Include = "RpasId,Name,NationalityId,EmiratesId,EmailId,MobileNo,Status,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn")] MSTR_RPAS_User mSTR_RPAS_User) {
       if (ModelState.IsValid) {
-                db.Entry(mSTR_RPAS_User).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(mSTR_RPAS_User);
-        }
+        db.Entry(mSTR_RPAS_User).State = EntityState.Modified;
+        db.SaveChanges();
+        return RedirectToAction("Index");
+      }
+      return View(mSTR_RPAS_User);
+    }
 
-        // GET: Rpas/Delete/5
+    // GET: Rpas/Delete/5
     public ActionResult Delete(int? id) {
       if (id == null) {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
+        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+      }
+      MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
       if (mSTR_RPAS_User == null) {
-                return HttpNotFound();
-            }
-            return View(mSTR_RPAS_User);
-        }
+        return HttpNotFound();
+      }
+      return View(mSTR_RPAS_User);
+    }
 
-        // POST: Rpas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+    // POST: Rpas/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
     public ActionResult DeleteConfirmed(int id) {
-            MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
-            db.MSTR_RPAS_User.Remove(mSTR_RPAS_User);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+      MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
+      db.MSTR_RPAS_User.Remove(mSTR_RPAS_User);
+      db.SaveChanges();
+      return RedirectToAction("Index");
+    }
 
     protected override void Dispose(bool disposing) {
       if (disposing) {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        db.Dispose();
+      }
+      base.Dispose(disposing);
     }
+  }
 }
