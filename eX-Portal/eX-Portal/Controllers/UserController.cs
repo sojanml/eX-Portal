@@ -109,34 +109,39 @@ namespace eX_Portal.Controllers
             /*Create instance of entity model*/
             ExponentPortalEntities objentity = new ExponentPortalEntities();
             /*Getting data from database for user validation*/
-
-            if (exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0)
+            if (exLogic.User.UserIsActive(_objuserlogin.UserName, _objuserlogin.Password) > 0)
             {
-                /*Redirect user to success apge after successfull login*/
-                ViewBag.Message = 1;
-                UserInfo thisUser = exLogic.User.getInfo(_objuserlogin.UserName);
-                Session["FirstName"] = thisUser.FullName;
-                Session["UserID"] = thisUser.UserID;
-                Session["UserName"] = thisUser.UserName;
-                Session["BrandLogo"] = thisUser.BrandLogo;
-                Session["BrandColor"] = thisUser.BrandColor;
-                Session["AccountID"] = thisUser.AccountID;
-                Session["userIpAddress"] = Request.ServerVariables["REMOTE_ADDR"];
-                Session["Lat"] = _objuserlogin.Lat;
-                Session["Lng"]= _objuserlogin.Lng;
-                var browser = Request.Browser.Browser;
+                if (exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0)
+                {
+                    /*Redirect user to success apge after successfull login*/
+                    ViewBag.Message = 1;
+                    UserInfo thisUser = exLogic.User.getInfo(_objuserlogin.UserName);
+                    Session["FirstName"] = thisUser.FullName;
+                    Session["UserID"] = thisUser.UserID;
+                    Session["UserName"] = thisUser.UserName;
+                    Session["BrandLogo"] = thisUser.BrandLogo;
+                    Session["BrandColor"] = thisUser.BrandColor;
+                    Session["AccountID"] = thisUser.AccountID;
+                    Session["userIpAddress"] = Request.ServerVariables["REMOTE_ADDR"];
+                    Session["Lat"] = _objuserlogin.Lat;
+                    Session["Lng"] = _objuserlogin.Lng;
+                    var browser = Request.Browser.Browser;
 
-                string sessionId = this.Session.SessionID;
-                string sql = "insert into userlog(UserID,loggedintime,UserIPAddress,Browser,SessionID) values('" + thisUser.UserID + "',getdate(),'" + Session["userIpAddress"] + "','" + browser + "','" + sessionId + "') Select @@Identity";
-                Session["uid"] = Util.InsertSQL(sql);
-                return RedirectToAction("Index", "Home");
+                    string sessionId = this.Session.SessionID;
+                    string sql = "insert into userlog(UserID,loggedintime,UserIPAddress,Browser,SessionID) values('" + thisUser.UserID + "',getdate(),'" + Session["userIpAddress"] + "','" + browser + "','" + sessionId + "') Select @@Identity";
+                    Session["uid"] = Util.InsertSQL(sql);
+                    return RedirectToAction("Index", "Home");
 
+                }
+                else {
+                    ViewBag.Message = 0;
+                }
             }
-
-
             else {
-                ViewBag.Message = 0;
+                ViewBag.Message = 2;
             }
+
+
             return View(_objuserlogin);
         }//HttpPost Login()
 
