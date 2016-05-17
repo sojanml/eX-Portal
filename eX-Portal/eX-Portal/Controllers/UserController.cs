@@ -477,21 +477,30 @@ namespace eX_Portal.Controllers
 
 
         [HttpPost]
-        public ActionResult Create(ViewModel.UserViewModel UserModel, int RPASID = 0)
+        public ActionResult Create(ViewModel.UserViewModel UserModel, int ID = 0)
         {
             string hdnRPASid = Request["hdnRPASid"];
-            RPASID = ViewBag.RPASid == null ? 0 : ViewBag.RPASid;
-            
+            //
+            //int RPASID = string.IsNullOrEmpty(hdnRPASid) ? 0 : Convert.ToInt16(hdnRPASid);
+            int RPASID = ID;
+
+
             if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
             //if (ModelState.IsValid) {
             if (exLogic.User.UserExist(UserModel.User.UserName) > 0)
             {
                 ModelState.AddModelError("User.UserName", "This username already exists.");
             }
-
-            if (String.IsNullOrEmpty(UserModel.User.Password) && RPASID!=0)
+            if (exLogic.User.EmailExist(UserModel.User.EmailId) > 0)
             {
-                ModelState.AddModelError("User.Password", "Invalid Password. Please enter again.");
+                ModelState.AddModelError("User.EmailId", "This email id already exists.");
+            }
+            if (RPASID == 0)
+            {
+                if (String.IsNullOrEmpty(UserModel.User.Password))
+                {
+                    ModelState.AddModelError("User.Password", "Invalid Password. Please enter again.");
+                }
             }
 
             if (UserModel.User.IsPilot == true)
@@ -513,7 +522,12 @@ namespace eX_Portal.Controllers
 
             if (ModelState.IsValid)
             {
-                string Password = Util.GetEncryptedPassword(UserModel.User.Password).ToString();
+                string Password;
+                if(RPASID==0)
+                    Password = Util.GetEncryptedPassword(UserModel.User.Password).ToString();
+                else
+                    Password = "";
+
                 String SQL = "insert into MSTR_User(\n" +
                   "  UserName,\n" +
                   "  Password,\n" +
@@ -604,9 +618,13 @@ namespace eX_Portal.Controllers
                 }
                 if (RPASID != 0)
                 {
-                    var mailurl = Url.Action("RPASUserCreated", "Email", new { RpasID = 0, UserID = id });
+                    var mailurl = Url.Action("RPASUserCreated", "Email", new { RpasID = RPASID, UserID = id });
                     var mailsubject = "User has been created";
-                    Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
+                    Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, "~"+mailurl);
+
+                    //need to update the RPAS Status after sending mmail
+                    SQL = "update mstr_rpas_user set [Status] = 'User Created' where rpasID = " + RPASID;
+                    Util.doSQL(SQL);
                 }
                 return RedirectToAction("UserDetail", new { ID = id });
 

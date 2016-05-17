@@ -97,7 +97,35 @@ namespace eX_Portal.exLogic {
       }
     }
 
-    public static int GetUserId(String UserName) {
+        public static int EmailExist(String EmailID)
+        {
+            try
+            {
+
+                int result = 0;
+                using (var ctx = new ExponentPortalEntities())
+                {
+                    var _objuserdetail = (from data in ctx.MSTR_User
+                                          where data.EmailId == EmailID
+
+
+                                          select data);
+
+                    result = _objuserdetail.Count();
+                }
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                Util.ErrorHandler(ex);
+                System.Web.HttpContext.Current.Response.Write("<script>alert('Please Check Database Connection');</script>");
+                return -1;
+            }
+        }
+
+        public static int GetUserId(String UserName) {
       int result = 0;
       using (var ctx = new ExponentPortalEntities()) {
         String SQL = "select UserId from MSTR_User" +
