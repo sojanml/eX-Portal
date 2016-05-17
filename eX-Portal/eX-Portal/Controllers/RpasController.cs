@@ -148,37 +148,50 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-    // POST: Rpas/Create
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    //[ValidateAntiForgeryToken]
-    public ActionResult Create(MSTR_RPAS_User mSTR_RPAS_User) {
-      if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
-      if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select your nationality..");
-      string sqlmailcheck = "select EmailId from MSTR_RPAS_User where [EmailId] ='" + mSTR_RPAS_User.EmailId.ToString() + "'";
-      var Row = Util.getDBRow(sqlmailcheck);
-      if (Row.Count > 1) {
-        if (Row["EmailId"].ToString() == mSTR_RPAS_User.EmailId) {
-          ViewBag.message = "Registeration for this user is already done!!";
-          return View(mSTR_RPAS_User);
-        } else { }
-      } else { }
-      if (ModelState.IsValid) {
-        mSTR_RPAS_User.Status = "New User Request";
-        mSTR_RPAS_User.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
-        mSTR_RPAS_User.CreatedOn = System.DateTime.Now;
-        db.MSTR_RPAS_User.Add(mSTR_RPAS_User);
-        db.SaveChanges();
-        int id = mSTR_RPAS_User.RpasId;
-        var mailurl = "~/Email/RPASRegEmail/" + id;  //"~/"+Url.Action("RPASRegEmail", "Email", new { id = mSTR_RPAS_User.RpasId });
-        var mailsubject = "New User Creation Request From RPAS Registeration";
-        Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
-        return RedirectToAction("Index");
-      }
-
-      return View(mSTR_RPAS_User);
-    }
+        // POST: Rpas/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult Create(MSTR_RPAS_User mSTR_RPAS_User)
+        {
+            if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
+            if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select Nationality.");
+            if (mSTR_RPAS_User.EmailId == null)
+            {
+                ModelState.AddModelError("EmailId", "Please enter Email Id.");
+            }
+            else
+            {
+                string sqlmailcheck = "select EmailId from MSTR_RPAS_User where [EmailId] ='" + mSTR_RPAS_User.EmailId.ToString() + "'";
+                var Row = Util.getDBRow(sqlmailcheck);
+                if (Row.Count > 1)
+                {
+                    if (Row["EmailId"].ToString() == mSTR_RPAS_User.EmailId)
+                    {
+                        ViewBag.message = "Registeration for this user is already done!!";
+                        return View(mSTR_RPAS_User);
+                    }
+                    else { }
+                }
+                else { }
+            }
+            if (ModelState.IsValid)
+            {
+                    mSTR_RPAS_User.Status = "New User Request";
+                    mSTR_RPAS_User.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
+                    mSTR_RPAS_User.CreatedOn = System.DateTime.Now;
+                    db.MSTR_RPAS_User.Add(mSTR_RPAS_User);
+                    db.SaveChanges();
+                    int id = mSTR_RPAS_User.RpasId;
+                    var mailurl = "~/Email/RPASRegEmail/" + id;  //"~/"+Url.Action("RPASRegEmail", "Email", new { id = mSTR_RPAS_User.RpasId });
+                    var mailsubject = "New User Creation Request From RPAS Registeration";
+                    Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
+                    return RedirectToAction("Index");
+            }
+            
+            return View(mSTR_RPAS_User);
+        }
 
     // GET: Rpas/Edit/5
     public ActionResult Edit(int? id) {
