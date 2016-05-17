@@ -99,7 +99,7 @@ namespace eX_Portal.Controllers {
                          "RpasId as _PKey\n"+
                          "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n"+
                          "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n"+
-                         "where LUP_Drone.Type = 'Country' and MSTR_RPAS_User.Status='New User Request'";
+                         "where LUP_Drone.Type = 'Country' and (MSTR_RPAS_User.Status='New User Request' or MSTR_RPAS_User.Status='User Created')";
 
             qView nView = new qView(SQL);
             //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
