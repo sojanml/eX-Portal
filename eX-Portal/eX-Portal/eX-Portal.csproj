@@ -594,6 +594,7 @@
     <Content Include="images\bullet.png" />
     <Content Include="images\cal-icon.png" />
     <Content Include="images\car-icon.png" />
+    <Content Include="images\dcca-logo.png" />
     <Content Include="images\drop-down.png" />
     <Content Include="images\fonts\DINNextLTPro-Light.svg" />
     <Content Include="images\fonts\DINNextLTPro-LightCondensed.svg" />
@@ -1074,6 +1075,7 @@
     <Content Include="Views\Email\RPASRegEmail.cshtml" />
     <Content Include="Views\Rpas\Login.cshtml" />
     <Content Include="Views\Rpas\Register.cshtml" />
+    <Content Include="Views\Email\RPASUserCreated.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
