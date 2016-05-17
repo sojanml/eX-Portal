@@ -7,11 +7,13 @@
     }//if
   })
 
-  $(':file').change(startUpload);
+   $(':file').change(startUploadImage);
+   //$("input[id^='fileinputs']").on('change', startUploadImage);
+
 });
 
 
-function startUpload() {
+function startUploadImage() {
   for (var i = 0; i < this.files.length; i++) {
     var file = this.files[i];
     if (file.name.length < 1) {
@@ -19,14 +21,14 @@ function startUpload() {
       alert("File is to big");
     } else {
       setPreview(file);
-      SubmitFile(file);
+      SubmitFileImage(file);
     }
   }
   this.value = "";
 }
 
 
-function SubmitFile(file) {
+function SubmitFileImage(file) {
 
 
   var FileName = file.name;
