@@ -14,9 +14,9 @@ var _OtherFlights = {};
 var _FlightOra = null
 
 var DistanceOptions = {
-  Radius: 10,
+  Radius: 50,
   Critical: 100,
-  Warning: 200
+  Warning: 500
 };
 
 $(document).ready(function () {
