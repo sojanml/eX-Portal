@@ -15,7 +15,7 @@ namespace eX_Portal.Controllers {
     private ExponentPortalEntities db = new ExponentPortalEntities();
 
     public ActionResult Register() {
-            int RegisterUserID = Util.toInt(69);//Session["RegisterUserID"]);
+            int RegisterUserID = Util.toInt(Session["RegisterUserID"]);
       if(RegisterUserID <= 0) return View("NoAccess");
 
       var User = (from n in db.MSTR_User
