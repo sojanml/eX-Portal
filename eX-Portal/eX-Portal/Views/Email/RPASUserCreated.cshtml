@@ -1,6 +1,6 @@
 ﻿@model eX_Portal.Models.MSTR_User
 @{
-    ViewBag.Title = "RPASUserCreated";
+    Layout = "~/Views/Shared/_Email.cshtml";
 }
 
 @if (Model != null)
@@ -19,7 +19,8 @@
         Registered Mobile No  : @Model.MobileNo<br />
     </p>
     <p>
-        To Activate your account,  <a href="#">Click here</a>.
+        To Activate your account, <input type="button" value="Click here" onclick="location.href='@Url.Action("Login", "Rpas")'" />
+        
     </p>
     <p>
         Thank you.

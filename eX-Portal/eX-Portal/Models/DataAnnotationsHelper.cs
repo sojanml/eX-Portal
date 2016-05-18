@@ -67,12 +67,12 @@ namespace eX_Portal.Models {
     [Display(Name = "Confirm Password")]
     public string ConfirmPassword { get; set; }
 
-    [Display(Name = "First Name")]
-    [Required]
+    [Required(ErrorMessage ="Please enter First Name")]
+    [Display(Name = "First Name")]    
     public string FirstName { get; set; }
 
-    [Display(Name = "Last Name")]
-    [Required]
+    [Required(ErrorMessage = "Please enter Last Name")]
+    [Display(Name = "Last Name")]    
     public string LastName { get; set; }
 
 
@@ -97,9 +97,10 @@ namespace eX_Portal.Models {
     [Required]
     public string IsPilot { get; set; }
 
-
+    [Required(ErrorMessage ="Please enter Mobile Number")]
     [Display(Name = "Mobile Number")]
     public string MobileNo { get; set; }
+
     [Display(Name = "Office Number")]
     public string OfficeNo { get; set; }
     [Display(Name = "Home Number")]

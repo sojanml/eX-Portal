@@ -15,17 +15,42 @@ namespace eX_Portal.Controllers {
     private ExponentPortalEntities db = new ExponentPortalEntities();
 
     public ActionResult Register() {
-      int RegisterUserID = Util.toInt(Session["RegisterUserID"]);
-      if(RegisterUserID <= 0) return View("NoAcess");
+      int RegisterUserID = Util.toInt(69);//Session["RegisterUserID"]);
+      if(RegisterUserID <= 0) return View("NoAccess");
+
       var User = (from n in db.MSTR_User
                   where n.UserId == RegisterUserID
                   select n
       ).FirstOrDefault();
-      if(User == null) return View("NoAcess");
+      if(User == null) return View("NoAccess");
 
       return View(User);
       
     }
+
+    [HttpPost]
+    public ActionResult Register(MSTR_User mSTR_User)
+    {
+        if (mSTR_User.CountryId < 1 ||mSTR_User.CountryId == null) ModelState.AddModelError("CountryId", "Please select Nationality");
+        if (mSTR_User.EmiratesID == null) ModelState.AddModelError("EmiratesID", "Please enter Emirates Id");            
+        if (mSTR_User.RPASPermitNo == null) ModelState.AddModelError("RPASPermitNo", "Please enter RPAS Permit Number");
+        if (mSTR_User.PermitCategory == null) ModelState.AddModelError("PermitCategory", "Please enter Permit Category");
+        if (mSTR_User.ContactAddress == null) ModelState.AddModelError("ContactAddress", "Please enter Contact Address");
+        if (mSTR_User.RegRPASSerialNo == null) ModelState.AddModelError("RegRPASSerialNo", "Please enter Registered RPAS SerialNo");
+        if (mSTR_User.CompanyAddress == null) ModelState.AddModelError("CompanyAddress", "Please enter Company Address");
+        if (mSTR_User.CompanyTelephone == null) ModelState.AddModelError("CompanyTelephone", "Please enter Company Telephone");
+        if (mSTR_User.CompanyEmail == null) ModelState.AddModelError("CompanyEmail", "Please enter Company Email");      
+
+        if (ModelState.IsValid)
+        {
+            mSTR_User.IsActive = true;
+            db.Entry(mSTR_User).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Internal","DashBoard");
+        }
+        return View(mSTR_User);        
+    }
+
     public ActionResult NoAccess() {
       return View();
     }
