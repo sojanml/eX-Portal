@@ -9,12 +9,39 @@ using System.Web.Mvc;
 using eX_Portal.Models;
 using eX_Portal.exLogic;
 using eX_Portal.ViewModel;
+using FileStorageUtils;
 
 namespace eX_Portal.Controllers {
   public class RpasController : Controller {
     private ExponentPortalEntities db = new ExponentPortalEntities();
 
     public ActionResult Register() {
+
+      var fileStorageProvider = new AmazonS3FileStorageProvider();
+
+      var fileUploadViewModel = new S3Upload(
+        fileStorageProvider.PublicKey,
+        fileStorageProvider.PrivateKey,
+        fileStorageProvider.BucketName,
+        Url.Action("complete", "home", null, Request.Url.Scheme)
+      );
+
+      fileUploadViewModel.SetPolicy(
+        fileStorageProvider.GetPolicyString(
+          fileUploadViewModel.FileId,
+          fileUploadViewModel.RedirectUrl
+        )
+      );
+
+
+      ViewBag.FormAction = fileUploadViewModel.FormAction;
+      ViewBag.FormMethod = fileUploadViewModel.FormMethod;
+      ViewBag.FormEnclosureType = fileUploadViewModel.FormEnclosureType;
+      ViewBag.AWSAccessKey = fileUploadViewModel.AWSAccessKey;
+      ViewBag.Acl = fileUploadViewModel.Acl;
+      ViewBag.Base64EncodedPolicy = fileUploadViewModel.Base64EncodedPolicy;
+      ViewBag.Signature = fileUploadViewModel.Signature;
+
       Session["RegisterUserID"] = 77;
       int RegisterUserID = Util.toInt(Session["RegisterUserID"]);
       if (RegisterUserID <= 0) return View("NoAccess");
