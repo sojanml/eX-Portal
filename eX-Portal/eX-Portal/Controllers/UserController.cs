@@ -939,29 +939,93 @@ namespace eX_Portal.Controllers
                 return  "Please enter your Username/Email";
             }
             else
-            {              
-                    string unamemail = mSTR_USER.UserName;
-                    string sqlcheck = "select EmailId,UserId from MSTR_User where UserName='" + mSTR_USER.UserName + "' or EmailId='" + mSTR_USER.UserName + "'";
-                    
-                    if (Util.getDBRow(sqlcheck).Count > 0)
+            {
+                int userexist = exLogic.User.UserExist(mSTR_USER.UserName);
+                if (userexist == 1)
+                {
+                    var UserInfo = (from n in db.MSTR_User
+                                    where (n.UserName == mSTR_USER.UserName ||
+                                    n.EmailId == mSTR_USER.EmailId)
+                                    select new
+                                    {
+                                        UserID = n.UserId,
+                                        EmailId = n.EmailId,
+                                    }).ToList();
+                    if (String.IsNullOrEmpty(UserInfo[0].EmailId))
                     {
-                        var Row = Util.getDBRow(sqlcheck);
-                        if (String.IsNullOrEmpty(Row["EmailId"].ToString()))
+                        return "Your Email is not updated in the system,kindly update your Email Id.";
+                    }
+                    else
+                    {
+                        var toaddress = UserInfo[0].EmailId.ToString();
+                        int userid = Convert.ToInt32(UserInfo[0].UserID.ToString());
+                        var newpaswd = Util.RandomPassword();
+                        string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId=" + userid;
+                        int result = Util.doSQL(updatepswdsql);
+                        var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
+                        var mailsubject = "Confidential Mail from Exponent";
+                        Util.EmailQue(userid, toaddress, mailsubject, mailurl);
+                    }
+                }
+                else
+                {
+                    int emailexist = exLogic.User.EmailExist(mSTR_USER.UserName);
+                    if (emailexist == 1)
+                    {
+                        var UserInfo = (from n in db.MSTR_User
+                                        where (n.UserName == mSTR_USER.UserName ||
+                                        n.EmailId == mSTR_USER.EmailId)
+                                        select new
+                                        {
+                                            UserID = n.UserId,
+                                            EmailId = n.EmailId,
+                                        }).ToList();
+                        if (String.IsNullOrEmpty(UserInfo[0].EmailId))
                         {
                             return "Your Email is not updated in the system,kindly update your Email Id.";
                         }
                         else
                         {
-                        var toaddress = Row["EmailId"].ToString();
-                        int userid =Convert.ToInt32(Row["UserId"].ToString());              
-                        var newpaswd = Util.RandomPassword();
-                        string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId="+ userid;
-                        int result = Util.doSQL(updatepswdsql);
-                        var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
-                        var mailsubject = "Confidential Mail from Exponent";
-                        Util.EmailQue(userid, toaddress, mailsubject, mailurl);
-                    }                
-                    } 
+                            var toaddress = UserInfo[0].EmailId.ToString();
+                            int userid = Convert.ToInt32(UserInfo[0].UserID.ToString());
+                            var newpaswd = Util.RandomPassword();
+                            string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId=" + userid;
+                            int result = Util.doSQL(updatepswdsql);
+                            var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
+                            var mailsubject = "Confidential Mail from Exponent";
+                            Util.EmailQue(userid, toaddress, mailsubject, mailurl);
+                        }
+                    }
+                    else {
+                        return "Please enter valid Username/Email!";
+                    }
+                }
+               
+
+
+
+                //string unamemail = mSTR_USER.UserName;
+                //    string sqlcheck = "select EmailId,UserId from MSTR_User where UserName='" + mSTR_USER.UserName + "' or EmailId='" + mSTR_USER.UserName + "'";
+                    
+                //    if (Util.getDBRow(sqlcheck).Count > 0)
+                //    {
+                //        var Row = Util.getDBRow(sqlcheck);
+                //        if (String.IsNullOrEmpty(Row["EmailId"].ToString()))
+                //        {
+                //            return "Your Email is not updated in the system,kindly update your Email Id.";
+                //        }
+                //        else
+                //        {
+                //        var toaddress = Row["EmailId"].ToString();
+                //        int userid =Convert.ToInt32(Row["UserId"].ToString());              
+                //        var newpaswd = Util.RandomPassword();
+                //        string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId="+ userid;
+                //        int result = Util.doSQL(updatepswdsql);
+                //        var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
+                //        var mailsubject = "Confidential Mail from Exponent";
+                //        Util.EmailQue(userid, toaddress, mailsubject, mailurl);
+                //        }                
+                //    } 
                         
             }
             return "OK";
