@@ -443,7 +443,6 @@ namespace eX_Portal.Controllers
                   "  CompanyAddress='" + UserModel.User.CompanyAddress + "',\n" +
                   "  CompanyTelephone='" + UserModel.User.CompanyTelephone + "',\n" +
                   "  CompanyEmail='" + UserModel.User.CompanyEmail + "',\n" +
-                  "  TradeLicenceCopyUrl='" + UserModel.User.TradeLicenceCopyUrl + "',\n" +
                   "  EmiratesID='" + UserModel.User.EmiratesID + "'\n" +
                   Pass_SQL +
                   "where\n" +
@@ -559,7 +558,6 @@ namespace eX_Portal.Controllers
                   " CompanyAddress,\n" +
                   " CompanyTelephone,\n" +
                   " CompanyEmail,\n" +
-                  " TradeLicenceCopyUrl,\n" +
                   " EmiratesID\n" +
                   ") values(\n" +
                   "  '" + UserModel.User.UserName + "',\n" +
@@ -588,7 +586,6 @@ namespace eX_Portal.Controllers
                   "  '" + (UserModel.User.ContactAddress) + "',\n" +
                   "  '" + (UserModel.User.CompanyTelephone) + "',\n" +
                   "  '" + (UserModel.User.CompanyEmail) + "',\n" +
-                  "  '" + (UserModel.User.TradeLicenceCopyUrl) + "',\n" +
                   "  '" + (UserModel.User.EmiratesID) + "'\n" +
                   ")";
                 //inserting pilot information to the pilot table
