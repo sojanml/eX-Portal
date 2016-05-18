@@ -1076,6 +1076,7 @@
     <Content Include="Views\Rpas\Login.cshtml" />
     <Content Include="Views\Rpas\Register.cshtml" />
     <Content Include="Views\Email\RPASUserCreated.cshtml" />
+    <Content Include="Views\Rpas\NoAccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
