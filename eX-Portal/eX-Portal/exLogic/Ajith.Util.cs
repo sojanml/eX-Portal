@@ -665,7 +665,7 @@ namespace eX_Portal.exLogic {
       using (var ctx = new ExponentPortalEntities()) {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
-          SQL = "SELECT [Name] as Value  ,[Name] as code FROM [LUP_Drone] where name in('DpWorld','Default','Internal','Dewa') ";
+          SQL = "SELECT [Name] as Value  ,[Name] as code FROM [LUP_Drone] where name in('DpWorld','Default','Internal','Dewa','RPAS')  order by Code asc";
           cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
