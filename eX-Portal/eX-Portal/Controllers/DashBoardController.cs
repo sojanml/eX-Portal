@@ -217,7 +217,37 @@ namespace eX_Portal.Controllers
             Weather = Util.GetCurrentConditions(woeid);
             return View(Weather);
         }
+        public ActionResult RPAS()
+        {
+            string City, Lat = null, Lng = null, woeid;
+            if (Session["Lat"] != null)
+            {
+                Lat = Session["Lat"].ToString();
+            }
+            else
+            {
+                Lat = "25.2048";
+            }
+            if (Session["Long"] != null)
+            {
 
+                Lng = Session["Long"].ToString();
+
+            }
+            else
+            {
+                Lng = "55.2708";
+            }
+
+            WeatherViewModel Weather = new WeatherViewModel();
+            //getting the exact place from lat and long
+            City = Util.GetLocation(Lat, Lng);
+            //getting the woeid from yahoo api
+            woeid = Util.GetWOEID(City);
+            //getting the weather information from  woeid           
+            Weather = Util.GetCurrentConditions(woeid);
+            return View(Weather);
+        }
 
 
         public ActionResult ChartDetails()
