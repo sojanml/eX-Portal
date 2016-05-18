@@ -650,8 +650,10 @@ section.general-form div.editor-field textarea,
 div.form-group input,
 div.form-group select,
 div.form-group textarea,
-div#Coordinates
+div#Coordinates,
+div.input-field
  {
+    box-sizing:border-box;
     width: 100%;
     padding: 5px;
     max-width: 100%;
@@ -660,6 +662,10 @@ div#Coordinates
     border: 1px silver solid;
     font-size: 12pt;
     font-family: 'Conv_DINNextLTPro-Light', Arial;
+}
+div.input-field {
+  font-weight:bold;
+  border: 1px #f5bfc1 solid;
 }
 section.general-form div.editor-field textarea,
 div.form-group textarea,
