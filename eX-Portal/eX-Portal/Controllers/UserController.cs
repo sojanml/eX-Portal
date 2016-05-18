@@ -944,13 +944,13 @@ namespace eX_Portal.Controllers
                 if (userexist == 1)
                 {
                     var UserInfo = (from n in db.MSTR_User
-                                    where (n.UserName == mSTR_USER.UserName ||
-                                    n.EmailId == mSTR_USER.EmailId)
+                                    where (n.UserName == mSTR_USER.UserName)
                                     select new
                                     {
                                         UserID = n.UserId,
                                         EmailId = n.EmailId,
                                     }).ToList();
+
                     if (String.IsNullOrEmpty(UserInfo[0].EmailId))
                     {
                         return "Your Email is not updated in the system,kindly update your Email Id.";
@@ -962,7 +962,7 @@ namespace eX_Portal.Controllers
                         var newpaswd = Util.RandomPassword();
                         string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId=" + userid;
                         int result = Util.doSQL(updatepswdsql);
-                        var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
+                        var mailurl = "~/Email/ForgotPassword/" + userid + "?newpassword=" + newpaswd;
                         var mailsubject = "Confidential Mail from Exponent";
                         Util.EmailQue(userid, toaddress, mailsubject, mailurl);
                     }
@@ -973,8 +973,7 @@ namespace eX_Portal.Controllers
                     if (emailexist == 1)
                     {
                         var UserInfo = (from n in db.MSTR_User
-                                        where (n.UserName == mSTR_USER.UserName ||
-                                        n.EmailId == mSTR_USER.EmailId)
+                                        where (n.EmailId == mSTR_USER.UserName)
                                         select new
                                         {
                                             UserID = n.UserId,
@@ -987,11 +986,11 @@ namespace eX_Portal.Controllers
                         else
                         {
                             var toaddress = UserInfo[0].EmailId.ToString();
-                            int userid = Convert.ToInt32(UserInfo[0].UserID.ToString());
+                            int userid = Convert.ToInt32(UserInfo[0].UserID);
                             var newpaswd = Util.RandomPassword();
                             string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId=" + userid;
                             int result = Util.doSQL(updatepswdsql);
-                            var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
+                            var mailurl = "~/Email/ForgotPassword/" + userid + "?newpassword=" + newpaswd;
                             var mailsubject = "Confidential Mail from Exponent";
                             Util.EmailQue(userid, toaddress, mailsubject, mailurl);
                         }
