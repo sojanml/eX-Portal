@@ -50,5 +50,7 @@ namespace eX_Portal.Models
         public Nullable<int> HasFlightInfo { get; set; }
         public Nullable<decimal> FlightDistance { get; set; }
         public Nullable<bool> IsInsideTimeFrame { get; set; }
+        public Nullable<int> IsDistanceWarning { get; set; }
+        public Nullable<int> IsDistanceCritical { get; set; }
     }
 }
