@@ -16,16 +16,63 @@ namespace eX_Portal.Controllers
     public class RpasController : Controller
     {
         private ExponentPortalEntities db = new ExponentPortalEntities();
-
         public ActionResult Register()
         {
+
+            var fileStorageProvider = new AmazonS3FileStorageProvider();
+
+            var fileUploadViewModel = new S3Upload(
+              fileStorageProvider.PublicKey,
+              fileStorageProvider.PrivateKey,
+              fileStorageProvider.BucketName,
+              Url.Action("complete", "home", null, Request.Url.Scheme)
+            );
+
+            fileUploadViewModel.SetPolicy(
+              fileStorageProvider.GetPolicyString(
+                fileUploadViewModel.FileId,
+                fileUploadViewModel.RedirectUrl
+              )
+            );
+
+
+            ViewBag.FormAction = fileUploadViewModel.FormAction;
+            ViewBag.FormMethod = fileUploadViewModel.FormMethod;
+            ViewBag.FormEnclosureType = fileUploadViewModel.FormEnclosureType;
+            ViewBag.AWSAccessKey = fileUploadViewModel.AWSAccessKey;
+            ViewBag.Acl = fileUploadViewModel.Acl;
+            ViewBag.Base64EncodedPolicy = fileUploadViewModel.Base64EncodedPolicy;
+            ViewBag.Signature = fileUploadViewModel.Signature;
+
+            Session["RegisterUserID"] = 77;
             int RegisterUserID = Util.toInt(Session["RegisterUserID"]);
             if (RegisterUserID <= 0) return View("NoAccess");
 
-            var User = (from n in db.MSTR_User
-                        where n.UserId == RegisterUserID
-                        select n
-            ).FirstOrDefault();
+            var User = (
+            from n in db.MSTR_User
+            where n.UserId == RegisterUserID
+            select new RPAS_Register
+            {
+                EmailId = n.EmailId,
+                UserName = n.UserName,
+
+                PhotoUrl = n.PhotoUrl,
+                FirstName = n.FirstName,
+                MiddleName = n.MiddleName,
+                LastName = n.LastName,
+                MobileNo = n.MobileNo,
+                HomeNo = n.HomeNo,
+                CountryId = (n.CountryId == null ? 0 : (int)n.CountryId),
+                RPASPermitNo = n.RPASPermitNo,
+                PermitCategory = n.PermitCategory,
+                ContactAddress = n.ContactAddress,
+                RegRPASSerialNo = n.RegRPASSerialNo,
+                CompanyAddress = n.CompanyAddress,
+                CompanyTelephone = n.CompanyTelephone,
+                CompanyEmail = n.CompanyEmail,
+                TradeLicenceCopyUrl = n.TradeLicenceCopyUrl,
+                EmiratesID = n.EmiratesID
+            }).FirstOrDefault();
             if (User == null) return View("NoAccess");
 
             return View(User);
@@ -33,38 +80,62 @@ namespace eX_Portal.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(MSTR_User mSTR_User)
+        public ActionResult Register(RPAS_Register mSTR_User)
         {
-            if (mSTR_User.CountryId < 1 || mSTR_User.CountryId == null) ModelState.AddModelError("CountryId", "Please select Nationality");
-            if (mSTR_User.EmiratesID == null) ModelState.AddModelError("EmiratesID", "Please enter Emirates Id");
-            if (mSTR_User.RPASPermitNo == null) ModelState.AddModelError("RPASPermitNo", "Please enter RPAS Permit Number");
-            if (mSTR_User.PermitCategory == null) ModelState.AddModelError("PermitCategory", "Please enter Permit Category");
-            if (mSTR_User.ContactAddress == null) ModelState.AddModelError("ContactAddress", "Please enter Contact Address");
-            if (mSTR_User.RegRPASSerialNo == null) ModelState.AddModelError("RegRPASSerialNo", "Please enter Registered RPAS SerialNo");
-            if (mSTR_User.CompanyAddress == null) ModelState.AddModelError("CompanyAddress", "Please enter Company Address");
-            if (mSTR_User.CompanyTelephone == null) ModelState.AddModelError("CompanyTelephone", "Please enter Company Telephone");
-            if (mSTR_User.CompanyEmail == null) ModelState.AddModelError("CompanyEmail", "Please enter Company Email");
-            if (mSTR_User.Password == null) ModelState.AddModelError("Password", "Please enter Password");
-            ModelState.Remove("AccountId");
-            ModelState.Remove("UserProfileId");
-            ModelState.Remove("IsActive");
-            ModelState.Remove("IsPilot");
+
+            int RegisterUserID = Util.toInt(Session["RegisterUserID"]);
+            var InternalInfo = (
+              from n in db.MSTR_User
+              where n.UserId == RegisterUserID
+              select new
+              {
+                  UserName = n.UserName,
+                  EmailId = n.EmailId
+              }
+            ).FirstOrDefault();
+            mSTR_User.UserName = InternalInfo.UserName;
+            mSTR_User.EmailId = InternalInfo.EmailId;
+
+            ModelState.Remove("UserName");
+            ModelState.Remove("EmailId");
 
             if (ModelState.IsValid)
             {
                 string encryptedpasword = Util.GetEncryptedPassword(mSTR_User.Password);
                 mSTR_User.Password = encryptedpasword;
 
-                string updatesql = " update [ExponentPortal].[dbo].[MSTR_User] set [Password]='" + mSTR_User.Password + "',[PhotoUrl]='" + mSTR_User.PhotoUrl +
-                    "',[FirstName] ='" + mSTR_User.FirstName + "',[MiddleName] ='" + mSTR_User.MiddleName + "',[LastName] ='" + mSTR_User.LastName +
-                    "',[LastModifiedBy] =" + Session["RegisterUserID"] + ",[MobileNo] ='" + mSTR_User.MobileNo + "',[HomeNo] ='" + mSTR_User.HomeNo + "',[CountryId] =" + mSTR_User.CountryId +
-                    ",[IsActive] =1,[LastModifiedOn] ='" + System.DateTime.Now + "',[RPASPermitNo] ='" + mSTR_User.RPASPermitNo + "',[PermitCategory] ='" + mSTR_User.PermitCategory +
-                    "',[ContactAddress] ='" + mSTR_User.ContactAddress + "',[RegRPASSerialNo] ='" + mSTR_User.RegRPASSerialNo + "',[CompanyAddress] ='" + mSTR_User.CompanyAddress +
-                    "',[CompanyTelephone] ='" + mSTR_User.CompanyTelephone + "',[CompanyEmail] ='" + mSTR_User.CompanyEmail +
-                    "',[TradeLicenceCopyUrl] ='" + mSTR_User.TradeLicenceCopyUrl + "',[EmiratesID] ='" + mSTR_User.EmiratesID + "' where[UserId] =" + Session["RegisterUserID"];
+                string updatesql = " update [ExponentPortal].[dbo].[MSTR_User]\n" +
+                "set\n" +
+                "  [Password]='" + mSTR_User.Password + "',\n" +
+                "  [PhotoUrl]='" + mSTR_User.PhotoUrl + "',\n" +
+                "  [FirstName] ='" + mSTR_User.FirstName + "',\n" +
+                "  [MiddleName] ='" + mSTR_User.MiddleName + "',\n" +
+                "  [LastName] ='" + mSTR_User.LastName + "',\n" +
+                "  [LastModifiedBy] =" + Session["RegisterUserID"] + ",\n" +
+                "  [MobileNo] ='" + mSTR_User.MobileNo + "',\n" +
+                "  [HomeNo] ='" + mSTR_User.HomeNo + "',\n" +
+                "  [CountryId] =" + mSTR_User.CountryId + ",\n" +
+                "  [IsActive] =1,\n" +
+                "  [LastModifiedOn] =GETDATE(),\n" +
+                "  [RPASPermitNo] ='" + mSTR_User.RPASPermitNo + "',\n" +
+                "  [PermitCategory] ='" + mSTR_User.PermitCategory + "',\n" +
+                "  [ContactAddress] ='" + mSTR_User.ContactAddress + "',\n" +
+                "  [RegRPASSerialNo] ='" + mSTR_User.RegRPASSerialNo + "',\n" +
+                "  [CompanyAddress] ='" + mSTR_User.CompanyAddress + "',\n" +
+                "  [CompanyTelephone] ='" + mSTR_User.CompanyTelephone + "',\n" +
+                "  [CompanyEmail] ='" + mSTR_User.CompanyEmail + "',\n" +
+                "  [TradeLicenceCopyUrl] ='" + mSTR_User.TradeLicenceCopyUrl + "',\n" +
+                "  [EmiratesID] ='" + mSTR_User.EmiratesID + "'\n" +
+                "where\n" +
+                "  [UserId] =" + RegisterUserID;
                 int result = Util.doSQL(updatesql);
 
-                return RedirectToAction("Internal", "DashBoard");
+                //Login the user to the system
+                Session["UserID"] = RegisterUserID;
+                Session["FirstName"] = mSTR_User.FirstName;
+                Session["UserName"] = mSTR_User.UserName;
+
+                return RedirectToAction("Index", "Home");
             }
             return View(mSTR_User);
         }
@@ -318,6 +389,146 @@ namespace eX_Portal.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult UAS()
+        {
+            if (!exLogic.User.hasAccess("RPAS.UAS")) return RedirectToAction("NoAccess", "Home");
+            String SQL = "SELECT \n" +
+          "  D.[DroneName] as Name,\n" +
+          "  D.[CommissionDate],\n" +
+          "  M.Name as Manufacture,\n" +
+          "  D.RpasSerialNo as 'RPAS Serial Number',\n" +
+          "  Count(*) Over() as _TotalRecords,\n" +
+          "  D.[DroneId] as _PKey\n" +
+          "FROM\n" +
+          "  [MSTR_Drone] D\n" +
+          "Left join MSTR_Account  O on\n" +
+          "  D.AccountID = O.AccountID " +
+          "Left join LUP_Drone M on\n" +
+          "  ManufactureID = M.TypeID and\n" +
+          "  M.Type='Manufacturer' " +
+          "Left join LUP_Drone U on\n" +
+          "  UAVTypeID = U.TypeID and\n" +
+          "  U.Type= 'UAVType'\n" +
+          "where D.CreatedBy=" + Session["UserId"] + " and D.IsActive=1";
+
+            qView nView = new qView(SQL);
+            nView.addMenu("Edit", Url.Action("UASEdit", new { ID = "_Pkey" }));
+            nView.addMenu("Delete", Url.Action("DeleteUAS", "Rpas", new { ID = "_Pkey" }));
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }
+
+        // GET: Rpas/UASRegister
+        public ActionResult UASRegister()
+        {
+            if (!exLogic.User.hasAccess("RPAS.UASCREATE")) return RedirectToAction("NoAccess", "Home");
+
+            return View();
+        }
+
+        // POST: Rpas/UASRegister
+        [HttpPost]
+        public ActionResult UASRegister(MSTR_Drone mSTR_Drone)
+        {
+            if (!exLogic.User.hasAccess("RPAS.UASCREATE")) return RedirectToAction("NoAccess", "Home");
+
+            if (ModelState.IsValid)
+            {
+                mSTR_Drone.AccountID = 0;
+                mSTR_Drone.IsActive = true;
+                mSTR_Drone.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
+                mSTR_Drone.CreatedOn = System.DateTime.Now;
+                db.MSTR_Drone.Add(mSTR_Drone);
+                db.SaveChanges();
+                int id = mSTR_Drone.DroneId;
+
+                return RedirectToAction("UAS");
+            }
+
+            return View(mSTR_Drone);
+        }
+
+        // GET: Rpas/UASEdit
+        public ActionResult UASEdit(int id = 0)
+        {
+            string SQL = "";
+            if (!exLogic.User.hasAccess("RPAS.UASEDIT")) return RedirectToAction("NoAccess", "Home");
+            SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + id;
+            if (Util.getLoginUserID() == Util.getDBInt(SQL))
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                MSTR_Drone mSTR_Drone = db.MSTR_Drone.Find(id);
+                if (mSTR_Drone == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(mSTR_Drone);
+            }
+            else
+            {
+                return RedirectToAction("NoAccess", "Home");
+            }
+
+        }
+
+        // POST: Rpas/UASEdit
+        [HttpPost]
+        public ActionResult UASEdit(MSTR_Drone mSTR_Drone)
+        {
+            string SQL = "";
+            if (!exLogic.User.hasAccess("RPAS.UASEDIT")) return RedirectToAction("NoAccess", "Home");
+            SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + mSTR_Drone.DroneId;
+            if (Util.getLoginUserID() == Util.getDBInt(SQL))
+            {
+                if (ModelState.IsValid)
+                {
+                    string updatesql = "update MSTR_Drone set [ManufactureId]=" + mSTR_Drone.ManufactureId +
+                                       ",[ModifiedBy] =" + Session["UserID"] + ",[ModifiedOn] ='" + System.DateTime.Now +
+                                       "',[CommissionDate] ='" + mSTR_Drone.CommissionDate +
+                                       "',RpasSerialNo = '" + mSTR_Drone.RpasSerialNo + "' where[DroneId] =" + mSTR_Drone.DroneId;
+                    int result = Util.doSQL(updatesql);
+                    return RedirectToAction("UAS");
+                }
+                return View(mSTR_Drone);
+            }
+            else
+            {
+                return RedirectToAction("NoAccess", "Home");
+            }
+        }
+
+        public String DeleteUAS(int? ID = 0)
+        {
+            String SQL = "";
+            Response.ContentType = "text/json";
+            if (!exLogic.User.hasAccess("RPAS.UASDELETE"))
+                return Util.jsonStat("ERROR", "Access Denied");
+
+
+            SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + ID;
+            if (Util.getLoginUserID() == Util.getDBInt(SQL))
+            {
+                SQL = "DELETE FROM [MSTR_Drone] WHERE DroneId = " + ID;
+                Util.doSQL(SQL);
+
+                return Util.jsonStat("OK");
+            }
+            else
+            {
+                return Util.jsonStat("Access", "No Access");
+            }
         }
 
         /// <summary>
