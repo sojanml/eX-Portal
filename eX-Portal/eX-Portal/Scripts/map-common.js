@@ -208,7 +208,7 @@ function setAllowedRegion() {
     OuterBoundary.setMap(map);
 
     var InnerBoundary = new google.maps.Polygon({
-      paths: AllowedLocation[i].Inner,
+      paths: AllowedLocation[i].Outer,
       fillColor: FillOptions['Inner']['fillColor'],
       fillOpacity: FillOptions['Inner']['fillOpacity'],
       strokeWeight: 0,
@@ -219,7 +219,7 @@ function setAllowedRegion() {
 
 
     var OuterBorder = new google.maps.Polygon({
-      paths: AllowedLocation[i].Outer,
+      paths: AllowedLocation[i].Inner,
       strokeOpacity: 1,
       strokeColor: 'red',
       strokeWeight: FillOptions['Outer']['strokeWeight'],

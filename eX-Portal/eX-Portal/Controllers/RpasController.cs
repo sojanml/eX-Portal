@@ -91,6 +91,9 @@ namespace eX_Portal.Controllers {
       mSTR_User.UserName = InternalInfo.UserName;
       mSTR_User.EmailId = InternalInfo.EmailId;
 
+      ModelState.Remove("UserName");
+      ModelState.Remove("EmailId");
+
       if (ModelState.IsValid) {
         string encryptedpasword = Util.GetEncryptedPassword(mSTR_User.Password);
         mSTR_User.Password = encryptedpasword;
@@ -118,8 +121,13 @@ namespace eX_Portal.Controllers {
         "  [TradeLicenceCopyUrl] ='" + mSTR_User.TradeLicenceCopyUrl + "',\n" +
         "  [EmiratesID] ='" + mSTR_User.EmiratesID + "'\n" +
         "where\n" +
-        "  [UserId] =" + Session["RegisterUserID"];
+        "  [UserId] =" + RegisterUserID;
         int result = Util.doSQL(updatesql);
+
+        //Login the user to the system
+        Session["UserID"] = RegisterUserID;
+        Session["FirstName"] = mSTR_User.FirstName;
+        Session["UserName"] = mSTR_User.UserName;
 
         return RedirectToAction("Index", "Home");
       }
