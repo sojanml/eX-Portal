@@ -1,0 +1,17 @@
+﻿@model eX_Portal.exLogic.qView
+
+@{
+    ViewBag.Title = "RPAS UAS Details";
+    Layout = "~/Views/Shared/_exPortal.cshtml";
+}
+@Html.Raw(Model.getDataTable())
+
+@section toolbar {
+    <a href='@Url.Action("UASRegister", "Rpas")' class="button">New UAS</a>
+}
+
+@section scripts {
+    <script type="text/javascript">
+@Html.Raw(Model.getScripts())
+    </script>
+}
