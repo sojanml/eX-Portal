@@ -52,5 +52,6 @@ namespace eX_Portal.Models
         public Nullable<decimal> Longitude { get; set; }
         public Nullable<System.DateTime> FlightTime { get; set; }
         public Nullable<int> LastFlightID { get; set; }
+        public string RpasSerialNo { get; set; }
     }
 }

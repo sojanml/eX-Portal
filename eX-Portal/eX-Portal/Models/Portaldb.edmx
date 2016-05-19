@@ -182,6 +182,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="HasFlightInfo" Type="int" />
           <Property Name="FlightDistance" Type="decimal" Precision="18" Scale="0" />
           <Property Name="IsInsideTimeFrame" Type="bit" />
+          <Property Name="IsDistanceWarning" Type="int" />
+          <Property Name="IsDistanceCritical" Type="int" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -491,6 +493,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="Longitude" Type="decimal" Precision="18" Scale="5" />
           <Property Name="FlightTime" Type="datetime" />
           <Property Name="LastFlightID" Type="int" />
+          <Property Name="RpasSerialNo" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MSTR_Drone_Setup">
           <Key>
@@ -1509,6 +1512,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="FlightTime" Type="DateTime" Precision="3" />
           <Property Name="LastFlightID" Type="Int32" />
+          <Property Name="RpasSerialNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_DroneService">
           <Key>
@@ -2013,6 +2017,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="HasFlightInfo" Type="Int32" />
           <Property Name="FlightDistance" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="IsInsideTimeFrame" Type="Boolean" />
+          <Property Name="IsDistanceWarning" Type="Int32" />
+          <Property Name="IsDistanceCritical" Type="Int32" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -2629,6 +2635,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="MSTR_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
               <MappingFragment StoreEntitySet="MSTR_Drone">
+                <ScalarProperty Name="RpasSerialNo" ColumnName="RpasSerialNo" />
                 <ScalarProperty Name="LastFlightID" ColumnName="LastFlightID" />
                 <ScalarProperty Name="FlightTime" ColumnName="FlightTime" />
                 <ScalarProperty Name="Longitude" ColumnName="Longitude" />
@@ -3083,6 +3090,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="IsDistanceCritical" ColumnName="IsDistanceCritical" />
+                <ScalarProperty Name="IsDistanceWarning" ColumnName="IsDistanceWarning" />
                 <ScalarProperty Name="IsInsideTimeFrame" ColumnName="IsInsideTimeFrame" />
                 <ScalarProperty Name="FlightDistance" ColumnName="FlightDistance" />
                 <ScalarProperty Name="HasFlightInfo" ColumnName="HasFlightInfo" />

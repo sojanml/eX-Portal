@@ -42,7 +42,7 @@ namespace eX_Portal.Controllers {
       "?center=" + FirstPoint.Latitude + "," + FirstPoint.Longitude +
       "&size=640x400" +
       getGoogleBoundary(FlightID) +
-      "&path=color:0x0000ff|weight:2|enc:" + gEncode(GeoPoints);
+      "&path=color:0x000000|weight:1|enc:" + gEncode(GeoPoints);
 
 
       return GoogleURL;
@@ -81,9 +81,9 @@ namespace eX_Portal.Controllers {
         Polygon.AddRange(Outer);
 
 
-        GoogleURL.Append("&path=fillcolor:0xFF9B5299|weight:0|enc:" + gEncode(Polygon));
-        GoogleURL.Append("&path=fillcolor:0x5AD74699|weight:0|enc:" + gEncode(Inner));
-        GoogleURL.Append("&path=color:0xF42D2DAA|weight:2|enc:" + gEncode(Outer));
+        GoogleURL.Append("&path=fillcolor:0xFF9B5255|weight:0|enc:" + gEncode(Polygon));
+        GoogleURL.Append("&path=fillcolor:0x5AD74655|weight:0|enc:" + gEncode(Outer));
+        GoogleURL.Append("&path=color:0xF42D2DAA|weight:1|enc:" + gEncode(Inner));
 
       }
 
