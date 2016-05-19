@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_exPortal.cshtml";
 }
 
+
 @if (ViewBag.DroneID > 0)
 {
     @Html.Action("DroneDetail", "Drone", new { ID = ViewBag.DroneID })

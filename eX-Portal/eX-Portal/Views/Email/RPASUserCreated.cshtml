@@ -8,18 +8,18 @@
     <p>Dear @Model.FirstName,</p>
 
     <p>
-        You have been registered to  Exponent Portal. Password will be messaged to you.
+        You have been registered to  Exponent Portal. Password will be messaged to you  when you click the button below.
     </p>
 
     <p>
         Details:
-
+        <br /><br />
         User Name  : @Model.UserName<br />
         Registered EmailId    : @Model.EmailId<br />
         Registered Mobile No  : @Model.MobileNo<br />
     </p>
     <p>
-        To Activate your account, <input type="button" value="Click here" onclick="location.href='@Url.Action("Login", "Rpas")'" />
+        To Activate your account, <input type="button" value="Click here" onclick="location.href='@Url.Action("Login", "Rpas",new { userID = Model.UserId })'" />
         
     </p>
     <p>

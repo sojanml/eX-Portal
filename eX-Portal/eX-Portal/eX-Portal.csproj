@@ -1082,6 +1082,9 @@
     <Content Include="Views\DashBoard\RPAS.cshtml" />
     <Content Include="Views\Rpas\FlightRegister.cshtml" />
     <Content Include="Views\Rpas\Flight.cshtml" />
+    <Content Include="Views\Rpas\UAS.cshtml" />
+    <Content Include="Views\Rpas\UASEdit.cshtml" />
+    <Content Include="Views\Rpas\UASRegister.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

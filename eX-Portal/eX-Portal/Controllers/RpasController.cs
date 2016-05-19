@@ -693,12 +693,6 @@ namespace eX_Portal.Controllers
         [HttpPost]
         public ActionResult FlightRegister(GCA_Approval GCA)
         {
-            string SQL = "select createdBy from [GCA_Approval] WHERE ApprovalID=" + GCA.ApprovalID;
-            if (Util.getLoginUserID() != Util.getDBInt(SQL))
-            {
-                return RedirectToAction("NoAccess", "Home");
-            }
-
             if (String.IsNullOrWhiteSpace(GCA.ApprovalName))
             {
                 GCA.ApprovalName = toTitle(GCA.ApprovalFileUrl);
@@ -710,7 +704,7 @@ namespace eX_Portal.Controllers
             if (string.IsNullOrEmpty(GCA.BoundaryInMeters.ToString().Trim()))
                 GCA.BoundaryInMeters = 0;
 
-            SQL = "SELECT Count(*) FROM [GCA_Approval] WHERE ApprovalID = " + GCA.ApprovalID;
+            string SQL = "SELECT Count(*) FROM [GCA_Approval] WHERE ApprovalID = " + GCA.ApprovalID;
             if (Util.getDBInt(SQL) != 0 && GCA.ApprovalID != 0)
             {
                 if (!exLogic.User.hasAccess("RPAS.FLIGHTEDIT")) return RedirectToAction("NoAccess", "Home");
