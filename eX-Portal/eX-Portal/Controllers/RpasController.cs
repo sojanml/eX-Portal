@@ -335,8 +335,8 @@ namespace eX_Portal.Controllers
             if (ID == 0) SQL +=
                  "   d.[DroneName],\n";
             SQL += @"g.[ApprovalName]
-                  ,g.[StartDate]
-                  ,g.[EndDate]
+                  ,CONVERT(NVARCHAR, g.[StartDate], 103) AS [StartDate]
+                  ,CONVERT(NVARCHAR, g.[EndDate], 103) AS [EndDate]
                   ,g.[MinAltitude]
                   ,g.[MaxAltitude]
                   ,Count(*) Over() as _TotalRecords 
@@ -463,10 +463,9 @@ namespace eX_Portal.Controllers
         {
             String SQL = "";
             Response.ContentType = "text/json";
-            if (!exLogic.User.hasAccess("RPAS.FLIGHT"))
-                return Util.jsonStat("ERROR", "Access Denied");
 
-            
+            if (!exLogic.User.hasAccess("RPAS.FLIGHTDELETE")) return Util.jsonStat("ERROR", "Access Denied");
+
             SQL = "select createdBy from [GCA_Approval] WHERE ApprovalID=" + ID;
             if (Util.getLoginUserID() == Util.getDBInt(SQL))
             {
@@ -483,9 +482,8 @@ namespace eX_Portal.Controllers
         [HttpPost]
         public ActionResult FlightRegister(GCA_Approval GCA)
         {
-            if (!exLogic.User.hasAccess("RPAS.FLIGHTCREATE")) return RedirectToAction("NoAccess", "Home");
             string SQL = "select createdBy from [GCA_Approval] WHERE ApprovalID=" + GCA.ApprovalID;
-            if (Util.getLoginUserID() == Util.getDBInt(SQL))
+            if (Util.getLoginUserID() != Util.getDBInt(SQL))
             {
                 return RedirectToAction("NoAccess", "Home");
             }
@@ -504,6 +502,8 @@ namespace eX_Portal.Controllers
             SQL = "SELECT Count(*) FROM [GCA_Approval] WHERE ApprovalID = " + GCA.ApprovalID;
             if (Util.getDBInt(SQL) != 0 && GCA.ApprovalID != 0)
             {
+                if (!exLogic.User.hasAccess("RPAS.FLIGHTEDIT")) return RedirectToAction("NoAccess", "Home");
+
                 string SQLQ = "Update [GCA_Approval]  set" +
                          "[ApprovalName] = '" + GCA.ApprovalName + "' " +
                         ",[ApprovalDate] = '" + Util.toSQLDate(Convert.ToDateTime(GCA.ApprovalDate)) + "' " +
@@ -522,6 +522,7 @@ namespace eX_Portal.Controllers
             }
             else
             {
+                if (!exLogic.User.hasAccess("RPAS.FLIGHTCREATE")) return RedirectToAction("NoAccess", "Home");
                 SQL = @" insert into [GCA_Approval]
                          ([ApprovalName]
                         ,[ApprovalDate]
