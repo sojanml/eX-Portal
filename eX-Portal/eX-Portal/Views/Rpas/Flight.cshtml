@@ -1,0 +1,23 @@
+﻿
+@model eX_Portal.exLogic.qView
+@{
+    ViewBag.Title = "Flight List";
+    Layout = "~/Views/Shared/_exPortal.cshtml";
+}
+
+@if (ViewBag.DroneID > 0)
+{
+    @Html.Action("DroneDetail", "Drone", new { ID = ViewBag.DroneID })
+}
+
+@Html.Raw(Model.getDataTable())
+
+@section scripts {
+    <script type="text/javascript">
+@Html.Raw(Model.getScripts())
+    </script>
+}
+
+@section toolbar {
+    <a href='@Url.Action("FlightRegister", "rpas",new { ID =  ViewBag.DroneID })' class="button">Create</a>
+}

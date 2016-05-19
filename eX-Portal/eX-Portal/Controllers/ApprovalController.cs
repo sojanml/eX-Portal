@@ -18,7 +18,7 @@ namespace eX_Portal.Controllers
         // GET: Approval
         public ActionResult Index(int ID = 0)
         {
-            //if (!exLogic.User.hasAccess("DRONE.VIEW")) return RedirectToAction("NoAccess", "Home");
+            if (!exLogic.User.hasAccess("DRONE.VIEW")) return RedirectToAction("NoAccess", "Home");
            
             ViewBag.Title = "View";
             string SQL = @"SELECT ";

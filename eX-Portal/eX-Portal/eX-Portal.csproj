@@ -236,6 +236,7 @@
     <Compile Include="exLogic\Listing.cs" />
     <Compile Include="exLogic\qDetailView.cs" />
     <Compile Include="exLogic\qView.cs" />
+    <Compile Include="exLogic\Roshan.Util.cs" />
     <Compile Include="exLogic\S3Download.cs" />
     <Compile Include="exLogic\SimpleParser.cs" />
     <Compile Include="exLogic\Sojan.Util.cs" />
@@ -1079,6 +1080,8 @@
     <Content Include="Views\Email\RPASUserCreated.cshtml" />
     <Content Include="Views\Rpas\NoAccess.cshtml" />
     <Content Include="Views\DashBoard\RPAS.cshtml" />
+    <Content Include="Views\Rpas\FlightRegister.cshtml" />
+    <Content Include="Views\Rpas\Flight.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

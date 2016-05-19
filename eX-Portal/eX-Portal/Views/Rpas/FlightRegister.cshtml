@@ -1,0 +1,149 @@
+﻿@model eX_Portal.Models.GCA_Approval
+@using eX_Portal.exLogic
+@{
+    ViewBag.Title = "Flight Register";
+}
+
+@using (Html.BeginForm())
+{
+    <section class="general-form" id="loginForm">
+
+        <input type="hidden" name="ApprovalID" value="@Model.ApprovalID" />
+        <div class="editor-label">
+            Select the Drone for Uploading the document
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.DroneID, Util.GetRAPSDroneList())
+            @Html.ValidationMessageFor(model => model.DroneID)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ApprovalName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ApprovalName)
+            @Html.ValidationMessageFor(model => model.ApprovalName)
+        </div>
+        <div class="editor-label">
+            <input class="button" style="float:right; margin-bottom:5px;" type="button" id="btnCoordinates" name="btnCoordinates" value="Show Map" />
+            @Html.LabelFor(model => model.Coordinates, "Coordinates")
+        </div>
+
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Coordinates)
+            @Html.ValidationMessageFor(model => model.Coordinates)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ApprovalDate)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.ApprovalDate, new { @class = "date-picker" })
+            @Html.ValidationMessageFor(model => model.ApprovalDate)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.StartDate)
+        </div>
+        <div class="editor-field">
+
+            @Html.TextBoxFor(model => model.StartDate, new { @class = "date-picker" })
+            @Html.ValidationMessageFor(model => model.StartDate)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EndDate)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EndDate, new { @class = "date-picker" })
+            @Html.ValidationMessageFor(model => model.EndDate)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.StartTime)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.StartTime, new { @class = "time-picker" })
+            @Html.ValidationMessageFor(model => model.StartTime)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EndTime)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EndTime, new { @class = "time-picker" })
+            @Html.ValidationMessageFor(model => model.EndTime)
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.MinAltitude, "Minimum Altitude in meter")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.MinAltitude)
+            @Html.ValidationMessageFor(model => model.MinAltitude)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.MaxAltitude, "Maximum Altitude in mmeter[ max allowed : 50m ]")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.MaxAltitude)
+            @Html.ValidationMessageFor(model => model.MaxAltitude)
+        </div>
+        <div class="form-toolbar">
+            <input type="submit" id="btn-submit" value="Save" />
+        </div>
+    </section>
+}
+
+
+<div id="map-dialog" style="display:none;" title="Select Cordinates for the Approval">
+    <iframe id="iFrameMap" name="iFrameMap" src="/Map/Select" style="width:100%; height:100%; border:0px"></iframe>
+
+</div>
+
+
+@section header{
+    <link href="~/Content/black-box.css" rel="stylesheet" />
+    <script type="text/javascript">
+    function getCoordinates() {
+      return $('#Coordinates').val();
+    }
+    function setCoordinates(Cord) {
+      $('#Coordinates').val(Cord);
+    }
+
+    </script>
+}
+@section Scripts{
+    <script type="text/javascript">
+        var UploadUrl = '/rpas/FlightRegister';
+    var DocType ='rpasApproval';
+    $(document).ready(function () {
+      // Create a map object and specify the DOM element for display.
+      var map = null;
+      $('#btnCoordinates').on("click", function () {
+        var iFrame = window.frames['iFrameMap']
+        if (iFrame.updateCordinates) iFrame.updateCordinates();
+        $("#map-dialog").dialog({
+          resizable: false,
+          height: 600,
+          minWidth: 1000,
+          modal: true,
+          buttons: {
+            Close: function () {
+              $(this).dialog("close");
+            }
+          }
+        });
+      })
+    });
+
+    $(document).ready(function () {
+        $('#StartTime').timepicker({});
+    });
+    $(document).ready(function () {
+        $('#EndTime').timepicker({});
+    });
+
+    </script>
+@Scripts.Render("~/bundles/jqueryval")
+    <script src="~/jquery-ui/jquery.ui.timepicker.js"></script>
+    <link href="~/jquery-ui/jquery.ui.timepicker.css" rel="stylesheet" />
+}
+
