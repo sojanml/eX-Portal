@@ -435,18 +435,26 @@ namespace eX_Portal.Controllers {
         [HttpPost]
         public ActionResult UASEdit(MSTR_Drone mSTR_Drone)
         {
+            string SQL = "";
             if (!exLogic.User.hasAccess("RPAS.UASEDIT")) return RedirectToAction("NoAccess", "Home");
-
-            if (ModelState.IsValid)
+            SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" +mSTR_Drone.DroneId;
+            if (Util.getLoginUserID() == Util.getDBInt(SQL))
             {
-                string updatesql = "update MSTR_Drone set [ManufactureId]=" + mSTR_Drone.ManufactureId +
-                                   ",[ModifiedBy] =" + Session["UserID"] + ",[ModifiedOn] ='" + System.DateTime.Now +
-                                   "',[CommissionDate] ='" + mSTR_Drone.CommissionDate +
-                                   "',RpasSerialNo = '" + mSTR_Drone.RpasSerialNo + "' where[DroneId] =" + mSTR_Drone.DroneId;
-                int result=Util.doSQL(updatesql);
-                return RedirectToAction("UAS");
+                if (ModelState.IsValid)
+                {
+                    string updatesql = "update MSTR_Drone set [ManufactureId]=" + mSTR_Drone.ManufactureId +
+                                       ",[ModifiedBy] =" + Session["UserID"] + ",[ModifiedOn] ='" + System.DateTime.Now +
+                                       "',[CommissionDate] ='" + mSTR_Drone.CommissionDate +
+                                       "',RpasSerialNo = '" + mSTR_Drone.RpasSerialNo + "' where[DroneId] =" + mSTR_Drone.DroneId;
+                    int result = Util.doSQL(updatesql);
+                    return RedirectToAction("UAS");
+                }
+                return View(mSTR_Drone);
             }
-            return View(mSTR_Drone);         
+            else
+            {
+                return RedirectToAction("NoAccess", "Home");
+            }     
         }   
 
         public String DeleteUAS(int? ID = 0)
