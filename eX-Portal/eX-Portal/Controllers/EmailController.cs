@@ -94,7 +94,7 @@ namespace eX_Portal.Controllers {
         {
             var User = ctx.MSTR_User.Find(UserID);
             ViewBag.Title = "User Created";
-            string sql = "select [FirstName]+' '+LastName as Name from [MSTR_User] where [UserId]=" + Convert.ToInt32(Session["UserID"].ToString());
+            string sql = "select [FirstName]+' '+LastName as Name from [MSTR_User] where [UserId]=" + UserID;
             var Row = Util.getDBRow(sql);
             ViewBag.Username = Row["Name"].ToString();
             return View(User);
