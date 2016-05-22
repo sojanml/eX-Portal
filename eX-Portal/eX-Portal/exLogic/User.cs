@@ -194,13 +194,13 @@ namespace eX_Portal.exLogic {
       "  MSTR_Account.BrandLogo\n" +
       "from\n" +
       "  MSTR_User\n" +
-      "Inner Join MSTR_Account On\n" +
+      "left Join MSTR_Account On\n" +
       "  MSTR_Account.AccountId = MSTR_User.AccountId\n" +
       "where\n" +
       "  MSTR_User.UserName = '" + UserName + "'\n";
       var Result = Util.getDBRow(SQL);
       thisUser.UserID = int.Parse(Result["UserID"].ToString());
-      thisUser.AccountID = int.Parse(Result["AccountID"].ToString());
+      thisUser.AccountID =string.IsNullOrEmpty(Convert.ToString(Result["AccountID"]))? 0 : int.Parse(Convert.ToString(Result["AccountID"]));
       thisUser.FullName = Result["FullName"].ToString();
       thisUser.BrandColor = Result["BrandColor"].ToString();
       thisUser.BrandLogo = Result["BrandLogo"].ToString();
