@@ -72,9 +72,43 @@ namespace eX_Portal.exLogic {
 
     }
 
+    public static int UserIsActive(String UserName, String Password)
+    {
+        try
+        {
+            string PasswordCrypto = Util.GetEncryptedPassword(Password);
+            int result = 0;
+                
+            using (var ctx = new ExponentPortalEntities())
+            {
+                var _objuserdetail = (from data in ctx.MSTR_User
+                                      where (data.UserName == UserName
+                                      && data.Password == PasswordCrypto)
+                                      select data.IsActive).ToList();
+                    
+                    string isactive = _objuserdetail[0].ToString();
+                    if(isactive == "True")
+                    {
+                        result = 1;
+                    }
+                    else
+                    {
+                        result = 0;
+                    }
+            }
+            return result;
+
+        }
+        catch (Exception ex)
+        {
+            Util.ErrorHandler(ex);
+            System.Web.HttpContext.Current.Response.Write("<script>alert('Please Check Database Connection');</script>");
+            return -1;
+        }
+   }
 
 
-    public static int UserExist(String UserName) {
+        public static int UserExist(String UserName) {
       try {
 
         int result = 0;
@@ -97,7 +131,35 @@ namespace eX_Portal.exLogic {
       }
     }
 
-    public static int GetUserId(String UserName) {
+        public static int EmailExist(String EmailID)
+        {
+            try
+            {
+
+                int result = 0;
+                using (var ctx = new ExponentPortalEntities())
+                {
+                    var _objuserdetail = (from data in ctx.MSTR_User
+                                          where data.EmailId == EmailID
+
+
+                                          select data);
+
+                    result = _objuserdetail.Count();
+                }
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                Util.ErrorHandler(ex);
+                System.Web.HttpContext.Current.Response.Write("<script>alert('Please Check Database Connection');</script>");
+                return -1;
+            }
+        }
+
+        public static int GetUserId(String UserName) {
       int result = 0;
       using (var ctx = new ExponentPortalEntities()) {
         String SQL = "select UserId from MSTR_User" +
@@ -132,13 +194,13 @@ namespace eX_Portal.exLogic {
       "  MSTR_Account.BrandLogo\n" +
       "from\n" +
       "  MSTR_User\n" +
-      "Inner Join MSTR_Account On\n" +
+      "left Join MSTR_Account On\n" +
       "  MSTR_Account.AccountId = MSTR_User.AccountId\n" +
       "where\n" +
       "  MSTR_User.UserName = '" + UserName + "'\n";
       var Result = Util.getDBRow(SQL);
       thisUser.UserID = int.Parse(Result["UserID"].ToString());
-      thisUser.AccountID = int.Parse(Result["AccountID"].ToString());
+      thisUser.AccountID =string.IsNullOrEmpty(Convert.ToString(Result["AccountID"]))? 0 : int.Parse(Convert.ToString(Result["AccountID"]));
       thisUser.FullName = Result["FullName"].ToString();
       thisUser.BrandColor = Result["BrandColor"].ToString();
       thisUser.BrandLogo = Result["BrandLogo"].ToString();

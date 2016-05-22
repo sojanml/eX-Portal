@@ -74,37 +74,34 @@ namespace eX_Portal.exLogic {
       IList<ChartViewModel> ChartList = new List<ChartViewModel>();
 
       using (var ctx = new ExponentPortalEntities()) {
-                using (var cmd = ctx.Database.Connection.CreateCommand()) {
-                    ctx.Database.Connection.Open();
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
 
-                    cmd.CommandText = "usp_Portal_GetPilotChartData";
-                    DbParameter Param1 = cmd.CreateParameter();
-                    Param1.ParameterName = "@AccountID";
-                    Param1.Value = Util.getAccountID();
-                    DbParameter Param2 = cmd.CreateParameter();
-                    Param2.ParameterName = "@IsAccess";
-                    if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                    {
+          cmd.CommandText = "usp_Portal_GetPilotChartData";
+          DbParameter Param1 = cmd.CreateParameter();
+          Param1.ParameterName = "@AccountID";
+          Param1.Value = Util.getAccountID();
+          DbParameter Param2 = cmd.CreateParameter();
+          Param2.ParameterName = "@IsAccess";
+          if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
 
-                        Param2.Value = 1;
-                    }
-                    else
-                    {
-                        Param2.Value = 0;
-                    }
-                    cmd.Parameters.Add(Param1);
-                    cmd.Parameters.Add(Param2);
-                    cmd.CommandType = CommandType.StoredProcedure;
+            Param2.Value = 1;
+          } else {
+            Param2.Value = 0;
+          }
+          cmd.Parameters.Add(Param1);
+          cmd.Parameters.Add(Param2);
+          cmd.CommandType = CommandType.StoredProcedure;
 
 
-                    using (var reader = cmd.ExecuteReader()) {
+          using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
               ChartViewModel dd = new ChartViewModel();
               dd.PilotName = reader["FirstName"].ToString();
               dd.PilotTotalHrs = Util.toInt(reader["TotalPilotHours"].ToString());
               dd.PilotCurrentMonthHrs = Util.toInt(reader["LastMonthPilotHours"].ToString());
               dd.PilotLastFlightHrs = Util.toInt(reader["LastPilottHours"].ToString());
-                         
+
               ChartList.Add(dd);
 
             }
@@ -131,34 +128,31 @@ namespace eX_Portal.exLogic {
       using (var ctx = new ExponentPortalEntities()) {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
-          
-                    cmd.CommandText = "usp_Portal_GetLastFlightChartData";
-                    DbParameter Param1 = cmd.CreateParameter();
-                    Param1.ParameterName = "@AccountID";
-                    Param1.Value = Util.getAccountID();
-                    DbParameter Param2 = cmd.CreateParameter();
-                    Param2.ParameterName = "@IsAccess";
-                    if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                    {
 
-                        Param2.Value = 1;
-                    }
-                    else
-                    {
-                        Param2.Value = 0;
-                    }
-                    cmd.Parameters.Add(Param1);
-                    cmd.Parameters.Add(Param2);
-                    cmd.CommandType = CommandType.StoredProcedure;
+          cmd.CommandText = "usp_Portal_GetLastFlightChartData";
+          DbParameter Param1 = cmd.CreateParameter();
+          Param1.ParameterName = "@AccountID";
+          Param1.Value = Util.getAccountID();
+          DbParameter Param2 = cmd.CreateParameter();
+          Param2.ParameterName = "@IsAccess";
+          if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+
+            Param2.Value = 1;
+          } else {
+            Param2.Value = 0;
+          }
+          cmd.Parameters.Add(Param1);
+          cmd.Parameters.Add(Param2);
+          cmd.CommandType = CommandType.StoredProcedure;
 
 
 
-                    using (var reader = cmd.ExecuteReader()) {
+          using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
               ChartViewModel dd = new ChartViewModel();
               dd.DroneName = reader["DroneName"].ToString();
               dd.TotalFightTime = Util.toInt(reader["LastFlightHours"].ToString());
-              
+
               ChartList.Add(dd);
 
             }
@@ -186,30 +180,25 @@ namespace eX_Portal.exLogic {
       using (var ctx = new ExponentPortalEntities()) {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
-        
-                   
-                    cmd.CommandText = "usp_Portal_GetFlightChartData";
-                    DbParameter Param1 = cmd.CreateParameter();
-                    Param1.ParameterName = "@AccountID";
-                    Param1.Value = Util.getAccountID();
-                    DbParameter Param2 = cmd.CreateParameter();
-                    Param2.ParameterName = "@IsAccess";
-                    if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                    {                       
-                        Param2.Value = 1;
-                    }
-                    else
-                    {
-                        Param2.Value = 0;
-                    }
-                    cmd.Parameters.Add(Param1);
-                    cmd.Parameters.Add(Param2);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            
+
+
+          cmd.CommandText = "usp_Portal_GetFlightChartData";
+          DbParameter Param1 = cmd.CreateParameter();
+          Param1.ParameterName = "@AccountID";
+          Param1.Value = Util.getAccountID();
+          DbParameter Param2 = cmd.CreateParameter();
+          Param2.ParameterName = "@IsAccess";
+          if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+            Param2.Value = 1;
+          } else {
+            Param2.Value = 0;
+          }
+          cmd.Parameters.Add(Param1);
+          cmd.Parameters.Add(Param2);
+          cmd.CommandType = CommandType.StoredProcedure;
+          using (var reader = cmd.ExecuteReader()) {
+            while (reader.Read()) {
+
               ChartViewModel dd = new ChartViewModel();
               dd.DroneName = reader["DroneName"].ToString();
               dd.TotalFightTime = Util.toInt(reader["TotalFlightHours"].ToString());
@@ -307,7 +296,7 @@ namespace eX_Portal.exLogic {
 
     public static string GetWOEID(string City) {
       string WeatherWOEID = null, HttpSQL;
-      HttpSQL = " http://query.yahooapis.com/v1/public/yql?q=select woeid from geo.places where text='" + City +"'";
+      HttpSQL = " http://query.yahooapis.com/v1/public/yql?q=select woeid from geo.places where text='" + City + "'";
       XmlDocument doc = new XmlDocument();
       doc.Load(HttpSQL);
       WeatherWOEID = doc.GetElementsByTagName("woeid")[0].InnerText;
@@ -352,13 +341,13 @@ namespace eX_Portal.exLogic {
           response.Close();
       }
       if (AddStart != null) {
-         AddStart = AddStart.Split(',')[0];
-               // s.Replace("\"", "");
-                AddStart = AddStart.Replace("\"", "");
-                // AddStart = AddStart.Replace("\n", String.Empty);
-               // AddStart = AddStart.TrimEnd('\r', '\n');
-               // AddStart= AddStart.TrimStart('\r', '\n');
-            } else {
+        AddStart = AddStart.Split(',')[0];
+        // s.Replace("\"", "");
+        AddStart = AddStart.Replace("\"", "");
+        // AddStart = AddStart.Replace("\n", String.Empty);
+        // AddStart = AddStart.TrimEnd('\r', '\n');
+        // AddStart= AddStart.TrimStart('\r', '\n');
+      } else {
         AddStart = "";
       }
 
@@ -382,7 +371,7 @@ namespace eX_Portal.exLogic {
       // open a XmlTextReader object using the constructed url
       XmlTextReader reader = new XmlTextReader(forecastUrl);
       // loop through xml result node by node
-     
+
       while (reader.Read()) {
         // decide which type of node us currently being read
         switch (reader.NodeType) {
@@ -436,9 +425,9 @@ namespace eX_Portal.exLogic {
         }
         if (reader.Name.ToLower() == "yweather:atmosphere") {
           Weather.Humidity = reader.GetAttribute("humidity").ToString();
-                            Weather.Visibility = Math.Round((double.Parse(reader.GetAttribute("visibility")) / 1.60934),0);
+          Weather.Visibility = Math.Round((double.Parse(reader.GetAttribute("visibility")) / 1.60934), 0);
 
-          Weather.Pressure = Math.Round( double.Parse(reader.GetAttribute("pressure"))* 0.0295301 , 0);
+          Weather.Pressure = Math.Round(double.Parse(reader.GetAttribute("pressure")) * 0.0295301, 0);
           rising = Convert.ToInt32(reader.GetAttribute("rising"));
 
           rising = Convert.ToInt32(reader.GetAttribute("rising"));
@@ -517,76 +506,69 @@ namespace eX_Portal.exLogic {
       }
 
       Weather.Forecast = ForcastList;
-            //Checking the records if exist write to the file
-            if (ForcastList.Count>0)
-            {
-                WriteToFile(Weather,Location);
-            }
-            else
-            {
-                //not exist read from the file and display that
-                WeatherFromFile = ReadFromFile(Location);
-                if(WeatherFromFile!= null)
-                {
-                    Weather = WeatherFromFile;
-                }
-            }
-            
-           
+      //Checking the records if exist write to the file
+      if (ForcastList.Count > 0) {
+        WriteToFile(Weather, Location);
+      } else {
+        //not exist read from the file and display that
+        WeatherFromFile = ReadFromFile(Location);
+        if (WeatherFromFile != null) {
+          Weather = WeatherFromFile;
+        }
+      }
+
+
       return Weather;
 
     }
 
-        
-
-        public static string WriteToFile(WeatherViewModel  Weather,string FileName)
-        {
-            string Path = HttpContext.Current.Server.MapPath("/Upload/" + FileName+".txt");
-          
-                // String UploadPath = HttpContext.Current.Server.MapPath(Url.Content(RootUploadDir) + UserID + "/");
-                //string SubPath = "~/Weather/";
-                //string SubPath = HttpContext.Current.Server.MapPath("~/Weather/");
-
-              
-                //bool exists = System.IO.Directory.Exists(HttpContext.Current.Server.MapPath(SubPath));
-               // if (!exists)
-                  //  System.IO.Directory.CreateDirectory(SubPath);
-              //  if (File.Exists(Path))
-               // {
-                 //   File.Delete(Path);
-              //  }
-           
-
-                JavaScriptSerializer jss = new JavaScriptSerializer();
-
-                string output = jss.Serialize(Weather);
-
-                System.IO.File.WriteAllText(@Path, output);
-              //  System.IO.File.Create(Path).Close();
-           
-            return output;
-        }
 
 
-        public static WeatherViewModel ReadFromFile(string FileName)
-        {
-            try {
-                string Path = HttpContext.Current.Server.MapPath("/Upload/" + FileName + ".txt");
+    public static string WriteToFile(WeatherViewModel Weather, string FileName) {
+      string Path = HttpContext.Current.Server.MapPath("/Upload/" + FileName + ".txt");
 
-                StreamReader sr = new StreamReader(Path);
-                string jsonString = sr.ReadToEnd();
-                JavaScriptSerializer ser = new JavaScriptSerializer();
-                WeatherViewModel Weather = ser.Deserialize<WeatherViewModel>(jsonString);
+      // String UploadPath = HttpContext.Current.Server.MapPath(Url.Content(RootUploadDir) + UserID + "/");
+      //string SubPath = "~/Weather/";
+      //string SubPath = HttpContext.Current.Server.MapPath("~/Weather/");
 
-                return Weather;
-            }
-            catch  {
-                return null;
-            }
-            
-        }
 
-        public static Int32 toInt(String sItem) {
+      //bool exists = System.IO.Directory.Exists(HttpContext.Current.Server.MapPath(SubPath));
+      // if (!exists)
+      //  System.IO.Directory.CreateDirectory(SubPath);
+      //  if (File.Exists(Path))
+      // {
+      //   File.Delete(Path);
+      //  }
+
+
+      JavaScriptSerializer jss = new JavaScriptSerializer();
+
+      string output = jss.Serialize(Weather);
+
+      System.IO.File.WriteAllText(@Path, output);
+      //  System.IO.File.Create(Path).Close();
+
+      return output;
+    }
+
+
+    public static WeatherViewModel ReadFromFile(string FileName) {
+      try {
+        string Path = HttpContext.Current.Server.MapPath("/Upload/" + FileName + ".txt");
+
+        StreamReader sr = new StreamReader(Path);
+        string jsonString = sr.ReadToEnd();
+        JavaScriptSerializer ser = new JavaScriptSerializer();
+        WeatherViewModel Weather = ser.Deserialize<WeatherViewModel>(jsonString);
+
+        return Weather;
+      } catch {
+        return null;
+      }
+
+    }
+
+    public static Int32 toInt(String sItem) {
       int Temp;
       if (Int32.TryParse(sItem, out Temp)) {
         return Int32.Parse(sItem);
@@ -602,13 +584,9 @@ namespace eX_Portal.exLogic {
       List<SelectListItem> SelectList = new List<SelectListItem>();
       SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
 
-
       using (var cotx = new ExponentPortalEntities()) {
         using (var cmd = cotx.Database.Connection.CreateCommand()) {
-
           cotx.Database.Connection.Open();
-
-
           cmd.CommandText = "usp_Portal_GetDroneDropDown";
           DbParameter Param = cmd.CreateParameter();
           Param.ParameterName = "@Type";
@@ -617,55 +595,47 @@ namespace eX_Portal.exLogic {
           cmd.CommandType = CommandType.StoredProcedure;
           using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
-
               SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Code"].ToString() });
-
             }
           }
           DropDownList = SelectList.ToList();
           cotx.Database.Connection.Close();
           return DropDownList; //return the list objects
-
         }
       }
     }
-        public static IEnumerable<SelectListItem> GetLists(string Type)
-        {
-            List<SelectListItem> SelectList = new List<SelectListItem>();
-            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
-            String SQL = "SELECT 0 as Value, 'Not Available' as Name";
-            using (var ctx = new ExponentPortalEntities())
-            {
-                using (var cmd = ctx.Database.Connection.CreateCommand())
-                {
-                    ctx.Database.Connection.Open();
-                    SQL = "SELECT [Name] as Value  ,[Name] as code FROM[LUP_Drone] where type = '" + Type + "' ";
-                    cmd.CommandText = SQL;
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            SelectList.Add(new SelectListItem { Text = reader["code"].ToString(), Value = reader["Value"].ToString() });
-                        }
-                        ctx.Database.Connection.Close();
-                    }
-
-
-                }
-
-                return SelectList; //return the list objects
-
-
-            }
-        }
-        public static IEnumerable<SelectListItem> GetDashboardLists() {
+    public static IEnumerable<SelectListItem> GetLists(string Type) {
       List<SelectListItem> SelectList = new List<SelectListItem>();
       SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
       String SQL = "SELECT 0 as Value, 'Not Available' as Name";
       using (var ctx = new ExponentPortalEntities()) {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
-          SQL = "SELECT [Name] as Value  ,[Name] as code FROM [LUP_Drone] where name in('DpWorld','Default','Internal','Dewa') ";
+          SQL = "SELECT [Name] as Value  ,[Name] as code FROM[LUP_Drone] where type = '" + Type + "' ";
+          cmd.CommandText = SQL;
+          using (var reader = cmd.ExecuteReader()) {
+            while (reader.Read()) {
+              SelectList.Add(new SelectListItem { Text = reader["code"].ToString(), Value = reader["Value"].ToString() });
+            }
+            ctx.Database.Connection.Close();
+          }
+
+
+        }
+
+        return SelectList; //return the list objects
+
+
+      }
+    }
+    public static IEnumerable<SelectListItem> GetDashboardLists() {
+      List<SelectListItem> SelectList = new List<SelectListItem>();
+      SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
+      String SQL = "SELECT 0 as Value, 'Not Available' as Name";
+      using (var ctx = new ExponentPortalEntities()) {
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          ctx.Database.Connection.Open();
+          SQL = "SELECT [Name] as Value  ,[Name] as code FROM [LUP_Drone] where name in('DpWorld','Default','Internal','Dewa','RPAS')  order by Code asc";
           cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
@@ -781,77 +751,69 @@ namespace eX_Portal.exLogic {
     }
     public static int GetAccountIDFromDrone(int DroneId) {
       int result = 0;
-      using (var cotx = new ExponentPortalEntities()) {
-        String SQL = "select AccountID from MSTR_Drone where  DroneId=" + DroneId;
-        result = Util.toInt(Util.getDBVal(SQL));
 
-      }
-
+      String SQL = "select AccountID from MSTR_Drone where  DroneId=" + DroneId;
+      result = Util.toInt(Util.getDBVal(SQL));
+      
       return result;
     }
 
     public static int GetDroneIdFromFlight(int FlightId) {
       int result = 0;
-      using (var cotx = new ExponentPortalEntities()) {
-        String SQL = "select DroneId from DroneFlight where  ID=" + FlightId;
-        result = Util.toInt(Util.getDBVal(SQL));
 
-      }
+      String SQL = "select DroneId from DroneFlight where  ID=" + FlightId;
+      result = Util.toInt(Util.getDBVal(SQL));
 
       return result;
     }
 
 
-        public static string GetUASFromFlight(int FlightId)
-        {
-            string result = "";
-            using (var cotx = new ExponentPortalEntities())
-            {
-                String SQL = @"SELECT
-                           MSTR_Drone.DroneName as UAS
-                        FROM
-                          DroneFlight
-                        LEFT JOIN MSTR_Drone ON
-                          MSTR_Drone.DroneId = DroneFlight.DroneID
-                        LEFT JOIN MSTR_User as tblPilot ON
-                          tblPilot.UserID = DroneFlight.PilotID
-                        LEFT JOIN MSTR_User as tblGSC ON
-                          tblGSC.UserID = DroneFlight.GSCID
-                        LEFT JOIN MSTR_User as tblCreated ON
-                          tblCreated.UserID = DroneFlight.CreatedBy
-                          where DroneFlight.ID = " + FlightId;
-                result = Util.getDBVal(SQL);
+    public static string GetUASFromFlight(int FlightId) {
+      string result = "";
 
-            }
+      String SQL = @"SELECT
+                          MSTR_Drone.DroneName as UAS
+                      FROM
+                        DroneFlight
+                      LEFT JOIN MSTR_Drone ON
+                        MSTR_Drone.DroneId = DroneFlight.DroneID
+                      LEFT JOIN MSTR_User as tblPilot ON
+                        tblPilot.UserID = DroneFlight.PilotID
+                      LEFT JOIN MSTR_User as tblGSC ON
+                        tblGSC.UserID = DroneFlight.GSCID
+                      LEFT JOIN MSTR_User as tblCreated ON
+                        tblCreated.UserID = DroneFlight.CreatedBy
+                        where DroneFlight.ID = " + FlightId;
+      result = Util.getDBVal(SQL);
 
-            return result;
-        }
+ 
 
-        public static string GetPilotFromFlight(int FlightId)
-        {
-            string result = "";
-            using (var cotx = new ExponentPortalEntities())
-            {
-                String SQL = @"SELECT
-                           tblPilot.FirstName as PilotName
-                        FROM
-                          DroneFlight
-                        LEFT JOIN MSTR_Drone ON
-                          MSTR_Drone.DroneId = DroneFlight.DroneID
-                        LEFT JOIN MSTR_User as tblPilot ON
-                          tblPilot.UserID = DroneFlight.PilotID
-                        LEFT JOIN MSTR_User as tblGSC ON
-                          tblGSC.UserID = DroneFlight.GSCID
-                        LEFT JOIN MSTR_User as tblCreated ON
-                          tblCreated.UserID = DroneFlight.CreatedBy
-                          where DroneFlight.ID = " + FlightId;
-                result = Util.getDBVal(SQL);
+      return result;
+    }
 
-            }
+    public static string GetPilotFromFlight(int FlightId) {
+      string result = "";
 
-            return result;
-        }
-        public static int GetPilotIdFromFlight(int FlightId) {
+      String SQL = @"SELECT
+                          tblPilot.FirstName as PilotName
+                      FROM
+                        DroneFlight
+                      LEFT JOIN MSTR_Drone ON
+                        MSTR_Drone.DroneId = DroneFlight.DroneID
+                      LEFT JOIN MSTR_User as tblPilot ON
+                        tblPilot.UserID = DroneFlight.PilotID
+                      LEFT JOIN MSTR_User as tblGSC ON
+                        tblGSC.UserID = DroneFlight.GSCID
+                      LEFT JOIN MSTR_User as tblCreated ON
+                        tblCreated.UserID = DroneFlight.CreatedBy
+                        where DroneFlight.ID = " + FlightId;
+      result = Util.getDBVal(SQL);
+
+
+
+      return result;
+    }
+    public static int GetPilotIdFromFlight(int FlightId) {
       int result = 0;
       using (var cotx = new ExponentPortalEntities()) {
         String SQL = "select PilotID from DroneFlight where  ID=" + FlightId;

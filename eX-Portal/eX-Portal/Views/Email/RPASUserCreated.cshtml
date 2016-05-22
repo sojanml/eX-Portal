@@ -1,6 +1,6 @@
 ﻿@model eX_Portal.Models.MSTR_User
 @{
-    ViewBag.Title = "RPASUserCreated";
+    Layout = "~/Views/Shared/_Email.cshtml";
 }
 
 @if (Model != null)
@@ -8,18 +8,20 @@
     <p>Dear @Model.FirstName,</p>
 
     <p>
-        You have been registered to  Exponent Portal. Password will be messaged to you.
+        You have been registered to  Exponent Portal. Password will be messaged to you  when you click the button below.
     </p>
 
     <p>
         Details:
-
+        <br /><br />
         User Name  : @Model.UserName<br />
         Registered EmailId    : @Model.EmailId<br />
         Registered Mobile No  : @Model.MobileNo<br />
     </p>
     <p>
-        To Activate your account,  <a href="#">Click here</a>.
+        To Activate your account, 
+        <a href="@Url.Action("Login","RPAS", new { userID = Model.UserId })"> Click here</a>
+        
     </p>
     <p>
         Thank you.

@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data;
+using System.Data.SqlClient;
+using System.Web.Mvc;
+using eX_Portal.Models;
+using System.Data.Common;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
@@ -92,5 +97,37 @@ namespace eX_Portal.exLogic {
          R.Next(100, 999);
       return Password;
     }
-  }
+
+        public static IEnumerable<SelectListItem> GetDdListDroneName()
+        {
+            //  ctx=new ExponentPortalEntities();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+
+                    ctx.Database.Connection.Open();
+
+                    cmd.CommandText = "SELECT Name + ' [' + Code + ']' as Name, AccountId FROM MSTR_Account ORDER BY Name";
+                    cmd.CommandType = CommandType.Text;
+
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+
+                            SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["AccountId"].ToString() });
+
+                        }
+                    }
+                    DropDownList = SelectList.ToList();
+                    ctx.Database.Connection.Close();
+                    return DropDownList; //return the list objects
+
+                }
+            }
+        }
+    }
 }

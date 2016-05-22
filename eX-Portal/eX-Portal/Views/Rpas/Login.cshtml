@@ -15,7 +15,7 @@
       <div class="editor-field">
         Please use the password that you have received in your registered
         mobile number. If you have not received your password yet,
-        <a href="@Url.Action("Login","RPAS", new { Force = 1 })">Please click here to send it again</a>.
+        <a href="@Url.Action("Login","RPAS", new { Force = 1, id = ViewBag.UserId })">Please click here to send it again</a>.
       </div>
 
       <div class="error" id="ErrorMessage" style="display:none; margin-bottom:20px;"></div>
@@ -69,7 +69,7 @@
       $.ajax({
         url: '/RPAS/Login',
         method: 'POST',
-        contentType: 'text/Json',
+        data: TheData        
       }).complete(function (data) {
         var TheData = data.responseJSON;
         if (TheData.Status == 'OK') {

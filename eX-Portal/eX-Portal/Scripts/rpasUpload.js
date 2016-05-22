@@ -3,7 +3,7 @@ var ULElem = null;
 var FileInfo = '';
 
 $(document).ready(function () {
-    $(':input').on("change", checkForm);
+   // $(':input').on("change", checkForm);
 
     $('#createForm').on("submit", function (e) {
         e.stopPropagation();
@@ -16,12 +16,13 @@ $(document).ready(function () {
 });
 
 function checkForm() {
+    var UploadUrl = '/user/create';
+    var DocType = 'RpasTradeLicense';
+
     var ReturnValue = true;
     var Form = document.forms['createForm'];
     var File = Form['file'];
     var DocumentType = DocType;
-    if (Form['DocumentType']) DocumentType = Form['DocumentType'].value;
-
   
     if (File.files.length < 1) {
         $('#file-Required').fadeIn();
@@ -29,15 +30,6 @@ function checkForm() {
     } else {
         $('#file-Required').fadeOut();
     }
-
-    if (DocumentType.length <= 0) {
-        $('#DocumentType-Required').fadeIn();
-        ReturnValue = false;
-    } else {
-        $('#DocumentType-Required').fadeOut();
-    }
-
-
 
     return ReturnValue;
 }
