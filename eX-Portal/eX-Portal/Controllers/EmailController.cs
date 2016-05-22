@@ -71,24 +71,22 @@ namespace eX_Portal.Controllers {
     }//ActionResult FlightReport
 
 
-        public ActionResult RPASRegEmail([Bind(Prefix = "ID")] int RpasID = 0)
-        {
-            var User = ctx.MSTR_RPAS_User.Find(RpasID);
+    public ActionResult RPASRegEmail([Bind(Prefix = "ID")] int RpasID = 0) {
+      var User = ctx.MSTR_RPAS_User.Find(RpasID);
+      var innerJoinQuery = (
+        from LUP_Drone in ctx.LUP_Drone
+        join MSTR_RPAS_User in ctx.MSTR_RPAS_User on LUP_Drone.TypeId equals MSTR_RPAS_User.NationalityId
+        where MSTR_RPAS_User.NationalityId == User.NationalityId && LUP_Drone.Type == "Country"
+        select new { NationalityName = LUP_Drone.Name }
+      ).ToList();
 
-            var innerJoinQuery =
-    (from LUP_Drone in ctx.LUP_Drone
-     join MSTR_RPAS_User in ctx.MSTR_RPAS_User on LUP_Drone.TypeId equals MSTR_RPAS_User.NationalityId
-     where MSTR_RPAS_User.NationalityId == User.NationalityId && LUP_Drone.Type == "Country"
-     select new { NationalityName = LUP_Drone.Name }).ToList();
-
-            ViewBag.NationalityName = innerJoinQuery[0].NationalityName;
-
-            ViewBag.Title = "New User Creation Request Mail";
-            string sql = "select [FirstName]+' '+LastName as Name from [MSTR_User] where [UserId]=" + Convert.ToInt32(Session["UserID"].ToString());
-            var Row = Util.getDBRow(sql);
-            ViewBag.Username = Row["Name"].ToString();
-            return View(User);
-        }
+      ViewBag.NationalityName = innerJoinQuery[0].NationalityName;
+      ViewBag.Title = "New User Creation Request Mail";
+      string sql = "select [FirstName]+' '+LastName as Name from [MSTR_User] where [UserId]=" + Convert.ToInt32(Session["UserID"].ToString());
+      var Row = Util.getDBRow(sql);
+      ViewBag.Username = Row["Name"].ToString();
+      return View(User);
+    }//ActionResult RPASRegEmail
 
         public ActionResult RPASUserCreated([Bind(Prefix = "ID")] int UserID=0)
         {
@@ -98,5 +96,5 @@ namespace eX_Portal.Controllers {
             return View(User);
         }//ActionResult RPASUserCreated
 
-    }//public class EmailController
+  }//public class EmailController
 }//namespace eX_Portal.Controllers
