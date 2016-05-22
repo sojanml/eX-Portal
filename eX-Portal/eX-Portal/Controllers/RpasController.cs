@@ -44,7 +44,7 @@ namespace eX_Portal.Controllers
             ViewBag.Base64EncodedPolicy = fileUploadViewModel.Base64EncodedPolicy;
             ViewBag.Signature = fileUploadViewModel.Signature;
 
-            Session["RegisterUserID"] = 77;
+           
             int RegisterUserID = Util.toInt(Session["RegisterUserID"]);
             if (RegisterUserID <= 0) return View("NoAccess");
 
@@ -125,7 +125,8 @@ namespace eX_Portal.Controllers
                 "  [CompanyTelephone] ='" + mSTR_User.CompanyTelephone + "',\n" +
                 "  [CompanyEmail] ='" + mSTR_User.CompanyEmail + "',\n" +
                 "  [TradeLicenceCopyUrl] ='" + mSTR_User.TradeLicenceCopyUrl + "',\n" +
-                "  [EmiratesID] ='" + mSTR_User.EmiratesID + "'\n" +
+                "  [EmiratesID] ='" + mSTR_User.EmiratesID + "',\n" + 
+                "  [GeneratedPassword] =''\n" + 
                 "where\n" +
                 "  [UserId] =" + RegisterUserID;
                 int result = Util.doSQL(updatesql);
@@ -149,7 +150,7 @@ namespace eX_Portal.Controllers
             //this option allow to register the user to the
             //exponent portal
             bool isPasswordSend = false;
-
+            ViewBag.UserId = UserID;
             var UserInfo = (
               from n in db.MSTR_User
               where n.UserId == UserID
