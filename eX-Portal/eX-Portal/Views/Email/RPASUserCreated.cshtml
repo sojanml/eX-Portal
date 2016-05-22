@@ -19,7 +19,8 @@
         Registered Mobile No  : @Model.MobileNo<br />
     </p>
     <p>
-        To Activate your account, <input type="button" value="Click here" onclick="location.href='@Url.Action("Login", "Rpas",new { userID = Model.UserId })'" />
+        To Activate your account, 
+        <a href="@Url.Action("Login","RPAS", new { userID = Model.UserId })"> Click here</a>
         
     </p>
     <p>
