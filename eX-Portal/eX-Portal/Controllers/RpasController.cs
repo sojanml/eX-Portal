@@ -479,7 +479,7 @@ namespace eX_Portal.Controllers {
             ViewBag.Title = "View";
             string SQL = @"SELECT ";
             if (ID == 0) SQL +=
-                 "   d.[DroneName],\n";
+                 " d.[RpasSerialNo],\n"; //"   d.[DroneName],\n";
             SQL += @"g.[ApprovalName]
                   ,CONVERT(NVARCHAR, g.[StartDate], 103) AS [StartDate]
                   ,CONVERT(NVARCHAR, g.[EndDate], 103) AS [EndDate]
