@@ -5,7 +5,7 @@
 }
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "RegisterForm" }))
 {
     <section class="general-form" id="loginForm">
 
@@ -86,10 +86,41 @@
             @Html.EditorFor(model => model.MaxAltitude)
             @Html.ValidationMessageFor(model => model.MaxAltitude)
         </div>
-        <div class="form-toolbar">
-            <input type="submit" id="btn-submit" value="Save" />
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ApprovalRemarks, "Remarks")
         </div>
-    </section>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ApprovalRemarks)
+            @Html.ValidationMessageFor(model => model.ApprovalRemarks)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IsUseCamara, "Is using camara")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.IsUseCamara, Util.GetBoolList())
+            @Html.ValidationMessageFor(model => model.IsUseCamara)
+        </div>
+
+        <div id="UploadInfo" style="display:@(Model.IsUseCamara == 1 ? "block" : "none")">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.ApprovalFileUrl, "Upload Document")
+            </div>
+            <div class="editor-field" id="file-input">
+                <input name="file" type="file" />
+                <span style="display:none;" id="file-Required" class="field-validation-error">Please select a file to upload...</span>
+            </div>
+            <div class="editor-field" id="file-info">
+                <span id="file-info-name"></span><span id="file-info-status"></span>
+            </div>
+            </div>
+           
+
+            <div class="form-toolbar">
+                <input type="submit" id="btn-submit" value="Save" />
+            </div>
+</section>
 }
 
 
@@ -145,6 +176,7 @@
     </script>
 @Scripts.Render("~/bundles/jqueryval")
     <script src="~/jquery-ui/jquery.ui.timepicker.js"></script>
+    <script src="~/Scripts/flightCreation.js"></script>
     <link href="~/jquery-ui/jquery.ui.timepicker.css" rel="stylesheet" />
 }
 

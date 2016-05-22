@@ -479,7 +479,7 @@ namespace eX_Portal.Controllers {
             ViewBag.Title = "View";
             string SQL = @"SELECT ";
             if (ID == 0) SQL +=
-                 " d.[RpasSerialNo],\n"; //"   d.[DroneName],\n";
+                 " d.[RpasSerialNo],\n"; //"   d.[DroneName],\n";;
             SQL += @"g.[ApprovalName]
                   ,CONVERT(NVARCHAR, g.[StartDate], 103) AS [StartDate]
                   ,CONVERT(NVARCHAR, g.[EndDate], 103) AS [EndDate]
@@ -628,42 +628,54 @@ namespace eX_Portal.Controllers {
         [HttpPost]
         public ActionResult FlightRegister(GCA_Approval GCA)
         {
-            if (String.IsNullOrWhiteSpace(GCA.ApprovalName))
+            if (GCA.IsUseCamara == 1)
             {
-                GCA.ApprovalName = toTitle(GCA.ApprovalFileUrl);
+                if (String.IsNullOrEmpty(GCA.MOD_ApprovalURL))
+                {
+                    ModelState.AddModelError("GCA.MOD_ApprovalURL", "MOD Document is required.");
+                }
             }
-
-            string[] Coord = GCA.Coordinates.Split(',');
-            string Poly = GCA.Coordinates + "," + Coord[0];
-
-            if (string.IsNullOrEmpty(GCA.BoundaryInMeters.ToString().Trim()))
-                GCA.BoundaryInMeters = 0;
-
-            string SQL = "SELECT Count(*) FROM [GCA_Approval] WHERE ApprovalID = " + GCA.ApprovalID;
-            if (Util.getDBInt(SQL) != 0 && GCA.ApprovalID != 0)
+            if (ModelState.IsValid)
             {
-                if (!exLogic.User.hasAccess("RPAS.FLIGHTEDIT")) return RedirectToAction("NoAccess", "Home");
+                if (String.IsNullOrWhiteSpace(GCA.ApprovalName))
+                {
+                    GCA.ApprovalName = toTitle(GCA.ApprovalFileUrl);
+                }
 
-                string SQLQ = "Update [GCA_Approval]  set" +
-                         "[ApprovalName] = '" + GCA.ApprovalName + "' " +
-                        ",[ApprovalDate] = '" + Util.toSQLDate(Convert.ToDateTime(GCA.ApprovalDate)) + "' " +
-                        ",[StartDate] = '" + Util.toSQLDate(Convert.ToDateTime(GCA.StartDate)) + "' " +
-                        ",[EndDate] = '" + Util.toSQLDate(Convert.ToDateTime(GCA.EndDate)) + "' " +
-                        ",[StartTime]= '" + GCA.StartTime + "' " +
-                        ",[EndTime]= '" + GCA.EndTime + "' " +
-                        ",[Coordinates]= '" + GCA.Coordinates + "' " +
-                        ",[Polygon]= geography::STGeomFromText('POLYGON((" + Poly + @"))',4326).MakeValid()  " +
-                        ",DroneID= '" + GCA.DroneID + "' " +
-                        ",ApprovalFileUrl= '" + GCA.S3Url + "' " +
-                        ",MinAltitude= '" + (GCA.MinAltitude == null ? 0 : GCA.MinAltitude) + "' " +
-                        ",MaxAltitude= '" + (GCA.MaxAltitude == null ? 60 : GCA.MaxAltitude) + "' " +
-                        " WHERE ApprovalID = " + GCA.ApprovalID;
-                int res = Util.doSQL(SQLQ);
-            }
-            else
-            {
-                if (!exLogic.User.hasAccess("RPAS.FLIGHTCREATE")) return RedirectToAction("NoAccess", "Home");
-                SQL = @" insert into [GCA_Approval]
+                string[] Coord = GCA.Coordinates.Split(',');
+                string Poly = GCA.Coordinates + "," + Coord[0];
+
+                if (string.IsNullOrEmpty(GCA.BoundaryInMeters.ToString().Trim()))
+                    GCA.BoundaryInMeters = 0;
+
+                string SQL = "SELECT Count(*) FROM [GCA_Approval] WHERE ApprovalID = " + GCA.ApprovalID;
+                if (Util.getDBInt(SQL) != 0 && GCA.ApprovalID != 0)
+                {
+                    if (!exLogic.User.hasAccess("RPAS.FLIGHTEDIT")) return RedirectToAction("NoAccess", "Home");
+
+                    string SQLQ = "Update [GCA_Approval]  set" +
+                             "[ApprovalName] = '" + GCA.ApprovalName + "' " +
+                            ",[ApprovalDate] = '" + Util.toSQLDate(Convert.ToDateTime(GCA.ApprovalDate)) + "' " +
+                            ",[StartDate] = '" + Util.toSQLDate(Convert.ToDateTime(GCA.StartDate)) + "' " +
+                            ",[EndDate] = '" + Util.toSQLDate(Convert.ToDateTime(GCA.EndDate)) + "' " +
+                            ",[StartTime]= '" + GCA.StartTime + "' " +
+                            ",[EndTime]= '" + GCA.EndTime + "' " +
+                            ",[Coordinates]= '" + GCA.Coordinates + "' " +
+                            ",[Polygon]= geography::STGeomFromText('POLYGON((" + Poly + @"))',4326).MakeValid()  " +
+                            ",DroneID= '" + GCA.DroneID + "' " +
+                            ",ApprovalFileUrl= '" + GCA.S3Url + "' " +
+                            ",MinAltitude= '" + (GCA.MinAltitude == null ? 0 : GCA.MinAltitude) + "' " +
+                            ",MaxAltitude= '" + (GCA.MaxAltitude == null ? 60 : GCA.MaxAltitude) + "' " +
+                            ",IsUseCamara= '" + (GCA.IsUseCamara) + "' " +
+                            ",MOD_ApprovalURL= '" + GCA.MOD_ApprovalURL + "' " +
+                            ",ApprovalRemarks= '" + GCA.ApprovalRemarks + "' " +
+                            " WHERE ApprovalID = " + GCA.ApprovalID;
+                    int res = Util.doSQL(SQLQ);
+                }
+                else
+                {
+                    if (!exLogic.User.hasAccess("RPAS.FLIGHTCREATE")) return RedirectToAction("NoAccess", "Home");
+                    SQL = @" insert into [GCA_Approval]
                          ([ApprovalName]
                         ,[ApprovalDate]
                         ,[StartDate]
@@ -676,6 +688,10 @@ namespace eX_Portal.Controllers {
                         ,MinAltitude
                         ,MaxAltitude
                         ,createdBy
+                        ,IsUseCamara
+                        ,MOD_ApprovalURL
+                        ,ApprovalStatus
+                        ,ApprovalRemarks
                         ,BoundaryInMeters)
                       values
                       ('" + GCA.ApprovalName + @"',
@@ -689,12 +705,18 @@ namespace eX_Portal.Controllers {
                       " + GCA.DroneID + @",
                      " + (GCA.MinAltitude == null ? 0 : GCA.MinAltitude) + @",
                      " + (GCA.MaxAltitude == null ? 60 : GCA.MaxAltitude) + @",
+                     " + (GCA.IsUseCamara) + @",
+                     " + (GCA.MOD_ApprovalURL) + @",
+`                    " + "New" + @",
+                     " + (GCA.ApprovalRemarks) + @",
                      " + (Util.getLoginUserID()) + @",50)";
 
-                GCA.ApprovalID = Util.InsertSQL(SQL);
+                    GCA.ApprovalID = Util.InsertSQL(SQL);
 
+                }
+                return RedirectToAction("Flight", "RPAS");
             }
-            return RedirectToAction("Flight", "RPAS");
+            return View(GCA);
         }
 
     }
