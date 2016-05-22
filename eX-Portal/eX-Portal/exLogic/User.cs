@@ -85,11 +85,17 @@ namespace eX_Portal.exLogic {
                                       where (data.UserName == UserName
                                       && data.Password == PasswordCrypto)
                                       select data.IsActive).ToList();
-                    
-                    string isactive = _objuserdetail[0].ToString();
-                    if(isactive == "True")
+                    if (_objuserdetail.Count > 0)
                     {
-                        result = 1;
+                        string isactive = _objuserdetail[0].ToString();
+                        if (isactive == "True")
+                        {
+                            result = 1;
+                        }
+                        else
+                        {
+                            result = 0;
+                        }
                     }
                     else
                     {
