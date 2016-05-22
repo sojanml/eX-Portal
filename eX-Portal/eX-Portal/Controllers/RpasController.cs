@@ -272,7 +272,7 @@ namespace eX_Portal.Controllers {
                 var Row = Util.getDBRow(sqlmailcheck);
         if (Row.Count > 1) {
           if (Row["EmailId"].ToString() == mSTR_RPAS_User.EmailId) {
-                        ViewBag.message = "Registeration for this user is already done!!";
+                        ViewBag.message = "Registration for this user is already done!!";
                         return View(mSTR_RPAS_User);
           } else { }
         } else { }
@@ -284,8 +284,8 @@ namespace eX_Portal.Controllers {
                 db.MSTR_RPAS_User.Add(mSTR_RPAS_User);
                 db.SaveChanges();
                 int id = mSTR_RPAS_User.RpasId;
-                var mailurl = "~/Email/RPASRegEmail/" + id;  //"~/"+Url.Action("RPASRegEmail", "Email", new { id = mSTR_RPAS_User.RpasId });
-                var mailsubject = "New User Creation Request From RPAS Registeration";
+                var mailurl = "~/Email/RPASRegEmail?RpasID=" + id+ "&&CreatedbyID=" + Convert.ToInt32(Session["UserId"].ToString());  
+                var mailsubject = "New User Creation Request From RPAS Registration";
                 Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
                 return RedirectToAction("Index");
             }
@@ -351,7 +351,6 @@ namespace eX_Portal.Controllers {
     public ActionResult UAS() {
             if (!exLogic.User.hasAccess("RPAS.UAS")) return RedirectToAction("NoAccess", "Home");
             String SQL = "SELECT \n" +
-          "  D.[DroneName] as Name,\n" +
           "  D.[CommissionDate],\n" +
           "  M.Name as Manufacture,\n" +
           "  D.RpasSerialNo as 'RPAS Serial Number',\n" +
