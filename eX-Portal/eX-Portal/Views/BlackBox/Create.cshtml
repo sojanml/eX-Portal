@@ -1,0 +1,47 @@
+﻿@model eX_Portal.Models.MSTR_BlackBox
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_eXPortal.cshtml";
+}
+
+<h2>Create</h2>
+
+<section class="general-form" id="loginForm">
+    <script src="~/Scripts/bootstrap.js"></script>
+    @using (Html.BeginForm())
+    {
+
+        @Html.HiddenFor(model => model.BlackBoxID)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BlackBoxSerial, "Serial Number")
+        </div>
+        <div class="editor-field">
+
+            @Html.EditorFor(model => model.BlackBoxSerial)
+            @Html.ValidationMessageFor(model => model.BlackBoxName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BlackBoxName, "BlackBox Name")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.BlackBoxName)
+            @Html.ValidationMessageFor(model => model.BlackBoxName)
+        </div>
+
+        
+
+        
+
+        <div class="form-toolbar">
+            <input type="submit" value="Create" />
+        </div>
+
+
+    }
+
+
+
+</section>

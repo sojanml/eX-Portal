@@ -52,9 +52,6 @@
       <HintPath>..\packages\AWSSDK.S3.3.2.3.0-beta\lib\net45\AWSSDK.S3.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FileStorageUtils">
-      <HintPath>..\..\..\..\..\..\..\FileStorageUtils\bin\Debug\FileStorageUtils.dll</HintPath>
-    </Reference>
     <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
@@ -311,6 +308,9 @@
     <Compile Include="Models\MSTR_Account.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MSTR_BlackBox.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MSTR_Drone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -412,6 +412,12 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductTransaction.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagram.cs">
@@ -1074,6 +1080,10 @@
     <Content Include="Views\Email\RPASRegEmail.cshtml" />
     <Content Include="Views\Rpas\Login.cshtml" />
     <Content Include="Views\Rpas\Register.cshtml" />
+    <Content Include="Views\BlackBox\Create.cshtml" />
+    <Content Include="Views\BlackBox\BlackBoxList.cshtml" />
+    <Content Include="Views\BlackBox\BlackBoxDetails.cshtml" />
+    <Content Include="Views\BlackBox\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1091,6 +1101,12 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.S3.3.2.3.0-beta\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\Cathey\amazonfileupload-master\amazonfileupload-master\FileStorageUtils\FileStorageUtils.csproj">
+      <Project>{6cabaa57-63d3-446f-b44c-6ffa9acb1367}</Project>
+      <Name>FileStorageUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

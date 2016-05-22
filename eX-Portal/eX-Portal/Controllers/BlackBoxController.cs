@@ -1,18 +1,21 @@
 ﻿using eX_Portal.exLogic;
+using eX_Portal.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
- 
+
 namespace eX_Portal.Controllers {
   public class BlackBoxController : Controller {
     static String RootUploadDir = "~/Upload/BlackBox/";
-    // GET: BlackBox
+        public ExponentPortalEntities db = new ExponentPortalEntities();
+        // GET: BlackBox
 
-    public ActionResult Index() {
+        public ActionResult Index() {
       if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "FDR Data";
@@ -252,8 +255,166 @@ namespace eX_Portal.Controllers {
       return JsonText.ToString();
     }
 
+        //Get:BlackBox/Create
+        public ActionResult Create()
+        {
+            //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+
+            MSTR_BlackBox BB = new MSTR_BlackBox();
+             return View(BB);
+        }
+
+        // POST: BlackBox/Create
+        [HttpPost]
+        public ActionResult Create(Models.MSTR_BlackBox BlackBox)
+        {
+         //   if (!exLogic.User.hasAccess("BLACLBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+            try
+            {
+                // TODO: Add insert logic here
+               // BlackBox.BlackBoxID = 1;
+
+                if (ModelState.IsValid)
+                {
+                  //  BlackBox.BlackBoxID = 0;
+                    BlackBox.IsActive = 1;
+                    BlackBox.CreatedBy = Util.getLoginUserID();
+                    BlackBox.CreatedOn = DateTime.Now;
+                    BlackBox.LastUpdateDate = DateTime.Now;
+                    db.MSTR_BlackBox.Add(BlackBox);
+
+                    db.SaveChanges();
+
+                    db.Dispose();
+
+                    return RedirectToAction("BlackBoxList", "BlackBox");
+                }
+                else
+                {
+                    ViewBag.Title = "Create BlackBox";
+                    return View(BlackBox);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Util.ErrorHandler(ex);
+                return View("InternalError", ex);
+            }
+        }
+
+        public ActionResult BlackBoxList()
+        {
+
+      //      if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
+            ViewBag.Title = "Blackbox";
+
+            string SQL = @"SELECT  [BlackBoxID] as _PKey
+                          ,[BlackBoxSerial]
+                          ,[BlackBoxName]
+                          ,[IsActive]
+                          ,[CreatedOn]
+                          ,[CreatedBy]
+                          ,[CurrentStatus]
+                          ,[CurrentUserID]
+                          ,[LastUpdateDate]
+                          ,[CurrentDroneID]
+                            , Count(*) Over() as _TotalRecords
+                      FROM  MSTR_BlackBox";
+            qView nView = new qView(SQL);
+            nView.addMenu("Detail", Url.Action("BlackBoxDetails", new { ID = "_PKey" }));
+            nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
+         
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }//PartsBlackBoxlist
+
+        // GET: Parts/Edit/5
+        public ActionResult Edit(int id)
+        {
+         //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
+            ViewBag.Title = "Edit Blackbox";
+        //    ExponentPortalEntities db = new ExponentPortalEntities();
+            MSTR_BlackBox BB = db.MSTR_BlackBox.Find(id);
+
+            return View(BB);
+
+        }
+
+        // POST: BlackBox/Edit/5
+        [HttpPost]
+        public ActionResult Edit(MSTR_BlackBox  BB)
+        {
+            try
+            {
+                // TODO: Add update logic here
+
+           //     if (!exLogic.User.hasAccess("BlackBox.EDIT")) return RedirectToAction("NoAccess", "Home");
+                
+                if (ModelState.IsValid)
+                {
+                    ViewBag.Title = "Edit BlackBox";
+                    BB.CreatedBy = Util.getLoginUserID();
+                    BB.LastUpdateDate = DateTime.Now;
+
+                    db.Entry(BB).State = EntityState.Modified;
+                    
+                    db.SaveChanges();
+                    return RedirectToAction("BlackBoxList", "BlackBox");
+                }
+                else
+                {
+                    return View(BB);
+                }
+
+            }
+            catch
+            {
+                return View(BB);
+            }
+        }
+
+        // GET: BlackBox/Details/5
+        public String BBDetails(int id)
+        {
+           // if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return Util.jsonStat("ERROR", "Access Denied");
+            string SQL = @"SELECT  [BlackBoxID] as _PKey
+                          ,[BlackBoxSerial]
+                          ,[BlackBoxName]
+                          ,[IsActive]
+                          ,[CreatedOn]
+                          ,[CreatedBy]
+                          ,[CurrentStatus]
+                          ,[CurrentUserID]
+                          ,[LastUpdateDate]
+                          ,[CurrentDroneID]
+                            , Count(*) Over() as _TotalRecords
+                      FROM  MSTR_BlackBox
+                        where BlackBoxID="+id;
+
+            qDetailView nView = new qDetailView(SQL);
+            ViewBag.Message = nView.getTable();
+            ViewBag.Title = id;
+            return nView.getTable();
+        }
 
 
 
-  }//class
+        public ActionResult BlackBoxDetails([Bind(Prefix = "ID")] int BlackBoxID)
+        {
+           // if (!exLogic.User.hasAccess("PARTS.VIEW")) return RedirectToAction("NoAccess", "Home");
+
+            Models.MSTR_BlackBox BB = db.MSTR_BlackBox.Find(BlackBoxID);
+            if (BB == null) return RedirectToAction("Error", "Home");
+            ViewBag.Title = BB.BlackBoxID;
+            return View(BB);
+        }
+    }//class
 }//namespace
