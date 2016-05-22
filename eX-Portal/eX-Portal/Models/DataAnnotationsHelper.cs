@@ -67,12 +67,12 @@ namespace eX_Portal.Models {
     [Display(Name = "Confirm Password")]
     public string ConfirmPassword { get; set; }
 
-    [Required(ErrorMessage ="Please enter First Name")]
-    [Display(Name = "First Name")]    
+    [Required(ErrorMessage = "Please enter First Name")]
+    [Display(Name = "First Name")]
     public string FirstName { get; set; }
 
     [Required(ErrorMessage = "Please enter Last Name")]
-    [Display(Name = "Last Name")]    
+    [Display(Name = "Last Name")]
     public string LastName { get; set; }
 
 
@@ -97,7 +97,7 @@ namespace eX_Portal.Models {
     [Required]
     public string IsPilot { get; set; }
 
-    [Required(ErrorMessage ="Please enter Mobile Number")]
+    [Required(ErrorMessage = "Please enter Mobile Number")]
     [Display(Name = "Mobile Number")]
     public string MobileNo { get; set; }
 
@@ -112,7 +112,7 @@ namespace eX_Portal.Models {
     [EmailAddress(ErrorMessage = "Invalid Email Address")]
     public string CompanyEmail { get; set; }
 
-    }//MSTR_UserHelper
+  }//MSTR_UserHelper
 
 
 
@@ -421,101 +421,98 @@ namespace eX_Portal.Models {
     public string S3Url { get; set; }
   }
 
-    public class GCA_Approval_Helper
-    {
-        [Required(ErrorMessage = "Please select a drone")]
-        [Display(Name = "Drone Name")]
-        public string DroneID { get; set; }
+  public class GCA_Approval_Helper {
+    [Required(ErrorMessage = "Please select a drone")]
+    [Display(Name = "Drone Name")]
+    public string DroneID { get; set; }
 
-        [DataType(DataType.MultilineText)]
-        [Required(ErrorMessage = "Please Enter Coordinates")]
-        public string Coordinates { get; set; }
+    [DataType(DataType.MultilineText)]
+    [Required(ErrorMessage = "Please Enter Coordinates")]
+    public string Coordinates { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Approval Name")]
-        [Display(Name = "Approval Name")]
-        public string ApprovalName { get; set; }
+    [Required(ErrorMessage = "Please Enter Approval Name")]
+    [Display(Name = "Approval Name")]
+    public string ApprovalName { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Approval Date")]
-        [Display(Name = "Approval Date")]
-        public string ApprovalDate { get; set; }
+    [Required(ErrorMessage = "Please Enter Approval Date")]
+    [Display(Name = "Approval Date")]
+    public string ApprovalDate { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Start Date")]
-        [Display(Name = "Start Date")]
-        public string StartDate { get; set; }
+    [Required(ErrorMessage = "Please Enter Start Date")]
+    [Display(Name = "Start Date")]
+    public string StartDate { get; set; }
 
-        [Required(ErrorMessage = "Please Enter End Date")]
-        [Display(Name = "End Date")]
-        public string EndDate { get; set; }
+    [Required(ErrorMessage = "Please Enter End Date")]
+    [Display(Name = "End Date")]
+    public string EndDate { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Start Time")]
-        [Display(Name = "Start Time")]
-        public string StartTime { get; set; }
+    [Required(ErrorMessage = "Please Enter Start Time")]
+    [Display(Name = "Start Time")]
+    public string StartTime { get; set; }
 
-        [Required(ErrorMessage = "Please Enter End Time")]
-        [Display(Name = "End Time")]
-        public string EndTime { get; set; }
+    [Required(ErrorMessage = "Please Enter End Time")]
+    [Display(Name = "End Time")]
+    public string EndTime { get; set; }
 
-    }
+  }
 
-    [MetadataType(typeof(MSTR_RPAS_User_Helper))]
-    public partial class MSTR_RPAS_User
-    {        
-        public string confirmemailid { get; set; }
-        public string confirmmobno { get; set; }
-    }
+  [MetadataType(typeof(MSTR_RPAS_User_Helper))]
+  public partial class MSTR_RPAS_User {
+    public string confirmemailid { get; set; }
+    public string confirmmobno { get; set; }
+  }
 
-    public class MSTR_RPAS_User_Helper
-    {               
-        [Required(ErrorMessage = "Please Enter your Name")]
-        [Display(Name = "First Name")]
-        public string Name { get; set; }
+  public class MSTR_RPAS_User_Helper {
+    [Required(ErrorMessage = "Please Enter your Name")]
+    [Display(Name = "First Name")]
+    public string Name { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Emirates Id")]
-        [Display(Name = "Emirates ID")]
-        public string EmiratesId { get; set; }
+    [Required(ErrorMessage = "Please Enter Emirates Id")]
+    [Display(Name = "Emirates ID")]
+    public string EmiratesId { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Email Address")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        public string EmailId { get; set; }
+    [Required(ErrorMessage = "Please Enter Email Address")]
+    [EmailAddress(ErrorMessage = "Invalid Email Address")]
+    [Display(Name = "Email Address")]
+    public string EmailId { get; set; }
 
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        [Compare("EmailId")]
-        [Display(Name = "Email Address")]
-        public string confirmemailid { get; set; }
+    [EmailAddress(ErrorMessage = "Invalid Email Address")]
+    [Compare("EmailId")]
+    [Display(Name = "Conrim Email Address")]
+    public string confirmemailid { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Mobile Number")]
-        public string MobileNo { get; set; }
+    [Required(ErrorMessage = "Please Enter Mobile Number")]
+    [Display(Name = "Mobile Number")]
+    public string MobileNo { get; set; }
 
-        [Compare("MobileNo")]
-        [Display(Name = "Confirm Mobile No")]             
-        public string confirmmobno { get; set; }
-
-
-    }
+    [Compare("MobileNo")]
+    [Display(Name = "Confirm Mobile No")]
+    public string confirmmobno { get; set; }
 
 
-    [MetadataType(typeof(MSTR_DroneHelper))]
-    public partial class MSTR_Drone
-    {
+  }
 
-    }
 
-    public class MSTR_DroneHelper
-    {
-        [Required(ErrorMessage ="Please select Manufacturer")]
-        [Display(Name = "Manufacturer")]
-        public int ManufactureId { get; set; }
+  [MetadataType(typeof(MSTR_DroneHelper))]
+  public partial class MSTR_Drone {
 
-        //[Required(ErrorMessage = "Please select Drone Name")]
-        //[Display(Name = "Drone Name")]
-        //public string DroneName { get; set; }
+  }
 
-        [Required(ErrorMessage = "Please select Commission Date")]
-        [Display(Name = "Commission Date")]
-        public string CommissionDate { get; set; }
+  public class MSTR_DroneHelper {
+    [Required(ErrorMessage = "Please select Manufacturer")]
+    [Display(Name = "Manufacturer")]
+    public int ManufactureId { get; set; }
 
-        [Required(ErrorMessage = "Please enter Rpas Serial Number")]
-        [Display(Name = "Rpas Serial No")]
-        public string RpasSerialNo { get; set; }
-    }
+    //[Required(ErrorMessage = "Please select Drone Name")]
+    //[Display(Name = "Drone Name")]
+    //public string DroneName { get; set; }
+
+    [Required(ErrorMessage = "Please select Commission Date")]
+    [Display(Name = "Commission Date")]
+    public string CommissionDate { get; set; }
+
+    [Required(ErrorMessage = "Please enter Rpas Serial Number")]
+    [Display(Name = "Rpas Serial No")]
+    public string RpasSerialNo { get; set; }
+  }
 }

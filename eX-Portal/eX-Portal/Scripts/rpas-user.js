@@ -164,5 +164,5 @@ function SubmitFile(file) {
 
 function CompleteSubmitForm(AjaxData, S3KeyUrl) {
   document.forms['createForm']['TradeLicenceCopyUrl'].value = S3KeyUrl;
-  alert('S3KeyUrl: ' + S3KeyUrl);
+ // alert('S3KeyUrl: ' + S3KeyUrl);
 }
