@@ -141,6 +141,7 @@ namespace eX_Portal.Controllers {
       //this option allow to register the user to the
       //exponent portal
       bool isPasswordSend = false;
+      var Rnd = new Random();
 
       var UserInfo = (
         from n in db.MSTR_User
@@ -158,7 +159,7 @@ namespace eX_Portal.Controllers {
         var thisUser = UserInfo.First();
         if (String.IsNullOrEmpty(thisUser.Password) || Force == 1) {
           isPasswordSend = true;
-          var NewPassword = Util.getNewPassword();
+          var NewPassword = Rnd.Next(10000, 99999).ToString();
           var PasswordMD5 = Util.MD5(NewPassword);
           String Body = "Hi " + thisUser.FullName + ", Your password for " +
           "exponent is " + NewPassword;
