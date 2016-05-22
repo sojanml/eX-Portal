@@ -10,8 +10,11 @@ namespace eX_Portal.ViewModel
     public class UserLogin
     {
         public int UserId { get; set; }
+        [Required(ErrorMessage ="Please enter Username")]
     [Display(Name = "User Name")]
     public string UserName { get; set; }
+
+        [Required(ErrorMessage = "Please enter Password")]
         public string Password { get; set; }
         public Nullable<bool> RememberMe { get; set; }
         public string PhotoUrl { get; set; }
