@@ -8,7 +8,7 @@ using System.Web.Mvc;
 namespace eX_Portal.Controllers {
   public class HomeController : Controller {
     public ActionResult Index() {
-      if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("Index", "User");
+      //if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home")
       ViewBag.DashBoard = Util.getDashboard();
       return View();
     }
