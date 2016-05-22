@@ -14,6 +14,47 @@ using FileStorageUtils;
 namespace eX_Portal.Controllers {
   public class RpasController : Controller {
     private ExponentPortalEntities db = new ExponentPortalEntities();
+
+    public ActionResult Applications() {
+      if (!exLogic.User.hasAccess("RPAS.APPLICATION_LIST")) return RedirectToAction("NoAccess", "Home");
+      string SQL = @"Select
+        ApprovalID,
+        ApprovalName,
+        StartDate,
+        EndDate,
+        StartTime,
+        EndTime,
+        MaxAltitude,
+        MinAltitude,
+        IsUseCamara,
+        ISNULL(MSTR_User.FirstName,'') + ' ' + ISNULL(MSTR_User.LastName, '') as FullName,
+        Count(*) Over() as _TotalRecords,
+        ApprovalID as _PKey
+      FROM
+        GCA_Approval
+      LEFT JOIN MSTR_User ON
+        MSTR_User.UserID = GCA_Approval.CreatedBy
+      WHERE
+        ApprovalStatus='New'";
+
+      qView nView = new qView(SQL);
+      //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
+      nView.addMenu("Approve/Reject", Url.Action("Application", "RPAS", new { ID = "_PKey" }));
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
+    }//public ActionResult Applications() 
+
+    public ActionResult Application([Bind(Prefix = "ID")] int ApprovalID = 0) {
+      if (!exLogic.User.hasAccess("RPAS.APPLICATION")) return RedirectToAction("NoAccess", "Home");
+      var Approval = db.GCA_Approval.Find(ApprovalID);      
+      return View(Approval);
+    }//public ActionResult Application()
+
+
     public ActionResult Register() {
 
       var fileStorageProvider = new AmazonS3FileStorageProvider();
