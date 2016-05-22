@@ -88,11 +88,13 @@ namespace eX_Portal.Controllers {
       return View(User);
     }//ActionResult RPASRegEmail
 
-        public ActionResult RPASUserCreated([Bind(Prefix = "ID")] int UserID=0)
+        public ActionResult RPASUserCreated([Bind(Prefix = "ID")] int UserID = 0)
         {
             var User = ctx.MSTR_User.Find(UserID);
+            if(User!=null)
+                ViewBag.Username = User.UserName;
+
             ViewBag.Title = "User Created";
-            ViewBag.Username = User.UserName;
             return View(User);
         }//ActionResult RPASUserCreated
 
