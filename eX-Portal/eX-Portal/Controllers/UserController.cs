@@ -272,6 +272,8 @@ namespace eX_Portal.Controllers
                 EPASValues.EmailId = RPASoList[0].EmailId;
                 EPASValues.MobileNo = RPASoList[0].MobileNo;
 
+                EPASValues.UserProfileId = Convert.ToInt16(7);
+                EPASValues.Dashboard = "RPAS";
             }
             
             var viewModel = new ViewModel.UserViewModel
@@ -283,8 +285,7 @@ namespace eX_Portal.Controllers
                 AccountList = Util.GetAccountList(),
                 DashboardList = Util.GetDashboardLists(),
                 PermitCategoryList = Util.GetLists("RPASCategory")
-       
-            };
+        };
             
             return View(viewModel);
         }
