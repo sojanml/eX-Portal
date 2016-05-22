@@ -466,7 +466,7 @@ namespace eX_Portal.Models {
 
     public class MSTR_RPAS_User_Helper
     {               
-        [Required(ErrorMessage = "Please Enter your Name")]
+        [Required(ErrorMessage = "Please Enter Name")]
         [Display(Name = "First Name")]
         public string Name { get; set; }
 
