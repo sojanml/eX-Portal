@@ -12,7 +12,7 @@
   <div class="photo-upload">
     <input type="hidden" name="PhotoUrl" value="@Model.PhotoUrl" />
     <div class="user-photo">
-      <img id="img-user-photo" src="~/Upload/User/@(!String.IsNullOrEmpty(Model.PhotoUrl) ? "0/" + Model.PhotoUrl : "none.png")" />
+      <img id="img-user-photo" src="/Upload/User/@(!String.IsNullOrEmpty(Model.PhotoUrl) ? Model.UserId + "/" + Model.PhotoUrl : "none.png")" />
     </div>
     <div style="display:none" id="photo-upload-msg"></div>
     <div class="upload-btn">

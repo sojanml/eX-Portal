@@ -51,7 +51,7 @@ namespace eX_Portal.Controllers {
       select new RPAS_Register {
                 EmailId = n.EmailId,
                 UserName = n.UserName,
-
+        UserId = n.UserId,
                 PhotoUrl = n.PhotoUrl,
                 FirstName = n.FirstName,
                 MiddleName = n.MiddleName,
@@ -70,6 +70,7 @@ namespace eX_Portal.Controllers {
                 EmiratesID = n.EmiratesID
             }).FirstOrDefault();
             if (User == null) return View("NoAccess");
+
 
             return View(User);
 
@@ -454,13 +455,13 @@ namespace eX_Portal.Controllers {
                 return Util.jsonStat("ERROR", "Access Denied");
 
 
-                SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + ID;
-                if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
+            SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + ID;
+      if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
                 SQL = "DELETE FROM [MSTR_Drone] WHERE DroneId = " + ID;
                 Util.doSQL(SQL);
 
                 return Util.jsonStat("OK");
-                } else {
+      } else {
                 return Util.jsonStat("Access", "No Access");
             }
         }
@@ -471,8 +472,7 @@ namespace eX_Portal.Controllers {
         /// <returns></returns>
 
 
-        public ActionResult Flight(int ID = 0)
-        {
+    public ActionResult Flight(int ID = 0) {
             if (!exLogic.User.hasAccess("RPAS.FLIGHT")) return RedirectToAction("NoAccess", "Home");
 
             ViewBag.Title = "View";
@@ -502,30 +502,23 @@ namespace eX_Portal.Controllers {
             nView.addMenu("Delete", Url.Action("DeleteGCAApproval", "rpas", new { ID = "_PKey" }));
 
 
-            if (Request.IsAjaxRequest())
-            {
+      if (Request.IsAjaxRequest()) {
                 Response.ContentType = "text/javascript";
                 return PartialView("qViewData", nView);
-            }
-            else
-            {
+      } else {
                 return View(nView);
             }//if(IsAjaxRequest)
         }
-        public ActionResult Complete()
-        {
+    public ActionResult Complete() {
             return View();
         }
         [HttpPost]
-        public String Upload(DroneDocument Doc)
-        {
+    public String Upload(DroneDocument Doc) {
             //Doc.DocumentTitle = Doc.DocumentTitle.Trim();
-            if (String.IsNullOrWhiteSpace(Doc.DocumentTitle))
-            {
+      if (String.IsNullOrWhiteSpace(Doc.DocumentTitle)) {
                 Doc.DocumentTitle = toTitle(Doc.S3Url);
             }
-            if (String.IsNullOrEmpty(Doc.DocumentName))
-            {
+      if (String.IsNullOrEmpty(Doc.DocumentName)) {
                 Doc.DocumentName = Doc.DocumentTitle;
             }
             String SQL = @"INSERT INTO [DroneDocuments] (
@@ -555,35 +548,29 @@ namespace eX_Portal.Controllers {
             Doc.ID = Util.InsertSQL(SQL);
             return Url.Action("Document", "Drone", new { ID = Doc.ID });
         }
-        public string getDroneAccount(int DroneID)
-        {
+    public string getDroneAccount(int DroneID) {
             String SQL = "SELECT AccountID From MSTR_Drone WHERE DroneID=" + DroneID;
             return Util.getDBVal(SQL);
         }
-        private string toTitle(String S3url)
-        {
+    private string toTitle(String S3url) {
             var SlashAt = S3url.LastIndexOf('/');
             var LastDot = S3url.LastIndexOf('.');
             var FileOnly = S3url.Substring(SlashAt + 1, LastDot - SlashAt);
             var UKeyEnd = FileOnly.IndexOf('_');
             return FileOnly.Substring(UKeyEnd + 1);
         }
-        public ActionResult FlightRegister(int ID = 0)
-        {
+    public ActionResult FlightRegister(int ID = 0) {
             //to create gcaapproval
             if (!exLogic.User.hasAccess("RPAS.FLIGHTCREATE")) return RedirectToAction("NoAccess", "Home");
 
             var GCAApprovalDoc = new GCA_Approval();
-            if (ID != 0)
-            {
+      if (ID != 0) {
                 GCAApprovalDoc.DroneID = ID;
             }
 
-            if (ID != 0)
-            {
+      if (ID != 0) {
                 var olist = (from p in db.GCA_Approval where p.ApprovalID == ID select p).ToList();
-                if (olist.Count > 0)
-                {
+        if (olist.Count > 0) {
                     GCAApprovalDoc.ApprovalID = olist[0].ApprovalID;
                     GCAApprovalDoc.DroneID = olist[0].DroneID;
                     GCAApprovalDoc.ApprovalName = olist[0].ApprovalName;
@@ -604,31 +591,25 @@ namespace eX_Portal.Controllers {
             return View(GCAApprovalDoc);
 
         }
-        public String DeleteGCAApproval(int? ID = 0)
-        {
+    public String DeleteGCAApproval(int? ID = 0) {
             String SQL = "";
             Response.ContentType = "text/json";
 
             if (!exLogic.User.hasAccess("RPAS.FLIGHTDELETE")) return Util.jsonStat("ERROR", "Access Denied");
 
             SQL = "select createdBy from [GCA_Approval] WHERE ApprovalID=" + ID;
-            if (Util.getLoginUserID() == Util.getDBInt(SQL))
-            {
+      if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
                 SQL = "DELETE FROM [GCA_Approval] WHERE ApprovalID = " + ID;
                 Util.doSQL(SQL);
 
                 return Util.jsonStat("OK");
-            }
-            else
-            {
+      } else {
                 return Util.jsonStat("Access", "No Access");
             }
         }
         [HttpPost]
-        public ActionResult FlightRegister(GCA_Approval GCA)
-        {
-            if (String.IsNullOrWhiteSpace(GCA.ApprovalName))
-            {
+    public ActionResult FlightRegister(GCA_Approval GCA) {
+      if (String.IsNullOrWhiteSpace(GCA.ApprovalName)) {
                 GCA.ApprovalName = toTitle(GCA.ApprovalFileUrl);
             }
 
@@ -639,8 +620,7 @@ namespace eX_Portal.Controllers {
                 GCA.BoundaryInMeters = 0;
 
             string SQL = "SELECT Count(*) FROM [GCA_Approval] WHERE ApprovalID = " + GCA.ApprovalID;
-            if (Util.getDBInt(SQL) != 0 && GCA.ApprovalID != 0)
-            {
+      if (Util.getDBInt(SQL) != 0 && GCA.ApprovalID != 0) {
                 if (!exLogic.User.hasAccess("RPAS.FLIGHTEDIT")) return RedirectToAction("NoAccess", "Home");
 
                 string SQLQ = "Update [GCA_Approval]  set" +
@@ -658,9 +638,7 @@ namespace eX_Portal.Controllers {
                         ",MaxAltitude= '" + (GCA.MaxAltitude == null ? 60 : GCA.MaxAltitude) + "' " +
                         " WHERE ApprovalID = " + GCA.ApprovalID;
                 int res = Util.doSQL(SQLQ);
-            }
-            else
-            {
+      } else {
                 if (!exLogic.User.hasAccess("RPAS.FLIGHTCREATE")) return RedirectToAction("NoAccess", "Home");
                 SQL = @" insert into [GCA_Approval]
                          ([ApprovalName]
