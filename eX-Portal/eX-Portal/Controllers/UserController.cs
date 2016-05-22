@@ -274,6 +274,8 @@ namespace eX_Portal.Controllers
 
                 EPASValues.UserProfileId = Convert.ToInt16(7);
                 EPASValues.Dashboard = "RPAS";
+                EPASValues.IsActive = false;
+                EPASValues.IsPilot = false;
             }
             
             var viewModel = new ViewModel.UserViewModel
@@ -620,7 +622,7 @@ namespace eX_Portal.Controllers
                 }
                 if (RPASID != 0)
                 {
-                    var mailurl = Url.Action("RPASUserCreated", "Email", new { RpasID = RPASID, UserID = id });
+                    var mailurl = Url.Action("RPASUserCreated", "Email", new { UserID = id });
                     var mailsubject = "User has been created";
                     Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, "~"+mailurl);
 
