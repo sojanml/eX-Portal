@@ -455,13 +455,13 @@ namespace eX_Portal.Controllers {
                 return Util.jsonStat("ERROR", "Access Denied");
 
 
-            SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + ID;
-      if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
+                SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + ID;
+                if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
                 SQL = "DELETE FROM [MSTR_Drone] WHERE DroneId = " + ID;
                 Util.doSQL(SQL);
 
                 return Util.jsonStat("OK");
-      } else {
+                } else {
                 return Util.jsonStat("Access", "No Access");
             }
         }
