@@ -16,12 +16,12 @@
 <table class="qDetailView">
   <tr>
     <td>@Html.DisplayNameFor(model => model.ApprovalName): <span class="value">@Html.DisplayFor(model => model.ApprovalName)</span></td>
-    <td>Start Date: <span class="value">@Html.DisplayFor(model => model.StartDate)</span></td>
+    <td>Start Date: <span class="value">@Html.DisplayFor(model => model.StartDate, "ShortDateTime")</span></td>
     <td>Start Time: <span class="value">@Html.DisplayFor(model => model.StartTime)</span></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
-    <td>End Date: <span class="value">@Html.DisplayFor(model => model.EndDate)</span></td>
+    <td>End Date: <span class="value">@Html.DisplayFor(model => model.EndDate, "ShortDateTime")</span></td>
     <td>End Time: <span class="value">@Html.DisplayFor(model => model.EndTime)</span></td>
   </tr>
   <tr>
@@ -30,12 +30,15 @@
 </table>
 <div id="map_canvas" style="width: 100%; height: 450px"></div>
 
-    <h2>Approve/Reject</h2>
+<br />
+
 
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "AllicationForm" }))
 {
+    <h2>Approve/Reject</h2>
     <section class="general-form" id="loginForm">
+
         <input type="hidden" name="ApprovalID" value="@Model.ApprovalID" />
         <div class="editor-label">
             @Html.LabelFor(model => model.ApprovalStatus, "Approve/Reject")

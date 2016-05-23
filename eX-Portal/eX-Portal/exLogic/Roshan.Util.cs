@@ -58,7 +58,7 @@ namespace eX_Portal.exLogic
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();
             SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
-            SelectList.Add(new SelectListItem { Text = "Approve", Value = "Approve" });
+            SelectList.Add(new SelectListItem { Text = "Approved", Value = "Approved" });
             SelectList.Add(new SelectListItem { Text = "Reject", Value = "Reject" });
             return SelectList; //return the list objects
         }//function GetDropDowntList
