@@ -109,9 +109,10 @@ namespace eX_Portal.Controllers
             /*Create instance of entity model*/
             ExponentPortalEntities objentity = new ExponentPortalEntities();
             /*Getting data from database for user validation*/
-            if (exLogic.User.UserIsActive(_objuserlogin.UserName, _objuserlogin.Password) > 0)
+
+            if (exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0)
             {
-                if (exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0)
+                if (exLogic.User.UserIsActive(_objuserlogin.UserName, _objuserlogin.Password) > 0)
                 {
                     /*Redirect user to success apge after successfull login*/
                     ViewBag.Message = 1;
@@ -134,11 +135,11 @@ namespace eX_Portal.Controllers
 
                 }
                 else {
-                    ViewBag.Message = 0;
+                    ViewBag.Message = 2;
                 }
             }
             else {
-                ViewBag.Message = 2;
+                ViewBag.Message = 0;
             }
 
 

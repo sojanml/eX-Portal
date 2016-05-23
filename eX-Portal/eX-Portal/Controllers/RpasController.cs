@@ -54,6 +54,16 @@ namespace eX_Portal.Controllers {
       return View(Approval);
     }//public ActionResult Application()
 
+        [HttpPost]
+        public ActionResult Application(GCA_Approval GCA)
+        {
+            if (!exLogic.User.hasAccess("RPAS.APPLICATION")) return RedirectToAction("NoAccess", "Home");
+
+            string SQL = "update GCA_Approval set ApprovalStatus = '"+GCA.ApprovalStatus+"', ApprovalRemarks = '"+GCA.ApprovalRemarks+"' where ApprovalID = "+GCA.ApprovalID;
+            int Val = Util.doSQL(SQL);
+
+            return RedirectToAction("Applications", "Rpas");
+        }
 
     public ActionResult Register() {
 

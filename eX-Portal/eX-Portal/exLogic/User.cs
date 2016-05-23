@@ -59,14 +59,17 @@ namespace eX_Portal.exLogic {
                               && (data.Password == PasswordCrypto
                               ||data.GeneratedPassword== PasswordCrypto))
                               select data).ToList();
-        if(_objuserdetail[0].GeneratedPassword== PasswordCrypto)
-        {
-           string updatesql = "update MSTR_User set Password='" + PasswordCrypto + "',GeneratedPassword='' where UserId="+ _objuserdetail[0].UserId;
-           Util.doSQL(updatesql);
-        }
+                if (_objuserdetail.Count > 0)
+                {
+                    if (_objuserdetail[0].GeneratedPassword == PasswordCrypto)
+                    {
+                        string updatesql = "update MSTR_User set Password='" + PasswordCrypto + "',GeneratedPassword='' where UserId=" + _objuserdetail[0].UserId;
+                        Util.doSQL(updatesql);
+                    }
+                    else { }
+                }
                 result = _objuserdetail.Count;
       }
-
       return result;
 
 
