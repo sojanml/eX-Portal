@@ -20,7 +20,7 @@ namespace eX_Portal.exLogic
                 {
                     ctx.Database.Connection.Open();
 
-                    SQL = "SELECT [DroneId] as Value, [DroneName] as Name FROM [MSTR_Drone] where IsActive=1";
+                    SQL = "SELECT [DroneId] as Value, [RPASSerialNo] as Name FROM [MSTR_Drone] where IsActive=1";
                         SQL += "\n" +
                           " AND\n " +
                           "  MSTR_Drone.CreatedBy =" + Util.getLoginUserID();
@@ -44,5 +44,25 @@ namespace eX_Portal.exLogic
             }//using ExponentPortalEntities;
             return SelectList; //return the list objects
         }//function GetDropDowntList
+
+        public static IEnumerable<SelectListItem> GetBoolList()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
+            SelectList.Add(new SelectListItem { Text = "True", Value = "1" });
+            SelectList.Add(new SelectListItem { Text = "false", Value = "0" });
+            return SelectList; //return the list objects
+        }//function GetDropDowntList
+
+        public static IEnumerable<SelectListItem> GetApporveRejectList()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
+            SelectList.Add(new SelectListItem { Text = "Approved", Value = "Approved" });
+            SelectList.Add(new SelectListItem { Text = "Rejected", Value = "Rejected" });
+            return SelectList; //return the list objects
+        }//function GetDropDowntList
+
+
     }
 }

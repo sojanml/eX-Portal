@@ -109,9 +109,10 @@ namespace eX_Portal.Controllers
             /*Create instance of entity model*/
             ExponentPortalEntities objentity = new ExponentPortalEntities();
             /*Getting data from database for user validation*/
-            if (exLogic.User.UserIsActive(_objuserlogin.UserName, _objuserlogin.Password) > 0)
+
+            if (exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0)
             {
-                if (exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0)
+                if (exLogic.User.UserIsActive(_objuserlogin.UserName, _objuserlogin.Password) > 0)
                 {
                     /*Redirect user to success apge after successfull login*/
                     ViewBag.Message = 1;
@@ -134,11 +135,11 @@ namespace eX_Portal.Controllers
 
                 }
                 else {
-                    ViewBag.Message = 0;
+                    ViewBag.Message = 2;
                 }
             }
             else {
-                ViewBag.Message = 2;
+                ViewBag.Message = 0;
             }
 
 
@@ -274,6 +275,8 @@ namespace eX_Portal.Controllers
 
                 EPASValues.UserProfileId = Convert.ToInt16(7);
                 EPASValues.Dashboard = "RPAS";
+                EPASValues.IsActive = false;
+                EPASValues.IsPilot = false;
             }
             
             var viewModel = new ViewModel.UserViewModel
@@ -620,7 +623,8 @@ namespace eX_Portal.Controllers
                 }
                 if (RPASID != 0)
                 {
-                    var mailurl = Url.Action("RPASUserCreated", "Email", new { RpasID = RPASID, UserID = id });
+                    //var mailurl = Url.Action("RPASUserCreated", "Email", new { UserID = id });
+                    var mailurl = "/Email/RPASUserCreated/" + id;
                     var mailsubject = "User has been created";
                     Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, "~"+mailurl);
 

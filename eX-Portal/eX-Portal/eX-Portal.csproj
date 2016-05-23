@@ -760,6 +760,7 @@
     <Content Include="Scripts\drone.js" />
     <Content Include="Scripts\flight-gps-tag.js" />
     <Content Include="Scripts\FlightChart.js" />
+    <Content Include="Scripts\flightCreation.js" />
     <Content Include="Scripts\GoogleMapLabel.js" />
     <Content Include="Scripts\HomeMap.js" />
     <Content Include="Scripts\infobox.js" />
@@ -1085,6 +1086,16 @@
     <Content Include="Views\Email\RPASRegEmail.cshtml" />
     <Content Include="Views\Rpas\Login.cshtml" />
     <Content Include="Views\Rpas\Register.cshtml" />
+    <Content Include="Views\Email\RPASUserCreated.cshtml" />
+    <Content Include="Views\Rpas\NoAccess.cshtml" />
+    <Content Include="Views\DashBoard\RPAS.cshtml" />
+    <Content Include="Views\Rpas\UAS.cshtml" />
+    <Content Include="Views\Rpas\UASRegister.cshtml" />
+    <Content Include="Views\Rpas\UASEdit.cshtml" />
+    <Content Include="Views\Rpas\Flight.cshtml" />
+    <Content Include="Views\Rpas\FlightRegister.cshtml" />
+    <Content Include="Views\Rpas\Applications.cshtml" />
+    <Content Include="Views\Rpas\Application.cshtml" />
     <Content Include="Views\BlackBox\Create.cshtml" />
     <Content Include="Views\BlackBox\BlackBoxList.cshtml" />
     <Content Include="Views\BlackBox\BlackBoxDetails.cshtml" />
