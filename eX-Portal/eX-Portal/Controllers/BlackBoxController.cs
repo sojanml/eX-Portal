@@ -306,7 +306,7 @@ namespace eX_Portal.Controllers {
         }
 
         public ActionResult BlackBoxList()
-        {
+     {
 
       //      if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Blackbox";
@@ -315,18 +315,17 @@ namespace eX_Portal.Controllers {
                           ,[BlackBoxSerial]
                           ,[BlackBoxName]
                           ,[IsActive]
-                          ,[CreatedOn]
                           ,[CreatedBy]
                           ,[CurrentStatus]
                           ,[CurrentUserID]
-                          ,[LastUpdateDate]
                           ,[CurrentDroneID]
                             , Count(*) Over() as _TotalRecords
                       FROM  MSTR_BlackBox";
             qView nView = new qView(SQL);
             nView.addMenu("Detail", Url.Action("BlackBoxDetails", new { ID = "_PKey" }));
             nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-         
+            nView.addMenu("Receive", Url.Action("ReceiveBlackBox", new { ID = "_PKey" }));
+
             if (Request.IsAjaxRequest())
             {
                 Response.ContentType = "text/javascript";
@@ -461,6 +460,41 @@ namespace eX_Portal.Controllers {
             return View();
         }
 
+        public ActionResult ReceiveBlackBox([Bind(Prefix = "ID")] int BlackBoxID = 0)
+        {
+            if (BlackBoxID != 0)
+            {
+                var oList = (from p in db.BlackBoxTransactions where p.ID == BlackBoxID select p).ToList(); 
+                if(oList.Count>0) oList[0].BBStatus = "IN";
+
+                return View(oList);
+            }
+            else
+            {
+                BlackBoxTransaction btx = new BlackBoxTransaction();
+                btx.BBStatus = "IN";
+                return View(btx);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ReceiveBlackBox(BlackBoxTransaction Btx)
+        {
+            //var oList = from p in db.BlackBoxTransactions select p;
+            //if (!exLogic.User.hasAccess("RPAS.APPLICATION")) return RedirectToAction("NoAccess", "Home");
+
+            string SQL = "update BlackBoxTransaction set BlackBoxID = '" + Btx.BlackBoxID + "', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "' where ID = " + Btx.ID;
+            int Val = Util.doSQL(SQL); 
+
+            SQL = "update MSTR_BlackBox set LastReceiveId = '" + Btx.DroneID + "' where BlackBoxID = " + Btx.BlackBoxID;
+            Val = Util.doSQL(SQL);
+
+            SQL = "update dbo.MSTR_Drone set BlackBoxID = 0 where DroneId = " + Btx.DroneID;
+            Val = Util.doSQL(SQL);
+
+            return RedirectToAction("BlackBoxList", "Blackbox");
+            //return View();
+        }
 
     }//class
 }//namespace
