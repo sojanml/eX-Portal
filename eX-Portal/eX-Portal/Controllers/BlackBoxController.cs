@@ -423,8 +423,7 @@ namespace eX_Portal.Controllers {
         {
             //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Blackbox Rental";
-            //    ExponentPortalEntities db = new ExponentPortalEntities();
-            //MSTR_BlackBox BB = db.MSTR_BlackBox.Find(id);
+          
             BlackBoxViewModel BBViewModel = new BlackBoxViewModel();
             string sql = "SELECT BlackBoxID,BlackBoxSerial+'-'+BlackBoxName from MSTR_BlackBox where CurrentStatus='OUT'";
             BBViewModel.BBTransaction = new BlackBoxTransaction();

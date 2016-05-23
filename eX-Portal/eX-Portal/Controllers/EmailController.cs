@@ -79,8 +79,14 @@ namespace eX_Portal.Controllers {
         where MSTR_RPAS_User.NationalityId == User.NationalityId && LUP_Drone.Type == "Country"
         select new { NationalityName = LUP_Drone.Name }
       ).ToList();
-
-      ViewBag.NationalityName = innerJoinQuery[0].NationalityName;
+      if (innerJoinQuery.Count > 0)
+      {
+          ViewBag.NationalityName = innerJoinQuery[0].NationalityName;
+      }
+      else
+      {
+          ViewBag.NationalityName = "";
+      }
       ViewBag.Title = "New User Creation Request Mail";
       string sql = "select [FirstName]+' '+LastName as Name from [MSTR_User] where [UserId]=" + CreatedbyID;
       var Row = Util.getDBRow(sql);

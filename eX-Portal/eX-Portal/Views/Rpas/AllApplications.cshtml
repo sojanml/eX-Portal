@@ -1,0 +1,12 @@
+﻿@model eX_Portal.exLogic.qView
+
+@{
+    ViewBag.Title = "RPAS Flight Applications";
+}
+@Html.Raw(Model.getDataTable())
+
+@section scripts {
+    <script type="text/javascript">
+    @Html.Raw(Model.getScripts())
+    </script>
+}

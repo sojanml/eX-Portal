@@ -15,7 +15,42 @@ namespace eX_Portal.Controllers {
   public class RpasController : Controller {
     private ExponentPortalEntities db = new ExponentPortalEntities();
 
-    public ActionResult Applications() {
+        public ActionResult AllApplications()
+        {
+            if (!exLogic.User.hasAccess("RPAS.APPLICATION_LIST")) return RedirectToAction("NoAccess", "Home");
+            string SQL = @"Select
+        ApprovalID,
+        ApprovalName,
+        StartDate,
+        EndDate,
+        StartTime,
+        EndTime,
+        MaxAltitude,
+        MinAltitude,
+        case IsUseCamara when 1 then 'Yes' else 'No' end as IsUseCamara,
+        ISNULL(MSTR_User.FirstName,'') + ' ' + ISNULL(MSTR_User.LastName, '') as FullName,
+        ApprovalStatus,
+        Count(*) Over() as _TotalRecords,
+        ApprovalID as _PKey
+      FROM
+        GCA_Approval
+      LEFT JOIN MSTR_User ON
+        MSTR_User.UserID = GCA_Approval.CreatedBy ";
+
+            qView nView = new qView(SQL);
+            //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
+            nView.addMenu("Rental", Url.Action("Application", "RPAS", new { ID = "_PKey" }));
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }//public ActionResult Applications() 
+        public ActionResult Applications() {
       if (!exLogic.User.hasAccess("RPAS.APPLICATION_LIST")) return RedirectToAction("NoAccess", "Home");
       string SQL = @"Select
         ApprovalID,
@@ -26,7 +61,7 @@ namespace eX_Portal.Controllers {
         EndTime,
         MaxAltitude,
         MinAltitude,
-        IsUseCamara,
+        case IsUseCamara when 1 then 'Yes' else 'No' end as IsUseCamara,
         ISNULL(MSTR_User.FirstName,'') + ' ' + ISNULL(MSTR_User.LastName, '') as FullName,
         Count(*) Over() as _TotalRecords,
         ApprovalID as _PKey
