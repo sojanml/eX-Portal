@@ -1088,6 +1088,7 @@
     <Content Include="Views\Rpas\FlightRegister.cshtml" />
     <Content Include="Views\Rpas\Applications.cshtml" />
     <Content Include="Views\Rpas\Application.cshtml" />
+    <Content Include="Views\Rpas\AllApplications.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
