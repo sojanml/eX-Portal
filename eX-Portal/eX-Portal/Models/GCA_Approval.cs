@@ -34,9 +34,5 @@ namespace eX_Portal.Models
         public Nullable<int> MaxAltitude { get; set; }
         public Nullable<int> MinDefault { get; set; }
         public Nullable<int> MaxDefault { get; set; }
-        public Nullable<int> IsUseCamara { get; set; }
-        public string MOD_ApprovalURL { get; set; }
-        public string ApprovalStatus { get; set; }
-        public string ApprovalRemarks { get; set; }
     }
 }

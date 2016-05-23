@@ -52,9 +52,6 @@
       <HintPath>..\packages\AWSSDK.S3.3.2.3.0-beta\lib\net45\AWSSDK.S3.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FileStorageUtils">
-      <HintPath>..\..\..\..\..\..\..\FileStorageUtils\bin\Debug\FileStorageUtils.dll</HintPath>
-    </Reference>
     <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
@@ -249,6 +246,9 @@
     <Compile Include="Models\BlackBoxData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BlackBoxTransaction.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataAnnotationsHelper.cs" />
     <Compile Include="Models\DroneCheckList.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
@@ -310,6 +310,9 @@
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MSTR_Account.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MSTR_BlackBox.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MSTR_Drone.cs">
@@ -415,6 +418,12 @@
     <Compile Include="Models\ProductTransaction.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -454,6 +463,7 @@
     <Compile Include="SqlParser\WhereTag.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\AccountViewModel.cs" />
+    <Compile Include="ViewModel\BlackBoxViewModel.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\DroneServiceViewModel.cs" />
     <Compile Include="ViewModel\DroneView.cs" />
@@ -595,7 +605,6 @@
     <Content Include="images\bullet.png" />
     <Content Include="images\cal-icon.png" />
     <Content Include="images\car-icon.png" />
-    <Content Include="images\dcca-logo.png" />
     <Content Include="images\drop-down.png" />
     <Content Include="images\fonts\DINNextLTPro-Light.svg" />
     <Content Include="images\fonts\DINNextLTPro-LightCondensed.svg" />
@@ -773,10 +782,9 @@
     <Content Include="Scripts\PayLoadMap.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\rpas-user.js" />
-    <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
+    <Content Include="Scripts\user.js" />
     <None Include="Scripts\_references.js" />
     <Content Include="stylesheets\dewa-dashboard.css" />
     <Content Include="stylesheets\ie.css" />
@@ -1088,7 +1096,11 @@
     <Content Include="Views\Rpas\FlightRegister.cshtml" />
     <Content Include="Views\Rpas\Applications.cshtml" />
     <Content Include="Views\Rpas\Application.cshtml" />
-    <Content Include="Views\Rpas\AllApplications.cshtml" />
+    <Content Include="Views\BlackBox\Create.cshtml" />
+    <Content Include="Views\BlackBox\BlackBoxList.cshtml" />
+    <Content Include="Views\BlackBox\BlackBoxDetails.cshtml" />
+    <Content Include="Views\BlackBox\Edit.cshtml" />
+    <Content Include="Views\BlackBox\Rental.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1106,6 +1118,12 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.S3.3.2.3.0-beta\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\Cathey\amazonfileupload-master\amazonfileupload-master\FileStorageUtils\FileStorageUtils.csproj">
+      <Project>{6cabaa57-63d3-446f-b44c-6ffa9acb1367}</Project>
+      <Name>FileStorageUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
