@@ -10,6 +10,9 @@ using System.Data.Common;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
+        static IEnumerable<SelectListItem> DropDownList1 = Enumerable.Empty<SelectListItem>();
+        static IEnumerable<SelectListItem> DDoptions = Enumerable.Empty<SelectListItem>();
+
     public static string RandomPassword() {
       string paswd = System.Web.Security.Membership.GeneratePassword(7, 1).ToString();
       return paswd;
@@ -122,12 +125,54 @@ namespace eX_Portal.exLogic {
 
                         }
                     }
-                    DropDownList = SelectList.ToList();
+                    DropDownList1 = SelectList.ToList();
                     ctx.Database.Connection.Close();
-                    return DropDownList; //return the list objects
+                    return DropDownList1; //return the list objects
 
                 }
             }
+        }
+
+        public static IEnumerable<SelectListItem> GetBBTransactionType()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            SelectList.Add(new SelectListItem { Text = "Cash", Value = "0" });
+            SelectList.Add(new SelectListItem { Text = "Cheque", Value = "1" });
+            SelectList.Add(new SelectListItem { Text = "Card", Value = "2" });
+
+            DDoptions = SelectList.ToList();
+            return DDoptions; //return the list objects
+        }
+
+        public static IEnumerable<SelectListItem> GetBB()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+
+                    ctx.Database.Connection.Open();
+
+                    cmd.CommandText = "SELECT BlackBoxID,BlackBoxName from MSTR_BlackBox where CurrentStatus='IN'";
+                    cmd.CommandType = CommandType.Text;
+
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SelectList.Add(new SelectListItem { Text = reader["BlackBoxName"].ToString(), Value = reader["BlackBoxID"].ToString() });
+                        }
+                    }
+                    DropDownList1 = SelectList.ToList();
+                    ctx.Database.Connection.Close();
+                    return DropDownList1; //return the list objects
+
+                }
+            }           
         }
     }
 }
