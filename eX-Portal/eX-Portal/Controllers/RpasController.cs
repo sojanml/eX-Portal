@@ -17,7 +17,7 @@ namespace eX_Portal.Controllers {
 
         public ActionResult AllApplications()
         {
-            if (!exLogic.User.hasAccess("RPAS.APPLICATION_LIST")) return RedirectToAction("NoAccess", "Home");
+            if (!exLogic.User.hasAccess("RPAS.ALL_APPLICATION_LIST")) return RedirectToAction("NoAccess", "Home");
             string SQL = @"Select
         ApprovalID,
         ApprovalName,
