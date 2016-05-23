@@ -435,9 +435,8 @@ namespace eX_Portal.Models {
         [Display(Name = "Approval Name")]
         public string ApprovalName { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Approval Date")]
-        [Display(Name = "Approval Date")]
-        public string ApprovalDate { get; set; }
+    [Display(Name = "Approval Date")]
+    public string ApprovalDate { get; set; }
 
         [Required(ErrorMessage = "Please Enter Start Date")]
         [Display(Name = "Start Date")]

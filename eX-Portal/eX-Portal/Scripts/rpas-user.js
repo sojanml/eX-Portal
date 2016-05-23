@@ -162,7 +162,16 @@ function SubmitFile(file) {
 
 }
 
+function progressHandlingFunction(evt) {
+  var percentComplete = evt.loaded / evt.total * 100;
+  $('#file-info-status').html(percentComplete.toFixed(0) + '% done');
+}
+
 function CompleteSubmitForm(AjaxData, S3KeyUrl) {
   document.forms['createForm']['TradeLicenceCopyUrl'].value = S3KeyUrl;
  // alert('S3KeyUrl: ' + S3KeyUrl);
+}
+
+function uploadComplete(res, status, xhr) {
+  console.log(status);
 }

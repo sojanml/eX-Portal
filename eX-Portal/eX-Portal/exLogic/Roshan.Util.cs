@@ -20,7 +20,7 @@ namespace eX_Portal.exLogic
                 {
                     ctx.Database.Connection.Open();
 
-                    SQL = "SELECT [DroneId] as Value, [DroneName] as Name FROM [MSTR_Drone] where IsActive=1";
+                    SQL = "SELECT [DroneId] as Value, [RPASSerialNo] as Name FROM [MSTR_Drone] where IsActive=1";
                         SQL += "\n" +
                           " AND\n " +
                           "  MSTR_Drone.CreatedBy =" + Util.getLoginUserID();
