@@ -28,5 +28,6 @@ namespace eX_Portal.Models
         public string CreatedBy { get; set; }
         public Nullable<int> DroneID { get; set; }
         public Nullable<int> ApprovalID { get; set; }
+        public string Note { get; set; }
     }
 }

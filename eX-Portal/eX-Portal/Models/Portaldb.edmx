@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ExponentPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ExponentPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
 warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BlackBoxData">
@@ -55,6 +55,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="25" />
           <Property Name="DroneID" Type="int" />
           <Property Name="ApprovalID" Type="int" />
+          <Property Name="Note" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="DroneCheckList">
           <Key>
@@ -488,6 +489,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="CurrentUserID" Type="int" />
           <Property Name="LastUpdateDate" Type="datetime" />
           <Property Name="CurrentDroneID" Type="int" />
+          <Property Name="LastRentalId" Type="int" />
+          <Property Name="LastReceiveId" Type="int" />
         </EntityType>
         <EntityType Name="MSTR_Drone">
           <Key>
@@ -532,6 +535,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="FlightTime" Type="datetime" />
           <Property Name="LastFlightID" Type="int" />
           <Property Name="RpasSerialNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="BlackBoxID" Type="int" />
         </EntityType>
         <EntityType Name="MSTR_Drone_Setup">
           <Key>
@@ -1600,6 +1604,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="FlightTime" Type="DateTime" Precision="3" />
           <Property Name="LastFlightID" Type="Int32" />
           <Property Name="RpasSerialNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BlackBoxID" Type="Int32" />
         </EntityType>
         <EntityType Name="MSTR_DroneService">
           <Key>
@@ -2617,6 +2622,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="CurrentUserID" Type="Int32" />
           <Property Name="LastUpdateDate" Type="DateTime" Precision="3" />
           <Property Name="CurrentDroneID" Type="Int32" />
+          <Property Name="LastRentalId" Type="Int32" />
+          <Property Name="LastReceiveId" Type="Int32" />
         </EntityType>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -2647,6 +2654,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="CreatedBy" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="DroneID" Type="Int32" />
           <Property Name="ApprovalID" Type="Int32" />
+          <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2819,6 +2827,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="MSTR_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
               <MappingFragment StoreEntitySet="MSTR_Drone">
+                <ScalarProperty Name="BlackBoxID" ColumnName="BlackBoxID" />
                 <ScalarProperty Name="RpasSerialNo" ColumnName="RpasSerialNo" />
                 <ScalarProperty Name="LastFlightID" ColumnName="LastFlightID" />
                 <ScalarProperty Name="FlightTime" ColumnName="FlightTime" />
@@ -3787,6 +3796,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="MSTR_BlackBox">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_BlackBox">
               <MappingFragment StoreEntitySet="MSTR_BlackBox">
+                <ScalarProperty Name="LastReceiveId" ColumnName="LastReceiveId" />
+                <ScalarProperty Name="LastRentalId" ColumnName="LastRentalId" />
                 <ScalarProperty Name="CurrentDroneID" ColumnName="CurrentDroneID" />
                 <ScalarProperty Name="LastUpdateDate" ColumnName="LastUpdateDate" />
                 <ScalarProperty Name="CurrentUserID" ColumnName="CurrentUserID" />
@@ -3831,6 +3842,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="BlackBoxTransactions">
             <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxTransaction">
               <MappingFragment StoreEntitySet="BlackBoxTransaction">
+                <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
                 <ScalarProperty Name="DroneID" ColumnName="DroneID" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />

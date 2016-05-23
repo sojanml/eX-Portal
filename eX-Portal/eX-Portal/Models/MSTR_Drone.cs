@@ -53,5 +53,6 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> FlightTime { get; set; }
         public Nullable<int> LastFlightID { get; set; }
         public string RpasSerialNo { get; set; }
+        public Nullable<int> BlackBoxID { get; set; }
     }
 }

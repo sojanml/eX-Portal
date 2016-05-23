@@ -24,5 +24,7 @@ namespace eX_Portal.Models
         public Nullable<int> CurrentUserID { get; set; }
         public Nullable<System.DateTime> LastUpdateDate { get; set; }
         public Nullable<int> CurrentDroneID { get; set; }
+        public Nullable<int> LastRentalId { get; set; }
+        public Nullable<int> LastReceiveId { get; set; }
     }
 }

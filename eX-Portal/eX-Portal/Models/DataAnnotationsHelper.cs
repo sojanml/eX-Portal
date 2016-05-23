@@ -523,4 +523,27 @@ namespace eX_Portal.Models {
     [Display(Name = "Rpas Serial No")]
     public string RpasSerialNo { get; set; }
   }
+
+
+    [MetadataType(typeof(BlackBoxTransactionHelper))]
+    public partial class BlackBoxTransaction
+    {
+
+    }
+
+    public class BlackBoxTransactionHelper
+    {
+        [Required(ErrorMessage = "Please select BlackBox")]
+        [Display(Name = "BlackBox ID")]
+        public int BlackBoxID { get; set; }
+        
+        [Required(ErrorMessage = "Please enter Status")]
+        [Display(Name = "Status")]
+        public string BBStatus { get; set; }
+
+        [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "Please enter Note")]
+        [Display(Name = "Note")]
+        public string Note { get; set; }
+    }
 }

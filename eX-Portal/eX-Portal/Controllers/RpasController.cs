@@ -39,7 +39,7 @@ namespace eX_Portal.Controllers {
 
             qView nView = new qView(SQL);
             //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
-            nView.addMenu("Rental", Url.Action("Application", "RPAS", new { ID = "_PKey" }));
+            nView.addMenu("Rental", Url.Action("Rental", "Blackbox", new { ID = "_PKey" }));
             if (Request.IsAjaxRequest())
             {
                 Response.ContentType = "text/javascript";
