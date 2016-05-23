@@ -44,5 +44,25 @@ namespace eX_Portal.exLogic
             }//using ExponentPortalEntities;
             return SelectList; //return the list objects
         }//function GetDropDowntList
+
+        public static IEnumerable<SelectListItem> GetBoolList()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
+            SelectList.Add(new SelectListItem { Text = "True", Value = "1" });
+            SelectList.Add(new SelectListItem { Text = "false", Value = "0" });
+            return SelectList; //return the list objects
+        }//function GetDropDowntList
+
+        public static IEnumerable<SelectListItem> GetApporveRejectList()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
+            SelectList.Add(new SelectListItem { Text = "Approve", Value = "Approve" });
+            SelectList.Add(new SelectListItem { Text = "Reject", Value = "Reject" });
+            return SelectList; //return the list objects
+        }//function GetDropDowntList
+
+
     }
 }

@@ -421,40 +421,49 @@ namespace eX_Portal.Models {
     public string S3Url { get; set; }
   }
 
-  public class GCA_Approval_Helper {
-    [Required(ErrorMessage = "Please select a drone")]
-    [Display(Name = "Drone Name")]
-    public string DroneID { get; set; }
+    public class GCA_Approval_Helper
+    {
+        [Required(ErrorMessage = "Please select a drone")]
+        [Display(Name = "Drone Name")]
+        public string DroneID { get; set; }
 
-    [DataType(DataType.MultilineText)]
-    [Required(ErrorMessage = "Please Enter Coordinates")]
-    public string Coordinates { get; set; }
+        [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "Please Enter Coordinates")]
+        public string Coordinates { get; set; }
 
-    [Required(ErrorMessage = "Please Enter Approval Name")]
-    [Display(Name = "Approval Name")]
-    public string ApprovalName { get; set; }
+        [Required(ErrorMessage = "Please Enter Approval Name")]
+        [Display(Name = "Approval Name")]
+        public string ApprovalName { get; set; }
 
-    [Required(ErrorMessage = "Please Enter Approval Date")]
-    [Display(Name = "Approval Date")]
-    public string ApprovalDate { get; set; }
+        [Required(ErrorMessage = "Please Enter Approval Date")]
+        [Display(Name = "Approval Date")]
+        public string ApprovalDate { get; set; }
 
-    [Required(ErrorMessage = "Please Enter Start Date")]
-    [Display(Name = "Start Date")]
-    public string StartDate { get; set; }
+        [Required(ErrorMessage = "Please Enter Start Date")]
+        [Display(Name = "Start Date")]
+        public string StartDate { get; set; }
 
-    [Required(ErrorMessage = "Please Enter End Date")]
-    [Display(Name = "End Date")]
-    public string EndDate { get; set; }
+        [Required(ErrorMessage = "Please Enter End Date")]
+        [Display(Name = "End Date")]
+        public string EndDate { get; set; }
 
-    [Required(ErrorMessage = "Please Enter Start Time")]
-    [Display(Name = "Start Time")]
-    public string StartTime { get; set; }
+        [Required(ErrorMessage = "Please Enter Start Time")]
+        [Display(Name = "Start Time")]
+        public string StartTime { get; set; }
 
-    [Required(ErrorMessage = "Please Enter End Time")]
-    [Display(Name = "End Time")]
-    public string EndTime { get; set; }
+        [Required(ErrorMessage = "Please Enter End Time")]
+        [Display(Name = "End Time")]
+        public string EndTime { get; set; }
 
-  }
+        [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "Please Enter Remarks")]
+        [Display(Name = "Approval Remarks")]
+        public string ApprovalRemarks { get; set; }
+
+        [Required(ErrorMessage = "Please select the status")]
+        [Display(Name = "Approval Status")]
+        public string ApprovalStatus { get; set; }
+    }
 
   [MetadataType(typeof(MSTR_RPAS_User_Helper))]
   public partial class MSTR_RPAS_User {

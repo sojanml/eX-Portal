@@ -624,7 +624,7 @@ namespace eX_Portal.Controllers
                 if (RPASID != 0)
                 {
                     //var mailurl = Url.Action("RPASUserCreated", "Email", new { UserID = id });
-                    var mailurl = "/RPASUserCreated/Email/"+id;
+                    var mailurl = "/Email/RPASUserCreated/" + id;
                     var mailsubject = "User has been created";
                     Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, "~"+mailurl);
 

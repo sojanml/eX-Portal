@@ -289,6 +289,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="MinDefault" Type="int" />
           <Property Name="MaxDefault" Type="int" />
           <Property Name="CreatedBy" Type="int" />
+          <Property Name="IsUseCamara" Type="int" />
+          <Property Name="MOD_ApprovalURL" Type="varchar" MaxLength="100" />
+          <Property Name="ApprovalStatus" Type="varchar" MaxLength="100" />
+          <Property Name="ApprovalRemarks" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="LiveDrone">
           <Key>
@@ -2264,6 +2268,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="MaxAltitude" Type="Int32" />
           <Property Name="MinDefault" Type="Int32" />
           <Property Name="MaxDefault" Type="Int32" />
+          <Property Name="IsUseCamara" Type="Int32" />
+          <Property Name="MOD_ApprovalURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PortalAlert">
           <Key>
@@ -3363,6 +3371,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <EntitySetMapping Name="GCA_Approval">
             <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
               <MappingFragment StoreEntitySet="GCA_Approval">
+                <ScalarProperty Name="ApprovalRemarks" ColumnName="ApprovalRemarks" />
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+                <ScalarProperty Name="MOD_ApprovalURL" ColumnName="MOD_ApprovalURL" />
+                <ScalarProperty Name="IsUseCamara" ColumnName="IsUseCamara" />
                 <ScalarProperty Name="MaxDefault" ColumnName="MaxDefault" />
                 <ScalarProperty Name="MinDefault" ColumnName="MinDefault" />
                 <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
