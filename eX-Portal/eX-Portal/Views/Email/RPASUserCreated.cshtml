@@ -20,8 +20,8 @@
     </p>
     <p>
         To Activate your account, 
-        <a href="@Url.Action("Login","RPAS", new { userID = Model.UserId })"> Click here</a>
-        
+        @*<a href="@Url.Action("Login","RPAS", new { userID = Model.UserId })"> Click here</a>*@
+        <a href="~/Rpas/Login/@Model.UserId"> Click here</a>
     </p>
     <p>
         Thank you.
