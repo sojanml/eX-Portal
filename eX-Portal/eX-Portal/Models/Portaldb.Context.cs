@@ -80,6 +80,7 @@ namespace eX_Portal.Models
         public virtual DbSet<FlightInfo> FlightInfoes { get; set; }
         public virtual DbSet<MSTR_RPAS_User> MSTR_RPAS_User { get; set; }
         public virtual DbSet<MSTR_BlackBox> MSTR_BlackBox { get; set; }
+        public virtual DbSet<BlackBoxTransaction> BlackBoxTransactions { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

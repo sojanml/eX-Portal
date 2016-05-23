@@ -51,6 +51,7 @@
         <EntityTypeShape EntityType="ExponentPortalModel.FlightInfo" Width="1.5" PointX="21.375" PointY="0.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_RPAS_User" Width="1.5" PointX="21.375" PointY="11.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_BlackBox" Width="1.5" PointX="21.375" PointY="20.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxTransaction" Width="1.5" PointX="3.375" PointY="22.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

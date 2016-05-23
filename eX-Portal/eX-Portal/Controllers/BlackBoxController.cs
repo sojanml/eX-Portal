@@ -1,5 +1,6 @@
 ﻿using eX_Portal.exLogic;
 using eX_Portal.Models;
+using eX_Portal.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -416,5 +417,32 @@ namespace eX_Portal.Controllers {
             ViewBag.Title = BB.BlackBoxID;
             return View(BB);
         }
+
+        // GET: BlackBox/Issue/5
+        public ActionResult Rental()
+        {
+            //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
+            ViewBag.Title = "Blackbox Rental";
+            //    ExponentPortalEntities db = new ExponentPortalEntities();
+            //MSTR_BlackBox BB = db.MSTR_BlackBox.Find(id);
+            BlackBoxViewModel BBViewModel = new BlackBoxViewModel();
+            string sql = "SELECT BlackBoxID,BlackBoxSerial+'-'+BlackBoxName from MSTR_BlackBox where CurrentStatus='OUT'";
+            BBViewModel.BBTransaction = new BlackBoxTransaction();
+            SelectListItem Item = new SelectListItem();
+            Item.Text = "CASH";
+            Item.Value = "CASH";
+
+          //  BBViewModel.CollectionMode = new SelectList(
+       //         new SelectListItem {Text ="CASH" ,Value= "CASH" }, 
+         //       new SelectListItem { Text = "CASH", Value = "CASH" }
+            //    );
+
+           
+            BBViewModel.BBTransaction.BlackBoxID = 0;
+            BBViewModel.BlackBoxList = Util.getListSQL(sql);
+            return View(BBViewModel);
+        }
+
+
     }//class
 }//namespace

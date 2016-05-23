@@ -37,6 +37,25 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="FlightID" Type="int" />
           <Property Name="BBFlightID" Type="int" />
         </EntityType>
+        <EntityType Name="BlackBoxTransaction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BlackBoxID" Type="int" Nullable="false" />
+          <Property Name="BBStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsCollectionDeposit" Type="bit" />
+          <Property Name="CollectionMode" Type="nvarchar" MaxLength="20" />
+          <Property Name="NameOnCard" Type="nvarchar" MaxLength="25" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="25" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="ChequeNumber" Type="nvarchar" MaxLength="25" />
+          <Property Name="DateOfCheque" Type="datetime" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="25" />
+          <Property Name="DroneID" Type="int" />
+          <Property Name="ApprovalID" Type="int" />
+        </EntityType>
         <EntityType Name="DroneCheckList">
           <Key>
             <PropertyRef Name="ID" />
@@ -182,6 +201,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="HasFlightInfo" Type="int" />
           <Property Name="FlightDistance" Type="decimal" Precision="18" Scale="0" />
           <Property Name="IsInsideTimeFrame" Type="bit" />
+          <Property Name="IsDistanceWarning" Type="int" />
+          <Property Name="IsDistanceCritical" Type="int" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -287,6 +308,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="MinDefault" Type="int" />
           <Property Name="MaxDefault" Type="int" />
           <Property Name="CreatedBy" Type="int" />
+          <Property Name="IsUseCamara" Type="int" />
+          <Property Name="MOD_ApprovalURL" Type="varchar" MaxLength="100" />
+          <Property Name="ApprovalStatus" Type="varchar" MaxLength="100" />
+          <Property Name="ApprovalRemarks" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="LiveDrone">
           <Key>
@@ -506,6 +531,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="Longitude" Type="decimal" Precision="18" Scale="5" />
           <Property Name="FlightTime" Type="datetime" />
           <Property Name="LastFlightID" Type="int" />
+          <Property Name="RpasSerialNo" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MSTR_Drone_Setup">
           <Key>
@@ -952,12 +978,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="SMSSend" Type="int" />
           <Property Name="AlertCategory" Type="nvarchar" MaxLength="25" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PortalAlert_User">
-          <Property Name="AlertID" Type="int" />
-          <Property Name="UserID" Type="int" />
-        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -1041,11 +1061,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have
           <Property Name="IsActive" Type="bit" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SMSTable">
-          <Property Name="CellNumber" Type="nvarchar" MaxLength="20" />
-        </EntityType>-->
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -1164,6 +1179,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Parameter Name="IsAccess" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="ExponentPortalModelStoreContainer">
+          <EntitySet Name="BlackBoxTransaction" EntityType="Self.BlackBoxTransaction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckList" EntityType="Self.DroneCheckList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckListItem" EntityType="Self.DroneCheckListItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckListValidation" EntityType="Self.DroneCheckListValidation" Schema="dbo" store:Type="Tables" />
@@ -1583,6 +1599,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="FlightTime" Type="DateTime" Precision="3" />
           <Property Name="LastFlightID" Type="Int32" />
+          <Property Name="RpasSerialNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_DroneService">
           <Key>
@@ -1844,6 +1861,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
             <Parameter Name="AccountID" Mode="In" Type="String" />
             <Parameter Name="IsAccess" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="BlackBoxTransactions" EntityType="ExponentPortalModel.BlackBoxTransaction" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2179,6 +2197,8 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="HasFlightInfo" Type="Int32" />
           <Property Name="FlightDistance" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="IsInsideTimeFrame" Type="Boolean" />
+          <Property Name="IsDistanceWarning" Type="Int32" />
+          <Property Name="IsDistanceCritical" Type="Int32" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -2424,6 +2444,10 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="MaxAltitude" Type="Int32" />
           <Property Name="MinDefault" Type="Int32" />
           <Property Name="MaxDefault" Type="Int32" />
+          <Property Name="IsUseCamara" Type="Int32" />
+          <Property Name="MOD_ApprovalURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PortalAlert">
           <Key>
@@ -2605,6 +2629,25 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="BlackBoxTransaction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BlackBoxID" Type="Int32" Nullable="false" />
+          <Property Name="BBStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsCollectionDeposit" Type="Boolean" />
+          <Property Name="CollectionMode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NameOnCard" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="BankName" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="ChequeNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="DateOfCheque" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="DroneID" Type="Int32" />
+          <Property Name="ApprovalID" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2776,6 +2819,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="MSTR_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
               <MappingFragment StoreEntitySet="MSTR_Drone">
+                <ScalarProperty Name="RpasSerialNo" ColumnName="RpasSerialNo" />
                 <ScalarProperty Name="LastFlightID" ColumnName="LastFlightID" />
                 <ScalarProperty Name="FlightTime" ColumnName="FlightTime" />
                 <ScalarProperty Name="Longitude" ColumnName="Longitude" />
@@ -3276,6 +3320,8 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="IsDistanceCritical" ColumnName="IsDistanceCritical" />
+                <ScalarProperty Name="IsDistanceWarning" ColumnName="IsDistanceWarning" />
                 <ScalarProperty Name="IsInsideTimeFrame" ColumnName="IsInsideTimeFrame" />
                 <ScalarProperty Name="FlightDistance" ColumnName="FlightDistance" />
                 <ScalarProperty Name="HasFlightInfo" ColumnName="HasFlightInfo" />
@@ -3547,6 +3593,10 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="GCA_Approval">
             <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
               <MappingFragment StoreEntitySet="GCA_Approval">
+                <ScalarProperty Name="ApprovalRemarks" ColumnName="ApprovalRemarks" />
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+                <ScalarProperty Name="MOD_ApprovalURL" ColumnName="MOD_ApprovalURL" />
+                <ScalarProperty Name="IsUseCamara" ColumnName="IsUseCamara" />
                 <ScalarProperty Name="MaxDefault" ColumnName="MaxDefault" />
                 <ScalarProperty Name="MinDefault" ColumnName="MinDefault" />
                 <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
@@ -3778,6 +3828,26 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <FunctionImportMapping FunctionImportName="usp_Portal_GetFlightChartData" FunctionName="ExponentPortalModel.Store.usp_Portal_GetFlightChartData" />
           <FunctionImportMapping FunctionImportName="usp_Portal_GetLastFlightChartData" FunctionName="ExponentPortalModel.Store.usp_Portal_GetLastFlightChartData" />
           <FunctionImportMapping FunctionImportName="usp_Portal_GetPilotChartData" FunctionName="ExponentPortalModel.Store.usp_Portal_GetPilotChartData" />
+          <EntitySetMapping Name="BlackBoxTransactions">
+            <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxTransaction">
+              <MappingFragment StoreEntitySet="BlackBoxTransaction">
+                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="DateOfCheque" ColumnName="DateOfCheque" />
+                <ScalarProperty Name="ChequeNumber" ColumnName="ChequeNumber" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="NameOnCard" ColumnName="NameOnCard" />
+                <ScalarProperty Name="CollectionMode" ColumnName="CollectionMode" />
+                <ScalarProperty Name="IsCollectionDeposit" ColumnName="IsCollectionDeposit" />
+                <ScalarProperty Name="BBStatus" ColumnName="BBStatus" />
+                <ScalarProperty Name="BlackBoxID" ColumnName="BlackBoxID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
