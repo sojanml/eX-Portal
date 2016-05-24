@@ -13,7 +13,7 @@
             Select the Black box
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.ID, Util.GetRAPSDroneList(), new {  @disabled = "disabled" })
+            @Html.DropDownListFor(model => model.ID, Util.GetBB(), new {  @disabled = "disabled" })
             @Html.ValidationMessageFor(model => model.ID)
         </div>
         <div class="editor-label">
