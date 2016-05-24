@@ -1,6 +1,7 @@
 ﻿using eX_Portal.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,6 +10,36 @@ namespace eX_Portal.exLogic
 {
     public partial class Util
     {
+        public static IEnumerable<SelectListItem> GetBlackBox()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+
+                    ctx.Database.Connection.Open();
+
+                    cmd.CommandText = "SELECT BlackBoxID,BlackBoxName from MSTR_BlackBox where CurrentStatus='OUT' and IsActive = 1";
+                    cmd.CommandType = CommandType.Text;
+
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SelectList.Add(new SelectListItem { Text = reader["BlackBoxName"].ToString(), Value = reader["BlackBoxID"].ToString() });
+                        }
+                    }
+                    DropDownList1 = SelectList.ToList();
+                    ctx.Database.Connection.Close();
+                    return DropDownList1; //return the list objects
+
+                }
+            }
+        }
+
         public static IEnumerable<SelectListItem> GetRAPSDroneList()
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();

@@ -128,7 +128,7 @@ namespace eX_Portal.Controllers {
       ViewBag.DroneID = DroneID;
 
       String SQL =
-       "SELECT \n" +
+       "MOSELECT \n" +
        "  RecordNumber,\n" +
        "  ReadTime,\n" +
        "  Latitude,\n" +
@@ -311,16 +311,17 @@ namespace eX_Portal.Controllers {
       //      if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Blackbox";
 
-            string SQL = @"SELECT  [BlackBoxID] as _PKey
-                          ,[BlackBoxSerial]
-                          ,[BlackBoxName]
-                          ,[IsActive]
-                          ,[CreatedBy]
-                          ,[CurrentStatus]
-                          ,[CurrentUserID]
-                          ,[CurrentDroneID]
+            string SQL = @"SELECT  m.[BlackBoxID] as _PKey
+                          ,m.[BlackBoxSerial]
+                          ,m.[BlackBoxName]
+                          ,m.[CurrentStatus]
+                          ,u.Firstname +' '+u.lastname as CreatedBy
+                          ,d.RpasSerialNo
                             , Count(*) Over() as _TotalRecords
-                      FROM  MSTR_BlackBox";
+                      FROM  MSTR_BlackBox m left join mstr_user u
+                      on m.CurrentUserID = u.userid
+                      left join mstr_drone d
+                      on d.droneid = m.currentDroneID where m.[IsActive] = 1";
             qView nView = new qView(SQL);
             nView.addMenu("Detail", Url.Action("BlackBoxDetails", new { ID = "_PKey" }));
             nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
@@ -484,17 +485,12 @@ namespace eX_Portal.Controllers {
 
         public ActionResult ReceiveBlackBox([Bind(Prefix = "ID")] int BlackBoxID = 0)
         {
+            BlackBoxTransaction btx = new BlackBoxTransaction();
             if (BlackBoxID != 0)
             {
-                var oList = (from p in db.BlackBoxTransactions where p.ID == BlackBoxID select p).ToList();
-                if (oList.Count > 0)
-                {
-                    oList[0].BBStatus = "IN";
-                    return View(oList);
-                }
+                btx = db.BlackBoxTransactions.Find(BlackBoxID);
+                if (btx == null) return RedirectToAction("Error", "Home");
             }
-
-            BlackBoxTransaction btx = new BlackBoxTransaction();
             btx.BBStatus = "IN";
             return View(btx);
         }
@@ -505,10 +501,10 @@ namespace eX_Portal.Controllers {
             //var oList = from p in db.BlackBoxTransactions select p;
             //if (!exLogic.User.hasAccess("RPAS.APPLICATION")) return RedirectToAction("NoAccess", "Home");
 
-            string SQL = "update BlackBoxTransaction set BlackBoxID = '" + Btx.BlackBoxID + "', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "',CreatedBy='"+Util.getLoginUserID() +"' where ID = " + Btx.ID;
-            int Val = Util.doSQL(SQL); 
+            string SQL = "update BlackBoxTransaction set DroneID = '0', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "' where ID = " + Btx.ID;
+            int Val = Util.doSQL(SQL);
 
-            SQL = "update MSTR_BlackBox set LastReceiveId = '" + Btx.DroneID + "' where BlackBoxID = " + Btx.BlackBoxID;
+            SQL = "update MSTR_BlackBox set LastReceiveId = '" + Btx.ID + "',CurrentStatus='IN',CurrentUserID = '" + Util.getLoginUserID() + "',CurrentDroneID='0' where BlackBoxID = " + Btx.BlackBoxID;
             Val = Util.doSQL(SQL);
 
             SQL = "update dbo.MSTR_Drone set BlackBoxID = 0 where DroneId = " + Btx.DroneID;
