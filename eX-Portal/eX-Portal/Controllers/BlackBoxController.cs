@@ -445,18 +445,39 @@ namespace eX_Portal.Controllers {
         [HttpPost]
         public ActionResult Rental(BlackBoxTransaction BBTransaction)
         {
-            BBTransaction.BBStatus = "OUT";
-            BBTransaction.CreatedBy = Session["UserID"].ToString();
-            BBTransaction.DroneID = Convert.ToInt32(TempData["Droneid"]);
-            BBTransaction.ApprovalID = Convert.ToInt32(TempData["Approvalid"]);
-            db.BlackBoxTransactions.Add(BBTransaction);
-            db.SaveChanges();
-            int id = BBTransaction.ID;
+            ModelState.Remove("Note");
+            if (ModelState.IsValid)
+            {
+                BBTransaction.BBStatus = "OUT";
+                BBTransaction.CreatedBy = Session["UserID"].ToString();
+                BBTransaction.DroneID = Convert.ToInt32(TempData["Droneid"]);
+                BBTransaction.ApprovalID = Convert.ToInt32(TempData["Approvalid"]);
+                //db.BlackBoxTransactions.Add(BBTransaction);
+                //db.SaveChanges();
+                //int id = BBTransaction.ID;
 
-            string bbupdatesql = "update [MSTR_BlackBox] set [LastRentalId]="+id+" where [BlackBoxID]="+BBTransaction.BlackBoxID;
-            Util.doSQL(bbupdatesql);
-            string droneupdatesql = "update [MSTR_Drone] set [BlackBoxID]="+BBTransaction.BlackBoxID+" where [DroneId]="+BBTransaction.DroneID;
-            Util.doSQL(droneupdatesql);
+                string insertsql = "insert into[BlackBoxTransaction] ([BlackBoxID] \n" +
+                                 ",[BBStatus] \n" +
+                                 ",[CollectionMode] \n" +
+                                 ",[NameOnCard] \n" +
+                                 ",[BankName] \n" +
+                                 ",[Amount] \n" +
+                                 ",[ChequeNumber] \n" +
+                                 ",[DateOfCheque] \n" +
+                                 ",[CreatedDate] \n" +
+                                 ",[CreatedBy] \n" +
+                                 ",[DroneID] \n" +
+                                 ",[ApprovalID])values( \n" +
+                                 BBTransaction.BlackBoxID + ",'OUT'," + BBTransaction.CollectionMode + ",'" + BBTransaction.NameOnCard + "','" + BBTransaction.BankName + "',\n" +
+                                 BBTransaction.Amount + ",'" + BBTransaction.ChequeNumber + "','" + BBTransaction.DateOfCheque + "','" + System.DateTime.Now + "','\n" +
+                                 BBTransaction.CreatedBy + "'," + BBTransaction.DroneID + "," + BBTransaction.ApprovalID + ")";
+                int bbtransctionid = Util.InsertSQL(insertsql);
+                string bbupdatesql = "update [MSTR_BlackBox] set [LastRentalId]=" + bbtransctionid + ",[CurrentStatus]='OUT',CurrentUserID=" + Convert.ToInt32(Session["UserID"].ToString()) + ",CurrentDroneID=" + Convert.ToInt32(TempData["Droneid"]) + " where [BlackBoxID]=" + BBTransaction.BlackBoxID;
+                Util.doSQL(bbupdatesql);
+                string droneupdatesql = "update [MSTR_Drone] set [BlackBoxID]=" + BBTransaction.BlackBoxID + " where [DroneId]=" + BBTransaction.DroneID;
+                Util.doSQL(droneupdatesql);
+                return RedirectToAction("AllApplications", "Rpas");
+            }
             return View();
         }
 
