@@ -16,7 +16,8 @@
     <script src="~/Scripts/bootstrap.js"></script>
     @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "createForm" }))
     {
-
+        <input type="hidden" name="droneid" value="@ViewBag.DroneId" />
+        <input type="hidden" name="createdby" value="@ViewBag.CreatedBy" />
         @Html.HiddenFor(model => model.ID)       
 
         <div class="form-group">
