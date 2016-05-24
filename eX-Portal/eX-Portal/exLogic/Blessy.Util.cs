@@ -156,7 +156,7 @@ namespace eX_Portal.exLogic {
 
                     ctx.Database.Connection.Open();
 
-                    cmd.CommandText = "SELECT BlackBoxID,BlackBoxName from MSTR_BlackBox where CurrentStatus='IN'";
+                    cmd.CommandText = "SELECT BlackBoxID,BlackBoxName from MSTR_BlackBox where CurrentStatus='IN' and IsActive=1";
                     cmd.CommandType = CommandType.Text;
 
 
