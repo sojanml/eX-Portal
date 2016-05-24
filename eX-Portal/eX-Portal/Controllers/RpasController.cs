@@ -708,6 +708,7 @@ namespace eX_Portal.Controllers {
           ModelState.AddModelError("GCA.MOD_ApprovalURL", "MOD Document is required.");
         }
       }
+
       if (ModelState.IsValid) {
         if (String.IsNullOrWhiteSpace(GCA.ApprovalName)) {
           GCA.ApprovalName = toTitle(GCA.ApprovalFileUrl);

@@ -88,7 +88,7 @@ namespace eX_Portal.exLogic
         public static IEnumerable<SelectListItem> GetApporveRejectList()
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();
-            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
+            //SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
             SelectList.Add(new SelectListItem { Text = "Approved", Value = "Approved" });
             SelectList.Add(new SelectListItem { Text = "Rejected", Value = "Rejected" });
             return SelectList; //return the list objects
