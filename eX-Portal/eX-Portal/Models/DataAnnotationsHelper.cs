@@ -19,6 +19,7 @@ namespace eX_Portal.Models {
   [MetadataType(typeof(MSTR_AccountHelper))]
   public partial class MSTR_Account { }
 
+
   public class MSTR_AccountHelper {
     [Display(Name = "Email Address")]
     public string EmailId { get; set; }
@@ -534,12 +535,20 @@ namespace eX_Portal.Models {
     public class BlackBoxTransactionHelper
     {
         [Required(ErrorMessage = "Please select BlackBox")]
-        [Display(Name = "BlackBox ID")]
+        [Display(Name = "BlackBox")]
         public int BlackBoxID { get; set; }
-        
-        [Required(ErrorMessage = "Please enter Status")]
-        [Display(Name = "Status")]
-        public string BBStatus { get; set; }
+
+        [Required(ErrorMessage = "Please select Transaction Mode")]
+        [Display(Name = "Collection Mode")]
+        public string CollectionMode { get; set; }
+
+        [Required(ErrorMessage = "Please enter Bank Name")]
+        [Display(Name = "Bank Name")]
+        public string BankName { get; set; }
+
+        [Required(ErrorMessage = "Please enter Amount")]
+        [Display(Name = "Amount")]
+        public Nullable<decimal> Amount { get; set; }
 
         [DataType(DataType.MultilineText)]
         [Required(ErrorMessage = "Please enter Note")]
