@@ -314,12 +314,14 @@ namespace eX_Portal.Controllers {
       ViewBag.FlightID = FlightID;
 
       using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
-        var FlightMapDataList = (
-          from d in ctx.FlightMapDatas
-          where d.FlightID == FlightID &&
-                d.FlightMapDataID > LastFlightDataID
-          select d
-          )
+        var Flights = (
+            from d in ctx.FlightMapDatas
+            where d.FlightID == FlightID &&
+                  d.FlightMapDataID > LastFlightDataID
+            select d
+            );
+
+        var FlightMapDataList = Flights
           .OrderBy(x => x.FlightMapDataID)
           .Take(MaxRecords).ToList();
         
