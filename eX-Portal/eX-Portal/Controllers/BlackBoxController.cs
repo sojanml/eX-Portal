@@ -403,7 +403,7 @@ namespace eX_Portal.Controllers {
 
             qDetailView nView = new qDetailView(SQL);
             ViewBag.Message = nView.getTable();
-            ViewBag.Title = id;
+            ViewBag.Title = "Black Box Details";
             return nView.getTable();
         }
 
