@@ -1,55 +1,111 @@
-﻿@model eX_Portal.ViewModel.BlackBoxViewModel
-
-
+﻿@model eX_Portal.Models.BlackBoxTransaction
+@using eX_Portal.exLogic
 @{
-    ViewBag.Title = "Rental";
-//    Layout = "~/Views/Shared/_eXPortal.cshtml";
+    TempData["Droneid"] = ViewBag.DroneId;
+    TempData["Approvalid"] = ViewBag.CreatedBy;
 }
+<h2>Requested By</h2>
+@Html.Action("UserDetailView", "User", new { ID = ViewBag.CreatedBy })
 
-<h2>Issue</h2>
+<h2>UAS Details</h2>
+@Html.Action("DroneDetail", "Drone", new { ID = ViewBag.DroneId })
+
+
+<h2>BlackBox Rental</h2>
 
     <script src="~/Scripts/bootstrap.js"></script>
     @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "createForm" }))
     {
 
-        @Html.HiddenFor(model =>model.BBTransaction.ID)
-
+        @Html.HiddenFor(model => model.ID)       
 
         <div class="form-group">
-            @Html.LabelFor(model => model.BBTransaction.BlackBoxID, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.BlackBoxID, "Black Box", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.BBTransaction.BlackBoxID,Model.BlackBoxList)
-                @Html.ValidationMessageFor(model => model.BBTransaction.BlackBoxID, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.BlackBoxID, Util.GetBB(), "--Select Black Box--")
+                @Html.ValidationMessageFor(model => model.BlackBoxID, "", new { @class = "text-danger" })
+            </div>
+        </div>       
+
+        <div id="colctmode" class="form-group">
+            @Html.LabelFor(model => model.CollectionMode, "Transaction Mode", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CollectionMode, Util.GetBBTransactionType(), "--Select Transaction Mode--")
+                @Html.ValidationMessageFor(model => model.CollectionMode, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.BBTransaction.IsCollectionDeposit, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Amount,"Amount", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.BBTransaction.IsCollectionDeposit)
-                @Html.ValidationMessageFor(model => model.BBTransaction.IsCollectionDeposit, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.BBTransaction.CollectionMode, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-               
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.BBTransaction.IsCollectionDeposit, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.BBTransaction.IsCollectionDeposit)
-                @Html.ValidationMessageFor(model => model.BBTransaction.IsCollectionDeposit, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Amount)
+                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
             </div>
         </div>
 
+        <div class="form-group">
+            @Html.LabelFor(model => model.BankName ,"Bank Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BankName)
+                @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div id="chequediv" style="display:none">
+            <div class="form-group">
+                @Html.LabelFor(model => model.ChequeNumber,"Cheque Number", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ChequeNumber)
+                    @Html.ValidationMessageFor(model => model.ChequeNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-        <div class="form-toolbar">
-            <input type="submit" value="Create" />
+            <div class="form-group">
+                @Html.LabelFor(model => model.DateOfCheque,"Date of Cheque", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DateOfCheque, new { htmlAttributes = new { @class = "form-control date-picker" } })
+                    @Html.ValidationMessageFor(model => model.DateOfCheque, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div id="carddiv" class="form-group" style="display:none">
+            @Html.LabelFor(model => model.NameOnCard,"Name On Card", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NameOnCard)
+                @Html.ValidationMessageFor(model => model.NameOnCard, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="toolbar" style="text-align:right">
+            <input type="submit" value="Create" class="button"/>
         </div>
 
 
     }
+
+@section scripts{
+<script>
+    $('#CollectionMode').on("change", function (e) {
+        alert($(this).val());
+        if($(this).val()=='0') {
+            $('#chequediv').slideUp();
+            $('#carddiv').slideUp();
+        }
+        else if ($(this).val()=='1') {
+            $('#chequediv').slideDown();
+            $('#carddiv').slideUp();
+        }
+        else if ($(this).val()=='2') {
+            $('#chequediv').slideUp();
+            $('#carddiv').slideDown();
+        }
+        else {
+            $('#chequediv').slideUp();
+            $('#carddiv').slideUp();
+        }
+      })
+</script>
+@Scripts.Render("~/bundles/jqueryval")
+}
+
 
 

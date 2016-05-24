@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="FileStorageUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Storage\FileStorageUtils.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\FileStorageUtils\bin\Debug\FileStorageUtils.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
@@ -1105,7 +1105,6 @@
     <Content Include="Views\BlackBox\BlackBoxDetails.cshtml" />
     <Content Include="Views\BlackBox\Edit.cshtml" />
     <Content Include="Views\BlackBox\Rental.cshtml" />
-    <Content Include="Views\BlackBox\ReceiveBlackBox.cshtml" />
     <Content Include="Views\Rpas\AllApplications.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -1124,9 +1123,6 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.S3.3.2.3.0-beta\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
