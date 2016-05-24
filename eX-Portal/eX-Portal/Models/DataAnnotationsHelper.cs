@@ -460,9 +460,7 @@ namespace eX_Portal.Models {
         [Display(Name = "Approval Remarks")]
         public string ApprovalRemarks { get; set; }
 
-        [Required(ErrorMessage = "Please select the status")]
-        [Display(Name = "Approval Status")]
-        public string ApprovalStatus { get; set; }
+       
     }
 
   [MetadataType(typeof(MSTR_RPAS_User_Helper))]
