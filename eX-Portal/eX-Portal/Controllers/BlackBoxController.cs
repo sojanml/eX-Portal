@@ -420,6 +420,7 @@ namespace eX_Portal.Controllers {
 
         // GET: BlackBox/Issue/5
         public ActionResult Rental([Bind(Prefix = "ID")] int approvalid =0)
+
         {
             //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Blackbox Rental";
