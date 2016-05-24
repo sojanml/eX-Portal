@@ -445,17 +445,17 @@ namespace eX_Portal.Controllers {
         {
             if (BlackBoxID != 0)
             {
-                var oList = (from p in db.BlackBoxTransactions where p.ID == BlackBoxID select p).ToList(); 
-                if(oList.Count>0) oList[0].BBStatus = "IN";
+                var oList = (from p in db.BlackBoxTransactions where p.ID == BlackBoxID select p).ToList();
+                if (oList.Count > 0)
+                {
+                    oList[0].BBStatus = "IN";
+                    return View(oList);
+                }
+            }
 
-                return View(oList);
-            }
-            else
-            {
-                BlackBoxTransaction btx = new BlackBoxTransaction();
-                btx.BBStatus = "IN";
-                return View(btx);
-            }
+            BlackBoxTransaction btx = new BlackBoxTransaction();
+            btx.BBStatus = "IN";
+            return View(btx);
         }
 
         [HttpPost]
@@ -464,7 +464,7 @@ namespace eX_Portal.Controllers {
             //var oList = from p in db.BlackBoxTransactions select p;
             //if (!exLogic.User.hasAccess("RPAS.APPLICATION")) return RedirectToAction("NoAccess", "Home");
 
-            string SQL = "update BlackBoxTransaction set BlackBoxID = '" + Btx.BlackBoxID + "', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "' where ID = " + Btx.ID;
+            string SQL = "update BlackBoxTransaction set BlackBoxID = '" + Btx.BlackBoxID + "', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "',CreatedBy='"+Util.getLoginUserID() +"' where ID = " + Btx.ID;
             int Val = Util.doSQL(SQL); 
 
             SQL = "update MSTR_BlackBox set LastReceiveId = '" + Btx.DroneID + "' where BlackBoxID = " + Btx.BlackBoxID;

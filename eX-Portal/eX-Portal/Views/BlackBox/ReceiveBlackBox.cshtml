@@ -1,7 +1,7 @@
 ﻿@model eX_Portal.Models.BlackBoxTransaction
 @using eX_Portal.exLogic
 @{
-    ViewBag.Title = "ReceiveBlackBox";
+    ViewBag.Title = "Receive Black Box";
     Layout = "~/Views/Shared/_eXPortal.cshtml";
 }
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "RecBlackBox", name = "RecBlackBox" }))
@@ -13,7 +13,7 @@
             Select the Black box
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.ID, Util.GetRAPSDroneList(), new { @disabled = "disabled" })
+            @Html.DropDownListFor(model => model.ID, Util.GetRAPSDroneList(), new {  @disabled = "disabled" })
             @Html.ValidationMessageFor(model => model.ID)
         </div>
         <div class="editor-label">
