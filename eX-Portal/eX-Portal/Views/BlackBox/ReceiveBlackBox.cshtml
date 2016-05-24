@@ -1,0 +1,41 @@
+﻿@model eX_Portal.Models.BlackBoxTransaction
+@using eX_Portal.exLogic
+@{
+    ViewBag.Title = "Receive Black Box";
+    Layout = "~/Views/Shared/_eXPortal.cshtml";
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "RecBlackBox", name = "RecBlackBox" }))
+{
+    <section class="general-form" id="loginForm">
+
+        <input type="hidden" name="ID" value="@Model.ID" />
+        <div class="editor-label">
+            Select the Black box
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.ID, Util.GetRAPSDroneList(), new {  @disabled = "disabled" })
+            @Html.ValidationMessageFor(model => model.ID)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BBStatus)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.BBStatus)
+            @Html.ValidationMessageFor(model => model.BBStatus)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Note, "Note")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Note)
+            @Html.ValidationMessageFor(model => model.Note)
+        </div>
+
+        <div class="form-toolbar">
+            <input type="submit" id="btn-submit" value="Save" />
+        </div>
+    </section>
+}
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

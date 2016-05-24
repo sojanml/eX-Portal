@@ -1004,33 +1004,7 @@ namespace eX_Portal.Controllers
                         return "Please enter valid Username/Email!";
                     }
                 }
-               
-
-
-
-                //string unamemail = mSTR_USER.UserName;
-                //    string sqlcheck = "select EmailId,UserId from MSTR_User where UserName='" + mSTR_USER.UserName + "' or EmailId='" + mSTR_USER.UserName + "'";
-                    
-                //    if (Util.getDBRow(sqlcheck).Count > 0)
-                //    {
-                //        var Row = Util.getDBRow(sqlcheck);
-                //        if (String.IsNullOrEmpty(Row["EmailId"].ToString()))
-                //        {
-                //            return "Your Email is not updated in the system,kindly update your Email Id.";
-                //        }
-                //        else
-                //        {
-                //        var toaddress = Row["EmailId"].ToString();
-                //        int userid =Convert.ToInt32(Row["UserId"].ToString());              
-                //        var newpaswd = Util.RandomPassword();
-                //        string updatepswdsql = "update MSTR_User set GeneratedPassword='" + Util.GetEncryptedPassword(newpaswd).ToString() + "' where EmailId='" + toaddress + "' and UserId="+ userid;
-                //        int result = Util.doSQL(updatepswdsql);
-                //        var mailurl = "~/Email/ForgotPassword/" + Session["UserID"] + "?newpassword=" + newpaswd;
-                //        var mailsubject = "Confidential Mail from Exponent";
-                //        Util.EmailQue(userid, toaddress, mailsubject, mailurl);
-                //        }                
-                //    } 
-                        
+    
             }
             return "OK";
         }
