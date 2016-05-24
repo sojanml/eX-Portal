@@ -104,7 +104,8 @@ namespace eX_Portal.exLogic {
         public static IEnumerable<SelectListItem> GetDdListDroneName()
         {
             //  ctx=new ExponentPortalEntities();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<SelectListItem> SelectList = new List<SelectListItem>()
+                ;
             using (var ctx = new ExponentPortalEntities())
             {
                 using (var cmd = ctx.Database.Connection.CreateCommand())
