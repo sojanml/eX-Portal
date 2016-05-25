@@ -1,4 +1,5 @@
-﻿
+﻿var AlertHideTimer = null;
+
 $(document).ready(function () {  
 
   // $('Table.report tbody').on("click", 'tr', function () {
@@ -87,7 +88,8 @@ function checkAlert() {
   $.ajax({
     url: URL
   }).done(function (data) {
-    if (data != "") alertBox(data);
+    //if (data != "") alertBox(data);
+    if (data != "") alertLine(data);
   });
 }
 
@@ -142,6 +144,14 @@ function formatDate(currentTime)
     var currentTimeString = currentHours + ":" + currentMinutes+ " " + timeOfDay;
 
     return currentTimeString;
+}
+
+function alertLine(Message) {
+  $('#alertLine').html("<ul>" + Message + "</ul>").slideDown();
+  if (AlertHideTimer) window.clearTimeout(AlertHideTimer);
+  AlertHideTimer = window.setTimeout( function () {
+    $('#alertLine').slideUp();
+  }, 5000);
 }
 
 function alertBox(Message) {
