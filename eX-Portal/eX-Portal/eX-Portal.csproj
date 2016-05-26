@@ -1106,6 +1106,7 @@
     <Content Include="Views\BlackBox\Rental.cshtml" />
     <Content Include="Views\Rpas\AllApplications.cshtml" />
     <Content Include="Views\BlackBox\ReceiveBlackBox.cshtml" />
+    <Content Include="Views\BlackBox\TransactionDet.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
