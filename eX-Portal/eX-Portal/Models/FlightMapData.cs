@@ -34,7 +34,7 @@ namespace eX_Portal.Models
         public Nullable<decimal> Pitch { get; set; }
         public Nullable<decimal> Roll { get; set; }
         public Nullable<decimal> Heading { get; set; }
-        public Nullable<int> TotalFlightTime { get; set; }
+        public Nullable<decimal> TotalFlightTime { get; set; }
         public Nullable<int> FlightID { get; set; }
         public string BBFlightID { get; set; }
         public Nullable<decimal> avg_Altitude { get; set; }

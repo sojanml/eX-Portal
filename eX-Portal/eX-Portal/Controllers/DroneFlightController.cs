@@ -676,11 +676,11 @@ namespace eX_Portal.Controllers {
                     string[] Coord = flightsetupvm.GcaApproval.Coordinates.Split(',');
                     string Poly = flightsetupvm.GcaApproval.Coordinates + "," + Coord[0];
                     //To insert in GCA_Approval table
-                    string sqlinsertgca = @"insert into GCA_Approval(ApprovalName,ApprovalDate,StartDate,EndDate,Coordinates,Polygon,CreatedOn,CreatedBy,DroneID,EndTime,StartTime,BoundaryInMeters)
-                    values('" + flightsetupvm.GcaApproval.ApprovalName + "','" + System.DateTime.Now + "','" + System.DateTime.Now + "','" + todaydate.AddDays(90) + "','" +
+                    string sqlinsertgca = @"insert into GCA_Approval(ApprovalName,ApprovalDate,StartDate,EndDate,Coordinates,Polygon,CreatedOn,CreatedBy,DroneID,EndTime,StartTime,BoundaryInMeters,MinAltitude,MaxAltitude)
+                    values('" + flightsetupvm.GcaApproval.ApprovalName + "','" + System.DateTime.Now + "','" + System.DateTime.Now .AddDays(-1)+ "','" + todaydate.AddDays(90) + "','" +
                     flightsetupvm.GcaApproval.Coordinates + "',geography::STGeomFromText('POLYGON((" + Poly + "))', 4326).MakeValid(),'" +
                     System.DateTime.Now + "'," + Convert.ToInt32(Session["UserID"].ToString()) + "," + flightsetupvm.DroneSetup.DroneId +
-                    ",'6:00pm','8:00am'" + ",50" + ")";
+                    ",'23:59','00:00'" + ",50" + ",0,40)";
                     int result2 = Util.doSQL(sqlinsertgca);
                 }               
             }           

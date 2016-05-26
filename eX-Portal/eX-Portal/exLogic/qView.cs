@@ -239,19 +239,23 @@ namespace eX_Portal.exLogic {
       String FieldValue = "";
       switch (reader.GetFieldType(i).ToString()) {
       case "System.DateTime":
-      DateTime Dt = reader.GetDateTime(i);
-      if (String.IsNullOrEmpty(Dt.ToString())) {
-        FieldValue = "Invalid";
-      } else {
-        if (IsFormatDate) {
-          if (Dt.Hour == 0 && Dt.Minute == 0 && Dt.Second == 0) {
-            FieldValue = String.Format("{0:dd-MMM-yyyy}", Dt);
-          } else { 
-            FieldValue = String.Format("{0:dd-MMM-yyyy HH:mm}", Dt);
-          }
+      try {
+        DateTime Dt = reader.GetDateTime(i);
+        if (String.IsNullOrEmpty(Dt.ToString())) {
+          FieldValue = "Invalid";
         } else {
-          FieldValue = String.Format("{0:dd-MMM-yyyy HH:mm:ss}", Dt);
+          if (IsFormatDate) {
+            if (Dt.Hour == 0 && Dt.Minute == 0 && Dt.Second == 0) {
+              FieldValue = String.Format("{0:dd-MMM-yyyy}", Dt);
+            } else {
+              FieldValue = String.Format("{0:dd-MMM-yyyy HH:mm}", Dt);
+            }
+          } else {
+            FieldValue = String.Format("{0:dd-MMM-yyyy HH:mm:ss}", Dt);
+          }
         }
+      } catch {
+        FieldValue = "Invalid";
       }
       break;
       default:

@@ -22,7 +22,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Select() {
       return View();
     }
-    public ActionResult FlightData([Bind(Prefix = "ID")] int FlightID = 0) {
+    public ActionResult FlightData([Bind(Prefix = "ID")] int FlightID = 0, int IsLive = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       ViewBag.FlightID = FlightID;
       Drones thisDrone = new Drones();
@@ -30,7 +30,7 @@ namespace eX_Portal.Controllers {
       ViewBag.AllowedLocation = thisDrone.getAllowedLocation(FlightID);
       ViewBag.DroneID = thisDrone.DroneID;
 
-      if (thisDrone.isLiveFlight(FlightID)) {
+      if (thisDrone.isLiveFlight(FlightID) || IsLive == 1) {
         ViewBag.IsLive = true;
         ViewBag.PlayerURL = thisDrone.getLiveURL(FlightID);
         ViewBag.Title = "Flight Map (Live)";
@@ -40,6 +40,7 @@ namespace eX_Portal.Controllers {
         ViewBag.VideoStartAt = thisDrone.getVideoStartDate(FlightID);
         ViewBag.PlayerURL = thisDrone.getPlayListURL(FlightID);      
       }
+      //if (IsLive == 1) IsLive = ViewBag.IsLive = true;
       return View();
     }
 
@@ -79,7 +80,7 @@ namespace eX_Portal.Controllers {
     public String CheckAlert(int id = 0) {
       StringBuilder AlertMsg = new StringBuilder();
       int AccountID = Util.getDBInt("SELECT AccountID From MSTR_User WHERE UserID=" + id);
-      String SQL = @"SELECT
+      String SQL = @"SELECT TOP 1
           PortalAlert.AlertID,
           PortalAlert.AlertMessage,
           PortalAlert.AlertType
@@ -98,7 +99,9 @@ namespace eX_Portal.Controllers {
         WHERE
           MSTR_Drone.DroneID IS NOT NULL AND
           PortalAlert_User.UserID IS NULL AND
-          PortalAlert.CreatedOn > DATEADD(minute, -30, GETDATE())";
+          PortalAlert.CreatedOn > DATEADD(minute, -30, GETDATE())
+       ORDER BY
+         PortalAlert.CreatedOn";
       var Rows = Util.getDBRows(SQL);
       foreach (var Row in Rows) {
         String AlertType = Row["AlertType"].ToString();
@@ -115,7 +118,7 @@ namespace eX_Portal.Controllers {
           id + ", " + Row["AlertID"] + ")";
         Util.doSQL(SQL);
       }
-
+      //AlertMsg.Append("<LI class=\"warning\">Testing</Li>");
       return AlertMsg.ToString();
     }
 
@@ -314,12 +317,14 @@ namespace eX_Portal.Controllers {
       ViewBag.FlightID = FlightID;
 
       using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
-        var FlightMapDataList = (
-          from d in ctx.FlightMapDatas
-          where d.FlightID == FlightID &&
-                d.FlightMapDataID > LastFlightDataID
-          select d
-          )
+        var Flights = (
+            from d in ctx.FlightMapDatas
+            where d.FlightID == FlightID &&
+                  d.FlightMapDataID > LastFlightDataID
+            select d
+            );
+
+        var FlightMapDataList = Flights
           .OrderBy(x => x.FlightMapDataID)
           .Take(MaxRecords).ToList();
         
