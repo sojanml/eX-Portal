@@ -227,11 +227,11 @@ namespace eX_Portal.Controllers {
                                 {
                                      DroneService.FlightHour = 0;
                                  }
-          string SQL = "INSERT INTO MSTR_DRONESERVICE(Description,CreatedBy,CreatedOn,DroneId,TypeOfServiceId,TypeOfService,DateOfService,FlightHour) VALUES('"
-                    + DroneService.Description + "'," + Session["UserId"] + ",'" +
-                     DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "','"
-                    + DroneService.DroneId + "'," + DroneService.TypeOfService + ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'," + DroneService.FlightHour + "); ";
-          // int ID = Util.InsertSQL(SQL);
+          string SQL = @"INSERT INTO MSTR_DRONESERVICE(Description,CreatedBy,CreatedOn,DroneId,TypeOfServiceId,TypeOfService,DateOfService,FlightHour) 
+                    VALUES('"+ DroneService.Description + "'," + Session["UserId"] + ",'" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "','"
+                    + DroneService.DroneId + "'," + (DroneService.TypeOfServiceId ==null ? 0 : DroneService.TypeOfServiceId )+ ",'" + DroneService.TypeOfService + "','" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "'," + DroneService.FlightHour + "); ";
+          
+                    // int ID = Util.InsertSQL(SQL);
           int ServiceId = Util.InsertSQL(SQL);
 
           //   int ServiceId = Util.GetServiceId();
@@ -332,7 +332,7 @@ namespace eX_Portal.Controllers {
           }
 
           string SQL = "UPDATE MSTR_DRONESERVICE SET Description='" + DroneService.Description + "',CreatedBy=" + Session["UserId"] + ", CreatedOn='" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") +
-              "', DroneId=" + DroneService.DroneId + ",TypeOfServiceId='" + DroneService.TypeOfService + "' ,DateOfService='" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "', FlightHour=" + DroneService.FlightHour + " WHERE ServiceId=" + DroneService.ServiceId;
+              "', DroneId=" + DroneService.DroneId + ",TypeOfServiceId='" + (DroneService.TypeOfServiceId == null ? 0 : DroneService.TypeOfServiceId) + "' ,DateOfService='" + DroneService.DateOfService.Value.ToString("yyyy-MM-dd") + "', FlightHour=" + DroneService.FlightHour + " WHERE ServiceId=" + DroneService.ServiceId;
 
           int ID = Util.doSQL(SQL);
           SQL = "delete from M2M_DroneServiceParts where ServiceId =" + DroneService.ServiceId;
