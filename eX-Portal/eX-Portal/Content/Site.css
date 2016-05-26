@@ -1076,3 +1076,36 @@ span.link {
     color: red;
     cursor: pointer;
 }
+
+div#alertLine {
+ margin-bottom:20px;
+}
+div#alertLine ul {
+margin:0px;
+list-style:none;
+padding:0px;
+}
+div#alertLine ul li {
+margin:0px;
+list-style:none;
+    padding: 10px 5px 10px 5px;
+  
+}
+div#alertLine ul li.critical {
+    border-bottom: 2px red solid;
+    border-top: 2px red solid;
+
+    background-color: rgba(255,0,0,0.2);
+}
+
+div#alertLine ul li.high {
+border-bottom: 2px #fe9400 solid;
+    border-top: 2px #fe9400 solid;
+    background-color: rgba(254,148,0,0.2);
+}
+
+div#alertLine ul li.warning {
+  border-bottom: 2px silver solid;
+    border-top: 2px silver solid;
+    background-color: #ededed
+}
