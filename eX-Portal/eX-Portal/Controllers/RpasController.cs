@@ -766,6 +766,7 @@ namespace eX_Portal.Controllers {
                         ,IsUseCamara
                         ,MOD_ApprovalURL
                         ,ApprovalStatus
+                        ,ApprovalRemarks
                         ,BoundaryInMeters)
                       values
                       ('" + GCA.ApprovalName + @"',
@@ -782,6 +783,7 @@ namespace eX_Portal.Controllers {
                      " + (GCA.IsUseCamara) + @",
                      '" + (GCA.MOD_ApprovalURL) + @"',
                      '" + "New" + @"',
+                     '" + GCA.ApprovalRemarks+ @"',
                      50)";
 
           GCA.ApprovalID = Util.InsertSQL(SQL);

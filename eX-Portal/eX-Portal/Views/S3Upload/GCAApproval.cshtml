@@ -1,7 +1,7 @@
 ﻿@model eX_Portal.Models.GCA_Approval
 @using eX_Portal.exLogic
 @{ 
-  ViewBag.Title = "DGCAA Approval";
+  ViewBag.Title = "Zone Approval";
 }
 
 <form id="formS3" name="formS3" action="@ViewBag.FormAction" method="@ViewBag.FormMethod" enctype="@ViewBag.FormEnclosureType">
@@ -134,6 +134,7 @@
   </script>
 }
 @section Scripts{
+@Scripts.Render("~/bundles/jqueryval")
 <script type="text/javascript">
     var UploadUrl = '/S3Upload/UploadGCA';
     var DocType ='Approval';
