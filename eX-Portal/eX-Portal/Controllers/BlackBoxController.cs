@@ -306,7 +306,7 @@ namespace eX_Portal.Controllers {
         }
 
         public ActionResult BlackBoxList()
-     {
+        {
 
       //      if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Blackbox";
@@ -415,13 +415,46 @@ namespace eX_Portal.Controllers {
 
             Models.MSTR_BlackBox BB = db.MSTR_BlackBox.Find(BlackBoxID);
             if (BB == null) return RedirectToAction("Error", "Home");
-            ViewBag.Title = BB.BlackBoxID;
+            ViewBag.Title = "Black Box Details";
             return View(BB);
         }
 
+        //by BT
+        public ActionResult TransactionDet([Bind(Prefix = "ID")] int BlackBoxID)
+        {
+            string SQL = @"SELECT MSTR_BlackBox.BlackBoxName,
+                           BlackBoxTransaction.BBStatus as Status,
+                           BlackBoxTransaction.CollectionMode as 'TransactionMode',
+                           BlackBoxTransaction.BankName as 'BankName',
+                           BlackBoxTransaction.Amount, 
+                           BlackBoxTransaction.ChequeNumber as 'ChequeNumber',
+                           BlackBoxTransaction.DateOfCheque as 'ChequeDate', 
+                           BlackBoxTransaction.NameOnCard as 'NameOnCard',
+                           BlackBoxTransaction.CreatedDate as 'CreatedDate',
+                           MSTR_Drone.DroneName as 'DroneName',
+                           BlackBoxTransaction.Note,
+                           Count(*) Over() as _TotalRecords,
+                           BlackBoxTransaction.ID as _PKey                           
+                           FROM
+                           BlackBoxTransaction LEFT OUTER JOIN
+                           MSTR_BlackBox ON BlackBoxTransaction.BlackBoxID = MSTR_BlackBox.BlackBoxID LEFT OUTER JOIN
+                           MSTR_Drone ON BlackBoxTransaction.DroneID = MSTR_Drone.DroneId 
+                           WHERE(BlackBoxTransaction.BlackBoxID = " + BlackBoxID + ")";
+            qView nView = new qView(SQL);
+            
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }
+     
+
         // GET: BlackBox/Issue/5
         public ActionResult Rental([Bind(Prefix = "ID")] int approvalid =0)
-
         {
             //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Blackbox Rental";
@@ -470,7 +503,7 @@ namespace eX_Portal.Controllers {
                                  ",[CreatedBy] \n" +
                                  ",[DroneID] \n" +
                                  ",[ApprovalID])values( \n" +
-                                 BBTransaction.BlackBoxID + ",'OUT'," + BBTransaction.CollectionMode + ",'" + BBTransaction.NameOnCard + "','" + BBTransaction.BankName + "',\n" +
+                                 BBTransaction.BlackBoxID + ",'OUT','" + BBTransaction.CollectionMode + "','" + BBTransaction.NameOnCard + "','" + BBTransaction.BankName + "',\n" +
                                  BBTransaction.Amount + ",'" + BBTransaction.ChequeNumber + "','" + BBTransaction.DateOfCheque + "','" + System.DateTime.Now + "','\n" +
                                  BBTransaction.CreatedBy + "'," + BBTransaction.DroneID + "," + BBTransaction.ApprovalID + ")";
                 int bbtransctionid = Util.InsertSQL(insertsql);

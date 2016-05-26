@@ -286,7 +286,7 @@ namespace eX_Portal.Controllers {
 
         // return RedirectToAction("Index");
        
-      } catch {
+      } catch(Exception Ex) {
         return View();
       }
     }
