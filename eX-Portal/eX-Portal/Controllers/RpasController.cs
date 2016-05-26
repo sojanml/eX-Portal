@@ -499,7 +499,7 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("RPAS.UASEDIT")) return RedirectToAction("NoAccess", "Home");
       SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + id;
       if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
-        if (id == null) {
+        if (id == 0) {
           return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
         MSTR_Drone mSTR_Drone = db.MSTR_Drone.Find(id);

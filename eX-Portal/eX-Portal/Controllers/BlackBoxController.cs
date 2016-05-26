@@ -72,22 +72,14 @@ namespace eX_Portal.Controllers {
         "  [DroneDataId] as UASDataId ," +
         "  MSTR_Drone.DroneName as UAS,\n" +
         "  [ReadTime] as [Date],\n" +
-        "  CASE ISNUMERIC([DroneData].[Latitude])\n" +
-        "		 WHEN  1 THEN CONVERT(numeric(12, 3),[DroneData].[Latitude])\n" +
-        "		 ELSE 0.00\n" +
-        "   END as [Latitude] ,\n" +
-        "  CASE ISNUMERIC([DroneData].[Longitude])\n" +
-        "    WHEN  1 THEN  CONVERT(numeric(12, 3),[DroneData].[Longitude])\n" +
-        "    ELSE 0.00\n" +
-        "  END as [Longitude],\n" +
+        "  [DroneData].[Latitude] ,\n" +
+        "  [DroneData].[Longitude],\n" +
         "  [Altitude] as [Altitude],\n" +
         "  [Speed] as [Speed],\n" +
         "  [FixQuality],\n" +
         "  [Satellites],\n" +
-        "  CASE ISNUMERIC([BBFlightID])\n" +
-        "    WHEN  1 THEN  CONVERT(numeric(20, 0),[BBFlightID])\n" +
-        "    ELSE 0.00\n" +
-        "  END as [FDRFlightId],\n" + 
+        "  [Pitch],[Roll],[Heading],[TotalFlightTime],\n" +
+        "  [BBFlightID],\n" + 
         "  Count(*) Over() as _TotalRecords,[DroneDataId] as _PKey\n" +
         "FROM\n" +
         "  [DroneData]\n" +

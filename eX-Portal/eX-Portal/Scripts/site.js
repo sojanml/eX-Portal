@@ -151,7 +151,7 @@ function alertLine(Message) {
   if (AlertHideTimer) window.clearTimeout(AlertHideTimer);
   AlertHideTimer = window.setTimeout( function () {
     $('#alertLine').slideUp();
-  }, 5000);
+  }, 10 * 1000);
 }
 
 function alertBox(Message) {
