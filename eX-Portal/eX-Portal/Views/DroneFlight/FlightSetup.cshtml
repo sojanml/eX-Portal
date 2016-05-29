@@ -245,6 +245,13 @@
         });
         });// $('#GcaApproval_ApprovalID').on("change")
        
+
+        $('#GcaApproval_Coordinates').on("change", function(e) {
+          e.preventDefault();
+          updateCordinates();
+        })
+
+
     });//$(document).ready()
 
       function DroneID_Success(Row) {
@@ -335,10 +342,29 @@
 
       };
 
+      function getBounds(Polygon) {
+        var bounds = new google.maps.LatLngBounds();
+        var paths = Polygon.getPaths();
+        var path;        
+        for (var i = 0; i < paths.getLength(); i++) {
+          path = paths.getAt(i);
+          for (var ii = 0; ii < path.getLength(); ii++) {
+            bounds.extend(path.getAt(ii));
+          }
+        }
+        return bounds;
+      }
+
+
       function updateCordinates() {
           var Cordinates = getCoordinates1();
           var Bounds = setBoundary(Cordinates);
           BoundaryBox.setPath(Bounds);
+          
+          var thisBounds = getBounds(BoundaryBox);
+          map.fitBounds(thisBounds);
+
+
           google.maps.event.addListener(BoundaryBox.getPath(), 'set_at', setCoordinates);
           google.maps.event.addListener(BoundaryBox.getPath(), 'insert_at', setCoordinates);
       }
