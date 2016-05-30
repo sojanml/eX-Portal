@@ -631,10 +631,10 @@ namespace eX_Portal.Controllers {
 
     public ActionResult FlightSetup() {
       if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return RedirectToAction("NoAccess", "Home");
-
       ViewData["accountid"] = Convert.ToInt32(Session["AccountID"].ToString());
       return View();
     }
+
     [HttpPost]
     public string FlightSetup(FlightSetupViewModel flightsetupvm)//Models.MSTR_Drone_Setup droneSetup)
     {
@@ -644,51 +644,105 @@ namespace eX_Portal.Controllers {
       if (flightsetupvm.DroneSetup.GroundStaffUserId < 1 || flightsetupvm.DroneSetup.GroundStaffUserId == null) return "A Ground staff should be selected.";
 
       DateTime todaydate = System.DateTime.Now;
+      String SQL = String.Empty ;
+      int ApprovalID = flightsetupvm.GcaApproval.ApprovalID;
+      String ApprovalName = flightsetupvm.GcaApproval.ApprovalName;
+      String Coordinates = flightsetupvm.GcaApproval.Coordinates;
+      if (String.IsNullOrEmpty(Coordinates)) Coordinates = 
+        "24.94990139051521 55.33758544921875," +
+        "25.21855531449736 55.6209716796875," +
+        "25.387706850526847 55.41497802734375," +
+        "25.087092789448754 55.1370849609375";
+      string[] Coord = Coordinates.Split(',');
+      string Poly = Coordinates + "," + Coord[0];
 
-      if (flightsetupvm.GcaApproval.ApprovalName == null) {
-        if (flightsetupvm.GcaApproval.Coordinates == null) { } else {
-          string[] Coord = flightsetupvm.GcaApproval.Coordinates.Split(',');
-          string Poly = flightsetupvm.GcaApproval.Coordinates + "," + Coord[0];
-          //To update in GCA_Approval table
-          string sqlgcaapprovalupdate = @"Update [GCA_Approval] set Polygon=geography::STGeomFromText('POLYGON((" + Poly + "))', 4326).MakeValid(),"
-          + "Coordinates ='" + flightsetupvm.GcaApproval.Coordinates + "',BoundaryInMeters=50"
-          + "where ApprovalID=" + flightsetupvm.GcaApproval.ApprovalID;
-          int result3 = Util.doSQL(sqlgcaapprovalupdate);
-
-        }
+      if (ApprovalID == 0 && String.IsNullOrEmpty(ApprovalName)) {
+        //Approval is not selected or no name is specifeid
+        //then do not update approvals
+        SQL = String.Empty;
+      } else if(!String.IsNullOrEmpty(ApprovalName)) {
+        //when a new name is specified for approval
+        //save it as new approval     
+        SQL = @"insert into GCA_Approval(
+          ApprovalName,
+          ApprovalDate,
+          StartDate,
+          EndDate,
+          Coordinates,
+          Polygon,
+          CreatedOn,
+          CreatedBy,
+          DroneID,
+          EndTime,
+          StartTime,
+          BoundaryInMeters,
+          MinAltitude,
+          MaxAltitude
+        ) values(
+          '" + flightsetupvm.GcaApproval.ApprovalName + @"',
+          '" + System.DateTime.Now + @"',
+          '" + System.DateTime.Now.AddDays(-1) + @"',
+          '" + todaydate.AddDays(90) + @"',
+          '" + flightsetupvm.GcaApproval.Coordinates + @"',
+          geography::STGeomFromText('POLYGON((" + Poly + "))', 4326).MakeValid()," + 
+          "'" + System.DateTime.Now + "'," + 
+          Convert.ToInt32(Session["UserID"].ToString()) + "," + 
+          flightsetupvm.DroneSetup.DroneId + @",
+          '23:59',
+          '00:00',
+          50,
+          0,
+          40
+        )";
+        //
       } else {
-        if (flightsetupvm.GcaApproval.Coordinates == null) { } else {
-          string[] Coord = flightsetupvm.GcaApproval.Coordinates.Split(',');
-          string Poly = flightsetupvm.GcaApproval.Coordinates + "," + Coord[0];
-          //To insert in GCA_Approval table
-          string sqlinsertgca = @"insert into GCA_Approval(ApprovalName,ApprovalDate,StartDate,EndDate,Coordinates,Polygon,CreatedOn,CreatedBy,DroneID,EndTime,StartTime,BoundaryInMeters,MinAltitude,MaxAltitude)
-                    values('" + flightsetupvm.GcaApproval.ApprovalName + "','" + System.DateTime.Now + "','" + System.DateTime.Now.AddDays(-1) + "','" + todaydate.AddDays(90) + "','" +
-          flightsetupvm.GcaApproval.Coordinates + "',geography::STGeomFromText('POLYGON((" + Poly + "))', 4326).MakeValid(),'" +
-          System.DateTime.Now + "'," + Convert.ToInt32(Session["UserID"].ToString()) + "," + flightsetupvm.DroneSetup.DroneId +
-          ",'23:59','00:00'" + ",50" + ",0,40)";
-          int result2 = Util.doSQL(sqlinsertgca);
-        }
+        //Got an approval ID 
+        //Update the selected Approval ID
+        SQL = @"Update 
+          [GCA_Approval] 
+        set 
+          Polygon=geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+          Coordinates ='" + flightsetupvm.GcaApproval.Coordinates + @"',
+          BoundaryInMeters=50
+        where 
+          ApprovalID=" + ApprovalID;
+      }
+      if(!String.IsNullOrEmpty(SQL)) {
+        //Execute the sql statement generated
+        Util.doSQL(SQL);
       }
 
-      string sqlcheck = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + flightsetupvm.DroneSetup.DroneId;
-      int result = Util.getDBInt(sqlcheck);
-      if (result > 0) {
-        string sqlupdate = @"update MSTR_Drone_Setup set PilotUserId=" + flightsetupvm.DroneSetup.PilotUserId + ",GroundStaffUserId=" + flightsetupvm.DroneSetup.GroundStaffUserId +
-        ",[BatteryVoltage]=" + flightsetupvm.DroneSetup.BatteryVoltage + ",[Weather]='" + flightsetupvm.DroneSetup.Weather + "',[UasPhysicalCondition]='" + flightsetupvm.DroneSetup.UasPhysicalCondition
-        + "',[ModifiedBy]=" + Convert.ToInt32(Session["UserID"].ToString()) + ",[ModifiedOn]='" + System.DateTime.Now + "',[NotificationEmails]='" + flightsetupvm.DroneSetup.NotificationEmails
-        + "' where [DroneId]=" + flightsetupvm.DroneSetup.DroneId;
-        int result1 = Util.doSQL(sqlupdate);
-      } else {
-        int ID = 0;
-        ExponentPortalEntities db = new ExponentPortalEntities();
-        flightsetupvm.DroneSetup.CreatedBy = Convert.ToInt32(Session["UserID"].ToString());
-        flightsetupvm.DroneSetup.CreatedOn = System.DateTime.Now;
-        db.MSTR_Drone_Setup.Add(flightsetupvm.DroneSetup);
-        db.SaveChanges();
-        ID = flightsetupvm.DroneSetup.DroneSetupId;
-        db.Dispose();
-
+      int DroneID = flightsetupvm.DroneSetup.DroneId;
+      SQL = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + DroneID ;
+      int DroneSetupId = Util.getDBInt(SQL);
+      if (DroneSetupId == 0) {
+        SQL = @"INSERT INTO MSTR_Drone_Setup (
+          DroneID,
+          CreatedBy,
+          CreatedOn
+        ) VALUES (
+          " + DroneID + @",
+          " + Session["UserID"] + @",
+          [ModifiedOn]=GETDATE()
+        )";
+        Util.doSQL(SQL);
       }
+      if(flightsetupvm.DroneSetup.BatteryVoltage == null) flightsetupvm.DroneSetup.BatteryVoltage = 0;
+
+      SQL = @"update 
+        MSTR_Drone_Setup 
+      set 
+        PilotUserId=" + flightsetupvm.DroneSetup.PilotUserId + @",
+        GroundStaffUserId=" + flightsetupvm.DroneSetup.GroundStaffUserId + @",
+        [BatteryVoltage]=" + flightsetupvm.DroneSetup.BatteryVoltage + @",
+        [Weather]='" + flightsetupvm.DroneSetup.Weather + @"',
+        [UasPhysicalCondition]='" + flightsetupvm.DroneSetup.UasPhysicalCondition + @"',
+        [ModifiedBy]=" + Session["UserID"] + @",
+        [ModifiedOn]=GETDATE(),
+        [NotificationEmails]='" + flightsetupvm.DroneSetup.NotificationEmails + @"'
+      where 
+        [DroneId]=" + DroneID;
+      Util.doSQL(SQL);
       return "OK";
     }
 
