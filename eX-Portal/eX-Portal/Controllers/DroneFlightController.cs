@@ -121,7 +121,14 @@ namespace eX_Portal.Controllers {
       if (theFlight.PilotID < 1 || theFlight.PilotID == null) ModelState.AddModelError("PilotID", "Pilot is required for a Flight.");
       if (theFlight.GSCID < 1 || theFlight.GSCID == null) ModelState.AddModelError("GSCID", "A Ground Station Controller should be slected.");
 
-      if (ModelState.IsValid) {
+            //if (Request != null)
+            //{
+            //    var a = Request["fileinputError"];
+            //    HttpPostedFileBase file = Request.Files["fileinput"];
+            //    if(file==null) ModelState.AddModelError("fileinput", "You must select a Document.");
+            //}
+
+            if (ModelState.IsValid) {
         int ID = 0;
         ExponentPortalEntities db = new ExponentPortalEntities();
         db.DroneFlights.Add(theFlight);
@@ -130,10 +137,11 @@ namespace eX_Portal.Controllers {
         db.Dispose();
 
         //Move the uploaded file to correct path
-        MoveUploadFileTo((int)theFlight.DroneID, theFlight.ID);
+        if(Request["FileName"]!=null)
+            MoveUploadFileTo((int)theFlight.DroneID, theFlight.ID);
 
         //insert into log table
-        string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + theFlight.DroneID + ",'" + System.DateTime.Now + "'," + theFlight.PilotID + "," + (theFlight.FlightHours == null ? 0 : (theFlight.FlightHours / 60)) + "," + ID + ")";
+        string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + theFlight.DroneID + ",'" + System.DateTime.Now.ToString("MM/dd/yyyy") + "'," + theFlight.PilotID + "," + (theFlight.FlightHours == null ? 0 : (theFlight.FlightHours / 60)) + "," + ID + ")";
         Util.doSQL(sql);
 
         return RedirectToAction("Detail", new { ID = ID });
@@ -161,16 +169,19 @@ namespace eX_Portal.Controllers {
       ExponentPortalEntities db = new ExponentPortalEntities();
       db.Entry(InitialData).State = EntityState.Modified;
       db.SaveChanges();
-      //insert/update in log table
-      string sqlcheck = "select Id from MSTR_Pilot_Log where FlightID=" + InitialData.ID;
-      int result = Convert.ToInt32(Util.getDBInt(sqlcheck));
-      if (result > 0) {
-        string sql = "update MSTR_Pilot_Log set DroneId=" + InitialData.DroneID + ",PilotId=" + InitialData.PilotID + ",MultiDashRotor=" + (InitialData.FlightHours == null ? 0 : (InitialData.FlightHours / 60)) + "where FlightID=" + InitialData.ID;
-        Util.doSQL(sql);
-      } else {
-        string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + (InitialData.DroneID == null ? 0 : InitialData.DroneID) + ",'" + System.DateTime.Now + "'," + (InitialData.PilotID == null ? 0 : InitialData.PilotID) + "," + (InitialData.FlightHours == null ? 0 : (InitialData.FlightHours / 60)) + "," + InitialData.ID + ")";
-        Util.doSQL(sql);
-      }
+            //insert/update in log table
+            string sqlcheck = "select Id from MSTR_Pilot_Log where FlightID=" + InitialData.ID;
+            int result = Convert.ToInt32(Util.getDBInt(sqlcheck));
+            if (result > 0)
+            {
+                string sql = "update MSTR_Pilot_Log set DroneId=" + InitialData.DroneID + ",PilotId=" + InitialData.PilotID + ",MultiDashRotor=" + (InitialData.FlightHours == null ? 0 : (InitialData.FlightHours / 60)) + "where FlightID=" + InitialData.ID;
+                Util.doSQL(sql);
+            }
+            else
+            {
+                string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + (InitialData.DroneID == null ? 0 : InitialData.DroneID) + ",'" + System.DateTime.Now.ToString("MM/dd/yyyy") + "'," + (InitialData.PilotID == null ? 0 : InitialData.PilotID) + "," + (InitialData.FlightHours == null ? 0 : (InitialData.FlightHours / 60)) + "," + InitialData.ID + ")";
+                Util.doSQL(sql);
+            }
 
       return RedirectToAction("Detail", new { ID = InitialData.ID });
     }
@@ -322,7 +333,7 @@ namespace eX_Portal.Controllers {
     }//DroneFlightDetail ()
 
     private String getUploadedDocs(int FlightID) {
-      StringBuilder theList = new StringBuilder();
+            StringBuilder theList = new StringBuilder();
       String DroneName = "";
       ExponentPortalEntities db = new ExponentPortalEntities();
       List<DroneDocument> Docs = (from r in db.DroneDocuments
