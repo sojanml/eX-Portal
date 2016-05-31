@@ -7,18 +7,46 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using eX_Portal.Models;
-using eX_Portal.exLogic;  
+using eX_Portal.exLogic;
+using FileStorageUtils;
+using System.IO;
+using System.ComponentModel.DataAnnotations;
 
 namespace eX_Portal.Controllers
 {
     public class RpasUserController : Controller
     {
         private ExponentPortalEntities db = new ExponentPortalEntities();
-
+        static String RootUploadDir = "~/Upload/User/";
         // GET: RpasUser
         public ActionResult Index()
         {
-            return View(db.MSTR_User.ToList());
+            string SQL = "SELECT MSTR_User.UserName,\n" +
+                         "MSTR_User.FirstName + ' ' + MSTR_User.LastName as Name,\n" +
+                         "MSTR_Profile.ProfileName as Profile,\n" +
+                         "MSTR_Account.Name as Account,\n" +
+                         "MSTR_User.MobileNo as Mobile,\n" +
+                         "MSTR_User.EmailId,\n" +
+                         "case when MSTR_User.IsPilot = 1 then 'Yes' else case when MSTR_User.IsPilot = 0 then 'No' else '' end end as 'IsPilot?',\n" +
+                         "MSTR_User.Dashboard, \n" +
+                         "Count(*) Over() as _TotalRecords,\n" +
+                         "UserId as _PKey\n" +
+                         "FROM \n" +
+                         "MSTR_User INNER JOIN MSTR_Account \n" +
+                         "ON MSTR_User.AccountId = MSTR_Account.AccountId INNER JOIN MSTR_Profile \n" +
+                         "ON MSTR_User.UserProfileId = MSTR_Profile.ProfileId \n" +
+                         "where MSTR_User.AccountId = " +23;
+            qView nView = new qView(SQL);            
+            nView.addMenu("Edit", Url.Action("Edit", "RpasUser", new { ID = "_PKey" }));
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else {
+                return View(nView);
+            }//if(IsAjaxRequest)
+            //return View(db.MSTR_User.ToList());
         }
 
         // GET: RpasUser/Details/5
@@ -41,24 +69,13 @@ namespace eX_Portal.Controllers
         {            
             if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
 
-            ViewBag.IsPassowrdRequired = true;
+            //ViewBag.IsPassowrdRequired = true;
 
             MSTR_User EPASValues = new MSTR_User();
             if (RPASID != 0)
             {
                 ViewBag.RPASid = RPASID;
-                ViewBag.IsPassowrdRequired = false;
-                //var RPASoList = (from p in db.MSTR_RPAS_User where p.RpasId == RPASID select p).ToList();
-                //EPASValues.FirstName = RPASoList[0].Name;
-                //EPASValues.CountryId = Convert.ToInt16(RPASoList[0].NationalityId);
-                //EPASValues.EmiratesID = RPASoList[0].EmiratesId;
-                //EPASValues.EmailId = RPASoList[0].EmailId;
-                //EPASValues.MobileNo = RPASoList[0].MobileNo;
-
-                //EPASValues.UserProfileId = Convert.ToInt16(7);
-                //EPASValues.Dashboard = "RPAS";
-                //EPASValues.IsActive = false;
-                //EPASValues.IsPilot = false;
+                //ViewBag.IsPassowrdRequired = false;               
             }
 
             var viewModel = new ViewModel.UserViewModel
@@ -80,53 +97,50 @@ namespace eX_Portal.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ViewModel.UserViewModel UserModel, int ID = 0)
         {
-            string hdnRPASid = Request["hdnRPASid"];
-            //
-            //int RPASID = string.IsNullOrEmpty(hdnRPASid) ? 0 : Convert.ToInt16(hdnRPASid);
-            int RPASID = ID;
-
             if (!exLogic.User.hasAccess("USER.CREATE")) return RedirectToAction("NoAccess", "Home");
-            //if (ModelState.IsValid) {
+            string hdnRPASid = Request["hdnRPASid"];
+            ModelState.Remove("User.AccountId");
+            ModelState.Remove("User.UserProfileId");
+            ModelState.Remove("User.IsActive");
+            ModelState.Remove("User.IsPilot");
+            if (String.IsNullOrEmpty(UserModel.User.RPASPermitNo)) ModelState.AddModelError("User.RPASPermitNo","Please enter the RPAS Permit Number");
+            if (String.IsNullOrEmpty(UserModel.User.PermitCategory)) ModelState.AddModelError("User.PermitCategory", "Please select the RPAS Permit Category");
+            if (String.IsNullOrEmpty(UserModel.User.ContactAddress)) ModelState.AddModelError("User.ContactAddress", "Please enter Contact Address");
+            if (String.IsNullOrEmpty(UserModel.User.RegRPASSerialNo)) ModelState.AddModelError("User.RegRPASSerialNo", "Please enter RPAS Serial Number");
+            if (String.IsNullOrEmpty(UserModel.User.CompanyAddress)) ModelState.AddModelError("User.CompanyAddress", "Please enter Company Address");
+            if (String.IsNullOrEmpty(UserModel.User.CompanyTelephone)) ModelState.AddModelError("User.CompanyTelephone", "Please enter Company Telephone Number.");
+            if (String.IsNullOrEmpty(UserModel.User.CompanyEmail)) ModelState.AddModelError("User.CompanyEmail", "Please enter Company Email");
+            if (String.IsNullOrEmpty(UserModel.User.RPASPermitNo)) ModelState.AddModelError("User.RPASPermitNo", "Please enter the RPAS Permit Number");
+            if (String.IsNullOrEmpty(UserModel.Pilot.EmiratesId)) ModelState.AddModelError("Pilot.EmiratesId", "Emirates ID is required."); 
+            if (String.IsNullOrEmpty(UserModel.Pilot.PassportNo)) ModelState.AddModelError("Pilot.PassportNo", "Passport Number is required."); 
+            
+            int RPASID = ID;
+         
+            //checking if username or mail already exist
             if (exLogic.User.UserExist(UserModel.User.UserName) > 0)
             {
-                ModelState.AddModelError("User.UserName", "This username already exists.");
+                ModelState.AddModelError("User.UserName", "This Username already exists.");
             }
             if (exLogic.User.EmailExist(UserModel.User.EmailId) > 0)
             {
                 ModelState.AddModelError("User.EmailId", "Email already exists.");
             }
-            if (RPASID == 0)
-            {
-                if (String.IsNullOrEmpty(UserModel.User.Password))
-                {
-                    ModelState.AddModelError("User.Password", "Invalid Password. Please enter again.");
-                }
-            }
 
-            if (UserModel.User.IsPilot == true)
-            {
-                if (String.IsNullOrEmpty(UserModel.Pilot.EmiratesId))
-                {
-                    ModelState.AddModelError("Pilot.EmiratesId", "Emirates ID is required.");
-                }
-                if (String.IsNullOrEmpty(UserModel.Pilot.PassportNo))
-                {
-                    ModelState.AddModelError("Pilot.PassportNo", "Passport  ID is required.");
-                }
-                if (String.IsNullOrEmpty(UserModel.Pilot.Department))
-                {
-                    ModelState.AddModelError("Pilot.Department", "Department is required.");
-                }
-            }//if(UserModel.User.IsPilot == true) {
-             //}
+            //if (RPASID == 0)
+            //{
+            //    if (String.IsNullOrEmpty(UserModel.User.Password))
+            //    {
+            //        ModelState.AddModelError("User.Password", "Invalid Password.Please enter again.");
+            //    }
+            //}                      
 
             if (ModelState.IsValid)
             {
-                string Password;
-                if (RPASID == 0)
-                    Password = Util.GetEncryptedPassword(UserModel.User.Password).ToString();
-                else
-                    Password = "";
+                string Password="";
+                //if (RPASID == 0)
+                //    Password = Util.GetEncryptedPassword(UserModel.User.Password).ToString();
+                //else
+                //    Password = "";
 
                 String SQL = "insert into MSTR_User(\n" +
                   "  UserName,\n" +
@@ -136,7 +150,7 @@ namespace eX_Portal.Controllers
                   "  LastName,\n" +
                   "  CreatedBy,\n" +
                   "  UserProfileId,\n" +
-                  "  Remarks,\n" +
+                  //"  Remarks,\n" +
                   "  MobileNo,\n" +
                   "  OfficeNo,\n" +
                   "  HomeNo,\n" +
@@ -163,27 +177,27 @@ namespace eX_Portal.Controllers
                   "  '" + UserModel.User.MiddleName + "',\n" +
                     "  '" + UserModel.User.LastName + "',\n" +
                   "  " + Util.getLoginUserID() + ",\n" +
-                  "  " + UserModel.User.UserProfileId + ",\n" +
-                  "  '" + UserModel.User.Remarks + "',\n" +
+                  "  7,\n" +
+                  //"  '" + UserModel.User.Remarks + "',\n" +
                   "  '" + UserModel.User.MobileNo + "',\n" +
                   "  '" + UserModel.User.OfficeNo + "',\n" +
                   "  '" + UserModel.User.HomeNo + "',\n" +
                   "  '" + UserModel.User.EmailId + "',\n" +
                   "  " + Util.toInt(UserModel.User.CountryId) + ",\n" +
-                  "  '" + UserModel.User.IsActive + "',\n" +
+                  "  'true',\n" +
                   "  GETDATE(),\n" +
-                  "  " + Util.toInt(UserModel.User.AccountId) + ",\n" +
-                  "  '" + UserModel.User.IsPilot + "',\n" +
+                  "  23,\n" +
+                  "  'true',\n" +
                   "  '" + UserModel.User.PhotoUrl + "',\n" +
-                  "  '" + UserModel.User.Dashboard + "',\n" +
+                  "  'RPAS',\n" +
                   "  '" + (UserModel.User.RPASPermitNo) + "',\n" +
                   "  '" + (UserModel.User.PermitCategory) + "',\n" +
                   "  '" + (UserModel.User.ContactAddress) + "',\n" +
                   "  '" + (UserModel.User.RegRPASSerialNo) + "',\n" +
-                  "  '" + (UserModel.User.ContactAddress) + "',\n" +
+                  "  '" + (UserModel.User.CompanyAddress) + "',\n" +
                   "  '" + (UserModel.User.CompanyTelephone) + "',\n" +
                   "  '" + (UserModel.User.CompanyEmail) + "',\n" +
-                  "  '" + (UserModel.User.EmiratesID) + "'\n" +
+                  "  '" + (UserModel.Pilot.EmiratesId) + "'\n" +
                   ")";
                 //inserting pilot information to the pilot table
                 int id = Util.InsertSQL(SQL);
@@ -192,16 +206,14 @@ namespace eX_Portal.Controllers
                   "  UserId,\n" +
                   "  PassportNo,\n" +
                   "  DateOfExpiry,\n" +
-                  "  Department,\n" +
-                  "  EmiratesId,\n" +
-                  "  Title\n" +
+                  //"  Department,\n" +
+                  "  EmiratesId\n" +
+                  //"  Title\n" +
                   ") values(\n" +
                   "  '" + id + "',\n" +
                   "  '" + UserModel.Pilot.PassportNo + "',\n" +
                   "  '" + UserModel.Pilot.DateOfExpiry + "',\n" +
-                  "  '" + UserModel.Pilot.Department + "',\n" +
-                    "  '" + UserModel.Pilot.EmiratesId + "',\n" +
-                  "  '" + UserModel.Pilot.Title + "'\n)";
+                    "  '" + UserModel.Pilot.EmiratesId + "'\n)";
                 int Pid = Util.InsertSQL(SQL);
 
                 //move the image to correct path
@@ -214,18 +226,19 @@ namespace eX_Portal.Controllers
                 {
                     System.IO.File.Move(PhotoURL, newPath + UserModel.User.PhotoUrl);
                 }
-                if (RPASID != 0)
-                {
-                    //var mailurl = Url.Action("RPASUserCreated", "Email", new { UserID = id });
+
+                //to sent mail to the user created
+                if (id != 0)
+                {                   
                     var mailurl = "/Email/RPASUserCreated/" + id;
                     var mailsubject = "User has been created";
                     Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, "~" + mailurl);
 
-                    //need to update the RPAS Status after sending mmail
+                    //need to update the RPAS Status after sending mail
                     SQL = "update mstr_rpas_user set [Status] = 'User Created' where rpasID = " + RPASID;
                     Util.doSQL(SQL);
                 }
-                return RedirectToAction("UserDetail", new { ID = id });
+                return RedirectToAction("Index", new { ID = id });
 
             }
 
@@ -242,15 +255,7 @@ namespace eX_Portal.Controllers
             };
 
             return View(viewModel);
-
-            //if (ModelState.IsValid)
-            //{
-            //    db.MSTR_User.Add(mSTR_User);
-            //    db.SaveChanges();
-            //    return RedirectToAction("Index");
-            //}
-
-            //return View(mSTR_User);
+       
         }
 
         // GET: RpasUser/Edit/5
@@ -268,12 +273,10 @@ namespace eX_Portal.Controllers
             return View(mSTR_User);
         }
 
-        // POST: RpasUser/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: RpasUser/Edit/5     
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserId,UserName,Password,RememberMe,PhotoUrl,FirstName,MiddleName,LastName,CreatedBy,LastModifiedBy,ApprovedBy,UserProfileId,Remarks,MobileNo,OfficeNo,HomeNo,EmailId,CountryId,RecordType,IsActive,LastModifiedOn,ApprovedOn,CreatedOn,PasswordSalt,AccountId,IsPilot,UserAccountId,Dashboard,GeneratedPassword,RPASPermitNo,PermitCategory,ContactAddress,RegRPASSerialNo,CompanyAddress,CompanyTelephone,CompanyEmail,TradeLicenceCopyUrl,EmiratesID")] MSTR_User mSTR_User)
+        public ActionResult Edit(MSTR_User mSTR_User)
         {
             if (ModelState.IsValid)
             {
