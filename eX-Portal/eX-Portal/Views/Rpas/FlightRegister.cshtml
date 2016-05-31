@@ -90,7 +90,7 @@
     @Html.LabelFor(model => model.IsUseCamara, "Is using camara")
   </div>
   <div class="editor-field">
-    @Html.DropDownListFor(model => model.IsUseCamara, Util.GetBoolList())
+    @Html.DropDownListFor(model => model.IsUseCamara, Util.GetBoolList(true))
     @Html.ValidationMessageFor(model => model.IsUseCamara)
   </div>
 

@@ -810,6 +810,7 @@
     <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
+    <Content Include="Scripts\UAScreation.js" />
     <Content Include="Scripts\user.js" />
     <None Include="Scripts\_references.js" />
     <Content Include="SqlServerTypes\readme.htm" />
