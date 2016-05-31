@@ -72,6 +72,10 @@
       <HintPath>..\packages\Microsoft.SqlServer.TransactSql.ScriptDom.12.0.1\lib\net40\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.11.0.2\lib\net20\Microsoft.SqlServer.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -465,6 +469,7 @@
     <Compile Include="SqlParser\StringLiteralTag.cs" />
     <Compile Include="SqlParser\TagBase.cs" />
     <Compile Include="SqlParser\WhereTag.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\AccountViewModel.cs" />
     <Compile Include="ViewModel\BlackBoxViewModel.cs" />
@@ -483,6 +488,22 @@
     <Compile Include="ViewModel\WeatherViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\msvcr100.dll">
+      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x64\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\msvcr100.dll">
+      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="audio\notify.mp3" />
     <Content Include="Blue.png" />
     <Content Include="Blue1.png" />
@@ -792,6 +813,7 @@
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\user.js" />
     <None Include="Scripts\_references.js" />
+    <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="stylesheets\dewa-dashboard.css" />
     <Content Include="stylesheets\ie.css" />
     <Content Include="stylesheets\print.css" />

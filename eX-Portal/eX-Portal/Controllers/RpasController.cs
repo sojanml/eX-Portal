@@ -522,8 +522,8 @@ namespace eX_Portal.Controllers {
       if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
         if (ModelState.IsValid) {
           string updatesql = "update MSTR_Drone set [ManufactureId]=" + mSTR_Drone.ManufactureId +
-                             ",[ModifiedBy] =" + Session["UserID"] + ",[ModifiedOn] ='" + System.DateTime.Now +
-                             "',[CommissionDate] ='" + mSTR_Drone.CommissionDate +
+                             ",[ModifiedBy] =" + Session["UserID"] + ",[ModifiedOn] ='" + System.DateTime.Now.ToString("MM/dd/yyyy") +
+                             "',[CommissionDate] ='" + mSTR_Drone.CommissionDate.Value.ToString("MM/dd/yyyy") +
                              "',RpasSerialNo = '" + mSTR_Drone.RpasSerialNo + "' where[DroneId] =" + mSTR_Drone.DroneId;
           int result = Util.doSQL(updatesql);
           return RedirectToAction("UAS");

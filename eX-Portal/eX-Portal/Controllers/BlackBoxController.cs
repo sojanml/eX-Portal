@@ -120,7 +120,7 @@ namespace eX_Portal.Controllers {
       ViewBag.DroneID = DroneID;
 
       String SQL =
-       "MOSELECT \n" +
+       "SELECT \n" +
        "  RecordNumber,\n" +
        "  ReadTime,\n" +
        "  Latitude,\n" +
@@ -211,6 +211,8 @@ namespace eX_Portal.Controllers {
     public String getFiles() {
       StringBuilder JsonText = new StringBuilder();
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+            if (!Directory.Exists(UploadPath))
+                Directory.CreateDirectory(UploadPath);
       JsonText.Append("{");
       JsonText.Append(Util.Pair("status", "success", true));
       JsonText.Append("\"addFile\":[");

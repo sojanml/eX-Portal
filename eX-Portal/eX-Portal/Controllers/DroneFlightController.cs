@@ -80,7 +80,7 @@ namespace eX_Portal.Controllers {
       nView.addMenu("Flight Data", Url.Action("FlightDataView", "Map", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.VIDEOS")) nView.addMenu("Flight Videos", Url.Action("ListVdeos", "DroneFlight", new { ID = "_PKey" }));
       //nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
-      if (exLogic.User.hasAccess("FLIGHT.REPORT")) nView.addMenu("Post Flight Report", "/PostFlightReport/_PKey.pdf" );
+      if (exLogic.User.hasAccess("FLIGHT.REPORT")) nView.addMenu("Post Flight Report", "/PostFlightReport/_PKey.pdf");
       if (exLogic.User.hasAccess("FLIGHT.GEOTAG")) nView.addMenu("GEO Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 
@@ -121,7 +121,14 @@ namespace eX_Portal.Controllers {
       if (theFlight.PilotID < 1 || theFlight.PilotID == null) ModelState.AddModelError("PilotID", "Pilot is required for a Flight.");
       if (theFlight.GSCID < 1 || theFlight.GSCID == null) ModelState.AddModelError("GSCID", "A Ground Station Controller should be slected.");
 
-      if (ModelState.IsValid) {
+            //if (Request != null)
+            //{
+            //    var a = Request["fileinputError"];
+            //    HttpPostedFileBase file = Request.Files["fileinput"];
+            //    if(file==null) ModelState.AddModelError("fileinput", "You must select a Document.");
+            //}
+
+            if (ModelState.IsValid) {
         int ID = 0;
         ExponentPortalEntities db = new ExponentPortalEntities();
         db.DroneFlights.Add(theFlight);
@@ -130,13 +137,14 @@ namespace eX_Portal.Controllers {
         db.Dispose();
 
         //Move the uploaded file to correct path
-        MoveUploadFileTo((int)theFlight.DroneID, theFlight.ID);
+        if(Request["FileName"]!=null)
+            MoveUploadFileTo((int)theFlight.DroneID, theFlight.ID);
 
         //insert into log table
-        string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + theFlight.DroneID + ",'" + System.DateTime.Now + "'," + theFlight.PilotID + "," + (theFlight.FlightHours == null ? 0 : (theFlight.FlightHours / 60)) + "," + ID + ")";
+        string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + theFlight.DroneID + ",'" + System.DateTime.Now.ToString("MM/dd/yyyy") + "'," + theFlight.PilotID + "," + (theFlight.FlightHours == null ? 0 : (theFlight.FlightHours / 60)) + "," + ID + ")";
         Util.doSQL(sql);
 
-      return RedirectToAction("Detail", new { ID = ID });
+        return RedirectToAction("Detail", new { ID = ID });
       } else {
         ViewBag.Title = "Create UAS Flight";
         return View(theFlight);
@@ -171,11 +179,11 @@ namespace eX_Portal.Controllers {
             }
             else
             {
-                string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + (InitialData.DroneID == null ? 0 : InitialData.DroneID) + ",'" + System.DateTime.Now + "'," + (InitialData.PilotID == null ? 0 : InitialData.PilotID) + "," + (InitialData.FlightHours == null ? 0 : (InitialData.FlightHours / 60)) + "," + InitialData.ID + ")";
+                string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + (InitialData.DroneID == null ? 0 : InitialData.DroneID) + ",'" + System.DateTime.Now.ToString("MM/dd/yyyy") + "'," + (InitialData.PilotID == null ? 0 : InitialData.PilotID) + "," + (InitialData.FlightHours == null ? 0 : (InitialData.FlightHours / 60)) + "," + InitialData.ID + ")";
                 Util.doSQL(sql);
             }
 
-            return RedirectToAction("Detail", new { ID = InitialData.ID });
+      return RedirectToAction("Detail", new { ID = InitialData.ID });
     }
 
 
@@ -325,7 +333,7 @@ namespace eX_Portal.Controllers {
     }//DroneFlightDetail ()
 
     private String getUploadedDocs(int FlightID) {
-      StringBuilder theList = new StringBuilder();
+            StringBuilder theList = new StringBuilder();
       String DroneName = "";
       ExponentPortalEntities db = new ExponentPortalEntities();
       List<DroneDocument> Docs = (from r in db.DroneDocuments
@@ -533,43 +541,40 @@ namespace eX_Portal.Controllers {
     }
 
 
-        public ActionResult ListVdeos([Bind(Prefix = "ID")]int FlightID = 0)
-        {
-            if (!exLogic.User.hasAccess("FLIGHT.VIDEOS")) return RedirectToAction("NoAccess", "Home");
+    public ActionResult ListVdeos([Bind(Prefix = "ID")]int FlightID = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT.VIDEOS")) return RedirectToAction("NoAccess", "Home");
 
-            ViewBag.FlightID = FlightID;
-            var Videos = (from n in db.DroneFlightVideos
-                          where n.FlightID == FlightID && n.IsDeleted == 0
-                          select n).ToList();
+      ViewBag.FlightID = FlightID;
+      var Videos = (from n in db.DroneFlightVideos
+                    where n.FlightID == FlightID && n.IsDeleted == 0
+                    select n).ToList();
 
 
-            return View(Videos);
-        }
+      return View(Videos);
+    }
 
-        public string DeleteVdeo([Bind(Prefix = "ID")]int id = 0)
-        {
-            if (!exLogic.User.hasAccess("FLIGHT.DELTVIDEOS")) return "Access Denied";
-            Response.ContentType = "text/json";
-            string sql = "Update DroneFlightVideo set IsDeleted=1 where VideoID=" + id;
-            Util.doSQL(sql);
-            string sql1 = "select FlightID from DroneFlightVideo where VideoID=" + id;
-            int flightid = Util.getDBInt(sql1);
-            // return RedirectToAction("ListVdeos", "DroneFlight", new { id = flightid });
-            return Util.jsonStat("OK");
-        }
+    public string DeleteVdeo([Bind(Prefix = "ID")]int id = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT.DELTVIDEOS")) return "Access Denied";
+      Response.ContentType = "text/json";
+      string sql = "Update DroneFlightVideo set IsDeleted=1 where VideoID=" + id;
+      Util.doSQL(sql);
+      string sql1 = "select FlightID from DroneFlightVideo where VideoID=" + id;
+      int flightid = Util.getDBInt(sql1);
+      // return RedirectToAction("ListVdeos", "DroneFlight", new { id = flightid });
+      return Util.jsonStat("OK");
+    }
 
-        public ActionResult FlightDataVideo(int ID = 0)
-        {
-            //to get the url of the video
-            Drones thisDrone = new Drones();
-            string sql = "select VideoURL from DroneFlightVideo where videoId=" + ID;
-            string videourl = Util.getDBVal(sql);
-            ViewBag.PlayerURL = videourl; //thisDrone.getLiveURL(ID);
-            return View();
-        }
-        
+    public ActionResult FlightDataVideo(int ID = 0) {
+      //to get the url of the video
+      Drones thisDrone = new Drones();
+      string sql = "select VideoURL from DroneFlightVideo where videoId=" + ID;
+      string videourl = Util.getDBVal(sql);
+      ViewBag.PlayerURL = videourl; //thisDrone.getLiveURL(ID);
+      return View();
+    }
 
-        public ActionResult Deleted([Bind(Prefix = "ID")]int FlightID = 0) {
+
+    public ActionResult Deleted([Bind(Prefix = "ID")]int FlightID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.VIDEOS")) return RedirectToAction("NoAccess", "Home");
       String SQL = "";
       using (var ctx = new ExponentPortalEntities())
@@ -634,86 +639,127 @@ namespace eX_Portal.Controllers {
       return AlertMsg.ToString();
     }
 
-    
-   public ActionResult FlightSetup()
-  {
-            if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return RedirectToAction("NoAccess", "Home");
-           
-            ViewData["accountid"] = Convert.ToInt32(Session["AccountID"].ToString());           
-            return View();
+
+    public ActionResult FlightSetup() {
+      if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return RedirectToAction("NoAccess", "Home");
+      ViewData["accountid"] = Convert.ToInt32(Session["AccountID"].ToString());
+      return View();
     }
+
     [HttpPost]
     public string FlightSetup(FlightSetupViewModel flightsetupvm)//Models.MSTR_Drone_Setup droneSetup)
     {
-            if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return "You do not have accesss to this page";
-            if (flightsetupvm.DroneSetup == null || flightsetupvm.DroneSetup.DroneId < 1) return "You must select a Drone.";
-            if (flightsetupvm.DroneSetup.PilotUserId < 1 || flightsetupvm.DroneSetup.PilotUserId == null) return "You must select a pilot.";
-            if (flightsetupvm.DroneSetup.GroundStaffUserId < 1 || flightsetupvm.DroneSetup.GroundStaffUserId == null) return "A Ground staff should be selected.";
+      if (!exLogic.User.hasAccess("FLIGHT.SETUP")) return "You do not have accesss to this page";
+      if (flightsetupvm.DroneSetup == null || flightsetupvm.DroneSetup.DroneId < 1) return "You must select a Drone.";
+      if (flightsetupvm.DroneSetup.PilotUserId < 1 || flightsetupvm.DroneSetup.PilotUserId == null) return "You must select a pilot.";
+      if (flightsetupvm.DroneSetup.GroundStaffUserId < 1 || flightsetupvm.DroneSetup.GroundStaffUserId == null) return "A Ground staff should be selected.";
 
-            DateTime todaydate = System.DateTime.Now;
+      DateTime todaydate = System.DateTime.Now;
+      String SQL = String.Empty ;
+      int ApprovalID = flightsetupvm.GcaApproval.ApprovalID;
+      String ApprovalName = flightsetupvm.GcaApproval.ApprovalName;
+      String Coordinates = flightsetupvm.GcaApproval.Coordinates;
+      if (String.IsNullOrEmpty(Coordinates)) Coordinates = 
+        "24.94990139051521 55.33758544921875," +
+        "25.21855531449736 55.6209716796875," +
+        "25.387706850526847 55.41497802734375," +
+        "25.087092789448754 55.1370849609375";
+      string[] Coord = Coordinates.Split(',');
+      string Poly = Coordinates + "," + Coord[0];
 
-            if (flightsetupvm.GcaApproval.ApprovalName == null)
-            {
-                if (flightsetupvm.GcaApproval.Coordinates == null)
-                { }
-                else
-                {
-                    string[] Coord = flightsetupvm.GcaApproval.Coordinates.Split(',');
-                    string Poly = flightsetupvm.GcaApproval.Coordinates + "," + Coord[0];
-                    //To update in GCA_Approval table
-                    string sqlgcaapprovalupdate = @"Update [GCA_Approval] set Polygon=geography::STGeomFromText('POLYGON((" + Poly + "))', 4326).MakeValid(),"
-                    + "Coordinates ='" + flightsetupvm.GcaApproval.Coordinates + "',BoundaryInMeters=50"
-                    + "where ApprovalID=" + flightsetupvm.GcaApproval.ApprovalID;
-                    int result3 = Util.doSQL(sqlgcaapprovalupdate);
-                     
-                }
-            }
-            else
-            {
-                if(flightsetupvm.GcaApproval.Coordinates == null)
-                { }
-                else
-                {
-                    string[] Coord = flightsetupvm.GcaApproval.Coordinates.Split(',');
-                    string Poly = flightsetupvm.GcaApproval.Coordinates + "," + Coord[0];
-                    //To insert in GCA_Approval table
-                    string sqlinsertgca = @"insert into GCA_Approval(ApprovalName,ApprovalDate,StartDate,EndDate,Coordinates,Polygon,CreatedOn,CreatedBy,DroneID,EndTime,StartTime,BoundaryInMeters,MinAltitude,MaxAltitude)
-                    values('" + flightsetupvm.GcaApproval.ApprovalName + "','" + System.DateTime.Now + "','" + System.DateTime.Now .AddDays(-1)+ "','" + todaydate.AddDays(90) + "','" +
-                    flightsetupvm.GcaApproval.Coordinates + "',geography::STGeomFromText('POLYGON((" + Poly + "))', 4326).MakeValid(),'" +
-                    System.DateTime.Now + "'," + Convert.ToInt32(Session["UserID"].ToString()) + "," + flightsetupvm.DroneSetup.DroneId +
-                    ",'23:59','00:00'" + ",50" + ",0,40)";
-                    int result2 = Util.doSQL(sqlinsertgca);
-                }               
-            }           
-            
-            string sqlcheck = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + flightsetupvm.DroneSetup.DroneId;
-            int result = Util.getDBInt(sqlcheck);
-            if (result > 0)
-            {
-                string sqlupdate = @"update MSTR_Drone_Setup set PilotUserId=" + flightsetupvm.DroneSetup.PilotUserId + ",GroundStaffUserId=" + flightsetupvm.DroneSetup.GroundStaffUserId +
-                ",[BatteryVoltage]=" + flightsetupvm.DroneSetup.BatteryVoltage + ",[Weather]='" + flightsetupvm.DroneSetup.Weather + "',[UasPhysicalCondition]='" + flightsetupvm.DroneSetup.UasPhysicalCondition
-                + "',[ModifiedBy]=" + Convert.ToInt32(Session["UserID"].ToString()) + ",[ModifiedOn]='" + System.DateTime.Now + "',[NotificationEmails]='" + flightsetupvm.DroneSetup.NotificationEmails
-                +"' where [DroneId]=" + flightsetupvm.DroneSetup.DroneId;
-                int result1 = Util.doSQL(sqlupdate);               
-            }
-            else
-            {              
-                    int ID = 0;                                   
-                    ExponentPortalEntities db = new ExponentPortalEntities();
-                    flightsetupvm.DroneSetup.CreatedBy = Convert.ToInt32(Session["UserID"].ToString());
-                    flightsetupvm.DroneSetup.CreatedOn = System.DateTime.Now;
-                    db.MSTR_Drone_Setup.Add(flightsetupvm.DroneSetup);
-                    db.SaveChanges();                    
-                    ID = flightsetupvm.DroneSetup.DroneSetupId;
-                    db.Dispose();
-              
-            }
-            return "OK";
-        }
+      if (ApprovalID == 0 && String.IsNullOrEmpty(ApprovalName)) {
+        //Approval is not selected or no name is specifeid
+        //then do not update approvals
+        SQL = String.Empty;
+      } else if(!String.IsNullOrEmpty(ApprovalName)) {
+        //when a new name is specified for approval
+        //save it as new approval     
+        SQL = @"insert into GCA_Approval(
+          ApprovalName,
+          ApprovalDate,
+          StartDate,
+          EndDate,
+          Coordinates,
+          Polygon,
+          CreatedOn,
+          CreatedBy,
+          DroneID,
+          EndTime,
+          StartTime,
+          BoundaryInMeters,
+          MinAltitude,
+          MaxAltitude
+        ) values(
+          '" + flightsetupvm.GcaApproval.ApprovalName + @"',
+          '" + System.DateTime.Now + @"',
+          '" + System.DateTime.Now.AddDays(-1) + @"',
+          '" + todaydate.AddDays(90) + @"',
+          '" + flightsetupvm.GcaApproval.Coordinates + @"',
+          geography::STGeomFromText('POLYGON((" + Poly + "))', 4326).MakeValid()," + 
+          "'" + System.DateTime.Now + "'," + 
+          Convert.ToInt32(Session["UserID"].ToString()) + "," + 
+          flightsetupvm.DroneSetup.DroneId + @",
+          '23:59',
+          '00:00',
+          50,
+          0,
+          40
+        )";
+        //
+      } else {
+        //Got an approval ID 
+        //Update the selected Approval ID
+        SQL = @"Update 
+          [GCA_Approval] 
+        set 
+          Polygon=geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+          Coordinates ='" + flightsetupvm.GcaApproval.Coordinates + @"',
+          BoundaryInMeters=50
+        where 
+          ApprovalID=" + ApprovalID;
+      }
+      if(!String.IsNullOrEmpty(SQL)) {
+        //Execute the sql statement generated
+        Util.doSQL(SQL);
+      }
 
-        
-        [HttpGet]
-    public ActionResult FillPilot(int? id,int?droneid){            
+      int DroneID = flightsetupvm.DroneSetup.DroneId;
+      SQL = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + DroneID ;
+      int DroneSetupId = Util.getDBInt(SQL);
+      if (DroneSetupId == 0) {
+        SQL = @"INSERT INTO MSTR_Drone_Setup (
+          DroneID,
+          CreatedBy,
+          CreatedOn
+        ) VALUES (
+          " + DroneID + @",
+          " + Session["UserID"] + @",
+          [ModifiedOn]=GETDATE()
+        )";
+        Util.doSQL(SQL);
+      }
+      if(flightsetupvm.DroneSetup.BatteryVoltage == null) flightsetupvm.DroneSetup.BatteryVoltage = 0;
+
+      SQL = @"update 
+        MSTR_Drone_Setup 
+      set 
+        PilotUserId=" + flightsetupvm.DroneSetup.PilotUserId + @",
+        GroundStaffUserId=" + flightsetupvm.DroneSetup.GroundStaffUserId + @",
+        [BatteryVoltage]=" + flightsetupvm.DroneSetup.BatteryVoltage + @",
+        [Weather]='" + flightsetupvm.DroneSetup.Weather + @"',
+        [UasPhysicalCondition]='" + flightsetupvm.DroneSetup.UasPhysicalCondition + @"',
+        [ModifiedBy]=" + Session["UserID"] + @",
+        [ModifiedOn]=GETDATE(),
+        [NotificationEmails]='" + flightsetupvm.DroneSetup.NotificationEmails + @"'
+      where 
+        [DroneId]=" + DroneID;
+      Util.doSQL(SQL);
+      return "OK";
+    }
+
+
+    [HttpGet]
+    public ActionResult FillPilot(int? id, int? droneid) {
 
       String SQL = "SELECT * FROM MSTR_Drone_Setup where DroneId=" + droneid;
       var Row = Util.getDBRow(SQL);
@@ -728,25 +774,23 @@ namespace eX_Portal.Controllers {
       ).ToList();
 
       Row.Add("Approvals", Approvals);
-      
+
       return Json(Row, JsonRequestBehavior.AllowGet);
     }
 
-        [HttpGet]
-        public ActionResult FillCordinates(int? ApprovalID)
-        {
+    [HttpGet]
+    public ActionResult FillCordinates(int? ApprovalID) {
 
-              var olistCoordinates = (
-              from p in db.GCA_Approval
-              where p.ApprovalID == ApprovalID
-              select new
-              {
-                  Cordinates = p.Coordinates
-              }
-            ).ToList();
-            
-            return Json(olistCoordinates, JsonRequestBehavior.AllowGet);
-        }
+      var olistCoordinates = (
+      from p in db.GCA_Approval
+      where p.ApprovalID == ApprovalID
+      select new {
+        Cordinates = p.Coordinates
+      }
+    ).ToList();
 
-    }//class
+      return Json(olistCoordinates, JsonRequestBehavior.AllowGet);
+    }
+
+  }//class
 }//namespace
