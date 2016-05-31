@@ -502,27 +502,44 @@ namespace eX_Portal.Models {
 
   [MetadataType(typeof(MSTR_DroneHelper))]
   public partial class MSTR_Drone {
+    }
 
-  }
+    public class MSTR_DroneHelper
+    {
+        [Required(ErrorMessage = "Please select Manufacturer")]
+        [Display(Name = "Manufacturer")]
+        public int ManufactureId { get; set; }
 
-  public class MSTR_DroneHelper {
-    [Required(ErrorMessage = "Please select Manufacturer")]
-    [Display(Name = "Manufacturer")]
-    public int ManufactureId { get; set; }
+        //[Required(ErrorMessage = "Please select Drone Name")]
+        //[Display(Name = "Drone Name")]
+        //public string DroneName { get; set; }
 
-    //[Required(ErrorMessage = "Please select Drone Name")]
-    //[Display(Name = "Drone Name")]
-    //public string DroneName { get; set; }
+        //[Required(ErrorMessage = "Please select Commission Date")]
+        //[Display(Name = "Commission Date")]
+        //public string CommissionDate { get; set; }
 
-    [Required(ErrorMessage = "Please select Commission Date")]
-    [Display(Name = "Commission Date")]
-    public string CommissionDate { get; set; }
+        [Required(ErrorMessage = "Please enter Rpas Serial Number")]
+        [Display(Name = "Rpas Serial No")]
+        public string RpasSerialNo { get; set; }
 
-    [Required(ErrorMessage = "Please enter Rpas Serial Number")]
-    [Display(Name = "Rpas Serial No")]
-    public string RpasSerialNo { get; set; }
-  }
+        [Required(ErrorMessage = "Please enter Reference Name")]
+        [Display(Name = "Reference name")]
+        public int RefName { get; set; }
 
+        [Required(ErrorMessage = "Please select Make")]
+        [Display(Name = "Make")]
+        public string MakeID { get; set; }
+
+        [Required(ErrorMessage = "Please select Model Name")]
+        [Display(Name = "Model Name")]
+        public string ModelID { get; set; }
+
+
+        //[Required(ErrorMessage = "Please select Camara")]
+        //[Display(Name = "Is Camara")]
+        //public int? IsCamara { get; set; }
+
+    }
 
     [MetadataType(typeof(BlackBoxTransactionHelper))]
     public partial class BlackBoxTransaction

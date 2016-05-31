@@ -15,6 +15,7 @@ namespace eX_Portal.Models
     public partial class MSTR_Drone
     {
         public int DroneId { get; set; }
+        public Nullable<int> AccountID { get; set; }
         public Nullable<int> ManufactureId { get; set; }
         public Nullable<int> UavTypeId { get; set; }
         public Nullable<int> PartsGroupId { get; set; }
@@ -34,7 +35,6 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> CommissionDate { get; set; }
         public Nullable<int> DroneSerialNo { get; set; }
         public Nullable<int> DroneDefinitionID { get; set; }
-        public Nullable<int> AccountID { get; set; }
         public Nullable<System.DateTime> DecommissionDate { get; set; }
         public Nullable<int> DecommissionBy { get; set; }
         public string DecommissionNote { get; set; }
@@ -54,5 +54,15 @@ namespace eX_Portal.Models
         public Nullable<int> LastFlightID { get; set; }
         public string RpasSerialNo { get; set; }
         public Nullable<int> BlackBoxID { get; set; }
+        public string RefName { get; set; }
+        public string Type { get; set; }
+        public string MaxAllupWeight { get; set; }
+        public string color { get; set; }
+        public Nullable<int> IsCamara { get; set; }
+        public Nullable<int> MakeID { get; set; }
+        public string MakeOther { get; set; }
+        public Nullable<int> ModelID { get; set; }
+        public string ManufactureOther { get; set; }
+        public string CameraDetails { get; set; }
     }
 }

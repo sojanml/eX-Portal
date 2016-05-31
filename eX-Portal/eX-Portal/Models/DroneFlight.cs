@@ -52,5 +52,6 @@ namespace eX_Portal.Models
         public Nullable<bool> IsInsideTimeFrame { get; set; }
         public Nullable<int> IsDistanceWarning { get; set; }
         public Nullable<int> IsDistanceCritical { get; set; }
+        public int ApprovalID { get; set; }
     }
 }

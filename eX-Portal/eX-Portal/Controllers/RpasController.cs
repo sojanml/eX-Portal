@@ -467,9 +467,14 @@ namespace eX_Portal.Controllers {
     }
 
     // GET: Rpas/UASRegister
-    public ActionResult UASRegister() {
+    public ActionResult UASRegister(int ID = 0) {
       if (!exLogic.User.hasAccess("RPAS.UASCREATE")) return RedirectToAction("NoAccess", "Home");
-
+            ViewBag.UserExist = false;
+            if (ID!=0)
+            {
+                ViewBag.UserExist = true;
+                ViewBag.UserID = ID;
+            }
       return View();
     }
 
