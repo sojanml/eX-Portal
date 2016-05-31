@@ -485,7 +485,7 @@ namespace eX_Portal.Models {
 
     [EmailAddress(ErrorMessage = "Invalid Email Address")]
     [Compare("EmailId")]
-    [Display(Name = "Conrim Email Address")]
+    [Display(Name = "Confirm Email Address")]
     public string confirmemailid { get; set; }
 
     [Required(ErrorMessage = "Please Enter Mobile Number")]
