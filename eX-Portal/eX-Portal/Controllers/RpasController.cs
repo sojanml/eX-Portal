@@ -316,7 +316,7 @@ namespace eX_Portal.Controllers {
 
       qView nView = new qView(SQL);
       //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
-      nView.addMenu("Create User", Url.Action("Create", "User", new { ID = "_PKey" }));
+      nView.addMenu("Create User", Url.Action("Create", "RpasUser", new { ID = "_PKey" }));
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
