@@ -9,7 +9,7 @@
 
     if (ViewBag.UserExist == true)
     {
-        Html.Action("UserDetailView", "User", new { ID = ViewBag.UserID });
+        @Html.Action("UserDetailView", "User", new { ID = ViewBag.UserID })
     }
 
     <div class="form-horizontal">
