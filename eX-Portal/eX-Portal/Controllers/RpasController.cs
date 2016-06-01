@@ -302,28 +302,64 @@ namespace eX_Portal.Controllers {
     // GET: Rpas
     public ActionResult Index() {
       if (!exLogic.User.hasAccess("RPAS.VIEW")) return RedirectToAction("NoAccess", "Home");
-      string SQL = "SELECT MSTR_RPAS_User.Name as [FullName],\n" +
-                   "LUP_Drone.Name AS Nationality,\n" +
-                   "MSTR_RPAS_User.EmiratesId as [EmiratesID],\n" +
-                   "MSTR_RPAS_User.EmailId as [Email],\n" +
-                   "MSTR_RPAS_User.MobileNo as [MobileNo],\n" +
-                   "MSTR_RPAS_User.Status,\n" +
-                   "Count(*) Over() as _TotalRecords,\n" +
-                   "RpasId as _PKey\n" +
-                   "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n" +
-                   "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n" +
-                   "where LUP_Drone.Type = 'Country' and (MSTR_RPAS_User.Status='New User Request' or MSTR_RPAS_User.Status='User Created')";
 
-      qView nView = new qView(SQL);
-      //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
-      nView.addMenu("Create User", Url.Action("Create", "RpasUser", new { ID = "_PKey" }));
-      if (Request.IsAjaxRequest()) {
-        Response.ContentType = "text/javascript";
-        return PartialView("qViewData", nView);
-      } else {
-        return View(nView);
-      }//if(IsAjaxRequest)
-       //return View(db.MSTR_RPAS_User.ToList());
+      string sqlprofileid = "select UserProfileId from MSTR_User where [UserId]="+Session["UserId"];
+      int profileid = Util.getDBInt(sqlprofileid);
+            if (profileid == 9)
+            {
+                string SQL = "SELECT MSTR_RPAS_User.Name as [FullName],\n" +
+                  "LUP_Drone.Name AS Nationality,\n" +
+                  "MSTR_RPAS_User.EmiratesId as [EmiratesID],\n" +
+                  "MSTR_RPAS_User.EmailId as [Email],\n" +
+                  "MSTR_RPAS_User.MobileNo as [MobileNo],\n" +
+                  "MSTR_RPAS_User.Status,\n" +
+                  "Count(*) Over() as _TotalRecords,\n" +
+                  "RpasId as _PKey\n" +
+                  "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n" +
+                  "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n" +
+                  "where LUP_Drone.Type = 'Country' and (MSTR_RPAS_User.Status='New User Request')";
+
+                qView nView = new qView(SQL);
+                //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
+                 nView.addMenu("Create User", Url.Action("Create", "RpasUser", new { ID = "_PKey" }));
+                 nView.addMenu("Edit", Url.Action("Edit", "Rpas", new { ID = "_PKey" }));
+                if (Request.IsAjaxRequest())
+                {
+                    Response.ContentType = "text/javascript";
+                    return PartialView("qViewData", nView);
+                }
+                else {
+                    return View(nView);
+                }//if(IsAjaxRequest)
+            }
+            else
+            {
+                string SQL = "SELECT MSTR_RPAS_User.Name as [FullName],\n" +
+                             "LUP_Drone.Name AS Nationality,\n" +
+                             "MSTR_RPAS_User.EmiratesId as [EmiratesID],\n" +
+                             "MSTR_RPAS_User.EmailId as [Email],\n" +
+                             "MSTR_RPAS_User.MobileNo as [MobileNo],\n" +
+                             "MSTR_RPAS_User.Status,\n" +
+                             "Count(*) Over() as _TotalRecords,\n" +
+                             "RpasId as _PKey\n" +
+                             "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n" +
+                             "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n" +
+                             "where LUP_Drone.Type = 'Country' and (MSTR_RPAS_User.Status='New User Request' or MSTR_RPAS_User.Status='User Created')";
+
+                qView nView = new qView(SQL);
+                //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
+                 nView.addMenu("Create User", Url.Action("Create", "RpasUser", new { ID = "_PKey" }));
+                 nView.addMenu("Edit", Url.Action("Edit", "Rpas", new { ID = "_PKey" }));
+                if (Request.IsAjaxRequest())
+                {
+                    Response.ContentType = "text/javascript";
+                    return PartialView("qViewData", nView);
+                }
+                else {
+                    return View(nView);
+                }//if(IsAjaxRequest)
+            }
+
     }
 
     // GET: Rpas/Details/5
@@ -382,27 +418,49 @@ namespace eX_Portal.Controllers {
 
     // GET: Rpas/Edit/5
     public ActionResult Edit(int? id) {
+      if (!exLogic.User.hasAccess("RPASREQUEST.EDIT")) return RedirectToAction("NoAccess", "Home");
       if (id == null) {
         return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
       }
       MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
-      if (mSTR_RPAS_User == null) {
-        return HttpNotFound();
-      }
-      return View(mSTR_RPAS_User);
-    }
+            if (mSTR_RPAS_User == null)
+            {
+                return HttpNotFound();
+            }
+            if (mSTR_RPAS_User.Status == "User Created")
+            {
+                Session["access"] = 1;
+            }
+            else
+            {
+                Session["access"] = 0;
+            }
+            return View(mSTR_RPAS_User);
+        }
 
     // POST: Rpas/Edit/5
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit([Bind(Include = "RpasId,Name,NationalityId,EmiratesId,EmailId,MobileNo,Status,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn")] MSTR_RPAS_User mSTR_RPAS_User) {
-      if (ModelState.IsValid) {
-        db.Entry(mSTR_RPAS_User).State = EntityState.Modified;
-        db.SaveChanges();
-        return RedirectToAction("Index");
-      }
+    public ActionResult Edit(MSTR_RPAS_User mSTR_RPAS_User) {
+
+      if (!exLogic.User.hasAccess("RPASREQUEST.EDIT")) return RedirectToAction("NoAccess", "Home");
+        ModelState.Remove("confirmemailid");
+        ModelState.Remove("confirmmobno");
+
+        if (ModelState.IsValid)
+        {
+                string SQL = "update MSTR_RPAS_User set \n" +
+                            "[Name] = '" + mSTR_RPAS_User.Name + "',\n" +
+                            "[NationalityId] =" + mSTR_RPAS_User.NationalityId + ",\n" +
+                            "[EmiratesId] = '" + mSTR_RPAS_User.EmiratesId + "',\n" +
+                            "[EmailId]='" + mSTR_RPAS_User.EmailId + "',\n" +
+                            "[MobileNo]='" + mSTR_RPAS_User.MobileNo + "',\n" +
+                            "[ModifiedBy]=" + Session["UserID"] + ",\n" +
+                            "[ModifiedOn]=getdate()\n" +
+                            "where [RpasId] =" + mSTR_RPAS_User.RpasId;
+                int result = Util.doSQL(SQL);
+            return RedirectToAction("Index");
+        }
       return View(mSTR_RPAS_User);
     }
 
