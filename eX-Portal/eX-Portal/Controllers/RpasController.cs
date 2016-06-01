@@ -468,7 +468,8 @@ namespace eX_Portal.Controllers {
 
     // GET: Rpas/UASRegister
     public ActionResult UASRegister(int ID = 0) {
-      if (!exLogic.User.hasAccess("RPAS.UASCREATE")) return RedirectToAction("NoAccess", "Home");
+
+            if (!exLogic.User.hasAccess("RPAS.UASCREATE")) return RedirectToAction("NoAccess", "Home");
             ViewBag.UserExist = false;
             if (ID!=0)
             {
@@ -528,7 +529,16 @@ namespace eX_Portal.Controllers {
         if (ModelState.IsValid) {
           string updatesql = "update MSTR_Drone set [ManufactureId]=" + mSTR_Drone.ManufactureId +
                              ",[ModifiedBy] =" + Session["UserID"] + ",[ModifiedOn] ='" + System.DateTime.Now.ToString("MM/dd/yyyy") +
-                             "',[CommissionDate] ='" + mSTR_Drone.CommissionDate.Value.ToString("MM/dd/yyyy") +
+                             "',[MakeID] ='" + mSTR_Drone.MakeID +
+                             "',[MakeOther] ='" + mSTR_Drone.MakeOther +
+                             "',[ModelID] ='" + mSTR_Drone.ModelID +
+                             "',[ManufactureOther] ='" + mSTR_Drone.ManufactureOther +
+                             "',[color] ='" + mSTR_Drone.color +
+                             "',[MaxAllupWeight] ='" + mSTR_Drone.MaxAllupWeight +
+                             "',[Type] ='" + mSTR_Drone.Type +
+                             "',[RefName] ='" + mSTR_Drone.RefName +
+                             "',[ModelName] ='" + mSTR_Drone.ModelName +
+                             "',[CameraDetails] ='" + mSTR_Drone.CameraDetails +
                              "',RpasSerialNo = '" + mSTR_Drone.RpasSerialNo + "' where[DroneId] =" + mSTR_Drone.DroneId;
           int result = Util.doSQL(updatesql);
           return RedirectToAction("UAS");
