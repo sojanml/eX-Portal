@@ -321,8 +321,8 @@ namespace eX_Portal.Controllers {
 
                 qView nView = new qView(SQL);
                 //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
-                 nView.addMenu("Create User", Url.Action("Create", "RpasUser", new { ID = "_PKey" }));
-                 nView.addMenu("Edit", Url.Action("Edit", "Rpas", new { ID = "_PKey" }));
+                if (exLogic.User.hasAccess("RPASUSER.CREATE")) nView.addMenu("Create User", Url.Action("Create", "RpasUser", new { ID = "_PKey" }));
+                if (exLogic.User.hasAccess("RPASREQUEST.EDIT")) nView.addMenu("Edit", Url.Action("Edit", "Rpas", new { ID = "_PKey" }));
                 if (Request.IsAjaxRequest())
                 {
                     Response.ContentType = "text/javascript";
@@ -348,8 +348,8 @@ namespace eX_Portal.Controllers {
 
                 qView nView = new qView(SQL);
                 //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
-                 nView.addMenu("Create User", Url.Action("Create", "RpasUser", new { ID = "_PKey" }));
-                 nView.addMenu("Edit", Url.Action("Edit", "Rpas", new { ID = "_PKey" }));
+                if (exLogic.User.hasAccess("RPASUSER.CREATE")) nView.addMenu("Create User", Url.Action("Create", "RpasUser", new { ID = "_PKey" }));
+                if (exLogic.User.hasAccess("RPASREQUEST.EDIT")) nView.addMenu("Edit", Url.Action("Edit", "Rpas", new { ID = "_PKey" }));
                 if (Request.IsAjaxRequest())
                 {
                     Response.ContentType = "text/javascript";
