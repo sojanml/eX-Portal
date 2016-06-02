@@ -26,9 +26,7 @@ namespace eX_Portal.Controllers
                          "MSTR_Profile.ProfileName as Profile,\n" +
                          "MSTR_Account.Name as Account,\n" +
                          "MSTR_User.MobileNo as Mobile,\n" +
-                         "MSTR_User.EmailId,\n" +
-                         "case when MSTR_User.IsPilot = 1 then 'Yes' else case when MSTR_User.IsPilot = 0 then 'No' else '' end end as 'IsPilot?',\n" +
-                         "MSTR_User.Dashboard, \n" +
+                         "MSTR_User.EmailId,\n" +                         
                          "Count(*) Over() as _TotalRecords,\n" +
                          "UserId as _PKey\n" +
                          "FROM \n" +
@@ -307,6 +305,7 @@ namespace eX_Portal.Controllers
             ModelState.Remove("User.UserProfileId");
             ModelState.Remove("User.IsActive");
             ModelState.Remove("User.IsPilot");
+            
             if (String.IsNullOrEmpty(UserModel.User.RPASPermitNo)) ModelState.AddModelError("User.RPASPermitNo", "Please enter the RPAS Permit Number");
             if (String.IsNullOrEmpty(UserModel.User.PermitCategory)) ModelState.AddModelError("User.PermitCategory", "Please select the RPAS Permit Category");
             if (String.IsNullOrEmpty(UserModel.User.ContactAddress)) ModelState.AddModelError("User.ContactAddress", "Please enter Contact Address");
