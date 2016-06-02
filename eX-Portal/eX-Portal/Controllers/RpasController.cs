@@ -551,7 +551,7 @@ namespace eX_Portal.Controllers {
         db.SaveChanges();
         int id = mSTR_Drone.DroneId;
 
-        return RedirectToAction("UAS");
+        return RedirectToAction("Index","RpasUser");
       }
 
       return View(mSTR_Drone);
