@@ -29,5 +29,9 @@ namespace eX_Portal.Models
         public Nullable<int> DroneID { get; set; }
         public Nullable<int> ApprovalID { get; set; }
         public string Note { get; set; }
+        public Nullable<System.DateTime> RentStartDate { get; set; }
+        public Nullable<System.DateTime> RentEndDate { get; set; }
+        public string RentType { get; set; }
+        public Nullable<decimal> RentAmount { get; set; }
     }
 }

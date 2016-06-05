@@ -1,0 +1,41 @@
+﻿@model eX_Portal.ViewModel.BlackBoxViewModel
+@using eX_Portal.exLogic
+@{
+    ViewBag.Title = "Rent";
+    Layout = "~/Views/Shared/_eXPortal.cshtml";
+}
+
+<h2>Rent</h2>
+
+<script src="~/Scripts/bootstrap.js"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "createForm" }))
+{
+    <input type="hidden" name="droneid" value="@ViewBag.DroneId" />
+    <input type="hidden" name="createdby" value="@ViewBag.CreatedBy" />
+
+    @Html.HiddenFor(model => model.BBTransaction.ID)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.BBTransaction.BlackBoxID, "Black Box", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.BBTransaction.BlackBoxID, Util.GetBB(), "--Select Black Box--")
+            @Html.ValidationMessageFor(model => model.BBTransaction.BlackBoxID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(model=>model.BBTransaction.RentStartDate)
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.BBTransaction.RentStartDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
+            @Html.ValidationMessageFor(model => model.BBTransaction.RentStartDate)
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(model => model.BBTransaction.RentEndDate)
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.BBTransaction.RentEndDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
+            @Html.ValidationMessageFor(model => model.BBTransaction.RentStartDate)
+        </div>
+    </div>
+
+
+}

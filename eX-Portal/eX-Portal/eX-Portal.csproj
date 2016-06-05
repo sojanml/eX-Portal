@@ -251,6 +251,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BlackBoxCost.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\BlackBoxData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -416,7 +419,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Portaldb.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Portaldb1.Designer.cs" />
     <Compile Include="Models\ProductDefinition.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -813,6 +815,9 @@
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\UAScreation.js" />
     <Content Include="Scripts\user.js" />
+    <Content Include="Models\Portaldb.edmx.diagram">
+      <DependentUpon>Portaldb.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\_references.js" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="stylesheets\dewa-dashboard.css" />
@@ -1138,6 +1143,8 @@
     <Content Include="Views\RpasUser\Details.cshtml" />
     <Content Include="Views\RpasUser\Edit.cshtml" />
     <Content Include="Views\RpasUser\Index.cshtml" />
+    <Content Include="Views\BlackBox\Cost.cshtml" />
+    <Content Include="Views\BlackBox\Rent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

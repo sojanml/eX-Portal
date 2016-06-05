@@ -11,9 +11,10 @@ namespace eX_Portal.ViewModel
     {
         public IEnumerable<SelectListItem> BlackBoxList { get; set; }
         public  BlackBoxTransaction BBTransaction { get; set; }
-
         public IEnumerable<SelectListItem> CollectionMode { get; set; }
 
+        public  IList<BlackBoxCost> BlackBoxCostList { get; set; } 
+   }
 
-    }
+
 }

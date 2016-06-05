@@ -5,6 +5,18 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ExponentPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BlackBoxCost">
+          <Key>
+            <PropertyRef Name="CostID" />
+          </Key>
+          <Property Name="CostID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RentAmount" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="RentType" Type="nvarchar" MaxLength="30" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="LastUpdatedBy" Type="int" />
+          <Property Name="LastupdatedOn" Type="datetime" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BlackBoxData">
@@ -56,6 +68,10 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="DroneID" Type="int" />
           <Property Name="ApprovalID" Type="int" />
           <Property Name="Note" Type="nvarchar" MaxLength="200" />
+          <Property Name="RentStartDate" Type="datetime" />
+          <Property Name="RentEndDate" Type="datetime" />
+          <Property Name="RentType" Type="nvarchar" MaxLength="50" />
+          <Property Name="RentAmount" Type="decimal" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="DroneCheckList">
           <Key>
@@ -1167,6 +1183,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Parameter Name="IsAccess" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="ExponentPortalModelStoreContainer">
+          <EntitySet Name="BlackBoxCost" EntityType="Self.BlackBoxCost" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxTransaction" EntityType="Self.BlackBoxTransaction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckList" EntityType="Self.DroneCheckList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckListItem" EntityType="Self.DroneCheckListItem" Schema="dbo" store:Type="Tables" />
@@ -1814,6 +1831,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="BlackBoxTransactions" EntityType="ExponentPortalModel.BlackBoxTransaction" />
           <EntitySet Name="FlightMapDatas" EntityType="ExponentPortalModel.FlightMapData" />
           <EntitySet Name="MSTR_Drone" EntityType="ExponentPortalModel.MSTR_Drone" />
+          <EntitySet Name="BlackBoxCosts" EntityType="ExponentPortalModel.BlackBoxCost" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2558,6 +2576,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="DroneID" Type="Int32" />
           <Property Name="ApprovalID" Type="Int32" />
           <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RentStartDate" Type="DateTime" Precision="3" />
+          <Property Name="RentEndDate" Type="DateTime" Precision="3" />
+          <Property Name="RentType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RentAmount" Type="Decimal" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="FlightMapData">
           <Key>
@@ -2658,6 +2680,18 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="ModelID" Type="Int32" />
           <Property Name="ManufactureOther" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CameraDetails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BlackBoxCost">
+          <Key>
+            <PropertyRef Name="CostID" />
+          </Key>
+          <Property Name="CostID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RentAmount" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="RentType" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="LastUpdatedBy" Type="Int32" />
+          <Property Name="LastupdatedOn" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3730,6 +3764,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="BlackBoxTransactions">
             <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxTransaction">
               <MappingFragment StoreEntitySet="BlackBoxTransaction">
+                <ScalarProperty Name="RentAmount" ColumnName="RentAmount" />
+                <ScalarProperty Name="RentType" ColumnName="RentType" />
+                <ScalarProperty Name="RentEndDate" ColumnName="RentEndDate" />
+                <ScalarProperty Name="RentStartDate" ColumnName="RentStartDate" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
                 <ScalarProperty Name="DroneID" ColumnName="DroneID" />
@@ -3847,6 +3885,19 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="ManufactureId" ColumnName="ManufactureId" />
                 <ScalarProperty Name="AccountID" ColumnName="AccountID" />
                 <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlackBoxCosts">
+            <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxCost">
+              <MappingFragment StoreEntitySet="BlackBoxCost">
+                <ScalarProperty Name="LastupdatedOn" ColumnName="LastupdatedOn" />
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="RentType" ColumnName="RentType" />
+                <ScalarProperty Name="RentAmount" ColumnName="RentAmount" />
+                <ScalarProperty Name="CostID" ColumnName="CostID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
