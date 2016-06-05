@@ -167,9 +167,21 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("FLIGHT.EDIT")) return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "Edit UAS Flight";
-      ExponentPortalEntities db = new ExponentPortalEntities();
-      db.Entry(InitialData).State = EntityState.Modified;
-      db.SaveChanges();
+      // ExponentPortalEntities db = new ExponentPortalEntities();
+      // db.Entry(InitialData).State = EntityState.Modified;
+      // db.SaveChanges();
+
+      String SQL = @"UPDATE [DroneFlight] SET
+        PilotID=" + InitialData.PilotID + @",
+        GSCID=" + InitialData.GSCID + @",
+        FlightDate='" + ((DateTime)InitialData.FlightDate).ToString("yyyy-MM-dd HH:mm:ss") + @"',
+        DroneID=" + InitialData.DroneID + @",
+        Latitude=" + InitialData.Latitude + @",
+        Longitude=" + InitialData.Longitude + @"
+      WHERE
+        ID=" + InitialData.ID;
+      Util.doSQL(SQL);
+
       //insert/update in log table
       string sqlcheck = "select Id from MSTR_Pilot_Log where FlightID=" + InitialData.ID;
       int result = Convert.ToInt32(Util.getDBInt(sqlcheck));
