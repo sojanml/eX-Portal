@@ -541,5 +541,66 @@ namespace eX_Portal.Controllers {
             //return View();
         }
 
+
+        //Get:BlackBoxCost/Cost
+        public ActionResult Cost()
+        {
+            //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+
+            BlackBoxCost BB = new BlackBoxCost();
+
+            List<BlackBoxCost> Bl = db.BlackBoxCosts.ToList();
+            return View(Bl);
+        }
+
+        [HttpPost]
+        public ActionResult Cost(List<BlackBoxCost> BBCList)
+        {
+            //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+            
+            foreach(BlackBoxCost BB in BBCList)
+            { 
+
+               // BB.CreatedBy = Util.getLoginUserID();
+              
+                BB.LastUpdatedBy = Util.getLoginUserID();
+                db.Entry(BB).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+           
+            // IList<BlackBoxCost> Bl = db.BlackBoxCosts.ToList();
+            return View(db.BlackBoxCosts.ToList());
+        }
+
+        //Get:BlackBoxCost/Rent
+        public ActionResult Rent()
+        {
+            //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+
+            BlackBoxViewModel BV = new BlackBoxViewModel();
+
+
+            List<BlackBoxCost> Bl = db.BlackBoxCosts.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Rent(List<BlackBoxCost> BBCList)
+        {
+            //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+
+            foreach (BlackBoxCost BB in BBCList)
+            {
+
+                // BB.CreatedBy = Util.getLoginUserID();
+
+                BB.LastUpdatedBy = Util.getLoginUserID();
+                db.Entry(BB).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            // IList<BlackBoxCost> Bl = db.BlackBoxCosts.ToList();
+            return View(db.BlackBoxCosts.ToList());
+        }
     }//class
 }//namespace

@@ -5,16 +5,16 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace eX_Portal.ViewModel {
+namespace eX_Portal.ViewModel
+{
+    public class BlackBoxViewModel
+    {
+        public IEnumerable<SelectListItem> BlackBoxList { get; set; }
+        public  BlackBoxTransaction BBTransaction { get; set; }
+        public IEnumerable<SelectListItem> CollectionMode { get; set; }
 
-
-  public class BlackBoxViewModel {
-    public IEnumerable<SelectListItem> BlackBoxList { get; set; }
-    public BlackBoxTransaction BBTransaction { get; set; }
-
-    public IEnumerable<SelectListItem> CollectionMode { get; set; }
-
-  }
+        public  IList<BlackBoxCost> BlackBoxCostList { get; set; } 
+   }
 
 
 }
