@@ -29,9 +29,11 @@ namespace eX_Portal.exLogic {
             CAST(DroneID as VarChar) + ' - ' +  [DroneName] as DroneName,
             [DroneId] 
           from 
-            [MSTR_Drone] 
+            [MSTR_Drone]";
+          if (!exLogic.User.hasAccess("DRONE.MANAGE")) cmd.CommandText += @"
           where 
-            [AccountID]=" + accountid + @"
+            [AccountID]=" + accountid;
+          cmd.CommandText += @"
           order by 
             [DroneID] asc";
           cmd.CommandType = CommandType.Text;

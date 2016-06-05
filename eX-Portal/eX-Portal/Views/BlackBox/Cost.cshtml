@@ -1,0 +1,36 @@
+﻿@model List<eX_Portal.Models.BlackBoxCost>
+@{
+    ViewBag.Title = "Cost";
+    Layout = "~/Views/Shared/_eXPortal.cshtml";
+}
+ 
+<h2>Cost</h2>
+
+<section class="general-form" id="loginForm">
+    <script src="~/Scripts/bootstrap.js"></script>
+    @using (Html.BeginForm("Cost", "BlackBox", FormMethod.Post))
+    {
+        for (int i = 0; i < Model.Count; i++)
+        {
+            @Html.HiddenFor(x => Model[i].CostID)
+            @Html.HiddenFor(x => Model[i].RentType)
+            @Html.HiddenFor(x => Model[i].CreatedOn)
+            
+        <div class="editor-label">
+           @Model[i].RentType
+        </div>
+        <div class="editor-field">
+
+            @Html.EditorFor(x => Model[i].RentAmount)
+            @Html.ValidationMessageFor(x => Model[i].RentAmount)
+        </div>
+
+
+
+        }
+        <div class="form-toolbar">
+            <input type="submit" value="Save" />
+        </div>
+
+    }
+     </section>

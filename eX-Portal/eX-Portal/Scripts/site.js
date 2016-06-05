@@ -66,8 +66,10 @@ $(document).ready(function () {
   });
 
 
-  $('input.date-picker').datepicker({
+  if (jQuery.ui) $('input.date-picker').datepicker({
     dateFormat: 'dd-M-yy',
+    changeYear: true,
+    changeMonth: true
   });
 
   checkTime();

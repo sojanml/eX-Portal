@@ -367,7 +367,7 @@ namespace eX_Portal.exLogic {
       WeatherViewModel WeatherFromFile = new WeatherViewModel();
       // string forecastUrl = "http://weather.yahooapis.com/forecastrss?&" + "p=" + Location + "&u=c";
       //  string forecastUrl = "http://weather.yahooapis.com/forecastrss?w=" + Location + "&u=c";
-      string forecastUrl = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid=" + Location + " AND u='c'";
+      string forecastUrl = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid=" + Location + " AND u='f'";
       // open a XmlTextReader object using the constructed url
       XmlTextReader reader = new XmlTextReader(forecastUrl);
       // loop through xml result node by node
@@ -389,7 +389,7 @@ namespace eX_Portal.exLogic {
           // put it into the correct units
 
           if (temp == "c") {
-            Weather.TemperatureUnit = "°C";
+            Weather.TemperatureUnit = "&deg;C";
           } else {
             Weather.TemperatureUnit = "ºF";
           }
@@ -397,10 +397,8 @@ namespace eX_Portal.exLogic {
           temp = reader.GetAttribute("distance");
           if (temp == "km") {
             Weather.DistanceUnit = "Kilometeres";
-
           } else {
             Weather.DistanceUnit = "Miles";
-
           }
 
           temp = reader.GetAttribute("pressure");
