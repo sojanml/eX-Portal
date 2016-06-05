@@ -29,9 +29,9 @@ namespace eX_Portal.exLogic {
       "  M2M_ProfileMenu.ProfileID = MSTR_Profile.ProfileId AND\n" +
       "  MSTR_Menu.MenuId = M2M_ProfileMenu.MenuID AND\n" +
       "  MSTR_Menu.PermissionId = '" + PermissionID + "'";
-      String PermissionCount = Util.getDBVal(SQL);
+      int PermissionCount = Util.getDBInt(SQL);
 
-      return (PermissionCount == "1");
+      return (PermissionCount > 0);
     }
 
     public static bool hasDrone(int DroneID) {

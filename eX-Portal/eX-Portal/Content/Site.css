@@ -1109,3 +1109,19 @@ div#alertLine ul li.warning {
     border-top: 2px silver solid;
     background-color: #ededed
 }
+
+div.two-column-form-group div.form-group {
+  float: left;
+  width:49%;
+}
+div.two-column-form-group div.form-group:first-child {
+  margin-right:2%;
+}
+div.two-column-form-group:after {
+   content: "";
+   clear:both;
+}
+select.ui-datepicker-month,
+select.ui-datepicker-year {
+  height: auto !important;
+}
