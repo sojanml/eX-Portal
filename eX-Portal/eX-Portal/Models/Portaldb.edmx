@@ -16,6 +16,7 @@
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="LastUpdatedBy" Type="int" />
           <Property Name="LastupdatedOn" Type="datetime" />
+          <Property Name="RentDays" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1009,6 +1010,12 @@ warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primar
           <Property Name="SMSSend" Type="int" />
           <Property Name="AlertCategory" Type="nvarchar" MaxLength="25" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'TestPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="PortalAlert_User">
+          <Property Name="AlertID" Type="int" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -1091,6 +1098,13 @@ warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primar
           <Property Name="RecordType" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SMSTable">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="CellNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1229,6 +1243,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SMSTable" EntityType="Self.SMSTable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserLog" EntityType="Self.UserLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxData" EntityType="Self.BlackBoxData" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1832,6 +1847,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="FlightMapDatas" EntityType="ExponentPortalModel.FlightMapData" />
           <EntitySet Name="MSTR_Drone" EntityType="ExponentPortalModel.MSTR_Drone" />
           <EntitySet Name="BlackBoxCosts" EntityType="ExponentPortalModel.BlackBoxCost" />
+          <EntitySet Name="SMSTables" EntityType="ExponentPortalModel.SMSTable" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2692,6 +2708,14 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="LastUpdatedBy" Type="Int32" />
           <Property Name="LastupdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="RentDays" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SMSTable">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="CellNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3891,6 +3915,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="BlackBoxCosts">
             <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxCost">
               <MappingFragment StoreEntitySet="BlackBoxCost">
+                <ScalarProperty Name="RentDays" ColumnName="RentDays" />
                 <ScalarProperty Name="LastupdatedOn" ColumnName="LastupdatedOn" />
                 <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
@@ -3898,6 +3923,14 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="RentType" ColumnName="RentType" />
                 <ScalarProperty Name="RentAmount" ColumnName="RentAmount" />
                 <ScalarProperty Name="CostID" ColumnName="CostID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SMSTables">
+            <EntityTypeMapping TypeName="ExponentPortalModel.SMSTable">
+              <MappingFragment StoreEntitySet="SMSTable">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

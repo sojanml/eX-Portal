@@ -5,16 +5,42 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace eX_Portal.ViewModel
-{
-    public class BlackBoxViewModel
-    {
-        public IEnumerable<SelectListItem> BlackBoxList { get; set; }
-        public  BlackBoxTransaction BBTransaction { get; set; }
-        public IEnumerable<SelectListItem> CollectionMode { get; set; }
+namespace eX_Portal.ViewModel {
 
-        public  IList<BlackBoxCost> BlackBoxCostList { get; set; } 
-   }
+  public partial class BlackBoxCostCalucation : BlackBoxCost {
+    private bool _isSelected = false;
+    public bool isSelected {
+      get { return _isSelected; }
+      set { _isSelected = value; }
+    }
+    public Double CalcuatedCost { get; set; }
+    public int CalcuatedDays { get; set; }
+    public int SectionDays { get; set; }
+
+    public Double getItemCost(int NumOfDays) {
+      CalcuatedDays = NumOfDays;
+      if (RentAmount == null) RentAmount = 0;
+      int TheSecion = NumOfDays / RentDays ;
+      if (NumOfDays % RentDays > 0) TheSecion++;
+      if (TheSecion < 1) TheSecion = 1;
+      CalcuatedCost = TheSecion * (Double)RentAmount;
+      SectionDays = TheSecion;
+      return CalcuatedCost;
+    }
+
+  }
+
+
+
+
+
+  public class BlackBoxViewModel {
+    public IEnumerable<SelectListItem> BlackBoxList { get; set; }
+    public BlackBoxTransaction BBTransaction { get; set; }
+    public IEnumerable<SelectListItem> CollectionMode { get; set; }
+
+    public IList<BlackBoxCostCalucation> BlackBoxCostList { get; set; }
+  }
 
 
 }

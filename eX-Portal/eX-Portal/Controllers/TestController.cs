@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using eX_Portal.exLogic;
 using eX_Portal.Models;
 using System.Text;
+using eX_Portal.ViewModel;
 
 namespace eX_Portal.Controllers {
   public class TestController : Controller {
@@ -92,6 +93,16 @@ namespace eX_Portal.Controllers {
 
 
 
+    }
+
+    public ActionResult BlackBox() {
+      BlackBox BB = new BlackBox();
+      var theList = new List<List<BlackBoxCostCalucation>>();
+      theList.Add(BB.getBlackBoxCost(10));
+      theList.Add(BB.getBlackBoxCost(15));
+      theList.Add(BB.getBlackBoxCost(20));
+
+      return View(theList);
     }
 
     private String getReads(String RFID, String uKey) {

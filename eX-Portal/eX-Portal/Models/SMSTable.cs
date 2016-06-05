@@ -12,15 +12,9 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BlackBoxCost
+    public partial class SMSTable
     {
-        public int CostID { get; set; }
-        public Nullable<decimal> RentAmount { get; set; }
-        public string RentType { get; set; }
-        public Nullable<int> CreatedBy { get; set; }
-        public Nullable<System.DateTime> CreatedOn { get; set; }
-        public Nullable<int> LastUpdatedBy { get; set; }
-        public Nullable<System.DateTime> LastupdatedOn { get; set; }
-        public int RentDays { get; set; }
+        public string CellNumber { get; set; }
+        public int ID { get; set; }
     }
 }
