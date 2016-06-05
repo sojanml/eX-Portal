@@ -56,7 +56,7 @@ namespace eX_Portal.ViewModel {
     public string ZoneCoordinates { get; set; }
     public string DroneName { get; set; }
     public IList<PortalAlert> PortalAlerts { get; set; }
-    public IList<ApprovalInfo> Approvals { get; set; }
+    public IList<GCA_Approval> Approvals { get; set; }
     public IList<DroneFlightVideo> Videos { get; set; }
 
     public FlightInfo Info { get; set; }

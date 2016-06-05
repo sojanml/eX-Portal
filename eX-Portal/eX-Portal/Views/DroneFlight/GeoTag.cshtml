@@ -16,6 +16,7 @@
   };
   <li>
     <div class="delete-icon"><a href="#" class="delete"  data-file="@item.DocumentName"><span class="delete icon">&#xf057;</span></a></div>
+    <div class="download-icon"><a href="/upload/drone/@DroneName/@FlightID/@item.DocumentName"><span class="download icon">&#xf019;</span></a></div>
     <div class="thumbnail">
       <img src="/upload/drone/@DroneName/@FlightID/@item.DocumentName.Replace(".jpg", ".t.png")" />
     </div>
@@ -40,7 +41,18 @@
   <script type="text/javascript">
     var UploadURL = '@Url.Action("UploadFile", new { ID = ViewBag.FlightID, DocumentType="Geo Tag"})';
     var DeleteURL = '@Url.Action("DeleteFile", new { ID = ViewBag.FlightID, DocumentType="Geo Tag"})';
+    var GpsTags = [
+    @foreach (var item in Model) {<text>
+      {
+        lat:  @item.Latitude,
+        lng:  @item.Longitude,
+        file: "@item.DocumentName"
+      },
+    </text>}
+    ]
   </script>
+
+
   <script type="text/javascript" src="~/Scripts/flight-gps-tag.js"></script>
 }
 

@@ -16,14 +16,14 @@ UL#FileUploadProgress {
     margin: 5px 0px 5px 0px;
   }
 
-  UL#FileUploadProgress LI.success {
-    color: green;
-  }
+    UL#FileUploadProgress LI.success {
+      color: green;
+    }
 
-  UL#FileUploadProgress LI.error {
-    color: #ea050e;
-  }
-  
+    UL#FileUploadProgress LI.error {
+      color: #ea050e;
+    }
+
 
 UL#UploadedFilesList {
   margin: 20px 20px 0px 0px;
@@ -37,23 +37,25 @@ UL#UploadedFilesList {
     border-bottom: 1px silver solid;
   }
 
-  UL#UploadedFilesList LI.processing{
-    color: green;
-  }
-  UL#UploadedFilesList LI.success{
-    color: green;
-    font-weight:bold;
-  }
+    UL#UploadedFilesList LI.processing {
+      color: green;
+    }
 
-  UL#UploadedFilesList LI.error{
-    color: red;
-    font-weight:bold;
-  }
-    UL#UploadedFilesList LI.delete{
-    color: red;
-    font-weight:bold;
-    text-decoration:line-through !important;
-  }
+    UL#UploadedFilesList LI.success {
+      color: green;
+      font-weight: bold;
+    }
+
+    UL#UploadedFilesList LI.error {
+      color: red;
+      font-weight: bold;
+    }
+
+    UL#UploadedFilesList LI.delete {
+      color: red;
+      font-weight: bold;
+      text-decoration: line-through !important;
+    }
 
     UL#UploadedFilesList LI div.icon,
     UL#UploadedFilesList LI div.info {
@@ -70,8 +72,9 @@ UL#UploadedFilesList {
 
     UL#UploadedFilesList LI div.right-section {
       float: right;
-      margin-top:5px;
+      margin-top: 5px;
     }
+
     UL#UploadedFilesList LI div.toolbar {
       text-align: right;
     }
@@ -79,7 +82,6 @@ UL#UploadedFilesList {
 div.recordinfo {
   text-align: right;
   padding-top: 10px;
-
 }
 
 UL#UploadedFilesList LI div.toolbar A {
@@ -93,7 +95,7 @@ UL#UploadedFilesList LI div.toolbar A {
   cursor: pointer;
   font-family: 'Conv_DINNextLTPro-LightCondensed', Arial;
   text-decoration: none;
-  margin:5px 0px 0px 10px;
+  margin: 5px 0px 0px 10px;
 }
 
   UL#UploadedFilesList LI div.toolbar A:hover {
@@ -101,43 +103,60 @@ UL#UploadedFilesList LI div.toolbar A {
   }
 
 
-  #file-info-status {
-    color: red;
-    padding-left:30px;
+#file-info-status {
+  color: red;
+  padding-left: 30px;
+}
 
-  }
-
-  ul#GPS-Images {
-    list-style;none;
-    margin:0px;
-    padding:0px;
-  }
+ul#GPS-Images {
+  list-style;
+  none;
+  margin: 0px;
+  padding: 0px;
+}
 
   ul#GPS-Images li {
-  width:100px;
-  height:auto;
-  float:left;
-  margin:0px 20px 20px 0px;
-  list-style:none;
-  position:relative;
-  display:block;
+    width: 100px;
+    height: auto;
+    float: left;
+    margin: 0px 20px 20px 0px;
+    list-style: none;
+    position: relative;
+    display: block;
   }
 
- ul#GPS-Images li div.delete-icon  {
-  position:absolute;
-  right:10px;
-  top:10px;
-  z-index:20;
+    ul#GPS-Images li:hover div.delete-icon,
+    ul#GPS-Images li:hover div.download-icon {
+      display: block;
+    }
 
-  }
-  ul#GPS-Images li div.delete-icon  a {
-      text-decoration:none !important;
-  }
-  ul#GPS-Images li div.delete-icon  a span.icon {
-    color:white;
-    font-size:22px !important;
-        text-shadow: 1px 1px 3px black;
-  }
-  ul#GPS-Images li div.delete-icon  a:hover span.icon {
-    color:red;
-  }
+    ul#GPS-Images li div.delete-icon,
+    ul#GPS-Images li div.download-icon {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      z-index: 20;
+      display: none;
+    }
+    ul#GPS-Images li div.download-icon {
+      top:35px;
+    }
+
+      ul#GPS-Images li a  {
+        text-decoration: none !important;
+      }
+
+        ul#GPS-Images li a span.icon {
+          color: white;
+          font-size: 22px !important;
+          text-shadow: 1px 1px 4px #484747;
+        }
+
+        ul#GPS-Images li div.delete-icon a:hover span.icon {
+          color: chocolate;
+          text-shadow: 1px 1px 4px silver;
+        }
+        ul#GPS-Images li div.download-icon a:hover span.icon {
+          color: forestgreen;
+          text-shadow: 1px 1px 4px silver;
+        }
