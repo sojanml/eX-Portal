@@ -786,6 +786,7 @@
     <Content Include="Scripts\flight-gps-tag.js" />
     <Content Include="Scripts\FlightChart.js" />
     <Content Include="Scripts\flightCreation.js" />
+    <Content Include="Scripts\geotag.js" />
     <Content Include="Scripts\GoogleMapLabel.js" />
     <Content Include="Scripts\HomeMap.js" />
     <Content Include="Scripts\infobox.js" />
@@ -1138,6 +1139,7 @@
     <Content Include="Views\RpasUser\Details.cshtml" />
     <Content Include="Views\RpasUser\Edit.cshtml" />
     <Content Include="Views\RpasUser\Index.cshtml" />
+    <Content Include="Views\PayLoad\GeoTag.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

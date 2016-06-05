@@ -35,7 +35,7 @@ namespace eX_Portal.Controllers {
       FROM
         GCA_Approval
       LEFT JOIN MSTR_User ON
-        MSTR_User.UserID = GCA_Approval.CreatedBy ";
+        MSTR_User.UserID = GCA_Approval.CreatedBy where ApprovalStatus = 'Approved'";
 
             qView nView = new qView(SQL);
             //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))

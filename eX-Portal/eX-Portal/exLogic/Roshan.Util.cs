@@ -135,5 +135,15 @@ namespace eX_Portal.exLogic
             }
         }
 
+        public static String getDroneNameByDroneID(int DroneID)
+        {
+            String SQL = "SELECT \n" +
+           "  [DroneName]\n" +
+           "FROM\n" +
+           "  [MSTR_Drone]\n" +
+           "WHERE\n" +
+           "  MSTR_Drone.DroneId=" + DroneID;
+            return getDBVal(SQL);
+        }
     }
 }
