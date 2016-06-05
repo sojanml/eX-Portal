@@ -6,7 +6,7 @@
     <edmx:StorageModels>
     <Schema Namespace="ExponentPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BlackBoxData">
           <Key>
             <PropertyRef Name="BlackBoxDataID" />
@@ -204,6 +204,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="IsInsideTimeFrame" Type="bit" />
           <Property Name="IsDistanceWarning" Type="int" />
           <Property Name="IsDistanceCritical" Type="int" />
+          <Property Name="ApprovalID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -536,6 +537,16 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="LastFlightID" Type="int" />
           <Property Name="RpasSerialNo" Type="nvarchar" MaxLength="50" />
           <Property Name="BlackBoxID" Type="int" />
+          <Property Name="RefName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaxAllupWeight" Type="nvarchar" MaxLength="50" />
+          <Property Name="color" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsCamara" Type="int" />
+          <Property Name="MakeID" Type="int" />
+          <Property Name="MakeOther" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModelID" Type="int" />
+          <Property Name="ManufactureOther" Type="nvarchar" MaxLength="50" />
+          <Property Name="CameraDetails" Type="nvarchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="MSTR_Drone_Setup">
           <Key>
@@ -806,7 +817,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="Col" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadData">
           <Key>
             <PropertyRef Name="PayLoadDataID" />
@@ -834,7 +845,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadData' does not have a pr
           <Property Name="CellID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadFlight">
           <Key>
             <PropertyRef Name="PayLoadFlightID" />
@@ -852,7 +863,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadFlight' does not have a 
           <Property Name="PayLoadDroneID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadImageData">
           <Key>
             <PropertyRef Name="PayLoadImageDataID" />
@@ -871,7 +882,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadImageData' does not have
           <Property Name="LogFilePath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadMapData">
           <Key>
             <PropertyRef Name="PayLoadDataMapID" />
@@ -940,7 +951,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadYardGrid">
           <Key>
             <PropertyRef Name="CellID" />
@@ -964,7 +975,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <Property Name="Polygon" Type="geography" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PortalAlert">
           <Key>
             <PropertyRef Name="AlertID" />
@@ -982,12 +993,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="SMSSend" Type="int" />
           <Property Name="AlertCategory" Type="nvarchar" MaxLength="25" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PortalAlert_User">
-          <Property Name="AlertID" Type="int" />
-          <Property Name="UserID" Type="int" />
-        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -1072,17 +1077,16 @@ warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SMSTable">
-          <Property Name="CellNumber" Type="nvarchar" MaxLength="20" />
-        </EntityType>-->
+warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="sysdiagrams">
           <Key>
+            
+            
             <PropertyRef Name="diagram_id" />
           </Key>
           <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
@@ -1118,7 +1122,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Parameter Name="value" Type="bigint" Mode="In" />
           <Parameter Name="base" Type="int" Mode="In" />
         </Function>
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="GenerateHexCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar(max)">
           <Parameter Name="string" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="stringlength" Type="int" Mode="In" />
@@ -1128,41 +1131,11 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Parameter Name="Date_From" Type="datetime" Mode="In" />
           <Parameter Name="Date_To" Type="datetime" Mode="In" />
         </Function>
-        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
         <Function Name="sp_Recover_Dropped_Objects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Database_Name" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="Date_From" Type="datetime" Mode="In" />
           <Parameter Name="Date_To" Type="datetime" Mode="In" />
         </Function>
-        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="usp_PayLoad_AutoCorrectGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FlightUniqueID" Type="nvarchar" Mode="In" />
           <Parameter Name="YardID" Type="int" Mode="In" />
@@ -1239,7 +1212,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserLog" EntityType="Self.UserLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxData" EntityType="Self.BlackBoxData" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1407,6 +1379,15 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
     [PortalAlert].[AlertCategory] AS [AlertCategory]
     FROM [dbo].[PortalAlert] AS [PortalAlert]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [sysdiagrams].[name] AS [name], 
+    [sysdiagrams].[principal_id] AS [principal_id], 
+    [sysdiagrams].[diagram_id] AS [diagram_id], 
+    [sysdiagrams].[version] AS [version], 
+    [sysdiagrams].[definition] AS [definition]
+    FROM [dbo].[sysdiagrams] AS [sysdiagrams]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
             <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
             <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
@@ -1572,51 +1553,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="IsAcitive" Type="Boolean" />
           <Property Name="RecordType" Type="Int32" />
         </EntityType>
-        <EntityType Name="MSTR_Drone">
-          <Key>
-            <PropertyRef Name="DroneId" />
-          </Key>
-          <Property Name="DroneId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ManufactureId" Type="Int32" />
-          <Property Name="UavTypeId" Type="Int32" />
-          <Property Name="PartsGroupId" Type="Int32" />
-          <Property Name="DroneName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="ModifiedBy" Type="Int32" />
-          <Property Name="ApprovedBy" Type="Int32" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
-          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
-          <Property Name="DroneIdBitString" Type="String" MaxLength="96" FixedLength="false" Unicode="true" />
-          <Property Name="RecordType" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="DroneIdHexa" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="DroneIdBarCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CommissionDate" Type="DateTime" Precision="3" />
-          <Property Name="DroneSerialNo" Type="Int32" />
-          <Property Name="DroneDefinitionID" Type="Int32" />
-          <Property Name="AccountID" Type="Int32" />
-          <Property Name="DecommissionDate" Type="DateTime" Precision="3" />
-          <Property Name="DecommissionBy" Type="Int32" />
-          <Property Name="DecommissionNote" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="ReAssignDate" Type="DateTime" Precision="3" />
-          <Property Name="ReAssignBy" Type="Int32" />
-          <Property Name="ReAssignNote" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="ReAssignTo" Type="Int32" />
-          <Property Name="ReAssignFrom" Type="Int32" />
-          <Property Name="CommissionReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="UATReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="IncidentReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsLiveVideo" Type="Int32" />
-          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="FlightTime" Type="DateTime" Precision="3" />
-          <Property Name="LastFlightID" Type="Int32" />
-          <Property Name="RpasSerialNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BlackBoxID" Type="Int32" />
-        </EntityType>
         <EntityType Name="MSTR_DroneService">
           <Key>
             <PropertyRef Name="ServiceId" />
@@ -1758,7 +1694,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySet Name="M2M_DroneParts" EntityType="Self.M2M_DroneParts" />
           <EntitySet Name="M2M_DroneServiceParts" EntityType="Self.M2M_DroneServiceParts" />
           <EntitySet Name="M2M_UserAccount" EntityType="Self.M2M_UserAccount" />
-          <EntitySet Name="MSTR_Drone" EntityType="Self.MSTR_Drone" />
           <EntitySet Name="MSTR_DroneService" EntityType="Self.MSTR_DroneService" />
           <EntitySet Name="MSTR_Menu" EntityType="Self.MSTR_Menu" />
           <EntitySet Name="MSTR_Parts" EntityType="Self.MSTR_Parts" />
@@ -1878,6 +1813,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           </FunctionImport>
           <EntitySet Name="BlackBoxTransactions" EntityType="ExponentPortalModel.BlackBoxTransaction" />
           <EntitySet Name="FlightMapDatas" EntityType="ExponentPortalModel.FlightMapData" />
+          <EntitySet Name="MSTR_Drone" EntityType="ExponentPortalModel.MSTR_Drone" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2170,6 +2106,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="IsInsideTimeFrame" Type="Boolean" />
           <Property Name="IsDistanceWarning" Type="Int32" />
           <Property Name="IsDistanceCritical" Type="Int32" />
+          <Property Name="ApprovalID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -2667,6 +2604,61 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <Property Name="voltage" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="OtherFlightIDs" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="MSTR_Drone">
+          <Key>
+            <PropertyRef Name="DroneId" />
+          </Key>
+          <Property Name="DroneId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountID" Type="Int32" />
+          <Property Name="ManufactureId" Type="Int32" />
+          <Property Name="UavTypeId" Type="Int32" />
+          <Property Name="PartsGroupId" Type="Int32" />
+          <Property Name="DroneName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ApprovedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+          <Property Name="DroneIdBitString" Type="String" MaxLength="96" FixedLength="false" Unicode="true" />
+          <Property Name="RecordType" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="DroneIdHexa" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DroneIdBarCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CommissionDate" Type="DateTime" Precision="3" />
+          <Property Name="DroneSerialNo" Type="Int32" />
+          <Property Name="DroneDefinitionID" Type="Int32" />
+          <Property Name="DecommissionDate" Type="DateTime" Precision="3" />
+          <Property Name="DecommissionBy" Type="Int32" />
+          <Property Name="DecommissionNote" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ReAssignDate" Type="DateTime" Precision="3" />
+          <Property Name="ReAssignBy" Type="Int32" />
+          <Property Name="ReAssignNote" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ReAssignTo" Type="Int32" />
+          <Property Name="ReAssignFrom" Type="Int32" />
+          <Property Name="CommissionReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UATReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IncidentReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsLiveVideo" Type="Int32" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="FlightTime" Type="DateTime" Precision="3" />
+          <Property Name="LastFlightID" Type="Int32" />
+          <Property Name="RpasSerialNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BlackBoxID" Type="Int32" />
+          <Property Name="RefName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaxAllupWeight" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="color" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsCamara" Type="Int32" />
+          <Property Name="MakeID" Type="Int32" />
+          <Property Name="MakeOther" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModelID" Type="Int32" />
+          <Property Name="ManufactureOther" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CameraDetails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2832,52 +2824,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
                 <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
                 <ScalarProperty Name="IsAcitive" ColumnName="IsAcitive" />
                 <ScalarProperty Name="RecordType" ColumnName="RecordType" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MSTR_Drone">
-            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
-              <MappingFragment StoreEntitySet="MSTR_Drone">
-                <ScalarProperty Name="BlackBoxID" ColumnName="BlackBoxID" />
-                <ScalarProperty Name="RpasSerialNo" ColumnName="RpasSerialNo" />
-                <ScalarProperty Name="LastFlightID" ColumnName="LastFlightID" />
-                <ScalarProperty Name="FlightTime" ColumnName="FlightTime" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="IsLiveVideo" ColumnName="IsLiveVideo" />
-                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
-                <ScalarProperty Name="IncidentReportNote" ColumnName="IncidentReportNote" />
-                <ScalarProperty Name="UATReportNote" ColumnName="UATReportNote" />
-                <ScalarProperty Name="CommissionReportNote" ColumnName="CommissionReportNote" />
-                <ScalarProperty Name="ReAssignFrom" ColumnName="ReAssignFrom" />
-                <ScalarProperty Name="ReAssignTo" ColumnName="ReAssignTo" />
-                <ScalarProperty Name="ReAssignNote" ColumnName="ReAssignNote" />
-                <ScalarProperty Name="ReAssignBy" ColumnName="ReAssignBy" />
-                <ScalarProperty Name="ReAssignDate" ColumnName="ReAssignDate" />
-                <ScalarProperty Name="DecommissionNote" ColumnName="DecommissionNote" />
-                <ScalarProperty Name="DecommissionBy" ColumnName="DecommissionBy" />
-                <ScalarProperty Name="DecommissionDate" ColumnName="DecommissionDate" />
-                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
-                <ScalarProperty Name="DroneDefinitionID" ColumnName="DroneDefinitionID" />
-                <ScalarProperty Name="DroneSerialNo" ColumnName="DroneSerialNo" />
-                <ScalarProperty Name="CommissionDate" ColumnName="CommissionDate" />
-                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
-                <ScalarProperty Name="ManufactureId" ColumnName="ManufactureId" />
-                <ScalarProperty Name="UavTypeId" ColumnName="UavTypeId" />
-                <ScalarProperty Name="PartsGroupId" ColumnName="PartsGroupId" />
-                <ScalarProperty Name="DroneName" ColumnName="DroneName" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
-                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
-                <ScalarProperty Name="DroneIdBitString" ColumnName="DroneIdBitString" />
-                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="DroneIdHexa" ColumnName="DroneIdHexa" />
-                <ScalarProperty Name="DroneIdBarCode" ColumnName="DroneIdBarCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3294,6 +3240,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
                 <ScalarProperty Name="IsDistanceCritical" ColumnName="IsDistanceCritical" />
                 <ScalarProperty Name="IsDistanceWarning" ColumnName="IsDistanceWarning" />
                 <ScalarProperty Name="IsInsideTimeFrame" ColumnName="IsInsideTimeFrame" />
@@ -3776,30 +3723,6 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="ExponentPortalModel.Store.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="ExponentPortalModel.Store.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="ExponentPortalModel.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="ExponentPortalModel.Store.sp_helpdiagramdefinition">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="ExponentPortalModel.sp_helpdiagramdefinition_Result">
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="ExponentPortalModel.Store.sp_helpdiagrams">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="ExponentPortalModel.sp_helpdiagrams_Result">
-                <ScalarProperty Name="Database" ColumnName="Database" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Owner" ColumnName="Owner" />
-                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="ExponentPortalModel.Store.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="ExponentPortalModel.Store.sp_upgraddiagrams" />
           <FunctionImportMapping FunctionImportName="usp_PayLoad_AutoCorrectGrid" FunctionName="ExponentPortalModel.Store.usp_PayLoad_AutoCorrectGrid" />
           <FunctionImportMapping FunctionImportName="usp_Portal_GetFlightChartData" FunctionName="ExponentPortalModel.Store.usp_Portal_GetFlightChartData" />
           <FunctionImportMapping FunctionImportName="usp_Portal_GetLastFlightChartData" FunctionName="ExponentPortalModel.Store.usp_Portal_GetLastFlightChartData" />
@@ -3868,6 +3791,62 @@ warning 6013: The table/view 'ExponentPortal.dbo.SMSTable' does not have a prima
                 <ScalarProperty Name="DroneRFID" ColumnName="DroneRFID" />
                 <ScalarProperty Name="DroneId" ColumnName="DroneId" />
                 <ScalarProperty Name="FlightMapDataID" ColumnName="FlightMapDataID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_Drone">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
+              <MappingFragment StoreEntitySet="MSTR_Drone">
+                <ScalarProperty Name="CameraDetails" ColumnName="CameraDetails" />
+                <ScalarProperty Name="ManufactureOther" ColumnName="ManufactureOther" />
+                <ScalarProperty Name="ModelID" ColumnName="ModelID" />
+                <ScalarProperty Name="MakeOther" ColumnName="MakeOther" />
+                <ScalarProperty Name="MakeID" ColumnName="MakeID" />
+                <ScalarProperty Name="IsCamara" ColumnName="IsCamara" />
+                <ScalarProperty Name="color" ColumnName="color" />
+                <ScalarProperty Name="MaxAllupWeight" ColumnName="MaxAllupWeight" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="RefName" ColumnName="RefName" />
+                <ScalarProperty Name="BlackBoxID" ColumnName="BlackBoxID" />
+                <ScalarProperty Name="RpasSerialNo" ColumnName="RpasSerialNo" />
+                <ScalarProperty Name="LastFlightID" ColumnName="LastFlightID" />
+                <ScalarProperty Name="FlightTime" ColumnName="FlightTime" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="IsLiveVideo" ColumnName="IsLiveVideo" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="IncidentReportNote" ColumnName="IncidentReportNote" />
+                <ScalarProperty Name="UATReportNote" ColumnName="UATReportNote" />
+                <ScalarProperty Name="CommissionReportNote" ColumnName="CommissionReportNote" />
+                <ScalarProperty Name="ReAssignFrom" ColumnName="ReAssignFrom" />
+                <ScalarProperty Name="ReAssignTo" ColumnName="ReAssignTo" />
+                <ScalarProperty Name="ReAssignNote" ColumnName="ReAssignNote" />
+                <ScalarProperty Name="ReAssignBy" ColumnName="ReAssignBy" />
+                <ScalarProperty Name="ReAssignDate" ColumnName="ReAssignDate" />
+                <ScalarProperty Name="DecommissionNote" ColumnName="DecommissionNote" />
+                <ScalarProperty Name="DecommissionBy" ColumnName="DecommissionBy" />
+                <ScalarProperty Name="DecommissionDate" ColumnName="DecommissionDate" />
+                <ScalarProperty Name="DroneDefinitionID" ColumnName="DroneDefinitionID" />
+                <ScalarProperty Name="DroneSerialNo" ColumnName="DroneSerialNo" />
+                <ScalarProperty Name="CommissionDate" ColumnName="CommissionDate" />
+                <ScalarProperty Name="DroneIdBarCode" ColumnName="DroneIdBarCode" />
+                <ScalarProperty Name="DroneIdHexa" ColumnName="DroneIdHexa" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="DroneIdBitString" ColumnName="DroneIdBitString" />
+                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="DroneName" ColumnName="DroneName" />
+                <ScalarProperty Name="PartsGroupId" ColumnName="PartsGroupId" />
+                <ScalarProperty Name="UavTypeId" ColumnName="UavTypeId" />
+                <ScalarProperty Name="ManufactureId" ColumnName="ManufactureId" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

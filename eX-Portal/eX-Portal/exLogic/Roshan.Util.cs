@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -76,10 +77,11 @@ namespace eX_Portal.exLogic
             return SelectList; //return the list objects
         }//function GetDropDowntList
 
-        public static IEnumerable<SelectListItem> GetBoolList()
+        public static IEnumerable<SelectListItem> GetBoolList(bool NeedSelect)
         {
             List<SelectListItem> SelectList = new List<SelectListItem>();
-            SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "" });
+            if(NeedSelect)
+                SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
             SelectList.Add(new SelectListItem { Text = "True", Value = "1" });
             SelectList.Add(new SelectListItem { Text = "false", Value = "0" });
             return SelectList; //return the list objects
@@ -94,6 +96,44 @@ namespace eX_Portal.exLogic
             return SelectList; //return the list objects
         }//function GetDropDowntList
 
+        public static IEnumerable<SelectListItem> GetDropDowntList(string TypeField, string NameField, string ValueField, string SPName , bool OtherRquired)
+        {
+            //  ctx=new ExponentPortalEntities();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+
+                    ctx.Database.Connection.Open();
+
+
+                    cmd.CommandText = "usp_Portal_GetDroneDropDown";
+                    DbParameter Param = cmd.CreateParameter();
+                    Param.ParameterName = "@Type";
+                    Param.Value = TypeField;
+                    //  Param[0] = new DbParameter("@Type", TypeField);
+                    cmd.Parameters.Add(Param);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+
+                            SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Code"].ToString() });
+
+                        }
+                    }
+                    if(OtherRquired)
+                        SelectList.Add(new SelectListItem { Text = "Other", Value = "-1" });
+
+                    DropDownList = SelectList.ToList();
+                    ctx.Database.Connection.Close();
+                    return DropDownList; //return the list objects
+
+                }
+            }
+        }
 
     }
 }

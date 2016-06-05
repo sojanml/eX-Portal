@@ -13,26 +13,104 @@
         @Html.HiddenFor(model => model.DroneId)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ManufactureId,"Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.RefName, "Reference Name", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ManufactureId, Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown"), new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ManufactureId, "", new { @class = "text-danger" })
-            </div>
-        </div>       
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CommissionDate,"Commission Date", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CommissionDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
-                @Html.ValidationMessageFor(model => model.CommissionDate, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.RefName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.RefName, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.RpasSerialNo,"RPAS Serial Number", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.MakeID, "Make", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.MakeID, Util.GetDropDowntList("Make", "Name", "Code", "usp_Portal_GetDroneDropDown", true), "--Select Make--", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MakeID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="divMakeDetails" style="display:@(Model.MakeID == -1 ? "block" : "none")">
+            @Html.LabelFor(model => model.MakeOther, "Other", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MakeOther, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MakeOther, "", new { @class = "text-danger" })
+            </div>
+        </div>
+  
+              <div class="form-group">
+            @Html.LabelFor(model => model.ModelID, "Model", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ModelID, Util.GetDropDowntList("Model", "Name", "Code", "usp_Portal_GetDroneDropDown",true), "--Select Model--", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ModelID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group" id="divModelDetails" style="display:@(Model.ModelID == -1 ? "block" : "none")">
+            @Html.LabelFor(model => model.ModelName, "Other", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ModelName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ModelName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ManufactureId, "Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ManufactureId, Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown",true), "--Select Manufacturer--", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ManufactureId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group" id="divManuDetails" style="display:@(Model.ManufactureId == -1 ? "block" : "none")">
+            @Html.LabelFor(model => model.ManufactureOther, "Other", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ManufactureOther, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ManufactureOther, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Type, "Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Type, Util.GetDropDowntList("Type", "Name", "Code", "usp_Portal_GetDroneDropDown"), "--Select Type--", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaxAllupWeight, "Max All up weight", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MaxAllupWeight, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MaxAllupWeight, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.color, "Color", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.color, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.color, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RpasSerialNo, "RPAS Serial Number", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.RpasSerialNo, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.RpasSerialNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsCamara, "Is Camera", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IsCamara, Util.GetBoolList(true), new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IsCamara, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="divCamaraDetails"  style="display:@(Model.IsCamara == 1 ? "block" : "none")">
+            @Html.LabelFor(model => model.CameraDetails, "Details", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CameraDetails, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CameraDetails, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -45,3 +123,7 @@
 }
 
 
+<script src="~/Scripts/UAScreation.js"></script>
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+}

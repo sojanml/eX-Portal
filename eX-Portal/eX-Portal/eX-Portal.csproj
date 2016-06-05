@@ -223,6 +223,7 @@
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\RpasController.cs" />
+    <Compile Include="Controllers\RpasUserController.cs" />
     <Compile Include="Controllers\S3UploadController.cs" />
     <Compile Include="Controllers\SummaryController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -811,6 +812,7 @@
     <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
+    <Content Include="Scripts\UAScreation.js" />
     <Content Include="Scripts\user.js" />
     <None Include="Scripts\_references.js" />
     <Content Include="SqlServerTypes\readme.htm" />
@@ -1132,6 +1134,11 @@
     <Content Include="Views\Rpas\AllApplications.cshtml" />
     <Content Include="Views\BlackBox\ReceiveBlackBox.cshtml" />
     <Content Include="Views\BlackBox\TransactionDet.cshtml" />
+    <Content Include="Views\RpasUser\Create.cshtml" />
+    <Content Include="Views\RpasUser\Delete.cshtml" />
+    <Content Include="Views\RpasUser\Details.cshtml" />
+    <Content Include="Views\RpasUser\Edit.cshtml" />
+    <Content Include="Views\RpasUser\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

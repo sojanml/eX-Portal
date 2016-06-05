@@ -302,28 +302,64 @@ namespace eX_Portal.Controllers {
     // GET: Rpas
     public ActionResult Index() {
       if (!exLogic.User.hasAccess("RPAS.VIEW")) return RedirectToAction("NoAccess", "Home");
-      string SQL = "SELECT MSTR_RPAS_User.Name as [FullName],\n" +
-                   "LUP_Drone.Name AS Nationality,\n" +
-                   "MSTR_RPAS_User.EmiratesId as [EmiratesID],\n" +
-                   "MSTR_RPAS_User.EmailId as [Email],\n" +
-                   "MSTR_RPAS_User.MobileNo as [MobileNo],\n" +
-                   "MSTR_RPAS_User.Status,\n" +
-                   "Count(*) Over() as _TotalRecords,\n" +
-                   "RpasId as _PKey\n" +
-                   "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n" +
-                   "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n" +
-                   "where LUP_Drone.Type = 'Country' and (MSTR_RPAS_User.Status='New User Request' or MSTR_RPAS_User.Status='User Created')";
 
-      qView nView = new qView(SQL);
-      //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
-      nView.addMenu("Create User", Url.Action("Create", "User", new { ID = "_PKey" }));
-      if (Request.IsAjaxRequest()) {
-        Response.ContentType = "text/javascript";
-        return PartialView("qViewData", nView);
-      } else {
-        return View(nView);
-      }//if(IsAjaxRequest)
-       //return View(db.MSTR_RPAS_User.ToList());
+      string sqlprofileid = "select UserProfileId from MSTR_User where [UserId]="+Session["UserId"];
+      int profileid = Util.getDBInt(sqlprofileid);
+            if (profileid == 9)
+            {
+                string SQL = "SELECT MSTR_RPAS_User.Name as [FullName],\n" +
+                  "LUP_Drone.Name AS Nationality,\n" +
+                  "MSTR_RPAS_User.EmiratesId as [EmiratesID],\n" +
+                  "MSTR_RPAS_User.EmailId as [Email],\n" +
+                  "MSTR_RPAS_User.MobileNo as [MobileNo],\n" +
+                  "MSTR_RPAS_User.Status,\n" +
+                  "Count(*) Over() as _TotalRecords,\n" +
+                  "RpasId as _PKey\n" +
+                  "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n" +
+                  "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n" +
+                  "where LUP_Drone.Type = 'Country' and (MSTR_RPAS_User.Status='New User Request')";
+
+                qView nView = new qView(SQL);
+                //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
+                if (exLogic.User.hasAccess("RPASUSER.CREATE")) nView.addMenu("Create User", Url.Action("Create", "RpasUser", new { ID = "_PKey" }));
+                if (exLogic.User.hasAccess("RPASREQUEST.EDIT")) nView.addMenu("Edit", Url.Action("Edit", "Rpas", new { ID = "_PKey" }));
+                if (Request.IsAjaxRequest())
+                {
+                    Response.ContentType = "text/javascript";
+                    return PartialView("qViewData", nView);
+                }
+                else {
+                    return View(nView);
+                }//if(IsAjaxRequest)
+            }
+            else
+            {
+                string SQL = "SELECT MSTR_RPAS_User.Name as [FullName],\n" +
+                             "LUP_Drone.Name AS Nationality,\n" +
+                             "MSTR_RPAS_User.EmiratesId as [EmiratesID],\n" +
+                             "MSTR_RPAS_User.EmailId as [Email],\n" +
+                             "MSTR_RPAS_User.MobileNo as [MobileNo],\n" +
+                             "MSTR_RPAS_User.Status,\n" +
+                             "Count(*) Over() as _TotalRecords,\n" +
+                             "RpasId as _PKey\n" +
+                             "FROM MSTR_RPAS_User INNER JOIN LUP_Drone\n" +
+                             "ON MSTR_RPAS_User.NationalityId = LUP_Drone.TypeId\n" +
+                             "where LUP_Drone.Type = 'Country' and (MSTR_RPAS_User.Status='New User Request' or MSTR_RPAS_User.Status='User Created')";
+
+                qView nView = new qView(SQL);
+                //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
+                if (exLogic.User.hasAccess("RPASUSER.CREATE")) nView.addMenu("Create User", Url.Action("Create", "RpasUser", new { ID = "_PKey" }));
+                if (exLogic.User.hasAccess("RPASREQUEST.EDIT")) nView.addMenu("Edit", Url.Action("Edit", "Rpas", new { ID = "_PKey" }));
+                if (Request.IsAjaxRequest())
+                {
+                    Response.ContentType = "text/javascript";
+                    return PartialView("qViewData", nView);
+                }
+                else {
+                    return View(nView);
+                }//if(IsAjaxRequest)
+            }
+
     }
 
     // GET: Rpas/Details/5
@@ -382,27 +418,49 @@ namespace eX_Portal.Controllers {
 
     // GET: Rpas/Edit/5
     public ActionResult Edit(int? id) {
+      if (!exLogic.User.hasAccess("RPASREQUEST.EDIT")) return RedirectToAction("NoAccess", "Home");
       if (id == null) {
         return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
       }
       MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
-      if (mSTR_RPAS_User == null) {
-        return HttpNotFound();
-      }
-      return View(mSTR_RPAS_User);
-    }
+            if (mSTR_RPAS_User == null)
+            {
+                return HttpNotFound();
+            }
+            if (mSTR_RPAS_User.Status == "User Created")
+            {
+                Session["access"] = 1;
+            }
+            else
+            {
+                Session["access"] = 0;
+            }
+            return View(mSTR_RPAS_User);
+        }
 
     // POST: Rpas/Edit/5
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit([Bind(Include = "RpasId,Name,NationalityId,EmiratesId,EmailId,MobileNo,Status,CreatedBy,CreatedOn,ModifiedBy,ModifiedOn")] MSTR_RPAS_User mSTR_RPAS_User) {
-      if (ModelState.IsValid) {
-        db.Entry(mSTR_RPAS_User).State = EntityState.Modified;
-        db.SaveChanges();
-        return RedirectToAction("Index");
-      }
+    public ActionResult Edit(MSTR_RPAS_User mSTR_RPAS_User) {
+
+      if (!exLogic.User.hasAccess("RPASREQUEST.EDIT")) return RedirectToAction("NoAccess", "Home");
+        ModelState.Remove("confirmemailid");
+        ModelState.Remove("confirmmobno");
+
+        if (ModelState.IsValid)
+        {
+                string SQL = "update MSTR_RPAS_User set \n" +
+                            "[Name] = '" + mSTR_RPAS_User.Name + "',\n" +
+                            "[NationalityId] =" + mSTR_RPAS_User.NationalityId + ",\n" +
+                            "[EmiratesId] = '" + mSTR_RPAS_User.EmiratesId + "',\n" +
+                            "[EmailId]='" + mSTR_RPAS_User.EmailId + "',\n" +
+                            "[MobileNo]='" + mSTR_RPAS_User.MobileNo + "',\n" +
+                            "[ModifiedBy]=" + Session["UserID"] + ",\n" +
+                            "[ModifiedOn]=getdate()\n" +
+                            "where [RpasId] =" + mSTR_RPAS_User.RpasId;
+                int result = Util.doSQL(SQL);
+            return RedirectToAction("Index");
+        }
       return View(mSTR_RPAS_User);
     }
 
@@ -467,9 +525,15 @@ namespace eX_Portal.Controllers {
     }
 
     // GET: Rpas/UASRegister
-    public ActionResult UASRegister() {
-      if (!exLogic.User.hasAccess("RPAS.UASCREATE")) return RedirectToAction("NoAccess", "Home");
+    public ActionResult UASRegister(int ID = 0) {
 
+            if (!exLogic.User.hasAccess("RPAS.UASCREATE")) return RedirectToAction("NoAccess", "Home");
+            ViewBag.UserExist = false;
+            if (ID!=0)
+            {
+                ViewBag.UserExist = true;
+                ViewBag.UserID = ID;
+            }
       return View();
     }
 
@@ -487,7 +551,7 @@ namespace eX_Portal.Controllers {
         db.SaveChanges();
         int id = mSTR_Drone.DroneId;
 
-        return RedirectToAction("UAS");
+        return RedirectToAction("Index","RpasUser");
       }
 
       return View(mSTR_Drone);
@@ -522,8 +586,17 @@ namespace eX_Portal.Controllers {
       if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
         if (ModelState.IsValid) {
           string updatesql = "update MSTR_Drone set [ManufactureId]=" + mSTR_Drone.ManufactureId +
-                             ",[ModifiedBy] =" + Session["UserID"] + ",[ModifiedOn] ='" + System.DateTime.Now +
-                             "',[CommissionDate] ='" + mSTR_Drone.CommissionDate +
+                             ",[ModifiedBy] =" + Session["UserID"] + ",[ModifiedOn] ='" + System.DateTime.Now.ToString("MM/dd/yyyy") +
+                             "',[MakeID] ='" + mSTR_Drone.MakeID +
+                             "',[MakeOther] ='" + mSTR_Drone.MakeOther +
+                             "',[ModelID] ='" + mSTR_Drone.ModelID +
+                             "',[ManufactureOther] ='" + mSTR_Drone.ManufactureOther +
+                             "',[color] ='" + mSTR_Drone.color +
+                             "',[MaxAllupWeight] ='" + mSTR_Drone.MaxAllupWeight +
+                             "',[Type] ='" + mSTR_Drone.Type +
+                             "',[RefName] ='" + mSTR_Drone.RefName +
+                             "',[ModelName] ='" + mSTR_Drone.ModelName +
+                             "',[CameraDetails] ='" + mSTR_Drone.CameraDetails +
                              "',RpasSerialNo = '" + mSTR_Drone.RpasSerialNo + "' where[DroneId] =" + mSTR_Drone.DroneId;
           int result = Util.doSQL(updatesql);
           return RedirectToAction("UAS");

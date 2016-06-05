@@ -1,0 +1,17 @@
+﻿@model eX_Portal.exLogic.qView
+
+@{
+    ViewBag.Title = "RPAS User List";
+    Layout = "~/Views/Shared/_exPortal.cshtml";
+}
+@Html.Raw(Model.getDataTable())
+
+@section scripts {
+    <script type="text/javascript">
+@Html.Raw(Model.getScripts())
+    </script>
+}
+
+@section toolbar {
+    <a href='@Url.Action("Create", "RpasUser",new { ID =  ViewBag.DroneID })' class="button">Create User</a>
+}

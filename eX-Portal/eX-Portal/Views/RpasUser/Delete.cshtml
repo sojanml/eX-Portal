@@ -1,0 +1,321 @@
+﻿@model eX_Portal.Models.MSTR_User
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_eXPortal.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>MSTR_User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RememberMe)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RememberMe)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhotoUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhotoUrl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MiddleName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MiddleName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastModifiedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastModifiedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApprovedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApprovedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserProfileId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserProfileId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remarks)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MobileNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MobileNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfficeNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OfficeNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HomeNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HomeNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CountryId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CountryId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecordType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastModifiedOn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastModifiedOn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApprovedOn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApprovedOn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedOn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PasswordSalt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PasswordSalt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AccountId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsPilot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsPilot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserAccountId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserAccountId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Dashboard)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Dashboard)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GeneratedPassword)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GeneratedPassword)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RPASPermitNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RPASPermitNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PermitCategory)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PermitCategory)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContactAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RegRPASSerialNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RegRPASSerialNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyTelephone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyTelephone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TradeLicenceCopyUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TradeLicenceCopyUrl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmiratesID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmiratesID)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
