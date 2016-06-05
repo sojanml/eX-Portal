@@ -1,0 +1,77 @@
+﻿@model List<eX_Portal.Models.DroneDocument>
+@using eX_Portal.exLogic;
+@{
+    Layout = "~/Views/Shared/_eXPortal.cshtml";
+    int DroneID = ViewBag.DroneID;
+    ViewBag.Title = "GPS Tagging";
+    String DroneName = Util.getDroneNameByDroneID(DroneID);
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "DocForm", name = "DocForm" }))
+{
+    <input type="hidden" id="SelectedDroneID1" name="SelectedDroneID1" />
+<section class="general-form" id="loginForm">
+    @foreach (var itm in Model)
+    {
+        if (ViewBag.FirstRow == true)
+        {
+        <div class="editor-label">
+            Select the Drone for Uploading the document
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => itm.DroneID, Util.DroneList("usp_Portal_DroneNameList"))
+            @Html.ValidationMessageFor(model => itm.DroneID)
+        </div>
+        <div class ="editor-label">
+            @Html.LabelFor(model => itm.DocsType)
+        </div>
+        <div class ="editor-field">
+           @Html.RadioButtonFor(model => itm.DocsType, "Infrared", true) Infrared
+           @Html.RadioButtonFor(model => itm.DocsType, "Standard", false) Standard
+           @Html.ValidationMessageFor(model => itm.DocsType)<br />
+        </div>
+
+            ViewBag.FirstRow = false;
+        }
+    }
+</section>
+<div id="uploadGroup"  style="display:@(DroneName != ""  ? "block" : "none")">
+    <h2>GEO Tagged Images</h2>
+    <ul id="GPS-Images">
+        @foreach (var item in Model)
+        {
+            if (item.Latitude != null)
+            {
+                var GPS = new GPSInfo
+                {
+                    Latitude = item.Latitude == null ? 0 : (double)item.Latitude,
+                    Longitude = item.Longitude == null ? 0 : (double)item.Longitude,
+                    Altitude = item.Altitude == null ? 0 : (double)item.Altitude
+                };
+            <li>
+                <div class="delete-icon"><a href="#" class="delete" data-file="@item.DocumentName"><span class="delete icon">&#xf057;</span></a></div>
+                <div class="thumbnail">
+                    <img src="/upload/drone/@DroneName/@DroneID/@item.DocumentName.Replace(".jpg", ".t.png")" />
+                </div>
+                <div class="gps">@GPS.getInfo()</div>
+            </li>
+            }
+        }
+
+
+    </ul>
+    <div style="clear:both"></div>
+    <h2>Upload Images for GPS Tagging</h2>
+    <ul id="FileUploadProgress"></ul>
+    <div>Choose the files that you like to upload for above flight using the option bellow.</div>
+    <div><input type="file" multiple name="fileinput" id="fileinput" /></div>
+</div>
+}
+
+    @section header{
+        <link href="~/Content/black-box.css" rel="stylesheet" />
+    }
+    @section Scripts{
+        <script src="~/Scripts/geotag.js"></script>        
+    }
+
+

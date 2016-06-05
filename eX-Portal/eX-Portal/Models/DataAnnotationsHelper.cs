@@ -403,6 +403,7 @@ namespace eX_Portal.Models {
       return false;
     }
 
+        public string DocsType { get; set; }
   }
 
   public class DroneDocument_Helper {
