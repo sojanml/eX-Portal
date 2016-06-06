@@ -429,6 +429,9 @@
     <Compile Include="Models\ProductTransaction.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SMSTable.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -1142,6 +1145,9 @@
     <Content Include="Views\RpasUser\Details.cshtml" />
     <Content Include="Views\RpasUser\Edit.cshtml" />
     <Content Include="Views\RpasUser\Index.cshtml" />
+    <Content Include="Views\BlackBox\Cost.cshtml" />
+    <Content Include="Views\BlackBox\Rent.cshtml" />
+    <Content Include="Views\Test\BlackBox.cshtml" />
     <Content Include="Views\PayLoad\GeoTag.cshtml" />
     <Content Include="Views\BlackBox\Acknowledgement.cshtml" />
   </ItemGroup>

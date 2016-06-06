@@ -1,0 +1,29 @@
+﻿@model List<List<eX_Portal.ViewModel.BlackBoxCostCalucation>>
+
+@{
+    ViewBag.Title = "BlackBox";
+    Layout = "~/Views/Shared/_eXPortal.cshtml";
+}
+
+<h2>BlackBox</h2>
+
+@foreach (var BB in Model) {
+  var FirstItem = BB.FirstOrDefault();
+  <h2>Rented For: @FirstItem.CalcuatedDays</h2>
+  <ul>
+    @foreach (var Item in BB) {
+     <li>
+    <input type="radio" value="1" @(Item.isSelected ? "checked" : "") />
+    @Item.RentType @Item.SectionDays x @Item.RentAmount = @Item.CalcuatedCost</li>
+    }
+  </ul>
+}
+@section header {
+  <style type="text/css">
+    li.select-True {
+      color: forestgreen;
+      font-weight:bold;
+    }
+
+  </style>
+  }

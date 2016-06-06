@@ -5,10 +5,47 @@ using System.Web;
 using System.IO;
 using eX_Portal.Models;
 using System.Text;
+using eX_Portal.ViewModel;
 
 namespace eX_Portal.exLogic {
   public class BlackBox {
-   
+
+
+    public List<BlackBoxCostCalucation> getBlackBoxCost(DateTime FromDate, DateTime ToDate) {
+      var NumDays = (FromDate - ToDate).TotalDays;
+      return getBlackBoxCost((int)NumDays);
+    }
+
+
+    public List<BlackBoxCostCalucation> getBlackBoxCost(int NumOfDays = 0) {
+      int ID = 0;
+      var TheCost = new List<BlackBoxCostCalucation>();
+      using (var ctx = new ExponentPortalEntities()) {
+        var BlackBoxItems = (from n in ctx.BlackBoxCosts select n).ToList();
+        foreach(var Item in BlackBoxItems) {
+          BlackBoxCostCalucation ThisItem = new BlackBoxCostCalucation {
+            CostID = ID++,
+            RentType = Item.RentType,
+            RentAmount = Item.RentAmount,
+            RentDays = Item.RentDays,
+            isSelected = false
+          };
+          ThisItem.getItemCost(NumOfDays);
+          TheCost.Add(ThisItem);
+        }//foreach
+      }//using (var ctx = new ExponentPortalEntities())
+
+      //-- now sort the list by cost to get the minimum amount on first
+      var SortedList = TheCost.OrderBy(n => n.CalcuatedCost);
+      //-- get the First Item, the marked it as selected
+      if(SortedList.Count() > 0) SortedList.FirstOrDefault().isSelected = true;
+
+      //Return the list sorted by ID, to get the order from database
+      return SortedList.OrderBy(n => n.RentAmount).ToList();
+    }
+
+
+
     public int getBBID(String FileName) {
       String FileOnly = Path.GetFileNameWithoutExtension(FileName);
       int BB_ID = 0;
