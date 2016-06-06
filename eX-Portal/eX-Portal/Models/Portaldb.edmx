@@ -16,6 +16,7 @@
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="LastUpdatedBy" Type="int" />
           <Property Name="LastupdatedOn" Type="datetime" />
+          <Property Name="RentDays" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -72,6 +73,8 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="RentEndDate" Type="datetime" />
           <Property Name="RentType" Type="nvarchar" MaxLength="50" />
           <Property Name="RentAmount" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="VerifyCode" Type="nvarchar" MaxLength="30" />
+          <Property Name="RentAcknowledged" Type="bit" />
         </EntityType>
         <EntityType Name="DroneCheckList">
           <Key>
@@ -2580,6 +2583,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="RentEndDate" Type="DateTime" Precision="3" />
           <Property Name="RentType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RentAmount" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="VerifyCode" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="RentAcknowledged" Type="Boolean" />
         </EntityType>
         <EntityType Name="FlightMapData">
           <Key>
@@ -2692,6 +2697,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="LastUpdatedBy" Type="Int32" />
           <Property Name="LastupdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="RentDays" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3764,6 +3770,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="BlackBoxTransactions">
             <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxTransaction">
               <MappingFragment StoreEntitySet="BlackBoxTransaction">
+                <ScalarProperty Name="RentAcknowledged" ColumnName="RentAcknowledged" />
+                <ScalarProperty Name="VerifyCode" ColumnName="VerifyCode" />
                 <ScalarProperty Name="RentAmount" ColumnName="RentAmount" />
                 <ScalarProperty Name="RentType" ColumnName="RentType" />
                 <ScalarProperty Name="RentEndDate" ColumnName="RentEndDate" />
@@ -3891,6 +3899,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="BlackBoxCosts">
             <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxCost">
               <MappingFragment StoreEntitySet="BlackBoxCost">
+                <ScalarProperty Name="RentDays" ColumnName="RentDays" />
                 <ScalarProperty Name="LastupdatedOn" ColumnName="LastupdatedOn" />
                 <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />

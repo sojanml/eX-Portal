@@ -251,6 +251,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BlackBoxCost.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\BlackBoxData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -1140,6 +1143,7 @@
     <Content Include="Views\RpasUser\Edit.cshtml" />
     <Content Include="Views\RpasUser\Index.cshtml" />
     <Content Include="Views\PayLoad\GeoTag.cshtml" />
+    <Content Include="Views\BlackBox\Acknowledgement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -21,5 +21,6 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<int> LastUpdatedBy { get; set; }
         public Nullable<System.DateTime> LastupdatedOn { get; set; }
+        public int RentDays { get; set; }
     }
 }

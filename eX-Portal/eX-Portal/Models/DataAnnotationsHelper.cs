@@ -545,7 +545,7 @@ namespace eX_Portal.Models {
     [MetadataType(typeof(BlackBoxTransactionHelper))]
     public partial class BlackBoxTransaction
     {
-
+        public bool VerifyCheck { get; set; }
     }
 
     public class BlackBoxTransactionHelper
@@ -570,5 +570,13 @@ namespace eX_Portal.Models {
         [Required(ErrorMessage = "Please enter Note")]
         [Display(Name = "Note")]
         public string Note { get; set; }
+
+        [Required(ErrorMessage = "Please enter Verify Code")]
+        [Display(Name = "Verify Code")]
+        public string VerifyCode { get; set; }
+
+        //[Required(ErrorMessage = "Please Is Verified ")]
+        //[Display(Name = "Is Verified")]
+        //public string VerifyCheck { get; set; }
     }
 }
