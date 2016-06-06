@@ -511,6 +511,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="CurrentDroneID" Type="int" />
           <Property Name="LastRentalId" Type="int" />
           <Property Name="LastReceiveId" Type="int" />
+          <Property Name="EncryptionKey" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <EntityType Name="MSTR_Drone">
           <Key>
@@ -2548,6 +2549,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CurrentDroneID" Type="Int32" />
           <Property Name="LastRentalId" Type="Int32" />
           <Property Name="LastReceiveId" Type="Int32" />
+          <Property Name="EncryptionKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -3748,6 +3750,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="MSTR_BlackBox">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_BlackBox">
               <MappingFragment StoreEntitySet="MSTR_BlackBox">
+                <ScalarProperty Name="EncryptionKey" ColumnName="EncryptionKey" />
                 <ScalarProperty Name="LastReceiveId" ColumnName="LastReceiveId" />
                 <ScalarProperty Name="LastRentalId" ColumnName="LastRentalId" />
                 <ScalarProperty Name="CurrentDroneID" ColumnName="CurrentDroneID" />

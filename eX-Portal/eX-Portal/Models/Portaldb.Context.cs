@@ -82,7 +82,6 @@ namespace eX_Portal.Models
         public virtual DbSet<FlightMapData> FlightMapDatas { get; set; }
         public virtual DbSet<MSTR_Drone> MSTR_Drone { get; set; }
         public virtual DbSet<BlackBoxCost> BlackBoxCosts { get; set; }
-        public virtual DbSet<SMSTable> SMSTables { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

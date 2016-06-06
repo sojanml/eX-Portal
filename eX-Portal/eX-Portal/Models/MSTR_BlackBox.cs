@@ -26,5 +26,6 @@ namespace eX_Portal.Models
         public Nullable<int> CurrentDroneID { get; set; }
         public Nullable<int> LastRentalId { get; set; }
         public Nullable<int> LastReceiveId { get; set; }
+        public string EncryptionKey { get; set; }
     }
 }

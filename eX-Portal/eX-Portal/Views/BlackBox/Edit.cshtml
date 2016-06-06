@@ -6,7 +6,7 @@
 }
 <section class="general-form" id="loginForm">
     <script src="~/Scripts/bootstrap.js"></script>
-    @using (Html.BeginForm())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { name = "EditForm"}))
     {
 
         @Html.HiddenFor(model => model.BlackBoxID)
@@ -15,14 +15,16 @@
         @Html.HiddenFor(model => model.CurrentUserID)
         @Html.HiddenFor(model => model.CurrentDroneID)
         @Html.HiddenFor(model => model.CreatedOn)
-     
+        @Html.HiddenFor(model => model.LastReceiveId)
+        @Html.HiddenFor(model => model.LastRentalId)
+
         <div class="editor-label">
             @Html.LabelFor(model => model.BlackBoxSerial, "Serial Number")
         </div>
         <div class="editor-field">
 
             @Html.EditorFor(model => model.BlackBoxSerial)
-            @Html.ValidationMessageFor(model => model.BlackBoxName)
+            @Html.ValidationMessageFor(model => model.BlackBoxSerial)
         </div>
 
         <div class="editor-label">
@@ -33,7 +35,18 @@
             @Html.ValidationMessageFor(model => model.BlackBoxName)
         </div>
 
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EncryptionKey, "Encryption Key")
+        </div>
+        <div class="editor-field">
+           <div style="width:70%;float:left;"> @Html.EditorFor(model => model.EncryptionKey)
+        @Html.ValidationMessageFor(model => model.EncryptionKey)</div>
+            <div style="width:25%;float:right;">
+                <input type="button" value="Generate Key" onclick="showKey(); return false;" />
+            </div>
 
+        </div>
+        <br />
 
 
 
@@ -47,3 +60,21 @@
 
 
 </section>
+@Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+    function GenerateKey() {
+        var theKey = '';
+        for (var i = 1; i <= 32; i++) {
+            var Key = Math.floor(Math.random() * 255);
+            var KeyHex = '0' + Key.toString(16);
+            var HexDigit = KeyHex.substr(KeyHex.length - 2);
+            if (theKey != '') theKey += '-';
+            theKey += HexDigit;
+        }
+        return theKey;
+    }
+    function showKey() {
+        document.forms['EditForm']['EncryptionKey'].value = GenerateKey();
+        
+    }
+</script>

@@ -381,9 +381,7 @@ namespace eX_Portal.Controllers {
             try
             {
                 // TODO: Add update logic here
-
-                //     if (!exLogic.User.hasAccess("BlackBox.EDIT")) return RedirectToAction("NoAccess", "Home");
-
+                //if (!exLogic.User.hasAccess("BlackBox.EDIT")) return RedirectToAction("NoAccess", "Home");
                 if (ModelState.IsValid)
                 {
                     ViewBag.Title = "Edit BlackBox";
