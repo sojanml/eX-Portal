@@ -285,6 +285,9 @@ namespace eX_Portal.Controllers {
         public ActionResult Create()
         {
             //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+            //ViewBag.IsAESVisible = false;
+            //if (exLogic.User.hasAccess("BLACKBOX.AES"))
+            //    ViewBag.IsAESVisible = true;
 
             MSTR_BlackBox BB = new MSTR_BlackBox();
             return View(BB);
@@ -299,11 +302,19 @@ namespace eX_Portal.Controllers {
             {
                 // TODO: Add insert logic here
                 // BlackBox.BlackBoxID = 1;
+                //if (!exLogic.User.hasAccess("BLACKBOX.AES"))
+                //{
+                //    ModelState.Remove("EncryptionKey");
+                //    BlackBox.EncryptionKey = "";
+                //}
 
                 if (ModelState.IsValid)
                 {
                     //  BlackBox.BlackBoxID = 0;
                     BlackBox.IsActive = 1;
+                    BlackBox.CurrentStatus = "IN";
+                    BlackBox.LastReceiveId = 0;
+                    BlackBox.LastRentalId = 0;
                     BlackBox.CreatedBy = Util.getLoginUserID();
                     BlackBox.CreatedOn = DateTime.Now;
                     BlackBox.LastUpdateDate = DateTime.Now;
@@ -339,11 +350,11 @@ namespace eX_Portal.Controllers {
                           ,m.[BlackBoxSerial]
                           ,m.[BlackBoxName]
                           ,m.[CurrentStatus]
-                          ,u.Firstname +' '+u.lastname as CreatedBy
+                          ,isnull(u.Firstname,'') +' '+ isnull(u.lastname,'') as CreatedBy
                           ,d.RpasSerialNo
                             , Count(*) Over() as _TotalRecords
                       FROM  MSTR_BlackBox m left join mstr_user u
-                      on m.CurrentUserID = u.userid
+                      on m.CreatedBy = u.userid
                       left join mstr_drone d
                       on d.droneid = m.currentDroneID where m.[IsActive] = 1";
             qView nView = new qView(SQL);
@@ -367,6 +378,10 @@ namespace eX_Portal.Controllers {
         {
             //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Edit Blackbox";
+            ViewBag.IsAESVisible = false;
+            if (exLogic.User.hasAccess("BLACKBOX.AES"))
+                ViewBag.IsAESVisible = true;
+
             //    ExponentPortalEntities db = new ExponentPortalEntities();
             MSTR_BlackBox BB = db.MSTR_BlackBox.Find(id);
 
@@ -418,10 +433,13 @@ namespace eX_Portal.Controllers {
                           ,[CurrentStatus]
                           ,[CurrentUserID]
                           ,[LastUpdateDate]
-                          ,[CurrentDroneID]
-                            , Count(*) Over() as _TotalRecords
-                      FROM  MSTR_BlackBox
-                        where BlackBoxID=" + id;
+                          ,[CurrentDroneID] ";
+                    if (exLogic.User.hasAccess("BLACKBOX.AES"))
+                          SQL = SQL + ",[EncryptionKey]";
+
+                    SQL = SQL + @", Count(*) Over() as _TotalRecords
+                            FROM  MSTR_BlackBox
+                           where BlackBoxID = " + id;
 
             qDetailView nView = new qDetailView(SQL);
             ViewBag.Message = nView.getTable();

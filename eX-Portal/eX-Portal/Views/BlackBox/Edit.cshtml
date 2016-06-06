@@ -17,6 +17,10 @@
         @Html.HiddenFor(model => model.CreatedOn)
         @Html.HiddenFor(model => model.LastReceiveId)
         @Html.HiddenFor(model => model.LastRentalId)
+        if (ViewBag.IsAESVisible == false)
+        {
+            @Html.HiddenFor(model => model.EncryptionKey)
+        }
 
         <div class="editor-label">
             @Html.LabelFor(model => model.BlackBoxSerial, "Serial Number")
@@ -34,7 +38,8 @@
             @Html.EditorFor(model => model.BlackBoxName)
             @Html.ValidationMessageFor(model => model.BlackBoxName)
         </div>
-
+        if (ViewBag.IsAESVisible == true)
+        {
         <div class="editor-label">
             @Html.LabelFor(model => model.EncryptionKey, "Encryption Key")
         </div>
@@ -47,7 +52,7 @@
 
         </div>
         <br />
-
+        }
 
 
         <div class="form-toolbar">
