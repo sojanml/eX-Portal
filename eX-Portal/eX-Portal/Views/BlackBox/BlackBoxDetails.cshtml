@@ -3,7 +3,11 @@
 @model eX_Portal.Models.MSTR_BlackBox
 
 @Html.Action("BBDetails", new { ID = Model.BlackBoxID })
-
+@if (ViewBag.EncryptionKeyStatus)
+{
+    <span>Encryption Key :  @ViewBag.EncryptionKey</span> 
+}
+<hr />
 <h2>Black Box Transaction Details</h2>
 @Html.Action("TransactionDet", "BlackBox", new { ID = Model.BlackBoxID })
 
