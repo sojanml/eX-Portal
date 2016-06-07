@@ -139,7 +139,7 @@ namespace eX_Portal.exLogic {
             List<SelectListItem> SelectList = new List<SelectListItem>();
 
             SelectList.Add(new SelectListItem { Text = "Cash", Value = "Cash" });
-            SelectList.Add(new SelectListItem { Text = "Cheque", Value = "Cheque" });
+           
             SelectList.Add(new SelectListItem { Text = "Card", Value = "Card" });
 
             DDoptions = SelectList.ToList();

@@ -14,28 +14,111 @@
     <input type="hidden" name="createdby" value="@ViewBag.CreatedBy" />
 
     @Html.HiddenFor(model => model.BBTransaction.ID)
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.BBTransaction.BlackBoxID, "Black Box", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.BBTransaction.BlackBoxID, Util.GetBB(), "--Select Black Box--")
+                @Html.ValidationMessageFor(model => model.BBTransaction.BlackBoxID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.BBTransaction.RentStartDate)
+            <div id="divStartDate" class="col-md-10">
+                @Html.EditorFor(model => model.BBTransaction.RentStartDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
+                @Html.ValidationMessageFor(model => model.BBTransaction.RentStartDate)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.BBTransaction.RentEndDate)
+            <div id="divEndDate"  class="col-md-10">
+                @Html.EditorFor(model => model.BBTransaction.RentEndDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
+                @Html.ValidationMessageFor(model => model.BBTransaction.RentStartDate)
+                <input id="btnCalculate" type="button" value="Calculate"  />
+            </div>
+        </div>
+        <div class="form-group">
+           
+            <div class="col-md-10" id="divCostGroup">
+               @foreach (var BB in Model.BlackBoxCostList)
+               {
+                   var FirstItem = BB.FirstOrDefault();
+                <h2>Rented For: @FirstItem.CalcuatedDays</h2>
+                <ul>
+                    @foreach (var Item in BB)
+                    {
+                        <li>
+                            <input type="radio" value="1" @(Item.isSelected ? "checked" : "") />
+                            @Item.RentType @Item.SectionDays x @Item.RentAmount = @Item.CalcuatedCost
+                        </li>
+                    }
+                </ul>
+               }
+           
+            </div>
+        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.BBTransaction.BlackBoxID, "Black Box", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.BBTransaction.BlackBoxID, Util.GetBB(), "--Select Black Box--")
-            @Html.ValidationMessageFor(model => model.BBTransaction.BlackBoxID, "", new { @class = "text-danger" })
-        </div>
     </div>
-    <div>
-        @Html.LabelFor(model=>model.BBTransaction.RentStartDate)
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.BBTransaction.RentStartDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
-            @Html.ValidationMessageFor(model => model.BBTransaction.RentStartDate)
-        </div>
-    </div>
-    <div>
-        @Html.LabelFor(model => model.BBTransaction.RentEndDate)
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.BBTransaction.RentEndDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
-            @Html.ValidationMessageFor(model => model.BBTransaction.RentStartDate)
-        </div>
-    </div>
-
 
 }
+@section header {
+    <style type="text/css">
+        li.select-True {
+            color: forestgreen;
+            font-weight: bold;
+        }
+    </style>
+}
+
+@section Scripts {
+
+    <script type="text/javascript">
+      
+      
+        $(document).ready(function () {
+            var StartDate = $('#divStartDate').val();
+            var EndDate = $('#divEndDate').val();
+
+            // end - start returns difference in milliseconds 
+            var diff = new Date(EndDate - StartDate);
+
+            // get days
+            var days = diff
+            $('#divStartDate').on("change", function () {
+                StartDate = $('#divStartDate').val();
+                EndDate = $('#divEndDate').val();
+                diff = new Date(EndDate - StartDate);
+                days = diff / 1000 / 60 / 60 / 24;
+
+                Calculate(days);
+            });
+            $('#divEndDate').on("change", function () {
+                StartDate = $('#divStartDate').val();
+                EndDate = $('#divEndDate').val();
+                diff = new Date(EndDate - StartDate);
+                days = diff / 1000 / 60 / 60 / 24;
+                Calculate(days);
+            });
+        });
+
+    function Calculate(days)
+    {
+       
+        $.ajax({
+            url: 'Calculate/Days='+days,  //server script to process data
+            type: 'GET',
+            dataType: 'json',
+            success: completeHandler = function (data) {
+                //        if (data.status == "success") LI.fadeOut().remove();
+                alert('Success');
+            },
+            error: errorHandler = function (data) {
+                alert('End');
+              
+            }
+        });
+    }
+        
+</script>
+    }
+    

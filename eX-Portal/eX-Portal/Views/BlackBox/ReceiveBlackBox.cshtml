@@ -1,44 +1,100 @@
 ﻿@model eX_Portal.Models.BlackBoxTransaction
 @using eX_Portal.exLogic
 @{
-    ViewBag.Title = "Receive Black Box";
-    Layout = "~/Views/Shared/_eXPortal.cshtml";
+  ViewBag.Title = "Receive Black Box";
+  Layout = "~/Views/Shared/_eXPortal.cshtml";
 }
-@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "RecBlackBox", name = "RecBlackBox" }))
-{
-    <section class="general-form" id="loginForm">
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "RecBlackBox", name = "RecBlackBox" })) {
+<section class="general-form" id="loginForm">
 
-        <input type="hidden" name="DroneID" value="@Model.DroneID" />
-        <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
-        <input type="hidden" name="BlackBoxID" value="@Model.BlackBoxID" />
-        <input type="hidden" name="ApprovalID" value="@Model.ApprovalID" />
+  <input type="hidden" name="DroneID" value="@Model.DroneID" />
+  <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
+  <input type="hidden" name="BlackBoxID" value="@Model.BlackBoxID" />
+  <input type="hidden" name="ApprovalID" value="@Model.ApprovalID" />
+  <div class="editor-label">
+    Select the Black box
+  </div>
+  <div class="editor-field">
+    @Html.DropDownListFor(model => model.ID, Util.GetBlackBox(), "Please Select...")
+    @Html.ValidationMessageFor(model => model.ID)
+  </div>
+  <div class="editor-label">
+    @Html.LabelFor(model => model.BBStatus)
+  </div>
+  <div class="editor-field">
+    <div class="input-field">@Model.BBStatus</div>
+          @Html.ValidationMessageFor(model => model.BBStatus)
+        </div>
         <div class="editor-label">
-            Select the Black box
+          @Html.LabelFor(model => model.Note, "Note")
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.ID, Util.GetBlackBox(), new { @disabled = "disabled" })
-            @Html.ValidationMessageFor(model => model.ID)
+          @Html.EditorFor(model => model.Note)
+          @Html.ValidationMessageFor(model => model.Note)
         </div>
-        <div class="editor-label">
-            @Html.LabelFor(model => model.BBStatus)
+
+        <div class="two-column-form-group">
+          <div class="form-group">
+            <div class="editor-label">
+              @Html.LabelFor(model => model.RentStartDate)
+            </div>
+            <div class="editor-field">
+              @Html.TextBoxFor(model => model.RentStartDate, new { @class = "date-picker" })
+              @Html.ValidationMessageFor(model => model.RentStartDate)
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="editor-label">
+              @Html.LabelFor(model => model.RentEndDate)
+            </div>
+            <div class="editor-field">
+              @Html.TextBoxFor(model => model.RentEndDate, new { @class = "date-picker" })
+              @Html.ValidationMessageFor(model => model.RentEndDate)
+            </div>
+          </div>
         </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.BBStatus ,"IN", new { @disabled = "disabled" })
-            @Html.ValidationMessageFor(model => model.BBStatus)
-        </div>
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Note, "Note")
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Note)
-            @Html.ValidationMessageFor(model => model.Note)
-        </div>
+
+      <h2>Rent Calculation</h2>
+  <div id="RentCalculation">Please select a blackbox from list for calculation...</div>
+
 
         <div class="form-toolbar">
-            <input type="submit" id="btn-submit" value="Save" />
+          <input type="submit" id="btn-submit" value="Save" />
         </div>
-    </section>
+      </section>
 }
 @section scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+  @Scripts.Render("~/bundles/jqueryval")
+  <script type="text/javascript">
+    var FORM = document.forms['RecBlackBox'];
+
+    $(document).ready(function () {
+      $('#ID').on("change", function () {
+        var URL = '@Url.Action("BlackBoxInfo")' + "/" + $(this).val();
+        $('#RecBlackBox :input').prop("disabled", true);
+        $.ajax({
+          method: 'GET',
+          url: URL
+        }).done(ShowRentCalcualtion);
+      })
+    });
+
+    function ShowRentCalcualtion(data) {
+      $('#RecBlackBox :input').prop("disabled", false);
+      FORM['RentStartDate'].value = fmtDt(data.RentStartDate);
+      FORM['RentEndDate'].value = fmtDt(data.RentEndDate);
+    }
+
+    function fmtDt(value) {
+      var Month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      var d = /\/Date\((\d*)\)\//.exec(value);
+      var theDate = (d) ? new Date(+d[1]) : value;
+      var fmtDate =
+        theDate.getDate() + '-' +
+        Month[theDate.getMonth()] + '-' +
+        theDate.getFullYear();
+      return fmtDate;
+    }
+
+  </script>
 }
