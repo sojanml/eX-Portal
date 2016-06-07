@@ -433,11 +433,11 @@ namespace eX_Portal.Controllers {
                           ,[CurrentStatus]
                           ,[CurrentUserID]
                           ,[LastUpdateDate]
-                          ,[CurrentDroneID] ";
-                    if (exLogic.User.hasAccess("BLACKBOX.AES"))
-                          SQL = SQL + ",[EncryptionKey]";
-
-                    SQL = SQL + @", Count(*) Over() as _TotalRecords
+                          ,[CurrentDroneID]
+                          , Count(*) Over() as _TotalRecords ";
+                    //if (exLogic.User.hasAccess("BLACKBOX.AES"))
+                    //      SQL = SQL + ",[EncryptionKey]";
+                    SQL = SQL + @"
                             FROM  MSTR_BlackBox
                            where BlackBoxID = " + id;
 
@@ -446,14 +446,19 @@ namespace eX_Portal.Controllers {
             ViewBag.Title = "Black Box Details";
             return nView.getTable();
         }
-
-
-
+      
         public ActionResult BlackBoxDetails([Bind(Prefix = "ID")] int BlackBoxID)
         {
             // if (!exLogic.User.hasAccess("PARTS.VIEW")) return RedirectToAction("NoAccess", "Home");
 
             Models.MSTR_BlackBox BB = db.MSTR_BlackBox.Find(BlackBoxID);
+            ViewBag.EncryptionKeyStatus = false;
+            if (exLogic.User.hasAccess("BLACKBOX.AES"))
+            {
+                ViewBag.EncryptionKeyStatus = true;
+                if (BB != null)
+                    ViewBag.EncryptionKey = BB.EncryptionKey;
+            }
             if (BB == null) return RedirectToAction("Error", "Home");
             ViewBag.Title = "Black Box Details";
             return View(BB);
