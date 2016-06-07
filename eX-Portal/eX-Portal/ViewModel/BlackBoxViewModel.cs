@@ -39,7 +39,7 @@ namespace eX_Portal.ViewModel {
     public BlackBoxTransaction BBTransaction { get; set; }
     public IEnumerable<SelectListItem> CollectionMode { get; set; }
 
-    public IList<BlackBoxCostCalucation> BlackBoxCostList { get; set; }
+    public List<List<BlackBoxCostCalucation>> BlackBoxCostList { get; set; }
   }
 
 

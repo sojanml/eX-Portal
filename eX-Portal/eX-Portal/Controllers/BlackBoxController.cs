@@ -459,6 +459,7 @@ namespace eX_Portal.Controllers {
             {
                 ViewBag.CreatedBy = dronedet[0].CreatedBy == null ? "" : dronedet[0].CreatedBy.ToString();
                 ViewBag.DroneId = dronedet[0].DroneID == null ? "" : dronedet[0].DroneID.ToString();
+                
             }
             //string sqldronedet = "select * from GCA_Approval where ApprovalID="+ approvalid;
             //var Row=Util.getDBRow(sqldronedet);
@@ -578,10 +579,8 @@ namespace eX_Portal.Controllers {
             //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
 
             BlackBoxViewModel BV = new BlackBoxViewModel();
-
-
-            List<BlackBoxCost> Bl = db.BlackBoxCosts.ToList();
-            return View();
+            BV.BlackBoxCostList= new List<List<BlackBoxCostCalucation>>();
+            return View(BV);
         }
 
         [HttpPost]
@@ -601,6 +600,17 @@ namespace eX_Portal.Controllers {
 
             // IList<BlackBoxCost> Bl = db.BlackBoxCosts.ToList();
             return View(db.BlackBoxCosts.ToList());
+        }
+
+       
+        public ActionResult Calculate(int Days=0)
+        {
+            //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+            BlackBox BB = new BlackBox();
+            var theList = new List<List<BlackBoxCostCalucation>>();
+            theList.Add(BB.getBlackBoxCost(Days));
+            // IList<BlackBoxCost> Bl = db.BlackBoxCosts.ToList();
+            return Json(theList, JsonRequestBehavior.AllowGet); 
         }
     }//class
 }//namespace

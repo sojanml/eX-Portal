@@ -251,6 +251,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BlackBoxCost.cs" />
     <Compile Include="Models\BlackBoxData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -789,6 +790,7 @@
     <Content Include="Scripts\flight-gps-tag.js" />
     <Content Include="Scripts\FlightChart.js" />
     <Content Include="Scripts\flightCreation.js" />
+    <Content Include="Scripts\FlightSetup.js" />
     <Content Include="Scripts\geotag.js" />
     <Content Include="Scripts\GoogleMapLabel.js" />
     <Content Include="Scripts\HomeMap.js" />
