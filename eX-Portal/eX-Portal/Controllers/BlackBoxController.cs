@@ -564,6 +564,7 @@ namespace eX_Portal.Controllers {
           where y.BlackBoxID == BlackBoxID
           select y.LastRentalId
             ).FirstOrDefault();
+
       BlackBoxTransaction btx = (
           from n in db.BlackBoxTransactions
           where n.ID == lastID
@@ -572,8 +573,14 @@ namespace eX_Portal.Controllers {
 
 
       //get the information of calucation for the dates
-
-      return Json(btx, JsonRequestBehavior.AllowGet);
+      var NumDays = (int)((TimeSpan)(btx.RentEndDate - btx.RentStartDate)).TotalDays;
+      if (NumDays < 0) NumDays = -1 * NumDays;
+      var BB = new BlackBox();
+      var BBInfo = new {
+        Cost = BB.getBlackBoxCost(NumDays),
+        Info = btx
+      };
+      return Json(BBInfo, JsonRequestBehavior.AllowGet);
     }
 
     public ActionResult ReceiveBlackBox([Bind(Prefix = "ID")] int BlackBoxID = 0) {

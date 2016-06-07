@@ -39,9 +39,8 @@
               @Html.LabelFor(model => model.RentStartDate)
             </div>
             <div class="editor-field">
-              @Html.TextBoxFor(model => model.RentStartDate, new { @class = "date-picker" })
-              @Html.ValidationMessageFor(model => model.RentStartDate)
-            </div>
+              <div id="RentStartDate" class="input-field date-picker">@Model.RentStartDate&nbsp;</div>                               
+              </div>
           </div>
           <div class="form-group">
             <div class="editor-label">
@@ -67,6 +66,8 @@
   @Scripts.Render("~/bundles/jqueryval")
   <script type="text/javascript">
     var FORM = document.forms['RecBlackBox'];
+    var RentStartDate = null;
+    var RentEndDate = null;
 
     $(document).ready(function () {
       $('#ID').on("change", function () {
@@ -76,25 +77,82 @@
           method: 'GET',
           url: URL
         }).done(ShowRentCalcualtion);
-      })
-    });
+      })//$('#ID').on("change")
+
+      $('#RentEndDate').on("change", function () {
+        var Days = Math.abs(RentEndDate - RentStartDate);
+        var URL = ''
+
+      });//$('#RentEndDate').on("change")
+
+    });//$(document).ready(function ()
 
     function ShowRentCalcualtion(data) {
       $('#RecBlackBox :input').prop("disabled", false);
-      FORM['RentStartDate'].value = fmtDt(data.RentStartDate);
-      FORM['RentEndDate'].value = fmtDt(data.RentEndDate);
+      RentStartDate = toDate(data.Info.RentStartDate);
+      RentEndDate = toDate(data.Info.RentEndDate);
+      $('#RentStartDate').html(fmtDt(RentStartDate));
+      FORM['RentEndDate'].value = fmtDt(RentEndDate);
+
+      $('#RentCalculation').html(getCostDetail(data.Cost));
+    }
+
+    function getCostDetail(Cost) {
+      var HTML = '<table class="report" cellspacing="0">' +
+      '<thead>\n' +
+      '<tr>\n' +
+      '<th>#</th>\n' +
+      '<th>&nbsp;</th>\n' +
+      '<th>Rent Type</th>\n' +
+      '<th align="right">Qty</th>\n' +
+      '<th align="right">Amount</th>\n' +
+      '<th align="right">Total</th>\n' +
+      '<th>&nbsp;</th>\n' +
+      '</tr>\n' +
+      '</thead>\n';
+
+      for (var i = 0; i < Cost.length; i++) {
+        HTML += 
+        '<tr class="' + (Cost[i].isSelected ? "selected" : "") + '">\n' +
+        '<td>' +  (i+1) + '</td>\n' +
+        '<td>' + (Cost[i].isSelected ? '<span class="icon" style="color:green">&#xf00c;</span>' : '&nbsp;') + '</td>\n' +
+        '<td>' + Cost[i].RentType + '</td>\n' +
+        '<td align="right">' + Cost[i].SectionDays + '</td>\n' +
+        '<td align="right">' + fmtMoney(Cost[i].RentAmount) + '</td>\n' +
+        '<td align="right">' + fmtMoney(Cost[i].CalcuatedCost) + '</td>\n' +
+        '<td>&nbsp;</td>\n' +
+        '</tr>\n';
+      }
+      HTML += '</table>\n';
+
+      return HTML;
+    }
+
+    function toDate(value) {
+      var d = /\/Date\((\d*)\)\//.exec(value);
+      var theDate = (d) ? new Date(+d[1]) : value;
+      return theDate;
     }
 
     function fmtDt(value) {
       var Month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      var d = /\/Date\((\d*)\)\//.exec(value);
-      var theDate = (d) ? new Date(+d[1]) : value;
       var fmtDate =
         theDate.getDate() + '-' +
         Month[theDate.getMonth()] + '-' +
         theDate.getFullYear();
       return fmtDate;
     }
+
+    function fmtMoney(theNumber){
+      var n = theNumber;
+          c = 2, 
+          d = ".", 
+          t = ",", 
+          s = n < 0 ? "-" : "", 
+          i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+          j = (j = i.length) > 3 ? j % 3 : 0;
+      return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
 
   </script>
 }

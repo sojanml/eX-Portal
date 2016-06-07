@@ -971,7 +971,7 @@ cursor:pointer;
 li.profile_menu_row span.permission {
 color:gray;
 }
-li.profile_menu_row span.on {
+li.profile_menu_row span.on {q
   color:green;
 }
 li.profile_menu_row span.off {
@@ -1124,4 +1124,8 @@ div.two-column-form-group:after {
 select.ui-datepicker-month,
 select.ui-datepicker-year {
   height: auto !important;
+}
+
+tr.selected td {
+background-color: rgba(85, 237, 33, 0.36);
 }
