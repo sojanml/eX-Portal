@@ -557,19 +557,36 @@ namespace eX_Portal.Controllers {
             return View();
         }
 
-        public ActionResult ReceiveBlackBox([Bind(Prefix = "ID")] int BlackBoxID = 0)
-        {
-            BlackBoxTransaction btx = new BlackBoxTransaction();
-            if (BlackBoxID != 0)
-            {
-                btx = db.BlackBoxTransactions.Find(BlackBoxID);
-                if (btx == null) return RedirectToAction("Error", "Home");
-            }
-            btx.BBStatus = "IN";
-            return View(btx);
-        }
 
-        [HttpPost]
+    public JsonResult BlackBoxInfo([Bind(Prefix = "ID")] int BlackBoxID = 0) {
+      var lastID = (
+          from y in db.MSTR_BlackBox
+          where y.BlackBoxID == BlackBoxID
+          select y.LastRentalId
+            ).FirstOrDefault();
+      BlackBoxTransaction btx = (
+          from n in db.BlackBoxTransactions
+          where n.ID == lastID
+          select n
+        ).FirstOrDefault();
+
+
+      //get the information of calucation for the dates
+
+      return Json(btx, JsonRequestBehavior.AllowGet);
+    }
+
+    public ActionResult ReceiveBlackBox([Bind(Prefix = "ID")] int BlackBoxID = 0) {
+      BlackBoxTransaction btx = new BlackBoxTransaction();
+      if (BlackBoxID != 0) {
+        btx = db.BlackBoxTransactions.Find(BlackBoxID);
+        if (btx == null) return RedirectToAction("Error", "Home");
+      }
+      btx.BBStatus = "IN";
+      return View(btx);
+    }
+
+    [HttpPost]
         public ActionResult ReceiveBlackBox(BlackBoxTransaction Btx)
         {
             //var oList = from p in db.BlackBoxTransactions select p;
