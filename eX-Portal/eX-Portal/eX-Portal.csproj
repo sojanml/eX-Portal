@@ -251,7 +251,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\BlackBoxCost.cs" />
+    <Compile Include="Models\BlackBoxCost.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\BlackBoxData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -425,9 +427,6 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductTransaction.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SMSTable.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
@@ -1148,6 +1147,7 @@
     <Content Include="Views\BlackBox\Rent.cshtml" />
     <Content Include="Views\Test\BlackBox.cshtml" />
     <Content Include="Views\PayLoad\GeoTag.cshtml" />
+    <Content Include="Views\BlackBox\Acknowledgement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

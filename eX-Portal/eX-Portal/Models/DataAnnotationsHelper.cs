@@ -16,7 +16,26 @@ namespace eX_Portal.Models {
   public class DataAnnotationsHelper {
   }
 
-  [MetadataType(typeof(MSTR_AccountHelper))]
+    [MetadataType(typeof(MSTR_BlackBoxHelper))]
+    public partial class MSTR_BlackBox {}
+
+    public class MSTR_BlackBoxHelper
+    {
+        [Required(ErrorMessage = "Please Enter the BlackBox Serial")]
+        [Display(Name = "BlackBox Serial")]
+        public string BlackBoxSerial { get; set; }
+
+        [Required(ErrorMessage = "Please Enter the BlackBox Name")]
+        [Display(Name = "BlackBox Name")]
+        public string BlackBoxName { get; set; }
+
+        [Required(ErrorMessage = "Please Enter the Encryption Key")]
+        [Display(Name = "Encryption Key")]
+        public string EncryptionKey { get; set; }
+
+    }//MSTR_AccountHelper
+
+    [MetadataType(typeof(MSTR_AccountHelper))]
   public partial class MSTR_Account { }
 
 
@@ -545,7 +564,7 @@ namespace eX_Portal.Models {
     [MetadataType(typeof(BlackBoxTransactionHelper))]
     public partial class BlackBoxTransaction
     {
-
+        public bool VerifyCheck { get; set; }
     }
 
     public class BlackBoxTransactionHelper
@@ -570,5 +589,13 @@ namespace eX_Portal.Models {
         [Required(ErrorMessage = "Please enter Note")]
         [Display(Name = "Note")]
         public string Note { get; set; }
+
+        [Required(ErrorMessage = "Please enter Verify Code")]
+        [Display(Name = "Verify Code")]
+        public string VerifyCode { get; set; }
+
+        //[Required(ErrorMessage = "Please Is Verified ")]
+        //[Display(Name = "Is Verified")]
+        //public string VerifyCheck { get; set; }
     }
 }
