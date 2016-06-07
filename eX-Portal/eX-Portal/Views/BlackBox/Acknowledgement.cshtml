@@ -1,0 +1,56 @@
+﻿@model eX_Portal.Models.BlackBoxTransaction
+
+@{
+    ViewBag.Title = "Acknowledgement";
+    Layout = "~/Views/Shared/_eXPortal.cshtml";
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "BlackBoxAck", name = "BlackBoxAck" }))
+{
+    <section class="general-form" id="loginForm">
+
+        <input type="hidden" name="BlackBoxID" value="@Model.BlackBoxID" />
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.VerifyCode, "VerifyCode")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.VerifyCode)
+            @Html.ValidationMessageFor(model => model.VerifyCode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.VerifyCheck, "Is Verify")
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.VerifyCheck, new { @checked = true })
+            @Html.ValidationMessageFor(model => model.VerifyCheck)
+        </div>
+        @if(ViewBag.ErrorStatus == 1)
+        {
+            <span id="spnErrorMsg" class="error" style="color:red;">The code you have entered is wrong, Please chack and confirm.</span>
+            ViewBag.ErrorStatus = 0;
+        }
+        <div class="form-toolbar">
+            <input type="submit" id="btn-submit" value="Save" disabled />
+        </div>
+    </section>
+}
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+    $(document).ready(function () {
+        var VerifyCheck = document.getElementById('VerifyCheck');
+        var btnsubmit = document.getElementById('btn-submit');
+        // when unchecked or checked, run the function
+        VerifyCheck.onchange = function () {
+            if (this.checked) {
+                btnsubmit.disabled = false;
+            } else {
+                btnsubmit.disabled = true;
+            }
+
+        }
+    });
+    </script>
+
+}
