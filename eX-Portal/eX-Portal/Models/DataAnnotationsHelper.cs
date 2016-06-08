@@ -577,9 +577,9 @@ namespace eX_Portal.Models {
         [Display(Name = "Collection Mode")]
         public string CollectionMode { get; set; }
 
-        [Required(ErrorMessage = "Please enter Bank Name")]
-        [Display(Name = "Bank Name")]
-        public string BankName { get; set; }
+        //[Required(ErrorMessage = "Please enter Bank Name")]
+        //[Display(Name = "Bank Name")]
+        //public string BankName { get; set; }
 
         [Required(ErrorMessage = "Please enter Amount")]
         [Display(Name = "Amount")]

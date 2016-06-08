@@ -23,9 +23,11 @@
 
         <input type="hidden" name="droneid" value="@ViewBag.DroneId" />
         <input type="hidden" name="createdby" value="@ViewBag.CreatedBy" />
-        <input type="hidden" id="RentType" value="0" />
-        <input type="hidden" id="RentCost" value="0" />
-        @Html.HiddenFor(model => model.ID)       
+        //<input type="hidden" id="RentType" value="0" />
+        //<input type="hidden" id="RentCost" value="0" />
+        @Html.HiddenFor(model => model.ID) 
+        @Html.HiddenFor(model => model.RentType)
+        @Html.HiddenFor(model => model.RentAmount)
 
         <div class="form-group">
             @Html.LabelFor(model => model.BlackBoxID, "Black Box", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -85,7 +87,8 @@
         var Rent = amount.split("-");
         $('#Amount').val(Rent[0]);
         $('#RentType').val(Rent[1]);
-        $('#RentCost').val(Rent[2]);
+        $('#RentAmount').val(Rent[2]);
+        
     });
     $('#CollectionMode').on("change", function (e) {
        
@@ -109,8 +112,8 @@
         var Rent = amount.split("-");
         $('#Amount').val(Rent[0]);
         $('#RentType').val(Rent[1]);
-        $('#RentCost').val(Rent[2]);
-        alert($('#Amount').val() + "," + $('#RentType').val() + "," + $('#RentCost').val());
+        $('#RentAmount').val(Rent[2]);
+        alert($('#Amount').val() + "," + $('#RentType').val() + "," + $('#RentAmount').val());
     });
 
 
