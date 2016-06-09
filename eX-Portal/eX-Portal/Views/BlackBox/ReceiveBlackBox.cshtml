@@ -56,11 +56,23 @@
       <h2>Rent Calculation</h2>
   <div id="RentCalculation">Please select a blackbox from list for calculation...</div>
 
+  <div class="two-column-form-group">
+    <h2>Receive Black Box</h2>
+    <div class="form-group">
+      <div class="editor-label">
+        Rental Amount
+      </div>
+      <div class="editor-field">
+        @Html.TextBoxFor(model => model.RentEndDate, new { @class = "date-picker" })
+        @Html.ValidationMessageFor(model => model.RentEndDate)
+      </div>
+    </div>
+  </div>
 
-        <div class="form-toolbar">
-          <input type="submit" id="btn-submit" value="Save" />
-        </div>
-      </section>
+    <div class="form-toolbar">
+      <input type="submit" id="btn-submit" value="Save" />
+    </div>
+</section>
 }
 @section scripts {
   @Scripts.Render("~/bundles/jqueryval")
@@ -73,6 +85,7 @@
       $('#ID').on("change", function () {
         var URL = '@Url.Action("BlackBoxInfo")' + "/" + $(this).val();
         $('#RecBlackBox :input').prop("disabled", true);
+        $('#RentCalculation').slideUp();
         $.ajax({
           method: 'GET',
           url: URL
@@ -80,8 +93,21 @@
       })//$('#ID').on("change")
 
       $('#RentEndDate').on("change", function () {
+        RentEndDate = new Date($(this).val());
         var Days = Math.abs(RentEndDate - RentStartDate);
-        var URL = ''
+        var BBID = $('#ID').val();
+        var URL = '@Url.Action("BlackBoxInfo")' + "/" + BBID +
+          '?StartDate=' + fmtDt(RentStartDate) +
+          '&EndDate=' + fmtDt(RentEndDate);
+        $('#RentCalculation').slideUp();
+        $.ajax({
+          method: 'GET',
+          url: URL
+        }).done(function (data) {
+          $('#RentCalculation')
+            .html(getCostDetail(data.Cost))
+            .slideDown();
+        });
 
       });//$('#RentEndDate').on("change")
 
@@ -94,7 +120,9 @@
       $('#RentStartDate').html(fmtDt(RentStartDate));
       FORM['RentEndDate'].value = fmtDt(RentEndDate);
 
-      $('#RentCalculation').html(getCostDetail(data.Cost));
+      $('#RentCalculation')
+        .html(getCostDetail(data.Cost))
+        .slideDown();
     }
 
     function getCostDetail(Cost) {
@@ -105,14 +133,14 @@
       '<th>&nbsp;</th>\n' +
       '<th>Rent Type</th>\n' +
       '<th align="right">Qty</th>\n' +
-      '<th align="right">Amount</th>\n' +
-      '<th align="right">Total</th>\n' +
+      '<th align="right">Amount (AED)</th>\n' +
+      '<th align="right">Total (AED)</th>\n' +
       '<th>&nbsp;</th>\n' +
       '</tr>\n' +
       '</thead>\n';
 
       for (var i = 0; i < Cost.length; i++) {
-        HTML += 
+        HTML +=
         '<tr class="' + (Cost[i].isSelected ? "selected" : "") + '">\n' +
         '<td>' +  (i+1) + '</td>\n' +
         '<td>' + (Cost[i].isSelected ? '<span class="icon" style="color:green">&#xf00c;</span>' : '&nbsp;') + '</td>\n' +
@@ -134,7 +162,7 @@
       return theDate;
     }
 
-    function fmtDt(value) {
+    function fmtDt(theDate) {
       var Month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var fmtDate =
         theDate.getDate() + '-' +
@@ -145,11 +173,11 @@
 
     function fmtMoney(theNumber){
       var n = theNumber;
-          c = 2, 
-          d = ".", 
-          t = ",", 
-          s = n < 0 ? "-" : "", 
-          i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+          c = 2,
+          d = ".",
+          t = ",",
+          s = n < 0 ? "-" : "",
+          i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
           j = (j = i.length) > 3 ? j % 3 : 0;
       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
     };

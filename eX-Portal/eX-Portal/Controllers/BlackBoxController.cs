@@ -502,8 +502,12 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-
-    public JsonResult BlackBoxInfo([Bind(Prefix = "ID")] int BlackBoxID = 0) {
+    [HttpGet]
+    public JsonResult BlackBoxInfo(
+      [Bind(Prefix = "ID")] int BlackBoxID = 0,
+      DateTime? StartDate = null,
+      DateTime? EndDate = null
+    ) {
       var lastID = (
           from y in db.MSTR_BlackBox
           where y.BlackBoxID == BlackBoxID
@@ -516,9 +520,10 @@ namespace eX_Portal.Controllers {
           select n
         ).FirstOrDefault();
 
-
+      if (StartDate == null) StartDate = btx.RentStartDate;
+      if (EndDate == null) EndDate = btx.RentEndDate;
       //get the information of calucation for the dates
-      var NumDays = (int)((TimeSpan)(btx.RentEndDate - btx.RentStartDate)).TotalDays;
+      var NumDays = (int)((TimeSpan)(StartDate - EndDate)).TotalDays;
       if (NumDays < 0) NumDays = -1 * NumDays;
       var BB = new BlackBox();
       var BBInfo = new {
@@ -528,6 +533,7 @@ namespace eX_Portal.Controllers {
       return Json(BBInfo, JsonRequestBehavior.AllowGet);
     }
 
+    
     public ActionResult ReceiveBlackBox([Bind(Prefix = "ID")] int BlackBoxID = 0) {
       BlackBoxTransaction btx = new BlackBoxTransaction();
       if (BlackBoxID != 0) {

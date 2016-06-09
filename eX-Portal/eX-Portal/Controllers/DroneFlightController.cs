@@ -710,8 +710,8 @@ namespace eX_Portal.Controllers {
           ) values(
             '" + flightsetupvm.GcaApproval.ApprovalName + @"',
             GETDATE(),
-            '" + StartDate.ToString("yyyy-mm-dd") + @"',
-            '" + EndDate.ToString("yyyy-mm-dd") + @"',
+            '" + StartDate.ToString("yyyy-MM-dd") + @"',
+            '" + EndDate.ToString("yyyy-MM-dd") + @"',
             '" + Coordinates + @"',
             geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
             GETDATE(),
@@ -721,7 +721,7 @@ namespace eX_Portal.Controllers {
             '" + flightsetupvm.GcaApproval.StartTime + @"',
             50,
             " + MinAltitude + @",
-            " + MaxAltidute + @",
+            " + MaxAltidute + @"
           )";
           //
         } else {
