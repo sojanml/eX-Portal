@@ -308,6 +308,7 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "Blackbox";
 
       string SQL = @"SELECT  m.[BlackBoxID] as _PKey
+                            ,m.[LastRentalId]
                           ,m.[BlackBoxSerial]
                           ,m.[BlackBoxName]
                           ,m.[CurrentStatus]
@@ -321,7 +322,7 @@ namespace eX_Portal.Controllers {
       qView nView = new qView(SQL);
       nView.addMenu("Detail", Url.Action("BlackBoxDetails", new { ID = "_PKey" }));
       nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-      nView.addMenu("Receive", Url.Action("ReceiveBlackBox", new { ID = "_PKey" }));
+      nView.addMenu("Receive", Url.Action("ReceiveBlackBox", new { ID = "LastRentalId" }));
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -465,19 +466,20 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-    [HttpPost]
-    public ActionResult Rental(BlackBoxTransaction BBTransaction) {
-      ModelState.Remove("Note");
-      if (ModelState.IsValid) {
-        BBTransaction.BBStatus = "OUT";
-        BBTransaction.CreatedBy = Session["UserID"].ToString();
-        BBTransaction.DroneID = Convert.ToInt32(TempData["Droneid"]);
-        BBTransaction.ApprovalID = Convert.ToInt32(TempData["Approvalid"]);
-        //db.BlackBoxTransactions.Add(BBTransaction);
-        //db.SaveChanges();
-        //int id = BBTransaction.ID;
+        [HttpPost]
+        public ActionResult Rental(BlackBoxTransaction BBTransaction)
+        {
+            ModelState.Remove("Note");
+            ModelState.Remove("VerifyCode");
+            if (ModelState.IsValid)
+            {
+                BBTransaction.BBStatus = "OUT";
+                BBTransaction.CreatedBy = Session["UserID"].ToString();
+                BBTransaction.DroneID = Convert.ToInt32(TempData["Droneid"]);
+                BBTransaction.ApprovalID = Convert.ToInt32(TempData["Approvalid"]);
+                
 
-        string insertsql = "insert into[BlackBoxTransaction] ([BlackBoxID] \n" +
+                string insertsql = "insert into[BlackBoxTransaction] ([BlackBoxID] \n" +
                          ",[BBStatus] \n" +
                          ",[CollectionMode] \n" +
                          ",[NameOnCard] \n" +
@@ -488,19 +490,21 @@ namespace eX_Portal.Controllers {
                          ",[CreatedDate] \n" +
                          ",[CreatedBy] \n" +
                          ",[DroneID] \n" +
+                         ",[RentType] \n" +
+                         ",[RentAmount] \n" +
                          ",[ApprovalID])values( \n" +
                          BBTransaction.BlackBoxID + ",'OUT','" + BBTransaction.CollectionMode + "','" + BBTransaction.NameOnCard + "','" + BBTransaction.BankName + "',\n" +
                          BBTransaction.Amount + ",'" + BBTransaction.ChequeNumber + "','" + BBTransaction.DateOfCheque + "','" + System.DateTime.Now + "','\n" +
-                         BBTransaction.CreatedBy + "'," + BBTransaction.DroneID + "," + BBTransaction.ApprovalID + ")";
-        int bbtransctionid = Util.InsertSQL(insertsql);
-        string bbupdatesql = "update [MSTR_BlackBox] set [LastRentalId]=" + bbtransctionid + ",[CurrentStatus]='OUT',CurrentUserID=" + Convert.ToInt32(Session["UserID"].ToString()) + ",CurrentDroneID=" + Convert.ToInt32(TempData["Droneid"]) + " where [BlackBoxID]=" + BBTransaction.BlackBoxID;
-        Util.doSQL(bbupdatesql);
-        string droneupdatesql = "update [MSTR_Drone] set [BlackBoxID]=" + BBTransaction.BlackBoxID + " where [DroneId]=" + BBTransaction.DroneID;
-        Util.doSQL(droneupdatesql);
-        return RedirectToAction("AllApplications", "Rpas");
-      }
-      return View();
-    }
+                         BBTransaction.CreatedBy + "'," + BBTransaction.DroneID + ",'" + BBTransaction.RentType + "','" + BBTransaction.RentAmount + "'," + BBTransaction.ApprovalID + ")";
+                int bbtransctionid = Util.InsertSQL(insertsql);
+                string bbupdatesql = "update [MSTR_BlackBox] set [LastRentalId]=" + bbtransctionid + ",[CurrentStatus]='OUT',CurrentUserID=" + Convert.ToInt32(Session["UserID"].ToString()) + ",CurrentDroneID=" + Convert.ToInt32(TempData["Droneid"]) + " where [BlackBoxID]=" + BBTransaction.BlackBoxID;
+                Util.doSQL(bbupdatesql);
+                string droneupdatesql = "update [MSTR_Drone] set [BlackBoxID]=" + BBTransaction.BlackBoxID + " where [DroneId]=" + BBTransaction.DroneID;
+                Util.doSQL(droneupdatesql);
+                return RedirectToAction("AllApplications", "Rpas");
+            }
+            return View();
+        }
 
     [HttpGet]
     public JsonResult BlackBoxInfo(
