@@ -14,6 +14,7 @@ using eX_Portal.ViewModel;
 namespace eX_Portal.Controllers {
   public class DroneFlightController : Controller {
     static String RootUploadDir = "~/Upload/Drone/";
+       static int GL_Flight_Id;
     ExponentPortalEntities db = new ExponentPortalEntities();
     // GET: DroneFlight
     public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0) {
@@ -98,6 +99,7 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("FLIGHT.GEOTAG")) return RedirectToAction("NoAccess", "Home");
       ExponentPortalEntities Db = new ExponentPortalEntities();
       ViewBag.FlightID = FlightID;
+      GL_Flight_Id = FlightID;
       List<DroneDocument> Docs = (
         from o in Db.DroneDocuments
         where o.DocumentType == "GEO Tag" &&
@@ -107,7 +109,39 @@ namespace eX_Portal.Controllers {
       return View(Docs);
     }//GeoTag
 
-    public ActionResult Create([Bind(Prefix = "ID")] int DroneID = 0) {
+
+        [System.Web.Mvc.HttpGet]
+        public JsonResult GetGeoTagInfo()
+        {
+            ExponentPortalEntities Db = new ExponentPortalEntities();
+
+           
+            List<DroneDocument> Docs = (
+         from o in Db.DroneDocuments
+         where o.DocumentType == "GEO Tag" &&
+         o.FlightID == GL_Flight_Id
+         select o).ToList();
+            GL_Flight_Id = 0;
+            return Json(Docs, JsonRequestBehavior.AllowGet);
+           
+        }//GetGeoTagInfo()
+
+
+        [System.Web.Mvc.HttpGet]
+        public JsonResult GetDroneName(int DroneID)
+        {
+           
+            ExponentPortalEntities Db = new ExponentPortalEntities();
+
+         var   DroneName = Util.getDroneName(DroneID);
+           
+            return Json(DroneName, JsonRequestBehavior.AllowGet);
+
+        }//GetGeoTagInfo()
+
+
+
+        public ActionResult Create([Bind(Prefix = "ID")] int DroneID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.CREATE")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Create UAS Flight";
       DroneFlight InitialData = new DroneFlight();
