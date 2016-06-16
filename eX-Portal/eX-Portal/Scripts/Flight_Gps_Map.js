@@ -10,7 +10,6 @@ var infowindow = new google.maps.InfoWindow();
 var center = new google.maps.LatLng(initLat, initLng);
 
 $(document).ready(function () {
-
     initialize();
 });
 // marker position
@@ -24,76 +23,26 @@ function initialize() {
     };
 
      map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-    GetGeoTagInfo();
-   
-    
+    GetGeoTagInfo();   
 }
 
 
 function GetGeoTagInfo() {
-    
-    var _locVal = [];
-    $.ajax({
-        type: "GET",
-        url: GeoMapURL,
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        async: true,
-        success: function (_GeoInfo) {
-           // alert("geoinfo");
-              setMarker(map, _GeoInfo)
-        },
-        failure: function (msg) {
-            alert('Geo Tag Info ' + msg);
-        }
-    });
+  setMarker(map, GpsTags);
 }
 
 
-function setMarker(map, _GeoInfo) {
-  
-    $.each(_GeoInfo, function (index, GeoInfo) {
-       
-        GetDroneName(GeoInfo['DroneID']);
-        var url = 'src="/upload/drone/' + DroneName + '/' + GeoInfo['FlightID'] + '/' + GeoInfo['DocumentName'];
-       
+function setMarker(map, _GeoInfo) {   
+    $.each(_GeoInfo, function (index, GeoInfo) {       
         var body = '<b>' + "" + '</b><br>\n' +
-            ' <img src="/upload/drone/' + DroneName + '/' + GeoInfo['FlightID'] + '/' + GeoInfo['DocumentName'] + '"  height="300px" width="300px" />';
-           
-        
+            ' <img src="' + GeoInfo['Thumbnail'] + '"  height="100px" width="100px" />';
         var myLatLng = new google.maps.LatLng(GeoInfo['Latitude'], GeoInfo['Longitude']);
-
         var marker = createMarker(map, myLatLng, "", body, "");
-       
-     
-
     });
     map.fitBounds(bounds);
 }
 
 
-
-
-function GetDroneName(_DroneID) {
-
-    var _locVal = [];
-    $.ajax({
-        type: "GET",
-        url: GetDroneURL,
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        data: { DroneID: _DroneID },
-        async: false,
-        success: function (Response) {
-            DroneName = Response;
-         
-        },
-        failure: function (msg) {
-            alert('Geo Tag Info ' + msg);
-        }
-    });
-}
 function createMarker(map, latlng, heading, body, live) {
   
     var marker = new google.maps.Marker({

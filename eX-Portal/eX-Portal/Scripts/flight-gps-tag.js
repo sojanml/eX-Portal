@@ -1,15 +1,112 @@
 ﻿var QueID = 0;
 var FilesInQueue = [];
+var map;
+var bounds = new google.maps.LatLngBounds();
+var Markers = {};
+var refID = 0;
 
 $(document).ready(function () {
+    $(document).on('click', 'a.delete', function (e) {
+        e.preventDefault();
+        DeleteFile($(this));
+    });
 
-  $(document).on('click', 'a.delete', function (e) {
-    e.preventDefault();
-    DeleteFile($(this));
-  });
+    $(':file').change(AddToUploadQueue);
 
-  $(':file').change(AddToUploadQueue);
+    initialize();
+
 });
+
+// marker position
+//var factory = new google.maps.LatLng(25.9899106, 55.0034188;);
+function initialize() {
+    var center = new google.maps.LatLng(initLat, initLng);
+    var initLat = 24.9899106;
+    var initLng = 55.0034188;
+    var defaultZoom = 10;
+
+    var mapOptions = {
+        center: center,
+        zoom: defaultZoom,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+    GetGeoTagInfo();
+}
+
+
+function GetGeoTagInfo() {
+    setMarker(map, GpsTags);
+}
+
+
+function setMarker(map, _GeoInfo) {
+    $.each(_GeoInfo, function (index, GeoInfo) {
+        setMarkerOne(GeoInfo);
+    });
+    map.fitBounds(bounds);
+}
+
+
+function setMarkerOne(GeoInfo) {
+    var body = '<b>' + "" + '</b><br>\n' +
+        ' <img src="' + GeoInfo['Thumbnail'] + '"  height="100px" width="100px" />';
+    var myLatLng = new google.maps.LatLng(GeoInfo['Latitude'], GeoInfo['Longitude']);
+    var marker = createMarker(myLatLng, "", body, "");
+
+    Markers[GeoInfo["DocumentID"]] = marker;
+}
+
+function createMarker(latlng, heading, body, live) {
+
+    var marker = new google.maps.Marker({
+        map: map, position: latlng
+    });
+
+    var myOptions = {
+        content: heading,
+        boxStyle: {
+            textAlign: "center",
+            color: 'red',
+            fontSize: "8pt",
+            width: "auto"
+        },
+        disableAutoPan: true,
+        pixelOffset: new google.maps.Size(-25, 0),
+        position: latlng,
+        closeBoxURL: "",
+        isHidden: false,
+        pane: "mapPane",
+        enableEventPropagation: true
+    };
+
+    var ibLabel = new InfoBox(myOptions);
+    ibLabel.open(map);
+
+    marker.addListener('click', function () {
+        var infowindow = new google.maps.InfoWindow({
+            content: body
+        });
+        infowindow.open(map, marker);
+    });
+
+    bounds.extend(marker.position);
+
+    return marker;
+}
+
+function resetBounds() {
+   bounds = new google.maps.LatLngBounds();
+   $.each(Markers, function (index, theMarker) {
+       if(theMarker.getMap() != null) bounds.extend(theMarker.position)
+   });
+   map.fitBounds(bounds);
+}
+
+
+
+//Upload functions
 
 
 function AddToUploadQueue() {
@@ -54,7 +151,8 @@ function DeleteFile(Obj) {
 }
 
 function processDeleteFile(Obj) {
-  var FileName = Obj.attr("data-file");
+    var FileName = Obj.attr("data-file");
+    var DocumentID = Obj.attr("data-documentid");
   var URL = DeleteURL + '&file=' + FileName;
   var LI = Obj.closest('LI');
   LI.fadeTo( 200 , 0.2);
@@ -64,8 +162,14 @@ function processDeleteFile(Obj) {
     type: 'GET',
     dataType: 'json',
     success: completeHandler = function (data) {
-      if (data.status == "success") LI.fadeOut().remove();
-    },
+        if (data.status == "success") {
+            LI.fadeOut().remove();
+            if (Markers[DocumentID]) {
+                Markers[DocumentID].setMap(null);
+                resetBounds();
+            }
+        }//if (data.status == "success")
+    }, //success
     error: errorHandler = function (data) {
       alert(data.status + ' - ' + data.statusText);
       LI.fadeTo(1);
@@ -134,14 +238,22 @@ function progressHandlingFunction(evt, Elem, HTML) {
 
 function AddToThumbnail(theData) {
   var Thump = theData.url.replace(".jpg", ".t.png");
-
-
+  var theID = "x" + refID++;
   var HTML = '  <li>\n' +
-  '<div class="delete-icon"><a href="#" class="delete"  data-file="' + theData.addFile[0].name + '"><span class="delete icon">&#xf057;</span></a></div>\n' +
+  '<div class="delete-icon"><a href="#" class="delete" data-documentid="' + theID + '"  data-file="' + theData.addFile[0].name + '"><span class="delete icon">&#xf057;</span></a></div>\n' +
       '<div class="thumbnail">\n' +
       '  <img src="'  + Thump + '" />\n' +
       '</div>\n' +
       '<div class="gps">' + theData.GPS.Info + '</div>\n' +
     '</li>\n';
   $('#GPS-Images').append(HTML);
+
+  GeoInfo = {
+      DocumentID : theID,
+      Thumbnail: Thump,
+      Latitude:  theData.GPS.Latitude,
+      Longitude: theData.GPS.Longitude
+   };
+  setMarkerOne(GeoInfo);
+  resetBounds();
 }

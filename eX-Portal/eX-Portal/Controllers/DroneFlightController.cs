@@ -128,12 +128,12 @@ namespace eX_Portal.Controllers {
 
 
         [System.Web.Mvc.HttpGet]
-        public JsonResult GetDroneName(int DroneID)
+        public JsonResult GetDroneName(int FlightID)
         {
            
             ExponentPortalEntities Db = new ExponentPortalEntities();
 
-         var   DroneName = Util.getDroneName(DroneID);
+         var   DroneName = Util.getDroneNameByFlight(FlightID);
            
             return Json(DroneName, JsonRequestBehavior.AllowGet);
 
