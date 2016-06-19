@@ -455,6 +455,7 @@ namespace eX_Portal.Controllers {
         var TheFile = Request.Files[0];
         String FileName = System.Guid.NewGuid() + "~" + TheFile.FileName.ToLower();
         String DroneName = Util.getDroneNameByFlight(FlightID);
+                DroneID = Util.GetDroneIdFromFlight(FlightID);
         String UploadDir = UploadPath + DroneName + "\\" + FlightID + "\\";
         String FileURL = FileName;
         String FullName = UploadDir + FileName;
