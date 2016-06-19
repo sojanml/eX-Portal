@@ -7,6 +7,7 @@ using eX_Portal.Models;
 using eX_Portal.exLogic;
 using System.Text;
 using System.IO;
+using System.Globalization;
 
 namespace eX_Portal.Controllers {
   public class DroneController : Controller {
@@ -70,7 +71,7 @@ namespace eX_Portal.Controllers {
       if (exLogic.User.hasAccess("BLACKBOX")) nView.addMenu("FDR Data", Url.Action("Index", "BlackBox", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("DRONE.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_Pkey" }));
       if (exLogic.User.hasAccess("FLIGHT.CREATE")) nView.addMenu("Zone Approval", Url.Action("Index", "Approval", new { ID = "_Pkey" }));
-
+      if (exLogic.User.hasAccess("FLIGHT.GEOTAG"))  nView.addMenu("Geo Tagging", Url.Action("GeoTag","Drone",  new { ID = "_Pkey" }));
 
             if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -166,8 +167,171 @@ namespace eX_Portal.Controllers {
       return RedirectToAction("Detail", new { ID = DroneID });
     }//Decommission()
 
+//Geo Tagging for Drone
+        public ActionResult GeoTag([Bind(Prefix = "ID")] int DroneID = 0)
+        {
+            if (!exLogic.User.hasAccess("FLIGHT.GEOTAG")) return RedirectToAction("NoAccess", "Home");
+            ExponentPortalEntities Db = new ExponentPortalEntities();
+            ViewBag.DroneID = DroneID;
+            List<DroneDocument> Docs = (from o in Db.DroneDocuments
+                                        where o.DocumentType == "GEO Tag" &&
+                                        o.DroneID == DroneID
+                                        select o).ToList();
+            ViewBag.FirstRow = true;
 
-    public String UploadFile([Bind(Prefix = "ID")] int DroneID, String DocumentType) {
+          
+            return View(Docs);
+
+        }//GeoTag
+
+
+        [HttpPost]
+        public String UploadGeoFile([Bind(Prefix = "ID")]  int DroneID = 0, String DocumentType = "GCAA Approval", String CreatedOn = "")
+        {
+            int FlightID = 0;
+            DateTime FileCreatedOn = DateTime.MinValue;
+            String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+            //send information in JSON Format always
+            StringBuilder JsonText = new StringBuilder();
+            GPSInfo GPS = new GPSInfo();
+            Response.ContentType = "text/json";
+
+            try
+            {
+                FileCreatedOn = DateTime.ParseExact(CreatedOn, "ddd, d MMM yyyy HH:mm:ss GMT", CultureInfo.InvariantCulture);              
+
+                FlightID = Util.getFlightID(DroneID, FileCreatedOn);
+
+            }
+            catch { }
+
+            //when there are files in the request, save and return the file information
+            try
+            {
+                var TheFile = Request.Files[0];
+                String FileName = System.Guid.NewGuid() + "~" + TheFile.FileName.ToLower();
+                String DroneName = Util.getDroneNameByDroneID(DroneID);
+                String UploadDir = UploadPath + DroneName + "\\" + FlightID + "\\";
+                String FileURL = FileName;
+                String FullName = UploadDir + FileName;
+                String GPSFixName = UploadDir + "GPS-" + FileName;
+
+                //Save the file to Disk
+                if (!Directory.Exists(UploadDir))
+                {
+                    Directory.CreateDirectory(UploadDir);
+                }
+                TheFile.SaveAs(FullName);
+
+                //Do the calculation for GPS
+                if (DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".jpg")
+                {
+                    //here find the code to find the GPS Cordinate
+                    ExifLib GeoTag = new ExifLib(FullName, GPSFixName);
+                    
+                    GPS = GeoTag.getGPS(FlightID, FileCreatedOn);
+                    GeoTag.setGPS(GPS);
+                    GeoTag.setThumbnail(100);
+                    //System.IO.File.Delete(FullName);
+                    FullName = GPSFixName;
+                    FileURL = "GPS-" + FileName;
+                }
+
+
+                JsonText.Append("{");
+                JsonText.Append(Util.Pair("status", "success", true));
+                JsonText.Append(Util.Pair("url", "/upload/drone/" + DroneName + "/" + FlightID + "/" + FileURL, true));
+                JsonText.Append("\"GPS\":{");
+                JsonText.Append("\"Info\":\"");
+                JsonText.Append(GPS.getInfo());
+                JsonText.Append("\",");
+                JsonText.Append("\"Latitude\":");
+                JsonText.Append(GPS.Latitude);
+                JsonText.Append(",");
+                JsonText.Append("\"Longitude\":");
+                JsonText.Append(GPS.Longitude);
+                JsonText.Append(",");
+                JsonText.Append("\"Altitude\":");
+                JsonText.Append(GPS.Altitude);
+                JsonText.Append("},");
+                JsonText.Append("\"addFile\":[");
+                JsonText.Append(Util.getFileInfo(FullName, FileURL));
+                JsonText.Append("]}");
+
+                //now add the uploaded file to the database
+                String SQL = "INSERT INTO DroneDocuments(\n" +
+                  " DroneID, FlightID, DocumentType, DocumentName, UploadedDate, UploadedBy,\n" +
+                  " Latitude, Longitude, Altitude \n" +
+                  ") VALUES (\n" +
+                  "  '" + DroneID + "',\n" +
+                  "  '" + FlightID + "',\n" +
+                  "  '" + DocumentType + "',\n" +
+                  "  '" + FileURL + "',\n" +
+                  "  GETDATE(),\n" +
+                  "  " + Util.getLoginUserID() + ",\n" +
+                  "  " + GPS.Latitude + ", " + GPS.Longitude + ", " + GPS.Altitude + "\n" +
+                  ")";
+                int DocumentID = Util.InsertSQL(SQL);
+
+            }
+            catch (Exception ex)
+            {
+                JsonText.Clear();
+                JsonText.Append("{");
+                JsonText.Append(Util.Pair("status", "error", true));
+                JsonText.Append(Util.Pair("message", ex.Message, false));
+                JsonText.Append("}");
+            }//catch
+            return JsonText.ToString();
+        }//UploadGeoFile()
+
+
+
+        public String DeleteFile([Bind(Prefix = "ID")] int DroneID, String file)
+        {
+
+            //now add the uploaded file to the database
+            String SQL = "DELETE FROM DroneDocuments\n" +
+              "WHERE\n" +
+              "  DocumentName='" + file + "' AND\n" +
+              "  DroneID = '" + DroneID + "'";
+            Util.doSQL(SQL);
+
+            StringBuilder JsonText = new StringBuilder();
+            JsonText.Append("{");
+            JsonText.Append(Util.Pair("status", "success", false));
+            JsonText.Append("}");
+
+            return JsonText.ToString();
+        }
+
+
+        private void MoveUploadFileTo(int DroneID, int FlightID)
+        {
+            String[] Files = Request["FileName"].Split(',');
+            String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+            String OldUploadDir = UploadPath + "0\\0\\";
+            String DroneName = DroneID == 0 ? "0" : Util.getDroneName(DroneID);
+            String NewUploadDir = UploadPath + DroneName + "\\" + FlightID + "\\";
+            foreach (String file in Files)
+            {
+                if (String.IsNullOrEmpty(file)) continue;
+                String OldFullPath = OldUploadDir + file;
+                String NewFullPath = NewUploadDir + file;
+                if (System.IO.File.Exists(OldFullPath))
+                {
+                    if (!Directory.Exists(NewFullPath)) Directory.CreateDirectory(NewUploadDir);
+                    if (!System.IO.File.Exists(NewFullPath)) System.IO.File.Move(OldFullPath, NewFullPath);
+                    String SQL = "UPDATE DroneDocuments SET\n" +
+                    "  DroneID=" + DroneID + ",\n" +
+                    "  FlightID=" + FlightID + "\n" +
+                    "WHERE\n" +
+                    "  DocumentName='" + file + "'";
+                    Util.doSQL(SQL);
+                }//if(System.IO.File.Exists
+            }//foreach (String file in Files)
+        }//MoveUploadFileT
+        public String UploadFile([Bind(Prefix = "ID")] int DroneID, String DocumentType) {
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
       //send information in JSON Format always
       StringBuilder JsonText = new StringBuilder();

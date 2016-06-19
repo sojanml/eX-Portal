@@ -69,7 +69,35 @@ namespace eX_Portal.exLogic {
       return new string(list.ToArray());
     }
 
-    public static IList<ChartViewModel> getCurrentPilotChartData() {
+
+
+        //getting the flightid using date and time for geo tagging
+    public static int getFlightID(int DroneID, DateTime FileCreatedOn)
+               {
+          
+            int FlightID = 0;
+           
+            String SQL =        @"Select TOP 1 
+                                 FlightID       
+                                 from 
+                                 FlightMapData 
+                                             where 
+                                DroneID=" + DroneID + @" AND
+                                ReadTime >=  '" + Util.toSQLDate(FileCreatedOn.ToUniversalTime()) + @"' AND
+                                ReadTime <=  '" + Util.toSQLDate(FileCreatedOn.AddMinutes(10).ToUniversalTime()) + @"'
+                                ORDER BY
+                                ReadTime DESC";
+            var Row = Util.getDBRow(SQL);
+            var theGPS = new GPSInfo();
+            if (Row["hasRows"].ToString() == "True")
+            {
+                FlightID = Util.toInt(Row["FlightID"]);
+
+            }
+            return FlightID;
+        }
+
+        public static IList<ChartViewModel> getCurrentPilotChartData() {
 
       IList<ChartViewModel> ChartList = new List<ChartViewModel>();
 

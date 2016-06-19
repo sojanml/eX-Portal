@@ -20,9 +20,10 @@ $(document).ready(function () {
 // marker position
 //var factory = new google.maps.LatLng(25.9899106, 55.0034188;);
 function initialize() {
-    var center = new google.maps.LatLng(initLat, initLng);
     var initLat = 24.9899106;
     var initLng = 55.0034188;
+    var center = new google.maps.LatLng(initLat, initLng);
+    
     var defaultZoom = 10;
 
     var mapOptions = {
@@ -37,7 +38,10 @@ function initialize() {
 
 
 function GetGeoTagInfo() {
-    setMarker(map, GpsTags);
+    if (GpsTags.length > 0)
+        {
+             setMarker(map, GpsTags);
+        }
 }
 
 
@@ -53,12 +57,12 @@ function setMarkerOne(GeoInfo) {
     var body = '<b>' + "" + '</b><br>\n' +
         ' <img src="' + GeoInfo['Thumbnail'] + '"  height="100px" width="100px" />';
     var myLatLng = new google.maps.LatLng(GeoInfo['Latitude'], GeoInfo['Longitude']);
-    var marker = createMarker(myLatLng, "", body, "");
-
+    var marker = createMarker(map,myLatLng, "", body, "");
+    
     Markers[GeoInfo["DocumentID"]] = marker;
 }
 
-function createMarker(latlng, heading, body, live) {
+function createMarker(map,latlng, heading, body, live) {
 
     var marker = new google.maps.Marker({
         map: map, position: latlng
@@ -73,7 +77,7 @@ function createMarker(latlng, heading, body, live) {
             width: "auto"
         },
         disableAutoPan: true,
-        pixelOffset: new google.maps.Size(-25, 0),
+        pixelOffset: new google.maps.Size(-20, 0),
         position: latlng,
         closeBoxURL: "",
         isHidden: false,
@@ -90,9 +94,12 @@ function createMarker(latlng, heading, body, live) {
         });
         infowindow.open(map, marker);
     });
-
-    bounds.extend(marker.position);
-
+    //points count for checking multiple points and  set zoom
+   
+    
+    
+        bounds.extend(marker.position);
+   
     return marker;
 }
 
@@ -153,7 +160,11 @@ function DeleteFile(Obj) {
 function processDeleteFile(Obj) {
     var FileName = Obj.attr("data-file");
     var DocumentID = Obj.attr("data-documentid");
-  var URL = DeleteURL + '&file=' + FileName;
+    //var FlightId = Obj.attr("data-FlightID");
+    
+    //DeleteURL = "/Drone/DeleteFile/" + FlightId + "?DocumentType=Geo%20Tag";
+    var URL = DeleteURL + '&file=' + FileName;
+
   var LI = Obj.closest('LI');
   LI.fadeTo( 200 , 0.2);
   //return;
@@ -166,6 +177,7 @@ function processDeleteFile(Obj) {
             LI.fadeOut().remove();
             if (Markers[DocumentID]) {
                 Markers[DocumentID].setMap(null);
+              
                 resetBounds();
             }
         }//if (data.status == "success")
@@ -240,7 +252,7 @@ function AddToThumbnail(theData) {
   var Thump = theData.url.replace(".jpg", ".t.png");
   var theID = "x" + refID++;
   var HTML = '  <li>\n' +
-  '<div class="delete-icon"><a href="#" class="delete" data-documentid="' + theID + '"  data-file="' + theData.addFile[0].name + '"><span class="delete icon">&#xf057;</span></a></div>\n' +
+  '<div class="delete-icon"><a href="#" class="delete"    data-documentid="' + theID + '"  data-file="' + theData.addFile[0].name + '"><span class="delete icon">&#xf057;</span></a></div>\n' +
       '<div class="thumbnail">\n' +
       '  <img src="'  + Thump + '" />\n' +
       '</div>\n' +
@@ -253,6 +265,7 @@ function AddToThumbnail(theData) {
       Thumbnail: Thump,
       Latitude:  theData.GPS.Latitude,
       Longitude: theData.GPS.Longitude
+      
    };
   setMarkerOne(GeoInfo);
   resetBounds();

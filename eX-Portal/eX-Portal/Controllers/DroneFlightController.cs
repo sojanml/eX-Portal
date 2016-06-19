@@ -127,17 +127,7 @@ namespace eX_Portal.Controllers {
         }//GetGeoTagInfo()
 
 
-        [System.Web.Mvc.HttpGet]
-        public JsonResult GetDroneName(int FlightID)
-        {
-           
-            ExponentPortalEntities Db = new ExponentPortalEntities();
-
-         var   DroneName = Util.getDroneNameByFlight(FlightID);
-           
-            return Json(DroneName, JsonRequestBehavior.AllowGet);
-
-        }//GetGeoTagInfo()
+       
 
 
 
@@ -457,6 +447,7 @@ namespace eX_Portal.Controllers {
 
       try {
         FileCreatedOn = DateTime.ParseExact(CreatedOn, "ddd, d MMM yyyy HH:mm:ss GMT", CultureInfo.InvariantCulture);
+
       } catch { }
 
       //when there are files in the request, save and return the file information
