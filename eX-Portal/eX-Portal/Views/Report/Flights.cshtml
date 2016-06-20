@@ -1,0 +1,134 @@
+﻿@model eX_Portal.exLogic.qView
+@using eX_Portal.exLogic;
+
+@{ 
+  ViewBag.Title = "Flight Report";
+  FlightReportFilter TheFilter = (FlightReportFilter)ViewBag.ReportFilter;
+}
+
+@Html.Action("ReportFilter", "Report",new {
+  From = TheFilter.From,
+  To = TheFilter.To,
+  Pilot = TheFilter.Pilot,
+  UAS = TheFilter.UAS
+})
+
+
+@*Html.Raw(Model.getDataTable())*@
+
+<table id="qViewTable" class="report">
+  <thead>
+    <tr>
+      <th rowspan="2">Ref</th>
+      <th rowspan="2">Flight Date (UTC)</th>
+      <th rowspan="2">Pilot</th>
+      <th rowspan="2">UAS</th>
+      <th rowspan="2">
+        Flight Hours
+      </th>
+      <th rowspan="2">
+        Max<br />
+        Altitude
+      </th>
+      <th colspan="3" class="row-group">Critical Alerts</th>
+      <th rowspan="1">&nbsp;</th>
+    </tr>
+    <tr>
+      <th>Boundary </th>
+      <th>Proximity </th>
+      <th>Altitude </th>
+      <th rowspan="1" class="menu">&nbsp;</th>
+    </tr>
+
+  </thead>
+  <tfoot>
+    <tr>
+      <th rowspan="2">Ref</th>
+      <th rowspan="2">Flight Date</th>
+      <th rowspan="2">Pilot</th>
+      <th rowspan="2">UAS</th>
+      <th rowspan="2">
+        Flight<br />
+        Time
+      </th>
+      <th rowspan="2">
+        Max<br />
+        Altitude
+      </th>
+      <th colspan="3" class="row-group" >Critical Alerts</th>
+      <th rowspan="1">&nbsp;</th>
+    </tr>
+    <tr>
+      <th>Boundary </th>
+      <th>Proximity </th>
+      <th>Altitude </th>
+      <th rowspan="1" class="menu">&nbsp;</th>
+    </tr>
+
+  </tfoot>
+</table>
+
+
+
+
+@section header {  
+  <link href="~/jquery-ui/jquery-ui.theme.css" rel="stylesheet" />
+}
+
+@section scripts {
+<script type="text/javascript" src="~/jquery-ui/jquery-ui.js"></script>
+<script type="text/javascript">
+@Html.Raw(Model.getScripts())
+
+  $(document).ready(function () {
+    var FORM = document.forms['ReportFilterForm'];
+    $("#PilotName").autocomplete({
+      source: "@Url.Action("getPilots","Report",null)",
+      minLength: 2,
+      select: function (event, ui) {
+        if (ui.item) {
+          event.preventDefault();
+          FORM['Pilot'].value = ui.item.value;
+          FORM['PilotName'].value = ui.item.label;
+        } else {
+          FORM['Pilot'].value = '0';
+        }
+      }
+    });
+
+    $("#UASName").autocomplete({
+      source: "@Url.Action("getUAS","Report",null)",
+      minLength: 2,
+      select: function (event, ui) {
+        if (ui.item) {
+          event.preventDefault();
+          FORM['UAS'].value = ui.item.value;
+          FORM['UASName'].value = ui.item.label;
+        } else {
+          FORM['UAS'].value = '0';
+        }
+      }
+    });
+
+    $('#ProximityCritical').on("click", function () {
+      if ($(this).prop("checked")) FORM['Proximity'].checked = true;
+    });
+    $('#BoundaryCritical').on("click", function () {
+      if ($(this).prop("checked")) FORM['Boundary'].checked = true;
+    });
+    $('#HeightCritical').on("click", function () {
+      if ($(this).prop("checked")) FORM['Height'].checked = true;
+    });
+
+
+    $("#UASName").on("blur", function (e) {
+      if ($(this).val() == "") FORM['UAS'].value = '0';
+    });
+    $("#PilotName").on("blur", function (e) {
+      if ($(this).val() == "") FORM['Pilot'].value = '0';
+    });
+  })
+</script>
+  
+}
+

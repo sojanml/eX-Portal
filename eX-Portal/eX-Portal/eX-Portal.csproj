@@ -68,6 +68,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.SqlServer.TransactSql.ScriptDom.12.0.1\lib\net40\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath>
       <Private>True</Private>
@@ -241,6 +242,7 @@
     <Compile Include="exLogic\Listing.cs" />
     <Compile Include="exLogic\qDetailView.cs" />
     <Compile Include="exLogic\qView.cs" />
+    <Compile Include="exLogic\Report.cs" />
     <Compile Include="exLogic\Roshan.Util.cs" />
     <Compile Include="exLogic\S3Download.cs" />
     <Compile Include="exLogic\SimpleParser.cs" />
@@ -457,6 +459,14 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportsManager\ReportData.cs" />
+    <Compile Include="ReportsManager\WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportsManager\WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+    </Compile>
     <Compile Include="SqlParser\BracesTag.cs" />
     <Compile Include="SqlParser\ForUpdateTag.cs" />
     <Compile Include="SqlParser\FromTag.cs" />
@@ -746,6 +756,7 @@
       <DependentUpon>Portaldb.edmx</DependentUpon>
     </Content>
     <Content Include="red.png" />
+    <Content Include="ReportsManager\WebForm1.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="GreenDrone.png" />
@@ -1150,7 +1161,8 @@
     <Content Include="Views\Test\BlackBox.cshtml" />
     <Content Include="Views\PayLoad\GeoTag.cshtml" />
     <Content Include="Views\BlackBox\Acknowledgement.cshtml" />
-    <Content Include="Views\Drone\GeoTag.cshtml" />
+    <Content Include="Views\Report\Flights.cshtml" />
+    <Content Include="Views\Report\ReportFilter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1171,6 +1183,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ReportsManager\FlightReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReportsManager\MSTR_Drone.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

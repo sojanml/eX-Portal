@@ -258,6 +258,9 @@ namespace eX_Portal.exLogic {
         FieldValue = "Invalid";
       }
       break;
+      case "System.Decimal":
+      FieldValue = reader.GetDecimal(i).ToString("###,##0.00");
+      break;
       default:
       FieldValue = reader.GetValue(i).ToString();
       break;
@@ -372,7 +375,7 @@ namespace eX_Portal.exLogic {
         ScriptColumns.Append("}");
         isFirstColumn = false;
       }
-      if (IsPrimaryKey) ScriptColumns.AppendLine("\n, { \"data\": null, \"defaultContent\": \"<img class=button src=/images/drop-down.png>\", className: \"menu\" }");
+      if (IsPrimaryKey) ScriptColumns.AppendLine("\n, { \"data\": null, \"defaultContent\": \"<img class=button src=/images/drop-down.png>\",  \"orderable\": false,  className: \"menu\" }");
 
       ScriptColumns.AppendLine("]");
 

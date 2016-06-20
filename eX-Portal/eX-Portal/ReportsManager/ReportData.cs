@@ -1,0 +1,73 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using eX_Portal.Models;
+using eX_Portal.exLogic;
+
+namespace eX_Portal.Models {
+  public class ReportData {
+    public List<MSTR_Drone> get_MSTR_Drone() {
+      using (var db = new ExponentPortalEntities()) {
+        var Query = (from n in db.MSTR_Drone select n);
+        var Data = Query.ToList();
+        return Data;
+      }
+    }
+
+    public List<MSTR_User> MSTR_User() {
+      using (var db = new ExponentPortalEntities()) {
+        return (from n in db.MSTR_User select n).ToList();
+      }
+    }
+
+    public List<FlightReportData>getFlightReportData(FlightReportFilter Filter = null) {
+      var Request = HttpContext.Current.Request;
+      var thisReport = new exLogic.Report();
+      var Records = new List<FlightReportData>();
+      /*
+      FlightReportFilter Filter = new FlightReportFilter {
+        From = Request["From"],
+        To = Request["To"],
+        Boundary = Util.toInt(Request["Boundary"]),
+        BoundaryCritical  = Util.toInt(Request["BoundaryCritical"]),
+        Height = Util.toInt(Request["Height"]),
+        HeightCritical = Util.toInt(Request["HeightCritical"]),
+        Pilot  = Util.toInt(Request["Pilot"]),
+        Proximity = Util.toInt(Request["Proximity"]),
+        ProximityCritical = Util.toInt(Request["ProximityCritical"]),
+        UAS = Util.toInt(Request["UAS"])
+      };
+      */
+      if (Filter == null) Filter = new FlightReportFilter();
+      var SQL = thisReport.getFlightReportSQL(Filter);
+      using (var db = new ExponentPortalEntities()) {
+        using (var cmd = db.Database.Connection.CreateCommand()) {
+          db.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          using (var reader = cmd.ExecuteReader()) {
+            while (reader.Read()) {
+              var TheRow = new FlightReportData {
+                ID = Util.toInt(reader["Ref"]),
+                FlightDate = reader.GetDateTime(reader.GetOrdinal("FlightDate")),
+                FlightTime = reader["FlightTime"].ToString(),
+                Pilot = reader["Pilot"].ToString(),
+                UAS = reader["UAS"].ToString(),
+                BoundaryAlerts = reader["BoundaryAlerts"].ToString(),
+                HeightAlerts = reader["AltitudeAlerts"].ToString(),
+                ProximityAlerts = reader["ProximityAlerts"].ToString(),
+                MaxAltitude = reader["MaxAltitude"].ToString()
+              };
+              Records.Add(TheRow);
+            }//while
+          }//using reader
+        }
+      }//using (var db = new ExponentPortalEntities())
+
+      return Records;
+    }//getFlightReportData
+
+
+
+  }//public class ReportData
+}//namespace eX_Portal.Models

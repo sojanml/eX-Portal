@@ -63,9 +63,9 @@
     <h2>Zone Approval</h2>
 
     <div class="form-group">
-      @Html.LabelFor(model => model.GcaApproval.ApprovalID, "GCA Approvals")
+      @Html.LabelFor(model => model.GcaApproval.ApprovalID, "DCAA Approvals")
       <div class="col-md-10">
-        @Html.DropDownListFor(model => model.GcaApproval.ApprovalID, new SelectList(Enumerable.Empty<SelectListItem>(), "ApprovalID", "ApprovalName"), "--Select GCA Approval--", new { @class = "form-control" })
+        @Html.DropDownListFor(model => model.GcaApproval.ApprovalID, new SelectList(Enumerable.Empty<SelectListItem>(), "ApprovalID", "ApprovalName"), "--Select DCAA Approval--", new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalID, "", new { @class = "text-danger" })
       </div>
     </div>
@@ -131,7 +131,7 @@
       </div>
 
       <div id="newgcaapproval" class="form-group" style="visibility:visible;">
-        @Html.LabelFor(model => model.GcaApproval.ApprovalName, "New GCA Approval Name")
+        @Html.LabelFor(model => model.GcaApproval.ApprovalName, "New DCAA Approval Name")
         <div class="editor-field">
           @Html.EditorFor(model => model.GcaApproval.ApprovalName)
           @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalName)
