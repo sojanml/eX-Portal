@@ -127,8 +127,13 @@ namespace eX_Portal.Controllers {
     public ActionResult pdf() {
       var myReport = new ReportData();
       LocalReport localReport = new LocalReport();
+
+      ReportParameter[] TheParams = {
+        new ReportParameter("ReportFilterInfo", "Generate The Report From System", false)
+      };
       localReport.ReportPath = Server.MapPath("~/ReportsManager/FlightReport.rdlc");
       ReportDataSource reportDataSource = new ReportDataSource("FlightReportData", myReport.getFlightReportData());
+      localReport.SetParameters(TheParams);
 
       localReport.DataSources.Add(reportDataSource);
       string reportType = "PDF";

@@ -6,31 +6,31 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.5625in</Width>
+              <Width>0.62615in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.58334in</Width>
+              <Width>1.64699in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.9375in</Width>
+              <Width>1.8449in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.07292in</Width>
+              <Width>2.24074in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.95834in</Width>
+              <Width>1.02199in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.97917in</Width>
+              <Width>1.04282in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.72917in</Width>
+              <Width>0.79282in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.625in</Width>
+              <Width>0.74074in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.625in</Width>
+              <Width>0.68865in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -60,7 +60,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>Silver</BackgroundColor>
+                        <BackgroundColor>#e7e7e7</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -92,7 +92,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>Silver</BackgroundColor>
+                        <BackgroundColor>#e7e7e7</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -124,7 +124,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>Silver</BackgroundColor>
+                        <BackgroundColor>#e7e7e7</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -156,7 +156,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>Silver</BackgroundColor>
+                        <BackgroundColor>#e7e7e7</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -188,7 +188,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>Silver</BackgroundColor>
+                        <BackgroundColor>#e7e7e7</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -220,7 +220,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>Silver</BackgroundColor>
+                        <BackgroundColor>#e7e7e7</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -252,7 +252,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>Silver</BackgroundColor>
+                        <BackgroundColor>#e7e7e7</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -284,7 +284,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>Silver</BackgroundColor>
+                        <BackgroundColor>#e7e7e7</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -316,7 +316,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>Silver</BackgroundColor>
+                        <BackgroundColor>#e7e7e7</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -369,7 +369,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!FlightDate.Value</Value>
+                              <Value>=CDate(Fields!FlightDate.Value).ToString("dd-MMM-yyyy HH:MM")</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -634,54 +634,23 @@
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <FixedRowHeaders>true</FixedRowHeaders>
         <DataSetName>FlightReportData</DataSetName>
-        <Top>0.39236in</Top>
+        <Left>0in</Left>
         <Height>0.5in</Height>
-        <Width>10.07291in</Width>
+        <Width>10.64583in</Width>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Tablix>
-      <Textbox Name="Textbox14">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Critical Alerts Generated</Value>
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox14</rd:DefaultName>
-        <Top>0.05556in</Top>
-        <Left>6.41666in</Left>
-        <Height>0.25in</Height>
-        <Width>3in</Width>
-        <ZIndex>1</ZIndex>
-        <RepeatWith>MainDataTable</RepeatWith>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
     </ReportItems>
-    <Height>1.23486in</Height>
+    <Height>0.60986in</Height>
     <Style />
   </Body>
-  <Width>10.1875in</Width>
+  <Width>10.94792in</Width>
   <Page>
     <PageHeader>
-      <Height>0.62847in</Height>
+      <Height>1.405in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -689,8 +658,9 @@
           <Source>Embedded</Source>
           <Value>logo</Value>
           <Sizing>FitProportional</Sizing>
-          <Height>0.45139in</Height>
-          <Width>2.03125in</Width>
+          <Left>0in</Left>
+          <Height>0.52306in</Height>
+          <Width>2.14583in</Width>
           <Style>
             <Border>
               <Style>None</Style>
@@ -706,7 +676,10 @@
                 <TextRun>
                   <Value>Flight Report</Value>
                   <Style>
-                    <FontSize>20pt</FontSize>
+                    <FontFamily>Arial Narrow</FontFamily>
+                    <FontSize>22pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                    <Color>DimGray</Color>
                   </Style>
                 </TextRun>
               </TextRuns>
@@ -716,10 +689,86 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Left>3.04342in</Left>
-          <Height>0.35417in</Height>
+          <Left>6.42708in</Left>
+          <Height>0.45139in</Height>
           <Width>4.21875in</Width>
           <ZIndex>1</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Line Name="Line1">
+          <Top>0.65847in</Top>
+          <Height>0in</Height>
+          <Width>10.64583in</Width>
+          <ZIndex>2</ZIndex>
+          <Style>
+            <Border>
+              <Color>Red</Color>
+              <Style>Solid</Style>
+              <Width>2pt</Width>
+            </Border>
+          </Style>
+        </Line>
+        <Textbox Name="DataTableHeading">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Critical Alerts Generated</Value>
+                  <Style />
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Center</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <Top>1.155in</Top>
+          <Left>8.42362in</Left>
+          <Height>0.25in</Height>
+          <Width>2.22222in</Width>
+          <ZIndex>3</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <BackgroundColor>#e7e7e7</BackgroundColor>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="ReportFilterInfo">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Parameters!ReportFilterInfo.Value</Value>
+                  <Style>
+                    <Color>Gray</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>ReportFilterInfo</rd:DefaultName>
+          <Top>0.72792in</Top>
+          <Height>0.23958in</Height>
+          <Width>10.64583in</Width>
+          <ZIndex>4</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -738,9 +787,60 @@
       </Style>
     </PageHeader>
     <PageFooter>
-      <Height>0.45833in</Height>
+      <Height>0.46306in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
+      <ReportItems>
+        <Line Name="Line2">
+          <Top>0.04167in</Top>
+          <Height>0in</Height>
+          <Width>10.64583in</Width>
+          <Style>
+            <Border>
+              <Color>Red</Color>
+              <Style>Solid</Style>
+              <Width>2pt</Width>
+            </Border>
+          </Style>
+        </Line>
+        <Textbox Name="OverallPageNumber">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Globals!OverallPageNumber</Value>
+                  <Style />
+                </TextRun>
+                <TextRun>
+                  <Value> of </Value>
+                  <Style />
+                </TextRun>
+                <TextRun>
+                  <Value>=Globals!OverallTotalPages</Value>
+                  <Style />
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>OverallPageNumber</rd:DefaultName>
+          <Top>0.11111in</Top>
+          <Height>0.25in</Height>
+          <Width>3.01042in</Width>
+          <ZIndex>1</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+      </ReportItems>
       <Style>
         <Border>
           <Style>None</Style>
@@ -818,6 +918,17 @@
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="ReportFilterInfo">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>&lt;&lt;Some value is given by default&gt;&gt;</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="logo">
       <MIMEType>image/png</MIMEType>

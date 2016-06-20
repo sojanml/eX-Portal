@@ -18,6 +18,7 @@ using System.Web.UI.DataVisualization.Charting;
 using eX_Portal.ViewModel;
 using System.Text;
 using iTextSharp.tool.xml;
+using Microsoft.Reporting.WebForms;
 
 namespace eX_Portal.Controllers {
   public class ReportController : Controller {
@@ -30,7 +31,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult Flights(FlightReportFilter ReportFilter) {
       if (!exLogic.User.hasAccess("REPORT.FLIGHTS")) return RedirectToAction("NoAccess", "Home");
-      var theReport = new Report();            
+      var theReport = new exLogic.Report();            
       qView nView = new qView(theReport.getFlightReportSQL(ReportFilter));
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -42,17 +43,65 @@ namespace eX_Portal.Controllers {
 
     }
 
+
+
+    public ActionResult FlightsPDF(FlightReportFilter ReportFilter) {
+      var myReport = new ReportData();
+      LocalReport localReport = new LocalReport();
+
+      ReportParameter[] TheParams = {
+        new ReportParameter("ReportFilterInfo", ReportFilter.getReadableFilter(), false)
+      };
+      localReport.ReportPath = Server.MapPath("~/ReportsManager/FlightReport.rdlc");
+      ReportDataSource reportDataSource = new ReportDataSource("FlightReportData", myReport.getFlightReportData(ReportFilter));
+      localReport.SetParameters(TheParams);
+      localReport.DataSources.Add(reportDataSource);
+
+      string reportType = "PDF";
+      string mimeType;
+      string encoding;
+      string fileNameExtension;
+
+      //The DeviceInfo settings should be changed based on the reportType
+      //http://msdn2.microsoft.com/en-us/library/ms155397.aspx
+      string deviceInfo =
+      "<DeviceInfo>" +
+      "  <OutputFormat>PDF</OutputFormat>" +
+      "  <PageWidth>11.69in</PageWidth>" +
+      "  <PageHeight>8.27in</PageHeight>" +
+      "  <MarginTop>0.5in</MarginTop>" +
+      "  <MarginLeft>0.5in</MarginLeft>" +
+      "  <MarginRight>0.5in</MarginRight>" +
+      "  <MarginBottom>0.5in</MarginBottom>" +
+      "</DeviceInfo>";
+
+      Warning[] warnings;
+      string[] streams;
+      byte[] renderedBytes;
+
+      //Render the report
+      renderedBytes = localReport.Render(
+          reportType,
+          deviceInfo,
+          out mimeType,
+          out encoding,
+          out fileNameExtension,
+          out streams,
+          out warnings);
+      Response.AddHeader("content-disposition", "attachment; filename=FlightReport." + fileNameExtension);
+      return File(renderedBytes, mimeType);
+    }
     public ActionResult ReportFilter(FlightReportFilter ReportFilter) {
       return View(ReportFilter);
     }
 
     public String getPilots(String Term = "") {
-      var theReport = new Report();
+      var theReport = new exLogic.Report();
       return theReport.getPilots(Term);
     }
 
     public String getUAS(String Term = "") {
-      var theReport = new Report();
+      var theReport = new exLogic.Report();
       return theReport.getUAS(Term);
     }
 

@@ -92,6 +92,25 @@ namespace eX_Portal.exLogic {
     public String ToSQL() {
       return _To.ToString("yyyy-MM-dd 23:59:59");
     }
+
+    public String getReadableFilter() {
+      StringBuilder TheFilter = new StringBuilder();
+      TheFilter.Append("Report Date: ");
+      TheFilter.Append(From);
+      TheFilter.Append(" to ");
+      TheFilter.Append(To);
+
+      if(_Pilot > 0) {
+        TheFilter.Append(", Pilot: ");
+        TheFilter.Append(getPilotName());
+      }//if(_Pilot > 0)
+
+      if(_UAS > 0) {
+        TheFilter.Append(", UAS: ");
+        TheFilter.Append(getUASName());
+      }//if(_UAS > 0)
+      return TheFilter.ToString();
+    }//public String getReadableFilter()
   }
 
   public class FlightReportData {
@@ -120,7 +139,7 @@ namespace eX_Portal.exLogic {
   DroneFlight.MaxAltitude,
   Convert(Varchar(10), PortalAlertCounter.BoundaryCritical) + ' of ' + 
   Convert(Varchar(10), PortalAlertCounter.Boundary)  as BoundaryAlerts,
-  Convert(Varchar(10), PortalAlertCounter.ProximityCritical) + ' of' + 
+  Convert(Varchar(10), PortalAlertCounter.ProximityCritical) + ' of ' + 
   Convert(Varchar(10), PortalAlertCounter.Proximity)  as ProximityAlerts,
   Convert(Varchar(10), PortalAlertCounter.HeightCritical) + ' of ' + 
   Convert(Varchar(10), PortalAlertCounter.Height)  as AltitudeAlerts,
