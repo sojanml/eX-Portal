@@ -13,6 +13,7 @@ using System.IO;
 using System.Web.SessionState;
 using System.Text;
 using System.Security.Cryptography;
+using System.ComponentModel;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
@@ -609,6 +610,23 @@ namespace eX_Portal.exLogic {
 
     }
 
+
+    public static T toEntityModel<T>(DbDataReader row) where T : new() {
+      //reference: stackoverflow.com/questions/19286246/how-to-convert-dataset-to-entity-in-c
+      var entity = new T();
+      var properties = typeof(T).GetProperties();
+
+      foreach (var property in properties) {
+        //Get the description attribute
+        var descriptionAttribute = (DescriptionAttribute)property.GetCustomAttributes(typeof(DescriptionAttribute), true).SingleOrDefault();
+        if (descriptionAttribute == null)
+          continue;
+
+        property.SetValue(entity, row[descriptionAttribute.Description]);
+      }
+
+      return entity;
+    }//toEntityModel
 
   }//class Util
 

@@ -27,6 +27,36 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
+
+    public ActionResult Flights(FlightReportFilter ReportFilter) {
+      if (!exLogic.User.hasAccess("REPORT.FLIGHTS")) return RedirectToAction("NoAccess", "Home");
+      var theReport = new Report();            
+      qView nView = new qView(theReport.getFlightReportSQL(ReportFilter));
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        ViewBag.ReportFilter = ReportFilter;
+        return View(nView);
+      }//if(IsAjaxRequest)
+
+    }
+
+    public ActionResult ReportFilter(FlightReportFilter ReportFilter) {
+      return View(ReportFilter);
+    }
+
+    public String getPilots(String Term = "") {
+      var theReport = new Report();
+      return theReport.getPilots(Term);
+    }
+
+    public String getUAS(String Term = "") {
+      var theReport = new Report();
+      return theReport.getUAS(Term);
+    }
+
+
     public String GoogleMap([Bind(Prefix = "ID")]int FlightID = 0, int ApprovalID=0) {
       String GoogleURL = String.Empty;
       var GoogleAPI = ConfigurationManager.AppSettings["GoogleAPI"];
