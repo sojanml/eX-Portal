@@ -128,6 +128,18 @@
       if ($(this).val() == "") FORM['Pilot'].value = '0';
     });
   })
+
+  function _fnDrawCallback() {
+    if ($('#qViewTable_filter').find('#pdf_download').length <= 0) {
+      $('#qViewTable_filter').append('<div id="pdf_download"><span class="icon">&#xf1c1;</span> Download PDF</div>');
+
+      $('#pdf_download').on("click", function () {
+        var URL = '@Html.Raw(Url.Action("FlightsPDF", "Report", TheFilter))';
+        top.location.href = URL;
+      });
+
+    }
+  }
 </script>
   
 }

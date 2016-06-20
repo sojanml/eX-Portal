@@ -25,20 +25,7 @@ namespace eX_Portal.Models {
       var Request = HttpContext.Current.Request;
       var thisReport = new exLogic.Report();
       var Records = new List<FlightReportData>();
-      /*
-      FlightReportFilter Filter = new FlightReportFilter {
-        From = Request["From"],
-        To = Request["To"],
-        Boundary = Util.toInt(Request["Boundary"]),
-        BoundaryCritical  = Util.toInt(Request["BoundaryCritical"]),
-        Height = Util.toInt(Request["Height"]),
-        HeightCritical = Util.toInt(Request["HeightCritical"]),
-        Pilot  = Util.toInt(Request["Pilot"]),
-        Proximity = Util.toInt(Request["Proximity"]),
-        ProximityCritical = Util.toInt(Request["ProximityCritical"]),
-        UAS = Util.toInt(Request["UAS"])
-      };
-      */
+
       if (Filter == null) Filter = new FlightReportFilter();
       var SQL = thisReport.getFlightReportSQL(Filter);
       using (var db = new ExponentPortalEntities()) {

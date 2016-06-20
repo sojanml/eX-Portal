@@ -1194,3 +1194,18 @@ table.ReportFilter input[type=text] {
 table.ReportFilter input.date-picker {
   width:130px;
 }
+
+#pdf_download {
+float:right;
+margin-left:20px;
+  font-size:12pt;
+    color: white;
+    border-radius: 3px;
+    height: auto;
+    background-color: #484747;
+    padding: 3px 15px 3px 15px;
+    cursor: pointer;
+  font-family: 'Conv_DINNextLTPro-LightCondensed', Arial;
+  text-decoration: none;
+
+}
