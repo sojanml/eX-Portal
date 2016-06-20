@@ -53,7 +53,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FileStorageUtils">
-      <HintPath>..\..\..\Storage\FileStorageUtils.dll</HintPath>
+      <HintPath>..\..\..\..\..\FileStorageUtils\bin\Debug\FileStorageUtils.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
@@ -790,6 +790,7 @@
     <Content Include="Scripts\FlightChart.js" />
     <Content Include="Scripts\flightCreation.js" />
     <Content Include="Scripts\FlightSetup.js" />
+    <Content Include="Scripts\Flight_Gps_Map.js" />
     <Content Include="Scripts\geotag.js" />
     <Content Include="Scripts\GoogleMapLabel.js" />
     <Content Include="Scripts\HomeMap.js" />
@@ -831,6 +832,7 @@
     <Content Include="Upload\Brand-Logo\dewa-logo.png" />
     <Content Include="Upload\Brand-Logo\DpWorld-logo.png" />
     <Content Include="Upload\Brand-Logo\exponent-logo.png" />
+    <Content Include="Upload\Drone\EXP-ALG-F6-00366-007\672\GPS-ad3cef1c-64d2-419e-8abb-2ef1e75f3403~4b82341a-0ddd-4c42-855b-1f1811915ed0~67250m.jpg" />
     <Content Include="Upload\Drone\EXP-ALG-F6-00366-007\DocType\20160303115514291_kareniabloom.jpg" />
     <Content Include="Upload\Drone\EXP-ALG-F6-00366-007\DocType\20160303115621334_power2.jpg" />
     <Content Include="Upload\Drone\EXP-ALG-F6-00366-007\DocType\20160306073122963_port_track.png" />
@@ -1148,6 +1150,7 @@
     <Content Include="Views\Test\BlackBox.cshtml" />
     <Content Include="Views\PayLoad\GeoTag.cshtml" />
     <Content Include="Views\BlackBox\Acknowledgement.cshtml" />
+    <Content Include="Views\Drone\GeoTag.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
