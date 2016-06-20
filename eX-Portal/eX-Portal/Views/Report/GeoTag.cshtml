@@ -1,0 +1,50 @@
+﻿
+@using eX_Portal.exLogic;
+
+@{
+    ViewBag.Title = "GeoTag Report";
+    FlightReportFilter TheFilter = (FlightReportFilter)ViewBag.ReportFilter;
+}
+
+@Html.Action("GeoReportFilter", "Report", new
+{
+    From = TheFilter.From,
+    To = TheFilter.To,
+    Pilot = TheFilter.Pilot,
+    UAS = TheFilter.UAS
+})
+@section header {
+    <link href="~/jquery-ui/jquery-ui.theme.css" rel="stylesheet" />
+}
+
+@section scripts {
+    <script type="text/javascript" src="~/jquery-ui/jquery-ui.js"></script>
+    <script type="text/javascript">
+@*@Html.Raw(Model.getScripts())*@
+
+  $(document).ready(function () {
+    var FORM = document.forms['ReportFilterForm'];
+    
+
+    $("#UASName").autocomplete({
+      source: "@Url.Action("getUAS","Report",null)",
+      minLength: 2,
+      select: function (event, ui) {
+        if (ui.item) {
+          event.preventDefault();
+          FORM['UAS'].value = ui.item.value;
+          FORM['UASName'].value = ui.item.label;
+        } else {
+          FORM['UAS'].value = '0';
+        }
+      }
+    });    
+
+    $("#UASName").on("blur", function (e) {
+      if ($(this).val() == "") FORM['UAS'].value = '0';
+    });
+   
+  })
+    </script>
+
+}

@@ -41,8 +41,19 @@ namespace eX_Portal.Controllers {
       }//if(IsAjaxRequest)
 
     }
+        public ActionResult GeoTag(FlightReportFilter ReportFilter)
+        {
+            ViewBag.ReportFilter = ReportFilter;
 
-    public ActionResult ReportFilter(FlightReportFilter ReportFilter) {
+            return View();
+        }
+
+        public ActionResult GeoReportFilter(FlightReportFilter ReportFilter)
+        {
+            return View(ReportFilter);
+        }
+
+        public ActionResult ReportFilter(FlightReportFilter ReportFilter) {
       return View(ReportFilter);
     }
 
