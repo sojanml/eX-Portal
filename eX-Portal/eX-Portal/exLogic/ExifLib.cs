@@ -102,10 +102,11 @@ namespace eX_Portal.exLogic {
       }
       return theGPS;
     }
+     
 
-    // North or South Latitude 
-    // ASCII 2    // Latitude        
-    private const string GPSLatitudeRefQuery = "/app1/ifd/gps/subifd:{ulong=1}";
+        // North or South Latitude 
+        // ASCII 2    // Latitude        
+        private const string GPSLatitudeRefQuery = "/app1/ifd/gps/subifd:{ulong=1}";
     // RATIONAL 3  // East or West Longitude 
     private const string GPSLatitudeQuery = "/app1/ifd/gps/subifd:{ulong=2}";
     // ASCII 2 // Longitude 
