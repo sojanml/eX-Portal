@@ -384,6 +384,8 @@ table.cheklist {
  empty-cells: show;
  padding-top: 10px;
  margin-bottom:20px;
+ border-spacing: 0px;
+ border-collapse: collapse;
 }
 table.report thead tr th,
 table.report tfoot tr th,
@@ -396,12 +398,16 @@ table.cheklist tfoot tr th {
  text-align: left;
  padding: 6px 0px 6px 3px;
  font-family: Conv_DINNextLTPro-LightCondensed,Arial;
-  border-left: 1px #ffa9ad solid;
+  border-left: 1px #e6e6e6 solid;
 }
 
 table.report tfoot tr th {
  border-top: 1px none gray;
+}
 
+table#TableMapData th:last-child,
+table#TableMapData td:last-child {
+    border-left: 1px #e6e6e6 solid;
 }
 
 table.report tr.to-delete td {
@@ -429,7 +435,7 @@ table.cheklist tr td
  border-bottom: 1px solid silver;
  padding: 6px 0px 6px 3px;
  vertical-align: top;
- border-left: 1px #ffa9ad solid;
+ border-left: 1px #e6e6e6 solid;
 }
 
 table.report tr td:last-child,
@@ -439,7 +445,7 @@ table.report tfoot tr th:last-child,
 table.cheklist thead tr th:last-child,
 table.cheklist tfoot tr th:last-child
  {
- border-right: 1px #ffa9ad solid;
+ border-right: 1px #e6e6e6 solid;
  border-left:0px red none ;
 }
 

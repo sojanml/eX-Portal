@@ -27,7 +27,8 @@ namespace eX_Portal.Models {
       var Records = new List<FlightReportData>();
 
       if (Filter == null) Filter = new FlightReportFilter();
-      var SQL = thisReport.getFlightReportSQL(Filter);
+      var SQL = thisReport.getFlightReportSQL(Filter, true) ;
+      SQL = SQL + "\nORDER BY DroneFlight.ID DESC";
       using (var db = new ExponentPortalEntities()) {
         using (var cmd = db.Database.Connection.CreateCommand()) {
           db.Database.Connection.Open();
@@ -43,7 +44,13 @@ namespace eX_Portal.Models {
                 BoundaryAlerts = reader["BoundaryAlerts"].ToString(),
                 HeightAlerts = reader["AltitudeAlerts"].ToString(),
                 ProximityAlerts = reader["ProximityAlerts"].ToString(),
-                MaxAltitude = reader["MaxAltitude"].ToString()
+                MaxAltitude = reader["MaxAltitude"].ToString(),
+                Height = Util.toInt(reader["Height"]),
+                HeightCritical = Util.toInt(reader["HeightCritical"]),
+                Boundary = Util.toInt(reader["Boundary"]),
+                BoundaryCritical = Util.toInt(reader["BoundaryCritical"]),
+                Proximity = Util.toInt(reader["Proximity"]),
+                ProximityCritical = Util.toInt(reader["ProximityCritical"])
               };
               Records.Add(TheRow);
             }//while

@@ -95,20 +95,40 @@ namespace eX_Portal.exLogic {
 
     public String getReadableFilter() {
       StringBuilder TheFilter = new StringBuilder();
+      StringBuilder Alerts = new StringBuilder();
+
       TheFilter.Append("Report Date: ");
       TheFilter.Append(From);
       TheFilter.Append(" to ");
       TheFilter.Append(To);
 
       if(_Pilot > 0) {
-        TheFilter.Append(", Pilot: ");
+        TheFilter.Append("\nPilot: ");
         TheFilter.Append(getPilotName());
       }//if(_Pilot > 0)
 
       if(_UAS > 0) {
-        TheFilter.Append(", UAS: ");
+        TheFilter.Append("\nUAS: ");
         TheFilter.Append(getUASName());
       }//if(_UAS > 0)
+
+      if(_Height > 0) {
+        if (Alerts.Length > 0) Alerts.Append(", ");
+        Alerts.Append("Altitude Breach");
+      }
+      if (_Proximity > 0) {
+        if (Alerts.Length > 0) Alerts.Append(", ");
+        Alerts.Append("Proximity Warning");
+      }
+      if (_Boundary > 0) {
+        if (Alerts.Length > 0) Alerts.Append(", ");
+        Alerts.Append("Boundary Breach");
+      }
+
+      if(Alerts.Length > 0) {
+        TheFilter.Append("\nAlerts (Messages): ");
+        TheFilter.Append(Alerts);
+      }
       return TheFilter.ToString();
     }//public String getReadableFilter()
   }
@@ -124,10 +144,16 @@ namespace eX_Portal.exLogic {
     public String ProximityAlerts { get; set; }
     public String HeightAlerts { get; set; }
 
+    public int BoundaryCritical { get; set; }
+    public int Boundary { get; set; }
+    public int ProximityCritical { get; set; }
+    public int Proximity { get; set; }
+    public int HeightCritical { get; set; }
+    public int Height { get; set; }
   }
 
   public class Report {
-    public String getFlightReportSQL(FlightReportFilter Filter) {
+    public String getFlightReportSQL(FlightReportFilter Filter, bool IsReturnExtraInfo = false) {
       StringBuilder SQLFilter = new StringBuilder();
       StringBuilder SQL = new StringBuilder();
       SQL.AppendLine(@"SELECT
@@ -142,7 +168,15 @@ namespace eX_Portal.exLogic {
   Convert(Varchar(10), PortalAlertCounter.ProximityCritical) + ' of ' + 
   Convert(Varchar(10), PortalAlertCounter.Proximity)  as ProximityAlerts,
   Convert(Varchar(10), PortalAlertCounter.HeightCritical) + ' of ' + 
-  Convert(Varchar(10), PortalAlertCounter.Height)  as AltitudeAlerts,
+  Convert(Varchar(10), PortalAlertCounter.Height)  as AltitudeAlerts,");
+      if (IsReturnExtraInfo) SQL.AppendLine(@"
+  PortalAlertCounter.BoundaryCritical,
+  PortalAlertCounter.Boundary,
+  PortalAlertCounter.ProximityCritical,
+  PortalAlertCounter.Proximity,
+  PortalAlertCounter.HeightCritical,
+  PortalAlertCounter.Height,");
+  SQL.AppendLine(@"
   Count(*)
     OVER() AS _TotalRecords,
   DroneFlight.ID AS _PKey

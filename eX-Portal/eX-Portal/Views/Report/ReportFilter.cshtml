@@ -15,20 +15,26 @@
          <tr>
            <td><input id="Proximity" @(Model.Proximity > 0 || Model.ProximityCritical > 0 ? "checked" : "") type="checkbox" name="Proximity" value="1" /></td>
            <td><label for="Proximity">Proximity</label></td>
+           <!--
            <td><input id="ProximityCritical" @(Model.ProximityCritical > 0 ? "checked" : "") type="checkbox" name="ProximityCritical" value="1" /></td>
            <td><label for="ProximityCritical">Critical</label></td>
+             -->
          </tr>
          <tr>
            <td><input id="Boundary" @(Model.Boundary > 0 || Model.BoundaryCritical > 0 ? "checked" : "") type="checkbox" name="Boundary" value="1" /></td>
            <td><label for="Boundary">Boundary</label></td>
+           <!--
            <td><input id="BoundaryCritical" @(Model.BoundaryCritical > 0 ? "checked" : "") type="checkbox" name="BoundaryCritical" value="1" /></td>
            <td><label for="BoundaryCritical">Critical</label></td>
+           -->
          </tr>
          <tr>
            <td><input id="Height" @(Model.Height > 0 || Model.HeightCritical > 0 ? "checked" : "") type="checkbox" name="Height" value="1" /></td>
            <td><label for="Height">Altitude</label></td>
+           <!--
            <td><input id="HeightCritical" @(Model.HeightCritical > 0 ? "checked" : "") type="checkbox" name="HeightCritical" value="1" /></td>
            <td><label for="HeightCritical">Critical</label></td>
+           -->
          </tr>
        </table>
      </td>

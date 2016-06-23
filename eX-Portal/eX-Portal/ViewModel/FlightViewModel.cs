@@ -68,5 +68,11 @@ namespace eX_Portal.ViewModel {
     public String getFlightDate() {
       return Util.fmtDt(FlightDate);
     }
+
+    public String getFlightTime() {
+      if (FlightHours == null) FlightHours = 0;
+      TimeSpan time = TimeSpan.FromSeconds((int)FlightHours);
+      return time.ToString(@"hh\:mm\:ss");
+    }
   }
 }
