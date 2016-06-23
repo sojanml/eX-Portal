@@ -214,6 +214,7 @@
     <Compile Include="Controllers\DroneFlightController.cs" />
     <Compile Include="Controllers\DroneServiceController.cs" />
     <Compile Include="Controllers\EmailController.cs" />
+    <Compile Include="Controllers\GpsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -925,6 +926,7 @@
     <Content Include="Views\Drone\TechnicalLog.cshtml" />
     <Content Include="Views\Drone\TechnicalLogAdd.cshtml" />
     <Content Include="Views\Drone\UploadDocument.cshtml" />
+    <Content Include="Views\Gps\Index.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
