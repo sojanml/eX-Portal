@@ -45,8 +45,23 @@ namespace eX_Portal.Controllers {
         public ActionResult GeoTag(FlightReportFilter ReportFilter)
         {
             ViewBag.ReportFilter = ReportFilter;
+            int DroneID = ReportFilter.UAS;         
+            DateTime FromDate = DateTime.Parse(ReportFilter.From);
+            DateTime ToDate = DateTime.Parse(ReportFilter.To);
 
-            return View();
+
+
+            List<DroneDocument> Docs=new List<DroneDocument>();
+            ExponentPortalEntities Db = new ExponentPortalEntities();
+            if (DroneID != 0)
+            {
+                
+                Docs = (from o in Db.DroneDocuments
+                                            where o.DocumentType == "GEO Tag" &&
+                                            o.DroneID == DroneID && ( o.UploadedDate>=FromDate && o.UploadedDate<=ToDate)                                          
+                                            select o).ToList();
+            }
+            return View(Docs);
         }
 
         public ActionResult GeoReportFilter(FlightReportFilter ReportFilter)
