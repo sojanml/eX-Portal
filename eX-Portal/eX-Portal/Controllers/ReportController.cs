@@ -42,6 +42,17 @@ namespace eX_Portal.Controllers {
       }//if(IsAjaxRequest)
 
     }
+        public ActionResult GeoTag(FlightReportFilter ReportFilter)
+        {
+            ViewBag.ReportFilter = ReportFilter;
+
+            return View();
+        }
+
+        public ActionResult GeoReportFilter(FlightReportFilter ReportFilter)
+        {
+            return View(ReportFilter);
+        }
     /*
     public ActionResult Alerts(FlightReportFilter ReportFilter) {
       if (!exLogic.User.hasAccess("REPORT.ALERTS")) return RedirectToAction("NoAccess", "Home");
