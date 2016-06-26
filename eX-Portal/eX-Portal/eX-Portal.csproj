@@ -68,7 +68,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.ReportViewer.WebForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.SqlServer.TransactSql.ScriptDom.12.0.1\lib\net40\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath>
       <Private>True</Private>
@@ -214,6 +214,7 @@
     <Compile Include="Controllers\DroneFlightController.cs" />
     <Compile Include="Controllers\DroneServiceController.cs" />
     <Compile Include="Controllers\EmailController.cs" />
+    <Compile Include="Controllers\GpsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -914,6 +915,7 @@
     <Content Include="Views\Drone\TechnicalLog.cshtml" />
     <Content Include="Views\Drone\TechnicalLogAdd.cshtml" />
     <Content Include="Views\Drone\UploadDocument.cshtml" />
+    <Content Include="Views\Gps\Index.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
@@ -1156,6 +1158,7 @@
     <Content Include="Views\Report\Alerts.cshtml" />
     <Content Include="Views\Report\GeoReportFilter.cshtml" />
     <Content Include="Views\Report\GeoTag.cshtml" />
+    <Content Include="Views\Drone\GeoTag.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -4,13 +4,44 @@ var map;
 var bounds = new google.maps.LatLngBounds();
 var Markers = {};
 var refID = 0;
-
+var count = 0;
 $(document).ready(function () {
+
     $(document).on('click', 'a.delete', function (e) {
         e.preventDefault();
         DeleteFile($(this));
     });
 
+    $(document).on('click', 'img#ThumbNail', function (e) {
+        count += 1;
+        var img = document.getElementById('ThumbNail');
+
+        if (count == 1) {
+            $('#dialog').append('<img src="' + img.getAttribute('src') + '" height="400px" width="400px"/><br/>').append($(this).html());
+        }
+        $("#dialog").dialog({
+            autoOpen: true,
+            maxWidth: 600,
+            maxHeight: 500,
+            width: 1000,
+            height: 600,
+            modal: true,
+            buttons: {
+                "DownLoad": function () {
+                    $(this).dialog("close");
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            },
+            close: function (event, ui) {
+              
+            }
+          
+        });
+    });
+
+   
     $(':file').change(AddToUploadQueue);
 
     initialize();
@@ -55,7 +86,8 @@ function setMarker(map, _GeoInfo) {
 
 function setMarkerOne(GeoInfo) {
     var body = '<b>' + "" + '</b><br>\n' +
-        ' <img src="' + GeoInfo['Thumbnail'] + '"  height="100px" width="100px" />';
+        
+        '<img  id="ThumbNail" docid= "'+GeoInfo['Thumbnail'] + '" src="' + GeoInfo['Thumbnail'] + '"   height="100px" width="100px" />';
     var myLatLng = new google.maps.LatLng(GeoInfo['Latitude'], GeoInfo['Longitude']);
     var marker = createMarker(map,myLatLng, "", body, "");
     
