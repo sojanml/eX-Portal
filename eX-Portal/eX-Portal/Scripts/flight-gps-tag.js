@@ -5,40 +5,91 @@ var bounds = new google.maps.LatLngBounds();
 var Markers = {};
 var refID = 0;
 var count = 0;
+var Pinfowindow = false;
 $(document).ready(function () {
 
     $(document).on('click', 'a.delete', function (e) {
         e.preventDefault();
         DeleteFile($(this));
     });
+    //$('a').click(function () {
+    //    $("#dialog").dialog({
+    //        autoOpen: true,
+    //        maxWidth: 600,
+    //        maxHeight: 500,
+    //        width: 1000,
+    //        height: 600,
+    //        modal: true,
+    //        buttons: {
+    //            "DownLoad": function () {                   
+    //                //var Link = document.createElement('a');
+    //                //Link.href = img.getAttribute('src').replace("t.png", "jpg");  // use realtive url 
+    //                //Link.download ="smile.jpeg"
+                   
+    //                //document.body.appendChild(Link);
+    //                //Link.click();
 
+    //            },
+    //            Cancel: function () {
+    //                $(this).dialog("close");
+    //            }
+    //        },
+    //        close: function (event, ui) {
+
+    //        }
+
+    //    });
+
+    //});
+
+
+   
     $(document).on('click', 'img#ThumbNail', function (e) {
         count += 1;
         var img = document.getElementById('ThumbNail');
 
-        if (count == 1) {
-            $('#dialog').append('<img src="' + img.getAttribute('src') + '" height="400px" width="400px"/><br/>').append($(this).html());
-        }
-        $("#dialog").dialog({
-            autoOpen: true,
-            maxWidth: 600,
-            maxHeight: 500,
-            width: 1000,
-            height: 600,
-            modal: true,
-            buttons: {
-                "DownLoad": function () {
-                    $(this).dialog("close");
+        var ActualSrc = img.getAttribute('src').replace("t.png", "jpg");
+       
+        
+        $('#dialog').append('<img id="abc" src="' + ActualSrc + '" height="400px" width="400px"/><br/>').append($(this).html());
+       
+       
+            $("#dialog").dialog({
+                autoOpen: false,
+               
+                maxWidth: 600,
+                maxHeight: 500,
+                width: 1000,
+                height: 600,
+                modal: true,
+                buttons: {
+                    "DownLoad": function () {
+
+                        var ActualUrl = img.getAttribute('src').replace("t.png", "jpg");
+                        var Link = document.createElement('a');
+                        Link.href = ActualUrl;  // use realtive url 
+                      
+                        Link.download = ActualUrl.substring(ActualUrl.lastIndexOf("~") + 1)
+                       
+                        document.body.appendChild(Link);
+                        Link.click();
+
+                    },
+                    Cancel: function () {
+                        $(this).dialog("close");
+                    }
                 },
-                Cancel: function () {
-                    $(this).dialog("close");
+                close: function (event, ui) {
+                   
+                    $("img#abc" ).remove();
+
                 }
-            },
-            close: function (event, ui) {
-              
-            }
-          
-        });
+
+            });
+
+
+
+        $("#dialog").dialog('open');
     });
 
    
@@ -64,6 +115,7 @@ function initialize() {
     };
 
     map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+   
     GetGeoTagInfo();
 }
 
@@ -86,8 +138,9 @@ function setMarker(map, _GeoInfo) {
 
 function setMarkerOne(GeoInfo) {
     var body = '<b>' + "" + '</b><br>\n' +
-        
-        '<img  id="ThumbNail" docid= "'+GeoInfo['Thumbnail'] + '" src="' + GeoInfo['Thumbnail'] + '"   height="100px" width="100px" />';
+
+        '<img  id="ThumbNail"   docid= "' + GeoInfo['Thumbnail'] + '" src="' + GeoInfo['Thumbnail'] + '"   height="100px" width="100px" />';
+  
     var myLatLng = new google.maps.LatLng(GeoInfo['Latitude'], GeoInfo['Longitude']);
     var marker = createMarker(map,myLatLng, "", body, "");
     
@@ -121,15 +174,21 @@ function createMarker(map,latlng, heading, body, live) {
     ibLabel.open(map);
 
     marker.addListener('click', function () {
+        if (Pinfowindow)
+        {
+            Pinfowindow.close();
+        }
         var infowindow = new google.maps.InfoWindow({
             content: body
         });
+        Pinfowindow = infowindow;
         infowindow.open(map, marker);
     });
+  
     //points count for checking multiple points and  set zoom
    
     
-    
+   
         bounds.extend(marker.position);
    
     return marker;
