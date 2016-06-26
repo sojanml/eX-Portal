@@ -74,7 +74,21 @@ namespace eX_Portal.Controllers {
         {
             return View(ReportFilter);
         }
+    /*
+    public ActionResult Alerts(FlightReportFilter ReportFilter) {
+      if (!exLogic.User.hasAccess("REPORT.ALERTS")) return RedirectToAction("NoAccess", "Home");
+      var theReport = new exLogic.Report();
+      qView nView = new qView(theReport.getAlertReportSQL(ReportFilter));
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        ViewBag.ReportFilter = ReportFilter;
+        return View(nView);
+      }//if(IsAjaxRequest)
 
+    }
+    */
 
 
     public ActionResult FlightsPDF(FlightReportFilter ReportFilter) {

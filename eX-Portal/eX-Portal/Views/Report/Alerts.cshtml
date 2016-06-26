@@ -1,12 +1,13 @@
-﻿@model eX_Portal.exLogic.qView
+﻿
+@model eX_Portal.exLogic.qView
 @using eX_Portal.exLogic;
 
-@{ 
+@{
   ViewBag.Title = "Flight Report";
   FlightReportFilter TheFilter = (FlightReportFilter)ViewBag.ReportFilter;
 }
 
-@Html.Action("ReportFilter", "Report",new {
+@Html.Action("ReportFilter", "Report", new {
   From = TheFilter.From,
   To = TheFilter.To,
   Pilot = TheFilter.Pilot,
@@ -22,17 +23,15 @@
       <th rowspan="2">Ref</th>
       <th rowspan="2">Flight Date (UTC)</th>
       <th rowspan="2">Pilot</th>
-      <th rowspan="2">UAS Serial</th>
+      <th rowspan="2">UAS</th>
       <th rowspan="2">
-        Flight Time<br />
-        (HH:MM:SS)
+        Flight Hours
       </th>
       <th rowspan="2">
-        Maximum<br />
-        Altitude<br />
-        (Meter)
+        Max<br />
+        Altitude
       </th>
-      <th colspan="3" class="row-group">Critical of Total Alerts</th>
+      <th colspan="3" class="row-group">Critical Alerts</th>
       <th rowspan="1">&nbsp;</th>
     </tr>
     <tr>
@@ -46,19 +45,18 @@
   <tfoot>
     <tr>
       <th rowspan="2">Ref</th>
-      <th rowspan="2">Flight Date (UTC)</th>
+      <th rowspan="2">Flight Date</th>
       <th rowspan="2">Pilot</th>
-      <th rowspan="2">UAS Serial</th>
+      <th rowspan="2">UAS</th>
       <th rowspan="2">
-        Flight Time<br />
-        (HH:MM:SS)
+        Flight<br />
+        Time
       </th>
       <th rowspan="2">
-        Maximum<br />
-        Altitude<br />
-        (Meter)
+        Max<br />
+        Altitude
       </th>
-      <th colspan="3" class="row-group">Critical of Total Alerts</th>
+      <th colspan="3" class="row-group">Critical Alerts</th>
       <th rowspan="1">&nbsp;</th>
     </tr>
     <tr>
@@ -74,13 +72,13 @@
 
 
 
-@section header {  
+@section header {
   <link href="~/jquery-ui/jquery-ui.theme.css" rel="stylesheet" />
 }
 
 @section scripts {
-<script type="text/javascript" src="~/jquery-ui/jquery-ui.js"></script>
-<script type="text/javascript">
+  <script type="text/javascript" src="~/jquery-ui/jquery-ui.js"></script>
+  <script type="text/javascript">
 @Html.Raw(Model.getScripts())
 
   $(document).ready(function () {
@@ -143,7 +141,7 @@
 
     }
   }
-</script>
-  
+  </script>
+
 }
 
