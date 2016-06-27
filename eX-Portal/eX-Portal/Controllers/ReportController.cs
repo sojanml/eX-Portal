@@ -55,7 +55,7 @@ namespace eX_Portal.Controllers {
             DateTime FromDate = DateTime.Parse(ReportFilter.From);
             DateTime ToDate = DateTime.Parse(ReportFilter.To);
            
-            ToDate = ToDate.AddHours(12);
+            ToDate = ToDate.AddHours(24);
            
             List<DroneDocument> Docs=new List<DroneDocument>();
             ExponentPortalEntities Db = new ExponentPortalEntities();
