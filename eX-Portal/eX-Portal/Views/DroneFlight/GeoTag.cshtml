@@ -10,7 +10,7 @@
 <h2>GEO Map</h2>
 <div id="map-canvas" style="width:1000px;height:600px;border-width:2px;border-style:solid;border-color:red">
  </div>
-
+<div id="dialog" title="Image"></div>
 <h2>GEO Tagged Images</h2>
 <ul id="GPS-Images">
 @foreach(var item in Model) {
@@ -69,7 +69,10 @@
 @*<link href="~/stylesheets/Flight_GeoTag_Style.css" rel="stylesheet" />*@
 <script type="text/javascript" src="~/Scripts/flight-gps-tag.js"></script>
  
-
+@*/script for Dialog*@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 }
 
 
