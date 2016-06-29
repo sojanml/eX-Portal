@@ -9,9 +9,7 @@
 }
 
 <section class="general-form" id="loginForm">
-  @using (Html.BeginForm()) {
-
-
+  @using(Html.BeginForm()) {
 
     @Html.HiddenFor(model => model.Drone.DroneId)
 
@@ -30,13 +28,13 @@
           @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
         </div>
         <div class="editor-label">
-            @Html.LabelFor(model => model.Drone.ModelName, "Description")
+          @Html.LabelFor(model => model.Drone.ModelName, "Description")
         </div>
 
         <div class="editor-field">
 
-            @Html.EditorFor(model => model.Drone.ModelName)
-            @Html.ValidationMessageFor(model => model.Drone.ModelName)
+          @Html.EditorFor(model => model.Drone.ModelName)
+          @Html.ValidationMessageFor(model => model.Drone.ModelName)
         </div>
 
 
@@ -63,17 +61,20 @@
         <div class="editor-field">
           <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="SelectItemsForParts" />
           @Html.Action("DroneParts", "Drone", new { ID = ViewBag.DroneId })
-          <!-- <table class="report" id="Table_SelectItemsForParts" style="display:none;">
-               <thead>
-                   <tr>
-                       <th>Parts Name</th>
-                       <th>Model</th>
-                       <th>Supplier</th>
-                       <th>Qty</th>
-                       <th>&nbsp;</th>
-                   </tr>
-               </thead>
-           </table>-->
+        </div>
+
+
+        <h2>Regulator Approval </h2>
+        <div class="form-group">
+          <p>
+            You need to have Regulator Approval for this UAS. Please upload it here.<br />
+          </p>
+          <div class="col-md-10">
+            <ul id="FileUploadProgress"></ul>
+          </div>
+          <div>
+            <input type="file" multiple name="fileinput" id="fileinput" />
+          </div>
         </div>
 
         <div class="form-toolbar">
@@ -87,7 +88,21 @@
 
 </section>
 
+@section header{
+  <link href="~/Content/black-box.css" rel="stylesheet" />
+}
+
+
 @section Scripts {
+@Scripts.Render("~/bundles/jqueryval")
+
+<script type="text/javascript">
+
+    var DroneUploadURL = '@Url.Action("UploadFile", new { ID = Model.Drone.DroneId, FlightID = 0, DocumentType="UAS-Registration" })';
+</script>
+<script type="text/javascript" src="~/Scripts/drone.js"></script>
+
+
   <script>
     $(document).ready(function () {
       $('#SelectItemsForParts').autocomplete({

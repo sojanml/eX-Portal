@@ -10,7 +10,6 @@ using System.Linq;
 using System.Web.UI;
 using System.Web.Mvc;
 using static eX_Portal.exLogic.Util;
-
 using Color = System.Drawing.Color;
 using Font = System.Drawing.Font;
 using System.Web.UI.DataVisualization;
@@ -70,7 +69,7 @@ namespace eX_Portal.Controllers {
             return View(Docs);
         }
 
-        public ActionResult GeoReportFilter(FlightReportFilter ReportFilter)
+    public ActionResult GeoReportFilter(FlightReportFilter ReportFilter)
         {
             return View(ReportFilter);
         }
@@ -137,6 +136,7 @@ namespace eX_Portal.Controllers {
       Response.AddHeader("content-disposition", "attachment; filename=FlightReport." + fileNameExtension);
       return File(renderedBytes, mimeType);
     }
+
     public ActionResult ReportFilter(FlightReportFilter ReportFilter) {
       return View(ReportFilter);
     }
@@ -451,14 +451,14 @@ namespace eX_Portal.Controllers {
       "  [DroneDocuments]\n" +
       "WHERE\n" +
       "  FlightID = " + FlightID.ToString() + " and\n" +
-      "  DocumentType = 'GCA Approval'\n";
+      "  DocumentType = 'Regulator Approval'\n";
       int TheCount = Util.getDBInt(SQL);
       if (TheCount < 1) {
         UploadedDocs = "<div class=\"warning\"><span class=\"icon\">&#xf071;</span>" +
-        "Please upload your DCAA Authorisation document before the flight</div>";
+        "Please upload your Regulatory Authorisation document before the flight</div>";
       } else {
         UploadedDocs = "<div class=\"authorise\"><span class=\"icon\">&#xf214;</span>" +
-        "Your DCAA Authorization: " + getUploadedDocs(FlightID) +
+        "Your Regulatory Authorization: " + getUploadedDocs(FlightID) +
         "</div>";
       }
       return UploadedDocs + CheckListMessage;

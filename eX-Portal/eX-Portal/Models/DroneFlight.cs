@@ -53,5 +53,7 @@ namespace eX_Portal.Models
         public Nullable<int> IsDistanceWarning { get; set; }
         public Nullable<int> IsDistanceCritical { get; set; }
         public int ApprovalID { get; set; }
+        public Nullable<decimal> MaxSpeed { get; set; }
+        public Nullable<decimal> MaxAltitude { get; set; }
     }
 }
