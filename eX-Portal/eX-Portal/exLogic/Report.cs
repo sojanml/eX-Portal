@@ -252,9 +252,13 @@ GROUP  BY
         SQLFilter.AppendLine("AND  PortalAlertCounter.Boundary > 0");
       if (Filter.BoundaryCritical > 0)
         SQLFilter.AppendLine("AND  PortalAlertCounter.BoundaryCritical > 0");
+            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
+                SQLFilter.AppendLine(" AND  MSTR_Drone.AccountID=" + Util.getAccountID() + "");
+               
+            }
 
-
-      SQL.Append(SQLFilter);
+                SQL.Append(SQLFilter);
       return SQL.ToString();
     }//public String getFlightReportSQL()
 
