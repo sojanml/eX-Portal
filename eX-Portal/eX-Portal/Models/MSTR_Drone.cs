@@ -64,5 +64,7 @@ namespace eX_Portal.Models
         public Nullable<int> ModelID { get; set; }
         public string ManufactureOther { get; set; }
         public string CameraDetails { get; set; }
+        public string RegistrationDocument { get; set; }
+        public string RegistrationAuthority { get; set; }
     }
 }

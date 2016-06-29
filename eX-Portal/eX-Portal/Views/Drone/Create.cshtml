@@ -74,6 +74,26 @@
             </table>
         </div>
 
+        <h2>Regulator Approval </h2>
+        <div class="form-group">
+          <p>
+            You need to have Regulator Approval for this UAS. Please upload it here.<br />
+          </p>
+          <div class="col-md-10">
+            <ul id="FileUploadProgress"></ul>
+          </div>
+          <div>
+            <input type="file" multiple name="fileinput" id="fileinput" />
+          </div>
+        </div>
+        <div class="editor-label">
+          @Html.LabelFor(model => model.Drone.RegistrationAuthority, "Regulator Authority")
+        </div>
+        <div class="editor-field">
+          @Html.DropDownListFor(model => model.Drone.RegistrationAuthority, Model.RegistrationAuthority)
+          @Html.ValidationMessageFor(model => model.Drone.RegistrationAuthority)
+        </div>
+
     <div class="form-toolbar">
       <input type="submit" value="Create" />
     </div>
@@ -84,8 +104,19 @@
  
 
   </section>
-@Scripts.Render("~/bundles/jqueryval")
+
+@section header{
+  <link href="~/Content/black-box.css" rel="stylesheet" />
+}
+
 @section Scripts {
+
+@Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+  var DroneUploadURL = '@Url.Action("UploadFile", new { ID = 0, FlightID = 0, DocumentType="UAS-Registration" })';
+</script>
+<script type="text/javascript" src="~/Scripts/drone.js"></script>
+
     <script>
     $(document).ready(function () {
         $('#SelectItemsForParts').autocomplete({

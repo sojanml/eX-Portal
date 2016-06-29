@@ -18,8 +18,6 @@
           <Property Name="LastupdatedOn" Type="datetime" />
           <Property Name="RentDays" Type="int" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BlackBoxData">
           <Key>
             <PropertyRef Name="BlackBoxDataID" />
@@ -224,6 +222,8 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="IsDistanceWarning" Type="int" />
           <Property Name="IsDistanceCritical" Type="int" />
           <Property Name="ApprovalID" Type="int" Nullable="false" />
+          <Property Name="MaxSpeed" Type="numeric" Precision="12" Scale="5" />
+          <Property Name="MaxAltitude" Type="numeric" Precision="12" Scale="5" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -567,6 +567,8 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="ModelID" Type="int" />
           <Property Name="ManufactureOther" Type="nvarchar" MaxLength="50" />
           <Property Name="CameraDetails" Type="nvarchar" MaxLength="300" />
+          <Property Name="RegistrationDocument" Type="varchar" MaxLength="200" />
+          <Property Name="RegistrationAuthority" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MSTR_Drone_Setup">
           <Key>
@@ -836,8 +838,6 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="Row" Type="int" Nullable="false" />
           <Property Name="Col" Type="int" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadData">
           <Key>
             <PropertyRef Name="PayLoadDataID" />
@@ -864,8 +864,6 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadData' does not have a primar
           <Property Name="ColumnNumber" Type="int" />
           <Property Name="CellID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadFlight">
           <Key>
             <PropertyRef Name="PayLoadFlightID" />
@@ -882,8 +880,6 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadFlight' does not have a prim
           <Property Name="IsFlightSync" Type="int" />
           <Property Name="PayLoadDroneID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadImageData">
           <Key>
             <PropertyRef Name="PayLoadImageDataID" />
@@ -901,8 +897,6 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadImageData' does not have a p
           <Property Name="GPSFix" Type="nvarchar" MaxLength="10" />
           <Property Name="LogFilePath" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadMapData">
           <Key>
             <PropertyRef Name="PayLoadDataMapID" />
@@ -971,7 +965,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadMapData' does not have a pri
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadYardGrid">
           <Key>
             <PropertyRef Name="CellID" />
@@ -994,8 +988,6 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadYardGrid' does not have a pr
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="Polygon" Type="geography" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PortalAlert">
           <Key>
             <PropertyRef Name="AlertID" />
@@ -1096,17 +1088,13 @@ warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primar
           <Property Name="IsActive" Type="bit" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="sysdiagrams">
           <Key>
-            
-            
             <PropertyRef Name="diagram_id" />
           </Key>
           <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
@@ -1188,6 +1176,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
         </Function>
         <EntityContainer Name="ExponentPortalModelStoreContainer">
           <EntitySet Name="BlackBoxCost" EntityType="Self.BlackBoxCost" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlackBoxData" EntityType="Self.BlackBoxData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxTransaction" EntityType="Self.BlackBoxTransaction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckList" EntityType="Self.DroneCheckList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckListItem" EntityType="Self.DroneCheckListItem" Schema="dbo" store:Type="Tables" />
@@ -1226,144 +1215,20 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="Self.MSTR_User_Pilot_Certification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot_ExponentUAS" EntityType="Self.MSTR_User_Pilot_ExponentUAS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoad_AutoFix" EntityType="Self.PayLoad_AutoFix" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayLoadData" EntityType="Self.PayLoadData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayLoadFlight" EntityType="Self.PayLoadFlight" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayLoadImageData" EntityType="Self.PayLoadImageData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayLoadMapData" EntityType="Self.PayLoadMapData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoadYard" EntityType="Self.PayLoadYard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PortalAlert" EntityType="Self.PortalAlert" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortalAlertEmail" EntityType="Self.PortalAlertEmail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortalAlertRegistration" EntityType="Self.PortalAlertRegistration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortalAuth" EntityType="Self.PortalAuth" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDefinition" EntityType="Self.ProductDefinition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserLog" EntityType="Self.UserLog" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BlackBoxData" EntityType="Self.BlackBoxData" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [BlackBoxData].[BlackBoxDataID] AS [BlackBoxDataID], 
-    [BlackBoxData].[RecordNumber] AS [RecordNumber], 
-    [BlackBoxData].[DroneSerialID] AS [DroneSerialID], 
-    [BlackBoxData].[DroneId] AS [DroneId], 
-    [BlackBoxData].[DroneRFID] AS [DroneRFID], 
-    [BlackBoxData].[Latitude] AS [Latitude], 
-    [BlackBoxData].[Longitude] AS [Longitude], 
-    [BlackBoxData].[ProductRFID] AS [ProductRFID], 
-    [BlackBoxData].[ProductQrCode] AS [ProductQrCode], 
-    [BlackBoxData].[ProductRSSI] AS [ProductRSSI], 
-    [BlackBoxData].[ReadTime] AS [ReadTime], 
-    [BlackBoxData].[CreatedTime] AS [CreatedTime], 
-    [BlackBoxData].[RecordType] AS [RecordType], 
-    [BlackBoxData].[IsActive] AS [IsActive], 
-    [BlackBoxData].[ProductId] AS [ProductId], 
-    [BlackBoxData].[Altitude] AS [Altitude], 
-    [BlackBoxData].[Speed] AS [Speed], 
-    [BlackBoxData].[FixQuality] AS [FixQuality], 
-    [BlackBoxData].[Satellites] AS [Satellites], 
-    [BlackBoxData].[Pitch] AS [Pitch], 
-    [BlackBoxData].[Roll] AS [Roll], 
-    [BlackBoxData].[Heading] AS [Heading], 
-    [BlackBoxData].[TotalFlightTime] AS [TotalFlightTime], 
-    [BlackBoxData].[FlightID] AS [FlightID], 
-    [BlackBoxData].[BBFlightID] AS [BBFlightID]
-    FROM [dbo].[BlackBoxData] AS [BlackBoxData]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="PayLoadData" EntityType="Self.PayLoadData" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [PayLoadData].[PayLoadDataID] AS [PayLoadDataID], 
-    [PayLoadData].[FlightUniqueID] AS [FlightUniqueID], 
-    [PayLoadData].[DroneId] AS [DroneId], 
-    [PayLoadData].[RFID] AS [RFID], 
-    [PayLoadData].[ProductQrCode] AS [ProductQrCode], 
-    [PayLoadData].[RSSI] AS [RSSI], 
-    [PayLoadData].[ReadTime] AS [ReadTime], 
-    [PayLoadData].[ReadCount] AS [ReadCount], 
-    [PayLoadData].[ReadFreq] AS [ReadFreq], 
-    [PayLoadData].[Latitude] AS [Latitude], 
-    [PayLoadData].[Longitude] AS [Longitude], 
-    [PayLoadData].[GPSTime] AS [GPSTime], 
-    [PayLoadData].[CreatedTime] AS [CreatedTime], 
-    [PayLoadData].[FlightID] AS [FlightID], 
-    [PayLoadData].[GPSFix] AS [GPSFix], 
-    [PayLoadData].[YardID] AS [YardID], 
-    [PayLoadData].[ProcessingModel] AS [ProcessingModel], 
-    [PayLoadData].[IsProcessed] AS [IsProcessed], 
-    [PayLoadData].[RowNumber] AS [RowNumber], 
-    [PayLoadData].[ColumnNumber] AS [ColumnNumber], 
-    [PayLoadData].[CellID] AS [CellID]
-    FROM [dbo].[PayLoadData] AS [PayLoadData]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="PayLoadFlight" EntityType="Self.PayLoadFlight" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [PayLoadFlight].[PayLoadFlightID] AS [PayLoadFlightID], 
-    [PayLoadFlight].[FlightUniqueID] AS [FlightUniqueID], 
-    [PayLoadFlight].[CreatedTime] AS [CreatedTime], 
-    [PayLoadFlight].[FlightID] AS [FlightID], 
-    [PayLoadFlight].[RFIDCount] AS [RFIDCount], 
-    [PayLoadFlight].[PayLoadImageFolder] AS [PayLoadImageFolder], 
-    [PayLoadFlight].[YardID] AS [YardID], 
-    [PayLoadFlight].[ShelfID] AS [ShelfID], 
-    [PayLoadFlight].[Processingmodel] AS [Processingmodel], 
-    [PayLoadFlight].[IsFlightSync] AS [IsFlightSync], 
-    [PayLoadFlight].[PayLoadDroneID] AS [PayLoadDroneID]
-    FROM [dbo].[PayLoadFlight] AS [PayLoadFlight]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="PayLoadImageData" EntityType="Self.PayLoadImageData" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [PayLoadImageData].[PayLoadImageDataID] AS [PayLoadImageDataID], 
-    [PayLoadImageData].[PayLoadFlightID] AS [PayLoadFlightID], 
-    [PayLoadImageData].[DroneId] AS [DroneId], 
-    [PayLoadImageData].[ImagePath] AS [ImagePath], 
-    [PayLoadImageData].[ImageCreatedDate] AS [ImageCreatedDate], 
-    [PayLoadImageData].[Latitude] AS [Latitude], 
-    [PayLoadImageData].[Longitude] AS [Longitude], 
-    [PayLoadImageData].[GPSTime] AS [GPSTime], 
-    [PayLoadImageData].[CreatedTime] AS [CreatedTime], 
-    [PayLoadImageData].[FlightID] AS [FlightID], 
-    [PayLoadImageData].[GPSFix] AS [GPSFix], 
-    [PayLoadImageData].[LogFilePath] AS [LogFilePath]
-    FROM [dbo].[PayLoadImageData] AS [PayLoadImageData]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="PayLoadMapData" EntityType="Self.PayLoadMapData" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [PayLoadMapData].[PayLoadDataMapID] AS [PayLoadDataMapID], 
-    [PayLoadMapData].[FlightUniqueID] AS [FlightUniqueID], 
-    [PayLoadMapData].[DroneId] AS [DroneId], 
-    [PayLoadMapData].[RFID] AS [RFID], 
-    [PayLoadMapData].[ProductQrCode] AS [ProductQrCode], 
-    [PayLoadMapData].[RSSI] AS [RSSI], 
-    [PayLoadMapData].[ReadTime] AS [ReadTime], 
-    [PayLoadMapData].[ReadCount] AS [ReadCount], 
-    [PayLoadMapData].[ReadFreq] AS [ReadFreq], 
-    [PayLoadMapData].[Latitude] AS [Latitude], 
-    [PayLoadMapData].[Longitude] AS [Longitude], 
-    [PayLoadMapData].[GPSTime] AS [GPSTime], 
-    [PayLoadMapData].[CreatedTime] AS [CreatedTime], 
-    [PayLoadMapData].[FlightID] AS [FlightID], 
-    [PayLoadMapData].[GPSFix] AS [GPSFix], 
-    [PayLoadMapData].[RFIDAverage] AS [RFIDAverage], 
-    [PayLoadMapData].[RFIDMin] AS [RFIDMin], 
-    [PayLoadMapData].[LastProcessed] AS [LastProcessed], 
-    [PayLoadMapData].[IsProcessed] AS [IsProcessed], 
-    [PayLoadMapData].[YardID] AS [YardID], 
-    [PayLoadMapData].[RowNumber] AS [RowNumber], 
-    [PayLoadMapData].[ColumnNumber] AS [ColumnNumber], 
-    [PayLoadMapData].[CellID] AS [CellID], 
-    [PayLoadMapData].[MaxCellID] AS [MaxCellID], 
-    [PayLoadMapData].[MaxRow] AS [MaxRow], 
-    [PayLoadMapData].[MaxCol] AS [MaxCol], 
-    [PayLoadMapData].[RowDistance] AS [RowDistance], 
-    [PayLoadMapData].[ColDistance] AS [ColDistance], 
-    [PayLoadMapData].[ColPointLat] AS [ColPointLat], 
-    [PayLoadMapData].[ColPointLon] AS [ColPointLon], 
-    [PayLoadMapData].[RowPointLat] AS [RowPointLat], 
-    [PayLoadMapData].[RowPointLon] AS [RowPointLon], 
-    [PayLoadMapData].[RowFixExecuted] AS [RowFixExecuted], 
-    [PayLoadMapData].[ColFixExecuted] AS [ColFixExecuted], 
-    [PayLoadMapData].[AutoFixCol1] AS [AutoFixCol1], 
-    [PayLoadMapData].[AutoFixGap] AS [AutoFixGap], 
-    [PayLoadMapData].[ShelfID] AS [ShelfID], 
-    [PayLoadMapData].[IsValid] AS [IsValid], 
-    [PayLoadMapData].[ProcessingModel] AS [ProcessingModel], 
-    [PayLoadMapData].[GridLat] AS [GridLat], 
-    [PayLoadMapData].[GridLng] AS [GridLng]
-    FROM [dbo].[PayLoadMapData] AS [PayLoadMapData]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="PayLoadYardGrid" EntityType="Self.PayLoadYardGrid" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [PayLoadYardGrid].[CellID] AS [CellID], 
@@ -1383,31 +1248,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
     [PayLoadYardGrid].[CreatedOn] AS [CreatedOn], 
     [PayLoadYardGrid].[Polygon] AS [Polygon]
     FROM [dbo].[PayLoadYardGrid] AS [PayLoadYardGrid]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="PortalAlert" EntityType="Self.PortalAlert" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [PortalAlert].[AlertID] AS [AlertID], 
-    [PortalAlert].[FlightID] AS [FlightID], 
-    [PortalAlert].[FlightReadTime] AS [FlightReadTime], 
-    [PortalAlert].[Latitude] AS [Latitude], 
-    [PortalAlert].[Longitude] AS [Longitude], 
-    [PortalAlert].[Altitude] AS [Altitude], 
-    [PortalAlert].[FlightDataID] AS [FlightDataID], 
-    [PortalAlert].[AlertMessage] AS [AlertMessage], 
-    [PortalAlert].[AlertType] AS [AlertType], 
-    [PortalAlert].[CreatedOn] AS [CreatedOn], 
-    [PortalAlert].[SMSSend] AS [SMSSend], 
-    [PortalAlert].[AlertCategory] AS [AlertCategory]
-    FROM [dbo].[PortalAlert] AS [PortalAlert]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [sysdiagrams].[name] AS [name], 
-    [sysdiagrams].[principal_id] AS [principal_id], 
-    [sysdiagrams].[diagram_id] AS [diagram_id], 
-    [sysdiagrams].[version] AS [version], 
-    [sysdiagrams].[definition] AS [definition]
-    FROM [dbo].[sysdiagrams] AS [sysdiagrams]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
             <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
@@ -2129,6 +1969,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="IsDistanceWarning" Type="Int32" />
           <Property Name="IsDistanceCritical" Type="Int32" />
           <Property Name="ApprovalID" Type="Int32" Nullable="false" />
+          <Property Name="MaxSpeed" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="MaxAltitude" Type="Decimal" Precision="12" Scale="5" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -2687,6 +2529,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="ModelID" Type="Int32" />
           <Property Name="ManufactureOther" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CameraDetails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationDocument" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="RegistrationAuthority" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="BlackBoxCost">
           <Key>
@@ -3282,6 +3126,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
+                <ScalarProperty Name="MaxSpeed" ColumnName="MaxSpeed" />
                 <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
                 <ScalarProperty Name="IsDistanceCritical" ColumnName="IsDistanceCritical" />
                 <ScalarProperty Name="IsDistanceWarning" ColumnName="IsDistanceWarning" />
@@ -3846,6 +3692,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="MSTR_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
               <MappingFragment StoreEntitySet="MSTR_Drone">
+                <ScalarProperty Name="RegistrationAuthority" ColumnName="RegistrationAuthority" />
+                <ScalarProperty Name="RegistrationDocument" ColumnName="RegistrationDocument" />
                 <ScalarProperty Name="CameraDetails" ColumnName="CameraDetails" />
                 <ScalarProperty Name="ManufactureOther" ColumnName="ManufactureOther" />
                 <ScalarProperty Name="ModelID" ColumnName="ModelID" />

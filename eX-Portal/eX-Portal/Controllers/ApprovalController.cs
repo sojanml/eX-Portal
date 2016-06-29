@@ -41,7 +41,7 @@ namespace eX_Portal.Controllers {
 
       qView nView = new qView(SQL);
 
-      ViewBag.Title = "DCAA Approval";
+      ViewBag.Title = "Regulatory Approval";
       ViewBag.DroneID = ID;
       ViewBag.Title += " [" + Util.getDroneName(ID) + "]";
 

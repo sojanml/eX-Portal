@@ -34,7 +34,7 @@ $(document).ready(function () {
       success: function (data) {
         $("#frmDroneSetup :input").prop("disabled", false);
         if (data == 'OK') {
-          showMsg("Data has been updated. DCAA Approval is Pending.")
+          showMsg("Data has been updated. Regulator Approval is Pending.")
         } else {
           showMsg(data);
         }
@@ -152,7 +152,7 @@ function DroneID_Success(Row) {
   // clear before appending new list
   $("#GcaApproval_ApprovalID").html("");
   $("#GcaApproval_ApprovalID").append(
-     $('<option></option>').val(0).html("--Select DCAA Approval--"));
+     $('<option></option>').val(0).html("--Select Regulator Approval--"));
   
   updateCordinates();
   setDefaultApprovals();
