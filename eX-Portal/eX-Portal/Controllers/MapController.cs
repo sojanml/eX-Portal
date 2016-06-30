@@ -41,6 +41,10 @@ namespace eX_Portal.Controllers {
         ViewBag.PlayerURL = thisDrone.getPlayListURL(FlightID);      
       }
       //if (IsLive == 1) IsLive = ViewBag.IsLive = true;
+      if(!exLogic.User.hasAccess("FLIGHT.VIDEOS")) { 
+        ViewBag.PlayerURL = String.Empty;
+        ViewBag.VideoStartAt = String.Empty;
+      }
       return View();
     }
 
@@ -394,7 +398,7 @@ namespace eX_Portal.Controllers {
       List<int> lst_dataItem_5 = new List<int>();
       IList<FlightMapData> DroneDataList = Util.GetFlightChartData(FlightID, LastFlightDataID, MaxRecords);
       foreach (FlightMapData FMD in DroneDataList) {
-        labels.Add(FMD.ReadTime.Value.Hour + ":" + FMD.ReadTime.Value.Minute + ":" + FMD.ReadTime.Value.Second);
+        labels.Add(((DateTime)FMD.ReadTime).ToString("HH:mm:ss"));
         lst_dataItem_1.Add(Convert.ToInt32(FMD.Altitude));
         lst_dataItem_2.Add(Convert.ToInt32(FMD.Satellites));
         lst_dataItem_3.Add(Convert.ToInt32(FMD.Pitch));

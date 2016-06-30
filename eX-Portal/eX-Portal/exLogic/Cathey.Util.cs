@@ -15,12 +15,12 @@ namespace eX_Portal.exLogic {
     static IEnumerable<SelectListItem> DropDownList = Enumerable.Empty<SelectListItem>();
     public static IEnumerable<SelectListItem> getListSQL(string SQL) {
       List<SelectListItem> SelectList = new List<SelectListItem>();
-      using (var ctx = new ExponentPortalEntities()) {
-        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+      using(var ctx = new ExponentPortalEntities()) {
+        using(var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
-          using (var reader = cmd.ExecuteReader()) {
-            while (reader.Read()) {
+          using(var reader = cmd.ExecuteReader()) {
+            while(reader.Read()) {
               SelectList.Add(new SelectListItem {
                 Text = reader[0].ToString(),
                 Value = reader[1].ToString()
@@ -37,8 +37,8 @@ namespace eX_Portal.exLogic {
     public static IEnumerable<SelectListItem> GetDropDowntList(string TypeField, string NameField, string ValueField, string SPName) {
       //  ctx=new ExponentPortalEntities();
       List<SelectListItem> SelectList = new List<SelectListItem>();
-      using (var ctx = new ExponentPortalEntities()) {
-        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+      using(var ctx = new ExponentPortalEntities()) {
+        using(var cmd = ctx.Database.Connection.CreateCommand()) {
 
           ctx.Database.Connection.Open();
 
@@ -50,8 +50,8 @@ namespace eX_Portal.exLogic {
           //  Param[0] = new DbParameter("@Type", TypeField);
           cmd.Parameters.Add(Param);
           cmd.CommandType = CommandType.StoredProcedure;
-          using (var reader = cmd.ExecuteReader()) {
-            while (reader.Read()) {
+          using(var reader = cmd.ExecuteReader()) {
+            while(reader.Read()) {
 
               SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Code"].ToString() });
 
@@ -67,8 +67,8 @@ namespace eX_Portal.exLogic {
 
     public static int InsertSQL(String SQL, string[] Parameter) {
       int result = 0;
-      using (var ctx = new ExponentPortalEntities()) {
-        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+      using(var ctx = new ExponentPortalEntities()) {
+        using(var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
           cmd.Parameters.Add(Parameter.ToList());
@@ -87,12 +87,12 @@ namespace eX_Portal.exLogic {
       List<LiveDrone> LiveDroneList = new List<LiveDrone>();
 
 
-      using (var ctx = new ExponentPortalEntities()) {
-        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+      using(var ctx = new ExponentPortalEntities()) {
+        using(var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
-          using (var reader = cmd.ExecuteReader()) {
-            while (reader.Read()) {
+          using(var reader = cmd.ExecuteReader()) {
+            while(reader.Read()) {
               LiveDroneList.Add(new LiveDrone { DroneID = Convert.ToInt32(reader["DroneID"]), DroneHex = reader["DroneHex"].ToString(), LastLatitude = Convert.ToDouble(reader["LastLatitude"]), LastLongitude = Convert.ToDouble(reader["LastLongitude"]) });
             }
           }
@@ -112,7 +112,8 @@ namespace eX_Portal.exLogic {
 
 
     public static DataSet ExecuteDataset(SqlConnection connection, CommandType commandType, string commandText) {
-      if (connection == null) throw new ArgumentNullException("connection");
+      if(connection == null)
+        throw new ArgumentNullException("connection");
 
       // Create a command and prepare it for execution
       SqlCommand cmd = new SqlCommand();
@@ -124,7 +125,7 @@ namespace eX_Portal.exLogic {
       // PrepareCommand(cmd, connection, (SqlTransaction)null, commandType, commandText, commandParameters, out mustCloseConnection);
 
       // Create the DataAdapter & DataSet
-      using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
+      using(SqlDataAdapter da = new SqlDataAdapter(cmd)) {
         DataSet ds = new DataSet();
 
         // Fill the DataSet using default values for DataTable names, etc
@@ -133,7 +134,7 @@ namespace eX_Portal.exLogic {
         // Detach the SqlParameters from the command object, so they can be used again
         cmd.Parameters.Clear();
 
-        if (mustCloseConnection)
+        if(mustCloseConnection)
           connection.Close();
 
         // Return the dataset
@@ -150,9 +151,9 @@ namespace eX_Portal.exLogic {
       string query = "Select  TOP 30 DroneID,Latitude,[Longitude],[ReadTime],[Altitude],[Speed],[FixQuality],[Satellites],[Pitch] ,[Roll],[Heading],[TotalFlightTime],[FlightID],BBFlightID  FROM [sonrai001].[dbo].[WorkOrderTemp] order by  1 desc";
 
       DataSet ds = Util.ExecuteDataset(con, CommandType.Text, query);
-      if (ds.Tables.Count > 0) {
-        if (ds.Tables[0].Rows.Count > 0) {
-          foreach (DataRow dr in ds.Tables[0].Rows) {
+      if(ds.Tables.Count > 0) {
+        if(ds.Tables[0].Rows.Count > 0) {
+          foreach(DataRow dr in ds.Tables[0].Rows) {
             DroneData dd = new DroneData();
             dd.Altitude = dr["Alt"].ToString();
             dd.Latitude = dr["Lat"].ToString();
@@ -178,11 +179,11 @@ namespace eX_Portal.exLogic {
     public static IList<FlightMapData> GetDroneData(int FlID, int LastFlightID, int MaxRecords = 1, int Replay = 0) {
 
       IList<FlightMapData> FlightMapDataList;
-      using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
+      using(ExponentPortalEntities ctx = new ExponentPortalEntities()) {
         FlightMapDataList = (from FlightMapData in ctx.FlightMapDatas
-                             where FlightMapData.FlightID == FlID && 
+                             where FlightMapData.FlightID == FlID &&
                                    FlightMapData.FlightMapDataID > LastFlightID &&
-                                   ((Replay == 1  && FlightMapData.Speed > 0) || Replay == 0)
+                                   ((Replay == 1 && FlightMapData.Speed > 0) || Replay == 0)
                              select FlightMapData).OrderBy(x => x.FlightMapDataID).Take(MaxRecords).ToList();
 
       }
@@ -191,56 +192,50 @@ namespace eX_Portal.exLogic {
       return FlightMapDataList; //return the list objects
     }//function GetDropDowntList
 
-        public static IList<FlightMapData> GetFlightChartData(int FlID, int LastFlightID=0, int MaxRecords = 0)
-        {
+    public static IList<FlightMapData> GetFlightChartData(int FlID, int LastFlightID = 0, int MaxRecords = 0) {
+      int MaxDataCount = 25;      
+      int DataCount = 0;
+      int mode = 0;
+      IList<FlightMapData> FlightMapDataList = new List<FlightMapData>();
 
-            IList<FlightMapData> FlightMapDataList;
+      using(ExponentPortalEntities ctx = new ExponentPortalEntities()) {
+        var AllFlightData = (
+          from FlightMapData in ctx.FlightMapDatas
+          where FlightMapData.FlightID == FlID
+          select FlightMapData
+          ).OrderBy(x => x.FlightMapDataID)
+           .ToList();
+        DataCount = AllFlightData.Count;
 
-            int DataCount = 0;
-            int mode = 0;
-            using (ExponentPortalEntities ctx = new ExponentPortalEntities())
-            {
-                DataCount = (from FlightMapData in ctx.FlightMapDatas
-                             where FlightMapData.FlightID == FlID
-                             select FlightMapData).ToList().Count;
-                if(DataCount<50)
-                {
-                    FlightMapDataList = (from FlightMapData in ctx.FlightMapDatas.ToList().Select((FlightMapData, index) => new { FlightMapData, index })
-                                         where FlightMapData.FlightMapData.FlightID == FlID 
-                                         select FlightMapData.FlightMapData).OrderBy(x => x.FlightMapDataID).ToList();
-                }else
-                {
-                    mode = DataCount / 50;
-                FlightMapDataList = (from FlightMapData in ctx.FlightMapDatas.ToList().Select((FlightMapData, index) => new { FlightMapData, index })
-                                     where FlightMapData.FlightMapData.FlightID == FlID && FlightMapData.index % mode == 0
-                                     select FlightMapData.FlightMapData).OrderBy(x => x.FlightMapDataID).ToList();
-                }
-                
-            }
-            return FlightMapDataList; 
-            //return the list objects
+        if(DataCount < MaxDataCount) {
+          FlightMapDataList = AllFlightData;
+        } else {
+          mode = DataCount / MaxDataCount;
+          FlightMapDataList = AllFlightData.Where((x, i) => i % mode == 0).ToList();
         }
+      }
+      return FlightMapDataList;
+      //return the list objects
+    }
 
 
-        public static bool IsDate(string Timestamp) {
+    public static bool IsDate(string Timestamp) {
       DateTime tempDate;
       return DateTime.TryParse(Timestamp, out tempDate) ? true : false;
     }
-        public static IList<PayLoadMapData> GetPayLoadData(string FlID, int LastFlightID, int MaxRecords = 1)
-        {
+    public static IList<PayLoadMapData> GetPayLoadData(string FlID, int LastFlightID, int MaxRecords = 1) {
 
-             IList<PayLoadMapData> PayLoadMapDataList;
-            using (ExponentPortalEntities ctx = new ExponentPortalEntities())
-            {
-                PayLoadMapDataList = (from PayLoadMapData in ctx.PayLoadMapDatas
-                                      where PayLoadMapData.FlightUniqueID == FlID &&
-                                           PayLoadMapData.PayLoadDataMapID > LastFlightID
-                                     select PayLoadMapData).OrderBy(x => x.RFID).Take(MaxRecords).ToList();
+      IList<PayLoadMapData> PayLoadMapDataList;
+      using(ExponentPortalEntities ctx = new ExponentPortalEntities()) {
+        PayLoadMapDataList = (from PayLoadMapData in ctx.PayLoadMapDatas
+                              where PayLoadMapData.FlightUniqueID == FlID &&
+                                   PayLoadMapData.PayLoadDataMapID > LastFlightID
+                              select PayLoadMapData).OrderBy(x => x.RFID).Take(MaxRecords).ToList();
 
-            }
+      }
 
 
-            return PayLoadMapDataList; //return the list objects
-        }//function GetDropDowntList
-    }
+      return PayLoadMapDataList; //return the list objects
+    }//function GetDropDowntList
+  }
 }
