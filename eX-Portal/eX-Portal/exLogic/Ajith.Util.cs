@@ -111,12 +111,23 @@ namespace eX_Portal.exLogic {
           Param1.Value = Util.getAccountID();
           DbParameter Param2 = cmd.CreateParameter();
           Param2.ParameterName = "@IsAccess";
-          if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
 
-            Param2.Value = 1;
-          } else {
-            Param2.Value = 0;
-          }
+                    if (exLogic.User.hasAccess("PILOT"))
+                    {
+                        Param2.Value = 0;
+                    }
+                    else
+                    {
+                        if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                        {
+
+                            Param2.Value = 1;
+                        }
+                        else
+                        {
+                            Param2.Value = 0;
+                        }
+                    }
           cmd.Parameters.Add(Param1);
           cmd.Parameters.Add(Param2);
           cmd.CommandType = CommandType.StoredProcedure;
