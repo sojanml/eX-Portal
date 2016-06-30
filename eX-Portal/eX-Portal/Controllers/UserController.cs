@@ -334,7 +334,9 @@ namespace eX_Portal.Controllers
                         "on a.UserProfileId=d.ProfileId" +
                         " where a.userid=" + UserID;
 
-            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+      if(exLogic.User.hasAccess("PILOT")) {
+        //nothing
+      }else if (!exLogic.User.hasAccess("DRONE.MANAGE"))
             {
                 SQL +=
                   " AND\n" +

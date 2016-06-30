@@ -1,4 +1,5 @@
 ﻿var AlertHideTimer = null;
+var _isUTCFormat = true;
 
 $(document).ready(function () {  
 
@@ -106,7 +107,7 @@ function checkTime() {
         ClockTime = dt;
       //  var t = dt.getHours() + ':' + dt.getMinutes();
       
-        $("#Clock").html(dt.toDateString() +' '+formatDate(dt) + ' UTC');
+        $("#Clock").html(fmtDtHeader(dt) + ' UTC');
     });
 }
 
@@ -118,35 +119,9 @@ function setClockTime()
     dt.setMinutes(dt.getMinutes() + 1, 0, 0);
     ClockTime = dt;
   //  var t = dt.getHours() + ':' + dt.getMinutes();
-    $("#Clock").html(dt.toDateString() + ' ' + formatDate(dt) + ' UTC');
+    $("#Clock").html(fmtDtHeader(dt) + ' UTC');
 }
 
-function formatDate(currentTime)
-{
-    var currentHours = currentTime.getHours();
-    var currentMinutes = currentTime.getMinutes();
-    var currentSeconds = currentTime.getSeconds();
-    var currentDay = currentTime.getDay();
-    var currentMonth = currentTime.getMonth();
-
-    // Pad the minutes and seconds with leading zeros, if required
-    currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
-    currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
-
-    // Choose either "AM" or "PM" as appropriate
-    var timeOfDay = (currentHours < 12) ? "AM" : "PM";
-
-    // Convert the hours component to 12-hour format if needed
-    currentHours = (currentHours > 12) ? currentHours - 12 : currentHours;
-
-    // Convert an hours component of "0" to "12"
-    currentHours = (currentHours == 0) ? 12 : currentHours;
-
-    // Compose the string for display
-    var currentTimeString = currentHours + ":" + currentMinutes+ " " + timeOfDay;
-
-    return currentTimeString;
-}
 
 function alertLine(Message) {
   $('#alertLine').html("<ul>" + Message + "</ul>").slideDown();
@@ -245,3 +220,29 @@ function _fnDrawCallback() {
   $('#qViewTable_filter').append('<span class="refresh">&#xf021;</span>');
 
 }
+
+
+
+function fmtDtHeader(date) {
+  if (date instanceof Date) {
+
+  } else {
+    return 'Invalid';
+  }
+  var day = date.getDate();
+  var hours = _isUTCFormat ? date.getUTCHours() : date.getHours();
+  var minutes = _isUTCFormat ? date.getUTCMinutes() : date.getMinutes();
+  var seconds = _isUTCFormat ? date.getUTCSeconds() : date.getSeconds();
+  var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  //var ampm = hours >= 12 ? 'pm' : 'am';
+  //hours = hours % 12;
+  //hours = hours ? hours : 12; // the hour '0' should be '12'
+  seconds = seconds < 10 ? '0' + seconds : seconds;
+  hours = hours < 10 ? '0' + hours : hours;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  day = day < 10 ? '0' + day : day;
+  var strTime = hours + ':' + minutes;
+  var strDate = day + "-" + Months[date.getMonth()] + "-" + date.getFullYear();
+  return strDate + " " + strTime;
+}
+

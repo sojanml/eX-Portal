@@ -821,7 +821,7 @@ namespace eX_Portal.exLogic {
       string result = "";
 
       String SQL = @"SELECT
-                          tblPilot.FirstName as PilotName
+                          tblPilot.FirstName + ' ' + tblPilot.LastName as PilotName
                       FROM
                         DroneFlight
                       LEFT JOIN MSTR_Drone ON

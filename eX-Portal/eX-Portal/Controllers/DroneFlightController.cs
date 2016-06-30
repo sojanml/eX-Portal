@@ -315,9 +315,9 @@ namespace eX_Portal.Controllers {
       "SELECT\n" +
       "   DroneFlight.ID UASFlightId,\n" +
       "   MSTR_Drone.DroneName as UAS,\n" +
-      "   tblPilot.FirstName + ' ' + tblPilot.MiddleName + ' ' + tblPilot.LastName  as PilotName,\n" +
-      "   tblGSC.FirstName as [GroundStation],\n" +
-      "   tblPilot.FirstName as CreatedBy,\n" +
+      "   tblPilot.FirstName + ' ' + tblPilot.LastName  as PilotName,\n" +
+      "   tblGSC.FirstName + ' ' + tblGSC.LastName as [GroundStation],\n" +
+      "   tblPilot.FirstName + ' ' + tblPilot.LastName as CreatedBy,\n" +
       "   FORMAT(FlightDate, 'dd-MMM-yyyy HH:mm:ss', 'en-US' ) as 'FlightDate(UTC)'\n" +
       "FROM\n" +
       "  DroneFlight\n" +
@@ -338,8 +338,8 @@ namespace eX_Portal.Controllers {
       DroneId = Util.GetDroneIdFromFlight(ID);
       UserId = Util.GetPilotIdFromFlight(ID);
 
-      UASFormat = "<a href='/Drone/Detail/" + DroneId + "'> " + Util.GetUASFromFlight(ID) + "</a>";//url
-      PilotFormat = "<a href='/User/UserDetail/" + UserId + "'> " + Util.GetPilotFromFlight(ID) + "</a>";//url
+      UASFormat = "<a href='/Drone/Detail/" + DroneId + "'>" + Util.GetUASFromFlight(ID) + "</a>";//url
+      PilotFormat = "<a href='/User/UserDetail/" + UserId + "'>" + Util.GetPilotFromFlight(ID) + "</a>";//url
       theView.FormatCols.Add("UAS", UASFormat); //Adding the Column required for formatting  
       theView.FormatCols.Add("PilotName", PilotFormat); // //Adding the Column required for formatting  
 
