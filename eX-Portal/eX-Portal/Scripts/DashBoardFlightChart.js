@@ -48,12 +48,12 @@ $(document).ready(function () {
       labels: aLabels1,
       datasets: [{
           label: "Total Flight Time",
-          //
-          fillColor: "rgba(151,187,205,0.5)",
-          strokeColor: "rgba(151,187,205,0.8)",
-          highlightFill: "rgba(151,187,205,0.75)",
-          highlightStroke: "rgba(151,187,205,1)",
-
+         
+          
+          fillColor: "rgba(236,215,101,0.5)",
+              strokeColor: "rgba(236,215,101,0.8)",
+              highlightFill: "rgba(236,215,101,0.75)",
+              highlightStroke: "rgba(236,215,101,1)",
 
           
        
@@ -66,14 +66,14 @@ $(document).ready(function () {
         highlightStroke: "rgba(255,119,119,1)",
         data: aDatasets2
       },
-      {
-          label: "Last Flight Time",
-          fillColor: "rgba(236,215,101,0.5)",
-          strokeColor: "rgba(236,215,101,0.8)",
-          highlightFill: "rgba(236,215,101,0.75)",
-          highlightStroke: "rgba(236,215,101,1)",
-          data: aDatasets3
-      }
+      //{
+      //    label: "Last Flight Time",
+      //    fillColor: "rgba(236,215,101,0.5)",
+      //    strokeColor: "rgba(236,215,101,0.8)",
+      //    highlightFill: "rgba(236,215,101,0.75)",
+      //    highlightStroke: "rgba(236,215,101,1)",
+      //    data: aDatasets3
+      //}
       ]
     };
 

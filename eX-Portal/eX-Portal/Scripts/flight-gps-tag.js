@@ -6,6 +6,7 @@ var Markers = {};
 var refID = 0;
 var count = 0;
 var Pinfowindow = false;
+var FileDateUtc;
 $(document).ready(function () {
 
     $(document).on('click', 'a.delete', function (e) {
@@ -288,6 +289,7 @@ function SubmitFile(file) {
   Elem.html(HTML);
   var formData = new FormData();
   var FileDate = file.lastModifiedDate.toUTCString();
+  FileDateUtc = file.lastModifiedDate;
   formData.append("upload-file", file);
   $.ajax({
     url: UploadURL + '&CreatedOn=' + encodeURI(FileDate),  //server script to process data
@@ -352,12 +354,15 @@ function AddToThumbnail(theData) {
     '</li>\n';
   $('#GPS-Images').append(HTML);
 
+  var myDate = new Date(); // Set this to your date in whichever timezone.
+  var utcDate = myDate.toUTCString();
   GeoInfo = {
       DocumentID : theID,
       Thumbnail: Thump,
       Latitude:  theData.GPS.Latitude,
-      Longitude: theData.GPS.Longitude
-      
+      Longitude: theData.GPS.Longitude,
+      FlightID: theData.GPS.FlightID,
+      UpLoadedDate: FileDateUtc
    };
   setMarkerOne(GeoInfo);
   resetBounds();
