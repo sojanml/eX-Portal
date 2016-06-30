@@ -397,10 +397,38 @@ namespace eX_Portal.exLogic {
       String SQL = "SELECT \n" +
      "  D.[DroneName]\n" +
      "FROM\n" +
-     "  [ExponentPortal].[dbo].[MSTR_Drone] D\n" +
+     "  [MSTR_Drone] D\n" +
      "WHERE\n" +
      "  D.[DroneId]=" + DroneID;
       return getDBVal(SQL);
+    }
+
+    public static String getDroneRegistrationDocuments(int DroneID) {
+      StringBuilder AllDocs = new StringBuilder();
+      String SQL = "SELECT \n" +
+      "  D.[RegistrationDocument]\n" +
+      "FROM\n" +
+      "  [MSTR_Drone] D\n" +
+      "WHERE\n" +
+      "  D.[DroneId]=" + DroneID;
+      String Documents = getDBVal(SQL);
+      if(string.IsNullOrEmpty(Documents))
+        return "";
+    
+      String DroneName = getDroneName(DroneID);
+      AllDocs.Append(@"<div class=""authorise"">Your Regulatory Authorization: <ul>");
+      foreach(var Document in Documents.Split(',')) {
+        String URL = "/Upload/Drone/" + DroneName + "/" + Document;
+        if(!File.Exists(HttpContext.Current.Server.MapPath("~" + URL))) {
+          URL = "/Upload/" + DroneName + "/" + Document;
+        }
+        if(File.Exists(HttpContext.Current.Server.MapPath("~" + URL))) {
+          AllDocs.Append(@"<li><span class=""icon"">&#xf0f6;</span> <a href=""" + URL + @""">" + Document.Substring(Document.IndexOf("~") + 1) +  "</a></li>");
+        }
+          
+      }
+      AllDocs.Append("</ul></div>");
+      return AllDocs.ToString();
     }
 
     public static String getDroneNameByFlight(int FlightID) {

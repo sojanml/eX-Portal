@@ -9,6 +9,7 @@ namespace eX_Portal.ViewModel {
   public class DroneView {
 
     private List<SelectListItem> SelectListItems = new List<SelectListItem> {
+      new SelectListItem {Value = "", Text="Please Select..."},
       new SelectListItem {Value = "DCAA", Text="DCAA"},
       new SelectListItem {Value = "DOT", Text="DOT"},
       new SelectListItem {Value = "GCAA", Text="GCAA"}

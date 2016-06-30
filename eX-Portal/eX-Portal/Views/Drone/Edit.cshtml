@@ -10,6 +10,7 @@
 
 <section class="general-form" id="loginForm">
   @using(Html.BeginForm()) {
+    @Html.ValidationSummary(false)
 
     @Html.HiddenFor(model => model.Drone.DroneId)
 
@@ -70,11 +71,27 @@
             You need to have Regulator Approval for this UAS. Please upload it here.<br />
           </p>
           <div class="col-md-10">
-            <ul id="FileUploadProgress"></ul>
+            <ul id="FileUploadProgress">
+              @if(!String.IsNullOrEmpty(Model.Drone.RegistrationDocument)) {
+              <li class="success"><div style="float: right"><span 
+                data-file="@Model.Drone.RegistrationDocument" 
+                class="delete icon"></span></div>
+              <input type="hidden" name="FileName" value="@Model.Drone.RegistrationDocument">
+              @Model.Drone.RegistrationDocument.Substring(Model.Drone.RegistrationDocument.IndexOf('~')+1)</li>
+              }
+            </ul>
           </div>
           <div>
             <input type="file" multiple name="fileinput" id="fileinput" />
           </div>
+        </div>
+
+        <div style="margin-top:20px;" class="editor-label">
+          @Html.LabelFor(model => model.Drone.RegistrationAuthority, "Regulator Authority")
+        </div>
+        <div class="editor-field">
+          @Html.DropDownListFor(model => model.Drone.RegistrationAuthority, Model.RegistrationAuthority)
+          @Html.ValidationMessageFor(model => model.Drone.RegistrationAuthority)
         </div>
 
         <div class="form-toolbar">

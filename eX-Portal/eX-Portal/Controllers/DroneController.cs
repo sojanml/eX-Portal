@@ -440,7 +440,8 @@ namespace eX_Portal.Controllers {
           "  M.Name as ManufactureName,\n" +
           "  U.Name as UASType,\n" +
           "  D.[DroneIdHexa] as UASHexaId,\n" +
-          "  D.[ModelName] as Description\n" +
+          "  D.[ModelName] as Description,\n" +
+          "  RegistrationAuthority as RegistrationAuthority\n" +
           "FROM\n" +
           "  [MSTR_Drone] D\n" +
           "Left join MSTR_Account  O on\n" +
@@ -464,7 +465,11 @@ namespace eX_Portal.Controllers {
       OwnerFormat = "<a  href='/Admin/AccountDetail/" + OwnerId + "'>$OwnerName$</a>";//url
 
       nView.FormatCols.Add("OwnerName", OwnerFormat); //Adding the Column required for formatting  
-      return ReassignDetail(DroneID) + DecommissionDetail(DroneID) + nView.getTable();
+      return
+        ReassignDetail(DroneID) +
+        DecommissionDetail(DroneID) +
+        nView.getTable() +
+        Util.getDroneRegistrationDocuments(DroneID);
       //+
     }
 
@@ -559,13 +564,16 @@ namespace eX_Portal.Controllers {
       if(!exLogic.User.hasAccess("DRONE.CREATE"))
         return RedirectToAction("NoAccess", "Home");
       try {
+
         // TODO: Add insert logic here
         int DroneSerialNo = Util.getDBInt("SELECT Max(DroneSerialNo) + 1 FROM MSTR_DRONE");
         if(DroneSerialNo < 1001)
           DroneSerialNo = 1001;
         MSTR_Drone Drone = DroneView.Drone;
-
-        String SQL = "INSERT INTO MSTR_DRONE(\n" +
+        if(Drone.CommissionDate == null) Drone.CommissionDate = DateTime.Now;
+        if(Drone.ModelName == null) Drone.ModelName = "Other";
+        Drone.RegistrationDocument = String.IsNullOrEmpty(Request["FileName"]) ? "" : Request["FileName"];
+String SQL = "INSERT INTO MSTR_DRONE(\n" +
           "  AccountID,\n" +
           "  MANUFACTUREID,\n" +
           "  UAVTYPEID,\n" +
@@ -573,7 +581,11 @@ namespace eX_Portal.Controllers {
           "  DRONEDEFINITIONID,\n" +
           "  ISACTIVE,\n" +
           "  DroneSerialNo,\n" +
-          "  ModelName\n" +
+          "  ModelName,\n" +
+          "  RegistrationDocument,\n" +
+          "  RegistrationAuthority,\n" +
+          "  CreatedBy,\n" +
+          "  CreatedOn\n" +
           ") VALUES(\n" +
           "  '" + Drone.AccountID + "',\n" +
           "  '" + Drone.ManufactureId + "',\n" +
@@ -581,9 +593,13 @@ namespace eX_Portal.Controllers {
           "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
           "  11,\n" +
           "  'True',\n" +
-          "  " + DroneSerialNo +
-          "  ,'" + Drone.ModelName +
-          "');";
+          "  " + DroneSerialNo + ",\n" +
+          "  '" + Drone.ModelName + "',\n" +
+          "  '" + Drone.RegistrationDocument + "',\n" +
+          "  '" + Drone.RegistrationAuthority + "',\n" +
+          "  '" + Util.getLoginUserID() + "',\n" +
+          "  GETDATE()\n" +
+          ");";
         int DroneId = Util.InsertSQL(SQL);
 
         if(DroneView.SelectItemsForParts != null) {
@@ -604,7 +620,7 @@ namespace eX_Portal.Controllers {
 
         }
 
-        return RedirectToAction("Detail", new { ID = DroneId });
+        return RedirectToAction("Manage", new { ID = DroneId });
       } catch(Exception ex) {
         Util.ErrorHandler(ex);
         return View("InternalError", ex);
@@ -736,6 +752,10 @@ namespace eX_Portal.Controllers {
     public ActionResult Edit(ViewModel.DroneView DroneView) {
       if(!exLogic.User.hasAccess("DRONE.EDIT"))
         return RedirectToAction("NoAccess", "Home");
+      ModelState.Remove("Drone.RpasSerialNo");
+      ModelState.Remove("Drone.RefName");
+      ModelState.Remove("Drone.MakeID");
+      ModelState.Remove("Drone.ModelID");
       try {
         // TODO: Add update logic here
         if(ModelState.IsValid) {
@@ -744,13 +764,16 @@ namespace eX_Portal.Controllers {
 
           MSTR_Drone Drone = DroneView.Drone;
           //master updating
+          Drone.RegistrationDocument = String.IsNullOrEmpty(Request["FileName"]) ? "" : Request["FileName"];
 
           string SQL = "UPDATE MSTR_DRONE SET\n" +
           "   AccountID ='" + Drone.AccountID + "'," +
           "  MANUFACTUREID ='" + Drone.ManufactureId + "',\n" +
           "  UAVTYPEID ='" + Drone.UavTypeId + "',\n" +
           "  COMMISSIONDATE ='" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
-           "  MODELNAME ='" + Drone.ModelName + "'\n" +
+           "  MODELNAME ='" + Drone.ModelName + "',\n" +
+          "  RegistrationDocument ='" + Drone.RegistrationDocument + "',\n" +
+          "  RegistrationAuthority ='" + Drone.RegistrationAuthority + "'\n" +
           "WHERE\n" +
           "  DroneId =" + Drone.DroneId;
           int DroneId = Util.doSQL(SQL);
@@ -768,9 +791,17 @@ namespace eX_Portal.Controllers {
             }
 
           }
+          return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
+        } else {
 
+          DroneView.OwnerList = Util.getListSQL("SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name");
+          DroneView.UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown");
+          DroneView.ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown");
+            //PartsGroupList = Util.GetDropDowntList();
+
+          return View(DroneView);
         }
-        return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
+        
       } catch(Exception ex) {
         return View("InternalError", ex);
       }

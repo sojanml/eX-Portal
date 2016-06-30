@@ -22,6 +22,20 @@ namespace eX_Portal.Controllers {
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "UAS Flights";
       ViewBag.DroneID = DroneID;
+      String SQLVideo = @"CASE 
+      WHEN 
+          [MSTR_Drone].LastFlightID = DroneFlight.ID and
+          [MSTR_Drone].FlightTime > DATEADD(MINUTE, -1, GETDATE())
+        THEN '<span class=green_icon>&#xf04b;</span>'
+      WHEN (
+          SELECT Count(*)
+          FROM DroneFlightVideo
+          WHERE DroneFlightVideo.FlightID = DroneFlight.ID
+          ) = 0
+        THEN ''
+      ELSE '<span class=icon>&#xf03d;</span>'
+      END AS Video,";
+
       String SQLFilter = "";
       String SQL = @"SELECT 
         DroneFlight.ID,
@@ -30,19 +44,7 @@ namespace eX_Portal.Controllers {
         tblGSC.FirstName AS GSCName,
         tblPilot.FirstName AS CreatedBy,
         FlightDate AS 'FlightDate(UTC)',
-        CASE 
-          WHEN 
-             [MSTR_Drone].LastFlightID = DroneFlight.ID and
-             [MSTR_Drone].FlightTime > DATEADD(MINUTE, -1, GETDATE())
-            THEN '<span class=green_icon>&#xf04b;</span>'
-          WHEN (
-              SELECT Count(*)
-              FROM DroneFlightVideo
-              WHERE DroneFlightVideo.FlightID = DroneFlight.ID
-              ) = 0
-            THEN ''
-          ELSE '<span class=icon>&#xf03d;</span>'
-          END AS Video,
+        " + (exLogic.User.hasAccess("FLIGHT.VIDEOS") ? SQLVideo : "") + @"
         Count(*) OVER () AS _TotalRecords,
         DroneFlight.ID AS _PKey
       FROM 

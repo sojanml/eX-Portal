@@ -74,7 +74,7 @@
             </table>
         </div>
 
-        <h2>Regulator Approval </h2>
+        <h2>Regulatory Approval </h2>
         <div class="form-group">
           <p>
             You need to have Regulator Approval for this UAS. Please upload it here.<br />
@@ -86,11 +86,11 @@
             <input type="file" multiple name="fileinput" id="fileinput" />
           </div>
         </div>
-        <div class="editor-label">
+        <div style="margin-top:20px;" class="editor-label">
           @Html.LabelFor(model => model.Drone.RegistrationAuthority, "Regulator Authority")
         </div>
         <div class="editor-field">
-          @Html.DropDownListFor(model => model.Drone.RegistrationAuthority, Model.RegistrationAuthority)
+          @Html.DropDownListFor(model => model.Drone.RegistrationAuthority, Model.RegistrationAuthority )
           @Html.ValidationMessageFor(model => model.Drone.RegistrationAuthority)
         </div>
 
