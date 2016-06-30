@@ -6,6 +6,7 @@ var Markers = {};
 var refID = 0;
 var count = 0;
 var Pinfowindow = false;
+var FileDateUtc;
 $(document).ready(function () {
 
     $(document).on('click', 'a.delete', function (e) {
@@ -138,9 +139,10 @@ function setMarker(map, _GeoInfo) {
 
 function setMarkerOne(GeoInfo) {
     var body = '<b>' + "" + '</b><br>\n' +
-
-        '<img  id="ThumbNail"   docid= "' + GeoInfo['Thumbnail'] + '" src="' + GeoInfo['Thumbnail'] + '"   height="100px" width="100px" />';
-  
+        '<table ><tr><td>'+
+        '<img  id="ThumbNail"   docid= "' + GeoInfo['Thumbnail'] + '" src="' + GeoInfo['Thumbnail'] + '"   height="100px" width="100px" />' +
+        '</td><td>&nbsp;<font color="red" > Flight Id&nbsp;&nbsp;     :</font> ' + GeoInfo['FlightID'] + ' <br>&nbsp; <font color="red" >Latitude&nbsp;&nbsp;   :</font> ' + GeoInfo['Latitude'] + '<br>&nbsp;<font color="red" > Longitude:</font> '
+        + GeoInfo['Longitude'] + ' <br>&nbsp;<font color="red" > Date(UTC):</font>' + GeoInfo['UpLoadedDate'] + '</td> </tr></table>'
     var myLatLng = new google.maps.LatLng(GeoInfo['Latitude'], GeoInfo['Longitude']);
     var marker = createMarker(map,myLatLng, "", body, "");
     
@@ -287,6 +289,7 @@ function SubmitFile(file) {
   Elem.html(HTML);
   var formData = new FormData();
   var FileDate = file.lastModifiedDate.toUTCString();
+  FileDateUtc = file.lastModifiedDate;
   formData.append("upload-file", file);
   $.ajax({
     url: UploadURL + '&CreatedOn=' + encodeURI(FileDate),  //server script to process data
@@ -351,12 +354,15 @@ function AddToThumbnail(theData) {
     '</li>\n';
   $('#GPS-Images').append(HTML);
 
+  var myDate = new Date(); // Set this to your date in whichever timezone.
+  var utcDate = myDate.toUTCString();
   GeoInfo = {
       DocumentID : theID,
       Thumbnail: Thump,
       Latitude:  theData.GPS.Latitude,
-      Longitude: theData.GPS.Longitude
-      
+      Longitude: theData.GPS.Longitude,
+      FlightID: theData.GPS.FlightID,
+      UpLoadedDate: FileDateUtc
    };
   setMarkerOne(GeoInfo);
   resetBounds();

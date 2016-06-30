@@ -464,15 +464,16 @@ namespace eX_Portal.Controllers {
     public String UploadFile([Bind(Prefix = "ID")] int FlightID = 0, int DroneID = 0, String DocumentType = "Regulator Approval", String CreatedOn = "") {
       DateTime FileCreatedOn = DateTime.MinValue;
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
-      //send information in JSON Format always
+            //send information in JSON Format always
+           
       StringBuilder JsonText = new StringBuilder();
       GPSInfo GPS = new GPSInfo();
       Response.ContentType = "text/json";
 
       try {
         FileCreatedOn = DateTime.ParseExact(CreatedOn, "ddd, d MMM yyyy HH:mm:ss GMT", CultureInfo.InvariantCulture);
-
-      } catch { }
+                string FileCreated_ON=FileCreatedOn.ToString();
+            } catch { }
 
       //when there are files in the request, save and return the file information
       try {
@@ -518,14 +519,18 @@ namespace eX_Portal.Controllers {
         JsonText.Append(",");
         JsonText.Append("\"Altitude\":");
         JsonText.Append(GPS.Altitude);
-        JsonText.Append("},");
-        JsonText.Append("\"addFile\":[");
+                JsonText.Append(",");
+                JsonText.Append("\"FlightID\":");
+                JsonText.Append(FlightID);
+                JsonText.Append("},");               
+
+                JsonText.Append("\"addFile\":[");
         JsonText.Append(Util.getFileInfo(FullName, FileURL));
         JsonText.Append("]}");
 
         //now add the uploaded file to the database
         String SQL = "INSERT INTO DroneDocuments(\n" +
-          " DroneID, FlightID, DocumentType, DocumentName, UploadedDate, UploadedBy,\n" +
+          " DroneID, FlightID, DocumentType, DocumentName,DocumentDate, UploadedDate, UploadedBy,\n" +
           " Latitude, Longitude, Altitude \n" +
           ") VALUES (\n" +
           "  '" + DroneID + "',\n" +
@@ -533,6 +538,7 @@ namespace eX_Portal.Controllers {
           "  '" + DocumentType + "',\n" +
           "  '" + FileURL + "',\n" +
           "  GETDATE(),\n" +
+          " '" + FileCreatedOn + "'," +
           "  " + Util.getLoginUserID() + ",\n" +
           "  " + GPS.Latitude + ", " + GPS.Longitude + ", " + GPS.Altitude + "\n" +
           ")";
