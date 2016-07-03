@@ -49,10 +49,11 @@
          {
              Latitude:  @item.Latitude,
              Longitude:  @item.Longitude,
+             Altitude:@item.Altitude,
              DocumentName: "@item.DocumentName",
              DroneID: @DroneID,
              FlightID:@item.FlightID,
-             UpLoadedDate:"@item.UploadedDate",
+             UpLoadedDate:"@item.DocumentDate",
              Thumbnail: "/upload/drone/@DroneName/@item.FlightID/@item.DocumentName.Replace(".jpg", ".t.png")",
             DocumentID: @item.ID
        },
@@ -62,7 +63,7 @@
 
   $(document).ready(function () {
     var FORM = document.forms['GeoReportFilterForm'];
-    
+
 
     $("#UASName").autocomplete({
       source: "@Url.Action("getUAS","Report",null)",
@@ -76,12 +77,12 @@
           FORM['UAS'].value = '0';
         }
       }
-    });    
+    });
 
     $("#UASName").on("blur", function (e) {
       if ($(this).val() == "") FORM['UAS'].value = '0';
     });
-   
+
   })
 </script>
 
