@@ -575,6 +575,8 @@ String SQL = @"UPDATE [DroneFlight] SET
         JsonText.Append(",");
         JsonText.Append("\"Altitude\":");
         JsonText.Append(GPS.Altitude);
+                JsonText.Append(",");              
+                JsonText.Append(Util.Pair("CreatedDate", FileCreatedOn.ToString("dd-MMM-yyyy hh:mm"), false));
                 JsonText.Append(",");
                 JsonText.Append("\"FlightID\":");
                 JsonText.Append(FlightID);
@@ -586,7 +588,7 @@ String SQL = @"UPDATE [DroneFlight] SET
 
         //now add the uploaded file to the database
         String SQL = "INSERT INTO DroneDocuments(\n" +
-          " DroneID, FlightID, DocumentType, DocumentName,DocumentDate, UploadedDate, UploadedBy,\n" +
+          " DroneID, FlightID, DocumentType, DocumentName, UploadedDate,DocumentDate, UploadedBy,\n" +
           " Latitude, Longitude, Altitude \n" +
           ") VALUES (\n" +
           "  '" + DroneID + "',\n" +

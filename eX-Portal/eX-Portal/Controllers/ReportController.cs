@@ -63,7 +63,7 @@ namespace eX_Portal.Controllers {
                 
                 Docs = (from o in Db.DroneDocuments
                                             where o.DocumentType == "GEO Tag" &&
-                                            o.DroneID == DroneID && ( o.UploadedDate>=FromDate && o.UploadedDate<=ToDate)                                          
+                                            o.DroneID == DroneID && ( o.DocumentDate >= FromDate && o.UploadedDate<=ToDate)                                          
                                             select o).ToList();
             }
             return View(Docs);

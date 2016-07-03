@@ -44,21 +44,22 @@
 }
 @section Scripts{
   <script type="text/javascript">
-    var UploadURL = '@Url.Action("UploadFile", new { ID = ViewBag.FlightID, DocumentType="Geo Tag"})';
-    var DeleteURL = '@Url.Action("DeleteFile", new { ID = ViewBag.FlightID, DocumentType="Geo Tag"})';
-    var GpsTags = [
-    @foreach (var item in Model) {<text>
-      {
-          Latitude:  @item.Latitude,
-          Longitude:  @item.Longitude,
-          DocumentName: "@item.DocumentName",
-          FlightID: @FlightID,
-          UpLoadedDate:"@item.UploadedDate",
-          Thumbnail: "/upload/drone/@DroneName/@FlightID/@item.DocumentName.Replace(".jpg", ".t.png")",
-          DocumentID: @item.ID
-      },
-    </text>}
-    ]
+      var UploadURL = '@Url.Action("UploadFile", new { ID = ViewBag.FlightID, DocumentType="Geo Tag"})';
+      var DeleteURL = '@Url.Action("DeleteFile", new { ID = ViewBag.FlightID, DocumentType="Geo Tag"})';
+      var GpsTags = [
+      @foreach (var item in Model) {<text>
+        {
+            Latitude:  @item.Latitude,
+            Longitude:  @item.Longitude,
+            Altitude:@item.Altitude,
+            DocumentName: "@item.DocumentName",
+            FlightID: @FlightID,
+            UpLoadedDate:"@item.DocumentDate",
+            Thumbnail: "/upload/drone/@DroneName/@FlightID/@item.DocumentName.Replace(".jpg", ".t.png")",
+            DocumentID: @item.ID
+            },
+      </text>}
+      ]
   </script>
 
 <script type="text/javascript">

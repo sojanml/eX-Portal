@@ -32,7 +32,7 @@
                 <div class="delete-icon"><a href="#" class="delete" data-documentid="@item.ID" data-file="@item.DocumentName"><span class="delete icon">&#xf057;</span></a></div>
                 <div class="download-icon"><a href="/upload/drone/@DroneName/@item.FlightID/@item.DocumentName"><span class="download icon">&#xf019;</span></a></div>
                 <div class="thumbnail">
-                    <img src="/upload/drone/@DroneName/@item.FlightID/@item.DocumentName.Replace(".jpg", ".t.png")" />
+                    <img width:50px src="/upload/drone/@DroneName/@item.FlightID/@item.DocumentName.Replace(".jpg", ".t.png")" />
                 </div>
                 <div class="gps">@GPS.getInfo()</div>
             </li>
@@ -55,15 +55,18 @@
         <script type="text/javascript">
             var UploadURL = '@Url.Action("UploadGeoFile", new { ID = ViewBag.DroneID, DocumentType="Geo Tag"})';
             var DeleteURL = '@Url.Action("DeleteFile", new { ID = ViewBag.DroneID, DocumentType="Geo Tag"})';
+
             var GpsTags = [
             @foreach (var item in Model) {<text>
               {
+
                   Latitude:  @item.Latitude,
                   Longitude:  @item.Longitude,
+                  Altitude:@item.Altitude,
                   DocumentName: "@item.DocumentName",
                   DroneID: @DroneID,
                   FlightID:@item.FlightID,
-                  UpLoadedDate:"@item.UploadedDate",
+                  UpLoadedDate: "@item.DocumentDate",
                   Thumbnail: "/upload/drone/@DroneName/@item.FlightID/@item.DocumentName.Replace(".jpg", ".t.png")",
                   DocumentID: @item.ID
                   },
