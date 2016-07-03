@@ -544,7 +544,11 @@ namespace eX_Portal.Controllers {
     public ActionResult Create() {
       if(!exLogic.User.hasAccess("DRONE.CREATE"))
         return RedirectToAction("NoAccess", "Home");
-      String OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name";
+      String OwnerListSQL = 
+        "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account";
+      if(!exLogic.User.hasAccess("DRONE.MANAGE"))
+        OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();
+      OwnerListSQL +=" ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
         Drone = new MSTR_Drone(),
         OwnerList = Util.getListSQL(OwnerListSQL),
@@ -556,6 +560,50 @@ namespace eX_Portal.Controllers {
       return View(viewModel);
     }
 
+    public String UAVTypeList(int UavTypeId = 0) {
+      StringBuilder TypeList = new StringBuilder();
+      String LastGroupName = String.Empty;
+      String SQL = 
+      @"select DISTINCT
+        LUP_Drone.TypeID,
+        LUP_Drone.Name,
+        LUP_Drone.GroupName
+      from
+       LUP_Drone 
+      where 
+        LUP_Drone.[Type]='UAVType'
+      ORDER BY
+        GroupName,
+        Name";
+      TypeList.AppendLine(@"<select data-val=""true"" data-val-number=""The field UavTypeId must be a number."" id=""Drone_UavTypeId"" name=""Drone.UavTypeId"" class=""valid"">");
+      using(var cmd = ctx.Database.Connection.CreateCommand()) {
+        ctx.Database.Connection.Open();
+        cmd.CommandText = SQL;
+        using(var reader = cmd.ExecuteReader()) {
+          while(reader.Read()) {
+            String GroupName = reader["GroupName"].ToString();
+            String Name = reader["Name"].ToString();
+            int ID = reader.GetInt32(reader.GetOrdinal("TypeID"));
+            
+            if(GroupName != LastGroupName) {
+              if(!String.IsNullOrEmpty(LastGroupName))
+                TypeList.AppendLine("</optgroup>");
+              TypeList.AppendLine("<optgroup label=\"" + GroupName  + "\">");
+            }
+            TypeList.Append("<option value=\"");
+            TypeList.Append(ID);
+            TypeList.Append("\"");
+            if(ID == UavTypeId) TypeList.Append(" selected");
+            TypeList.Append(">" + Name);
+            TypeList.AppendLine("</option>");
+
+            LastGroupName = GroupName;
+          }//while
+        }//using reader
+      }//using ctx.Database.Connection.CreateCommand
+      TypeList.AppendLine("</select>");
+      return TypeList.ToString();
+    }
 
 
     // POST: Drone/Create

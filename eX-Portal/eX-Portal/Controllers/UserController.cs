@@ -148,6 +148,9 @@ namespace eX_Portal.Controllers
 
         public ActionResult Logout()
         {
+      var theObj = Session["uid"];
+      if(theObj == null)
+        return View();
 
             string sql = "update UserLog set loggedoftime=getdate() where ID=" + Session["uid"];
 

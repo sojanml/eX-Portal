@@ -299,10 +299,11 @@ GROUP  BY
       SQL.AppendLine("  MSTR_User.FirstName + ' ' + MSTR_User.LastName as label ");
       SQL.AppendLine("FROM ");
       SQL.AppendLine("  MSTR_User");
-      if (User.hasAccess("DRONE.MANAGE")) {
+      if (User.hasAccess("DRONE.MANAGE") || User.hasAccess("PILOT")) {
         SQL.AppendLine("WHERE \n");
         SQL.AppendLine("  MSTR_User.IsPilot = 1");
       } else {
+        SQL.AppendLine(",");
         SQL.AppendLine("  MSTR_User as AccountHolder");
         SQL.AppendLine("WHERE");
         SQL.AppendLine("  MSTR_User.IsPilot = 1  AND");

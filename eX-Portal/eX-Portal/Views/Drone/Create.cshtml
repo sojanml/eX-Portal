@@ -33,7 +33,8 @@
       @Html.LabelFor(model => model.Drone.UavTypeId, "UAS Type")
     </div>
     <div class="editor-field">
-      @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)
+      @*Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)*@
+      @Html.Action("UAVTypeList", new { UavTypeId = Model.Drone.UavTypeId } )
       @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
     </div>
 

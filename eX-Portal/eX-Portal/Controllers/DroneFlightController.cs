@@ -213,8 +213,11 @@ namespace eX_Portal.Controllers {
       // ExponentPortalEntities db = new ExponentPortalEntities();
       // db.Entry(InitialData).State = EntityState.Modified;
       // db.SaveChanges();
-
-      String SQL = @"UPDATE [DroneFlight] SET
+      if(InitialData.PilotID == null)
+        InitialData.PilotID = 0;
+      if(InitialData.GSCID == null)
+        InitialData.GSCID = 0;
+String SQL = @"UPDATE [DroneFlight] SET
         PilotID=" + InitialData.PilotID + @",
         GSCID=" + InitialData.GSCID + @",
         FlightDate='" + ((DateTime)InitialData.FlightDate).ToString("yyyy-MM-dd HH:mm:ss") + @"',
@@ -235,6 +238,7 @@ namespace eX_Portal.Controllers {
         string sql = "insert into MSTR_Pilot_Log(DroneId,Date,PilotId,MultiDashRotor,FlightID)values(" + (InitialData.DroneID == null ? 0 : InitialData.DroneID) + ",'" + System.DateTime.Now.ToString("MM/dd/yyyy") + "'," + (InitialData.PilotID == null ? 0 : InitialData.PilotID) + "," + (InitialData.FlightHours == null ? 0 : (InitialData.FlightHours / 60)) + "," + InitialData.ID + ")";
         Util.doSQL(sql);
       }
+
 
       return RedirectToAction("Detail", new { ID = InitialData.ID });
     }
@@ -393,13 +397,14 @@ namespace eX_Portal.Controllers {
       String DroneName = "";
       ExponentPortalEntities db = new ExponentPortalEntities();
       List<DroneDocument> Docs = (from r in db.DroneDocuments
-                                  where (int)r.FlightID == FlightID
+                                  where (int)r.FlightID == FlightID &&
+                                  r.DocumentType== "Regulator Approval"
                                   select r).ToList();
       theList.Append("<UL>");
       foreach(var Doc in Docs) {
         if(DroneName == "")
           DroneName = Util.getDroneName(Doc.DroneID);
-        theList.AppendLine("<LI><span class=\"icon\">&#xf0f6;</span> <a href=\"/upload/Drone/" + DroneName + "/" + FlightID +
+        theList.AppendLine("<LI><span class=\"icon\">&#xf0f6;</span> <a href=\"/upload/Drone/" +
         "/" + Doc.DocumentName + "\">" + Util.getFilePart(Doc.DocumentName) + "</a></LI>");
       }
       theList.Append("</UL>");
@@ -443,7 +448,7 @@ namespace eX_Portal.Controllers {
 
     }
 
-    public String DeleteFile([Bind(Prefix = "ID")] int FlightID, String file) {
+    public String DeleteFile(int FlightID = 0, String file = "") {
 
       //now add the uploaded file to the database
       String SQL = "DELETE FROM DroneDocuments\n" +
@@ -459,6 +464,57 @@ namespace eX_Portal.Controllers {
 
       return JsonText.ToString();
     }
+
+
+    public String UploadApproval(int DroneID = 0, int FlightID = 0) {
+      String DocumentType = "Regulator Approval";
+      String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+      //send information in JSON Format always
+      StringBuilder JsonText = new StringBuilder();
+      Response.ContentType = "text/json";
+
+      //when there are files in the request, save and return the file information
+      try {
+        var TheFile = Request.Files[0];
+        String DroneName = Util.getDroneName(DroneID);
+        DroneName = DroneName.Replace("*", "");
+        String FileName = System.Guid.NewGuid() + "~" + TheFile.FileName;
+        String UploadDir = UploadPath + DroneName + "\\" + DocumentType + "\\";
+        String FileURL = DroneName + "/" + DocumentType + "/" + FileName;
+        String FullName = UploadDir + FileName;
+
+        if(!Directory.Exists(UploadDir))
+          Directory.CreateDirectory(UploadDir);
+        TheFile.SaveAs(FullName);
+        JsonText.Append("{");
+        JsonText.Append(Util.Pair("status", "success", true));
+        JsonText.Append("\"addFile\":[");
+        JsonText.Append(Util.getFileInfo(FullName));
+        JsonText.Append("]}");
+
+        //now add the uploaded file to the database
+        String SQL = "INSERT INTO DroneDocuments(\n" +
+          " DroneID, FlightID, DocumentType, DocumentName, UploadedDate, UploadedBy\n" +
+          ") VALUES (\n" +
+          "  " + DroneID + ",\n" +
+          "  " + FlightID + ",\n" +
+          "  '" + DocumentType + "',\n" +
+          "  '" + FileURL + "',\n" +
+          "  GETDATE(),\n" +
+          "  " + Util.getLoginUserID() + "\n" +
+          ")";
+        Util.doSQL(SQL);
+
+      } catch(Exception ex) {
+        JsonText.Clear();
+        JsonText.Append("{");
+        JsonText.Append(Util.Pair("status", "error", true));
+        JsonText.Append(Util.Pair("message", ex.Message, false));
+        JsonText.Append("}");
+      }//catch
+      return JsonText.ToString();
+    }//Save()
+
 
     [HttpPost]
     public String UploadFile([Bind(Prefix = "ID")] int FlightID = 0, int DroneID = 0, String DocumentType = "Regulator Approval", String CreatedOn = "") {
@@ -582,7 +638,8 @@ namespace eX_Portal.Controllers {
     public ActionResult UASFiles(int FlightID = 0) {
       ExponentPortalEntities db = new ExponentPortalEntities();
       List<DroneDocument> Docs = (from r in db.DroneDocuments
-                                  where (int)r.FlightID == FlightID
+                                  where (int)r.FlightID == FlightID &&
+                                  r.DocumentType == "Regulator Approval"
                                   select r).ToList();
       return View(Docs);
     }
