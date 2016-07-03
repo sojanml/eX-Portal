@@ -141,7 +141,7 @@ function setMarkerOne(GeoInfo) {
     var body = '<b>' + "" + '</b><br>\n' +
         '<table ><tr><td>'+
         '<img  id="ThumbNail"   docid= "' + GeoInfo['Thumbnail'] + '" src="' + GeoInfo['Thumbnail'] + '"    width="100px" />' +
-        '</td><td>&nbsp;<a  href="/Map/FlightData/' + GeoInfo['FlightID'] + '"><font color="red" >Flight Id&nbsp;&nbsp;&nbsp;&nbsp;:</font></a> ' + GeoInfo['FlightID'] + ' <br>&nbsp; <font color="red" >Latitude&nbsp;&nbsp;   :</font> ' + GeoInfo['Latitude'] + '<br>&nbsp;<font color="red" > Longitude:</font> '
+        '</td><td>&nbsp;<font color="red" >Flight Id&nbsp;&nbsp;&nbsp;&nbsp;:</font><a  href="/Map/FlightData/' + GeoInfo['FlightID'] + '"> ' + GeoInfo['FlightID'] + '</a> <br>&nbsp; <font color="red" >Latitude&nbsp;&nbsp;   :</font> ' + GeoInfo['Latitude'] + '<br>&nbsp;<font color="red" > Longitude:</font> '
         + GeoInfo['Longitude'] + '<br>&nbsp;<font color="red" > Altitude&nbsp;&nbsp;&nbsp;&nbsp;:</font> ' + GeoInfo['Altitude'] + ' <br>&nbsp;<font color="red" > Date(UTC):</font>' + GeoInfo['UpLoadedDate'] + '</td> </tr></table>'
     var myLatLng = new google.maps.LatLng(GeoInfo['Latitude'], GeoInfo['Longitude']);
     var marker = createMarker(map,myLatLng, "", body, "");
