@@ -84,7 +84,7 @@
 }
 @section Scripts{
   <script type="text/javascript">
-    var DroneUploadURL = '@Url.Action("UploadFile", new { DroneID = Model.DroneID, FlightID = Model.ID })';
+    var DroneUploadURL = '@Url.Action("UploadApproval", new { DroneID = Model.DroneID, FlightID = Model.ID })';
     DroneUploadURL = DroneUploadURL.replace(/&amp;/g, '&');
     $(document).ready(function () {
       $(document).on('click', 'span.delete', function (e) {
