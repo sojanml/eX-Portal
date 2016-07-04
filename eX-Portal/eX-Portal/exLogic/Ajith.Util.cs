@@ -261,7 +261,66 @@ namespace eX_Portal.exLogic {
       return ChartList;
       //return the list objects
     }
-    public static IEnumerable<SelectListItem> GetLookup(string type) {
+
+        public static IList<ChartAlertViewModel> getAlertData()
+        {
+
+            IList<ChartAlertViewModel> ChartList = new List<ChartAlertViewModel>();
+
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+
+
+                    cmd.CommandText = "usp_Portal_GetAlertChartData";
+                 ////   DbParameter Param1 = cmd.CreateParameter();
+                 //  // Param1.ParameterName = "@AccountID";
+                 //   Param1.Value = Util.getAccountID();
+                 //   DbParameter Param2 = cmd.CreateParameter();
+                 //   Param2.ParameterName = "@IsAccess";
+                 //   if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                 //   {
+                 //       Param2.Value = 1;
+                 //   }
+                 //   else
+                 //   {
+                 //       Param2.Value = 0;
+                 //   }
+                 //   cmd.Parameters.Add(Param1);
+                 //   cmd.Parameters.Add(Param2);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+
+                            ChartAlertViewModel alerts = new ChartAlertViewModel();
+                          alerts.AlertType= reader["AlertCategory"].ToString();
+                          alerts.TotalAlert = Util.toInt(reader["TotalAlerts"].ToString());
+                          alerts.CurrentMonthAlert = Util.toInt(reader["ThisMonthAlert"].ToString());
+                          alerts.LastFlightAlert = Util.toInt(reader["LastFlightAlert"].ToString());
+                           ChartList.Add(alerts);
+
+                        }
+                    }
+
+                    ctx.Database.Connection.Close();
+
+
+                }
+
+
+            }
+
+
+
+            return ChartList;
+            //return the list objects
+        }
+
+        public static IEnumerable<SelectListItem> GetLookup(string type) {
       List<SelectListItem> SelectList = new List<SelectListItem>();
       SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
 

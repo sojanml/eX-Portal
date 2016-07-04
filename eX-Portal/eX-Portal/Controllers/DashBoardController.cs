@@ -96,7 +96,47 @@ namespace eX_Portal.Controllers {
 
 
 
-    [System.Web.Mvc.HttpGet]
+
+        [System.Web.Mvc.HttpGet]
+        public JsonResult getAlertData()
+        {
+         
+            List<object> iData = new List<object>();
+            List<string> labels = new List<string>();
+            List<string> labelsShort = new List<string>();
+            List<string> labelsLastDate = new List<string>();
+            List<double> lst_dataItem_2 = new List<double>();
+            List<double> lst_dataItem_1 = new List<double>();
+            List<double> lst_dataItem_3 = new List<double>();
+            List<double> lst_dataItem_4 = new List<double>();
+            List<double> lst_dataItem_5 = new List<double>();
+
+
+            IList<ChartAlertViewModel> ChartList = Util.getAlertData();
+            foreach (ChartAlertViewModel FMD in ChartList)
+            {
+               
+                labels.Add(FMD.AlertType);
+              
+                lst_dataItem_1.Add(FMD.TotalAlert);
+                lst_dataItem_2.Add(FMD.CurrentMonthAlert);
+                lst_dataItem_3.Add(FMD.LastFlightAlert);
+
+
+
+            }
+            iData.Add(labels);
+            iData.Add(lst_dataItem_1);
+            iData.Add(lst_dataItem_2);
+            iData.Add(lst_dataItem_3);
+
+
+            return Json(iData, JsonRequestBehavior.AllowGet);
+
+        }
+
+
+        [System.Web.Mvc.HttpGet]
     public JsonResult getCurrentFlightChartData() {
       string DroneName;
       List<object> iData = new List<object>();

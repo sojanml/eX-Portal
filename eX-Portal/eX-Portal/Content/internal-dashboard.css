@@ -157,3 +157,37 @@ ul#forecast li .status {
   color: red;
   width: 60px;
 }
+/* Styles for Pie chart divisions*/
+.ChartDev{
+    width:250px;
+    height:200px;
+}
+
+
+
+    .chart-legend li span{
+    display: inline-block;
+    width: auto;
+    height: 12px;
+    margin-right: 2px;
+}
+
+
+ 
+/* line 35, ../sass/dashboard.scss */
+div.ChartDev h4 {
+  color: rgba(234, 5, 14, 0.6);
+  margin: 10px 5px 0px 90px;
+  padding: 0px;
+  font-size: 12pt;
+}
+
+
+.Pichart{
+    width:1000px;
+    height:250px;  
+    border:solid;
+    border-width:1px;
+    border-color:rgba(255, 0, 0, 0.2); 
+    
+}

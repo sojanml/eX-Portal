@@ -501,6 +501,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\AccountViewModel.cs" />
     <Compile Include="ViewModel\BlackBoxViewModel.cs" />
+    <Compile Include="ViewModel\ChartAlertViewModel.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\DroneServiceViewModel.cs" />
     <Compile Include="ViewModel\DroneView.cs" />
@@ -807,6 +808,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\DashBoardAlertChart.js" />
     <Content Include="Scripts\DashBoardFlightChart.js" />
     <Content Include="Scripts\DashBoardLastFlightChart.js" />
     <Content Include="Scripts\DashBoardPilotChart.js" />
