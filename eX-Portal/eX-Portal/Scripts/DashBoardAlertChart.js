@@ -71,7 +71,7 @@ $(document).ready(function () {
                 segmentStrokeColor: "#fff",
                 segmentStrokeWidth: 2,
                 animation: true,
-                animationSteps: 100,
+                animationSteps: 200,
                 animationEasing: "easeOutBounce",
                 animateRotate: true,
                 animateScale: false,
@@ -80,7 +80,8 @@ $(document).ready(function () {
                 labelFontStyle: "normal",
                 labelFontSize: 12,
                 labelFontColor: "white",
-                labelVisible:true
+                labelVisible: true,
+                onAnimationComplete: null
             })
 
      var legend = PieChartAltitude.generateLegend();
@@ -138,7 +139,7 @@ $(document).ready(function () {
                 segmentStrokeColor: "#fff",
                 segmentStrokeWidth: 2,
                 animation: true,
-                animationSteps: 100,
+                animationSteps: 200,
                 animationEasing: "easeOutBounce",
                 animateRotate: true,
                 animateScale: true,
@@ -147,7 +148,8 @@ $(document).ready(function () {
                 labelFontStyle: "normal",
                 labelFontSize: 12,
                 labelFontColor: "white",
-                labelVisible: true
+                labelVisible: true,
+                onAnimationComplete: null
             })
 
         //proximity
@@ -189,20 +191,21 @@ $(document).ready(function () {
 
             {
 
-                //segmentShowStroke: true,
-                //segmentStrokeColor: "#fff",
-                //segmentStrokeWidth: 2,
+                segmentShowStroke: true,
+                segmentStrokeColor: "#fff",
+                segmentStrokeWidth: 2,
                 animation: true,
-               // animationSteps: 100,
+                animationSteps: 200,
                animationEasing: "easeOutBounce",
                 animateRotate: true,
                animateScale: true,
               
-                //labelFontFamily: "'Arial'",
-                //labelFontStyle: "normal",
-                //labelFontSize: 12,
-                //labelFontColor: "white",
-                //labelVisible: true
+                labelFontFamily: "'Arial'",
+                labelFontStyle: "normal",
+                labelFontSize: 12,
+                labelFontColor: "white",
+                labelVisible: true,
+               onAnimationComplete: null
             })
 
 
