@@ -192,7 +192,7 @@ $(document).ready(function () {
                 //segmentShowStroke: true,
                 //segmentStrokeColor: "#fff",
                 //segmentStrokeWidth: 2,
-                //animation: true,
+                animation: true,
                // animationSteps: 100,
                animationEasing: "easeOutBounce",
                 animateRotate: true,
