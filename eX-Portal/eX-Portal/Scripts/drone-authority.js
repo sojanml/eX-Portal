@@ -1,7 +1,7 @@
 ﻿var QueID = 0;
 
 $(document).ready(function () {
-  $(document).on('click', 'a.delete', function (e) {
+  $(document).on('click', 'span.delete', function (e) {
     e.preventDefault();
     DeleteFile($(this));
   });
@@ -60,18 +60,18 @@ function DeleteFile(Obj) {
 }
 
 function processDeleteFile(Obj) {
-  var FileName = Obj.parent().attr("data-file");
-  var URL = '/Drone/DeleteFile?file=' + FileName;
+  var FileName = Obj.attr("data-file");
+  var URL = '/Drone/DeleteFile/' + DroneID + '?file=' + FileName;
   var LI = Obj.closest('LI');
   $.ajax({
     url: URL,  //server script to process data
     type: 'GET',
     dataType: 'json',
     success: completeHandler = function (data) {
-      Obj.parent().parent().find('.recordinfo').html(data.message);
-      if (data.status == "ok") LI.slideUp();
+      LI.find('.recordinfo').html(data.message);
+      //if (data.status == "ok") LI.slideUp();
     }, error: errorHandler = function (data) {
-      Obj.parent().parent().find('.recordinfo').html(data.status + ' - ' + data.statusText);
+      LI.find('.recordinfo').html(data.status + ' - ' + data.statusText);
     }
   });
 }
@@ -111,8 +111,12 @@ function SubmitFile(file, Sufix) {
           Elem.append('<div style="float: right"><span data-file="' + data.addFile[0].name + '" class="delete icon">&#xf057;</span></div>');
           Elem.append('<input type="hidden" name="FileName" Value="' + data.addFile[0].name + '">');
         }
-        Elem.append(FileName + " - 100%");
 
+        Elem.append(
+          ((data.DocumentDesc && data.DocumentDesc != "") ? data.DocumentDesc + " - " : "") + 
+          '<a href="/Upload/Drone/' + data.FileURL + '">' + FileName + '</a>' +
+          '<span class="recordinfo"></span>'
+        );
         Elem.addClass("success");
       } else {
         Elem.addClass("error");
@@ -136,5 +140,6 @@ function SubmitFile(file, Sufix) {
 
 function progressHandlingFunction(evt, Elem, HTML) {
   var percentComplete = evt.loaded / evt.total * 100;
-  Elem.html(HTML + ' - ' + percentComplete.toFixed(0) + '% done');
+  var Status = (percentComplete >= 100 ? ' Processing...' :  percentComplete.toFixed(0) + '% done');
+  Elem.html(HTML + ' - ' + Status);
 }

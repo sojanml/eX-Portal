@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Authority Approval";
+    ViewBag.Title = "Authority Approval for UAS (RPAS)";
     Layout = "~/Views/Shared/_eXPortal.cshtml";
 }
 @Html.Action("DroneDetail", new { ID = ViewBag.DroneID })
@@ -101,6 +101,7 @@
 
 @section Scripts {
   <script type="text/javascript">
+    var DroneID = '@ViewBag.DroneID';
     var DroneUploadURL = '@Html.Raw(Url.Action("UploadFile", new { DroneId = ViewBag.DroneID, DocumentType = "UAS-Registration" }))';
   </script>
   <script type="text/javascript" src="~/Scripts/drone-authority.js"></script>

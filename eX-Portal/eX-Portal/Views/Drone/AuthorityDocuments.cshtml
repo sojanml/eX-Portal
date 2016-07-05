@@ -11,7 +11,15 @@
     <div class="col-md-10">
       <ul class="FileUploadProgress" id="FileUploadProgress_@Authority">
         @foreach(var Doc in Model) {
-          <li>@Doc.DocumentName</li>
+          <li class="success">
+            <div style="float: right">
+              <span data-file="@Doc.DocumentName" class="delete icon">&#xf057;</span>
+            </div>
+            <input type="hidden" name="FileName" value="@Doc.DocumentName">        
+          @if(!String.IsNullOrEmpty(Doc.DocumentDesc)) { @(Doc.DocumentDesc + " - ")} 
+           <a href="@Doc.getURL()">@Doc.getName()</a>
+            <span class="recordinfo"></span>
+          </li>
         }
       </ul>
     </div>

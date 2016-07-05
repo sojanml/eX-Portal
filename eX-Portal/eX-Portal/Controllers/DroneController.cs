@@ -97,6 +97,8 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult AuthorityApproval([Bind(Prefix = "ID")] int DroneID = 0) {
+      if(!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
+        return RedirectToAction("NoAccess", "Home");
       ViewBag.DroneID = DroneID;
       return View();
     }
@@ -329,17 +331,40 @@ namespace eX_Portal.Controllers {
 
 
     public String DeleteFile([Bind(Prefix = "ID")] int DroneID, String file) {
-
-      //now add the uploaded file to the database
-      String SQL = "DELETE FROM DroneDocuments\n" +
-        "WHERE\n" +
-        "  DocumentName='" + file + "' AND\n" +
-        "  DroneID = '" + DroneID + "'";
-      Util.doSQL(SQL);
-
+      bool isDeleted = false;
       StringBuilder JsonText = new StringBuilder();
       JsonText.Append("{");
-      JsonText.Append(Util.Pair("status", "success", false));
+
+      if(!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT")) {
+        JsonText.Append(Util.Pair("status", "error", true));
+        JsonText.Append(Util.Pair("message", "You do not have access to UAS Documents", false));        
+      } else { 
+        String SQL = "SELECT Count(*) FROM DroneDocuments\n" +
+          "WHERE\n" +
+          "  DocumentName='" + file + "' AND\n" +
+          "  DroneID = '" + DroneID + "'";
+        int DocCount = Util.getDBInt(SQL);
+        if(DocCount > 0) {
+          String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+          String FullPath = Path.Combine(UploadPath, file);
+          if(System.IO.File.Exists(FullPath)) {
+            System.IO.File.Delete(FullPath);
+            //now add the uploaded file to the database
+            SQL = "DELETE FROM DroneDocuments\n" +
+            "WHERE\n" +
+            "  DocumentName='" + file + "' AND\n" +
+            "  DroneID = '" + DroneID + "'";
+            Util.doSQL(SQL);
+            isDeleted = true;
+            JsonText.Append(Util.Pair("status", "success", true));
+            JsonText.Append(Util.Pair("message", "Deleted successfully.", false));
+          }
+        }
+      }
+      if(!isDeleted) { 
+        JsonText.Append(Util.Pair("status", "error", true));
+        JsonText.Append(Util.Pair("message", "Can not delete the file from server.", false));
+      }
       JsonText.Append("}");
 
       return JsonText.ToString();
@@ -395,6 +420,7 @@ namespace eX_Portal.Controllers {
         JsonText.Append(Util.Pair("status", "success", true));
         JsonText.Append(Util.Pair("DocumentTitle", Util.toSQL(DocumentTitle), true));
         JsonText.Append(Util.Pair("DocumentDesc", Util.toSQL(DocumentDesc), true));
+        JsonText.Append(Util.Pair("FileURL", Util.toSQL(FileURL), true));
         JsonText.Append("\"addFile\":[");
         JsonText.Append(Util.getFileInfo(FullName));
         JsonText.Append("]}");
@@ -599,6 +625,7 @@ namespace eX_Portal.Controllers {
       return View(viewModel);
     }
 
+    [ChildActionOnly]
     public String UAVTypeList(int UavTypeId = 0) {
       StringBuilder TypeList = new StringBuilder();
       String LastGroupName = String.Empty;
