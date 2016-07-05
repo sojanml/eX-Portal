@@ -448,7 +448,7 @@ String SQL = @"UPDATE [DroneFlight] SET
 
     }
 
-    public String DeleteFile(int FlightID = 0, String file = "") {
+    public String DeleteFile([Bind(Prefix = "ID")] int FlightID = 0, String file = "") {
 
       //now add the uploaded file to the database
       String SQL = "DELETE FROM DroneDocuments\n" +
