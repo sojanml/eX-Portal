@@ -68,8 +68,10 @@ namespace eX_Portal.Controllers {
       qView nView = new qView(SQL);
       if(!exLogic.User.hasAccess("DRONE"))
         nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
-      if(exLogic.User.hasAccess("DRONE.EDIT"))
+      if(exLogic.User.hasAccess("DRONE.EDIT")) {
         nView.addMenu("Edit", Url.Action("Edit", new { ID = "_Pkey" }));
+        nView.addMenu("Authority Approval", Url.Action("AuthorityApproval", new { ID = "_Pkey" }));
+      }
       if(exLogic.User.hasAccess("FLIGHT.CREATE"))
         nView.addMenu("Create Flight", Url.Action("Create", "DroneFlight", new { ID = "_Pkey" }));
       if(exLogic.User.hasAccess("FLIGHT"))
@@ -93,6 +95,29 @@ namespace eX_Portal.Controllers {
       }//if(IsAjaxRequest)
 
     }
+
+    public ActionResult AuthorityApproval([Bind(Prefix = "ID")] int DroneID = 0) {
+      ViewBag.DroneID = DroneID;
+      return View();
+    }
+
+    [ChildActionOnly]
+    public ActionResult AuthorityDocuments(int DroneID = 0, String Authority="DCAA") {
+      ViewBag.DroneID = DroneID;
+      ViewBag.Authority = Authority;
+
+
+      List<DroneDocument> Docs = (
+        from o in ctx.DroneDocuments
+        where 
+        o.DocumentType == "UAS-Registration" &&
+        o.DroneID == DroneID &&
+        o.DocumentTitle == Authority
+        select o).ToList();
+
+      return View(Docs);
+    }
+
 
     public ActionResult Manage([Bind(Prefix = "ID")] int DroneID = 0) {
       if(!exLogic.User.hasAccess("DRONE.MANAGE"))
@@ -347,7 +372,7 @@ namespace eX_Portal.Controllers {
       }//foreach (String file in Files)
     }//MoveUploadFileT
 
-    public String UploadFile([Bind(Prefix = "ID")] int DroneID, String DocumentType) {
+    public String UploadFile(int DroneID, String DocumentType, String DocumentTitle="", String DocumentDesc="") {
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
       //send information in JSON Format always
       StringBuilder JsonText = new StringBuilder();
@@ -368,17 +393,24 @@ namespace eX_Portal.Controllers {
         TheFile.SaveAs(FullName);
         JsonText.Append("{");
         JsonText.Append(Util.Pair("status", "success", true));
+        JsonText.Append(Util.Pair("DocumentTitle", Util.toSQL(DocumentTitle), true));
+        JsonText.Append(Util.Pair("DocumentDesc", Util.toSQL(DocumentDesc), true));
         JsonText.Append("\"addFile\":[");
         JsonText.Append(Util.getFileInfo(FullName));
         JsonText.Append("]}");
 
+
         //now add the uploaded file to the database
         String SQL = "INSERT INTO DroneDocuments(\n" +
-          " DroneID, DocumentType, DocumentName, UploadedDate, UploadedBy\n" +
+          " DroneID, DocumentType, DocumentName,\n" +
+          " DocumentTitle, DocumentDesc,\n" +
+          " UploadedDate, UploadedBy\n" +
           ") VALUES (\n" +
           "  '" + DroneID + "',\n" +
           "  '" + DocumentType + "',\n" +
           "  '" + FileURL + "',\n" +
+          "  '" + Util.toSQL(DocumentTitle) + "',\n" +
+          "  '" + Util.toSQL(DocumentDesc) + "',\n" +
           "  GETDATE(),\n" +
           "  " + Util.getLoginUserID() + "\n" +
           ")";

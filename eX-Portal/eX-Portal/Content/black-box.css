@@ -3,24 +3,28 @@ div#UploadedDatabase {
   margin-bottom: 20px;
 }
 
-UL#FileUploadProgress {
+UL#FileUploadProgress,
+UL.FileUploadProgress {
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
 
 
-  UL#FileUploadProgress LI {
+  UL#FileUploadProgress LI,
+  UL.FileUploadProgress LI {
     padding: 5px 0px 5px 0px;
     border-bottom: 1px #ea050e solid;
     margin: 5px 0px 5px 0px;
   }
 
-    UL#FileUploadProgress LI.success {
+    UL#FileUploadProgress LI.success,
+    UL.FileUploadProgress LI.success {
       color: green;
     }
 
-    UL#FileUploadProgress LI.error {
+    UL#FileUploadProgress LI.error,
+    UL.FileUploadProgress LI.error {
       color: #ea050e;
     }
 
