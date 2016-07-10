@@ -1,5 +1,5 @@
 ﻿var AlertHideTimer = null;
-var _isUTCFormat = true;
+var _isUTCFormat = false;
 
 $(document).ready(function () {  
 

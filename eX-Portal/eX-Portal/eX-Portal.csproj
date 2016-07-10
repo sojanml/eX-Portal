@@ -659,6 +659,8 @@
     <Content Include="images\bullet.png" />
     <Content Include="images\cal-icon.png" />
     <Content Include="images\car-icon.png" />
+    <Content Include="images\dcaa_logo.png" />
+    <Content Include="images\dcca-logo.png" />
     <Content Include="images\drop-down.png" />
     <Content Include="images\fonts\DINNextLTPro-Light.svg" />
     <Content Include="images\fonts\DINNextLTPro-LightCondensed.svg" />
@@ -812,6 +814,7 @@
     <Content Include="Scripts\DashBoardFlightChart.js" />
     <Content Include="Scripts\DashBoardLastFlightChart.js" />
     <Content Include="Scripts\DashBoardPilotChart.js" />
+    <Content Include="Scripts\drone-authority.js" />
     <Content Include="Scripts\drone-live.js" />
     <Content Include="Scripts\drone.js" />
     <Content Include="Scripts\flight-gps-tag.js" />
@@ -1177,6 +1180,8 @@
     <Content Include="Views\Report\GeoReportFilter.cshtml" />
     <Content Include="Views\Report\GeoTag.cshtml" />
     <Content Include="Views\Drone\GeoTag.cshtml" />
+    <Content Include="Views\Drone\AuthorityApproval.cshtml" />
+    <Content Include="Views\Drone\AuthorityDocuments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

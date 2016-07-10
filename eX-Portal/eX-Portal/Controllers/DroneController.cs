@@ -68,8 +68,10 @@ namespace eX_Portal.Controllers {
       qView nView = new qView(SQL);
       if(!exLogic.User.hasAccess("DRONE"))
         nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
-      if(exLogic.User.hasAccess("DRONE.EDIT"))
+      if(exLogic.User.hasAccess("DRONE.EDIT")) {
         nView.addMenu("Edit", Url.Action("Edit", new { ID = "_Pkey" }));
+        nView.addMenu("Authority Approval", Url.Action("AuthorityApproval", new { ID = "_Pkey" }));
+      }
       if(exLogic.User.hasAccess("FLIGHT.CREATE"))
         nView.addMenu("Create Flight", Url.Action("Create", "DroneFlight", new { ID = "_Pkey" }));
       if(exLogic.User.hasAccess("FLIGHT"))
@@ -93,6 +95,31 @@ namespace eX_Portal.Controllers {
       }//if(IsAjaxRequest)
 
     }
+
+    public ActionResult AuthorityApproval([Bind(Prefix = "ID")] int DroneID = 0) {
+      if(!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
+        return RedirectToAction("NoAccess", "Home");
+      ViewBag.DroneID = DroneID;
+      return View();
+    }
+
+    [ChildActionOnly]
+    public ActionResult AuthorityDocuments(int DroneID = 0, String Authority="DCAA") {
+      ViewBag.DroneID = DroneID;
+      ViewBag.Authority = Authority;
+
+
+      List<DroneDocument> Docs = (
+        from o in ctx.DroneDocuments
+        where 
+        o.DocumentType == "UAS-Registration" &&
+        o.DroneID == DroneID &&
+        o.DocumentTitle == Authority
+        select o).ToList();
+
+      return View(Docs);
+    }
+
 
     public ActionResult Manage([Bind(Prefix = "ID")] int DroneID = 0) {
       if(!exLogic.User.hasAccess("DRONE.MANAGE"))
@@ -304,17 +331,40 @@ namespace eX_Portal.Controllers {
 
 
     public String DeleteFile([Bind(Prefix = "ID")] int DroneID, String file) {
-
-      //now add the uploaded file to the database
-      String SQL = "DELETE FROM DroneDocuments\n" +
-        "WHERE\n" +
-        "  DocumentName='" + file + "' AND\n" +
-        "  DroneID = '" + DroneID + "'";
-      Util.doSQL(SQL);
-
+      bool isDeleted = false;
       StringBuilder JsonText = new StringBuilder();
       JsonText.Append("{");
-      JsonText.Append(Util.Pair("status", "success", false));
+
+      if(!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT")) {
+        JsonText.Append(Util.Pair("status", "error", true));
+        JsonText.Append(Util.Pair("message", "You do not have access to UAS Documents", false));        
+      } else { 
+        String SQL = "SELECT Count(*) FROM DroneDocuments\n" +
+          "WHERE\n" +
+          "  DocumentName='" + file + "' AND\n" +
+          "  DroneID = '" + DroneID + "'";
+        int DocCount = Util.getDBInt(SQL);
+        if(DocCount > 0) {
+          String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+          String FullPath = Path.Combine(UploadPath, file);
+          if(System.IO.File.Exists(FullPath)) {
+            System.IO.File.Delete(FullPath);
+            //now add the uploaded file to the database
+            SQL = "DELETE FROM DroneDocuments\n" +
+            "WHERE\n" +
+            "  DocumentName='" + file + "' AND\n" +
+            "  DroneID = '" + DroneID + "'";
+            Util.doSQL(SQL);
+            isDeleted = true;
+            JsonText.Append(Util.Pair("status", "success", true));
+            JsonText.Append(Util.Pair("message", "Deleted successfully.", false));
+          }
+        }
+      }
+      if(!isDeleted) { 
+        JsonText.Append(Util.Pair("status", "error", true));
+        JsonText.Append(Util.Pair("message", "Can not delete the file from server.", false));
+      }
       JsonText.Append("}");
 
       return JsonText.ToString();
@@ -347,7 +397,7 @@ namespace eX_Portal.Controllers {
       }//foreach (String file in Files)
     }//MoveUploadFileT
 
-    public String UploadFile([Bind(Prefix = "ID")] int DroneID, String DocumentType) {
+    public String UploadFile(int DroneID, String DocumentType, String DocumentTitle="", String DocumentDesc="") {
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
       //send information in JSON Format always
       StringBuilder JsonText = new StringBuilder();
@@ -368,17 +418,25 @@ namespace eX_Portal.Controllers {
         TheFile.SaveAs(FullName);
         JsonText.Append("{");
         JsonText.Append(Util.Pair("status", "success", true));
+        JsonText.Append(Util.Pair("DocumentTitle", Util.toSQL(DocumentTitle), true));
+        JsonText.Append(Util.Pair("DocumentDesc", Util.toSQL(DocumentDesc), true));
+        JsonText.Append(Util.Pair("FileURL", Util.toSQL(FileURL), true));
         JsonText.Append("\"addFile\":[");
         JsonText.Append(Util.getFileInfo(FullName));
         JsonText.Append("]}");
 
+
         //now add the uploaded file to the database
         String SQL = "INSERT INTO DroneDocuments(\n" +
-          " DroneID, DocumentType, DocumentName, UploadedDate, UploadedBy\n" +
+          " DroneID, DocumentType, DocumentName,\n" +
+          " DocumentTitle, DocumentDesc,\n" +
+          " UploadedDate, UploadedBy\n" +
           ") VALUES (\n" +
           "  '" + DroneID + "',\n" +
           "  '" + DocumentType + "',\n" +
           "  '" + FileURL + "',\n" +
+          "  '" + Util.toSQL(DocumentTitle) + "',\n" +
+          "  '" + Util.toSQL(DocumentDesc) + "',\n" +
           "  GETDATE(),\n" +
           "  " + Util.getLoginUserID() + "\n" +
           ")";
@@ -567,6 +625,7 @@ namespace eX_Portal.Controllers {
       return View(viewModel);
     }
 
+    [ChildActionOnly]
     public String UAVTypeList(int UavTypeId = 0) {
       StringBuilder TypeList = new StringBuilder();
       String LastGroupName = String.Empty;

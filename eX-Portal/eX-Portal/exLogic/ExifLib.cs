@@ -81,17 +81,22 @@ namespace eX_Portal.exLogic {
 
     public GPSInfo getGPS(int FlightID, DateTime FileCreatedOn) {
         StringBuilder GPSInfo = new StringBuilder();
+      String FromTime = Util.toSQLDate(FileCreatedOn.AddMinutes(-5).ToUniversalTime());
+      String ToTime = Util.toSQLDate(FileCreatedOn.AddMinutes(5).ToUniversalTime());
+      String ThisTime = Util.toSQLDate(FileCreatedOn.ToUniversalTime());
       String SQL = @"Select TOP 1 
         Latitude,
         Longitude,
-        Altitude
+        Altitude,
+        ABS(DATEDIFF(SECOND, ReadTime,'" + ThisTime + @"')) as SortTime
       from 
         FlightMapData 
       where 
         flightid=" + FlightID + @" AND
-        ReadTime >=  '" + Util.toSQLDate(FileCreatedOn.ToUniversalTime()) + @"' AND
-        ReadTime <=  '" + Util.toSQLDate(FileCreatedOn.AddMinutes(10).ToUniversalTime()) + @"'
+        ReadTime >=  '" + FromTime + @"' AND
+        ReadTime <=  '" + ToTime + @"'
       ORDER BY
+        SortTime ASC,
         ReadTime DESC";
       var Row = Util.getDBRow(SQL);
       var theGPS = new GPSInfo();

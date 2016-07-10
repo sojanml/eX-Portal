@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 
 namespace eX_Portal.Models {
@@ -16,26 +17,25 @@ namespace eX_Portal.Models {
   public class DataAnnotationsHelper {
   }
 
-    [MetadataType(typeof(MSTR_BlackBoxHelper))]
-    public partial class MSTR_BlackBox {}
+  [MetadataType(typeof(MSTR_BlackBoxHelper))]
+  public partial class MSTR_BlackBox { }
 
-    public class MSTR_BlackBoxHelper
-    {
-        [Required(ErrorMessage = "Please Enter the BlackBox Serial")]
-        [Display(Name = "BlackBox Serial")]
-        public string BlackBoxSerial { get; set; }
+  public class MSTR_BlackBoxHelper {
+    [Required(ErrorMessage = "Please Enter the BlackBox Serial")]
+    [Display(Name = "BlackBox Serial")]
+    public string BlackBoxSerial { get; set; }
 
-        [Required(ErrorMessage = "Please Enter the BlackBox Name")]
-        [Display(Name = "BlackBox Name")]
-        public string BlackBoxName { get; set; }
+    [Required(ErrorMessage = "Please Enter the BlackBox Name")]
+    [Display(Name = "BlackBox Name")]
+    public string BlackBoxName { get; set; }
 
-        [Required(ErrorMessage = "Please Enter the Encryption Key")]
-        [Display(Name = "Encryption Key")]
-        public string EncryptionKey { get; set; }
+    [Required(ErrorMessage = "Please Enter the Encryption Key")]
+    [Display(Name = "Encryption Key")]
+    public string EncryptionKey { get; set; }
 
-    }//MSTR_AccountHelper
+  }//MSTR_AccountHelper
 
-    [MetadataType(typeof(MSTR_AccountHelper))]
+  [MetadataType(typeof(MSTR_AccountHelper))]
   public partial class MSTR_Account { }
 
 
@@ -317,83 +317,84 @@ namespace eX_Portal.Models {
       var S3Path = HttpContext.Current.Server.MapPath("/Upload/" + S3Url);
       String HTTPURL = "https://exponent-s3.s3.amazonaws.com/" + S3Url;
       String theExt = Path.GetExtension(S3Path);
-      switch (theExt) {
-      case ".jpg":
-      case ".jpeg":
-      case ".gif":
-      case ".png":
-      string AppPath = Path.GetDirectoryName(S3Path);
-      if (!File.Exists(S3Path)) {
-        if (!Directory.Exists(AppPath)) Directory.CreateDirectory(AppPath);
-        Image image = getImageFromURL(HTTPURL);
-        Image thumb = image.GetThumbnailImage(120, 120, () => false, IntPtr.Zero);
-        thumb.Save(S3Path);
-      }
-      HTTPURL = "/Upload/" + S3Url;
-      break;
-      case ".aac":
-      case ".ai":
-      case ".aiff":
-      case ".avi":
-      case ".bmp":
-      case ".c":
-      case ".cpp":
-      case ".css":
-      case ".dat":
-      case ".dmg":
-      case ".doc":
-      case ".dotx":
-      case ".dwg":
-      case ".dxf":
-      case ".eps":
-      case ".exe":
-      case ".flv":
-      case ".h":
-      case ".hpp":
-      case ".html":
-      case ".ics":
-      case ".iso":
-      case ".java":
-      case ".js":
-      case ".key":
-      case ".less":
-      case ".mid":
-      case ".mp3":
-      case ".mp4":
-      case ".mpg":
-      case ".odf":
-      case ".ods":
-      case ".odt":
-      case ".otp":
-      case ".ots":
-      case ".ott":
-      case ".pdf":
-      case ".php":
-      case ".ppt":
-      case ".psd":
-      case ".py":
-      case ".qt":
-      case ".rar":
-      case ".rb":
-      case ".rtf":
-      case ".sass":
-      case ".scss":
-      case ".sql":
-      case ".tga":
-      case ".tgz":
-      case ".tiff":
-      case ".txt":
-      case ".wav":
-      case ".xls":
-      case ".xlsx":
-      case ".xml":
-      case ".yml":
-      case ".zip":
-      HTTPURL = "/images/512px/" + theExt.Substring(1) + ".png";
-      break;
-      default:
-      HTTPURL = "/images/512px/_page.png";
-      break;
+      switch(theExt) {
+        case ".jpg":
+        case ".jpeg":
+        case ".gif":
+        case ".png":
+          string AppPath = Path.GetDirectoryName(S3Path);
+          if(!File.Exists(S3Path)) {
+            if(!Directory.Exists(AppPath))
+              Directory.CreateDirectory(AppPath);
+            Image image = getImageFromURL(HTTPURL);
+            Image thumb = image.GetThumbnailImage(120, 120, () => false, IntPtr.Zero);
+            thumb.Save(S3Path);
+          }
+          HTTPURL = "/Upload/" + S3Url;
+          break;
+        case ".aac":
+        case ".ai":
+        case ".aiff":
+        case ".avi":
+        case ".bmp":
+        case ".c":
+        case ".cpp":
+        case ".css":
+        case ".dat":
+        case ".dmg":
+        case ".doc":
+        case ".dotx":
+        case ".dwg":
+        case ".dxf":
+        case ".eps":
+        case ".exe":
+        case ".flv":
+        case ".h":
+        case ".hpp":
+        case ".html":
+        case ".ics":
+        case ".iso":
+        case ".java":
+        case ".js":
+        case ".key":
+        case ".less":
+        case ".mid":
+        case ".mp3":
+        case ".mp4":
+        case ".mpg":
+        case ".odf":
+        case ".ods":
+        case ".odt":
+        case ".otp":
+        case ".ots":
+        case ".ott":
+        case ".pdf":
+        case ".php":
+        case ".ppt":
+        case ".psd":
+        case ".py":
+        case ".qt":
+        case ".rar":
+        case ".rb":
+        case ".rtf":
+        case ".sass":
+        case ".scss":
+        case ".sql":
+        case ".tga":
+        case ".tgz":
+        case ".tiff":
+        case ".txt":
+        case ".wav":
+        case ".xls":
+        case ".xlsx":
+        case ".xml":
+        case ".yml":
+        case ".zip":
+          HTTPURL = "/images/512px/" + theExt.Substring(1) + ".png";
+          break;
+        default:
+          HTTPURL = "/images/512px/_page.png";
+          break;
 
       }//switch (theExt)
 
@@ -403,8 +404,8 @@ namespace eX_Portal.Models {
     private Image getImageFromURL(string url) {
       HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(url);
 
-      using (HttpWebResponse httpWebReponse = (HttpWebResponse)httpWebRequest.GetResponse()) {
-        using (Stream stream = httpWebReponse.GetResponseStream()) {
+      using(HttpWebResponse httpWebReponse = (HttpWebResponse)httpWebRequest.GetResponse()) {
+        using(Stream stream = httpWebReponse.GetResponseStream()) {
           return Image.FromStream(stream);
         }
       }
@@ -414,15 +415,51 @@ namespace eX_Portal.Models {
       S3Url = S3Url.Trim();
       var S3Path = HttpContext.Current.Server.MapPath("/Upload/" + S3Url);
       String theExt = Path.GetExtension(S3Path);
-      switch (theExt) {
-      case ".mp4":
-      case ".flv":
-      return true;
+      switch(theExt) {
+        case ".mp4":
+        case ".flv":
+          return true;
       }
       return false;
     }
 
-        public string DocsType { get; set; }
+    public String getURL() {
+      String URL = String.Empty;
+      if(!String.IsNullOrEmpty(DocumentName)) {
+        URL = "/Upload/Drone/" + DocumentName;
+      }
+      return URL;
+    }
+    public String getName() {
+      String FileName = String.Empty;
+      if(!String.IsNullOrEmpty(DocumentName)) {
+        int TiledAt = DocumentName.IndexOf('~');
+        if(TiledAt > 0) FileName = DocumentName.Substring(TiledAt + 1);
+      }
+      return FileName;
+    }
+
+    public String getMoreInfo() {
+      StringBuilder MoreInfo = new StringBuilder();
+      if(!String.IsNullOrEmpty(DocumentTitle)) {
+        MoreInfo.Append("<span class=\"DocumentTitle\">");
+        MoreInfo.Append(DocumentTitle);
+        MoreInfo.Append("</span>");
+      }
+      if(!String.IsNullOrEmpty(DocumentDesc)) {
+        bool isAppendBraket = (MoreInfo.Length > 0);
+        MoreInfo.Append("<span class=\"DocumentDesc\">");
+        if(isAppendBraket)
+          MoreInfo.Append(" [");
+        MoreInfo.Append(DocumentDesc);
+        if(isAppendBraket)
+          MoreInfo.Append("]");
+        MoreInfo.Append("</span>");
+      }
+      return MoreInfo.ToString();
+    }
+
+    public string DocsType { get; set; }
   }
 
   public class DroneDocument_Helper {
@@ -442,46 +479,45 @@ namespace eX_Portal.Models {
     public string S3Url { get; set; }
   }
 
-    public class GCA_Approval_Helper
-    {
-        [Required(ErrorMessage = "Please select a drone")]
-        [Display(Name = "Drone Name")]
-        public string DroneID { get; set; }
+  public class GCA_Approval_Helper {
+    [Required(ErrorMessage = "Please select a drone")]
+    [Display(Name = "Drone Name")]
+    public string DroneID { get; set; }
 
-        [DataType(DataType.MultilineText)]
-        [Required(ErrorMessage = "Please Enter Coordinates")]
-        public string Coordinates { get; set; }
+    [DataType(DataType.MultilineText)]
+    [Required(ErrorMessage = "Please Enter Coordinates")]
+    public string Coordinates { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Approval Name")]
-        [Display(Name = "Approval Name")]
-        public string ApprovalName { get; set; }
+    [Required(ErrorMessage = "Please Enter Approval Name")]
+    [Display(Name = "Approval Name")]
+    public string ApprovalName { get; set; }
 
     [Display(Name = "Approval Date")]
     public string ApprovalDate { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Start Date")]
-        [Display(Name = "Start Date")]
-        public string StartDate { get; set; }
+    [Required(ErrorMessage = "Please Enter Start Date")]
+    [Display(Name = "Start Date")]
+    public string StartDate { get; set; }
 
-        [Required(ErrorMessage = "Please Enter End Date")]
-        [Display(Name = "End Date")]
-        public string EndDate { get; set; }
+    [Required(ErrorMessage = "Please Enter End Date")]
+    [Display(Name = "End Date")]
+    public string EndDate { get; set; }
 
-        [Required(ErrorMessage = "Please Enter Start Time")]
-        [Display(Name = "Start Time")]
-        public string StartTime { get; set; }
+    [Required(ErrorMessage = "Please Enter Start Time")]
+    [Display(Name = "Start Time")]
+    public string StartTime { get; set; }
 
-        [Required(ErrorMessage = "Please Enter End Time")]
-        [Display(Name = "End Time")]
-        public string EndTime { get; set; }
+    [Required(ErrorMessage = "Please Enter End Time")]
+    [Display(Name = "End Time")]
+    public string EndTime { get; set; }
 
-        [DataType(DataType.MultilineText)]
-        [Required(ErrorMessage = "Please Enter Remarks")]
-        [Display(Name = "Approval Remarks")]
-        public string ApprovalRemarks { get; set; }
+    [DataType(DataType.MultilineText)]
+    [Required(ErrorMessage = "Please Enter Remarks")]
+    [Display(Name = "Approval Remarks")]
+    public string ApprovalRemarks { get; set; }
 
-       
-    }
+
+  }
 
   [MetadataType(typeof(MSTR_RPAS_User_Helper))]
   public partial class MSTR_RPAS_User {
@@ -522,80 +558,77 @@ namespace eX_Portal.Models {
 
   [MetadataType(typeof(MSTR_DroneHelper))]
   public partial class MSTR_Drone {
-    }
+  }
 
-    public class MSTR_DroneHelper
-    {
-        [Required(ErrorMessage = "Please select Manufacturer")]
-        [Display(Name = "Manufacturer")]
-        public int ManufactureId { get; set; }
+  public class MSTR_DroneHelper {
+    [Required(ErrorMessage = "Please select Manufacturer")]
+    [Display(Name = "Manufacturer")]
+    public int ManufactureId { get; set; }
 
-        //[Required(ErrorMessage = "Please select Drone Name")]
-        //[Display(Name = "Drone Name")]
-        //public string DroneName { get; set; }
+    //[Required(ErrorMessage = "Please select Drone Name")]
+    //[Display(Name = "Drone Name")]
+    //public string DroneName { get; set; }
 
-        //[Required(ErrorMessage = "Please select Commission Date")]
-        //[Display(Name = "Commission Date")]
-        //public string CommissionDate { get; set; }
+    //[Required(ErrorMessage = "Please select Commission Date")]
+    //[Display(Name = "Commission Date")]
+    //public string CommissionDate { get; set; }
 
-        [Required(ErrorMessage = "Please enter Rpas Serial Number")]
-        [Display(Name = "Rpas Serial No")]
-        public string RpasSerialNo { get; set; }
+    [Required(ErrorMessage = "Please enter Rpas Serial Number")]
+    [Display(Name = "Rpas Serial No")]
+    public string RpasSerialNo { get; set; }
 
-        [Required(ErrorMessage = "Please enter Reference Name")]
-        [Display(Name = "Reference name")]
-        public int RefName { get; set; }
+    [Required(ErrorMessage = "Please enter Reference Name")]
+    [Display(Name = "Reference name")]
+    public int RefName { get; set; }
 
-        [Required(ErrorMessage = "Please select Make")]
-        [Display(Name = "Make")]
-        public string MakeID { get; set; }
+    [Required(ErrorMessage = "Please select Make")]
+    [Display(Name = "Make")]
+    public string MakeID { get; set; }
 
-        [Required(ErrorMessage = "Please select Model Name")]
-        [Display(Name = "Model Name")]
-        public string ModelID { get; set; }
+    [Required(ErrorMessage = "Please select Model Name")]
+    [Display(Name = "Model Name")]
+    public string ModelID { get; set; }
 
 
-        //[Required(ErrorMessage = "Please select Camara")]
-        //[Display(Name = "Is Camara")]
-        //public int? IsCamara { get; set; }
+    //[Required(ErrorMessage = "Please select Camara")]
+    //[Display(Name = "Is Camara")]
+    //public int? IsCamara { get; set; }
 
-    }
+  }
 
-    [MetadataType(typeof(BlackBoxTransactionHelper))]
-    public partial class BlackBoxTransaction
-    {
-        public bool VerifyCheck { get; set; }
-    }
+  [MetadataType(typeof(BlackBoxTransactionHelper))]
+  public partial class BlackBoxTransaction {
+    public bool VerifyCheck { get; set; }
+  }
 
-    public class BlackBoxTransactionHelper
-    {
-        [Required(ErrorMessage = "Please select BlackBox")]
-        [Display(Name = "BlackBox")]
-        public int BlackBoxID { get; set; }
+  public class BlackBoxTransactionHelper {
+    [Required(ErrorMessage = "Please select BlackBox")]
+    [Display(Name = "BlackBox")]
+    public int BlackBoxID { get; set; }
 
-        [Required(ErrorMessage = "Please select Transaction Mode")]
-        [Display(Name = "Collection Mode")]
-        public string CollectionMode { get; set; }
+    [Required(ErrorMessage = "Please select Transaction Mode")]
+    [Display(Name = "Collection Mode")]
+    public string CollectionMode { get; set; }
 
-        //[Required(ErrorMessage = "Please enter Bank Name")]
-        //[Display(Name = "Bank Name")]
-        //public string BankName { get; set; }
+    //[Required(ErrorMessage = "Please enter Bank Name")]
+    //[Display(Name = "Bank Name")]
+    //public string BankName { get; set; }
 
-        [Required(ErrorMessage = "Please enter Amount")]
-        [Display(Name = "Amount")]
-        public Nullable<decimal> Amount { get; set; }
+    [Required(ErrorMessage = "Please enter Amount")]
+    [Display(Name = "Amount")]
+    public Nullable<decimal> Amount { get; set; }
 
-        [DataType(DataType.MultilineText)]
-        [Required(ErrorMessage = "Please enter Note")]
-        [Display(Name = "Note")]
-        public string Note { get; set; }
+    [DataType(DataType.MultilineText)]
+    [Required(ErrorMessage = "Please enter Note")]
+    [Display(Name = "Note")]
+    public string Note { get; set; }
 
-        [Required(ErrorMessage = "Please enter Verify Code")]
-        [Display(Name = "Verify Code")]
-        public string VerifyCode { get; set; }
+    [Required(ErrorMessage = "Please enter Verify Code")]
+    [Display(Name = "Verify Code")]
+    public string VerifyCode { get; set; }
 
-        //[Required(ErrorMessage = "Please Is Verified ")]
-        //[Display(Name = "Is Verified")]
-        //public string VerifyCheck { get; set; }
-    }
+    //[Required(ErrorMessage = "Please Is Verified ")]
+    //[Display(Name = "Is Verified")]
+    //public string VerifyCheck { get; set; }
+  }
 }

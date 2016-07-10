@@ -405,30 +405,40 @@ namespace eX_Portal.exLogic {
 
     public static String getDroneRegistrationDocuments(int DroneID) {
       StringBuilder AllDocs = new StringBuilder();
-      String SQL = "SELECT \n" +
-      "  D.[RegistrationDocument]\n" +
-      "FROM\n" +
-      "  [MSTR_Drone] D\n" +
-      "WHERE\n" +
-      "  D.[DroneId]=" + DroneID;
-      String Documents = getDBVal(SQL);
-      if(string.IsNullOrEmpty(Documents))
-        return "";
-    
-      String DroneName = getDroneName(DroneID);
-      AllDocs.Append(@"<div class=""authorise"">Your Regulatory Authorization: <ul>");
-      foreach(var Document in Documents.Split(',')) {
-        String URL = "/Upload/Drone/" + DroneName + "/" + Document;
-        if(!File.Exists(HttpContext.Current.Server.MapPath("~" + URL))) {
-          URL = "/Upload/" + DroneName + "/" + Document;
+      using(var ctx = new ExponentPortalEntities()) {
+        List<DroneDocument> Docs = (
+        from o in ctx.DroneDocuments
+        where
+        o.DocumentType == "UAS-Registration" &&
+        o.DroneID == DroneID
+        select o)
+        .OrderBy(o => o.DocumentTitle)
+        .OrderBy(o => o.DocumentName)
+        .ToList();
+
+        if(Docs.Count < 1) return "";
+
+        String DroneName = getDroneName(DroneID);
+        AllDocs.Append(@"<div class=""authorise"">Your Regulatory Authorization: <ul>");
+        foreach(var Document in Docs) {
+          String URL = Document.getURL();
+
+          if(File.Exists(HttpContext.Current.Server.MapPath("~" + URL))) {
+            if(Document.DocumentTitle == "Other")
+              Document.DocumentTitle = Document.getMoreInfo();
+            
+            AllDocs.Append(@"<li><span class=""icon"">&#xf0f6;</span>");
+            AllDocs.Append(@" <span class=""DocumentTitle"">");
+            AllDocs.Append(Document.DocumentTitle);
+            AllDocs.Append(" - </span>");
+            AllDocs.Append(@"<a href=""" + URL + @""">" + Document.getName() + "</a></li>");
+
+          }
+
         }
-        if(File.Exists(HttpContext.Current.Server.MapPath("~" + URL))) {
-          AllDocs.Append(@"<li><span class=""icon"">&#xf0f6;</span> <a href=""" + URL + @""">" + Document.Substring(Document.IndexOf("~") + 1) +  "</a></li>");
-        }
-          
+        AllDocs.Append("</ul></div>");
+        return AllDocs.ToString();
       }
-      AllDocs.Append("</ul></div>");
-      return AllDocs.ToString();
     }
 
     public static String getDroneNameByFlight(int FlightID) {

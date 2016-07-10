@@ -56,7 +56,7 @@
       @Html.ValidationMessageFor(model => model.Drone.CommissionDate)
     </div>
 
-
+    if(eX_Portal.exLogic.User.hasAccess("DRONE.PARTS")) {
     <div class="editor-label">
         @Html.LabelFor(model => model.DroneParts.PartsName, "Parts")
     </div>
@@ -74,32 +74,33 @@
                 </thead>
             </table>
         </div>
-
-        <h2>Regulatory Approval </h2>
-        <div class="form-group">
-          <p>
-            You need to have Regulator Approval for this UAS. Please upload it here.<br />
-          </p>
-          <div class="col-md-10">
-            <ul id="FileUploadProgress"></ul>
-          </div>
-          <div>
-            <input type="file" multiple name="fileinput" id="fileinput" />
-          </div>
-        </div>
-        <div style="margin-top:20px;" class="editor-label">
-          @Html.LabelFor(model => model.Drone.RegistrationAuthority, "Regulator Authority")
-        </div>
-        <div class="editor-field">
-          @Html.DropDownListFor(model => model.Drone.RegistrationAuthority, Model.RegistrationAuthority )
-          @Html.ValidationMessageFor(model => model.Drone.RegistrationAuthority)
-        </div>
-
-    <div class="form-toolbar">
-      <input type="submit" value="Create" />
+    }
+    @*
+  <h2>Regulatory Approval </h2>
+  <div class="form-group">
+    <p>
+      You need to have Regulator Approval for this UAS. Please upload it here.<br />
+    </p>
+    <div class="col-md-10">
+      <ul id="FileUploadProgress"></ul>
     </div>
+    <div>
+      <input type="file" multiple name="fileinput" id="fileinput" />
+    </div>
+  </div>
+  <div style="margin-top:20px;" class="editor-label">
+    @Html.LabelFor(model => model.Drone.RegistrationAuthority, "Regulator Authority")
+  </div>
+  <div class="editor-field">
+    @Html.DropDownListFor(model => model.Drone.RegistrationAuthority, Model.RegistrationAuthority )
+    @Html.ValidationMessageFor(model => model.Drone.RegistrationAuthority)
+  </div>
+    *@
+  <div class="form-toolbar">
+    <input type="submit" value="Create" />
+  </div>
 
-
+    
   }
 
  
