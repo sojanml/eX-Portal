@@ -11,7 +11,9 @@ var xLabel = new Object();
 var ToolTipTimeout = null;
 
 $(document).ready(function () {
-
+  $('#DsChart3-tooltip').css({
+    position: 'absolute'
+  })
 
   $.ajax({
     type: "GET",
@@ -34,53 +36,63 @@ $(document).ready(function () {
     for (var i = 0; i < aData[0].length; i++) {
       var name = aLabels1[i];
       var value = aLabels[i];
-
       xLabel[name] = value;
     }
-    
 
     // var aDatasets3 = aData[3];
     //var aDatasets4 = aData[4];
     //var aDatasets5 = aData[5];
 
-
     var data = {
       labels: aLabels1,
       datasets: [{
-          label: "Total Flight Time",
-         
-          
-          fillColor: "rgba(236,215,101,0.5)",
-              strokeColor: "rgba(236,215,101,0.8)",
-              highlightFill: "rgba(236,215,101,0.75)",
-              highlightStroke: "rgba(236,215,101,1)",
-
-          
-       
-        data: aDatasets1
-      }, {
-        label: "Current Month Flight Time",
+        label: "This Month",
         fillColor: "rgba(255,119,119,0.5)",
         strokeColor: "rgba(255,119,119,0.8)",
         highlightFill: "rgba(255,119,119,0.75)",
         highlightStroke: "rgba(255,119,119,1)",
         data: aDatasets2
       },
-      //{
-      //    label: "Last Flight Time",
-      //    fillColor: "rgba(236,215,101,0.5)",
-      //    strokeColor: "rgba(236,215,101,0.8)",
-      //    highlightFill: "rgba(236,215,101,0.75)",
-      //    highlightStroke: "rgba(236,215,101,1)",
-      //    data: aDatasets3
-      //}
+      {
+        label: "Last Flight",
+        fillColor: "rgba(236,215,101,0.5)",
+        strokeColor: "rgba(236,215,101,0.8)",
+        highlightFill: "rgba(236,215,101,0.75)",
+        highlightStroke: "rgba(236,215,101,1)",
+        data: aDatasets3
+      }
       ]
     };
 
+    var data2 = {
+      labels: aLabels1,
+      datasets: [{
+        label: "Total Flight",
+        fillColor: "rgba(236,215,101,0.5)",
+        strokeColor: "rgba(236,215,101,0.8)",
+        highlightFill: "rgba(236,215,101,0.75)",
+        highlightStroke: "rgba(236,215,101,1)",
+        data: aDatasets1
+      }],
+    }
+
     var ctx = $("#DsChart1").get(0).getContext('2d');
-    ctx.canvas.height = 235;  // setting height of canvas
-    ctx.canvas.width = 500; // setting width of canvas
-    lineChart = new Chart(ctx).Bar(data, {
+    ctx.canvas.height = 250;  // setting height of canvas
+    ctx.canvas.width = 480; // setting width of canvas
+    lineChart = new Chart(ctx).Bar(data, getCharOptions(true));
+    //var legend = lineChart.generateLegend();
+    //$('#map-legent').append(legend);
+
+    var ctx2 = $("#DsChart3").get(0).getContext('2d');
+    ctx2.canvas.height = 250;  // setting height of canvas
+    ctx2.canvas.width = 480; // setting width of canvas
+    lineChart2 = new Chart(ctx2).Bar(data2, getCharOptions(false));
+  }
+
+
+
+  function getCharOptions(isMulti) {
+    var Options = {
       //bezierCurve: true,
       // datasetFill: false,
       // animateScale: false,
@@ -113,14 +125,8 @@ $(document).ready(function () {
 
       //Number - Spacing between data sets within X values
       barDatasetSpacing: 1,
-      
-      customTooltips: function (tooltip) {
-        customToolTip(tooltip, event);
-      },
-      
-      tooltipTemplate: _tooltipTemplate,      
+
       //String - A legend template
-      multiTooltipTemplate: "<%= datasetLabel %> : <%= value %>",
       legendTemplate:
       '<ul id=\"line-legend">\n' +
       '  <% for (var i=0; i<datasets.length; i++){%>\n' +
@@ -132,27 +138,29 @@ $(document).ready(function () {
       '  </li>\n' +
       '  <%}%>\n' +
       '</ul>'
-    });
-    var legend = lineChart.generateLegend();
-    $('#map-legent').append(legend);
-  }
+    };
 
-  function _tooltipTemplate(Label) {
-   // alert(Label);
-  return
-  "xxx<ul class=\"<%=name.toLowerCase()%>-legend\">" +
-  "<% for (var i=0; i<datasets.length; i++){%>" +
-  "<li>xxxyy" +
-  "  <span style=\"background-color:<%=datasets[i].strokeColor%>\"></span>" +
-  "  <%if(datasets[i].datasetLabel){%><%=xLabel[i]%><%}%>" +
-  "</li>" +
-  "<%}%>" +
-  "</ul>";
-  
+    if (isMulti) {
+      Options['customTooltips'] = function (tooltip) {
+        customToolTip(tooltip, event);
+      }
+    } else {
+      Options['customTooltips'] = function (tooltip) {
+        customToolTip(tooltip, event);
+      }
+      /*
+      Options['tooltipTemplate'] =
+        "<%if (label){%><%=xLabel[label]%>: <%}%>\n" +
+        '<%=value%>(Minutes)';
+        */
+    }
+
+    return Options;
   }
 
   function customToolTip(tooltip, e) {
-    var tooltipEl = $('#chartjs-tooltip');
+    var tooltipEl =  $('#chartjs-tooltip');    
+
     if (ToolTipTimeout) window.clearTimeout(ToolTipTimeout);
     if (!tooltip) {
       ToolTipTimeout = window.setTimeout(function () {
@@ -161,32 +169,54 @@ $(document).ready(function () {
       return false;
     }
 
-    var HTML = xLabel[tooltip.title];
+    if (tooltip.text) {
+      var ToolParts = tooltip.text.split(":");
+      tooltip.title = ToolParts[0].trim();
+      tooltip.labels = [ToolParts[1].trim()];
+      tooltip.legendColors = [{ fill: 'rgba(236,215,101,0.5)' }];
+    }
+    var HTML = xLabel[tooltip.title];    
     for (var i = 0; i < tooltip.labels.length; i++) {
       HTML += "<br>\n" +
       '<span class="icon" style="color:' + tooltip.legendColors[i].fill + '">&#xf111;</span>\n' +
       '<span style="font-weight:bold; color:' + tooltip.legendColors[i].fill + '">' + tooltip.labels[i] + '(Minutes)</span>\n';
     }
     tooltipEl.html(HTML);
-    /*
-    console.log(
-    tooltip.title +
-    " - x: " + tooltip.x + ", y: " + tooltip.y +
-    " - xPadding: " + tooltip.xPadding + ", yPadding: " + tooltip.yPadding +
-    " - xOffset: " + tooltip.xOffset + ", yOffset: " + tooltip.yOffset
-    );
-    */
+
     tooltipEl.css({
       display: 'block',
       opacity: 1,
-      left: tooltip.chart.canvas.offsetLeft + tooltip.x + 'px',
-      top: tooltip.chart.canvas.offsetTop + tooltip.y-30 + 'px'
+      left: getLeft(tooltip.chart.canvas) + tooltip.x + 'px',
+      top: getTop(tooltip.chart.canvas) + tooltip.y - 30 + 'px'
     });
 
   }
 
+  function getLeft(Elem) {
+    var offsetLeft = 0;
+    while (1) {
+      if (!Elem) return offsetLeft;
+      if (Elem.className == 'dash-row') return offsetLeft;
+      offsetLeft += Elem.offsetLeft;
+      Elem = Elem.parentElement;
+    }
+    return offsetLeft
+  }
+
+  function getTop(Elem) {
+    var offsetTop = 0;
+    while (1) {
+      if (!Elem) return offsetTop;
+      if (Elem.className == 'dash-row') return offsetTop;
+      offsetTop += Elem.offsetTop;
+      Elem = Elem.parentElement;
+    }
+    return offsetTop
+  }
+
+
   function OnErrorCall_(repo) {
-   // alert("Woops something went wrong, pls try later !");
+    // alert("Woops something went wrong, pls try later !");
   }
 
   $(document).on("click", "ul#line-legend li", function () {
