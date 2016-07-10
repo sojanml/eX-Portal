@@ -58,6 +58,9 @@ namespace eX_Portal.Controllers {
            
             List<DroneDocument> Docs=new List<DroneDocument>();
             ExponentPortalEntities Db = new ExponentPortalEntities();
+
+
+
             if (DroneID != 0)
             {
                 
@@ -65,6 +68,13 @@ namespace eX_Portal.Controllers {
                                             where o.DocumentType == "GEO Tag" &&
                                             o.DroneID == DroneID && ( o.DocumentDate >= FromDate && o.UploadedDate<=ToDate)                                          
                                             select o).ToList();
+            }
+            else
+            {
+                Docs = (from o in Db.DroneDocuments
+                        where o.DocumentType == "GEO Tag" &&
+                         (o.DocumentDate >= FromDate && o.UploadedDate <= ToDate)
+                        select o).ToList();
             }
             return View(Docs);
         }
