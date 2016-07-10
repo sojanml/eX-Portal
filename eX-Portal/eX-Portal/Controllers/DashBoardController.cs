@@ -13,7 +13,7 @@ using System.IO;
 using System.Xml;
 
 namespace eX_Portal.Controllers {
-  public class DashBoardController : Controller {
+  public class DashBoardController :Controller {
     // GET: DashBoard
     public ActionResult Default() {
       return View();
@@ -35,9 +35,9 @@ namespace eX_Portal.Controllers {
           'Water Sampling',
           'Red Tide and Oil Spill Detection',
           'Power Plants Surveillance',
-            'Vehicle Tracking - QR Codes',
-            'RFID Inventory Tracking',
-'Port Facility Surveillance'
+          'Vehicle Tracking - QR Codes',
+          'RFID Inventory Tracking',
+          Port Facility Surveillance'
         ) 
       Group BY
         DroneDocuments.DocumentType
@@ -69,17 +69,13 @@ namespace eX_Portal.Controllers {
       List<double> lst_dataItem_4 = new List<double>();
       List<double> lst_dataItem_5 = new List<double>();
 
-
       IList<ChartViewModel> ChartList = Util.getUASLastFlightChartData();
-      foreach (ChartViewModel FMD in ChartList) {
+      foreach(ChartViewModel FMD in ChartList) {
         DroneName = FMD.DroneName;
         labels.Add(FMD.DroneName);
         labelsShort.Add(DroneName.Split('-').Last());
         lst_dataItem_1.Add(Math.Round((FMD.TotalFightTime / 60), 2));
         labelsLastDate.Add(FMD.LastFlightTime.ToString());
-
-
-
       }
       iData.Add(labels);
       iData.Add(lst_dataItem_1);
@@ -97,46 +93,38 @@ namespace eX_Portal.Controllers {
 
 
 
-        [System.Web.Mvc.HttpGet]
-        public JsonResult getAlertData()
-        {
-         
-            List<object> iData = new List<object>();
-            List<string> labels = new List<string>();
-            List<string> labelsShort = new List<string>();
-            List<string> labelsLastDate = new List<string>();
-            List<double> lst_dataItem_2 = new List<double>();
-            List<double> lst_dataItem_1 = new List<double>();
-            List<double> lst_dataItem_3 = new List<double>();
-            List<double> lst_dataItem_4 = new List<double>();
-            List<double> lst_dataItem_5 = new List<double>();
+    [System.Web.Mvc.HttpGet]
+    public JsonResult getAlertData() {
+
+      List<object> iData = new List<object>();
+      List<string> labels = new List<string>();
+      List<string> labelsShort = new List<string>();
+      List<string> labelsLastDate = new List<string>();
+      List<double> lst_dataItem_2 = new List<double>();
+      List<double> lst_dataItem_1 = new List<double>();
+      List<double> lst_dataItem_3 = new List<double>();
+      List<double> lst_dataItem_4 = new List<double>();
+      List<double> lst_dataItem_5 = new List<double>();
 
 
-            IList<ChartAlertViewModel> ChartList = Util.getAlertData();
-            foreach (ChartAlertViewModel FMD in ChartList)
-            {
-               
-                labels.Add(FMD.AlertType);
-              
-                lst_dataItem_1.Add(FMD.TotalAlert);
-                lst_dataItem_2.Add(FMD.CurrentMonthAlert);
-                lst_dataItem_3.Add(FMD.LastFlightAlert);
+      IList<ChartAlertViewModel> ChartList = Util.getAlertData();
+      foreach(ChartAlertViewModel FMD in ChartList) {
+        labels.Add(FMD.AlertType);
+        lst_dataItem_1.Add(FMD.TotalAlert);
+        lst_dataItem_2.Add(FMD.CurrentMonthAlert);
+        lst_dataItem_3.Add(FMD.LastFlightAlert);
+      }
+      iData.Add(labels);
+      iData.Add(lst_dataItem_1);
+      iData.Add(lst_dataItem_2);
+      iData.Add(lst_dataItem_3);
+
+      return Json(iData, JsonRequestBehavior.AllowGet);
+
+    }
 
 
-
-            }
-            iData.Add(labels);
-            iData.Add(lst_dataItem_1);
-            iData.Add(lst_dataItem_2);
-            iData.Add(lst_dataItem_3);
-
-
-            return Json(iData, JsonRequestBehavior.AllowGet);
-
-        }
-
-
-        [System.Web.Mvc.HttpGet]
+    [System.Web.Mvc.HttpGet]
     public JsonResult getCurrentFlightChartData() {
       string DroneName;
       List<object> iData = new List<object>();
@@ -151,7 +139,7 @@ namespace eX_Portal.Controllers {
 
 
       IList<ChartViewModel> ChartList = Util.getCurrentFlightChartData();
-      foreach (ChartViewModel FMD in ChartList) {
+      foreach(ChartViewModel FMD in ChartList) {
         //labels.Add(FMD.DroneName);
         DroneName = FMD.DroneName;
         labels.Add(FMD.DroneName);
@@ -188,7 +176,7 @@ namespace eX_Portal.Controllers {
 
 
       IList<ChartViewModel> ChartList = Util.getCurrentPilotChartData();
-      foreach (ChartViewModel FMD in ChartList) {
+      foreach(ChartViewModel FMD in ChartList) {
         labels.Add(FMD.PilotName);
         lst_dataItem_1.Add(Convert.ToInt32(FMD.PilotTotalHrs));
         lst_dataItem_2.Add(Convert.ToInt32(FMD.PilotCurrentMonthHrs));
@@ -214,12 +202,12 @@ namespace eX_Portal.Controllers {
     }
     public ActionResult Internal() {
       string City, Lat = null, Lng = null, woeid;
-      if (Session["Lat"] != null) {
+      if(Session["Lat"] != null) {
         Lat = Session["Lat"].ToString();
       } else {
         Lat = "25.2048";
       }
-      if (Session["Long"] != null) {
+      if(Session["Long"] != null) {
         Lng = Session["Long"].ToString();
       } else {
         Lng = "55.2708";
@@ -236,12 +224,12 @@ namespace eX_Portal.Controllers {
     }
     public ActionResult RPAS() {
       string City, Lat = null, Lng = null, woeid;
-      if (Session["Lat"] != null) {
+      if(Session["Lat"] != null) {
         Lat = Session["Lat"].ToString();
       } else {
         Lat = "25.2048";
       }
-      if (Session["Long"] != null) {
+      if(Session["Long"] != null) {
 
         Lng = Session["Long"].ToString();
 
@@ -282,7 +270,7 @@ namespace eX_Portal.Controllers {
                             group by t.DroneId,v.DroneName";
 
       qView nView = new qView(SQL);
-      if (Request.IsAjaxRequest()) {
+      if(Request.IsAjaxRequest()) {
         Response.ContentType = "text /javascript";
         return PartialView("qViewData", nView);
       } else {
