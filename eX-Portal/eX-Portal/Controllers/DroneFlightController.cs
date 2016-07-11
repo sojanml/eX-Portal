@@ -884,11 +884,13 @@ String SQL = @"UPDATE [DroneFlight] SET
           SQL = @"INSERT INTO MSTR_Drone_Setup (
             DroneID,
             CreatedBy,
-            CreatedOn
+            CreatedOn,
+            [ModifiedOn]
           ) VALUES (
             " + DroneID + @",
             " + Session["UserID"] + @",
-            [ModifiedOn]=GETDATE()
+            GETDATE(),
+            GETDATE()
           )";
           Util.doSQL(SQL);
         }
