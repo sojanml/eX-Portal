@@ -1182,6 +1182,7 @@
     <Content Include="Views\Drone\GeoTag.cshtml" />
     <Content Include="Views\Drone\AuthorityApproval.cshtml" />
     <Content Include="Views\Drone\AuthorityDocuments.cshtml" />
+    <Content Include="Views\Rpas\ApprovalList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
