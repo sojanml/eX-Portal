@@ -126,6 +126,9 @@ $(document).ready(function () {
       //Number - Spacing between data sets within X values
       barDatasetSpacing: 1,
 
+      multiTooltipTemplate: "<%= datasetLabel %> : <%= value %>",
+      tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>",
+
       //String - A legend template
       legendTemplate:
       '<ul id=\"line-legend">\n' +
@@ -159,7 +162,8 @@ $(document).ready(function () {
   }
 
   function customToolTip(tooltip, e) {
-    var tooltipEl =  $('#chartjs-tooltip');    
+    var tooltipEl = $('#chartjs-tooltip');
+    var ToolLabels = ['']
 
     if (ToolTipTimeout) window.clearTimeout(ToolTipTimeout);
     if (!tooltip) {
@@ -179,7 +183,7 @@ $(document).ready(function () {
     for (var i = 0; i < tooltip.labels.length; i++) {
       HTML += "<br>\n" +
       '<span class="icon" style="color:' + tooltip.legendColors[i].fill + '">&#xf111;</span>\n' +
-      '<span style="font-weight:bold; color:' + tooltip.legendColors[i].fill + '">' + tooltip.labels[i] + '(Minutes)</span>\n';
+      '<span style="font-weight:bold; color:' + tooltip.legendColors[i].fill + '">' + tooltip.labels[i] + ' Minutes</span>\n';
     }
     tooltipEl.html(HTML);
 
