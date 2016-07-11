@@ -668,7 +668,53 @@ namespace eX_Portal.Controllers {
         return View(nView);
       }//if(IsAjaxRequest)
     }
-    public ActionResult Complete() {
+
+
+
+        public ActionResult ApprovalList(int ID = 0)
+        {
+            if (!exLogic.User.hasAccess("RPAS.FLIGHT")) return RedirectToAction("NoAccess", "Home");
+
+            ViewBag.Title = "View";
+            string SQL = @"SELECT ";
+            if (ID == 0)
+                SQL +=
+        " d.[RpasSerialNo],\n"; //"   d.[DroneName],\n";;
+            SQL += @"g.[ApprovalName]
+                  ,CONVERT(NVARCHAR, g.[StartDate], 103) AS [StartDate]
+                  ,CONVERT(NVARCHAR, g.[EndDate], 103) AS [EndDate]
+                  ,g.[MinAltitude]
+                  ,g.[MaxAltitude]
+                  ,Count(*) Over() as _TotalRecords 
+                  ,g.[ApprovalID] as _PKey
+             from GCA_Approval g join mstr_drone d
+             on g.droneID = d.droneID  where d.AccountID=" + Util.getAccountID();
+            if (ID > 0) SQL += @"
+             and g.DroneID =" + ID;
+          
+
+            qView nView = new qView(SQL);
+
+            ViewBag.Title = "Approval List";
+            ViewBag.DroneID = ID;
+            ViewBag.Title += " [" + Util.getDroneName(ID) + "]";
+
+
+            nView.addMenu("Edit", Url.Action("FlightRegister", "rpas", new { ID = "_PKey" }));
+            nView.addMenu("Delete", Url.Action("DeleteGCAApproval", "rpas", new { ID = "_PKey" }));
+
+
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }
+        public ActionResult Complete() {
       return View();
     }
     [HttpPost]
