@@ -48,14 +48,14 @@ $(document).ready(function () {
 
   $('#ispilot').on("change", function (e) {
     if ($(this).prop('checked')) {
-      document.forms['frmDroneSetup']['DroneSetup.PilotUserId'].value = '@Session["UserID"]';
+      document.forms['frmDroneSetup']['DroneSetup.PilotUserId'].value = LoginUserID;
     }
   })
 
 
   $('#isgroundstaff').on("change", function (e) {
     if ($(this).prop('checked')) {
-      document.forms['frmDroneSetup']['DroneSetup.GroundStaffUserId'].value = '@Session["UserID"]';
+      document.forms['frmDroneSetup']['DroneSetup.GroundStaffUserId'].value = LoginUserID;
     }
   })
 
