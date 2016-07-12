@@ -236,6 +236,7 @@
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Controllers\PartsController.cs" />
     <Compile Include="Controllers\PayLoadController.cs" />
+    <Compile Include="Controllers\PilotController.cs" />
     <Compile Include="Controllers\PilotLogController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
@@ -1183,6 +1184,11 @@
     <Content Include="Views\Drone\AuthorityApproval.cshtml" />
     <Content Include="Views\Drone\AuthorityDocuments.cshtml" />
     <Content Include="Views\Rpas\ApprovalList.cshtml" />
+    <Content Include="Views\Pilot\Create.cshtml" />
+    <Content Include="Views\Pilot\Index.cshtml" />
+    <Content Include="Views\Pilot\PilotDetail.cshtml" />
+    <Content Include="Views\Pilot\PilotDetailView.cshtml" />
+    <Content Include="Views\Pilot\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

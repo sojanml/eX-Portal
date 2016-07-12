@@ -1,0 +1,16 @@
+﻿
+@{
+    Layout = null;
+}
+<div>
+    <div class="photo-upload">
+        <div class="user-photo">
+            <img id="img-user-photo" src="@ViewBag.ProfileImage" />
+        </div>
+    </div>
+    <div style="margin-right:200px">
+        @Html.Raw(ViewBag.Message)
+    </div>
+    <div style="clear:both"></div>
+</div>
+

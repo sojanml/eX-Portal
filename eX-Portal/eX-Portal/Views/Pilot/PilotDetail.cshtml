@@ -1,0 +1,117 @@
+﻿
+@model eX_Portal.Models.MSTR_User
+
+@Html.Action("PilotDetailView", new { ID = Model.UserId })
+
+@if (eX_Portal.exLogic.User.hasAccess("PILOTCERT.VIEW"))
+{
+    @Html.Action("PilotCertificateDetails","User", new { ID = Model.UserId })
+}
+@if (eX_Portal.exLogic.User.hasAccess("EXPCERT.VIEW"))
+{
+    @Html.Action("ExponentCertificateDetails","User", new { ID = Model.UserId })
+}
+
+@Html.Action("PilotLogDetails", "PilotLog", new { ID = Model.UserId })
+@if (Model.IsPilot == true)
+{
+    @Html.Action("PilotLogTotal", "PilotLog", new { ID = Model.UserId })
+}
+@section toolbar {
+
+    @if (Model.IsPilot == true)
+    {
+        <ul>
+
+            @if (eX_Portal.exLogic.User.hasAccess("PILOTCERT.CREATE"))
+            {
+                <li> @Html.ActionLink("Pilot Certification", "PilotCertificationCreate", "User", new { ID = Model.UserId }, null)  </li>
+            }
+
+            @if (eX_Portal.exLogic.User.hasAccess("EXPCERT.CREATE"))
+            {
+                <li>@Html.ActionLink("Exponent Certification", "ExponentCertificationCreate", "User", new { ID = Model.UserId }, null)</li>
+            }
+            @if (eX_Portal.exLogic.User.hasAccess("PILOTLOG.CREATE"))
+            {
+                <li> @Html.ActionLink("Pilot Log", "Create", "PilotLog", new { ID = Model.UserId }, null)  </li>
+            }
+
+        </ul>
+    }
+
+}
+
+@section scripts {
+    <script type="text/javascript">
+
+    var LastButton = null;
+
+    @if(eX_Portal.exLogic.User.hasAccess("PILOTCERT.EDIT") || eX_Portal.exLogic.User.hasAccess("PILOTCERT.DELETE")) {
+    <text>
+    $('table#PilotCertificateDetails').on('click', 'img.row-button', function (e) {
+      e.stopPropagation();
+      if (LastButton) LastButton.parent().find('UL').remove();
+      var Btn = $(this);
+      LastButton = Btn;
+      var data = Btn.attr("data-pkey");
+      //var pKey = data['_PKey'];
+      //Btn.parent().find('UL').remove();
+      Btn.parent().append(
+        '<ul class="qViewMenu">\n' +
+        '<li><a href="/User/PilotCertificationEdit/' + data + '">Edit</a></li>\n' +
+        '<li><a class="_delete" href="/User/PilotCertificationDelete/' + data + '">Delete</a></li>\n' +
+        '</ul>'
+        );
+      //alert('Key: ' + pKey)
+    });
+    </text>
+    }
+
+    @if(eX_Portal.exLogic.User.hasAccess("EXPCERT.EDIT") || eX_Portal.exLogic.User.hasAccess("EXPCERT.DELETE")) {
+    <text>
+    $('table#ExponentCertificateDetails').on('click', 'img.row-button', function (e) {
+      e.stopPropagation();
+      if (LastButton) LastButton.parent().find('UL').remove();
+      var Btn = $(this);
+      LastButton = Btn;
+      var data = Btn.attr("data-pkey");
+      //var pKey = data['_PKey'];
+      //Btn.parent().find('UL').remove();
+      Btn.parent().append(
+        '<ul class="qViewMenu">\n' +
+        '<li><a href="/User/ExponentCertificationEdit/' + data + '">Edit</a></li>\n' +
+        '<li><a class="_delete" href="/User/ExponentCertificationDelete/' + data + '">Delete</a></li>\n' +
+        '</ul>'
+        );
+      //alert('Key: ' + pKey)
+    });
+
+    </text>
+        }
+
+    @if(eX_Portal.exLogic.User.hasAccess("PILOTLOG.EDIT") || eX_Portal.exLogic.User.hasAccess("PILOTLOG.DELETE")) {
+      <text>
+
+    $('table#PilotLogDetails').on('click', 'img.row-button', function (e) {
+      e.stopPropagation();
+      if (LastButton) LastButton.parent().find('UL').remove();
+      var Btn = $(this);
+      LastButton = Btn;
+      var data = Btn.attr("data-pkey");
+      //var pKey = data['_PKey'];
+      //Btn.parent().find('UL').remove();
+      Btn.parent().append(
+        '<ul class="qViewMenu">\n' +
+        '<li><a href="/PilotLog/Edit/' + data + '">Edit</a></li>\n' +
+        '<li><a class="_delete" href="/PilotLog/Delete/' + data + '">Delete</a></li>\n' +
+        '</ul>'
+        );
+      //alert('Key: ' + pKey)
+    });
+    </text>
+    }
+    </script>
+
+
+}

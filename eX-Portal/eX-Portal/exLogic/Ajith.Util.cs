@@ -618,9 +618,15 @@ namespace eX_Portal.exLogic {
 
     }
 
+        public static int getPilotProfileID(int AccountID)
+        {
+            String SQL = "SELECT PilotProfileID From MSTR_Account WHERE AccountID=" + AccountID;
+            int PilotProfileID =Int32.Parse( getDBVal(SQL));
+          
+            return PilotProfileID;
+        }
 
-
-    public static string WriteToFile(WeatherViewModel Weather, string FileName) {
+        public static string WriteToFile(WeatherViewModel Weather, string FileName) {
       string Path = HttpContext.Current.Server.MapPath("/Upload/" + FileName + ".txt");
 
       // String UploadPath = HttpContext.Current.Server.MapPath(Url.Content(RootUploadDir) + UserID + "/");
