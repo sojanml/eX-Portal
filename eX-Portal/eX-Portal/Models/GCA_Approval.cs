@@ -38,5 +38,8 @@ namespace eX_Portal.Models
         public string MOD_ApprovalURL { get; set; }
         public string ApprovalStatus { get; set; }
         public string ApprovalRemarks { get; set; }
+        public Nullable<int> PilotUserId { get; set; }
+        public Nullable<int> GroundStaffUserId { get; set; }
+        public string NotificationEmails { get; set; }
     }
 }

@@ -447,6 +447,9 @@
     <Compile Include="Models\ProductTransaction.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SMSTable.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -847,6 +850,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\rpas-user.js" />
+    <Content Include="Scripts\RpasFlightSetup.js" />
     <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />

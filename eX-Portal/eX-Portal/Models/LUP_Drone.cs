@@ -28,5 +28,6 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> ApprovedOn { get; set; }
         public Nullable<int> RecordType { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public string GroupName { get; set; }
     }
 }

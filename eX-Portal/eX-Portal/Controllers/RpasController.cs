@@ -11,9 +11,11 @@ using eX_Portal.exLogic;
 using eX_Portal.ViewModel;
 using FileStorageUtils;
 
-namespace eX_Portal.Controllers {
-  public class RpasController : Controller {
-    private ExponentPortalEntities db = new ExponentPortalEntities();
+namespace eX_Portal.Controllers
+{
+    public class RpasController : Controller
+    {
+        private ExponentPortalEntities db = new ExponentPortalEntities();
 
         public ActionResult AllApplications()
         {
@@ -50,9 +52,10 @@ namespace eX_Portal.Controllers {
                 return View(nView);
             }//if(IsAjaxRequest)
         }//public ActionResult Applications() 
-        public ActionResult Applications() {
-      if (!exLogic.User.hasAccess("RPAS.APPLICATION_LIST")) return RedirectToAction("NoAccess", "Home");
-      string SQL = @"Select
+        public ActionResult Applications()
+        {
+            if (!exLogic.User.hasAccess("RPAS.APPLICATION_LIST")) return RedirectToAction("NoAccess", "Home");
+            string SQL = @"Select
         ApprovalID,
         ApprovalName,
         StartDate,
@@ -72,239 +75,260 @@ namespace eX_Portal.Controllers {
       WHERE
         ApprovalStatus='New'";
 
-      qView nView = new qView(SQL);
-      //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
-      nView.addMenu("Approve/Reject", Url.Action("Application", "RPAS", new { ID = "_PKey" }));
-      if (Request.IsAjaxRequest()) {
-        Response.ContentType = "text/javascript";
-        return PartialView("qViewData", nView);
-      } else {
-        return View(nView);
-      }//if(IsAjaxRequest)
-    }//public ActionResult Applications() 
+            qView nView = new qView(SQL);
+            //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
+            nView.addMenu("Approve/Reject", Url.Action("Application", "RPAS", new { ID = "_PKey" }));
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }//public ActionResult Applications() 
 
-    public ActionResult Application([Bind(Prefix = "ID")] int ApprovalID = 0) {
-      if (!exLogic.User.hasAccess("RPAS.APPLICATION")) return RedirectToAction("NoAccess", "Home");
-      var Approval = db.GCA_Approval.Find(ApprovalID);
-      return View(Approval);
-    }//public ActionResult Application()
+        public ActionResult Application([Bind(Prefix = "ID")] int ApprovalID = 0)
+        {
+            if (!exLogic.User.hasAccess("RPAS.APPLICATION")) return RedirectToAction("NoAccess", "Home");
+            var Approval = db.GCA_Approval.Find(ApprovalID);
+            return View(Approval);
+        }//public ActionResult Application()
 
         [HttpPost]
         public ActionResult Application(GCA_Approval GCA)
         {
             if (!exLogic.User.hasAccess("RPAS.APPLICATION")) return RedirectToAction("NoAccess", "Home");
 
-            string SQL = "update GCA_Approval set ApprovalStatus = '"+GCA.ApprovalStatus+"', ApprovalRemarks = '"+GCA.ApprovalRemarks+"' where ApprovalID = "+GCA.ApprovalID;
+            string SQL = "update GCA_Approval set ApprovalStatus = '" + GCA.ApprovalStatus + "', ApprovalRemarks = '" + GCA.ApprovalRemarks + "' where ApprovalID = " + GCA.ApprovalID;
             int Val = Util.doSQL(SQL);
 
             return RedirectToAction("Applications", "Rpas");
         }
 
-    public ActionResult Register() {
+        public ActionResult Register()
+        {
 
-      var fileStorageProvider = new AmazonS3FileStorageProvider();
+            var fileStorageProvider = new AmazonS3FileStorageProvider();
 
-      var fileUploadViewModel = new S3Upload(
-        fileStorageProvider.PublicKey,
-        fileStorageProvider.PrivateKey,
-        fileStorageProvider.BucketName,
-        Url.Action("complete", "home", null, Request.Url.Scheme)
-      );
+            var fileUploadViewModel = new S3Upload(
+              fileStorageProvider.PublicKey,
+              fileStorageProvider.PrivateKey,
+              fileStorageProvider.BucketName,
+              Url.Action("complete", "home", null, Request.Url.Scheme)
+            );
 
-      fileUploadViewModel.SetPolicy(
-        fileStorageProvider.GetPolicyString(
-          fileUploadViewModel.FileId,
-          fileUploadViewModel.RedirectUrl
-        )
-      );
-
-
-      ViewBag.FormAction = fileUploadViewModel.FormAction;
-      ViewBag.FormMethod = fileUploadViewModel.FormMethod;
-      ViewBag.FormEnclosureType = fileUploadViewModel.FormEnclosureType;
-      ViewBag.AWSAccessKey = fileUploadViewModel.AWSAccessKey;
-      ViewBag.Acl = fileUploadViewModel.Acl;
-      ViewBag.Base64EncodedPolicy = fileUploadViewModel.Base64EncodedPolicy;
-      ViewBag.Signature = fileUploadViewModel.Signature;
+            fileUploadViewModel.SetPolicy(
+              fileStorageProvider.GetPolicyString(
+                fileUploadViewModel.FileId,
+                fileUploadViewModel.RedirectUrl
+              )
+            );
 
 
-      int RegisterUserID = Util.toInt(Session["RegisterUserID"]);
-      if (RegisterUserID <= 0) return View("NoAccess");
-
-      var User = (
-      from n in db.MSTR_User
-      where n.UserId == RegisterUserID
-      select new RPAS_Register {
-        EmailId = n.EmailId,
-        UserName = n.UserName,
-        UserId = n.UserId,
-        PhotoUrl = n.PhotoUrl,
-        FirstName = n.FirstName,
-        MiddleName = n.MiddleName,
-        LastName = n.LastName,
-        MobileNo = n.MobileNo,
-        HomeNo = n.HomeNo,
-        CountryId = (n.CountryId == null ? 0 : (int)n.CountryId),
-        RPASPermitNo = n.RPASPermitNo,
-        PermitCategory = n.PermitCategory,
-        ContactAddress = n.ContactAddress,
-        RegRPASSerialNo = n.RegRPASSerialNo,
-        CompanyAddress = n.CompanyAddress,
-        CompanyTelephone = n.CompanyTelephone,
-        CompanyEmail = n.CompanyEmail,
-        TradeLicenceCopyUrl = n.TradeLicenceCopyUrl,
-        EmiratesID = n.EmiratesID
-      }).FirstOrDefault();
-      if (User == null) return View("NoAccess");
+            ViewBag.FormAction = fileUploadViewModel.FormAction;
+            ViewBag.FormMethod = fileUploadViewModel.FormMethod;
+            ViewBag.FormEnclosureType = fileUploadViewModel.FormEnclosureType;
+            ViewBag.AWSAccessKey = fileUploadViewModel.AWSAccessKey;
+            ViewBag.Acl = fileUploadViewModel.Acl;
+            ViewBag.Base64EncodedPolicy = fileUploadViewModel.Base64EncodedPolicy;
+            ViewBag.Signature = fileUploadViewModel.Signature;
 
 
-      return View(User);
+            int RegisterUserID = Util.toInt(Session["RegisterUserID"]);
+            if (RegisterUserID <= 0) return View("NoAccess");
 
-    }
+            var User = (
+            from n in db.MSTR_User
+            where n.UserId == RegisterUserID
+            select new RPAS_Register
+            {
+                EmailId = n.EmailId,
+                UserName = n.UserName,
+                UserId = n.UserId,
+                PhotoUrl = n.PhotoUrl,
+                FirstName = n.FirstName,
+                MiddleName = n.MiddleName,
+                LastName = n.LastName,
+                MobileNo = n.MobileNo,
+                HomeNo = n.HomeNo,
+                CountryId = (n.CountryId == null ? 0 : (int)n.CountryId),
+                RPASPermitNo = n.RPASPermitNo,
+                PermitCategory = n.PermitCategory,
+                ContactAddress = n.ContactAddress,
+                RegRPASSerialNo = n.RegRPASSerialNo,
+                CompanyAddress = n.CompanyAddress,
+                CompanyTelephone = n.CompanyTelephone,
+                CompanyEmail = n.CompanyEmail,
+                TradeLicenceCopyUrl = n.TradeLicenceCopyUrl,
+                EmiratesID = n.EmiratesID
+            }).FirstOrDefault();
+            if (User == null) return View("NoAccess");
 
-    [HttpPost]
-    public ActionResult Register(RPAS_Register mSTR_User) {
 
-      int RegisterUserID = Util.toInt(Session["RegisterUserID"]);
-      var InternalInfo = (
-        from n in db.MSTR_User
-        where n.UserId == RegisterUserID
-        select new {
-          UserName = n.UserName,
-          EmailId = n.EmailId
+            return View(User);
+
         }
-      ).FirstOrDefault();
-      mSTR_User.UserName = InternalInfo.UserName;
-      mSTR_User.EmailId = InternalInfo.EmailId;
 
-      ModelState.Remove("UserName");
-      ModelState.Remove("EmailId");
+        [HttpPost]
+        public ActionResult Register(RPAS_Register mSTR_User)
+        {
 
-      if (ModelState.IsValid) {
+            int RegisterUserID = Util.toInt(Session["RegisterUserID"]);
+            var InternalInfo = (
+              from n in db.MSTR_User
+              where n.UserId == RegisterUserID
+              select new
+              {
+                  UserName = n.UserName,
+                  EmailId = n.EmailId
+              }
+            ).FirstOrDefault();
+            mSTR_User.UserName = InternalInfo.UserName;
+            mSTR_User.EmailId = InternalInfo.EmailId;
 
-        string encryptedpasword = Util.GetEncryptedPassword(mSTR_User.Password);
-        mSTR_User.Password = encryptedpasword;
+            ModelState.Remove("UserName");
+            ModelState.Remove("EmailId");
 
-        string updatesql = " update [ExponentPortal].[dbo].[MSTR_User]\n" +
-        "set\n" +
-        "  [Password]='" + mSTR_User.Password + "',\n" +
-        "  [PhotoUrl]='" + mSTR_User.PhotoUrl + "',\n" +
-        "  [FirstName] ='" + mSTR_User.FirstName + "',\n" +
-        "  [MiddleName] ='" + mSTR_User.MiddleName + "',\n" +
-        "  [LastName] ='" + mSTR_User.LastName + "',\n" +
-        "  [LastModifiedBy] =" + Session["RegisterUserID"] + ",\n" +
-        "  [MobileNo] ='" + mSTR_User.MobileNo + "',\n" +
-        "  [HomeNo] ='" + mSTR_User.HomeNo + "',\n" +
-        "  [CountryId] =" + mSTR_User.CountryId + ",\n" +
-        "  [IsActive] =1,\n" +
-        "  [LastModifiedOn] =GETDATE(),\n" +
-        "  [RPASPermitNo] ='" + mSTR_User.RPASPermitNo + "',\n" +
-        "  [PermitCategory] ='" + mSTR_User.PermitCategory + "',\n" +
-        "  [ContactAddress] ='" + mSTR_User.ContactAddress + "',\n" +
-        "  [RegRPASSerialNo] ='" + mSTR_User.RegRPASSerialNo + "',\n" +
-        "  [CompanyAddress] ='" + mSTR_User.CompanyAddress + "',\n" +
-        "  [CompanyTelephone] ='" + mSTR_User.CompanyTelephone + "',\n" +
-        "  [CompanyEmail] ='" + mSTR_User.CompanyEmail + "',\n" +
-        "  [TradeLicenceCopyUrl] ='" + mSTR_User.TradeLicenceCopyUrl + "',\n" +
-        "  [EmiratesID] ='" + mSTR_User.EmiratesID + "',\n" +
-        "  [GeneratedPassword] =''\n" +
-        "where\n" +
-        "  [UserId] =" + RegisterUserID;
-        int result = Util.doSQL(updatesql);
+            if (ModelState.IsValid)
+            {
 
-        //Login the user to the system
-        Session["UserID"] = RegisterUserID;
-        Session["FirstName"] = mSTR_User.FirstName;
-        Session["UserName"] = mSTR_User.UserName;
+                string encryptedpasword = Util.GetEncryptedPassword(mSTR_User.Password);
+                mSTR_User.Password = encryptedpasword;
 
-        return RedirectToAction("Index", "Home");
-      }
-      return View(mSTR_User);
-    }
-    public ActionResult NoAccess() {
-      return View();
-    }
+                string updatesql = " update [ExponentPortal].[dbo].[MSTR_User]\n" +
+                "set\n" +
+                "  [Password]='" + mSTR_User.Password + "',\n" +
+                "  [PhotoUrl]='" + mSTR_User.PhotoUrl + "',\n" +
+                "  [FirstName] ='" + mSTR_User.FirstName + "',\n" +
+                "  [MiddleName] ='" + mSTR_User.MiddleName + "',\n" +
+                "  [LastName] ='" + mSTR_User.LastName + "',\n" +
+                "  [LastModifiedBy] =" + Session["RegisterUserID"] + ",\n" +
+                "  [MobileNo] ='" + mSTR_User.MobileNo + "',\n" +
+                "  [HomeNo] ='" + mSTR_User.HomeNo + "',\n" +
+                "  [CountryId] =" + mSTR_User.CountryId + ",\n" +
+                "  [IsActive] =1,\n" +
+                "  [LastModifiedOn] =GETDATE(),\n" +
+                "  [RPASPermitNo] ='" + mSTR_User.RPASPermitNo + "',\n" +
+                "  [PermitCategory] ='" + mSTR_User.PermitCategory + "',\n" +
+                "  [ContactAddress] ='" + mSTR_User.ContactAddress + "',\n" +
+                "  [RegRPASSerialNo] ='" + mSTR_User.RegRPASSerialNo + "',\n" +
+                "  [CompanyAddress] ='" + mSTR_User.CompanyAddress + "',\n" +
+                "  [CompanyTelephone] ='" + mSTR_User.CompanyTelephone + "',\n" +
+                "  [CompanyEmail] ='" + mSTR_User.CompanyEmail + "',\n" +
+                "  [TradeLicenceCopyUrl] ='" + mSTR_User.TradeLicenceCopyUrl + "',\n" +
+                "  [EmiratesID] ='" + mSTR_User.EmiratesID + "',\n" +
+                "  [GeneratedPassword] =''\n" +
+                "where\n" +
+                "  [UserId] =" + RegisterUserID;
+                int result = Util.doSQL(updatesql);
 
-    public ActionResult Login([Bind(Prefix = "ID")]int UserID = 0, int Force = 0) {
-      //this option allow to register the user to the
-      //exponent portal
-      bool isPasswordSend = false;
-      var Rnd = new Random();
+                //Login the user to the system
+                Session["UserID"] = RegisterUserID;
+                Session["FirstName"] = mSTR_User.FirstName;
+                Session["UserName"] = mSTR_User.UserName;
 
-      var UserInfo = (
-        from n in db.MSTR_User
-        where n.UserId == UserID
-        select new {
-          Password = n.Password,
-          Mobile = n.MobileNo,
-          FullName = n.FirstName
+                return RedirectToAction("Index", "Home");
+            }
+            return View(mSTR_User);
         }
-      ).ToList();
-
-      if (UserInfo.Count <= 0) {
-        //nothing
-      } else {
-        var thisUser = UserInfo.First();
-        if (String.IsNullOrEmpty(thisUser.Password) || Force == 1) {
-          isPasswordSend = true;
-          var NewPassword = Rnd.Next(10000, 99999).ToString();
-          var PasswordMD5 = Util.MD5(NewPassword);
-          String Body = "Hi " + thisUser.FullName + ", Your password for " +
-          "exponent is " + NewPassword;
-          Util.SMSQue(UserID, thisUser.Mobile, Body);
-
-          //Save the password to the database, so it can be used to login
-          String SQL = "UPDATE MSTR_User Set GeneratedPassword='" + PasswordMD5 + "' " +
-          "WHERE UserID=" + UserID;
-          Util.doSQL(SQL);
-          isPasswordSend = true;
+        public ActionResult NoAccess()
+        {
+            return View();
         }
-      }
 
-      ViewBag.isPasswordSend = isPasswordSend;
-      return View();
-    }
+        public ActionResult Login([Bind(Prefix = "ID")]int UserID = 0, int Force = 0)
+        {
+            //this option allow to register the user to the
+            //exponent portal
+            bool isPasswordSend = false;
+            var Rnd = new Random();
 
-    [HttpPost]
-    public JsonResult Login(String UserName = "", String Password = "") {
-      //UserName = Request["UserName"];
-      //Password = Request["Password"];
-      var theResult = new {
-        Status = "Error",
-        Message = "Username or Password does not match. Please Try again."
-      };
-      String PasswordMD5 = Util.MD5(Password);
-      //Check 1: Is username and password match the login
-      var UserInfo = (
-        from n in db.MSTR_User
-        where (n.UserName == UserName ||
-        n.EmailId == UserName) &&
-        n.GeneratedPassword == PasswordMD5
-        select new {
-          UserID = n.UserId,
-          Mobile = n.MobileNo,
-          FullName = n.FirstName
+            var UserInfo = (
+              from n in db.MSTR_User
+              where n.UserId == UserID
+              select new
+              {
+                  Password = n.Password,
+                  Mobile = n.MobileNo,
+                  FullName = n.FirstName
+              }
+            ).ToList();
+
+            if (UserInfo.Count <= 0)
+            {
+                //nothing
+            }
+            else
+            {
+                var thisUser = UserInfo.First();
+                if (String.IsNullOrEmpty(thisUser.Password) || Force == 1)
+                {
+                    isPasswordSend = true;
+                    var NewPassword = Rnd.Next(10000, 99999).ToString();
+                    var PasswordMD5 = Util.MD5(NewPassword);
+                    String Body = "Hi " + thisUser.FullName + ", Your password for " +
+                    "exponent is " + NewPassword;
+                    Util.SMSQue(UserID, thisUser.Mobile, Body);
+
+                    //Save the password to the database, so it can be used to login
+                    String SQL = "UPDATE MSTR_User Set GeneratedPassword='" + PasswordMD5 + "' " +
+                    "WHERE UserID=" + UserID;
+                    Util.doSQL(SQL);
+                    isPasswordSend = true;
+                }
+            }
+
+            ViewBag.isPasswordSend = isPasswordSend;
+            return View();
         }
-      ).ToList();
-      if (UserInfo.Count < 1) return Json(theResult);
 
-      //Setp 2: If the user is found, then redirect the user to 
-      //        Registration page
-      Session["RegisterUserID"] = UserInfo.First().UserID;
-      theResult = new {
-        Status = "OK",
-        Message = "User logged in successfully. Contine to register..."
-      };
-      return Json(theResult);
+        [HttpPost]
+        public JsonResult Login(String UserName = "", String Password = "")
+        {
+            //UserName = Request["UserName"];
+            //Password = Request["Password"];
+            var theResult = new
+            {
+                Status = "Error",
+                Message = "Username or Password does not match. Please Try again."
+            };
+            String PasswordMD5 = Util.MD5(Password);
+            //Check 1: Is username and password match the login
+            var UserInfo = (
+              from n in db.MSTR_User
+              where (n.UserName == UserName ||
+              n.EmailId == UserName) &&
+              n.GeneratedPassword == PasswordMD5
+              select new
+              {
+                  UserID = n.UserId,
+                  Mobile = n.MobileNo,
+                  FullName = n.FirstName
+              }
+            ).ToList();
+            if (UserInfo.Count < 1) return Json(theResult);
 
-    }
+            //Setp 2: If the user is found, then redirect the user to 
+            //        Registration page
+            Session["RegisterUserID"] = UserInfo.First().UserID;
+            theResult = new
+            {
+                Status = "OK",
+                Message = "User logged in successfully. Contine to register..."
+            };
+            return Json(theResult);
 
-    // GET: Rpas
-    public ActionResult Index() {
-      if (!exLogic.User.hasAccess("RPAS.VIEW")) return RedirectToAction("NoAccess", "Home");
+        }
 
-      string sqlprofileid = "select UserProfileId from MSTR_User where [UserId]="+Session["UserId"];
-      int profileid = Util.getDBInt(sqlprofileid);
+        // GET: Rpas
+        public ActionResult Index()
+        {
+            if (!exLogic.User.hasAccess("RPAS.VIEW")) return RedirectToAction("NoAccess", "Home");
+
+            string sqlprofileid = "select UserProfileId from MSTR_User where [UserId]=" + Session["UserId"];
+            int profileid = Util.getDBInt(sqlprofileid);
             if (profileid == 9)
             {
                 string SQL = "SELECT MSTR_RPAS_User.Name as [FullName],\n" +
@@ -328,7 +352,8 @@ namespace eX_Portal.Controllers {
                     Response.ContentType = "text/javascript";
                     return PartialView("qViewData", nView);
                 }
-                else {
+                else
+                {
                     return View(nView);
                 }//if(IsAjaxRequest)
             }
@@ -355,74 +380,90 @@ namespace eX_Portal.Controllers {
                     Response.ContentType = "text/javascript";
                     return PartialView("qViewData", nView);
                 }
-                else {
+                else
+                {
                     return View(nView);
                 }//if(IsAjaxRequest)
             }
 
-    }
+        }
 
-    // GET: Rpas/Details/5
-    public ActionResult Details(int? id) {
-      if (id == null) {
-        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-      }
-      MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
-      if (mSTR_RPAS_User == null) {
-        return HttpNotFound();
-      }
-      return View(mSTR_RPAS_User);
-    }
-
-    // GET: Rpas/Create
-    public ActionResult Create() {
-      if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
-      return View();
-    }
-
-    // POST: Rpas/Create
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    //[ValidateAntiForgeryToken]
-    public ActionResult Create(MSTR_RPAS_User mSTR_RPAS_User) {
-      if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
-      if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select Nationality.");
-      if (mSTR_RPAS_User.EmailId == null) {
-        ModelState.AddModelError("EmailId", "Please enter Email Id.");
-      } else {
-        string sqlmailcheck = "select EmailId from MSTR_RPAS_User where [EmailId] ='" + mSTR_RPAS_User.EmailId.ToString() + "'";
-        var Row = Util.getDBRow(sqlmailcheck);
-        if (Row.Count > 1) {
-          if (Row["EmailId"].ToString() == mSTR_RPAS_User.EmailId) {
-            ViewBag.message = "Registration for this user is already done!!";
+        // GET: Rpas/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
+            if (mSTR_RPAS_User == null)
+            {
+                return HttpNotFound();
+            }
             return View(mSTR_RPAS_User);
-          } else { }
-        } else { }
-      }
-      if (ModelState.IsValid) {
-        mSTR_RPAS_User.Status = "New User Request";
-        mSTR_RPAS_User.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
-        mSTR_RPAS_User.CreatedOn = System.DateTime.Now;
-        db.MSTR_RPAS_User.Add(mSTR_RPAS_User);
-        db.SaveChanges();
-        int id = mSTR_RPAS_User.RpasId;
-        var mailurl = "~/Email/RPASRegEmail?RpasID=" + id + "&&CreatedbyID=" + Convert.ToInt32(Session["UserId"].ToString());
-        var mailsubject = "New User Creation Request From RPAS Registration";
-        Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
-        return RedirectToAction("Index");
-      }
+        }
 
-      return View(mSTR_RPAS_User);
-    }
+        // GET: Rpas/Create
+        public ActionResult Create()
+        {
+            if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
+            return View();
+        }
 
-    // GET: Rpas/Edit/5
-    public ActionResult Edit(int? id) {
-      if (!exLogic.User.hasAccess("RPASREQUEST.EDIT")) return RedirectToAction("NoAccess", "Home");
-      if (id == null) {
-        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-      }
-      MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
+        // POST: Rpas/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult Create(MSTR_RPAS_User mSTR_RPAS_User)
+        {
+            if (!exLogic.User.hasAccess("RPAS.CREATE")) return RedirectToAction("NoAccess", "Home");
+            if (mSTR_RPAS_User.NationalityId == null) ModelState.AddModelError("NationalityId", "Please select Nationality.");
+            if (mSTR_RPAS_User.EmailId == null)
+            {
+                ModelState.AddModelError("EmailId", "Please enter Email Id.");
+            }
+            else
+            {
+                string sqlmailcheck = "select EmailId from MSTR_RPAS_User where [EmailId] ='" + mSTR_RPAS_User.EmailId.ToString() + "'";
+                var Row = Util.getDBRow(sqlmailcheck);
+                if (Row.Count > 1)
+                {
+                    if (Row["EmailId"].ToString() == mSTR_RPAS_User.EmailId)
+                    {
+                        ViewBag.message = "Registration for this user is already done!!";
+                        return View(mSTR_RPAS_User);
+                    }
+                    else { }
+                }
+                else { }
+            }
+            if (ModelState.IsValid)
+            {
+                mSTR_RPAS_User.Status = "New User Request";
+                mSTR_RPAS_User.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
+                mSTR_RPAS_User.CreatedOn = System.DateTime.Now;
+                db.MSTR_RPAS_User.Add(mSTR_RPAS_User);
+                db.SaveChanges();
+                int id = mSTR_RPAS_User.RpasId;
+                var mailurl = "~/Email/RPASRegEmail?RpasID=" + id + "&&CreatedbyID=" + Convert.ToInt32(Session["UserId"].ToString());
+                var mailsubject = "New User Creation Request From RPAS Registration";
+                Util.EmailQue(Convert.ToInt32(Session["UserId"].ToString()), "info@exponent-ts.com", mailsubject, mailurl);
+                return RedirectToAction("Index");
+            }
+
+            return View(mSTR_RPAS_User);
+        }
+
+        // GET: Rpas/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (!exLogic.User.hasAccess("RPASREQUEST.EDIT")) return RedirectToAction("NoAccess", "Home");
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
             if (mSTR_RPAS_User == null)
             {
                 return HttpNotFound();
@@ -438,17 +479,18 @@ namespace eX_Portal.Controllers {
             return View(mSTR_RPAS_User);
         }
 
-    // POST: Rpas/Edit/5
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Edit(MSTR_RPAS_User mSTR_RPAS_User) {
-
-      if (!exLogic.User.hasAccess("RPASREQUEST.EDIT")) return RedirectToAction("NoAccess", "Home");
-        ModelState.Remove("confirmemailid");
-        ModelState.Remove("confirmmobno");
-
-        if (ModelState.IsValid)
+        // POST: Rpas/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(MSTR_RPAS_User mSTR_RPAS_User)
         {
+
+            if (!exLogic.User.hasAccess("RPASREQUEST.EDIT")) return RedirectToAction("NoAccess", "Home");
+            ModelState.Remove("confirmemailid");
+            ModelState.Remove("confirmmobno");
+
+            if (ModelState.IsValid)
+            {
                 string SQL = "update MSTR_RPAS_User set \n" +
                             "[Name] = '" + mSTR_RPAS_User.Name + "',\n" +
                             "[NationalityId] =" + mSTR_RPAS_User.NationalityId + ",\n" +
@@ -459,186 +501,216 @@ namespace eX_Portal.Controllers {
                             "[ModifiedOn]=getdate()\n" +
                             "where [RpasId] =" + mSTR_RPAS_User.RpasId;
                 int result = Util.doSQL(SQL);
+                return RedirectToAction("Index");
+            }
+            return View(mSTR_RPAS_User);
+        }
+
+        // GET: Rpas/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
+            if (mSTR_RPAS_User == null)
+            {
+                return HttpNotFound();
+            }
+            return View(mSTR_RPAS_User);
+        }
+
+        // POST: Rpas/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
+            db.MSTR_RPAS_User.Remove(mSTR_RPAS_User);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
-      return View(mSTR_RPAS_User);
-    }
 
-    // GET: Rpas/Delete/5
-    public ActionResult Delete(int? id) {
-      if (id == null) {
-        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-      }
-      MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
-      if (mSTR_RPAS_User == null) {
-        return HttpNotFound();
-      }
-      return View(mSTR_RPAS_User);
-    }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-    // POST: Rpas/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public ActionResult DeleteConfirmed(int id) {
-      MSTR_RPAS_User mSTR_RPAS_User = db.MSTR_RPAS_User.Find(id);
-      db.MSTR_RPAS_User.Remove(mSTR_RPAS_User);
-      db.SaveChanges();
-      return RedirectToAction("Index");
-    }
+        public ActionResult UAS()
+        {
+            if (!exLogic.User.hasAccess("RPAS.UAS")) return RedirectToAction("NoAccess", "Home");
+            String SQL = "SELECT \n" +
+          "  D.[CommissionDate],\n" +
+          "  M.Name as Manufacture,\n" +
+          "  D.RpasSerialNo as 'RPAS Serial Number',\n" +
+          "  Count(*) Over() as _TotalRecords,\n" +
+          "  D.[DroneId] as _PKey\n" +
+          "FROM\n" +
+          "  [MSTR_Drone] D\n" +
+          "Left join MSTR_Account  O on\n" +
+          "  D.AccountID = O.AccountID " +
+          "Left join LUP_Drone M on\n" +
+          "  ManufactureID = M.TypeID and\n" +
+          "  M.Type='Manufacturer' " +
+          "Left join LUP_Drone U on\n" +
+          "  UAVTypeID = U.TypeID and\n" +
+          "  U.Type= 'UAVType'\n" +
+          "where D.CreatedBy=" + Session["UserId"] + " and D.IsActive=1";
 
-    protected override void Dispose(bool disposing) {
-      if (disposing) {
-        db.Dispose();
-      }
-      base.Dispose(disposing);
-    }
+            qView nView = new qView(SQL);
+            nView.addMenu("Edit", Url.Action("UASEdit", new { ID = "_Pkey" }));
+            nView.addMenu("Delete", Url.Action("DeleteUAS", "Rpas", new { ID = "_Pkey" }));
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }
 
-    public ActionResult UAS() {
-      if (!exLogic.User.hasAccess("RPAS.UAS")) return RedirectToAction("NoAccess", "Home");
-      String SQL = "SELECT \n" +
-    "  D.[CommissionDate],\n" +
-    "  M.Name as Manufacture,\n" +
-    "  D.RpasSerialNo as 'RPAS Serial Number',\n" +
-    "  Count(*) Over() as _TotalRecords,\n" +
-    "  D.[DroneId] as _PKey\n" +
-    "FROM\n" +
-    "  [MSTR_Drone] D\n" +
-    "Left join MSTR_Account  O on\n" +
-    "  D.AccountID = O.AccountID " +
-    "Left join LUP_Drone M on\n" +
-    "  ManufactureID = M.TypeID and\n" +
-    "  M.Type='Manufacturer' " +
-    "Left join LUP_Drone U on\n" +
-    "  UAVTypeID = U.TypeID and\n" +
-    "  U.Type= 'UAVType'\n" +
-    "where D.CreatedBy=" + Session["UserId"] + " and D.IsActive=1";
-
-      qView nView = new qView(SQL);
-      nView.addMenu("Edit", Url.Action("UASEdit", new { ID = "_Pkey" }));
-      nView.addMenu("Delete", Url.Action("DeleteUAS", "Rpas", new { ID = "_Pkey" }));
-      if (Request.IsAjaxRequest()) {
-        Response.ContentType = "text/javascript";
-        return PartialView("qViewData", nView);
-      } else {
-        return View(nView);
-      }//if(IsAjaxRequest)
-    }
-
-    // GET: Rpas/UASRegister
-    public ActionResult UASRegister(int ID = 0) {
+        // GET: Rpas/UASRegister
+        public ActionResult UASRegister(int ID = 0)
+        {
 
             if (!exLogic.User.hasAccess("RPAS.UASCREATE")) return RedirectToAction("NoAccess", "Home");
             ViewBag.UserExist = false;
-            if (ID!=0)
+            if (ID != 0)
             {
                 ViewBag.UserExist = true;
                 ViewBag.UserID = ID;
             }
-      return View();
-    }
-
-    // POST: Rpas/UASRegister
-    [HttpPost]
-    public ActionResult UASRegister(MSTR_Drone mSTR_Drone) {
-      if (!exLogic.User.hasAccess("RPAS.UASCREATE")) return RedirectToAction("NoAccess", "Home");
-
-      if (ModelState.IsValid) {
-        mSTR_Drone.AccountID = 0;
-        mSTR_Drone.IsActive = true;
-        mSTR_Drone.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
-        mSTR_Drone.CreatedOn = System.DateTime.Now;
-        db.MSTR_Drone.Add(mSTR_Drone);
-        db.SaveChanges();
-        int id = mSTR_Drone.DroneId;
-
-        return RedirectToAction("Index","RpasUser");
-      }
-
-      return View(mSTR_Drone);
-    }
-
-    // GET: Rpas/UASEdit
-    public ActionResult UASEdit(int id = 0) {
-      string SQL = "";
-      if (!exLogic.User.hasAccess("RPAS.UASEDIT")) return RedirectToAction("NoAccess", "Home");
-      SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + id;
-      if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
-        if (id == 0) {
-          return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            return View();
         }
-        MSTR_Drone mSTR_Drone = db.MSTR_Drone.Find(id);
-        if (mSTR_Drone == null) {
-          return HttpNotFound();
+
+        // POST: Rpas/UASRegister
+        [HttpPost]
+        public ActionResult UASRegister(MSTR_Drone mSTR_Drone)
+        {
+            if (!exLogic.User.hasAccess("RPAS.UASCREATE")) return RedirectToAction("NoAccess", "Home");
+
+            if (ModelState.IsValid)
+            {
+                mSTR_Drone.AccountID = 0;
+                mSTR_Drone.IsActive = true;
+                mSTR_Drone.CreatedBy = Convert.ToInt32(Session["UserId"].ToString());
+                mSTR_Drone.CreatedOn = System.DateTime.Now;
+                db.MSTR_Drone.Add(mSTR_Drone);
+                db.SaveChanges();
+                int id = mSTR_Drone.DroneId;
+
+                return RedirectToAction("Index", "RpasUser");
+            }
+
+            return View(mSTR_Drone);
         }
-        return View(mSTR_Drone);
-      } else {
-        return RedirectToAction("NoAccess", "Home");
-      }
 
-    }
+        // GET: Rpas/UASEdit
+        public ActionResult UASEdit(int id = 0)
+        {
+            string SQL = "";
+            if (!exLogic.User.hasAccess("RPAS.UASEDIT")) return RedirectToAction("NoAccess", "Home");
+            SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + id;
+            if (Util.getLoginUserID() == Util.getDBInt(SQL))
+            {
+                if (id == 0)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                MSTR_Drone mSTR_Drone = db.MSTR_Drone.Find(id);
+                if (mSTR_Drone == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(mSTR_Drone);
+            }
+            else
+            {
+                return RedirectToAction("NoAccess", "Home");
+            }
 
-    // POST: Rpas/UASEdit
-    [HttpPost]
-    public ActionResult UASEdit(MSTR_Drone mSTR_Drone) {
-      string SQL = "";
-      if (!exLogic.User.hasAccess("RPAS.UASEDIT")) return RedirectToAction("NoAccess", "Home");
-      SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + mSTR_Drone.DroneId;
-      if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
-        if (ModelState.IsValid) {
-          string updatesql = "update MSTR_Drone set [ManufactureId]=" + mSTR_Drone.ManufactureId +
-                             ",[ModifiedBy] =" + Session["UserID"] + ",[ModifiedOn] ='" + System.DateTime.Now.ToString("MM/dd/yyyy") +
-                             "',[MakeID] ='" + mSTR_Drone.MakeID +
-                             "',[MakeOther] ='" + mSTR_Drone.MakeOther +
-                             "',[ModelID] ='" + mSTR_Drone.ModelID +
-                             "',[ManufactureOther] ='" + mSTR_Drone.ManufactureOther +
-                             "',[color] ='" + mSTR_Drone.color +
-                             "',[MaxAllupWeight] ='" + mSTR_Drone.MaxAllupWeight +
-                             "',[Type] ='" + mSTR_Drone.Type +
-                             "',[RefName] ='" + mSTR_Drone.RefName +
-                             "',[ModelName] ='" + mSTR_Drone.ModelName +
-                             "',[CameraDetails] ='" + mSTR_Drone.CameraDetails +
-                             "',RpasSerialNo = '" + mSTR_Drone.RpasSerialNo + "' where[DroneId] =" + mSTR_Drone.DroneId;
-          int result = Util.doSQL(updatesql);
-          return RedirectToAction("UAS");
         }
-        return View(mSTR_Drone);
-      } else {
-        return RedirectToAction("NoAccess", "Home");
-      }
-    }
 
-    public String DeleteUAS(int? ID = 0) {
-      String SQL = "";
-      Response.ContentType = "text/json";
-      if (!exLogic.User.hasAccess("RPAS.UASDELETE"))
-        return Util.jsonStat("ERROR", "Access Denied");
+        // POST: Rpas/UASEdit
+        [HttpPost]
+        public ActionResult UASEdit(MSTR_Drone mSTR_Drone)
+        {
+            string SQL = "";
+            if (!exLogic.User.hasAccess("RPAS.UASEDIT")) return RedirectToAction("NoAccess", "Home");
+            SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + mSTR_Drone.DroneId;
+            if (Util.getLoginUserID() == Util.getDBInt(SQL))
+            {
+                if (ModelState.IsValid)
+                {
+                    string updatesql = "update MSTR_Drone set [ManufactureId]=" + mSTR_Drone.ManufactureId +
+                                       ",[ModifiedBy] =" + Session["UserID"] + ",[ModifiedOn] ='" + System.DateTime.Now.ToString("MM/dd/yyyy") +
+                                       "',[MakeID] ='" + mSTR_Drone.MakeID +
+                                       "',[MakeOther] ='" + mSTR_Drone.MakeOther +
+                                       "',[ModelID] ='" + mSTR_Drone.ModelID +
+                                       "',[ManufactureOther] ='" + mSTR_Drone.ManufactureOther +
+                                       "',[color] ='" + mSTR_Drone.color +
+                                       "',[MaxAllupWeight] ='" + mSTR_Drone.MaxAllupWeight +
+                                       "',[Type] ='" + mSTR_Drone.Type +
+                                       "',[RefName] ='" + mSTR_Drone.RefName +
+                                       "',[ModelName] ='" + mSTR_Drone.ModelName +
+                                       "',[CameraDetails] ='" + mSTR_Drone.CameraDetails +
+                                       "',RpasSerialNo = '" + mSTR_Drone.RpasSerialNo + "' where[DroneId] =" + mSTR_Drone.DroneId;
+                    int result = Util.doSQL(updatesql);
+                    return RedirectToAction("UAS");
+                }
+                return View(mSTR_Drone);
+            }
+            else
+            {
+                return RedirectToAction("NoAccess", "Home");
+            }
+        }
+
+        public String DeleteUAS(int? ID = 0)
+        {
+            String SQL = "";
+            Response.ContentType = "text/json";
+            if (!exLogic.User.hasAccess("RPAS.UASDELETE"))
+                return Util.jsonStat("ERROR", "Access Denied");
 
 
-      SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + ID;
-      if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
-        SQL = "DELETE FROM [MSTR_Drone] WHERE DroneId = " + ID;
-        Util.doSQL(SQL);
+            SQL = "select createdBy from [MSTR_Drone] WHERE DroneId=" + ID;
+            if (Util.getLoginUserID() == Util.getDBInt(SQL))
+            {
+                SQL = "DELETE FROM [MSTR_Drone] WHERE DroneId = " + ID;
+                Util.doSQL(SQL);
 
-        return Util.jsonStat("OK");
-      } else {
-        return Util.jsonStat("Access", "No Access");
-      }
-    }
+                return Util.jsonStat("OK");
+            }
+            else
+            {
+                return Util.jsonStat("Access", "No Access");
+            }
+        }
 
-    /// <summary>
-    /// Roshan created.
-    /// </summary>
-    /// <returns></returns>
+        /// <summary>
+        /// Roshan created.
+        /// </summary>
+        /// <returns></returns>
 
 
-    public ActionResult Flight(int ID = 0) {
-      if (!exLogic.User.hasAccess("RPAS.FLIGHT")) return RedirectToAction("NoAccess", "Home");
+        public ActionResult Flight(int ID = 0)
+        {
+            if (!exLogic.User.hasAccess("RPAS.FLIGHT")) return RedirectToAction("NoAccess", "Home");
 
-      ViewBag.Title = "View";
-      string SQL = @"SELECT ";
-      if (ID == 0) SQL +=
-           " d.[RpasSerialNo],\n"; //"   d.[DroneName],\n";;
-      SQL += @"g.[ApprovalName]
+            ViewBag.Title = "View";
+            string SQL = @"SELECT ";
+            if (ID == 0)
+                SQL +=
+        " d.[RpasSerialNo],\n"; //"   d.[DroneName],\n";;
+            SQL += @"g.[ApprovalName]
                   ,CONVERT(NVARCHAR, g.[StartDate], 103) AS [StartDate]
                   ,CONVERT(NVARCHAR, g.[EndDate], 103) AS [EndDate]
                   ,g.[MinAltitude]
@@ -647,27 +719,30 @@ namespace eX_Portal.Controllers {
                   ,g.[ApprovalID] as _PKey
              from GCA_Approval g join mstr_drone d
              on g.droneID = d.droneID  where g.CreatedBy =" + Util.getLoginUserID();
-      if (ID > 0) SQL += @"
+            if (ID > 0) SQL += @"
              and g.DroneID =" + ID;
 
-      qView nView = new qView(SQL);
+            qView nView = new qView(SQL);
 
-      ViewBag.Title = "RPAS Approval";
-      ViewBag.DroneID = ID;
-      ViewBag.Title += " [" + Util.getDroneName(ID) + "]";
-
-
-      nView.addMenu("Edit", Url.Action("FlightRegister", "rpas", new { ID = "_PKey" }));
-      nView.addMenu("Delete", Url.Action("DeleteGCAApproval", "rpas", new { ID = "_PKey" }));
+            ViewBag.Title = "RPAS Approval";
+            ViewBag.DroneID = ID;
+            ViewBag.Title += " [" + Util.getDroneName(ID) + "]";
 
 
-      if (Request.IsAjaxRequest()) {
-        Response.ContentType = "text/javascript";
-        return PartialView("qViewData", nView);
-      } else {
-        return View(nView);
-      }//if(IsAjaxRequest)
-    }
+            nView.addMenu("Edit", Url.Action("FlightRegister", "rpas", new { ID = "_PKey" }));
+            nView.addMenu("Delete", Url.Action("DeleteGCAApproval", "rpas", new { ID = "_PKey" }));
+
+
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }
 
 
 
@@ -691,7 +766,7 @@ namespace eX_Portal.Controllers {
              on g.droneID = d.droneID  where d.AccountID=" + Util.getAccountID();
             if (ID > 0) SQL += @"
              and g.DroneID =" + ID;
-          
+
 
             qView nView = new qView(SQL);
 
@@ -714,19 +789,23 @@ namespace eX_Portal.Controllers {
                 return View(nView);
             }//if(IsAjaxRequest)
         }
-        public ActionResult Complete() {
-      return View();
-    }
-    [HttpPost]
-    public String Upload(DroneDocument Doc) {
-      //Doc.DocumentTitle = Doc.DocumentTitle.Trim();
-      if (String.IsNullOrWhiteSpace(Doc.DocumentTitle)) {
-        Doc.DocumentTitle = toTitle(Doc.S3Url);
-      }
-      if (String.IsNullOrEmpty(Doc.DocumentName)) {
-        Doc.DocumentName = Doc.DocumentTitle;
-      }
-      String SQL = @"INSERT INTO [DroneDocuments] (
+        public ActionResult Complete()
+        {
+            return View();
+        }
+        [HttpPost]
+        public String Upload(DroneDocument Doc)
+        {
+            //Doc.DocumentTitle = Doc.DocumentTitle.Trim();
+            if (String.IsNullOrWhiteSpace(Doc.DocumentTitle))
+            {
+                Doc.DocumentTitle = toTitle(Doc.S3Url);
+            }
+            if (String.IsNullOrEmpty(Doc.DocumentName))
+            {
+                Doc.DocumentName = Doc.DocumentTitle;
+            }
+            String SQL = @"INSERT INTO [DroneDocuments] (
         [DroneID],
         [DocumentType],
         [DocumentName],
@@ -750,168 +829,216 @@ namespace eX_Portal.Controllers {
         '" + Doc.S3Url + @"'
         )
       ";
-      Doc.ID = Util.InsertSQL(SQL);
-      return Url.Action("Document", "Drone", new { ID = Doc.ID });
-    }
-    public string getDroneAccount(int DroneID) {
-      String SQL = "SELECT AccountID From MSTR_Drone WHERE DroneID=" + DroneID;
-      return Util.getDBVal(SQL);
-    }
-    private string toTitle(String S3url) {
-      var SlashAt = S3url.LastIndexOf('/');
-      var LastDot = S3url.LastIndexOf('.');
-      var FileOnly = S3url.Substring(SlashAt + 1, LastDot - SlashAt);
-      var UKeyEnd = FileOnly.IndexOf('_');
-      return FileOnly.Substring(UKeyEnd + 1);
-    }
-    public ActionResult FlightRegister(int ID = 0) {
-      //to create gcaapproval
-      if (!exLogic.User.hasAccess("RPAS.FLIGHTCREATE")) return RedirectToAction("NoAccess", "Home");
-
-      var fileStorageProvider = new AmazonS3FileStorageProvider();
-
-      var fileUploadViewModel = new S3Upload(
-        fileStorageProvider.PublicKey,
-        fileStorageProvider.PrivateKey,
-        fileStorageProvider.BucketName,
-        Url.Action("complete", "home", null, Request.Url.Scheme)
-      );
-
-      fileUploadViewModel.SetPolicy(
-        fileStorageProvider.GetPolicyString(
-          fileUploadViewModel.FileId,
-          fileUploadViewModel.RedirectUrl
-        )
-      );
-
-
-      ViewBag.FormAction = fileUploadViewModel.FormAction;
-      ViewBag.FormMethod = fileUploadViewModel.FormMethod;
-      ViewBag.FormEnclosureType = fileUploadViewModel.FormEnclosureType;
-      ViewBag.AWSAccessKey = fileUploadViewModel.AWSAccessKey;
-      ViewBag.Acl = fileUploadViewModel.Acl;
-      ViewBag.Base64EncodedPolicy = fileUploadViewModel.Base64EncodedPolicy;
-      ViewBag.Signature = fileUploadViewModel.Signature;
-      ViewBag.RedirectUrl = fileUploadViewModel.RedirectUrl;
-
-      var GCAApprovalDoc = new GCA_Approval();
-      var ThisApproval = (from p in db.GCA_Approval 
-        where p.ApprovalID == ID 
-        select p).FirstOrDefault();
-      if (ThisApproval != null) GCAApprovalDoc = ThisApproval;
-      //GCAApprovalDoc.DroneID = ID;
-
-      return View(GCAApprovalDoc);
-
-    }
-    public String DeleteGCAApproval(int? ID = 0) {
-      String SQL = "";
-      Response.ContentType = "text/json";
-
-      if (!exLogic.User.hasAccess("RPAS.FLIGHTDELETE")) return Util.jsonStat("ERROR", "Access Denied");
-
-      SQL = "select createdBy from [GCA_Approval] WHERE ApprovalID=" + ID;
-      if (Util.getLoginUserID() == Util.getDBInt(SQL)) {
-        SQL = "DELETE FROM [GCA_Approval] WHERE ApprovalID = " + ID;
-        Util.doSQL(SQL);
-
-        return Util.jsonStat("OK");
-      } else {
-        return Util.jsonStat("Access", "No Access");
-      }
-    }
-    [HttpPost]
-    public ActionResult FlightRegister(GCA_Approval GCA) {
-      if (GCA.IsUseCamara == 1) {
-        if (String.IsNullOrEmpty(GCA.MOD_ApprovalURL)) {
-          ModelState.AddModelError("GCA.MOD_ApprovalURL", "MOD Document is required.");
+            Doc.ID = Util.InsertSQL(SQL);
+            return Url.Action("Document", "Drone", new { ID = Doc.ID });
         }
-      }
-
-      if (ModelState.IsValid) {
-        if (String.IsNullOrWhiteSpace(GCA.ApprovalName)) {
-          GCA.ApprovalName = toTitle(GCA.ApprovalFileUrl);
+        public string getDroneAccount(int DroneID)
+        {
+            String SQL = "SELECT AccountID From MSTR_Drone WHERE DroneID=" + DroneID;
+            return Util.getDBVal(SQL);
         }
+        private string toTitle(String S3url)
+        {
+            var SlashAt = S3url.LastIndexOf('/');
+            var LastDot = S3url.LastIndexOf('.');
+            var FileOnly = S3url.Substring(SlashAt + 1, LastDot - SlashAt);
+            var UKeyEnd = FileOnly.IndexOf('_');
+            return FileOnly.Substring(UKeyEnd + 1);
+        }
+        public ActionResult FlightRegister(int ID = 0)
+        {
+            //to create gcaapproval
+            if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
+                return RedirectToAction("NoAccess", "Home");
+            ViewData["accountid"] = Convert.ToInt32(Session["AccountID"].ToString());
 
-        string[] Coord = GCA.Coordinates.Split(',');
-        string Poly = GCA.Coordinates + "," + Coord[0];
+            var viewModel = new ViewModel.FlightSetupViewModel
+            {
 
-        if (string.IsNullOrEmpty(GCA.BoundaryInMeters.ToString().Trim()))
-          GCA.BoundaryInMeters = 0;
 
-        string SQL = "SELECT Count(*) FROM [GCA_Approval] WHERE ApprovalID = " + GCA.ApprovalID;
-        if (Util.getDBInt(SQL) != 0 && GCA.ApprovalID != 0) {
-          if (!exLogic.User.hasAccess("RPAS.FLIGHTEDIT")) return RedirectToAction("NoAccess", "Home");
 
-          string SQLQ = "Update [GCA_Approval]  set" +
-                   "[ApprovalName] = '" + GCA.ApprovalName + "' " +
-                  ",[StartDate] = '" + Util.toSQLDate(Convert.ToDateTime(GCA.StartDate)) + "' " +
-                  ",[EndDate] = '" + Util.toSQLDate(Convert.ToDateTime(GCA.EndDate)) + "' " +
-                  ",[StartTime]= '" + GCA.StartTime + "' " +
-                  ",[EndTime]= '" + GCA.EndTime + "' " +
-                  ",[Coordinates]= '" + GCA.Coordinates + "' " +
-                  ",[Polygon]= geography::STGeomFromText('POLYGON((" + Poly + @"))',4326).MakeValid()  " +
-                  ",DroneID= '" + GCA.DroneID + "' " +
-                  ",ApprovalFileUrl= '" + GCA.S3Url + "' " +
-                  ",MinAltitude= '" + (GCA.MinAltitude == null ? 0 : GCA.MinAltitude) + "' " +
-                  ",MaxAltitude= '" + (GCA.MaxAltitude == null ? 60 : GCA.MaxAltitude) + "' " +
-                  ",IsUseCamara= '" + (GCA.IsUseCamara) + "' " +
-                  ",MOD_ApprovalURL= '" + GCA.MOD_ApprovalURL + "' " +
-                  ",ApprovalRemarks= '" + GCA.ApprovalRemarks + "' " +
-                  " WHERE ApprovalID = " + GCA.ApprovalID;
-          int res = Util.doSQL(SQLQ);
-        } else {
-          if (!exLogic.User.hasAccess("RPAS.FLIGHTCREATE")) return RedirectToAction("NoAccess", "Home");
+                GcaApproval = db.GCA_Approval.Find(ID)
 
-          if(GCA.BoundaryInMeters == null) GCA.BoundaryInMeters = 0;
-          if(GCA.MinAltitude == null) GCA.MinAltitude = 0;
-          if(GCA.MaxAltitude == null) GCA.MaxAltitude = 0;
-          if(GCA.MinDefault == null) GCA.MinDefault = 0;
-          if(GCA.MaxDefault == null) GCA.MaxDefault = 0;
-          if(GCA.IsUseCamara == null) GCA.IsUseCamara = 0;
-
-    SQL = @" insert into [GCA_Approval]
-                         ([ApprovalName]
-                        ,[StartDate]
-                        ,[EndDate]
-                        ,[StartTime]
-                        ,[EndTime]
-                        ,[Coordinates]
-                        ,[Polygon]
-                        ,DroneID
-                        ,MinAltitude
-                        ,MaxAltitude
-                        ,createdBy
-                        ,IsUseCamara
-                        ,MOD_ApprovalURL
-                        ,ApprovalStatus
-                        ,ApprovalRemarks
-                        ,BoundaryInMeters)
-                      values
-                      ('" + GCA.ApprovalName + @"',
-                      '" + Util.toSQLDate(Convert.ToDateTime(GCA.StartDate)) + @"',
-                      '" + Util.toSQLDate(Convert.ToDateTime(GCA.EndDate)) + @"',
-                      '" + GCA.StartTime + @"',
-                      '" + GCA.EndTime + @"',
-                      '" + GCA.Coordinates + @"',
-                      geography::STGeomFromText('POLYGON((" + Poly + @"))',4326).MakeValid(),
-                      " + GCA.DroneID + @",
-                     " + (GCA.MinAltitude == null ? 0 : GCA.MinAltitude) + @",
-                     " + (GCA.MaxAltitude == null ? 60 : GCA.MaxAltitude) + @",
-                     " + Util.getLoginUserID() + @",
-                     " + (GCA.IsUseCamara) + @",
-                     '" + (GCA.MOD_ApprovalURL) + @"',
-                     '" + "New" + @"',
-                     '" + GCA.ApprovalRemarks+ @"',
-                     50)";
-
-          GCA.ApprovalID = Util.InsertSQL(SQL);
+               
+            };
+            return View(viewModel);
 
         }
-        return RedirectToAction("Flight", "RPAS");
-      }
-      return View(GCA);
-    }
+        public String DeleteGCAApproval(int? ID = 0)
+        {
+            String SQL = "";
+            Response.ContentType = "text/json";
 
-  }
+            if (!exLogic.User.hasAccess("RPAS.FLIGHTDELETE")) return Util.jsonStat("ERROR", "Access Denied");
+
+            SQL = "select createdBy from [GCA_Approval] WHERE ApprovalID=" + ID;
+            if (Util.getLoginUserID() == Util.getDBInt(SQL))
+            {
+                SQL = "DELETE FROM [GCA_Approval] WHERE ApprovalID = " + ID;
+                Util.doSQL(SQL);
+
+                return Util.jsonStat("OK");
+            }
+            else
+            {
+                return Util.jsonStat("Access", "No Access");
+            }
+        }
+        [HttpPost]
+        public string FlightRegister(FlightSetupViewModel flightsetupvm)
+        {
+            try
+            {
+                if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
+                    return "You do not have accesss to this page";
+                if (flightsetupvm.GcaApproval.DroneID == null || flightsetupvm.GcaApproval.DroneID < 1)
+                    return "You must select a Drone.";
+                if (flightsetupvm.GcaApproval.PilotUserId < 1 || flightsetupvm.GcaApproval.PilotUserId == null)
+                    return "You must select a pilot.";
+                if (flightsetupvm.GcaApproval.GroundStaffUserId < 1 || flightsetupvm.GcaApproval.GroundStaffUserId == null)
+                    return "A Ground staff should be selected.";
+
+                DateTime todaydate = System.DateTime.Now;
+                String SQL = String.Empty;
+                var StartDate = (flightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(-1) : (DateTime)flightsetupvm.GcaApproval.StartDate);
+                var EndDate = (flightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(90) : (DateTime)flightsetupvm.GcaApproval.EndDate);
+                var MinAltitude = (flightsetupvm.GcaApproval.MinAltitude == null ? 0 : flightsetupvm.GcaApproval.MinAltitude);
+                var MaxAltidute = (flightsetupvm.GcaApproval.MaxAltitude == null ? 40 : flightsetupvm.GcaApproval.MaxAltitude);
+
+
+                int ApprovalID = flightsetupvm.GcaApproval.ApprovalID;
+                String ApprovalName = flightsetupvm.GcaApproval.ApprovalName;
+                String Coordinates = flightsetupvm.GcaApproval.Coordinates;
+                if (String.IsNullOrEmpty(Coordinates))
+                    Coordinates =
+          "24.949901 55.337585," +
+          "25.218555 55.620971," +
+          "25.387706 55.414978," +
+          "25.087092 55.137084";
+                string[] Coord = Coordinates.Split(',');
+                string Poly = Coordinates + "," + Coord[0];
+
+                if (ApprovalID == 0 && String.IsNullOrEmpty(ApprovalName))
+                {
+                    //Approval is not selected or no name is specifeid
+                    //then do not update approvals
+                    SQL = String.Empty;
+                }
+                else if (!String.IsNullOrEmpty(ApprovalName) && ApprovalID == 0)
+                {
+                    //when a new name is specified for approval
+                    //save it as new approval     
+                    SQL = @"insert into GCA_Approval(
+            ApprovalName,
+            ApprovalDate,
+            StartDate,
+            EndDate,
+            Coordinates,
+            Polygon,
+            CreatedOn,
+            CreatedBy,
+            DroneID,
+            EndTime,
+            StartTime,
+            BoundaryInMeters,
+            MinAltitude,
+            MaxAltitude,
+            IsUseCamara,
+            PilotUserId,
+            GroundStaffUserId,
+            NotificationEmails
+
+          ) values(
+            '" + flightsetupvm.GcaApproval.ApprovalName + @"',
+            GETDATE(),
+            '" + StartDate.ToString("yyyy-MM-dd") + @"',
+            '" + EndDate.ToString("yyyy-MM-dd") + @"',
+            '" + Coordinates + @"',
+            geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+            GETDATE(),
+            " + Session["UserID"] + "," +
+                        flightsetupvm.GcaApproval.DroneID + @",
+            '" + flightsetupvm.GcaApproval.EndTime + @"',
+            '" + flightsetupvm.GcaApproval.StartTime + @"',
+            50,
+            " + MinAltitude + @",
+            " + MaxAltidute + @",
+            " + flightsetupvm.GcaApproval.IsUseCamara + @",
+            " + flightsetupvm.GcaApproval.PilotUserId + @",
+            " + flightsetupvm.GcaApproval.GroundStaffUserId + @",
+            '" + flightsetupvm.GcaApproval.NotificationEmails + @"'
+
+
+          )";
+                    //
+                }
+                else
+                {
+                    //Got an approval ID 
+                    //Update the selected Approval ID
+                    SQL = @"Update 
+            [GCA_Approval] 
+          set 
+            StartDate ='" + StartDate.ToString("yyyy-MM-dd") + @"',
+            EndDate = '" + EndDate.ToString("yyyy-MM-dd") + @"',
+            Coordinates  = '" + Coordinates + @"',
+            Polygon=geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+            EndTime='" + flightsetupvm.GcaApproval.EndTime + @"',
+            StartTime='" + flightsetupvm.GcaApproval.StartTime + @"',
+            BoundaryInMeters=50,
+            MinAltitude = " + MinAltitude + @",
+            MaxAltitude = " + MaxAltidute + @",
+            IsUseCamara= "+ flightsetupvm.GcaApproval.IsUseCamara + @",
+            PilotUserId="+ flightsetupvm.GcaApproval.PilotUserId + @",
+            GroundStaffUserId="+ flightsetupvm.GcaApproval.GroundStaffUserId + @",
+            NotificationEmails='"+ flightsetupvm.GcaApproval.NotificationEmails + @"'
+          where 
+            ApprovalID=" + ApprovalID;
+                }
+                if (!String.IsNullOrEmpty(SQL))
+                {
+                    //Execute the sql statement generated
+                    Util.doSQL(SQL);
+                }
+
+                int DroneID = Util.toInt(flightsetupvm.GcaApproval.DroneID);
+                SQL = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + DroneID;
+                int DroneSetupId = Util.getDBInt(SQL);
+                if (DroneSetupId == 0)
+                {
+                    SQL = @"INSERT INTO MSTR_Drone_Setup (
+            DroneID,
+            CreatedBy,
+            CreatedOn,
+            [ModifiedOn]
+          ) VALUES (
+            " + DroneID + @",
+            " + Session["UserID"] + @",
+            GETDATE(),
+            GETDATE()
+          )";
+                    Util.doSQL(SQL);
+                }
+        //        if (flightsetupvm.DroneSetup.BatteryVoltage == null)
+        //            flightsetupvm.DroneSetup.BatteryVoltage = 0;
+
+                SQL = @"update 
+         MSTR_Drone_Setup 
+        set 
+          PilotUserId=" + flightsetupvm.GcaApproval.PilotUserId + @",
+          GroundStaffUserId=" + flightsetupvm.GcaApproval.GroundStaffUserId + @",        
+          [ModifiedBy]=" + Util.getLoginUserID() + @",
+         [ModifiedOn]=GETDATE(),
+         [NotificationEmails]='" + flightsetupvm.GcaApproval.NotificationEmails + @"'
+        where 
+         [DroneId]=" + DroneID;
+               Util.doSQL(SQL);
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+    }
 }
