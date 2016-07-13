@@ -1193,6 +1193,7 @@
     <Content Include="Views\Pilot\PilotDetail.cshtml" />
     <Content Include="Views\Pilot\PilotDetailView.cshtml" />
     <Content Include="Views\Pilot\Edit.cshtml" />
+    <Content Include="Views\Rpas\NoAccessApplication.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

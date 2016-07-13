@@ -64,20 +64,29 @@ namespace eX_Portal.Controllers
         EndTime,
         MaxAltitude,
         MinAltitude,
+        DroneID,
         case IsUseCamara when 1 then 'Yes' else 'No' end as IsUseCamara,
         ISNULL(MSTR_User.FirstName,'') + ' ' + ISNULL(MSTR_User.LastName, '') as FullName,
+        ApprovalStatus as Status,
         Count(*) Over() as _TotalRecords,
         ApprovalID as _PKey
       FROM
         GCA_Approval
       LEFT JOIN MSTR_User ON
-        MSTR_User.UserID = GCA_Approval.CreatedBy
-      WHERE
-        ApprovalStatus='New'";
+        MSTR_User.UserID = GCA_Approval.CreatedBy";
+     
+       
 
             qView nView = new qView(SQL);
             //if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
+            if (!exLogic.User.hasAccess("RPAS.APPLICATION"))
             nView.addMenu("Approve/Reject", Url.Action("Application", "RPAS", new { ID = "_PKey" }));
+            if (!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
+                nView.addMenu("Authority Approval", Url.Action("AuthorityApproval","Drone", new { ID = "DroneID" }));
+            if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
+                nView.addMenu("Edit", Url.Action("FlightRegister", "rpas", new { ID = "_PKey", Approval ="Status"  }));
+            if (!exLogic.User.hasAccess("RPAS.FLIGHTDELETE")) 
+            nView.addMenu("Delete", Url.Action("DeleteGCAApproval", "rpas", new { ID = "_PKey" }));
             if (Request.IsAjaxRequest())
             {
                 Response.ContentType = "text/javascript";
@@ -95,6 +104,13 @@ namespace eX_Portal.Controllers
             var Approval = db.GCA_Approval.Find(ApprovalID);
             return View(Approval);
         }//public ActionResult Application()
+
+        public ActionResult NoAccessApplication([Bind(Prefix = "ID")] int ID = 0)
+        {
+            if (!exLogic.User.hasAccess("RPAS.APPLICATION")) return RedirectToAction("NoAccess", "Home");
+            var Approval = db.GCA_Approval.Find(ID);
+            return View(Approval);
+        }//public ActionResult Appl
 
         [HttpPost]
         public ActionResult Application(GCA_Approval GCA)
@@ -845,11 +861,18 @@ namespace eX_Portal.Controllers
             var UKeyEnd = FileOnly.IndexOf('_');
             return FileOnly.Substring(UKeyEnd + 1);
         }
-        public ActionResult FlightRegister(int ID = 0)
+        public ActionResult FlightRegister([Bind(Prefix = "ID")]int  ID=0)
         {
             //to create gcaapproval
             if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
                 return RedirectToAction("NoAccess", "Home");
+
+            if(Util.IsGcaApproved(ID))
+            {
+                return RedirectToAction("NoAccessApplication", "Rpas",new { ID=ID });
+            }
+                
+
             ViewData["accountid"] = Convert.ToInt32(Session["AccountID"].ToString());
 
             var viewModel = new ViewModel.FlightSetupViewModel
