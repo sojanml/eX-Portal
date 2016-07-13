@@ -3,6 +3,7 @@
 @using eX_Portal.exLogic
 @{
     ViewBag.Title = "Flight Registration";
+   
 }
 @using (Html.BeginForm(null, null, FormMethod.Get, new { name = "frmDroneSetup", id = "frmDroneSetup" }))
 {
@@ -82,9 +83,11 @@
 
         <div class="two-column-form-group">
             <div class="form-group">
-                @Html.LabelFor(model => model.GcaApproval.StartDate)
+                @Html.LabelFor(model => model.GcaApproval.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.GcaApproval.StartDate,  new { htmlAttributes = new { @class = "form-control date-picker" } })
+                    @*<input type="text" name="GcaApproval_StartDate" value="@String.Format("{0:dd-MMM-yyyy}", Model.GcaApproval.StartDate)" class="form-control date-picker" />*@
+                    @Html.EditorFor(model => model.GcaApproval.StartDate, "{0:dd-MM-yyyy}", new { htmlAttributes = new { @class = "form-control date-picker" } })
+                   
                     @Html.ValidationMessageFor(model => model.GcaApproval.StartDate, "", new { @class = "text-danger" })
                 </div>
             </div>
