@@ -32,15 +32,17 @@ namespace eX_Portal.Controllers
             ViewBag.Title = "All Pilot";
             string SQL = "select\n" +
             "  a.UserName,\n" +
-            "  a.FirstName,\n" +
-            "  a.MobileNo,\n" +
-            "  b.ProfileName, \n" +
+            "  a.FirstName" + " + '  '+ " +" a.LastName as FullName,\n" +
+            "  c.Name as AccountName, \n" +
+            "  a.MobileNo,\n" +          
             "  Count(*) Over() as _TotalRecords ,\n" +
             "  a.UserId as _PKey\n" +
             "from \n" +
             "  MSTR_User a \n" +
             "left join MSTR_Profile b \n" +
+            
             "  on a.UserProfileId = b.ProfileId\n" +
+            "left join MSTR_Account c on  a.AccountId=c.AccountId \n" +
             "where \n" +
             "  a.ispilot=1";
             if (!exLogic.User.hasAccess("DRONE.MANAGE"))
@@ -53,7 +55,7 @@ namespace eX_Portal.Controllers
             if (exLogic.User.hasAccess("PILOTS.VIEW")) nView.addMenu("Detail", Url.Action("PilotDetail", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("PILOTS.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("PILOTS.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
-           // if (exLogic.User.hasAccess("PILOTLOG.VIEW")) nView.addMenu("Pilot Log", Url.Action("Detail", "PilotLog", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("PILOTLOG.VIEW")) nView.addMenu("Add Pilot Log", Url.Action("Create", "PilotLog", new { ID = "_PKey" }));
             if (Request.IsAjaxRequest())
             {
                 Response.ContentType = "text/javascript";

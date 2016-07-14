@@ -50,33 +50,36 @@ namespace eX_Portal.Controllers {
         {
             if (!exLogic.User.hasAccess("REPORT.FLIGHTS")) return RedirectToAction("NoAccess", "Home");
             ViewBag.ReportFilter = ReportFilter;
-            int DroneID = ReportFilter.UAS;         
+            int DroneID = ReportFilter.UAS;
+            int IsCompany=0;   
             DateTime FromDate = DateTime.Parse(ReportFilter.From);
             DateTime ToDate = DateTime.Parse(ReportFilter.To);
            
             ToDate = ToDate.AddHours(24);
            
             List<DroneDocument> Docs=new List<DroneDocument>();
+            IList<GeoTagReport> DocsGeo =new List<GeoTagReport>();
             ExponentPortalEntities Db = new ExponentPortalEntities();
 
-
-
-            if (DroneID != 0)
+            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
             {
-                
-                Docs = (from o in Db.DroneDocuments
-                                            where o.DocumentType == "GEO Tag" &&
-                                            o.DroneID == DroneID && ( o.DocumentDate >= FromDate && o.UploadedDate<=ToDate)                                          
-                                            select o).ToList();
+                IsCompany = 1;
+
             }
             else
             {
-                Docs = (from o in Db.DroneDocuments
-                        where o.DocumentType == "GEO Tag" &&
-                         (o.DocumentDate >= FromDate && o.UploadedDate <= ToDate)
-                        select o).ToList();
+                IsCompany = 0;
             }
-            return View(Docs);
+
+
+          
+
+            DocsGeo = Util.getAllGeoTag(FromDate, ToDate,IsCompany);
+
+                
+
+           
+            return View(DocsGeo);
         }
 
     public ActionResult GeoReportFilter(FlightReportFilter ReportFilter)

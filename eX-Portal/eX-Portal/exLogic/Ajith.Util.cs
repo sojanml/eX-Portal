@@ -320,6 +320,79 @@ namespace eX_Portal.exLogic {
             //return the list objects
         }
 
+
+
+
+
+        public static IList<GeoTagReport> getAllGeoTag(DateTime FromDate,DateTime ToDate,int IsCompany)
+            
+        {
+
+            IList<GeoTagReport> GeoList = new List<GeoTagReport>();
+
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+
+                    string SQLFilter = @"select  o.Latitude,
+                        o.Longitude,      
+                        o.Altitude,
+                        o.DocumentName,
+                        o.FlightID,
+                        o.DocumentDate,
+                        o.ID,
+                        d.DroneName
+                            from
+                          DroneDocuments o
+                             left join mstr_drone d on o.DroneId = d.DroneId
+                      where o.DocumentType = 'GEO Tag' and
+                         (o.DocumentDate >= '" + FromDate + "' and  o.DocumentDate <='" + ToDate + "')";
+                    if (IsCompany== 1)
+                    {
+                        if (SQLFilter != "")
+                            SQLFilter += " AND";
+                        SQLFilter += " \n" +
+                          "  d.AccountID=" + Util.getAccountID();
+                    }
+
+                    cmd.CommandText = SQLFilter;
+                 
+                        using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            
+
+                            GeoTagReport lst = new GeoTagReport();
+                            lst.Latitude = Util.toDecimal(reader["Latitude"].ToString());
+                            lst.Longitude= Util.toDecimal( reader["Longitude"].ToString());
+                            lst.Altitude= Util.toDecimal(reader["Altitude"].ToString());
+                            lst.DocumentName = reader["DocumentName"].ToString();
+                            lst.FlightID = Util.toInt(reader["FlightID"]);
+                            lst.UpLoadedDate = Util.toDate( reader["DocumentDate"].ToString());
+                            lst.ID =Util.toInt(reader["ID"]);
+                            lst.DroneName= reader["DroneName"].ToString();
+                            GeoList.Add(lst);
+                           
+
+                        }
+                    }
+
+                    ctx.Database.Connection.Close();
+
+
+                }
+
+
+            }
+
+
+
+            return GeoList;
+            //return the list objects
+        }
         public static IEnumerable<SelectListItem> GetLookup(string type) {
       List<SelectListItem> SelectList = new List<SelectListItem>();
       SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });

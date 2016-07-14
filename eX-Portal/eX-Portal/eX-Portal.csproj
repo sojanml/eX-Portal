@@ -512,6 +512,7 @@
     <Compile Include="ViewModel\FlightSetupViewModel.cs" />
     <Compile Include="ViewModel\FlightViewModel.cs" />
     <Compile Include="ViewModel\Forcast.cs" />
+    <Compile Include="ViewModel\GeoTagReport.cs" />
     <Compile Include="ViewModel\ListViewModel.cs" />
     <Compile Include="ViewModel\MenuModel.cs" />
     <Compile Include="ViewModel\S3Upload.cs" />

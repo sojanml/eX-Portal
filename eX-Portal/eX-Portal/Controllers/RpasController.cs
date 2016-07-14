@@ -55,7 +55,7 @@ namespace eX_Portal.Controllers
         public ActionResult Applications()
         {
             if (!exLogic.User.hasAccess("RPAS.APPLICATION_LIST")) return RedirectToAction("NoAccess", "Home");
-            string SQL = @"Select
+            string SQLFilter = @"Select
         ApprovalID,
         ApprovalName,
         StartDate,
@@ -63,26 +63,31 @@ namespace eX_Portal.Controllers
         StartTime,
         EndTime,
         MaxAltitude,
-        MinAltitude,
-        DroneID,
-        case IsUseCamara when 1 then 'Yes' else 'No' end as IsUseCamara,
-        ISNULL(MSTR_User.FirstName,'') + ' ' + ISNULL(MSTR_User.LastName, '') as FullName,
+        MinAltitude,        
+        case IsUseCamara when 1 then 'Yes' else 'No' end as IsUseCamara,       
         ApprovalStatus as Status,
         Count(*) Over() as _TotalRecords,
         ApprovalID as _PKey
       FROM
         GCA_Approval
       LEFT JOIN MSTR_User ON
-        MSTR_User.UserID = GCA_Approval.CreatedBy";
-     
-       
+        MSTR_User.UserID = GCA_Approval.CreatedBy
+       LEFT JOIN MSTR_Drone  on GCA_Approval.DroneId= MSTR_Drone.DroneId";
 
-            qView nView = new qView(SQL);
+            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
+                if (SQLFilter != "")
+                    SQLFilter += " AND";
+                SQLFilter += " \n" +
+                  "  MSTR_Drone.AccountID=" + Util.getAccountID();
+
+            }
+            qView nView = new qView(SQLFilter);
             
             if (exLogic.User.hasAccess("RPAS.APPLICATION"))
             nView.addMenu("Approve/Reject", Url.Action("Application", "RPAS", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
-                nView.addMenu("Authority Approval", Url.Action("AuthorityApproval","Drone", new { ID = "DroneID" }));
+                nView.addMenu("Authority Approval", Url.Action("AuthorityApproval","Drone", new { ID = "ApprovalID" }));
             if (exLogic.User.hasAccess("FLIGHT.SETUP"))
                 nView.addMenu("Edit", Url.Action("FlightRegister", "rpas", new { ID = "_PKey", Approval ="Status"  }));
             if (exLogic.User.hasAccess("RPAS.FLIGHTDELETE")) 

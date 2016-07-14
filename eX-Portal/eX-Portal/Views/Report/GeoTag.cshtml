@@ -1,4 +1,4 @@
-﻿@model List<eX_Portal.Models.DroneDocument>
+﻿@model List<eX_Portal.ViewModel.GeoTagReport>
 @using eX_Portal.exLogic;
 
 @{
@@ -30,7 +30,7 @@
 @{
     int DroneID = ViewBag.ReportFilter.UAS;
     ViewBag.Title = "GPS Report";
-    String DroneName = Util.getDroneNameByDroneID(DroneID);
+    
 }
 @section header {
     <link href="~/jquery-ui/jquery-ui.theme.css" rel="stylesheet" />
@@ -45,45 +45,51 @@
         //**********************************
 
         var GpsTags = [
-       @foreach (var item in Model) {<text>
-         {
+       @foreach (var item in Model)
+       {<text>
+
+
+
+           {
+
              Latitude:  @item.Latitude,
              Longitude:  @item.Longitude,
              Altitude:@item.Altitude,
              DocumentName: "@item.DocumentName",
              DroneID: @DroneID,
              FlightID:@item.FlightID,
-             UpLoadedDate:"@item.DocumentDate",
-             Thumbnail: "/upload/drone/@DroneName/@item.FlightID/@item.DocumentName.Replace(".jpg", ".t.png")",
+             UpLoadedDate:"@item.UpLoadedDate",
+             Thumbnail: "/upload/drone/@item.DroneName/@item.FlightID/@item.DocumentName.Replace(".jpg", ".t.png")",
             DocumentID: @item.ID
+
        },
         </text>}
         ]
         //**********************************
 
-  $(document).ready(function () {
-    var FORM = document.forms['GeoReportFilterForm'];
+        $(document).ready(function () {
+            var FORM = document.forms['GeoReportFilterForm'];
 
 
-    $("#UASName").autocomplete({
-      source: "@Url.Action("getUAS","Report",null)",
-      minLength: 2,
-      select: function (event, ui) {
-        if (ui.item) {
-          event.preventDefault();
-          FORM['UAS'].value = ui.item.value;
-          FORM['UASName'].value = ui.item.label;
-        } else {
-          FORM['UAS'].value = '0';
-        }
-      }
-    });
+            $("#UASName").autocomplete({
+                source: "@Url.Action("getUAS","Report",null)",
+                minLength: 2,
+                select: function (event, ui) {
+                    if (ui.item) {
+                        event.preventDefault();
+                        FORM['UAS'].value = ui.item.value;
+                        FORM['UASName'].value = ui.item.label;
+                    } else {
+                        FORM['UAS'].value = '0';
+                    }
+                }
+            });
 
-    $("#UASName").on("blur", function (e) {
-      if ($(this).val() == "") FORM['UAS'].value = '0';
-    });
+            $("#UASName").on("blur", function (e) {
+                if ($(this).val() == "") FORM['UAS'].value = '0';
+            });
 
-  })
+        })
 </script>
 
 
