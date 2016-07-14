@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "Authority Approval for Flight (RPAS)";
+    Layout = "~/Views/Shared/_eXPortal.cshtml";
+}
+@*@Html.Action("FlightDetail", new { ID = ViewBag.FlightID })*@
+
+<h2>Dubai Civil Aviation Authority (DCAA)</h2>
+
+<table cellpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            Dubai Civil Aviation Authority was established as an autonomous
+            body by the decree issued by His Highness Sheikh Mohammed
+            Bin Rashid Al Maktoum, Vice President and Prime Minister
+            of the UAE and Ruler of Dubai, by proclamation of Law No.
+            (21) of 2007, to undertake development of air transport industry
+            in the Emirate of Dubai and to oversee all aviation related activities.
+        </td>
+        <td style="width:300px;"><img style="float:right; padding:0px 0px 20px 20px;" src="~/images/dcaa_logo.png" /></td>
+    </tr>
+    <tr>
+        <td style="width:300px;">
+            @Html.Action("AuthorityDocuments", new { ApprovalID = ViewBag.ApprovalID, Authority = "DCAA" })
+        </td>
+        <td></td>
+    </tr>
+</table>
+
+<div class="hr"></div>
+<h2>General Civil Aviation Authority (GCAA)</h2>
+
+<table cellpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            The General Civil Aviation Authority (GCAA) was established
+            in 1996 by Federal Cabinet Decree (Law 4) to regulate Civil
+            Aviation and provide designated aviation services with emphasis
+            on safety and security and to strengthen the aviation industry
+            within the UAE and its upper airspace. The main office is
+            located in Abu Dhabi and the regional office is located in
+            Dubai to serve the northern Emirates.
+        </td>
+        <td style="width:300px;"><img style="float:right; padding:0px 0px 20px 20px; height:100px; width:auto;" src="~/images/gcaa_logo.png" /></td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Action("AuthorityDocuments", new { ApprovalID = ViewBag.ApprovalID, Authority = "GCAA" })
+        </td>
+        <td></td>
+    </tr>
+</table>
+
+
+<div class="hr"></div>
+<h2>Department of Municipal Affairs and Transport (DoT)</h2>
+
+<table cellpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            The Department of Transport (DoT) was established pursuant to
+            Law No. 4 of year 2006, amended by Law No. 5 of year 2008 to
+            cover the entire value chain and ensure fully coordinated planning
+            in all aspects of transport policy and development in the Emirate of
+            Abu Dhabi in cooperation with all relevant local, regional and
+            international stakeholders and partners.
+        </td>
+        <td style="width:300px;"><img style="float:right; padding:0px 0px 20px 20px; height:100px; width:auto;" src="~/images/dot-logo.png" /></td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Action("AuthorityDocuments", new { DroneID = ViewBag.ApprovalID, Authority = "DOT" })
+        </td>
+        <td></td>
+    </tr>
+</table>
+
+
+<div class="hr"></div>
+<h2>Other Authorities</h2>
+
+<table cellpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            Many public service authorities in Dubai operate at the emirate level,
+            independently or partially independent, from UAE federal authorities
+            based in Abu Dhabi. For example Dubai Police, utilities, schools,
+            transport infrastructure and public transport services.
+        </td>
+        <td style="width:300px;"><div style="width:300px; display:block"></div></td>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.Action("AuthorityDocuments", new { DroneID = ViewBag.ApprovalID, Authority = "Other" })
+        </td>
+        <td></td>
+    </tr>
+</table>
+
+@section header{
+    <link href="~/Content/black-box.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        var FlightID = '@ViewBag.ApprovalID';
+        var DroneUploadURL = '@Html.Raw(Url.Action("UploadFile", new { ApprovalID = ViewBag.ApprovalID, DocumentType = "Flight-Registration" }))';
+    </script>
+    <script type="text/javascript" src="~/Scripts/Flight-authority.js"></script>
+}

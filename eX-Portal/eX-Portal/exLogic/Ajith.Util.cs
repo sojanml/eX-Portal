@@ -324,7 +324,7 @@ namespace eX_Portal.exLogic {
 
 
 
-        public static IList<GeoTagReport> getAllGeoTag(DateTime FromDate,DateTime ToDate,int IsCompany)
+        public static IList<GeoTagReport> getAllGeoTag(DateTime FromDate,DateTime ToDate,int IsCompany,int DroneID)
             
         {
 
@@ -335,8 +335,28 @@ namespace eX_Portal.exLogic {
                 using (var cmd = ctx.Database.Connection.CreateCommand())
                 {
                     ctx.Database.Connection.Open();
-
-                    string SQLFilter = @"select  o.Latitude,
+                    string SQLFilter = "";
+                    if (DroneID != 0)
+                    {
+                    
+                            SQLFilter= @"select  o.Latitude,
+                        o.Longitude,      
+                        o.Altitude,
+                        o.DocumentName,
+                        o.FlightID,
+                        o.DocumentDate,
+                        o.ID,
+                        d.DroneName
+                            from
+                          DroneDocuments o
+                             left join mstr_drone d on o.DroneId = d.DroneId
+                      where o.DocumentType = 'GEO Tag' and
+                          o.DroneID="+ DroneID + " and"+
+                         "   (o.DocumentDate >= '" + FromDate + "' and  o.DocumentDate <='" + ToDate + "')";
+                        }
+                    else
+                    {
+                        SQLFilter = @"select  o.Latitude,
                         o.Longitude,      
                         o.Altitude,
                         o.DocumentName,
@@ -349,6 +369,7 @@ namespace eX_Portal.exLogic {
                              left join mstr_drone d on o.DroneId = d.DroneId
                       where o.DocumentType = 'GEO Tag' and
                          (o.DocumentDate >= '" + FromDate + "' and  o.DocumentDate <='" + ToDate + "')";
+                    }
                     if (IsCompany== 1)
                     {
                         if (SQLFilter != "")

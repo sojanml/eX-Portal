@@ -451,8 +451,21 @@ namespace eX_Portal.exLogic {
      "  DroneFlight.ID=" + FlightID;
       return getDBVal(SQL);
     }
+        public static String getDroneNameByApplicationID(int ApplicationID)
+        {
+            string SQL = @"select mstr_drone.DroneName from GCA_approval left join
+                        mstr_drone on GCA_approval.droneid = mstr_drone.droneid
+                        where GCA_approval.ApprovalID =" + ApplicationID;
+            return getDBVal(SQL);
+        }
 
-    public static void ErrorHandler(Exception ex = null) {
+
+        public static string getDroneIDByApplicationID(int ApplicationID)
+        {
+            string SQL = @"select GCA_approval.DroneID from GCA_approval where GCA_approval.ApprovalID =" + ApplicationID;
+            return getDBVal(SQL);
+        }
+        public static void ErrorHandler(Exception ex = null) {
       /*
       //Reference - http://stackoverflow.com/questions/3328990/c-sharp-get-line-number-which-threw-exception
       // Get stack trace for the exception with source file information

@@ -1,0 +1,46 @@
+﻿@model List<eX_Portal.Models.DroneDocument>
+@{
+    Layout = null;
+    String Authority = ViewBag.Authority;
+    int DroneID = ViewBag.ApprovalID;
+}
+<form method="post" name="FileUpload_@Authority" id="FileUpload_@Authority">
+
+    <div style="margin-top:20px;" class="form-group">
+
+        <div class="col-md-10">
+            <ul class="FileUploadProgress" id="FileUploadProgress_@Authority">
+                @foreach (var Doc in Model)
+                {
+                    <li class="success">
+                        <div style="float: right">
+                            <span data-file="@Doc.DocumentName" class="delete icon">&#xf057;</span>
+                        </div>
+                        <input type="hidden" name="FileName" value="@Doc.DocumentName">
+                        @if (!String.IsNullOrEmpty(Doc.DocumentDesc))
+                        { @(Doc.DocumentDesc + " - ")}
+                        <a href="@Doc.getURL()">@Doc.getName()</a>
+                        <span class="recordinfo"></span>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        @if (Authority == "Other")
+        {
+            <div class="editor-label">
+                Name of the Authority where you receive the Authentication bellow: (* Required)
+            </div>
+            <div class="editor-field">
+                <input type="text" placeholder="Authority" id="AuthorityName" name="AuthorityName" />
+            </div>
+        }
+        <div class="editor-label">
+            Please upload one or more documents here..<br />
+        </div>
+        <div class="editor-field">
+            <input @if (Authority == "Other") { <text> disabled</text>}
+                   type="file" multiple name="fileinput_@Authority" id="fileinput_@Authority" />
+        </div>
+    </div>
+</form>

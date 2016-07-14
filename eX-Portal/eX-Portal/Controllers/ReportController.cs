@@ -74,7 +74,7 @@ namespace eX_Portal.Controllers {
 
           
 
-            DocsGeo = Util.getAllGeoTag(FromDate, ToDate,IsCompany);
+            DocsGeo = Util.getAllGeoTag(FromDate, ToDate,IsCompany,DroneID);
 
                 
 
