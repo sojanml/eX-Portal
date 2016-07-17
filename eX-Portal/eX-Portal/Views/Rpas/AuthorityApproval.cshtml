@@ -69,7 +69,7 @@
     </tr>
     <tr>
         <td>
-            @Html.Action("AuthorityDocuments", new { DroneID = ViewBag.ApprovalID, Authority = "DOT" })
+            @Html.Action("AuthorityDocuments", new { ApprovalID = ViewBag.ApprovalID, Authority = "DOT" })
         </td>
         <td></td>
     </tr>
@@ -92,7 +92,7 @@
 
     <tr>
         <td>
-            @Html.Action("AuthorityDocuments", new { DroneID = ViewBag.ApprovalID, Authority = "Other" })
+            @Html.Action("AuthorityDocuments", new { ApprovalID = ViewBag.ApprovalID, Authority = "Other" })
         </td>
         <td></td>
     </tr>
