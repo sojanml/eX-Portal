@@ -58,119 +58,147 @@ namespace eX_Portal.Controllers {
 
     [System.Web.Mvc.HttpGet]
     public JsonResult getUASLastFlightChartData() {
-      string DroneName;
-      List<object> iData = new List<object>();
-      List<string> labels = new List<string>();
-      List<string> labelsShort = new List<string>();
-      List<string> labelsLastDate = new List<string>();
-      List<double> lst_dataItem_2 = new List<double>();
-      List<double> lst_dataItem_1 = new List<double>();
-      List<double> lst_dataItem_3 = new List<double>();
-      List<double> lst_dataItem_4 = new List<double>();
-      List<double> lst_dataItem_5 = new List<double>();
 
-      IList<ChartViewModel> ChartList = Util.getUASLastFlightChartData();
-      foreach(ChartViewModel FMD in ChartList) {
-        DroneName = FMD.DroneName;
-        labels.Add(FMD.DroneName);
-        labelsShort.Add(DroneName.Split('-').Last());
-        lst_dataItem_1.Add(Math.Round((FMD.TotalFightTime / 60), 2));
-        labelsLastDate.Add(FMD.LastFlightTime.ToString());
-      }
-      iData.Add(labels);
-      iData.Add(lst_dataItem_1);
-      iData.Add(labelsShort);
+            try
+            {
+                string DroneName;
+                List<object> iData = new List<object>();
+                List<string> labels = new List<string>();
+                List<string> labelsShort = new List<string>();
+                List<string> labelsLastDate = new List<string>();
+                List<double> lst_dataItem_2 = new List<double>();
+                List<double> lst_dataItem_1 = new List<double>();
+                List<double> lst_dataItem_3 = new List<double>();
+                List<double> lst_dataItem_4 = new List<double>();
+                List<double> lst_dataItem_5 = new List<double>();
 
-      //  iData.Add(lst_dataItem_2);
-      //iData.Add(lst_dataItem_3);
-      //iData.Add(lst_dataItem_4);
-      //iData.Add(lst_dataItem_5);
+                IList<ChartViewModel> ChartList = Util.getUASLastFlightChartData();
+                foreach (ChartViewModel FMD in ChartList) {
+                    DroneName = FMD.DroneName;
+                    labels.Add(FMD.DroneName);
+                    labelsShort.Add(DroneName.Split('-').Last());
+                    lst_dataItem_1.Add(Math.Round((FMD.TotalFightTime / 60), 2));
+                    labelsLastDate.Add(FMD.LastFlightTime.ToString());
+                }
+                iData.Add(labels);
+                iData.Add(lst_dataItem_1);
+                iData.Add(labelsShort);
 
-      return Json(iData, JsonRequestBehavior.AllowGet);
+                //  iData.Add(lst_dataItem_2);
+                //iData.Add(lst_dataItem_3);
+                //iData.Add(lst_dataItem_4);
+                //iData.Add(lst_dataItem_5);
 
-    }
+                return Json(iData, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
 
 
     [System.Web.Mvc.HttpGet]
     public JsonResult getAlertData() {
-      IList<ChartAlertViewModel> ChartList = Util.getAlertData();
-      return Json(ChartList, JsonRequestBehavior.AllowGet);
-
-    }
+            try
+            {
+                IList<ChartAlertViewModel> ChartList = Util.getAlertData();
+                return Json(ChartList, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
     [System.Web.Mvc.HttpGet]
     public JsonResult getCurrentFlightChartData() {
-      string DroneName;
-      List<object> iData = new List<object>();
-      List<string> labels = new List<string>();
-      List<string> labelsShort = new List<string>();
 
-      List<double> lst_dataItem_2 = new List<double>();
-      List<double> lst_dataItem_1 = new List<double>();
-      List<double> lst_dataItem_3 = new List<double>();
-      List<double> lst_dataItem_4 = new List<double>();
-      List<double> lst_dataItem_5 = new List<double>();
+            try
+            {
+                string DroneName;
+                List<object> iData = new List<object>();
+                List<string> labels = new List<string>();
+                List<string> labelsShort = new List<string>();
+
+                List<double> lst_dataItem_2 = new List<double>();
+                List<double> lst_dataItem_1 = new List<double>();
+                List<double> lst_dataItem_3 = new List<double>();
+                List<double> lst_dataItem_4 = new List<double>();
+                List<double> lst_dataItem_5 = new List<double>();
 
 
-      IList<ChartViewModel> ChartList = Util.getCurrentFlightChartData();
-      foreach(ChartViewModel FMD in ChartList) {
-        //labels.Add(FMD.DroneName);
-        DroneName = FMD.DroneName;
-        labels.Add(FMD.DroneName);
-        labelsShort.Add(DroneName.Split('-').Last());
-        lst_dataItem_1.Add(Math.Round((FMD.TotalFightTime / 60), 2));
-        lst_dataItem_2.Add(Math.Round((FMD.CurrentFlightTime / 60), 2));
-        lst_dataItem_3.Add(Math.Round((FMD.LastFlightTime / 60), 2));
+                IList<ChartViewModel> ChartList = Util.getCurrentFlightChartData();
+                foreach (ChartViewModel FMD in ChartList) {
+                    //labels.Add(FMD.DroneName);
+                    DroneName = FMD.DroneName;
+                    labels.Add(FMD.DroneName);
+                    labelsShort.Add(DroneName.Split('-').Last());
+                    lst_dataItem_1.Add(Math.Round((FMD.TotalFightTime / 60), 2));
+                    lst_dataItem_2.Add(Math.Round((FMD.CurrentFlightTime / 60), 2));
+                    lst_dataItem_3.Add(Math.Round((FMD.LastFlightTime / 60), 2));
 
-      }
-      iData.Add(labels);
+                }
+                iData.Add(labels);
 
-      iData.Add(lst_dataItem_1);
-      iData.Add(lst_dataItem_2);
+                iData.Add(lst_dataItem_1);
+                iData.Add(lst_dataItem_2);
 
-      iData.Add(labelsShort);
-      iData.Add(lst_dataItem_3);
-      //iData.Add(lst_dataItem_3);
-      //iData.Add(lst_dataItem_4);
-      //iData.Add(lst_dataItem_5);
+                iData.Add(labelsShort);
+                iData.Add(lst_dataItem_3);
+                //iData.Add(lst_dataItem_3);
+                //iData.Add(lst_dataItem_4);
+                //iData.Add(lst_dataItem_5);
 
-      return Json(iData, JsonRequestBehavior.AllowGet);
+                return Json(iData, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
-    }
+        }
 
     [System.Web.Mvc.HttpGet]
     public JsonResult getCurrentPilotChartData() {
-      List<object> iData = new List<object>();
-      List<string> labels = new List<string>();
-      List<int> lst_dataItem_2 = new List<int>();
-      List<int> lst_dataItem_1 = new List<int>();
-      List<int> lst_dataItem_3 = new List<int>();
-      List<int> lst_dataItem_4 = new List<int>();
-      List<int> lst_dataItem_5 = new List<int>();
+            try
+            {
+                List<object> iData = new List<object>();
+                List<string> labels = new List<string>();
+                List<int> lst_dataItem_2 = new List<int>();
+                List<int> lst_dataItem_1 = new List<int>();
+                List<int> lst_dataItem_3 = new List<int>();
+                List<int> lst_dataItem_4 = new List<int>();
+                List<int> lst_dataItem_5 = new List<int>();
 
 
-      IList<ChartViewModel> ChartList = Util.getCurrentPilotChartData();
-      foreach(ChartViewModel FMD in ChartList) {
-        labels.Add(FMD.PilotName);
-        lst_dataItem_1.Add(Convert.ToInt32(FMD.PilotTotalHrs));
-        lst_dataItem_2.Add(Convert.ToInt32(FMD.PilotCurrentMonthHrs));
-        lst_dataItem_3.Add(Convert.ToInt32(FMD.PilotLastFlightHrs));
+                IList<ChartViewModel> ChartList = Util.getCurrentPilotChartData();
+                foreach (ChartViewModel FMD in ChartList) {
+                    labels.Add(FMD.PilotName);
+                    lst_dataItem_1.Add(Convert.ToInt32(FMD.PilotTotalHrs));
+                    lst_dataItem_2.Add(Convert.ToInt32(FMD.PilotCurrentMonthHrs));
+                    lst_dataItem_3.Add(Convert.ToInt32(FMD.PilotLastFlightHrs));
 
-      }
-      iData.Add(labels);
-      iData.Add(lst_dataItem_1);
-      iData.Add(lst_dataItem_2);
-      iData.Add(lst_dataItem_3);
-      //iData.Add(lst_dataItem_3);
-      //iData.Add(lst_dataItem_4);
-      //iData.Add(lst_dataItem_5);
+                }
+                iData.Add(labels);
+                iData.Add(lst_dataItem_1);
+                iData.Add(lst_dataItem_2);
+                iData.Add(lst_dataItem_3);
+                //iData.Add(lst_dataItem_3);
+                //iData.Add(lst_dataItem_4);
+                //iData.Add(lst_dataItem_5);
 
-      return Json(iData, JsonRequestBehavior.AllowGet);
+                return Json(iData, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
-    }
+        }
 
     [System.Web.Mvc.HttpGet]
     public JsonResult getCurrentTime() {
@@ -178,28 +206,37 @@ namespace eX_Portal.Controllers {
       return Json(System.DateTime.Now.ToString(), JsonRequestBehavior.AllowGet);
     }
     public ActionResult Internal() {
-      string City, Lat = null, Lng = null, woeid;
-      if(Session["Lat"] != null) {
-        Lat = Session["Lat"].ToString();
-      } else {
-        Lat = "25.2048";
-      }
-      if(Session["Long"] != null) {
-        Lng = Session["Long"].ToString();
-      } else {
-        Lng = "55.2708";
-      }
+            try
+            {
+                string City, Lat = null, Lng = null, woeid;
+                if (Session["Lat"] != null) {
+                    Lat = Session["Lat"].ToString();
+                } else {
+                    Lat = "25.2048";
+                }
+                if (Session["Long"] != null) {
+                    Lng = Session["Long"].ToString();
+                } else {
+                    Lng = "55.2708";
+                }
 
-      WeatherViewModel Weather = new WeatherViewModel();
-      //getting the exact place from lat and long
-      City = Util.GetLocation(Lat, Lng);
-      //getting the woeid from yahoo api
-      woeid = Util.GetWOEID(City);
-      //getting the weather information from  woeid           
-      Weather = Util.GetCurrentConditions(woeid);
-      return View(Weather);
-    }
+                WeatherViewModel Weather = new WeatherViewModel();
+                //getting the exact place from lat and long
+                City = Util.GetLocation(Lat, Lng);
+                //getting the woeid from yahoo api
+                woeid = Util.GetWOEID(City);
+                //getting the weather information from  woeid           
+                Weather = Util.GetCurrentConditions(woeid);
+                return View(Weather);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+        }
     public ActionResult RPAS() {
+
       string City, Lat = null, Lng = null, woeid;
       if(Session["Lat"] != null) {
         Lat = Session["Lat"].ToString();
