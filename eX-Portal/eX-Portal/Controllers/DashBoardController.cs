@@ -11,11 +11,14 @@ using eX_Portal.ViewModel;
 using System.Text;
 using System.IO;
 using System.Xml;
+using System.Configuration;
 
 namespace eX_Portal.Controllers {
   public class DashBoardController :Controller {
-    // GET: DashBoard
-    public ActionResult Default() {
+        // GET: DashBoard
+
+      public string DebugOption = ConfigurationManager.AppSettings["DebugOption"];
+        public ActionResult Default() {
       return View();
     }
 
@@ -93,7 +96,12 @@ namespace eX_Portal.Controllers {
             }
             catch (Exception ex)
             {
-                throw ex;
+                if (DebugOption == "True")
+                {
+                    throw ex;
+                }
+                else
+                    return null;
             }
         }
 
@@ -109,7 +117,13 @@ namespace eX_Portal.Controllers {
             }
             catch (Exception ex)
             {
-                throw ex;
+                if (DebugOption == "True")
+                {
+                    throw ex;
+                }
+                else
+                    return null;
+           
             }
         }
 
@@ -157,7 +171,12 @@ namespace eX_Portal.Controllers {
             }
             catch (Exception ex)
             {
-                throw ex;
+                if (DebugOption == "True")
+                {
+                    throw ex;
+                }
+                else
+                    return null;
             }
 
         }
@@ -195,7 +214,12 @@ namespace eX_Portal.Controllers {
             }
             catch (Exception ex)
             {
-                throw ex;
+                if (DebugOption == "True")
+                {
+                    throw ex;
+                }
+                else
+                    return null;
             }
 
         }
