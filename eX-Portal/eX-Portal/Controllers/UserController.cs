@@ -431,9 +431,9 @@ namespace eX_Portal.Controllers
             {
                 string SQL = "UPDATE MSTR_USER SET\n" +
                   "  UserProfileId=" + Util.toInt(UserModel.User.UserProfileId.ToString()) + ",\n" +
-                  "  FirstName='" + UserModel.User.FirstName + "',\n" +
-                  "  MiddleName='" + UserModel.User.MiddleName + "',\n" +
-                  "  LastName='" + UserModel.User.LastName + "',\n" +
+                  "  FirstName='" + Util.FirstLetterToUpper(UserModel.User.FirstName) + "',\n" +
+                  "  MiddleName='" + Util.FirstLetterToUpper( UserModel.User.MiddleName) + "',\n" +
+                  "  LastName='" + Util.FirstLetterToUpper(UserModel.User.LastName) + "',\n" +
                   "  Remarks='" + UserModel.User.Remarks + "',\n" +
                   "  MobileNo='" + UserModel.User.MobileNo + "',\n" +
                   "  EmailId='" + UserModel.User.EmailId + "',\n" +
@@ -543,9 +543,9 @@ namespace eX_Portal.Controllers
                 String SQL = "insert into MSTR_User(\n" +
                   "  UserName,\n" +
                   "  Password,\n" +
-                  "  FirstName,\n" +
-                  "  MiddleName,\n" +
-                  "  LastName,\n" +
+                  "  FirstName ,\n" +
+                  "  MiddleName ,\n" +
+                  "  LastName ,\n" +
                   "  CreatedBy,\n" +
                   "  UserProfileId,\n" +
                   "  Remarks,\n" +
@@ -569,11 +569,11 @@ namespace eX_Portal.Controllers
                   " CompanyEmail,\n" +
                   " EmiratesID\n" +
                   ") values(\n" +
-                  "  '" + UserModel.User.UserName + "',\n" +
+                  "  '"  +Util.FirstLetterToUpper( UserModel.User.UserName) + "',\n" +
                   "  '" + Password + "',\n" +
-                  "  '" + UserModel.User.FirstName + "',\n" +
-                  "  '" + UserModel.User.MiddleName + "',\n" +
-                    "  '" + UserModel.User.LastName + "',\n" +
+                  "  '" + Util.FirstLetterToUpper( UserModel.User.FirstName) + "',\n" +
+                  "  '" + Util.FirstLetterToUpper( UserModel.User.MiddleName) + "',\n" +
+                    "  '" + Util.FirstLetterToUpper( UserModel.User.LastName) + "',\n" +
                   "  " + Util.getLoginUserID() + ",\n" +
                   "  " + UserModel.User.UserProfileId + ",\n" +
                   "  '" + UserModel.User.Remarks + "',\n" +

@@ -92,7 +92,7 @@
         <ul id="forecast">
           @foreach (var item in Model.Forecast) {
           <li>
-            <span class="icon big">
+            <span class="big">
               <img style="width:50px; height:50px;" src="~/images/weather/@(item.Code).png" />
             <!--@Html.Raw(Weather.WeatherIcons[item.Code])--></span><br />
             <div class="status">@item.status</div>
@@ -158,7 +158,7 @@
 
 
 <div id="map_canvas" style="margin-top:10px; width: 100%; height: 480px;"></div>
-<div style="height:150px;">&nbsp;</div>
+<div style="height:10px;">&nbsp;</div>
 
 
 <script type="text/javascript">

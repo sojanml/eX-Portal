@@ -33,9 +33,9 @@
                 playerInstance_@video.VideoID = jwplayer('Player_@video.VideoID');
                 playerInstance_@(video.VideoID).setup({
                     file: '@Html.Raw(S3Download.getURL("VOD/" + video.VideoURL))',
-                    width: 256,
+                    width: 280,
                     height: 192,
-                    description: 'Click on play to start video.',
+                    description: 'Press Play to begin video.',
                     mediaid: '123456',
                 });
 

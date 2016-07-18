@@ -41,7 +41,7 @@ namespace eX_Portal.Controllers {
         DroneFlight.ID,
         MSTR_Drone.DroneName AS UAS,
         tblPilot.FirstName AS PilotName,
-        tblGSC.FirstName AS GSCName,
+        tblGSC.FirstName AS GCSName,
         tblPilot.FirstName AS CreatedBy,
         FlightDate AS 'FlightDate(UTC)',
         " + (exLogic.User.hasAccess("FLIGHT.VIDEOS") ? SQLVideo : "") + @"
@@ -93,7 +93,7 @@ namespace eX_Portal.Controllers {
       if(exLogic.User.hasAccess("FLIGHT.REPORT"))
         nView.addMenu("Post Flight Report", "/PostFlightReport/_PKey.pdf");
       if(exLogic.User.hasAccess("FLIGHT.GEOTAG"))
-        nView.addMenu("GEO Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
+        nView.addMenu("Geo-Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
       if(exLogic.User.hasAccess("FLIGHT.DELETE"))
         nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 

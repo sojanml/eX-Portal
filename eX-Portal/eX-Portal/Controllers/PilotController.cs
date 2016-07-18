@@ -95,11 +95,11 @@ namespace eX_Portal.Controllers
                         ",a.[MobileNo]\n  " +
                         ",a.[OfficeNo]\n  " +
                         ",a.[HomeNo]\n" +
-                        " ,a.[EmailId]\n  " +
+                        " ,a.[EmailId]\n  as [Email ID] " +
                         ",b.[PassportNo]" +
                         " ,CONVERT(NVARCHAR, b.[DateOfExpiry], 106) AS DateOfExpiry\n   " +
                         ",b.[Department]\n  " +
-                        " ,b.[EmiratesId] \n   " +
+                        " ,b.[EmiratesId]  as [Emirates ID]\n   " +
                         ",b.[Title] as JobTitle\n   " +
                         ",c.[Name] as OrganizationName\n   " +
                         ",d.[ProfileName]\n   " +
@@ -276,11 +276,11 @@ namespace eX_Portal.Controllers
                   " CompanyEmail,\n" +
                   " EmiratesID\n" +
                   ") values(\n" +
-                  "  '" + UserModel.User.UserName + "',\n" +
+                  "  '" + Util.FirstLetterToUpper( UserModel.User.UserName) + "',\n" +
                   "  '" + Password + "',\n" +
-                  "  '" + UserModel.User.FirstName + "',\n" +
-                  "  '" + UserModel.User.MiddleName + "',\n" +
-                    "  '" + UserModel.User.LastName + "',\n" +
+                  "  '" + Util.FirstLetterToUpper( UserModel.User.FirstName) + "',\n" +
+                  "  '" + Util.FirstLetterToUpper(UserModel.User.MiddleName) + "',\n" +
+                    "  '" + Util.FirstLetterToUpper( UserModel.User.LastName) + "',\n" +
                   "  " + Util.getLoginUserID() + ",\n" +
                   " '"+Util.getPilotProfileID(AccountID)  +"' ,\n" +
                   "  '" + UserModel.User.Remarks + "',\n" +
@@ -419,9 +419,9 @@ namespace eX_Portal.Controllers
 
                 string SQL = "UPDATE MSTR_USER SET\n" +
                "  UserProfileId=" + Util.toInt(Util.getPilotProfileID(AccountID)) + ",\n" +
-                  "  FirstName='" + UserModel.User.FirstName + "',\n" +
-                  "  MiddleName='" + UserModel.User.MiddleName + "',\n" +
-                  "  LastName='" + UserModel.User.LastName + "',\n" +
+                  "  FirstName='" + Util.FirstLetterToUpper( UserModel.User.FirstName) + "',\n" +
+                  "  MiddleName='" + Util.FirstLetterToUpper( UserModel.User.MiddleName) + "',\n" +
+                  "  LastName='" + Util.FirstLetterToUpper(UserModel.User.LastName) + "',\n" +
                   "  Remarks='" + UserModel.User.Remarks + "',\n" +
                   "  MobileNo='" + UserModel.User.MobileNo + "',\n" +
                   "  EmailId='" + UserModel.User.EmailId + "',\n" +

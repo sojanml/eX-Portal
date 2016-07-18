@@ -32,7 +32,7 @@
                 @Html.ValidationMessageFor(model => model.DroneId, "", new { @class = "text-danger" })
             </div>
         </div>
-        <h2>Route Of Flight</h2>
+        <h2>Route of Flight</h2>
         <div class="form-group">
             @Html.LabelFor(model => model.RouteFrom, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -55,9 +55,9 @@
                 @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
             </div>
         </div>
-        <h2>Air Craft Category</h2>
+        <h2>Aircraft Category</h2>
         <div class="form-group">
-            @Html.LabelFor(model => model.FixedWing, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.FixedWing,"Fixed-Wing", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.FixedWing)
                 @Html.ValidationMessageFor(model => model.FixedWing, "", new { @class = "text-danger" })
@@ -65,13 +65,13 @@
         </div>
        
         <div class="form-group">
-            @Html.LabelFor(model => model.MultiDashRotor, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.MultiDashRotor,"Multi-Dash Rotor", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.MultiDashRotor)
                 @Html.ValidationMessageFor(model => model.MultiDashRotor, "", new { @class = "text-danger" })
             </div>
         </div>
-        <h2>Conditions Of Flight</h2>
+        <h2>Conditions of Flight</h2>
         <div class="form-group">
             @Html.LabelFor(model => model.SimulatedInstrument, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <h2>Type Of  Piloting Time</h2>
+        <h2>Typeo of  Piloting Time</h2>
         <div class="form-group">
             @Html.LabelFor(model => model.AsflightInstructor, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -97,7 +97,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.FloatingCommand, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.FloatingCommand,"Pilot-In-Command", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.FloatingCommand)
                 @Html.ValidationMessageFor(model => model.FloatingCommand, "", new { @class = "text-danger" })

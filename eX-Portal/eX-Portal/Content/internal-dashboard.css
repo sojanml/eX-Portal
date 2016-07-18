@@ -168,9 +168,11 @@ ul#forecast li .status {
 
     .chart-legend li span{
     display: inline-block;
-    width: auto;
+    width:40;
     height: 12px;
-    margin-right: 2px;
+    margin-right: -10px;
+    margin-left:20px;
+
 }
 
 
@@ -198,7 +200,7 @@ div.ChartDev h4 {
 }
 
 ul.pie-legend {
-  margin:0px;
+  margin:20px 20px  0px 0px;
   padding:0px;
   list-style:none;
 }

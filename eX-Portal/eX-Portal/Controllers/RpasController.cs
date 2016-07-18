@@ -33,7 +33,7 @@ namespace eX_Portal.Controllers
         EndTime,
         MaxAltitude,
         MinAltitude,
-        case IsUseCamara when 1 then 'Yes' else 'No' end as IsUseCamara,
+        case IsUseCamara when 1 then 'Yes' else 'No' end as Camera being used,
         ISNULL(MSTR_User.FirstName,'') + ' ' + ISNULL(MSTR_User.LastName, '') as FullName,
         ApprovalStatus,
         Count(*) Over() as _TotalRecords,

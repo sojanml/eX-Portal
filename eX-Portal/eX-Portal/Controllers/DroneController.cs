@@ -85,7 +85,7 @@ namespace eX_Portal.Controllers {
       if(exLogic.User.hasAccess("FLIGHT.CREATE"))
         nView.addMenu("Zone Approval", Url.Action("Index", "Approval", new { ID = "_Pkey" }));
       if(exLogic.User.hasAccess("FLIGHT.GEOTAG"))
-        nView.addMenu("Geo Tagging", Url.Action("GeoTag", "Drone", new { ID = "_Pkey" }));
+        nView.addMenu("Geo-Tagging", Url.Action("GeoTag", "Drone", new { ID = "_Pkey" }));
 
       if(Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
@@ -500,7 +500,7 @@ namespace eX_Portal.Controllers {
       String SQL = "SELECT \n" +
           "  D.[DroneName] as UAS,\n" +
           "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
-          "  D.[DroneSerialNo] as UASSno,\n" +
+          "  D.[DroneSerialNo] as [UAS S.no],\n" +
           "  O.Name as OwnerName,\n" +
           "  M.Name as ManufactureName,\n" +
           "  U.Name as UASType,\n" +
