@@ -94,7 +94,9 @@ namespace eX_Portal.Controllers {
         nView.addMenu("Post Flight Report", "/PostFlightReport/_PKey.pdf");
       if(exLogic.User.hasAccess("FLIGHT.GEOTAG"))
         nView.addMenu("Geo-Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
-      if(exLogic.User.hasAccess("FLIGHT.DELETE"))
+     if (exLogic.User.hasAccess("FLIGHT.EXPORTCSV"))
+                nView.addMenu("Export-CSV", Url.Action("ExportExcel", new { ID = "_PKey" }));
+     if (exLogic.User.hasAccess("FLIGHT.DELETE"))
         nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 
       if(Request.IsAjaxRequest()) {
@@ -732,7 +734,17 @@ String SQL = @"UPDATE [DroneFlight] SET
 
     }
 
-    public String CheckAlert(int id = 0) {
+
+
+        public ActionResult ExportExcel([Bind(Prefix = "ID")]int FlightID = 0)
+        {
+            if (exLogic.User.hasAccess("FLIGHT.EXPORTCSV"))
+
+                Util.ExportFlightDataCSV(Response, FlightID);
+            return RedirectToAction("Index", "DroneFlight", new { ID =0 });
+        }
+
+        public String CheckAlert(int id = 0) {
       StringBuilder AlertMsg = new StringBuilder();
       int AccountID = Util.getDBInt("SELECT AccountID From MSTR_User WHERE UserID=" + id);
       String SQL = @"SELECT

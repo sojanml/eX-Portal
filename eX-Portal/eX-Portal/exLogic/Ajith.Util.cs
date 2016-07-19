@@ -17,7 +17,7 @@ using System.Web.Script.Serialization;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Globalization;
-
+using System.Text;
 namespace eX_Portal.exLogic {
 
 
@@ -1126,10 +1126,10 @@ namespace eX_Portal.exLogic {
 
 
 
-        public int ExportFlightDataCSV(HttpResponseBase Response)
+        public static int ExportFlightDataCSV(HttpResponseBase Response,int FlightID)
         {
             int Result = 1;
-
+            string Path = HttpContext.Current.Server.MapPath("/Upload/FightData.csv");
             //    String SQL =
             //  "SELECT \n" +
             //  "  FlightMapDataID,\n" +
@@ -1158,7 +1158,7 @@ namespace eX_Portal.exLogic {
                 var FlightData = (
                  from o in ctx.FlightMapDatas
                  where
-                o.FlightID == 761
+                o.FlightID == FlightID
                  select new
                  {
                      FlightMapDataID = o.FlightMapDataID,
@@ -1171,29 +1171,63 @@ namespace eX_Portal.exLogic {
                      Satellites = o.Satellites,
                      Pitch = o.Pitch,
                      Roll = o.Roll,
-                     Heading = o.Heading,
-                     TotalFlightTime = o.TotalFlightTime
+                     Heading = o.Heading                    
                  }).ToList();
 
-                Response.Clear();
+               
 
-                Response.AddHeader("Content-Disposition", "attachment; filename=FightData.csv");
-                Response.ContentType = "text/csv";
-                //////write the header
-                Response.Write(String.Format("{0},{1},{2},{3}", "FlightMapDataID", "ReadTime", "Latitude", "Longitude"));
 
-                ////write every subscriber to the file
-                //var resourceManager = new ResourceManager(typeof(CMSMessages));
-                foreach (var record in FlightData)
+
+                string attachment = "attachment; filename=FlightData.csv";
+                HttpContext.Current.Response.Clear();
+                HttpContext.Current.Response.ClearHeaders();
+                HttpContext.Current.Response.ClearContent();
+                HttpContext.Current.Response.AddHeader("content-disposition", attachment);
+                HttpContext.Current.Response.ContentType = "text/csv";
+                HttpContext.Current.Response.AddHeader("Pragma", "public");
+                WriteColumnName();
+                foreach (var FlighInfo  in FlightData)
                 {
-                    Response.Write(String.Format("{0},{1},{2},{3}", record.FlightMapDataID, record.ReadTime,record.Latitude,record.Longitude));
-                }
 
-                Response.End();
+                    StringBuilder stringBuilder = new StringBuilder();
+                   
+                    AddComma(FlighInfo.ReadTime.ToString(), stringBuilder);
+                    AddComma(FlighInfo.Latitude.ToString(), stringBuilder);
+                    AddComma(FlighInfo.Longitude.ToString(),stringBuilder);
+                    AddComma(FlighInfo.Altitude.ToString(), stringBuilder);
+                    AddComma(FlighInfo.Speed.ToString(), stringBuilder);
+                    AddComma(FlighInfo.FixQuality.ToString(), stringBuilder);
+                    AddComma(FlighInfo.Satellites.ToString(), stringBuilder);
+                    AddComma(FlighInfo.Pitch.ToString(), stringBuilder);
+                    AddComma(FlighInfo.Roll.ToString(), stringBuilder);
+                    AddComma(FlighInfo.Heading.ToString(), stringBuilder);
+                  
+                    HttpContext.Current.Response.Write(stringBuilder.ToString());
+                    HttpContext.Current.Response.Write(Environment.NewLine);
+                    
+                }
+                HttpContext.Current.Response.End();
             }
 
             return Result;
 
+        }
+        private static void WriteUserInfo(FlightMapData FlightInfo)
+        {
+            
+        }
+
+        private static void AddComma(string value, StringBuilder stringBuilder)
+        {
+            stringBuilder.Append(value.Replace(',', ' '));
+            stringBuilder.Append(", ");
+        }
+        private static void WriteColumnName()
+        {
+            string columnNames = " ReadTime,Latitude, Longitude,Altitude,Speed,FixQuality,Satellites,Pitch,Roll,Heading";
+         
+            HttpContext.Current.Response.Write(columnNames);
+            HttpContext.Current.Response.Write(Environment.NewLine);
         }
 
 
@@ -1214,9 +1248,7 @@ namespace eX_Portal.exLogic {
 
 
 
-
-
-    public static int GetServiceId() {
+        public static int GetServiceId() {
       int result = 0;
       using (var cotx = new ExponentPortalEntities()) {
         String SQL = "select MAX(ServiceId)as ServiceId from MSTR_DroneService";

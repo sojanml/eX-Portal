@@ -137,7 +137,6 @@ namespace eX_Portal.Controllers {
                 List<object> iData = new List<object>();
                 List<string> labels = new List<string>();
                 List<string> labelsShort = new List<string>();
-
                 List<double> lst_dataItem_2 = new List<double>();
                 List<double> lst_dataItem_1 = new List<double>();
                 List<double> lst_dataItem_3 = new List<double>();
