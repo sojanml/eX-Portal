@@ -125,7 +125,7 @@
             RentEndDate = new Date($(this).val());
            // RentEndDate = FORM['RentEndDate'].value;
         var Days = Math.abs(RentEndDate - RentStartDate);
-        var BBID = $('#ID').val();
+        var BBID = $('#BlackBoxID').val();
         var URL = '@Url.Action("BlackBoxInfo")' + "/" + BBID +
           '?StartDate=' + fmtDt(RentStartDate) +
           '&EndDate=' + fmtDt(RentEndDate);
