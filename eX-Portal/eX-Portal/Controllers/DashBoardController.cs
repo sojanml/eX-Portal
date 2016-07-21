@@ -245,9 +245,11 @@ namespace eX_Portal.Controllers {
 
                 WeatherViewModel Weather = new WeatherViewModel();
                 //getting the exact place from lat and long
-                City = Util.GetLocation(Lat, Lng);
+               // City = Util.GetLocation(Lat, Lng);
                 //getting the woeid from yahoo api
-                woeid = Util.GetWOEID(City);
+              //  woeid = Util.GetWOEID(City);
+                woeid = "1940345";
+
                 //getting the weather information from  woeid           
                 Weather = Util.GetCurrentConditions(woeid);
                 return View(Weather);
@@ -259,8 +261,8 @@ namespace eX_Portal.Controllers {
             }
         }
     public ActionResult RPAS() {
-
-      string City, Lat = null, Lng = null, woeid;
+        
+      string City, Lat = null, Lng = null, woeid="";
       if(Session["Lat"] != null) {
         Lat = Session["Lat"].ToString();
       } else {
@@ -278,9 +280,11 @@ namespace eX_Portal.Controllers {
       //getting the exact place from lat and long
       City = Util.GetLocation(Lat, Lng);
       //getting the woeid from yahoo api
-      woeid = Util.GetWOEID(City);
+     // woeid = Util.GetWOEID(City);
       //getting the weather information from  woeid           
       Weather = Util.GetCurrentConditions(woeid);
+            ViewBag.City = City;
+
       return View(Weather);
     }
 

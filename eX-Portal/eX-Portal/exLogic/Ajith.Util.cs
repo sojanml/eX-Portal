@@ -505,8 +505,10 @@ namespace eX_Portal.exLogic {
             string json = null;
 
             try {
-                //Create the web request   
-                request = (HttpWebRequest)WebRequest.Create("http://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng + "&sensor=false");
+                //Create the web request
+                string Data= "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBSdl9aWjP5rHiceUgBVRxBqdQbc29cWKk&latlng=" + lat + "," + lng + "&sensor=false";
+                //string data = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng + "&sensor=false";
+                request = (HttpWebRequest)WebRequest.Create(Data);
                 //Get response   
                 response = (HttpWebResponse)request.GetResponse();
                 //Get the response stream into a reader   
@@ -530,6 +532,8 @@ namespace eX_Portal.exLogic {
                 };
             } catch (Exception ex) {
                 string Message = "Error: " + ex.ToString();
+
+                throw ex;
             } finally {
                 if ((response != null))
                     response.Close();
@@ -700,10 +704,11 @@ namespace eX_Portal.exLogic {
             Weather.Forecast = ForcastList;
             //Checking the records if exist write to the file
             if (ForcastList.Count > 0) {
-                WriteToFile(Weather, Location);
+                //WriteToFile(Weather, Location);
             } else {
                 //not exist read from the file and display that
-                WeatherFromFile = ReadFromFile(Location);
+                // WeatherFromFile = ReadFromFile(Location);
+                WeatherFromFile = null;
                 if (WeatherFromFile != null) {
                     Weather = WeatherFromFile;
                 }
@@ -1231,6 +1236,22 @@ namespace eX_Portal.exLogic {
         }
 
 
+        public static  bool IsAssignToDrone(Nullable<int> DroneID, Nullable<int> BlackBoxID)
+        {
+            bool Result = false;
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL = "select count(*) as Count from mstr_drone where DroneID='" + DroneID + "' and BlackBoxID='" + BlackBoxID + "'";
+                int Count = cotx.Database.SqlQuery<int>(SQL).FirstOrDefault<int>();
+                if (Count > 0)
+                {
+                    Result = true;
+                }
+            }
+
+            return Result;
+        }
+
 
 
 
@@ -1258,7 +1279,7 @@ namespace eX_Portal.exLogic {
 
       return result;
     }
-
+        
 
         public static string FirstLetterToUpper(string str)
         {
