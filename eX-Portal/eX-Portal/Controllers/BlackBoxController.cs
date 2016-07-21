@@ -68,7 +68,7 @@ namespace eX_Portal.Controllers {
 
       ViewBag.Title = "FDR Live Data";
       string SQL =
-        "SELECT top 1000\n" +
+        "SELECT  \n" +
         "  [DroneDataId] as UASDataId ," +
         "  MSTR_Drone.DroneName as UAS,\n" +
         "  [ReadTime] as [Date],\n" +

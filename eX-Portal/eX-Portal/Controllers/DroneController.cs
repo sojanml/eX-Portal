@@ -733,9 +733,11 @@ String SQL = "INSERT INTO MSTR_DRONE(\n" +
           }
 
         }
-
-        return RedirectToAction("Manage", new { ID = DroneId });
-      } catch(Exception ex) {
+                if (exLogic.User.hasAccess("DRONE.MANAGE"))
+                    return RedirectToAction("Manage", new { ID = DroneId });
+                else
+                    return RedirectToAction("Detail", new { ID = DroneId });
+            } catch(Exception ex) {
         Util.ErrorHandler(ex);
         return View("InternalError", ex);
       }
@@ -905,7 +907,13 @@ String SQL = "INSERT INTO MSTR_DRONE(\n" +
             }
 
           }
-          return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
+
+
+                    if (exLogic.User.hasAccess("DRONE.MANAGE"))
+                        return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
+                    else
+                        return RedirectToAction("Detail", new { ID = DroneView.Drone.DroneId });
+                  //  
         } else {
 
           DroneView.OwnerList = Util.getListSQL("SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name");
