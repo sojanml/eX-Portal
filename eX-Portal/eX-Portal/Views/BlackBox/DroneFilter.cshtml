@@ -1,0 +1,26 @@
+﻿
+@model eX_Portal.exLogic.FlightReportFilter
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("Rent", "BlackBox", FormMethod.Get, new { id = "DroneFilterForm", name = "DroneFilterForm" }))
+{
+
+
+                    <div style="padding-left:205px" >
+                      Select the UAS
+                    </div>
+
+                    <table class="ReportFilter" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td>
+                                <input type="hidden" id="UAS" name="UAS" value="@Model.UAS" />
+                            </td>    
+                            <td style=" padding-left:180px ">
+                                <input style="width:600px;" id="UASName" type="text" name="UASName" value="@Model.getUASName()" />
+                            </td>
+                        </tr>
+                        </table>
+                        }
+
+

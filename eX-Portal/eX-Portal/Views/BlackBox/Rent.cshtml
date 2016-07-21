@@ -1,124 +1,255 @@
-﻿@model eX_Portal.ViewModel.BlackBoxViewModel
+﻿@model eX_Portal.Models.BlackBoxTransaction
 @using eX_Portal.exLogic
 @{
-    ViewBag.Title = "Rent";
+    ViewBag.Title = "Rent Black Box";
     Layout = "~/Views/Shared/_eXPortal.cshtml";
+    FlightReportFilter TheFilter = (FlightReportFilter)ViewBag.ReportFilter;
 }
 
-<h2>Rent</h2>
 
-<script src="~/Scripts/bootstrap.js"></script>
-@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "createForm" }))
+@*@Html.Action("DroneFilter", "BlackBox", new
 {
-    <input type="hidden" name="droneid" value="@ViewBag.DroneId" />
-    <input type="hidden" name="createdby" value="@ViewBag.CreatedBy" />
 
-    @Html.HiddenFor(model => model.BBTransaction.ID)
-    <div class="form-horizontal">
-        <div class="form-group">
-            @Html.LabelFor(model => model.BBTransaction.BlackBoxID, "Black Box", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.BBTransaction.BlackBoxID, Util.GetBB(), "--Select Black Box--")
-                @Html.ValidationMessageFor(model => model.BBTransaction.BlackBoxID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.BBTransaction.RentStartDate)
-            <div id="divStartDate" class="col-md-10">
-                @Html.EditorFor(model => model.BBTransaction.RentStartDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
-                @Html.ValidationMessageFor(model => model.BBTransaction.RentStartDate)
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.BBTransaction.RentEndDate)
-            <div id="divEndDate"  class="col-md-10">
-                @Html.EditorFor(model => model.BBTransaction.RentEndDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
-                @Html.ValidationMessageFor(model => model.BBTransaction.RentStartDate)
-                <input id="btnCalculate" type="button" value="Calculate"  />
-            </div>
-        </div>
-        <div class="form-group">
-           
-            <div class="col-md-10" id="divCostGroup">
-               @foreach (var BB in Model.BlackBoxCostList)
-               {
-                   var FirstItem = BB.FirstOrDefault();
-                <h2>Rented For: @FirstItem.CalcuatedDays</h2>
-                <ul>
-                    @foreach (var Item in BB)
-                    {
-                        <li>
-                            <input type="radio" value="1" @(Item.isSelected ? "checked" : "") />
-                            @Item.RentType @Item.SectionDays x @Item.RentAmount = @Item.CalcuatedCost
-                        </li>
-                    }
-                </ul>
-               }
-           
-            </div>
-        </div>
+    UAS = 0
+})*@
 
-    </div>
 
-}
-@section header {
-    <style type="text/css">
-        li.select-True {
-            color: forestgreen;
-            font-weight: bold;
-        }
-    </style>
-}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "RentBlackBox", name = "RecBlackBox" }))
+{
+    <section class="general-form" id="loginForm">
 
-@section Scripts {
-
-    <script type="text/javascript">
-      
-      
-        $(document).ready(function () {
-            var StartDate = $('#divStartDate').val();
-            var EndDate = $('#divEndDate').val();
-
-            // end - start returns difference in milliseconds 
-            var diff = new Date(EndDate - StartDate);
-
-            // get days
-            var days = diff
-            $('#divStartDate').on("change", function () {
-                StartDate = $('#divStartDate').val();
-                EndDate = $('#divEndDate').val();
-                diff = new Date(EndDate - StartDate);
-                days = diff / 1000 / 60 / 60 / 24;
-
-                Calculate(days);
-            });
-            $('#divEndDate').on("change", function () {
-                StartDate = $('#divStartDate').val();
-                EndDate = $('#divEndDate').val();
-                diff = new Date(EndDate - StartDate);
-                days = diff / 1000 / 60 / 60 / 24;
-                Calculate(days);
-            });
-        });
-
-    function Calculate(days)
-    {
-       
-        $.ajax({
-            url: 'Calculate/Days='+days,  //server script to process data
-            type: 'GET',
-            dataType: 'json',
-            success: completeHandler = function (data) {
-                //        if (data.status == "success") LI.fadeOut().remove();
-                alert('Success');
-            },
-            error: errorHandler = function (data) {
-                alert('End');
-              
-            }
-        });
-    }
         
-</script>
-    }
+        <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
+       
+        <input type="hidden" name="ApprovalID" value="@Model.ApprovalID" />
+        <input type="hidden" name="RentAmount" value="@Model.RentAmount "/>
+
+
+        <div class="editor-label">
+            Select the UAS
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("Drone"))
+            @Html.ValidationMessageFor(model => model.DroneID)
+        </div>
     
+
+        <div class="editor-label">
+            Select the Black box
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.BlackBoxID, Util.GetBB(), "Please Select...")
+            @Html.ValidationMessageFor(model => model.BlackBoxID)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BBStatus)
+        </div>
+        <div class="editor-field">
+            <div class="input-field">@Model.BBStatus</div>
+            @Html.ValidationMessageFor(model => model.BBStatus)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Note, "Note")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Note)
+            @Html.ValidationMessageFor(model => model.Note)
+        </div>
+
+        <div class="two-column-form-group">
+            <div class="form-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.RentStartDate)
+                </div>
+
+
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.RentStartDate, new { @class = "date-picker" })
+                    @Html.ValidationMessageFor(model => model.RentStartDate)
+                </div>
+               
+            </div>
+            <div class="form-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.RentEndDate)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.RentEndDate, new { @class = "date-picker" })
+                    @Html.ValidationMessageFor(model => model.RentEndDate)
+                </div>
+            </div>
+        </div>
+
+        <h2>Rent Calculation</h2>
+        <div id="RentCalculation">Please select a blackbox from list for calculation...</div>
+
+        <div class="two-column-form-group">
+          
+            <div class="form-group">
+                <div class="editor-label">
+                   Amount to be paid
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Amount)
+                    @Html.ValidationMessageFor(model => model.Amount)
+                </div>
+            </div>
+        </div>
+
+        <div class="form-toolbar">
+            <input type="submit" id="btn-submit" value="Save" />
+        </div>
+    </section>
+}
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+    var FORM = document.forms['RecBlackBox'];
+    var RentStartDate = null; 
+    var RentEndDate = null;
+
+    $(document).ready(function () {
+      @*$('#ID').on("change", function () {
+        var URL = '@Url.Action("BlackBoxInfo")' + "/" + $(this).val();
+        $('#RecBlackBox :input').prop("disabled", true);
+        $('#RentCalculation').slideUp();
+        $.ajax({
+          method: 'GET',
+          url: URL
+        }).done(ShowRentCalcualtion);
+      })//$('#ID').on("change")*@
+
+        $('#RentEndDate').on("change", function () {
+            
+            RentStartDate =new Date( FORM['RentStartDate'].value);            
+            RentEndDate = new Date($(this).val());
+           // RentEndDate = FORM['RentEndDate'].value;
+        var Days = Math.abs(RentEndDate - RentStartDate);
+        var BBID = $('#ID').val();
+        var URL = '@Url.Action("BlackBoxInfo")' + "/" + BBID +
+          '?StartDate=' + fmtDt(RentStartDate) +
+          '&EndDate=' + fmtDt(RentEndDate);
+        $('#RentCalculation').slideUp();
+        $.ajax({
+          method: 'GET',
+          url: URL
+        }).done(function (data) {
+          $('#RentCalculation')
+            .html(getCostDetail(data.Cost))
+            .slideDown();
+        });
+
+      });//$('#RentEndDate').on("change")
+
+    });//$(document).ready(function ()
+
+    function ShowRentCalcualtion(data) {
+      $('#RecBlackBox :input').prop("disabled", false);
+      RentStartDate = toDate(data.Info.RentStartDate);
+      RentEndDate = toDate(data.Info.RentEndDate);
+      $('#RentStartDate').html(fmtDt(RentStartDate));
+      FORM['RentEndDate'].value = fmtDt(RentEndDate);
+
+      $('#RentCalculation')
+        .html(getCostDetail(data.Cost))
+        .slideDown();
+    }
+
+    function getCostDetail(Cost) {
+      var HTML = '<table class="report" cellspacing="0">' +
+      '<thead>\n' +
+      '<tr>\n' +
+      '<th>#</th>\n' +
+      '<th>&nbsp;</th>\n' +
+      '<th>Rent Type</th>\n' +
+      '<th align="right">Qty</th>\n' +
+      '<th align="right">Amount (AED)</th>\n' +
+      '<th align="right">Total (AED)</th>\n' +
+      '<th>&nbsp;</th>\n' +
+      '</tr>\n' +
+      '</thead>\n';
+
+      for (var i = 0; i < Cost.length; i++) {
+
+           if(Cost[i].isSelected )
+          {
+               var amt =parseInt( Cost[i].CalcuatedCost);
+               var RentAmount =parseInt( Cost[i].RentAmount);
+               //Amt.value = fmtMoney(Cost[i].CalcuatedCost);
+           }
+
+           FORM['Amount'].value = amt;
+           FORM['RentAmount'].value = RentAmount;
+          
+        HTML +=
+        '<tr class="' + (Cost[i].isSelected ? "selected" : "") + '">\n' +
+        '<td>' +  (i+1) + '</td>\n' +
+        '<td>' + (Cost[i].isSelected ? '<span class="icon" style="color:green">&#xf00c;</span>' : '&nbsp;') + '</td>\n' +
+        '<td>' + Cost[i].RentType + '</td>\n' +
+        '<td align="right">' + Cost[i].SectionDays + '</td>\n' +
+        '<td align="right">' + fmtMoney(Cost[i].RentAmount) + '</td>\n' +
+        '<td align="right">' + fmtMoney(Cost[i].CalcuatedCost) + '</td>\n' +
+        '<td>&nbsp;</td>\n' +
+        '</tr>\n';
+      }
+      HTML += '</table>\n';
+
+      return HTML;
+    }
+
+    function toDate(value) {
+      var d = /\/Date\((\d*)\)\//.exec(value);
+      var theDate = (d) ? new Date(+d[1]) : value;
+      return theDate;
+    }
+
+    function fmtDt(theDate) {
+      
+      var Month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      var fmtDate =
+        theDate.getDate() + '-' +
+        Month[theDate.getMonth()] + '-' +
+        theDate.getFullYear();
+      return fmtDate;
+    }
+
+    function fmtMoney(theNumber){
+      var n = theNumber;
+          c = 2,
+          d = ".",
+          t = ",",
+          s = n < 0 ? "-" : "",
+          i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+          j = (j = i.length) > 3 ? j % 3 : 0;
+      return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
+
+
+//function for uas dropdown
+
+    $(document).ready(function () {
+
+        var FORM = document.forms['DroneFilterForm'];
+        $("#UASName").autocomplete({
+            source: "@Url.Action("getUAS","Report",null)",
+            minLength: 2,
+        select: function (event, ui) {
+            if (ui.item) {
+                event.preventDefault();
+                FORM['UAS'].value = ui.item.value;
+                FORM['UASName'].value = ui.item.label;
+            } else {
+                FORM['UAS'].value = '0';
+            }
+        }
+    });
+
+    $("#UASName").on("blur", function (e) {
+        if ($(this).val() == "") FORM['UAS'].value = '0';
+    });
+
+    })
+
+
+    </script>
+}

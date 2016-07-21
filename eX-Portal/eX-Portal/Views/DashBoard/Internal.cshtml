@@ -24,93 +24,93 @@
   </div>
 
   <div class="dash-column col1">
-    <div class="dash-content weather">
-      <h3>Weather in @Html.DisplayFor(Model => Model.City)</h3>
-      <div>
-        <table cellpadding="0" cellspacing="0">
-          <tr>
-            <td rowspan="2" class="condition">
-                @if (Model.ConditionCode != null) {
+      <div class="dash-content weather">
+        <h3>Weather in @Html.DisplayFor(Model => Model.City)</h3>
+        <div>
+          <table cellpadding="0" cellspacing="0">
+            <tr>
+              <td rowspan="2" class="condition">
+                  @if (Model.ConditionCode != null) {
 
-                <img style="width:80px; height:80px;" src="~/images/weather/@(Model.ConditionCode).png" />
-              <!--<span class="icon big">@Html.Raw(Weather.WeatherIcons[int.Parse(Model.ConditionCode)])</span>--><br />
-                }
-              @Model.ConditionText
-            </td>
-            <td class="spacer"></td>
-            <td>
-              <span class="icon">&#xf055;</span>
-            </td>
-            <td>
-              <span class="text">
-                @Html.DisplayFor(Model => Model.ConditionTemperature)
-                @Html.DisplayFor(Model => Model.TemperatureUnit)
-              </span>
-            </td>
-            <td class="spacer"></td>
-            <td>
-              <span style="display:inline-block; transform: rotate(@(Model.Direction)deg);" class="icon">&#xf0b1;</span>
-              <label>@Html.DisplayFor(Model => Model.Direction) &deg;</label><br>
-              <span>@Html.DisplayFor(Model => Model.Speed) km/h</span><br>
-            </td>
-            <td class="spacer"></td>
-            <td>
+                  <img style="width:80px; height:80px;" src="~/images/weather/@(Model.ConditionCode).png" />
+                <!--<span class="icon big">@Html.Raw(Weather.WeatherIcons[int.Parse(Model.ConditionCode)])</span>--><br />
+                  }
+                @Model.ConditionText
+              </td>
+              <td class="spacer"></td>
+              <td>
+                <span class="icon">&#xf055;</span>
+              </td>
+              <td>
+                <span class="text">
+                  @Html.DisplayFor(Model => Model.ConditionTemperature)
+                  @Html.DisplayFor(Model => Model.TemperatureUnit)
+                </span>
+              </td>
+              <td class="spacer"></td>
+              <td>
+                <span style="display:inline-block; transform: rotate(@(Model.Direction)deg);" class="icon">&#xf0b1;</span>
+                <label>@Html.DisplayFor(Model => Model.Direction) &deg;</label><br>
+                <span>@Html.DisplayFor(Model => Model.Speed) km/h</span><br>
+              </td>
+              <td class="spacer"></td>
+              <td>
 
-              <div>
-                <span class="icon tiny">&#xf07a;</span>
-                <label>Humidity: @Html.DisplayFor(Model => Model.Humidity)%</label>
+                <div>
+                  <span class="icon tiny">&#xf07a;</span>
+                  <label>Humidity: @Html.DisplayFor(Model => Model.Humidity)%</label>
+                </div>
+                <div>
+                  <span class="icon tiny">&#xf075;</span>
+                  <label>Visibility: @Html.DisplayFor(Model => Model.Visibility) KM</label>
+                </div>
+                <div>
+                  <span class="icon tiny">&#xf079;</span>
+                  <label>
+                    Pressure: @Html.DisplayFor(Model => Model.Pressure) MB
+                    (@Model.PressureStatus)
+                  </label>
+                </div>
+
+              </td>
+            </tr>
+            <tr>
+
+              <td class="spacer"></td>
+              <td colspan="2"><span class="caption">Temperature</span></td>
+              <td class="spacer"></td>
+              <td><span class="caption">Wind</span></td>
+              <td class="spacer"></td>
+              <td><span class="caption">Atmosphere</span></td>
+            </tr>
+          </table>
+
+
+
+        </div>
+        <div style="margin-top:20px;">
+          <ul id="forecast">
+            @foreach (var item in Model.Forecast) {
+            <li>
+              <span class="big">
+                <img style="width:50px; height:50px;" src="~/images/weather/@(item.Code).png" />
+              <!--@Html.Raw(Weather.WeatherIcons[item.Code])--></span><br />
+              <div class="status">@item.status</div>
+              <div class="date">@item.Date</div>
+              <div class="temp">
+                <span class="tiny icon">&#xf058;</span>
+                @item.TempLow&deg;
+                <span class="tiny icon">&#xf044;</span>
+                @item.TempHigh&deg;
               </div>
-              <div>
-                <span class="icon tiny">&#xf075;</span>
-                <label>Visibility: @Html.DisplayFor(Model => Model.Visibility) KM</label>
-              </div>
-              <div>
-                <span class="icon tiny">&#xf079;</span>
-                <label>
-                  Pressure: @Html.DisplayFor(Model => Model.Pressure) MB
-                  (@Model.PressureStatus)
-                </label>
-              </div>
-
-            </td>
-          </tr>
-          <tr>
-
-            <td class="spacer"></td>
-            <td colspan="2"><span class="caption">Temperature</span></td>
-            <td class="spacer"></td>
-            <td><span class="caption">Wind</span></td>
-            <td class="spacer"></td>
-            <td><span class="caption">Atmosphere</span></td>
-          </tr>
-        </table>
-
+            </li>
+            }
+          </ul>
+        </div>
 
 
       </div>
-      <div style="margin-top:20px;">
-        <ul id="forecast">
-          @foreach (var item in Model.Forecast) {
-          <li>
-            <span class="big">
-              <img style="width:50px; height:50px;" src="~/images/weather/@(item.Code).png" />
-            <!--@Html.Raw(Weather.WeatherIcons[item.Code])--></span><br />
-            <div class="status">@item.status</div>
-            <div class="date">@item.Date</div>
-            <div class="temp">
-              <span class="tiny icon">&#xf058;</span>
-              @item.TempLow&deg;
-              <span class="tiny icon">&#xf044;</span>
-              @item.TempHigh&deg;
-            </div>
-          </li>
-          }
-        </ul>
-      </div>
-
-
     </div>
-  </div>
 
   <div class="dash-column col2">
     <div class="dash-content">

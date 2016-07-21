@@ -68,7 +68,7 @@ namespace eX_Portal.Controllers {
 
       ViewBag.Title = "FDR Live Data";
       string SQL =
-        "SELECT\n" +
+        "SELECT  \n" +
         "  [DroneDataId] as UASDataId ," +
         "  MSTR_Drone.DroneName as UAS,\n" +
         "  [ReadTime] as [Date],\n" +
@@ -97,6 +97,8 @@ namespace eX_Portal.Controllers {
           "WHERE\n" +
           "  MSTR_Drone.DroneID IS NOT NULL";
       }
+            SQL+= " Order By UasDataid";
+
 
       qView nView = new qView(SQL);
       //if (!exLogic.User.hasAccess("BLACKBOX.LIVE")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
@@ -414,28 +416,45 @@ namespace eX_Portal.Controllers {
 
     //by BT
     public ActionResult TransactionDet([Bind(Prefix = "ID")] int BlackBoxID) {
-      string SQL = @"SELECT MSTR_BlackBox.BlackBoxName,
-                           BlackBoxTransaction.BBStatus as Status,
-                           BlackBoxTransaction.CollectionMode as 'TransactionMode',
-                           BlackBoxTransaction.BankName as 'BankName',
-                           BlackBoxTransaction.Amount, 
-                           BlackBoxTransaction.ChequeNumber as 'ChequeNumber',
-                           BlackBoxTransaction.DateOfCheque as 'ChequeDate', 
-                           BlackBoxTransaction.NameOnCard as 'NameOnCard',
-                           BlackBoxTransaction.CreatedDate as 'CreatedDate',
-                           MSTR_Drone.DroneName as 'DroneName',
-                           BlackBoxTransaction.Note,
-                           Count(*) Over() as _TotalRecords,
-                           BlackBoxTransaction.ID as _PKey                           
-                           FROM
-                           BlackBoxTransaction LEFT OUTER JOIN
-                           MSTR_BlackBox ON BlackBoxTransaction.BlackBoxID = MSTR_BlackBox.BlackBoxID LEFT OUTER JOIN
-                           MSTR_Drone ON BlackBoxTransaction.DroneID = MSTR_Drone.DroneId 
-                           WHERE(BlackBoxTransaction.BlackBoxID = " + BlackBoxID + ")";
-      qView nView = new qView(SQL);
+            //string SQL = @"SELECT MSTR_BlackBox.BlackBoxName,
+            //                     BlackBoxTransaction.BBStatus as Status,
+            //                     BlackBoxTransaction.CollectionMode as 'TransactionMode',
+            //                     BlackBoxTransaction.BankName as 'BankName',
+            //                     BlackBoxTransaction.Amount, 
+            //                     BlackBoxTransaction.ChequeNumber as 'ChequeNumber',
+            //                     BlackBoxTransaction.DateOfCheque as 'ChequeDate', 
+            //                     BlackBoxTransaction.NameOnCard as 'NameOnCard',
+            //                     BlackBoxTransaction.CreatedDate as 'CreatedDate',
+            //                     MSTR_Drone.DroneName as 'DroneName',
+            //                     BlackBoxTransaction.Note,
+            //                     Count(*) Over() as _TotalRecords,
+            //                     BlackBoxTransaction.ID as _PKey                           
+            //                     FROM
+            //                     BlackBoxTransaction LEFT OUTER JOIN
+            //                     MSTR_BlackBox ON BlackBoxTransaction.BlackBoxID = MSTR_BlackBox.BlackBoxID LEFT OUTER JOIN
+            //                     MSTR_Drone ON BlackBoxTransaction.DroneID = MSTR_Drone.DroneId 
+            //                     WHERE(BlackBoxTransaction.BlackBoxID = " + BlackBoxID + ")";
+
+
+
+            string SQL = @"SELECT MSTR_BlackBox.BlackBoxName,
+                                 BlackBoxTransaction.BBStatus as Status,                               
+                                 BlackBoxTransaction.Amount,                              
+                                 MSTR_Drone.DroneName as 'DroneName',
+                                 BlackBoxTransaction.Note,
+                                 Count(*) Over() as _TotalRecords,
+                                 BlackBoxTransaction.ID as _PKey                           
+                                 FROM
+                                 BlackBoxTransaction LEFT OUTER JOIN
+                                 MSTR_BlackBox ON BlackBoxTransaction.BlackBoxID = MSTR_BlackBox.BlackBoxID LEFT OUTER JOIN
+                                 MSTR_Drone ON BlackBoxTransaction.DroneID = MSTR_Drone.DroneId 
+                                 WHERE(BlackBoxTransaction.BlackBoxID = " + BlackBoxID + ")";
+
+
+            qView nView = new qView(SQL);
 
       if (Request.IsAjaxRequest()) {
-        Response.ContentType = "text/javascript";
+        Response.ContentType = "text /javascript";
         return PartialView("qViewData", nView);
       } else {
         return View(nView);
@@ -680,31 +699,67 @@ namespace eX_Portal.Controllers {
     }
 
     //Get:BlackBoxCost/Rent
-    public ActionResult Rent() {
-      //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+    public ActionResult Rent([Bind(Prefix = "ID")] int BlackBoxID = 0) {
+            //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
 
-      BlackBoxViewModel BV = new BlackBoxViewModel();
-      BV.BlackBoxCostList = new List<List<BlackBoxCostCalucation>>();
-      return View(BV);
+            //BlackBoxViewModel BV = new BlackBoxViewModel();
+            //BV.BlackBoxCostList = new List<List<BlackBoxCostCalucation>>();
+
+
+            BlackBoxTransaction btx = new BlackBoxTransaction();
+            if (BlackBoxID != 0)
+            {
+                btx = db.BlackBoxTransactions.Find(BlackBoxID);
+                if (btx == null) return RedirectToAction("Error", "Home");
+            }
+            btx.BBStatus = "OUT";
+            return View(btx);
+           
     }
 
-    [HttpPost]
-    public ActionResult Rent(List<BlackBoxCost> BBCList) {
-      //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
 
-      foreach (BlackBoxCost BB in BBCList) {
+        [HttpPost]
+        public ActionResult Rent(BlackBoxTransaction Btx)
+        {
+           Nullable<int> DroneID = Btx.DroneID;
+            Nullable<int> BlackBoxID = Btx.BlackBoxID;
 
-        // BB.CreatedBy = Util.getLoginUserID();
+            if (Btx.DroneID < 1 || Btx.DroneID == null)
+                ModelState.AddModelError("DroneID", "You must select a Drone.");
+            //if (Util.IsAssignToDrone(DroneID, BlackBoxID))
+            //{
+            //    ModelState.AddModelError("BlackBoxID", "Black Box Already Assigned to This  Drone !");
+            //}
 
-        BB.LastUpdatedBy = Util.getLoginUserID();
-        db.Entry(BB).State = EntityState.Modified;
-        db.SaveChanges();
-      }
+            string SQL = "insert into blackboxtransaction(DroneID,BBstatus,Note,createdby,Blackboxid,amount,rentamount,RentStartDate,RentEndDate) values("+Btx.DroneID +",'OUT','" + Btx.Note + "'," + Util.getLoginUserID() + "," +BlackBoxID + "," + Util.toInt(Btx.Amount) + "," + Util.toInt(Btx.RentAmount) + ",'"+ Btx.RentStartDate + "','"+ Btx.RentEndDate +"')";
+            //  string SQL = "update BlackBoxTransaction set DroneID = '0', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "' where ID = " + Btx.ID;
 
-      // IList<BlackBoxCost> Bl = db.BlackBoxCosts.ToList();
-      return View(db.BlackBoxCosts.ToList());
-    }
+            int bbtransctionid = Util.InsertSQL(SQL);
+           
 
+            SQL = "update MSTR_BlackBox  set [LastRentalId]=" + bbtransctionid + ", CurrentStatus='OUT',CurrentUserID = '" + Util.getLoginUserID() + "',CurrentDroneID="+Btx.DroneID +" where BlackBoxID = " + BlackBoxID;
+          int  Val = Util.doSQL(SQL);
+
+            SQL = "update dbo.MSTR_Drone set BlackBoxID ="+ BlackBoxID + " where DroneId = " + Btx.DroneID;
+            Val = Util.doSQL(SQL);
+
+            return RedirectToAction("BlackBoxList", "Blackbox");
+        }
+
+
+        //adding this for auto complete drone name
+        public ActionResult DroneFilter(FlightReportFilter ReportFilter)
+        {
+            return View(ReportFilter);
+        }
+
+        public String getUAS(String Term = "")
+        {
+            var theReport = new exLogic.Report();
+            return theReport.getUAS(Term);
+        }
+
+      
     public ActionResult Acknowledgement([Bind(Prefix = "ID")] int TransactionID = 0) {
       //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Blackbox Rental";

@@ -134,6 +134,6 @@
   }
 
   function OnErrorCall_(repo) {
-    alert("Woops something went wrong, pls try later !");
+    //alert("Woops something went wrong, pls try later !");
   }
 });

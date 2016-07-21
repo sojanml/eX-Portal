@@ -858,13 +858,13 @@
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\UAScreation.js" />
     <Content Include="Scripts\user.js" />
+    <None Include="Properties\PublishProfiles\exportal.pubxml" />
     <None Include="Scripts\_references.js" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="stylesheets\dewa-dashboard.css" />
     <Content Include="stylesheets\ie.css" />
     <Content Include="stylesheets\print.css" />
     <Content Include="stylesheets\screen.css" />
-    <Content Include="Upload\Brand-Logo\gcaa-logo.png" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
@@ -1198,9 +1198,11 @@
     <Content Include="Views\Rpas\NoAccessApplication.cshtml" />
     <Content Include="Views\Rpas\AuthorityApproval.cshtml" />
     <Content Include="Views\Rpas\AuthorityDocuments.cshtml" />
+    <Content Include="Views\BlackBox\DroneFilter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Upload\Brand-Logo\" />
     <Folder Include="Views\UserLogin\" />
     <Folder Include="Weather\" />
   </ItemGroup>
