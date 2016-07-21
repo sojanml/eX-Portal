@@ -37,11 +37,14 @@ namespace eX_Portal.exLogic {
 
       //-- now sort the list by cost to get the minimum amount on first
       var SortedList = TheCost.OrderBy(n => n.CalcuatedCost);
-      //-- get the First Item, the marked it as selected
-      if(SortedList.Count() > 0) SortedList.FirstOrDefault().isSelected = true;
-
-      //Return the list sorted by ID, to get the order from database
-      return SortedList.OrderBy(n => n.RentAmount).ToList();
+            //-- get the First Item, the marked it as selected
+            if (SortedList.Count() > 0)
+            {
+                SortedList.FirstOrDefault().isSelected = true;
+                //totalAmt =Convert.ToDecimal(SortedList.FirstOrDefault().CalcuatedCost);
+            }
+                //Return the list sorted by ID, to get the order from database
+                return SortedList.OrderBy(n => n.RentAmount).ToList();
     }
 
 

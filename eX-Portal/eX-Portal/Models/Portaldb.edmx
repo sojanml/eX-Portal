@@ -75,6 +75,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="RentAmount" Type="decimal" Precision="18" Scale="5" />
           <Property Name="VerifyCode" Type="nvarchar" MaxLength="30" />
           <Property Name="RentAcknowledged" Type="bit" />
+          <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="DroneCheckList">
           <Key>
@@ -519,6 +520,8 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="LastRentalId" Type="int" />
           <Property Name="LastReceiveId" Type="int" />
           <Property Name="EncryptionKey" Type="nvarchar" MaxLength="128" />
+          <Property Name="BlackBoxCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="Temp" Type="int" />
         </EntityType>
         <EntityType Name="MSTR_Drone">
           <Key>
@@ -2575,6 +2578,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="LastRentalId" Type="Int32" />
           <Property Name="LastReceiveId" Type="Int32" />
           <Property Name="EncryptionKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="BlackBoxCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Temp" Type="Int32" />
         </EntityType>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -2612,6 +2617,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="RentAmount" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="VerifyCode" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="RentAcknowledged" Type="Boolean" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="FlightMapData">
           <Key>
@@ -3791,6 +3797,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="MSTR_BlackBox">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_BlackBox">
               <MappingFragment StoreEntitySet="MSTR_BlackBox">
+                <ScalarProperty Name="Temp" ColumnName="Temp" />
+                <ScalarProperty Name="BlackBoxCode" ColumnName="BlackBoxCode" />
                 <ScalarProperty Name="EncryptionKey" ColumnName="EncryptionKey" />
                 <ScalarProperty Name="LastReceiveId" ColumnName="LastReceiveId" />
                 <ScalarProperty Name="LastRentalId" ColumnName="LastRentalId" />
@@ -3814,6 +3822,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="BlackBoxTransactions">
             <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxTransaction">
               <MappingFragment StoreEntitySet="BlackBoxTransaction">
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="RentAcknowledged" ColumnName="RentAcknowledged" />
                 <ScalarProperty Name="VerifyCode" ColumnName="VerifyCode" />
                 <ScalarProperty Name="RentAmount" ColumnName="RentAmount" />

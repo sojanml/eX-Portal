@@ -35,5 +35,6 @@ namespace eX_Portal.Models
         public Nullable<decimal> RentAmount { get; set; }
         public string VerifyCode { get; set; }
         public Nullable<bool> RentAcknowledged { get; set; }
+        public Nullable<decimal> TotalAmount { get; set; }
     }
 }

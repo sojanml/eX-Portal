@@ -27,5 +27,7 @@ namespace eX_Portal.Models
         public Nullable<int> LastRentalId { get; set; }
         public Nullable<int> LastReceiveId { get; set; }
         public string EncryptionKey { get; set; }
+        public string BlackBoxCode { get; set; }
+        public Nullable<int> Temp { get; set; }
     }
 }
