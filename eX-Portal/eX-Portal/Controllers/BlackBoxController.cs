@@ -613,8 +613,8 @@ namespace eX_Portal.Controllers {
                 select n
               ).FirstOrDefault();
 
-            //if (btx == null)
-            //    return Json(new BlackBox(), JsonRequestBehavior.AllowGet);
+            if (btx == null)
+                return Json(new BlackBox(), JsonRequestBehavior.AllowGet);
 
             if (StartDate == null) StartDate = btx.RentStartDate == null ? System.DateTime.Now : btx.RentStartDate;
             if (EndDate == null) EndDate = btx.RentEndDate == null ? System.DateTime.Now : btx.RentEndDate;
@@ -745,8 +745,10 @@ namespace eX_Portal.Controllers {
             //{
             //    ModelState.AddModelError("BlackBoxID", "Black Box Already Assigned to This  Drone !");
             //}
-
-            string SQL = "insert into blackboxtransaction(DroneID,BBstatus,Note,createdby,Blackboxid,amount,rentamount,RentStartDate,RentEndDate) values("+Btx.DroneID +",'OUT','" + Btx.Note + "'," + Util.getLoginUserID() + "," +BlackBoxID + "," + Util.toInt(Btx.Amount) + "," + Util.toInt(Btx.RentAmount) + ",'"+ Btx.RentStartDate + "','"+ Btx.RentEndDate +"')";
+            string sDate = Convert.ToDateTime(Btx.RentStartDate).ToString("yyyy/MM/dd");
+            string eDate = Convert.ToDateTime(Btx.RentEndDate).ToString("yyyy/MM/dd");
+            
+            string SQL = "insert into blackboxtransaction(DroneID,BBstatus,Note,createdby,Blackboxid,amount,rentamount,RentStartDate,RentEndDate) values("+Btx.DroneID +",'OUT','" + Btx.Note + "'," + Util.getLoginUserID() + "," +BlackBoxID + "," + Util.toInt(Btx.Amount) + "," + Util.toInt(Btx.RentAmount) + ",'"+ sDate + "','"+ eDate +"')";
             //  string SQL = "update BlackBoxTransaction set DroneID = '0', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "' where ID = " + Btx.ID;
 
             int bbtransctionid = Util.InsertSQL(SQL);
