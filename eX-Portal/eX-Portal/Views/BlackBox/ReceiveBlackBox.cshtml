@@ -68,7 +68,7 @@
                   Rental Amount (In AED)
               </div>
               <div class="editor-field">
-                  @Html.EditorFor(model => model.Amount)
+                  @Html.EditorFor(model => model.Amount,new{ disabled = "disabled"})
                   @ViewData["RAmount"]
               </div>
           </div>
@@ -91,7 +91,7 @@
                 Balance Amount (In AED)
             </div>
             <div class="editor-field">
-                @Html.EditorFor(model => model.NameOnCard)
+                @Html.EditorFor(model => model.NameOnCard, new { disabled = "disabled" })
             </div>
     </div>
     <div class="form-toolbar">
@@ -110,6 +110,31 @@
     var BalanceAmount = null;
 
     $(document).ready(function () {
+
+        var e = document.getElementById("BlackBoxID");
+        var bxID = e.options[e.selectedIndex].value;
+        if (bxID != null)
+        {
+            var URL_t = '@Url.Action("BlackBoxTransAmountPaidVal")' + "/" + bxID;
+            $.ajax({
+                method: 'GET',
+                url: URL_t
+            }).done(ShowAmount);
+
+            var URL_t = '@Url.Action("BlackBoxTransDroneVal")' + "/" + bxID;
+            $.ajax({
+                method: 'GET',
+                url: URL_t
+            }).done(ShowDroneID);
+
+            var URL = '@Url.Action("BlackBoxInfo")' + "/" + bxID;
+            $('#RecBlackBox :input').prop("disabled", true);
+            $('#RentCalculation').slideUp();
+            $.ajax({
+                method: 'GET',
+                url: URL
+            }).done(ShowRentCalcualtion);
+        }
         $('#BlackBoxID').on("change", function () {
             var URL_t = '@Url.Action("BlackBoxTransAmountPaidVal")' + "/" + $(this).val();
             $.ajax({
@@ -123,13 +148,13 @@
                 url: URL_t
             }).done(ShowDroneID);
 
-        var URL = '@Url.Action("BlackBoxInfo")' + "/" + $(this).val();
-        $('#RecBlackBox :input').prop("disabled", true);
-        $('#RentCalculation').slideUp();
-        $.ajax({
-          method: 'GET',
-          url: URL
-        }).done(ShowRentCalcualtion);
+            var URL = '@Url.Action("BlackBoxInfo")' + "/" + $(this).val();
+            $('#RecBlackBox :input').prop("disabled", true);
+            $('#RentCalculation').slideUp();
+            $.ajax({
+                method: 'GET',
+                url: URL
+            }).done(ShowRentCalcualtion);
       })//$('#TotalAmount').on("change")
 
       $('#RentEndDate').on("change", function () {
