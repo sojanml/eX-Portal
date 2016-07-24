@@ -117,7 +117,7 @@
 
 function processDeleteFile1(Obj) {
   var FileName = Obj.attr("data-file");
-  var URL = '/DroneFlight/DeleteFile?FlightID=@(Model.ID)&file=' + FileName;
+  var URL = '/DroneFlight/DeleteFile?ID=@(Model.ID)&file=' + FileName;
   Obj.closest('LI').slideUp();
   $.ajax({
     url: URL,  //server script to process data
