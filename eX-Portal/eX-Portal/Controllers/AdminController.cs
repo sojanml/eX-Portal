@@ -233,8 +233,17 @@ namespace eX_Portal.Controllers {
     [ChildActionOnly]
     public String AccountDetailView([Bind(Prefix = "ID")] int AccountID = 0) {
       if (!exLogic.User.hasAccess("ACCOUNT.VIEW")) return "Access Denied";
-      String SQL = "SELECT * FROM MSTR_Account WHERE AccountID=" + AccountID;
-      qDetailView nView = new qDetailView(SQL);
+     
+
+       String SQL = @"SELECT
+       [Name]
+      ,[EmailId] AS [Email ID]
+      ,[MobileNo] as [Mobile No.]
+      ,[OfficeNo] as [Office No.]    
+      ,[ContactName] as [Contact Person]     
+        FROM[ExponentPortal].[dbo].[MSTR_Account] WHERE AccountID=" + AccountID; ;
+
+        qDetailView nView = new qDetailView(SQL);
       return nView.getTable();
     }
 

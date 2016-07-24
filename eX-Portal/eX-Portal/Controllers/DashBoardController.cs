@@ -278,13 +278,14 @@ namespace eX_Portal.Controllers {
 
       WeatherViewModel Weather = new WeatherViewModel();
       //getting the exact place from lat and long
-      City = Util.GetLocation(Lat, Lng);
-      //getting the woeid from yahoo api
-     // woeid = Util.GetWOEID(City);
-      //getting the weather information from  woeid           
-      Weather = Util.GetCurrentConditions(woeid);
-            ViewBag.City = City;
-
+    //  City = Util.GetLocation(Lat, Lng);
+            //getting the woeid from yahoo api
+            // woeid = Util.GetWOEID(City);
+            //getting the weather information from  woeid 
+            woeid = "1940345";
+            Weather = Util.GetCurrentConditions(woeid);
+            //  ViewBag.City = City;
+            ViewBag.City = "Dubai";
       return View(Weather);
     }
 

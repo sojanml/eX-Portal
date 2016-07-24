@@ -108,7 +108,8 @@ function SubmitFile(file, Sufix) {
             Elem.html("");
             if (data.status == 'success') {
                 if (data.addFile[0].savename) {
-                    Elem.append('<div style="float: right"><span data-file="' + data.addFile[0].name + '" class="delete icon">&#xf057;</span></div>');
+                    Elem.append('<div style="float: right"><span data-file="' + data.FileURL + '" class="delete icon">&#xf057;</span></div>');
+                   // Elem.append('<div style="float: right"><span data-file="' + data.addFile[0].name + '" class="delete icon">&#xf057;</span></div>');
                     Elem.append('<input type="hidden" name="FileName" Value="' + data.addFile[0].name + '">');
                 }
 
