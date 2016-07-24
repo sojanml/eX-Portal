@@ -286,6 +286,7 @@ namespace eX_Portal.Controllers {
        [MSTR_Drone].[ModelName] AS Description,
        [MSTR_Drone].[CommissionDate],
        [MSTR_Account].NAME AS OwnerName,
+       U.name as UAVType,
        M.NAME AS Manufacture,
        FlightTime,
        DroneID,

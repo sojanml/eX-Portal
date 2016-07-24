@@ -97,7 +97,7 @@ namespace eX_Portal.Controllers {
           "WHERE\n" +
           "  MSTR_Drone.DroneID IS NOT NULL";
       }
-            SQL+= " Order By UasDataid";
+         //   SQL+= " Order By UasDataid";
 
 
       qView nView = new qView(SQL);

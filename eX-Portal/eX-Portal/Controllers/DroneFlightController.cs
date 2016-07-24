@@ -449,7 +449,7 @@ String SQL = @"UPDATE [DroneFlight] SET
       return "";
 
     }
-
+       
     public String DeleteFile([Bind(Prefix = "ID")] int FlightID = 0, String file = "") {
 
       //now add the uploaded file to the database
