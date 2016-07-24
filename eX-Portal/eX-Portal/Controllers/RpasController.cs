@@ -1061,18 +1061,22 @@ namespace eX_Portal.Controllers
             }
         }
         [HttpPost]
-        public string FlightRegister(FlightSetupViewModel flightsetupvm)
+        public String FlightRegister(FlightSetupViewModel flightsetupvm)
         {
             try
             {
                 if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
-                    return "You do not have accesss to this page";
+                   // return RedirectToAction("NoAccess", "Home");
+                return "You do not have accesss to this page";
                 if (flightsetupvm.GcaApproval.DroneID == null || flightsetupvm.GcaApproval.DroneID < 1)
-                    return "You must select a Drone.";
+                   
+               return "You must select a Drone.";
                 if (flightsetupvm.GcaApproval.PilotUserId < 1 || flightsetupvm.GcaApproval.PilotUserId == null)
-                    return "You must select a pilot.";
+                   
+                 return "You must select a pilot.";
                 if (flightsetupvm.GcaApproval.GroundStaffUserId < 1 || flightsetupvm.GcaApproval.GroundStaffUserId == null)
-                    return "A Ground staff should be selected.";
+                 //   return RedirectToAction("NoAccess", "Home");
+                  return "A Ground staff should be selected.";
 
                 DateTime todaydate = System.DateTime.Now;
                 String SQL = String.Empty;
@@ -1209,7 +1213,8 @@ namespace eX_Portal.Controllers
         where 
          [DroneId]=" + DroneID;
                Util.doSQL(SQL);
-                return "OK";
+              //  return RedirectToAction("Applications", "Rpas","");
+               return "OK";
             }
             catch (Exception ex)
             {
