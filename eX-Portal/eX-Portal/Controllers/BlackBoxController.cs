@@ -539,7 +539,11 @@ namespace eX_Portal.Controllers {
                 select n
               ).FirstOrDefault();
 
-            return Json(btx.Amount, JsonRequestBehavior.AllowGet);
+            decimal? Amount = 0;
+            if (btx != null)
+                Amount = btx.Amount;
+
+            return Json(Amount, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -558,7 +562,12 @@ namespace eX_Portal.Controllers {
                 select n
               ).FirstOrDefault();
 
-            return Json(btx.DroneID, JsonRequestBehavior.AllowGet);
+
+            int? DroneID=0;
+            if (btx != null)
+                DroneID = btx.DroneID;
+
+            return Json(DroneID, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -583,39 +592,45 @@ namespace eX_Portal.Controllers {
                 return 0;
             }
         }
-       
+
         [HttpGet]
-    public JsonResult BlackBoxInfo(
+        public JsonResult BlackBoxInfo(
       [Bind(Prefix = "ID")] int BlackBoxID = 0,
       DateTime? StartDate = null,
       DateTime? EndDate = null
-    ) {
-      var lastID = (
-          from y in db.MSTR_BlackBox
-          where y.BlackBoxID == BlackBoxID
-          select y.LastRentalId
-            ).FirstOrDefault();
+    )
+        {
 
-      BlackBoxTransaction btx = (
-          from n in db.BlackBoxTransactions
-          where n.ID == lastID
-          select n
-        ).FirstOrDefault();
+            var lastID = (
+                from y in db.MSTR_BlackBox
+                where y.BlackBoxID == BlackBoxID
+                select y.LastRentalId
+                  ).FirstOrDefault();
 
-      if (StartDate == null) StartDate = btx.RentStartDate == null ? System.DateTime.Now : btx.RentStartDate;
-      if (EndDate == null) EndDate = btx.RentEndDate == null ? System.DateTime.Now : btx.RentEndDate;
+            BlackBoxTransaction btx = (
+                from n in db.BlackBoxTransactions
+                where n.ID == lastID
+                select n
+              ).FirstOrDefault();
+
+            //if (btx == null)
+            //    return Json(new BlackBox(), JsonRequestBehavior.AllowGet);
+
+            if (StartDate == null) StartDate = btx.RentStartDate == null ? System.DateTime.Now : btx.RentStartDate;
+            if (EndDate == null) EndDate = btx.RentEndDate == null ? System.DateTime.Now : btx.RentEndDate;
             //get the information of calucation for the dates
             ViewData["RAmount"] = btx.Amount == null ? 0 : btx.Amount;
-      var NumDays = (int)((TimeSpan)(StartDate - EndDate)).TotalDays;
-      if (NumDays < 0) NumDays = -1 * NumDays;
-      var BB = new BlackBox();
-      var BBInfo = new {
-        Cost = BB.getBlackBoxCost(NumDays),
-        Info = btx
-      };
-      //      ViewData["BalanceAmount"] = totalAmt;
-      return Json(BBInfo, JsonRequestBehavior.AllowGet);
-    }
+            var NumDays = (int)((TimeSpan)(StartDate - EndDate)).TotalDays;
+            if (NumDays < 0) NumDays = -1 * NumDays;
+            var BB = new BlackBox();
+            var BBInfo = new
+            {
+                Cost = BB.getBlackBoxCost(NumDays),
+                Info = btx
+            };
+            //      ViewData["BalanceAmount"] = totalAmt;
+            return Json(BBInfo, JsonRequestBehavior.AllowGet);
+        }
 
 
         public ActionResult ReceiveBlackBox([Bind(Prefix = "ID")] int BlackBoxTransID = 0)
