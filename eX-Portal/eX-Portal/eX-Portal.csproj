@@ -1201,6 +1201,7 @@
     <Content Include="Views\Rpas\AuthorityDocuments.cshtml" />
     <Content Include="Views\BlackBox\DroneFilter.cshtml" />
     <Content Include="Views\Drone\DroneImaging.cshtml" />
+    <Content Include="Views\Rpas\FlightRegistrationDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

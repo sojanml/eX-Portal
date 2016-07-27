@@ -42,8 +42,8 @@
 @section Scripts{
   <script type="text/javascript">
       var DroneID = '@ViewBag.DroneID';
-      var DroneUploadURL = '@Url.Action("UploadFile",new { DocumentType = ViewBag.DocumentType,DroneID = DroneID})';
-     // var DroneUploadURL = '/Drone/UploadFile?DroneID=' + 131 + '&DocumentType=' + ViewBag.DocumentType;
+       var DroneUploadURL ='@Html.Raw(@Url.Action("UploadFile",new { DroneID = DroneID,DocumentType = ViewBag.DocumentType}))';
+     // var DroneUploadURL = '/Drone/UploadFile?DroneID=' + DroneID + '&DocumentType=' + ViewBag.DocumentType;
   </script>
 
   <script type="text/javascript" src="~/Scripts/drone.js"></script>

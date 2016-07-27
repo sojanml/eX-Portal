@@ -87,7 +87,9 @@ namespace eX_Portal.Controllers
 
             }
             qView nView = new qView(SQLFilter);
-            
+            if (exLogic.User.hasAccess("FLIGHTREG.DETAIL")) 
+            nView.addMenu("Details", Url.Action("FlightRegistrationDetails", "RPAS", new { ID = "_PKey" }));
+
             if (exLogic.User.hasAccess("RPAS.APPLICATION"))
             nView.addMenu("Approve/Reject", Url.Action("Application", "RPAS", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
@@ -107,6 +109,14 @@ namespace eX_Portal.Controllers
             }//if(IsAjaxRequest)
         }//public ActionResult Applications() 
 
+
+        public ActionResult FlightRegistrationDetails([Bind(Prefix = "ID")] int ApprovalID = 0)
+        {
+            if (!exLogic.User.hasAccess("FLIGHTREG.DETAIL")) return RedirectToAction("NoAccess", "Home");
+            var Approval = db.GCA_Approval.Find(ApprovalID);
+            return View(Approval);
+
+        }
         public ActionResult Application([Bind(Prefix = "ID")] int ApprovalID = 0)
         {
             if (!exLogic.User.hasAccess("RPAS.APPLICATION")) return RedirectToAction("NoAccess", "Home");
