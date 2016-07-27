@@ -41,8 +41,11 @@
 }
 @section Scripts{
   <script type="text/javascript">
-
-    var DroneUploadURL = '@Url.Action("UploadFile", new { ID = DroneID, DocumentType = ViewBag.DocumentType})';
+      var DroneID = '@ViewBag.DroneID';
+      var DroneUploadURL = '@Url.Action("UploadFile",new { DocumentType = ViewBag.DocumentType,DroneID = DroneID})';
+     // var DroneUploadURL = '/Drone/UploadFile?DroneID=' + 131 + '&DocumentType=' + ViewBag.DocumentType;
   </script>
-  <script type="text/javascript" src="~/Scripts/flight-gps-tag.js"></script>
+
+  <script type="text/javascript" src="~/Scripts/drone.js"></script>
+
 }

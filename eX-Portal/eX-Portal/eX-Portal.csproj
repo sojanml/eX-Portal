@@ -822,6 +822,7 @@
     <Content Include="Scripts\drone-authority.js" />
     <Content Include="Scripts\drone-live.js" />
     <Content Include="Scripts\drone.js" />
+    <Content Include="Scripts\DroneImaging.js" />
     <Content Include="Scripts\Flight-Authority.js" />
     <Content Include="Scripts\flight-gps-tag.js" />
     <Content Include="Scripts\FlightChart.js" />
@@ -1199,6 +1200,7 @@
     <Content Include="Views\Rpas\AuthorityApproval.cshtml" />
     <Content Include="Views\Rpas\AuthorityDocuments.cshtml" />
     <Content Include="Views\BlackBox\DroneFilter.cshtml" />
+    <Content Include="Views\Drone\DroneImaging.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

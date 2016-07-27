@@ -4,6 +4,8 @@
   int DroneID = ViewBag.DroneID;
 }
 @Html.Action("DroneDetail","Drone", new { ID = DroneID })
+<!-- Drone Images-->
+@Html.Action("DroneImaging", "Drone", new { ID = DroneID, Actions = "View" })
 
 <!-- Recent Flights-->
 @Html.Action("ByDrone", "DroneFlight", new { ID = DroneID })
@@ -35,4 +37,8 @@
     <script type="text/javascript">
 
     </script>
+<script type="text/javascript" src="~/Scripts/DroneImaging.js"></script>
   }
+@section header{
+    <link href="~/Content/black-box.css" rel="stylesheet" />
+}

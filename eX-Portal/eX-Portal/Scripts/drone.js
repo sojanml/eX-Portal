@@ -2,6 +2,10 @@
 
 $(document).ready(function () {
 
+    $(document).on('click', 'span.delete', function (e) {
+        e.preventDefault();
+        DeleteFile($(this));
+    });
   $(document).on('click', 'a.delete', function (e) {
     e.preventDefault();
     DeleteFile($(this));
@@ -52,7 +56,7 @@ function DeleteFile(Obj) {
 
 function processDeleteFile(Obj) {
   var FileName = Obj.parent().attr("data-file");
-  var URL = '/Drone/DeleteFile?file=' + FileName;
+  var URL = '/Drone/DeleteFile?DroneID='+ DroneID + '&file=' + FileName;
   var LI = Obj.closest('LI');
   $.ajax({
     url: URL,  //server script to process data

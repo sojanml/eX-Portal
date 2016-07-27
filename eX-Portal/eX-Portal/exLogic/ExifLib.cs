@@ -75,6 +75,7 @@ namespace eX_Portal.exLogic {
 
       Image thumb = image.GetThumbnailImage(Width, Height, () => false, IntPtr.Zero);      
       thumb.Save(ThumbnailImage);
+            image.Dispose();
       return ThumbnailImage;
     }
 

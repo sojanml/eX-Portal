@@ -66,8 +66,9 @@
         <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="SelectItemsForParts" />
         @Html.Action("DroneParts", "Drone", new { ID = ViewBag.DroneId })
       </div>
-    }//if(eX_Portal.exLogic.User.hasAccess("DRONE.PARTS"))
-  
+      }//if(eX_Portal.exLogic.User.hasAccess("DRONE.PARTS"))
+
+    @Html.Action("DroneImaging", "Drone", new { ID = ViewBag.DroneId ,Actions="Edit"})
 
     <div class="form-toolbar">
       <input type="submit" value="Save" />
@@ -84,9 +85,12 @@
 @section Scripts {
   @Scripts.Render("~/bundles/jqueryval")
   <script type="text/javascript">
-    var DroneUploadURL = '@Url.Action("UploadFile", new { ID = Model.Drone.DroneId, FlightID = 0, DocumentType="UAS-Registration" })';
+      var UploadDroneURL = '@Url.Action("UploadDroneFile","Drone", new { ID = ViewBag.DroneID, DocumentType="Drone Image"})';
+      var DeleteDroneURL = '@Url.Action("DeleteDroneFile", "Drone",new { ID = ViewBag.DroneID, DocumentType="Drone Image"})';
+   // var DroneUploadURL = '@Url.Action("UploadFile", new { ID = Model.Drone.DroneId, FlightID = 0, DocumentType="UAS-Registration" })';
   </script>
-  <script type="text/javascript" src="~/Scripts/drone.js"></script>
+ @*/ <script type="text/javascript" src="~/Scripts/drone.js"></script>*@
+<script type="text/javascript" src="~/Scripts/DroneImaging.js"></script>
 
   <script>
     $(document).ready(function () {

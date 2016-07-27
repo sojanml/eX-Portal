@@ -4,7 +4,7 @@
   String ActionName = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
 }
 <ul>
-  <li><a href="@Url.Action("Index", "Home")" class="disabled">Dashboard</a></li>
+  @*<li><a href="@Url.Action("Index", "Home")" class="disabled">Dashboard</a></li>
   @switch (ControllerName) {
     case "DroneCheckList":
 
@@ -25,7 +25,34 @@
     }
     break;
   }
-  <li>@ViewBag.Title</li>
+  <li>@ViewBag.Title</li>*@
+    @*//disabling breadcrumblinks*@
+
+
+    <li><a href="" class="disabled">Dashboard</a></li>
+        @switch (ControllerName) {
+          case "DroneCheckList":
+
+            var DroneID = Request["DroneID"] != null ? Request["DroneID"].ToString() : "";
+            var FlightID = Request["FlightID"] != null ? Request["FlightID"].ToString() : "";
+            if (DroneID != "") {
+              <li><a href="" class="disabled">Drone</a></li>
+              <li><a href="" class="disabled">Details</a></li>
+            }
+            if (FlightID != "") {
+              <li><a href="" class="disabled">Drone Flight</a></li>
+              <li><a href="" class="disabled">Details</a></li>
+            }
+            break;
+          default:
+            if (ActionName != "Index") {
+            <li><a href="" class="disabled">@Util.toCaption(ControllerName)</a></li>
+          }
+          break;
+        }
+        <li>@ViewBag.Title</li>
+
+
 </ul>
 @section Scripts { 
     <style>
@@ -33,6 +60,7 @@
         pointer-events: none;
         cursor: default;
         opacity: 0.6;
+
     }
     </style>
 
