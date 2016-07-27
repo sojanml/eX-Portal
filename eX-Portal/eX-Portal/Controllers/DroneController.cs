@@ -66,7 +66,7 @@ namespace eX_Portal.Controllers {
           "  D.AccountID=" + Util.getAccountID();
       }
       qView nView = new qView(SQL);
-      if(!exLogic.User.hasAccess("DRONE"))
+      if(exLogic.User.hasAccess("DRONE"))
         nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
       if(exLogic.User.hasAccess("DRONE.EDIT")) {
         nView.addMenu("Edit", Url.Action("Edit", new { ID = "_Pkey" }));
@@ -168,6 +168,7 @@ namespace eX_Portal.Controllers {
           ViewBag.DocumentType = "Commission";
           break;
       }
+            ViewBag.DroneID = DroneID;
       ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
       return View(DroneID);
     }//Decommission()
@@ -347,7 +348,10 @@ namespace eX_Portal.Controllers {
         if(DocCount > 0) {
           String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
           String FullPath = Path.Combine(UploadPath, file);
-          if(System.IO.File.Exists(FullPath)) {
+
+                    using (System.IO.File.Create(FullPath)) { }
+                    
+                    if (System.IO.File.Exists(FullPath)) {
             System.IO.File.Delete(FullPath);
             //now add the uploaded file to the database
             SQL = "DELETE FROM DroneDocuments\n" +
@@ -416,7 +420,8 @@ namespace eX_Portal.Controllers {
         if(!Directory.Exists(UploadDir))
           Directory.CreateDirectory(UploadDir);
         TheFile.SaveAs(FullName);
-        JsonText.Append("{");
+               
+                JsonText.Append("{");
         JsonText.Append(Util.Pair("status", "success", true));
         JsonText.Append(Util.Pair("DocumentTitle", Util.toSQL(DocumentTitle), true));
         JsonText.Append(Util.Pair("DocumentDesc", Util.toSQL(DocumentDesc), true));
@@ -621,8 +626,11 @@ namespace eX_Portal.Controllers {
         ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
         //PartsGroupList = Util.GetDropDowntList();
       };
+            //deleting if unwanted files exist in drone documents;
+            string SQL = " Delete from droneDocuments where droneid=0 and documenttype='Drone Image'";
+            Util.doSQL(SQL);
 
-      return View(viewModel);
+            return View(viewModel);
     }
 
     [ChildActionOnly]
@@ -715,8 +723,8 @@ String SQL = "INSERT INTO MSTR_DRONE(\n" +
           "  GETDATE()\n" +
           ");";
         int DroneId = Util.InsertSQL(SQL);
-
-        if(DroneView.SelectItemsForParts != null) {
+                MoveDroneUploadFileTo(DroneId);
+                if (DroneView.SelectItemsForParts != null) {
           for(var count = 0; count < DroneView.SelectItemsForParts.Count(); count++) {
             string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
             int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
@@ -730,6 +738,10 @@ String SQL = "INSERT INTO MSTR_DRONE(\n" +
           "  " + Qty + "\n" +
           ");";
             int ID = Util.doSQL(SQL);
+
+          
+
+
           }
 
         }
@@ -1076,5 +1088,230 @@ new { ID = DroneID, FlightID = "_Pkey" }));
     }
 
 
-  }
+        //uploading multiple images for the drone
+
+
+        public ActionResult DroneImaging([Bind(Prefix = "ID")] int DroneID = 0,string Actions="")
+        {
+            if (!exLogic.User.hasAccess("DRONE"))
+                return RedirectToAction("NoAccess", "Home");
+            ViewBag.DroneID = 0;
+            ViewBag.Actions = Actions;
+              ExponentPortalEntities Db = new ExponentPortalEntities();
+            ViewBag.DroneID = DroneID;
+           
+            List<DroneDocument> Docs = (
+              from o in Db.DroneDocuments
+              where o.DocumentType == "Drone Image" &&
+              o.DroneID == DroneID
+              select o).ToList();
+
+            return View(Docs);
+        }//Drone Imaging
+
+
+
+        [HttpPost]
+        public String UploadDroneFile([Bind(Prefix = "ID")]  int DroneID = 0, String DocumentType = "Drone Image", String CreatedOn = "")
+        {
+            if (!exLogic.User.hasAccess("DRONE"))
+                return "Access Denied";
+            DateTime FileCreatedOn = DateTime.MinValue;
+            String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+            //send information in JSON Format always
+
+            StringBuilder JsonText = new StringBuilder();
+            GPSInfo GPS = new GPSInfo();
+            Response.ContentType = "text/json";
+
+            try
+            {
+                FileCreatedOn = DateTime.ParseExact(CreatedOn, "ddd, d MMM yyyy HH:mm:ss GMT", CultureInfo.InvariantCulture);
+                string FileCreated_ON = FileCreatedOn.ToString();
+            }
+            catch { }
+
+            //when there are files in the request, save and return the file information
+            try
+            {
+                var TheFile = Request.Files[0];
+                String FileName = System.Guid.NewGuid() + "~" + TheFile.FileName.ToLower();
+                String DroneName = Util.getDroneNameByDroneID(DroneID);
+                String UploadDir = UploadPath + DroneName + "\\" + DroneID + "\\";                
+                String FileURL = FileName;
+                String FullName = UploadDir + FileName;
+                //Save the file to Disk
+                if (!Directory.Exists(UploadDir))
+                    Directory.CreateDirectory(UploadDir);
+               TheFile.SaveAs(FullName);
+                TheFile.InputStream.Close();
+                TheFile.InputStream.Dispose();
+                GC.Collect();
+
+
+                ExifLib GeoTag = new ExifLib(FullName, FullName);
+               // GPS = GeoTag.getGPS(FlightID, FileCreatedOn);
+               // GeoTag.setGPS(GPS);
+                GeoTag.setThumbnail(100);
+
+               
+
+
+
+
+
+
+                JsonText.Append("{");
+                JsonText.Append(Util.Pair("status", "success", true));
+                JsonText.Append(Util.Pair("url", "/upload/drone/" + DroneName + "/" + DroneID + "/" + FileURL, true));
+                JsonText.Append("\"GPS\":{");
+                JsonText.Append("\"Info\":\"");
+                JsonText.Append(2.00);
+                JsonText.Append("\",");
+                JsonText.Append("\"Latitude\":");
+                JsonText.Append(2.20);
+                JsonText.Append(",");
+                JsonText.Append("\"Longitude\":");
+                JsonText.Append(2.20);
+                JsonText.Append(",");
+                JsonText.Append("\"Altitude\":");
+                JsonText.Append(0);
+                JsonText.Append(",");
+                JsonText.Append(Util.Pair("CreatedDate", FileCreatedOn.ToString("dd-MMM-yyyy hh:mm"), false));
+                JsonText.Append(",");
+                JsonText.Append("\"DroneID\":");
+                JsonText.Append(DroneID);
+                JsonText.Append("},");
+
+                JsonText.Append("\"addFile\":[");
+                JsonText.Append(Util.getFileInfo(FullName, FileURL));
+                JsonText.Append("]}");
+
+                //now add the uploaded file to the database
+                String SQL = "INSERT INTO DroneDocuments(\n" +
+                  " DroneID,  DocumentType, DocumentName, UploadedDate,DocumentDate, UploadedBy\n" +
+                 
+                  ") VALUES (\n" +
+                  "  '" + DroneID + "',\n" +                
+                  "  '" + DocumentType + "',\n" +
+                  "  '" + FileURL + "',\n" +
+                  "  GETDATE(),\n" +
+                  " '" + FileCreatedOn + "'," +
+                  "  " + Util.getLoginUserID() + "\n" +
+                
+                  ")";
+                int DocumentID = Util.InsertSQL(SQL);
+
+            }
+            catch (Exception ex)
+            {
+                JsonText.Clear();
+                JsonText.Append("{");
+                JsonText.Append(Util.Pair("status", "error", true));
+                JsonText.Append(Util.Pair("message", ex.Message, false));
+                JsonText.Append("}");
+            }//catch
+            return JsonText.ToString();
+        }//UploadDroneFile
+
+        private void MoveDroneUploadFileTo(int DroneID)
+        {
+          
+
+      //  String[] Files = Request["data-file"].Split(',');
+   ExponentPortalEntities db = new ExponentPortalEntities();
+        var FileList = (
+        from t1 in db.DroneDocuments
+        where t1.DroneID ==0 &&
+     t1.DocumentType=="Drone Image"       
+        select new
+        {
+            Name=t1.DocumentName
+         
+        }).ToList();
+
+            String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+            String OldUploadDir = UploadPath + "0\\";
+            String DroneName = DroneID == 0 ? "0" : Util.getDroneName(DroneID);
+            String NewUploadDir = UploadPath + DroneName + "\\" + DroneID + "\\";
+            foreach (var file in FileList)
+            {
+                if (String.IsNullOrEmpty(file.Name.ToString()))
+                    continue;
+                String OldFullPath = OldUploadDir + file.Name.ToString();
+                String NewFullPath = NewUploadDir + file.Name.ToString();
+                String OldThumbFullPath = OldUploadDir + file.Name.Replace(".jpg", ".t.png");
+                String NewThumbFullPath = NewUploadDir + file.Name.Replace(".jpg", ".t.png");
+
+                if (System.IO.File.Exists(OldFullPath))
+                {
+                    if (!Directory.Exists(NewFullPath))
+                        Directory.CreateDirectory(NewUploadDir);
+
+                    if (!System.IO.File.Exists(NewFullPath))
+                    {
+                        System.IO.File.Move(OldFullPath, NewFullPath);
+                        System.IO.File.Move(OldThumbFullPath, NewThumbFullPath);
+                    }
+                    String SQL = "UPDATE DroneDocuments SET\n" +
+                    "  DroneID=" + DroneID + "\n" +                    
+                    "WHERE\n" +
+                    "  DocumentName='" + file.Name.ToString() + "'" +
+                    " and DocumentType='Drone Image'";
+                    Util.doSQL(SQL);
+                }//if(System.IO.File.Exists
+            }//foreach (String file in Files)
+        }//MoveUploadFileT
+
+        public String DeleteDroneFile([Bind(Prefix = "ID")] int DroneID, String file = "")
+        {
+            if (!exLogic.User.hasAccess("DRONE"))
+                return "Access Denied";
+            bool isDeleted = false;
+            StringBuilder JsonText = new StringBuilder();
+            JsonText.Append("{");
+
+                String SQL = "SELECT Count(*) FROM DroneDocuments\n" +
+                  "WHERE\n" +
+                  "  DocumentName='" + file + "' AND\n" +
+                  "  DroneID = '" + DroneID + "'\n" +
+                  " and DocumentType='Drone Image'";
+                int DocCount = Util.getDBInt(SQL);
+
+                if (DocCount > 0)
+                {
+                string DroneName = Util.getDroneNameByDroneID(DroneID);
+                    String UploadPath = Server.MapPath(Url.Content(RootUploadDir+ DroneName+"//"+ DroneID +"//"));
+                    String FullPath = Path.Combine(UploadPath, file);
+                string PngPath= Path.Combine(UploadPath, file.Replace(".jpg", ".t.png"));
+                if (System.IO.File.Exists(FullPath))
+                    {
+                        System.IO.File.Delete(FullPath);
+                    System.IO.File.Delete(PngPath);
+                    //now add the uploaded file to the database
+                    SQL = "DELETE FROM DroneDocuments\n" +
+                        "WHERE\n" +
+                        "  DocumentName='" + file + "' AND\n" +
+                        "  DroneID = '" + DroneID + "'"+
+                        " and DocumentType='Drone Image'";
+                    Util.doSQL(SQL);
+                        isDeleted = true;
+                        JsonText.Append(Util.Pair("status", "success", true));
+                        JsonText.Append(Util.Pair("message", "Deleted successfully.", false));
+                    }
+                }
+            
+            if (!isDeleted)
+            {
+                JsonText.Append(Util.Pair("status", "error", true));
+                JsonText.Append(Util.Pair("message", "Can not delete the file from server.", false));
+            }
+            JsonText.Append("}");
+
+            return JsonText.ToString();
+        }
+
+
+
+    }
 }//class/namespace

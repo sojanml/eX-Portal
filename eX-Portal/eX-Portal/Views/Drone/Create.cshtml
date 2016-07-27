@@ -96,6 +96,10 @@
     @Html.ValidationMessageFor(model => model.Drone.RegistrationAuthority)
   </div>
     *@
+
+    @Html.Action("DroneImaging", "Drone", new { ID = 0,Actions="Create" })
+
+
   <div class="form-toolbar">
     <input type="submit" value="Create" />
   </div>
@@ -115,9 +119,13 @@
 
 @Scripts.Render("~/bundles/jqueryval")
 <script type="text/javascript">
-  var DroneUploadURL = '@Url.Action("UploadFile", new { ID = 0, FlightID = 0, DocumentType="UAS-Registration" })';
+    var UploadDroneURL = '@Url.Action("UploadDroneFile","Drone", new { ID = 0, DocumentType="Drone Image"})';
+    var DeleteDroneURL = '@Url.Action("DeleteDroneFile", "Drone",new { ID = 0, DocumentType="Drone Image"})';
+  @*var DroneUploadURL = '@Url.Action("UploadFile", new { ID = 0, FlightID = 0, DocumentType="UAS-Registration" })';*@
 </script>
-<script type="text/javascript" src="~/Scripts/drone.js"></script>
+@*<script type="text/javascript" src="~/Scripts/drone.js"></script>*@
+<script type="text/javascript" src="~/Scripts/DroneImaging.js"></script>
+
 
     <script>
     $(document).ready(function () {
