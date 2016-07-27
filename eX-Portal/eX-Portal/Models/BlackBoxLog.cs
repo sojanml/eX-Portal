@@ -10,10 +10,13 @@
 namespace eX_Portal.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class usp_Portal_DroneNameList_Result
+    public partial class BlackBoxLog
     {
-        public int DroneId { get; set; }
-        public string DroneName { get; set; }
+        public int LogId { get; set; }
+        public string FileName { get; set; }
+        public Nullable<bool> IsProcessed { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
     }
 }

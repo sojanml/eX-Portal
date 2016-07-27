@@ -30,10 +30,10 @@ namespace eX_Portal.Models
         public Nullable<int> FlightID { get; set; }
         public string GPSFix { get; set; }
         public Nullable<int> YardID { get; set; }
+        public Nullable<int> ProcessingModel { get; set; }
         public Nullable<bool> IsProcessed { get; set; }
         public Nullable<int> RowNumber { get; set; }
         public Nullable<int> ColumnNumber { get; set; }
         public Nullable<int> CellID { get; set; }
-        public Nullable<int> ProcessingModel { get; set; }
     }
 }
