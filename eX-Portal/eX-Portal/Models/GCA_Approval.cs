@@ -22,7 +22,6 @@ namespace eX_Portal.Models
         public string Coordinates { get; set; }
         public System.Data.Entity.Spatial.DbGeography Polygon { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
-        public Nullable<int> CreatedBy { get; set; }
         public Nullable<int> DroneID { get; set; }
         public string ApprovalFileUrl { get; set; }
         public string EndTime { get; set; }
@@ -34,6 +33,7 @@ namespace eX_Portal.Models
         public Nullable<int> MaxAltitude { get; set; }
         public Nullable<int> MinDefault { get; set; }
         public Nullable<int> MaxDefault { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
         public Nullable<int> IsUseCamara { get; set; }
         public string MOD_ApprovalURL { get; set; }
         public string ApprovalStatus { get; set; }

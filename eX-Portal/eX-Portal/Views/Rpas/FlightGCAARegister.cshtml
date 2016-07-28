@@ -1,0 +1,325 @@
+﻿@model eX_Portal.ViewModel.GCAAFlightApproval
+
+@using eX_Portal.exLogic
+@{
+    ViewBag.Title = "GCAA  Flight Registration";
+
+}
+@using (Html.BeginForm(null, null, FormMethod.Get, new { name = "frmDroneSetup", id = "frmDroneSetup" }))
+{
+
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.GcaApproval.ApprovalID)
+    <div id="frm" class="form-horizontal">
+        <div class="error" id="error-message" style="display:none;margin-bottom:20px;"></div>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+       
+        <h2>PART 1 ­ GENERAL DETAILS </h2>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.CompanyName, "Organization Name")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.CompanyName)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.CompanyName)
+            </div>
+        </div>
+        <div class="two-column-form-group">
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.Label("GCAA Approval Rerence")
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10">
+                    @ViewData["NextSerialNo"]
+                </div>
+            </div>
+        </div>
+        <div id="newgcaapproval" class="form-group" style="visibility:visible;">
+            @Html.LabelFor(model => model.GcaApproval.ApprovalName, "Approval Reference")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.GcaApproval.ApprovalName)
+                @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalName)
+            </div>
+        </div>
+         @*<div class="form-group">
+            @Html.LabelFor(model => model.GcaApproval.ApprovalName, "Approval Reference")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.GcaApproval.ApprovalName)
+                @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalName)
+            </div>
+        </div>*@
+        <h2>1.1 ­ Name and Address of Proponent</h2>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.POC, "Point of Contact")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.POC)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.POC)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.Title, "Title")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.Title)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.Title)
+            </div>
+        </div>
+        @*NEET TO KEEP PHONE*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.Address, "Phone")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.Address)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.Address)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.GcaApproval.NotificationEmails, "Email")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.GcaApproval.NotificationEmails)
+                @Html.ValidationMessageFor(model => model.GcaApproval.NotificationEmails)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.Telephone, "Telephone")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.Telephone)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.Telephone)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.Fax, "Fax")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.Fax)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.Fax)
+            </div>
+        </div>
+        <h2>1.2 ­ Name and Address of Appropriate Authority Contact Person: </h2>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.AuthorityPOC, "Point of Contact ")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.AuthorityPOC)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.AuthorityPOC)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.AuthorityTitle, "Title")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.AuthorityTitle)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.AuthorityTitle)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.AuthorityPhone, "Phone")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.AuthorityPhone)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.AuthorityPhone)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.AuthorityEmail, "Email")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.AuthorityEmail)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.AuthorityEmail)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.AuthorityTelephoneNo, "TelephoneNo")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.AuthorityTelephoneNo)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.AuthorityTelephoneNo)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.AuthorityFaxNo, "FaxNo")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.AuthorityFaxNo)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.AuthorityFaxNo)
+            </div>
+        </div>
+        <h2>PART 2 ­ SUBMISSION DETAILS </h2>
+        <h2>2.1 ­ Type of Operation </h2>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.TypeOfOperation, "Type of Operation")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.TypeOfOperation)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.TypeOfOperation)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.GcaApproval.DroneID, "UAS or Model Aircraft")
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.GcaApproval.DroneID, DroneFlightSetup.GetDdListDrone(Convert.ToInt32(Session["AccountID"].ToString())),
+        "--Select Drone--",
+        new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GcaApproval.DroneID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <h2>2.2 ­ Area of Operation </h2>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.DescOfAreaLocation, "Description of Area of Operations")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.DescOfAreaLocation)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.DescOfAreaLocation)
+            </div>
+        </div>
+        <div id="gcacoordinates" class="form-group" style="visibility:visible;">
+            @Html.LabelFor(model => model.GcaApproval.Coordinates, "Location")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.GcaApproval.Coordinates)
+                @Html.ValidationMessageFor(model => model.GcaApproval.Coordinates)
+            </div>
+        </div>
+        <div id="polygonmap" class="form-group" style="visibility:visible;height:500px;width:600px;">
+            <div id="map_canvas" style="width: 100%; height: 100%;border:1px solid black;"></div>
+        </div>
+        <div class="two-column-form-group">
+            <div class="form-group">
+                @Html.LabelFor(model => model.GcaApproval.MinAltitude)
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.GcaApproval.MinAltitude, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.GcaApproval.MinAltitude, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.GcaApproval.MaxAltitude)
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.GcaApproval.MaxAltitude, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.GcaApproval.MaxAltitude, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.PurposeOfOperation, "Purpose of Operations")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.PurposeOfOperation)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.PurposeOfOperation)
+            </div>
+        </div>
+        <h2>2.4 ­ Date & Duration of Operation </h2>
+        <div class="two-column-form-group">
+            <div class="form-group">
+                @Html.LabelFor(model => model.GcaApproval.StartDate)
+                <div class="col-md-10">
+
+
+                    @Html.EditorFor(model => model.GcaApproval.StartDate, "{0:dd-MM-yyyy}", new { htmlAttributes = new { @class = "form-control date-picker" } })
+
+
+
+                    @Html.ValidationMessageFor(model => model.GcaApproval.StartDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.GcaApproval.EndDate)
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.GcaApproval.EndDate, "{0:dd-MM-yyyy}", new { htmlAttributes = new { @class = "form-control date-picker" } })
+                    @Html.ValidationMessageFor(model => model.GcaApproval.EndDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="two-column-form-group">
+            <div class="form-group">
+                @Html.LabelFor(model => model.GcaApproval.StartTime)
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.GcaApproval.StartTime, new { htmlAttributes = new { @class = "form-control time-picker" } })
+                    @Html.ValidationMessageFor(model => model.GcaApproval.StartTime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.GcaApproval.EndTime)
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.GcaApproval.EndTime, new { htmlAttributes = new { @class = "form-control time-picker" } })
+                    @Html.ValidationMessageFor(model => model.GcaApproval.EndTime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <h2>2.5 ­ Details of UAS/ Model aircraft involved and means of control </h2>
+    
+        <div class="form-group">
+            Will the UAS/ model aircraft carry any camera or surveillance equipment? If so, detail equipment and use.
+            <div class="editor-field">
+                @Html.CheckBoxFor(model => model.ApprovalDetails.IsCamara, new { @checked = true })
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.IsCamara)
+            </div>
+        </div>
+        <div class="form-group">
+            Has the consultation with the stakeholders been carried out in accordance with the requirements of the Appropriate Authority and in accordance with the CAAP 65 GCAA checklist? 
+            <div class="editor-field">
+                @Html.CheckBoxFor(model => model.ApprovalDetails.IsStakeholderConsultation, new { @checked = true })
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.IsStakeholderConsultation)
+            </div>
+        </div>
+        <div class="form-group">
+            What is the impact on Air Traffic Control?
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.AirtraficImpact)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.AirtraficImpact)
+            </div>
+        </div>
+
+        <h2>PART 6 ­ APPROVAL DETAILS AND CONDITIONS/COMMENTS </h2>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApprovalDetails.Comments, "Comments")
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ApprovalDetails.Comments)
+                @Html.ValidationMessageFor(model => model.ApprovalDetails.Comments)
+            </div>
+        </div>
+         <hr />
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GcaApproval.PilotUserId, "Helicopter Operator")
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.GcaApproval.PilotUserId, DroneFlightSetup.getAllUsers(Session["AccountID"]),
+         "--Select Pilot--",
+          new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GcaApproval.PilotUserId, "", new { @class = "text-danger" })
+            </div>
+            <div>
+                <input id="ispilot" value="1" name="ispilot" type="checkbox" />
+                <label for="ispilot">I am the pilot</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GcaApproval.GroundStaffUserId, "Ground Staff")
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.GcaApproval.GroundStaffUserId,
+          DroneFlightSetup.getAllUsers(Session["AccountID"]),
+          "--Select Ground Staff--",
+          new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GcaApproval.GroundStaffUserId, "", new { @class = "text-danger" })
+            </div>
+            <div>
+                <input id="isgroundstaff" name="isgroundstaff" type="checkbox" />
+                <label for="isgroundstaff">I am the ground staff</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="submitButton" type="submit" value="Save" class="btn btn-default" style="width:60px;" />
+            </div>
+        </div>
+
+    </div>
+}
+
+
+@section header{
+    <link href="~/Content/black-box.css" rel="stylesheet" />
+    <link href="~/jquery-ui/jquery-ui.css" rel="stylesheet" />
+    <link href="~/jquery-ui/jquery.ui.timepicker.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/jquery-ui/jquery-ui.js"></script>
+    <script src="~/jquery-ui/jquery.ui.timepicker.js"></script>
+    <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>
+    <script src="~/Scripts/RpasGCAAflight.js"></script>
+}
+

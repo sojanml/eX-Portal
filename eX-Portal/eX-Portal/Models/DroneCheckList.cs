@@ -18,10 +18,10 @@ namespace eX_Portal.Models
         public Nullable<int> DroneCheckListID { get; set; }
         public Nullable<int> DroneID { get; set; }
         public Nullable<int> FlightID { get; set; }
-        public Nullable<int> CreatedBy { get; set; }
-        public Nullable<System.DateTime> CreatedOn { get; set; }
         public string Comments { get; set; }
         public Nullable<bool> IsOverride { get; set; }
         public string SignedBy { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> CreatedOn { get; set; }
     }
 }

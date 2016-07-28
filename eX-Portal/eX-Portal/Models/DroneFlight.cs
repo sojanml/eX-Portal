@@ -21,7 +21,7 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<int> DroneID { get; set; }
-        public Nullable<int> BBFlightID { get; set; }
+        public Nullable<decimal> BBFlightID { get; set; }
         public Nullable<decimal> Latitude { get; set; }
         public Nullable<decimal> Longitude { get; set; }
         public string LogFrom { get; set; }
@@ -34,11 +34,11 @@ namespace eX_Portal.Models
         public string LogBattery2ID { get; set; }
         public Nullable<decimal> LogBattery2StartV { get; set; }
         public Nullable<decimal> LogBattery2EndV { get; set; }
+        public Nullable<byte> IsLogged { get; set; }
         public Nullable<System.DateTime> LogDateTime { get; set; }
         public Nullable<int> LogCreatedBy { get; set; }
         public string Descrepency { get; set; }
         public string ActionTaken { get; set; }
-        public Nullable<byte> IsLogged { get; set; }
         public Nullable<bool> IsFlightOutside { get; set; }
         public string RecordedVideoURL { get; set; }
         public Nullable<int> IsFlightSoftFence { get; set; }

@@ -278,9 +278,6 @@
     <Compile Include="Models\BlackBoxData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\BlackBoxLog.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\BlackBoxTransaction.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>

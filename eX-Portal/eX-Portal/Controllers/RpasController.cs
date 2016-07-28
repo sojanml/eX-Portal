@@ -1231,5 +1231,550 @@ namespace eX_Portal.Controllers
                 return ex.Message;
             }
         }
+
+
+        public ActionResult FlightDCAARegister([Bind(Prefix = "ID")]int ID = 0)
+
+
+        {
+            //to create gcaapproval
+            if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
+                return RedirectToAction("NoAccess", "Home");
+
+            if (Util.IsGcaApproved(ID))
+            {
+                return RedirectToAction("NoAccessApplication", "Rpas", new { ID = ID });
+            }
+            ViewData["accountid"] = Convert.ToInt32(Session["AccountID"].ToString());
+            string sSql = "select count(*) from ApproalDetail where Authority= 'DCAA'";
+            int SerialNo = Util.getDBInt(sSql)+1;
+            ViewData["NextSerialNo"] = SerialNo;
+            var viewModel = new ViewModel.DCAAFlightApproval
+            {
+                GcaApproval = db.GCA_Approval.Find(ID),
+                ApprovalDetails = db.ApproalDetails.FirstOrDefault(i => i.ApprovalID == ID)
+        };
+            return View(viewModel);
+
+        }
+
+        [HttpPost]
+        public String FlightDCAARegister(DCAAFlightApproval DCAAFlightsetupvm)
+        {
+            try
+            {
+                if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
+                    // return RedirectToAction("NoAccess", "Home");
+                    return "You do not have accesss to this page";
+                if (DCAAFlightsetupvm.GcaApproval.DroneID == null || DCAAFlightsetupvm.GcaApproval.DroneID < 1)
+
+                    return "You must select a Drone.";
+                if (DCAAFlightsetupvm.GcaApproval.PilotUserId < 1 || DCAAFlightsetupvm.GcaApproval.PilotUserId == null)
+
+                    return "You must select a pilot.";
+                if (DCAAFlightsetupvm.GcaApproval.GroundStaffUserId < 1 || DCAAFlightsetupvm.GcaApproval.GroundStaffUserId == null)
+                    //   return RedirectToAction("NoAccess", "Home");
+                    return "A Ground staff should be selected.";
+
+                DateTime todaydate = System.DateTime.Now;
+                String SQL = String.Empty;
+                String SQL1 = String.Empty;
+                var StartDate = (DCAAFlightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(-1) : (DateTime)DCAAFlightsetupvm.GcaApproval.StartDate);
+                var EndDate = (DCAAFlightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(90) : (DateTime)DCAAFlightsetupvm.GcaApproval.EndDate);
+                var MinAltitude = (DCAAFlightsetupvm.GcaApproval.MinAltitude == null ? 0 : DCAAFlightsetupvm.GcaApproval.MinAltitude);
+                var MaxAltidute = (DCAAFlightsetupvm.GcaApproval.MaxAltitude == null ? 40 : DCAAFlightsetupvm.GcaApproval.MaxAltitude);
+
+
+                int ApprovalID = DCAAFlightsetupvm.GcaApproval.ApprovalID;
+                String ApprovalName = DCAAFlightsetupvm.GcaApproval.ApprovalName;
+                String Coordinates = DCAAFlightsetupvm.GcaApproval.Coordinates;
+                if (String.IsNullOrEmpty(Coordinates))
+                    Coordinates =
+          "24.949901 55.337585," +
+          "25.218555 55.620971," +
+          "25.387706 55.414978," +
+          "25.087092 55.137084";
+                string[] Coord = Coordinates.Split(',');
+                string Poly = Coordinates + "," + Coord[0];
+
+                if (ApprovalID == 0 && String.IsNullOrEmpty(ApprovalName))
+                {
+                    //Approval is not selected or no name is specifeid
+                    //then do not update approvals
+                    SQL = String.Empty;
+                }
+                else if (!String.IsNullOrEmpty(ApprovalName) && ApprovalID == 0)
+                {
+                    //when a new name is specified for approval
+                    //save it as new approval     
+                    SQL = @"insert into GCA_Approval(
+            ApprovalName,
+            ApprovalDate,
+            StartDate,
+            EndDate,
+            Coordinates,
+            Polygon,
+            CreatedOn,
+            CreatedBy,
+            DroneID,
+            EndTime,
+            StartTime,
+            BoundaryInMeters,
+            MinAltitude,
+            MaxAltitude,
+            IsUseCamara,
+            PilotUserId,
+            GroundStaffUserId,
+            NotificationEmails
+
+          ) values(
+            '" + DCAAFlightsetupvm.GcaApproval.ApprovalName + @"',
+            GETDATE(),
+            '" + StartDate.ToString("yyyy-MM-dd") + @"',
+            '" + EndDate.ToString("yyyy-MM-dd") + @"',
+            '" + Coordinates + @"',
+            geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+            GETDATE(),
+            " + Session["UserID"] + "," +
+                        DCAAFlightsetupvm.GcaApproval.DroneID + @",
+            '" + DCAAFlightsetupvm.GcaApproval.EndTime + @"',
+            '" + DCAAFlightsetupvm.GcaApproval.StartTime + @"',
+            50,
+            " + MinAltitude + @",
+            " + MaxAltidute + @",
+            " + DCAAFlightsetupvm.GcaApproval.IsUseCamara + @",
+            " + DCAAFlightsetupvm.GcaApproval.PilotUserId + @",
+            " + DCAAFlightsetupvm.GcaApproval.GroundStaffUserId + @",
+            '" + DCAAFlightsetupvm.GcaApproval.NotificationEmails + @"'
+
+
+          )";
+                    //write insert here
+                    string ssSQL = "select max(ApprovalID) from GCA_Approval";
+                    int maxApprovalID = Util.getDBInt(ssSQL) +1;
+
+                    string sSql = "select case count(*) when 0 then 1 else count(*) end from ApproalDetail where Authority= 'DCAA'";
+                    int SerialNo = Util.getDBInt(sSql);
+
+                    SQL1 = @"insert into ApproalDetail(
+            ApprovalID,
+            Authority,
+            SerialNo,
+            CompanyName,
+            Address,
+            Fax,
+            Telephone,
+            POC,
+            TypeOfAreal,
+            AircraftType,
+            AircraftTailNo,
+            Registration,
+            CallSign,
+            DepartureAerodrome,
+            DestinationAerodrome
+          ) values(
+            '" + maxApprovalID + @"',
+            '" + "DCAA" + @"',
+            '" + SerialNo + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.CompanyName + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.Address + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.Fax + @"',
+           '" + DCAAFlightsetupvm.ApprovalDetails.Telephone + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.POC + @"',
+             '" + DCAAFlightsetupvm.ApprovalDetails.TypeOfAreal + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.AircraftType + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.AircraftTailNo + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.Registration + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.CallSign + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.DepartureAerodrome + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.DestinationAerodrome + @"'
+          )";
+
+                }
+                else
+                {
+                    //Got an approval ID 
+                    //Update the selected Approval ID
+                    
+                    SQL = @"Update 
+            [GCA_Approval] 
+          set 
+            StartDate ='" + StartDate.ToString("yyyy-MM-dd") + @"',
+            EndDate = '" + EndDate.ToString("yyyy-MM-dd") + @"',
+            Coordinates  = '" + Coordinates + @"',
+            Polygon=geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+            EndTime='" + DCAAFlightsetupvm.GcaApproval.EndTime + @"',
+            StartTime='" + DCAAFlightsetupvm.GcaApproval.StartTime + @"',
+            BoundaryInMeters=50,
+            MinAltitude = " + MinAltitude + @",
+            MaxAltitude = " + MaxAltidute + @",
+            IsUseCamara= " + DCAAFlightsetupvm.GcaApproval.IsUseCamara + @",
+            PilotUserId=" + DCAAFlightsetupvm.GcaApproval.PilotUserId + @",
+            GroundStaffUserId=" + DCAAFlightsetupvm.GcaApproval.GroundStaffUserId + @",
+            NotificationEmails='" + DCAAFlightsetupvm.GcaApproval.NotificationEmails + @"'
+          where 
+            ApprovalID=" + ApprovalID;
+
+                    SQL1 = @"Update 
+            [ApproalDetail] 
+          set 
+            CompanyName='" + DCAAFlightsetupvm.ApprovalDetails.CompanyName + @"',
+            Address='" + DCAAFlightsetupvm.ApprovalDetails.Address + @"',
+            Fax='" + DCAAFlightsetupvm.ApprovalDetails.Fax + @"',
+            Telephone='" + DCAAFlightsetupvm.ApprovalDetails.Telephone + @"',
+            POC='" + DCAAFlightsetupvm.ApprovalDetails.POC + @"',
+            TypeOfAreal='" + DCAAFlightsetupvm.ApprovalDetails.TypeOfAreal + @"',
+            AircraftType='" + DCAAFlightsetupvm.ApprovalDetails.AircraftType + @"',
+            AircraftTailNo='" + DCAAFlightsetupvm.ApprovalDetails.AircraftTailNo + @"',
+            Registration='" + DCAAFlightsetupvm.ApprovalDetails.Registration + @"',
+            CallSign='" + DCAAFlightsetupvm.ApprovalDetails.CallSign + @"',
+            DepartureAerodrome='" + DCAAFlightsetupvm.ApprovalDetails.DepartureAerodrome + @"',
+            DestinationAerodrome='" + DCAAFlightsetupvm.ApprovalDetails.DestinationAerodrome + @"'
+          where 
+            ApprovalID=" + ApprovalID;
+
+                }
+                if (!String.IsNullOrEmpty(SQL))
+                {
+                    //Execute the sql statement generated
+                    Util.doSQL(SQL);
+                }
+                if (!String.IsNullOrEmpty(SQL1))
+                {
+                    Util.doSQL(SQL1);
+                }
+                //------------ Here new code Starts
+
+
+
+
+                //------------ Here new code Ends
+
+
+                int DroneID = Util.toInt(DCAAFlightsetupvm.GcaApproval.DroneID);
+                SQL = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + DroneID;
+                int DroneSetupId = Util.getDBInt(SQL);
+                if (DroneSetupId == 0)
+                {
+                    SQL = @"INSERT INTO MSTR_Drone_Setup (
+            DroneID,
+            CreatedBy,
+            CreatedOn,
+            [ModifiedOn]
+          ) VALUES (
+            " + DroneID + @",
+            " + Session["UserID"] + @",
+            GETDATE(),
+            GETDATE()
+          )";
+                    Util.doSQL(SQL);
+                }
+               
+                SQL = @"update 
+         MSTR_Drone_Setup 
+        set 
+          PilotUserId=" + DCAAFlightsetupvm.GcaApproval.PilotUserId + @",
+          GroundStaffUserId=" + DCAAFlightsetupvm.GcaApproval.GroundStaffUserId + @",        
+          [ModifiedBy]=" + Util.getLoginUserID() + @",
+         [ModifiedOn]=GETDATE(),
+         [NotificationEmails]='" + DCAAFlightsetupvm.GcaApproval.NotificationEmails + @"'
+        where 
+         [DroneId]=" + DroneID;
+                Util.doSQL(SQL);
+                //  return RedirectToAction("Applications", "Rpas","");
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+
+
+        public ActionResult FlightGCAARegister([Bind(Prefix = "ID")]int ID = 0)
+
+
+        {
+            //to create gcaapproval
+            if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
+                return RedirectToAction("NoAccess", "Home");
+
+            if (Util.IsGcaApproved(ID))
+            {
+                return RedirectToAction("NoAccessApplication", "Rpas", new { ID = ID });
+            }
+            ViewData["accountid"] = Convert.ToInt32(Session["AccountID"].ToString());
+            string sSql = "select count(*) from ApproalDetail where Authority= 'GCAA'";
+            int SerialNo = Util.getDBInt(sSql) + 1;
+            ViewData["NextSerialNo"] = SerialNo;
+            var viewModel = new ViewModel.GCAAFlightApproval
+            {
+                GcaApproval = db.GCA_Approval.Find(ID),
+                ApprovalDetails = db.ApproalDetails.FirstOrDefault(i => i.ApprovalID == ID)
+            };
+            return View(viewModel);
+
+        }
+
+        [HttpPost]
+        public String FlightGCAARegister(GCAAFlightApproval DCAAFlightsetupvm)
+        {
+            try
+            {
+                //if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
+                //    // return RedirectToAction("NoAccess", "Home");
+                //    return "You do not have accesss to this page";
+                //if (DCAAFlightsetupvm.GcaApproval.DroneID == null || DCAAFlightsetupvm.GcaApproval.DroneID < 1)
+
+                //    return "You must select a Drone.";
+                //
+                //if (DCAAFlightsetupvm.GcaApproval.PilotUserId < 1 || DCAAFlightsetupvm.GcaApproval.PilotUserId == null)
+                //    return "You must select a pilot.";
+
+                //if (DCAAFlightsetupvm.GcaApproval.GroundStaffUserId < 1 || DCAAFlightsetupvm.GcaApproval.GroundStaffUserId == null)
+                //    //   return RedirectToAction("NoAccess", "Home");
+                //    return "A Ground staff should be selected.";
+
+                DateTime todaydate = System.DateTime.Now;
+                String SQL = String.Empty;
+                String SQL1 = String.Empty;
+                var StartDate = (DCAAFlightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(-1) : (DateTime)DCAAFlightsetupvm.GcaApproval.StartDate);
+                var EndDate = (DCAAFlightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(90) : (DateTime)DCAAFlightsetupvm.GcaApproval.EndDate);
+                var MinAltitude = (DCAAFlightsetupvm.GcaApproval.MinAltitude == null ? 0 : DCAAFlightsetupvm.GcaApproval.MinAltitude);
+                var MaxAltidute = (DCAAFlightsetupvm.GcaApproval.MaxAltitude == null ? 40 : DCAAFlightsetupvm.GcaApproval.MaxAltitude);
+
+
+                int ApprovalID = DCAAFlightsetupvm.GcaApproval.ApprovalID;
+                String ApprovalName = DCAAFlightsetupvm.GcaApproval.ApprovalName;
+                String Coordinates = DCAAFlightsetupvm.GcaApproval.Coordinates;
+                if (String.IsNullOrEmpty(Coordinates))
+                    Coordinates =
+          "24.949901 55.337585," +
+          "25.218555 55.620971," +
+          "25.387706 55.414978," +
+          "25.087092 55.137084";
+                string[] Coord = Coordinates.Split(',');
+                string Poly = Coordinates + "," + Coord[0];
+
+                if (ApprovalID == 0 && String.IsNullOrEmpty(ApprovalName))
+                {
+                    //Approval is not selected or no name is specifeid
+                    //then do not update approvals
+                    SQL = String.Empty;
+                }
+                else if (!String.IsNullOrEmpty(ApprovalName) && ApprovalID == 0)
+                {
+                    //when a new name is specified for approval
+                    //save it as new approval     
+                    SQL = @"insert into GCA_Approval(
+            ApprovalName,
+            ApprovalDate,
+            StartDate,
+            EndDate,
+            Coordinates,
+            Polygon,
+            CreatedOn,
+            CreatedBy,
+            DroneID,
+            EndTime,
+            StartTime,
+            BoundaryInMeters,
+            MinAltitude,
+            MaxAltitude,
+            IsUseCamara,
+            PilotUserId,
+            GroundStaffUserId,
+            NotificationEmails
+
+          ) values(
+            '" + DCAAFlightsetupvm.GcaApproval.ApprovalName + @"',
+            GETDATE(),
+            '" + StartDate.ToString("yyyy-MM-dd") + @"',
+            '" + EndDate.ToString("yyyy-MM-dd") + @"',
+            '" + Coordinates + @"',
+            geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+            GETDATE(),
+            " + Session["UserID"] + "," +
+                        DCAAFlightsetupvm.GcaApproval.DroneID + @",
+            '" + DCAAFlightsetupvm.GcaApproval.EndTime + @"',
+            '" + DCAAFlightsetupvm.GcaApproval.StartTime + @"',
+            50,
+            " + MinAltitude + @",
+            " + MaxAltidute + @",
+            " + (DCAAFlightsetupvm.GcaApproval.IsUseCamara==null ? 0 : DCAAFlightsetupvm.GcaApproval.IsUseCamara) + @",
+            " + (DCAAFlightsetupvm.GcaApproval.PilotUserId == null ? 0 : DCAAFlightsetupvm.GcaApproval.PilotUserId) + @",
+            " + (DCAAFlightsetupvm.GcaApproval.GroundStaffUserId == null ? 0 : DCAAFlightsetupvm.GcaApproval.GroundStaffUserId) + @",
+            '" + DCAAFlightsetupvm.GcaApproval.NotificationEmails + @"'
+
+
+          )";
+                    //write insert here
+                    string ssSQL = "select max(ApprovalID) from GCA_Approval";
+                    int maxApprovalID = Util.getDBInt(ssSQL) + 1;
+
+                    string sSql = "select case count(*) when 0 then 1 else count(*) end from ApproalDetail where Authority= 'GCAA'";
+                    int SerialNo = Util.getDBInt(sSql);
+
+                    SQL1 = @"insert into ApproalDetail(
+            ApprovalID,
+            Authority,
+            SerialNo,
+            CompanyName,
+            POC,
+            Title,
+            Address,
+            Fax,
+            Telephone,
+            AuthorityPOC,
+            AuthorityTitle,
+            AuthorityPhone,
+            AuthorityEmail,
+            AuthorityTelephoneNo,
+            AuthorityFaxNo,
+            TypeOfOperation,
+            DescOfAreaLocation,
+            PurposeOfOperation,
+            IsCamara,
+            IsCamaraDesc,
+            IsStakeholderConsultation,
+            IsStakeholderConsultationDesc,
+            AirtraficImpact,
+            Comments
+          ) values(
+            '" + maxApprovalID + @"',
+            '" + "GCAA" + @"',
+            '" + SerialNo + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.CompanyName + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.POC + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.Title + @"',
+           '" + DCAAFlightsetupvm.ApprovalDetails.Address + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.Fax + @"',
+             '" + DCAAFlightsetupvm.ApprovalDetails.Telephone + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityPOC + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityTitle + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityPhone + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityEmail + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityTelephoneNo + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityFaxNo + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.TypeOfOperation + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.DescOfAreaLocation + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.PurposeOfOperation + @"',
+            " + (DCAAFlightsetupvm.ApprovalDetails.IsCamara==true ? 1 : 0) + @",
+            '" + DCAAFlightsetupvm.ApprovalDetails.IsCamaraDesc + @"',
+            " + (DCAAFlightsetupvm.ApprovalDetails.IsStakeholderConsultation == true ? 1 : 0) + @",
+            '" + DCAAFlightsetupvm.ApprovalDetails.IsStakeholderConsultationDesc + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.AirtraficImpact + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.Comments + @"'
+          )";
+
+                }
+                else
+                {
+                    //Got an approval ID 
+                    //Update the selected Approval ID
+
+                    SQL = @"Update 
+            [GCA_Approval] 
+          set 
+            StartDate ='" + StartDate.ToString("yyyy-MM-dd") + @"',
+            EndDate = '" + EndDate.ToString("yyyy-MM-dd") + @"',
+            Coordinates  = '" + Coordinates + @"',
+            Polygon=geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+            EndTime='" + DCAAFlightsetupvm.GcaApproval.EndTime + @"',
+            StartTime='" + DCAAFlightsetupvm.GcaApproval.StartTime + @"',
+            BoundaryInMeters=50,
+            MinAltitude = " + MinAltitude + @",
+            MaxAltitude = " + MaxAltidute + @",
+            IsUseCamara= " + DCAAFlightsetupvm.GcaApproval.IsUseCamara + @",
+            PilotUserId=" + DCAAFlightsetupvm.GcaApproval.PilotUserId + @",
+            GroundStaffUserId=" + DCAAFlightsetupvm.GcaApproval.GroundStaffUserId + @",
+            NotificationEmails='" + DCAAFlightsetupvm.GcaApproval.NotificationEmails + @"'
+          where 
+            ApprovalID=" + ApprovalID;
+                    
+                    SQL1 = @"Update 
+            [ApproalDetail] 
+          set 
+            CompanyName = '" + DCAAFlightsetupvm.ApprovalDetails.CompanyName + @"',
+            POC = '" + DCAAFlightsetupvm.ApprovalDetails.POC + @"',
+            Title = '" + DCAAFlightsetupvm.ApprovalDetails.Title + @"',
+            Address = '" + DCAAFlightsetupvm.ApprovalDetails.Address + @"',
+            Fax = '" + DCAAFlightsetupvm.ApprovalDetails.Fax + @"',
+            Telephone = '" + DCAAFlightsetupvm.ApprovalDetails.Telephone + @"',
+            AuthorityPOC = '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityPOC + @"',
+            AuthorityTitle = '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityTitle + @"',
+            AuthorityPhone = '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityPhone + @"',
+            AuthorityEmail = '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityEmail + @"',
+            AuthorityTelephoneNo = '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityTelephoneNo + @"',
+            AuthorityFaxNo = '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityFaxNo + @"',
+            TypeOfOperation= '" + DCAAFlightsetupvm.ApprovalDetails.TypeOfOperation + @"',
+            DescOfAreaLocation= '" + DCAAFlightsetupvm.ApprovalDetails.DescOfAreaLocation + @"',
+            PurposeOfOperation= '" + DCAAFlightsetupvm.ApprovalDetails.PurposeOfOperation + @"',
+            IsCamara= " + (DCAAFlightsetupvm.ApprovalDetails.IsCamara == true ? 1 : 0) + @",
+            IsCamaraDesc= '" + DCAAFlightsetupvm.ApprovalDetails.IsCamaraDesc + @"',
+            IsStakeholderConsultation= " + (DCAAFlightsetupvm.ApprovalDetails.IsStakeholderConsultation == true ? 1 : 0) + @",
+            IsStakeholderConsultationDesc= '" + DCAAFlightsetupvm.ApprovalDetails.IsStakeholderConsultationDesc + @"',
+            AirtraficImpact= '" + DCAAFlightsetupvm.ApprovalDetails.AirtraficImpact + @"',
+            Comments= '" + DCAAFlightsetupvm.ApprovalDetails.Comments + @"'
+          where
+            ApprovalID = " + ApprovalID;
+
+                }
+                if (!String.IsNullOrEmpty(SQL))
+                {
+                    //Execute the sql statement generated
+                    Util.doSQL(SQL);
+                }
+                if (!String.IsNullOrEmpty(SQL1))
+                {
+                    Util.doSQL(SQL1);
+                }
+                //------------ Here new code Starts
+
+
+
+
+                //------------ Here new code Ends
+
+
+                int DroneID = Util.toInt(DCAAFlightsetupvm.GcaApproval.DroneID);
+                SQL = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + DroneID;
+                int DroneSetupId = Util.getDBInt(SQL);
+                if (DroneSetupId == 0)
+                {
+                    SQL = @"INSERT INTO MSTR_Drone_Setup (
+            DroneID,
+            CreatedBy,
+            CreatedOn,
+            [ModifiedOn]
+          ) VALUES (
+            " + DroneID + @",
+            " + Session["UserID"] + @",
+            GETDATE(),
+            GETDATE()
+          )";
+                    Util.doSQL(SQL);
+                }
+
+                SQL = @"update 
+         MSTR_Drone_Setup 
+        set 
+          PilotUserId=" + (DCAAFlightsetupvm.GcaApproval.PilotUserId == null ? 0 : DCAAFlightsetupvm.GcaApproval.PilotUserId) + @",
+          GroundStaffUserId=" + (DCAAFlightsetupvm.GcaApproval.GroundStaffUserId == null ? 0 : DCAAFlightsetupvm.GcaApproval.GroundStaffUserId) + @",        
+          [ModifiedBy]=" + Util.getLoginUserID() + @",
+         [ModifiedOn]=GETDATE(),
+         [NotificationEmails]='" + DCAAFlightsetupvm.GcaApproval.NotificationEmails + @"'
+        where 
+         [DroneId]=" + DroneID;
+                Util.doSQL(SQL);
+                //  return RedirectToAction("Applications", "Rpas","");
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }
