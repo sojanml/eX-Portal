@@ -83,5 +83,6 @@ namespace eX_Portal.Models
         public virtual DbSet<PortalAlert> PortalAlerts { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<ApproalDetail> ApproalDetails { get; set; }
+        public virtual DbSet<ApproalDetail1> ApproalDetail1 { get; set; }
     }
 }

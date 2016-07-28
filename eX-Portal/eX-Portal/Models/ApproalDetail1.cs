@@ -12,7 +12,7 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ApproalDetail
+    public partial class ApproalDetail1
     {
         public int ID { get; set; }
         public Nullable<int> ApprovalID { get; set; }

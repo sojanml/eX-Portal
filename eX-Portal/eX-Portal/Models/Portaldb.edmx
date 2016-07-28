@@ -2642,8 +2642,46 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
             <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
           </AssociationSet>
           <EntitySet Name="ApproalDetails" EntityType="Portaldb.ApproalDetail" />
+          <EntitySet Name="ApproalDetail1" EntityType="Portaldb.ApproalDetail1" />
         </EntityContainer>
         <EntityType Name="ApproalDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApprovalID" Type="Int32" />
+          <Property Name="Authority" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SerialNo" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="POC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeOfAreal" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AircraftType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AircraftTailNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Registration" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CallSign" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepartureAerodrome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DestinationAerodrome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityPOC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityTelephoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityFaxNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeOfOperation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DescOfAreaLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PurposeOfOperation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsCamara" Type="Boolean" />
+          <Property Name="IsCamaraDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsStakeholderConsultation" Type="Boolean" />
+          <Property Name="IsStakeholderConsultationDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AirtraficImpact" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Comments" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ApproalDetail1">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -3869,8 +3907,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ApproalDetails">
-            <EntityTypeMapping TypeName="Portaldb.ApproalDetail">
+          <EntitySetMapping Name="ApproalDetail1">
+            <EntityTypeMapping TypeName="Portaldb.ApproalDetail1">
               <MappingFragment StoreEntitySet="ApproalDetail">
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
                 <ScalarProperty Name="AirtraficImpact" ColumnName="AirtraficImpact" />

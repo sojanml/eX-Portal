@@ -63,7 +63,7 @@
         <EntityTypeShape EntityType="Portaldb.PortalAlert" Width="1.5" PointX="24.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Portaldb.sysdiagram" Width="1.5" PointX="24.75" PointY="15.75" IsExpanded="true" />
         <AssociationConnector Association="Portaldb.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="Portaldb.ApproalDetail" Width="1.5" PointX="23.375" PointY="24.75" />
+        <EntityTypeShape EntityType="Portaldb.ApproalDetail1" Width="1.5" PointX="23.375" PointY="24.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

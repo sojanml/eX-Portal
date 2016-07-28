@@ -1631,7 +1631,16 @@ namespace eX_Portal.Controllers
             AuthorityPhone,
             AuthorityEmail,
             AuthorityTelephoneNo,
-            AuthorityFaxNo
+            AuthorityFaxNo,
+            TypeOfOperation,
+            DescOfAreaLocation,
+            PurposeOfOperation,
+            IsCamara,
+            IsCamaraDesc,
+            IsStakeholderConsultation,
+            IsStakeholderConsultationDesc,
+            AirtraficImpact,
+            Comments
           ) values(
             '" + maxApprovalID + @"',
             '" + "GCAA" + @"',
@@ -1647,7 +1656,16 @@ namespace eX_Portal.Controllers
             '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityPhone + @"',
             '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityEmail + @"',
             '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityTelephoneNo + @"',
-            '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityFaxNo + @"'
+            '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityFaxNo + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.TypeOfOperation + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.DescOfAreaLocation + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.PurposeOfOperation + @"',
+            " + (DCAAFlightsetupvm.ApprovalDetails.IsCamara==true ? 1 : 0) + @",
+            '" + DCAAFlightsetupvm.ApprovalDetails.IsCamaraDesc + @"',
+            " + (DCAAFlightsetupvm.ApprovalDetails.IsStakeholderConsultation == true ? 1 : 0) + @",
+            '" + DCAAFlightsetupvm.ApprovalDetails.IsStakeholderConsultationDesc + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.AirtraficImpact + @"',
+            '" + DCAAFlightsetupvm.ApprovalDetails.Comments + @"'
           )";
 
                 }
@@ -1689,7 +1707,16 @@ namespace eX_Portal.Controllers
             AuthorityPhone = '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityPhone + @"',
             AuthorityEmail = '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityEmail + @"',
             AuthorityTelephoneNo = '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityTelephoneNo + @"',
-            AuthorityFaxNo = '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityFaxNo + @"'
+            AuthorityFaxNo = '" + DCAAFlightsetupvm.ApprovalDetails.AuthorityFaxNo + @"',
+            TypeOfOperation= '" + DCAAFlightsetupvm.ApprovalDetails.TypeOfOperation + @"',
+            DescOfAreaLocation= '" + DCAAFlightsetupvm.ApprovalDetails.DescOfAreaLocation + @"',
+            PurposeOfOperation= '" + DCAAFlightsetupvm.ApprovalDetails.PurposeOfOperation + @"',
+            IsCamara= " + (DCAAFlightsetupvm.ApprovalDetails.IsCamara == true ? 1 : 0) + @",
+            IsCamaraDesc= '" + DCAAFlightsetupvm.ApprovalDetails.IsCamaraDesc + @"',
+            IsStakeholderConsultation= " + (DCAAFlightsetupvm.ApprovalDetails.IsStakeholderConsultation == true ? 1 : 0) + @",
+            IsStakeholderConsultationDesc= '" + DCAAFlightsetupvm.ApprovalDetails.IsStakeholderConsultationDesc + @"',
+            AirtraficImpact= '" + DCAAFlightsetupvm.ApprovalDetails.AirtraficImpact + @"',
+            Comments= '" + DCAAFlightsetupvm.ApprovalDetails.Comments + @"'
           where
             ApprovalID = " + ApprovalID;
 
