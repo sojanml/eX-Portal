@@ -5,6 +5,43 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ExponentPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ApproalDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApprovalID" Type="int" />
+          <Property Name="Authority" Type="varchar" MaxLength="10" />
+          <Property Name="SerialNo" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="50" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="50" />
+          <Property Name="Telephone" Type="nvarchar" MaxLength="50" />
+          <Property Name="POC" Type="nvarchar" MaxLength="50" />
+          <Property Name="TypeOfAreal" Type="nvarchar" MaxLength="50" />
+          <Property Name="AircraftType" Type="nvarchar" MaxLength="50" />
+          <Property Name="AircraftTailNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Registration" Type="nvarchar" MaxLength="50" />
+          <Property Name="CallSign" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepartureAerodrome" Type="nvarchar" MaxLength="50" />
+          <Property Name="DestinationAerodrome" Type="nvarchar" MaxLength="50" />
+          <Property Name="AuthorityPOC" Type="nvarchar" MaxLength="50" />
+          <Property Name="AuthorityTitle" Type="nvarchar" MaxLength="50" />
+          <Property Name="AuthorityPhone" Type="nvarchar" MaxLength="50" />
+          <Property Name="AuthorityEmail" Type="nvarchar" MaxLength="50" />
+          <Property Name="AuthorityTelephoneNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="AuthorityFaxNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="TypeOfOperation" Type="nvarchar" MaxLength="50" />
+          <Property Name="DescOfAreaLocation" Type="nvarchar" MaxLength="50" />
+          <Property Name="PurposeOfOperation" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsCamara" Type="bit" Nullable="false" />
+          <Property Name="IsCamaraDesc" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsStakeholderConsultation" Type="bit" Nullable="false" />
+          <Property Name="IsStakeholderConsultationDesc" Type="nvarchar" MaxLength="100" />
+          <Property Name="AirtraficImpact" Type="varchar" MaxLength="200" />
+          <Property Name="Comments" Type="nvarchar" MaxLength="300" />
+        </EntityType>
         <EntityType Name="BlackBoxCost">
           <Key>
             <PropertyRef Name="CostID" />
@@ -49,6 +86,15 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="TotalFlightTime" Type="int" />
           <Property Name="FlightID" Type="int" />
           <Property Name="BBFlightID" Type="int" />
+        </EntityType>
+        <EntityType Name="BlackBoxLog">
+          <Key>
+            <PropertyRef Name="LogId" />
+          </Key>
+          <Property Name="LogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="250" />
+          <Property Name="IsProcessed" Type="bit" />
+          <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="BlackBoxTransaction">
           <Key>
@@ -144,6 +190,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="QueueMessage" Type="nvarchar(max)" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="Voltage" Type="nvarchar" MaxLength="25" />
+          <Property Name="IsLogData" Type="bit" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -1025,6 +1072,12 @@ warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primar
           <Property Name="SMSSend" Type="int" />
           <Property Name="AlertCategory" Type="nvarchar" MaxLength="25" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'TestPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="PortalAlert_User">
+          <Property Name="AlertID" Type="int" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -1206,7 +1259,9 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Parameter Name="IsAccess" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="ExponentPortalModelStoreContainer">
+          <EntitySet Name="ApproalDetail" EntityType="Self.ApproalDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxCost" EntityType="Self.BlackBoxCost" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlackBoxLog" EntityType="Self.BlackBoxLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxTransaction" EntityType="Self.BlackBoxTransaction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckList" EntityType="Self.DroneCheckList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckListItem" EntityType="Self.DroneCheckListItem" Schema="dbo" store:Type="Tables" />
@@ -1468,6 +1523,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="QueueMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="Voltage" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="IsLogData" Type="Boolean" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -1858,6 +1914,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="MSTR_Drone" EntityType="ExponentPortalModel.MSTR_Drone" />
           <EntitySet Name="BlackBoxCosts" EntityType="ExponentPortalModel.BlackBoxCost" />
           <EntitySet Name="SMSTables" EntityType="ExponentPortalModel.SMSTable" />
+          <EntitySet Name="BlackBoxLogs" EntityType="ExponentPortalModel.BlackBoxLog" />
+          <EntitySet Name="ApproalDetails" EntityType="ExponentPortalModel.ApproalDetail" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2741,6 +2799,52 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CellNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
+        <EntityType Name="BlackBoxLog">
+          <Key>
+            <PropertyRef Name="LogId" />
+          </Key>
+          <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="IsProcessed" Type="Boolean" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ApproalDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApprovalID" Type="Int32" />
+          <Property Name="Authority" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SerialNo" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="POC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeOfAreal" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AircraftType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AircraftTailNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Registration" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CallSign" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepartureAerodrome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DestinationAerodrome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityPOC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityTelephoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorityFaxNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeOfOperation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DescOfAreaLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PurposeOfOperation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsCamara" Type="Boolean" Nullable="false" />
+          <Property Name="IsCamaraDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsStakeholderConsultation" Type="Boolean" Nullable="false" />
+          <Property Name="IsStakeholderConsultationDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AirtraficImpact" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Comments" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2750,6 +2854,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="DroneDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneData">
               <MappingFragment StoreEntitySet="DroneData">
+                <ScalarProperty Name="IsLogData" ColumnName="IsLogData" />
                 <ScalarProperty Name="Voltage" ColumnName="Voltage" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="QueueMessage" ColumnName="QueueMessage" />
@@ -3970,6 +4075,54 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
               <MappingFragment StoreEntitySet="SMSTable">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlackBoxLogs">
+            <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxLog">
+              <MappingFragment StoreEntitySet="BlackBoxLog">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="LogId" ColumnName="LogId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApproalDetails">
+            <EntityTypeMapping TypeName="ExponentPortalModel.ApproalDetail">
+              <MappingFragment StoreEntitySet="ApproalDetail">
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="AirtraficImpact" ColumnName="AirtraficImpact" />
+                <ScalarProperty Name="IsStakeholderConsultationDesc" ColumnName="IsStakeholderConsultationDesc" />
+                <ScalarProperty Name="IsStakeholderConsultation" ColumnName="IsStakeholderConsultation" />
+                <ScalarProperty Name="IsCamaraDesc" ColumnName="IsCamaraDesc" />
+                <ScalarProperty Name="IsCamara" ColumnName="IsCamara" />
+                <ScalarProperty Name="PurposeOfOperation" ColumnName="PurposeOfOperation" />
+                <ScalarProperty Name="DescOfAreaLocation" ColumnName="DescOfAreaLocation" />
+                <ScalarProperty Name="TypeOfOperation" ColumnName="TypeOfOperation" />
+                <ScalarProperty Name="AuthorityFaxNo" ColumnName="AuthorityFaxNo" />
+                <ScalarProperty Name="AuthorityTelephoneNo" ColumnName="AuthorityTelephoneNo" />
+                <ScalarProperty Name="AuthorityEmail" ColumnName="AuthorityEmail" />
+                <ScalarProperty Name="AuthorityPhone" ColumnName="AuthorityPhone" />
+                <ScalarProperty Name="AuthorityTitle" ColumnName="AuthorityTitle" />
+                <ScalarProperty Name="AuthorityPOC" ColumnName="AuthorityPOC" />
+                <ScalarProperty Name="DestinationAerodrome" ColumnName="DestinationAerodrome" />
+                <ScalarProperty Name="DepartureAerodrome" ColumnName="DepartureAerodrome" />
+                <ScalarProperty Name="CallSign" ColumnName="CallSign" />
+                <ScalarProperty Name="Registration" ColumnName="Registration" />
+                <ScalarProperty Name="AircraftTailNo" ColumnName="AircraftTailNo" />
+                <ScalarProperty Name="AircraftType" ColumnName="AircraftType" />
+                <ScalarProperty Name="TypeOfAreal" ColumnName="TypeOfAreal" />
+                <ScalarProperty Name="POC" ColumnName="POC" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="SerialNo" ColumnName="SerialNo" />
+                <ScalarProperty Name="Authority" ColumnName="Authority" />
+                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

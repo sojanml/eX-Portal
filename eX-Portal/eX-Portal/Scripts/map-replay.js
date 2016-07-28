@@ -377,10 +377,50 @@ function drawMarkerAtIndex(Opacity) {
 
 
 function drawPolyLineAtIndex(Polygon) {
-  var loc = _LocationPoints[_LocationIndex];
-  var myLatLng = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
-  var Path = Polygon.getPath();
-  Path.push(myLatLng);
+    var loc = _LocationPoints[_LocationIndex];
+    var myLatLng = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
+    var Path = Polygon.getPath();
+    
+    if (_LocationIndex > 0)
+    {
+        var FirstLat = _LocationPoints[_LocationIndex - 1];
+        var SecondLat=_LocationPoints[_LocationIndex ];
+        var seconds = (SecondLat.ReadTimeObject.getTime() - FirstLat.ReadTimeObject.getTime()) / 1000;
+        if(seconds>5)
+        {
+        var firstlatlng = new google.maps.LatLng(FirstLat['Latitude'], FirstLat['Longitude']);
+        var secondlatlng = new google.maps.LatLng(SecondLat['Latitude'], SecondLat['Longitude']);
+        var lineSymbol = {
+            path: 'M 0,-1 0,1',
+            strokeOpacity: 1,
+            scale: 4
+        };
+        var errpolyOptions = {
+        
+            strokeColor: "red",
+            strokeOpacity: 0.4,
+            strokeWeight: 1,
+            icons: [{
+                icon: lineSymbol,
+                offset: '0',
+                repeat: '20px'
+            }]
+
+        }
+        var  errorpoly = new google.maps.Polyline(errpolyOptions);
+        errorpoly.setMap(map);
+        var errorpath = errorpoly.getPath();
+        errorpath.push(firstlatlng);
+        errorpath.push(secondlatlng);
+    }
+    
+        Path.push(myLatLng);
+   }else
+    {
+        Path.push(myLatLng);
+    }
+ 
+ 
 }
 
 function drawLineChart(isReset) {

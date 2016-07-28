@@ -6,10 +6,10 @@ $(document).ready(function () {
         e.preventDefault();
         DeleteFile($(this));
     });
-  $(document).on('click', 'a.delete', function (e) {
-    e.preventDefault();
-    DeleteFile($(this));
-  });
+  //$(document).on('click', 'a.delete', function (e) {
+  //  e.preventDefault();
+  //  DeleteFile($(this));
+  //});
 
   $(':file').change(startUpload);
 
@@ -55,7 +55,8 @@ function DeleteFile(Obj) {
 }
 
 function processDeleteFile(Obj) {
-  var FileName = Obj.parent().attr("data-file");
+    var FileName = Obj.parent().attr("data-file");
+    
   var URL = '/Drone/DeleteFile?DroneID='+ DroneID + '&file=' + FileName;
   var LI = Obj.closest('LI');
   $.ajax({

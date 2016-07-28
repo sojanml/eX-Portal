@@ -40,5 +40,6 @@ namespace eX_Portal.Models
         public string QueueMessage { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string Voltage { get; set; }
+        public Nullable<bool> IsLogData { get; set; }
     }
 }
