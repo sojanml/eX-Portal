@@ -10,18 +10,13 @@
 namespace eX_Portal.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class DroneCheckList
+    public partial class sp_helpdiagrams_Result
     {
+        public string Database { get; set; }
+        public string Name { get; set; }
         public int ID { get; set; }
-        public Nullable<int> DroneCheckListID { get; set; }
-        public Nullable<int> DroneID { get; set; }
-        public Nullable<int> FlightID { get; set; }
-        public Nullable<int> CreatedBy { get; set; }
-        public Nullable<System.DateTime> CreatedOn { get; set; }
-        public string Comments { get; set; }
-        public Nullable<bool> IsOverride { get; set; }
-        public string SignedBy { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }

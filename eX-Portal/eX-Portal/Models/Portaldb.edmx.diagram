@@ -54,8 +54,8 @@
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone" Width="1.5" PointX="23.375" PointY="0.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxCost" Width="1.5" PointX="22.375" PointY="15.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.SMSTable" Width="1.5" PointX="0.75" PointY="23.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxLog" Width="1.5" PointX="23.375" PointY="12.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.ApproalDetail" Width="1.5" PointX="23.375" PointY="19.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxLog" Width="1.5" PointX="23.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1914,8 +1914,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="MSTR_Drone" EntityType="ExponentPortalModel.MSTR_Drone" />
           <EntitySet Name="BlackBoxCosts" EntityType="ExponentPortalModel.BlackBoxCost" />
           <EntitySet Name="SMSTables" EntityType="ExponentPortalModel.SMSTable" />
-          <EntitySet Name="BlackBoxLogs" EntityType="ExponentPortalModel.BlackBoxLog" />
           <EntitySet Name="ApproalDetails" EntityType="ExponentPortalModel.ApproalDetail" />
+          <EntitySet Name="BlackBoxLogs" EntityType="ExponentPortalModel.BlackBoxLog" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2799,15 +2799,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CellNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
-        <EntityType Name="BlackBoxLog">
-          <Key>
-            <PropertyRef Name="LogId" />
-          </Key>
-          <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FileName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="IsProcessed" Type="Boolean" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="ApproalDetail">
           <Key>
             <PropertyRef Name="ID" />
@@ -2844,6 +2835,15 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="IsStakeholderConsultationDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="AirtraficImpact" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Comments" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BlackBoxLog">
+          <Key>
+            <PropertyRef Name="LogId" />
+          </Key>
+          <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="IsProcessed" Type="Boolean" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4078,16 +4078,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BlackBoxLogs">
-            <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxLog">
-              <MappingFragment StoreEntitySet="BlackBoxLog">
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
-                <ScalarProperty Name="FileName" ColumnName="FileName" />
-                <ScalarProperty Name="LogId" ColumnName="LogId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ApproalDetails">
             <EntityTypeMapping TypeName="ExponentPortalModel.ApproalDetail">
               <MappingFragment StoreEntitySet="ApproalDetail">
@@ -4123,6 +4113,16 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="Authority" ColumnName="Authority" />
                 <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlackBoxLogs">
+            <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxLog">
+              <MappingFragment StoreEntitySet="BlackBoxLog">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="LogId" ColumnName="LogId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

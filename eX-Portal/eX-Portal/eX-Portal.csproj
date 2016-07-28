@@ -278,6 +278,9 @@
     <Compile Include="Models\BlackBoxData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BlackBoxLog.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\BlackBoxTransaction.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -510,11 +513,13 @@
     <Compile Include="ViewModel\BlackBoxViewModel.cs" />
     <Compile Include="ViewModel\ChartAlertViewModel.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
+    <Compile Include="ViewModel\DCAAFlightApproval.cs" />
     <Compile Include="ViewModel\DroneServiceViewModel.cs" />
     <Compile Include="ViewModel\DroneView.cs" />
     <Compile Include="ViewModel\FlightSetupViewModel.cs" />
     <Compile Include="ViewModel\FlightViewModel.cs" />
     <Compile Include="ViewModel\Forcast.cs" />
+    <Compile Include="ViewModel\GCAAFlightApproval.cs" />
     <Compile Include="ViewModel\GeoTagReport.cs" />
     <Compile Include="ViewModel\ListViewModel.cs" />
     <Compile Include="ViewModel\MenuModel.cs" />

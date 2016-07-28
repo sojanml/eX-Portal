@@ -34,10 +34,10 @@ namespace eX_Portal.Models
         public string Address2 { get; set; }
         public string Address3 { get; set; }
         public Nullable<int> CountryCode { get; set; }
+        public string BrandLogo { get; set; }
+        public string BrandColor { get; set; }
         public string ContactName { get; set; }
         public string ContactTitle { get; set; }
-        public string BrandColor { get; set; }
-        public string BrandLogo { get; set; }
         public Nullable<int> PilotProfileID { get; set; }
     }
 }

@@ -26,7 +26,6 @@ namespace eX_Portal.Models
         public Nullable<int> LastModifiedBy { get; set; }
         public Nullable<int> ApprovedBy { get; set; }
         public Nullable<int> UserProfileId { get; set; }
-        public Nullable<int> UserAccountId { get; set; }
         public string Remarks { get; set; }
         public string MobileNo { get; set; }
         public string OfficeNo { get; set; }
@@ -39,9 +38,10 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> ApprovedOn { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public string PasswordSalt { get; set; }
-        public string Dashboard { get; set; }
         public Nullable<int> AccountId { get; set; }
         public Nullable<bool> IsPilot { get; set; }
+        public Nullable<int> UserAccountId { get; set; }
+        public string Dashboard { get; set; }
         public string GeneratedPassword { get; set; }
         public string RPASPermitNo { get; set; }
         public string PermitCategory { get; set; }
