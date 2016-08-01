@@ -5,6 +5,8 @@ var LatestLine = null;
 var OldLine = null;
 var playerInstance = null;
 var thePlayTimer = null;
+var _IsGeoTagShown = false;
+var _GeoTagLayer = null;
 
 var _BlackBoxStartAt = null;
 var _ReplayTimeAt = null;
@@ -12,6 +14,7 @@ var _VideoStartTime = new Date(1970, 0, 0, 24, 0, 0);
 var _IsDrawInitilized = false;
 var _OtherFlights = {};
 var _FlightOra = null
+var ReplayInterval = 1000;
 
 var DistanceOptions = {
   Radius: 50,
@@ -36,7 +39,103 @@ $(document).ready(function () {
       OldLine.setMap(null);
     }
   })
+
+  $('#ReplaySpeed').on("change", function(e) {
+    ReplayInterval = parseInt($(this).val(), 0);
+    startReplayTimer();
+  });
+
+  $('#btnGeoTag').on("click", function (e) {
+    ShowHideGeoTag($(this));
+  });
 });
+
+
+function ShowHideGeoTag(btn) {
+  if (btn.length) btn.val("Loading...");
+
+  if (_IsGeoTagShown) {
+    _GeoTagLayer.setValues({ map: null });
+    _IsGeoTagShown = false;
+    if (btn.length) btn.val("Show Geo Tag");
+    return;
+  }
+
+  if (_GeoTagLayer) {
+    _GeoTagLayer.setValues({ map: map });
+    _IsGeoTagShown = true;
+    if (btn.length) btn.val("Hide Geo Tag");
+    return;
+  }
+
+  $.ajax({
+    type: "GET",
+    url: '/Map/GeoTag/' + FlightID,
+    contentType: "application/json;charset=utf-8",
+    dataType: "json",
+    async: true,
+    success: function (GeoTagData) {
+      _IsGeoTagShown = true;
+      _GeoTagLayer = new MyOverlay({ map: map }, GeoTagData);
+      if (btn.length) btn.val("Hide Geo Tag");
+    },
+    failure: function (msg) {
+      alert('Geo tag load error' + msg);
+    }
+  });
+
+
+}
+
+
+function MyOverlay(options, GeoTagData) {
+  this.setValues(options);
+  this.markerLayer = $('<div />').addClass('overlay');
+  this.GeoTagData = GeoTagData;
+};
+MyOverlay.prototype = new google.maps.OverlayView;
+
+MyOverlay.prototype.onAdd = function () {
+  var $pane = $(this.getPanes().overlayImage); // Pane 3  
+  $pane.append(this.markerLayer);
+};
+
+MyOverlay.prototype.onRemove = function () {
+  this.markerLayer.remove();
+};
+
+MyOverlay.prototype.draw = function () {
+  var projection = this.getProjection();
+  var zoom = this.getMap().getZoom();
+  var fragment = document.createDocumentFragment();
+
+
+  this.markerLayer.empty(); // Empty any previous rendered markers  
+
+  for (var i = 0; i < this.GeoTagData.length; i++) {
+    // Determine a random location from the bounds set previously  
+    var IconGeoPos = new google.maps.LatLng(
+            this.GeoTagData[i].Latitude,
+            this.GeoTagData[i].Longitude
+    );
+
+    var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
+    var $point = $(
+        '<div class="map-point" id="p' + i + '" title="' + i + '" '
+      + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
+      + '<span class="icon GeoTagIcon">&#xf03e;</span>'
+      + '<span class="icon GeoTagPoint">&#xf0d7;</span>'
+      + '</div>'
+    );
+
+    // Append the HTML to the fragment in memory  
+    fragment.appendChild($point.get(0));
+  }
+
+  // Now append the entire fragment from memory onto the DOM  
+  this.markerLayer.append(fragment);
+};
+
 
 //run the replay of map;
 function Replay() {
@@ -60,7 +159,6 @@ function Replay() {
   _LocationIndex = -1;
   _IsLiveMode = false;
   startReplayTimer();
-
 
 }
 
@@ -114,9 +212,7 @@ function setDrawIntilize() {
     map.setCenter(myLatLng);
     map.setZoom(20);
     drawLocationPoints();
-
     _IsDrawInitilized = true;
-
   }
 }
 
@@ -562,6 +658,6 @@ function startReplayTimer() {
     _ReplayTimeAt.setSeconds(_BlackBoxStartAt.getSeconds() + _ElapsedTime);
     setMapInfo();
     drawLocationPointsTimer();
-  }, 1000);
+  }, ReplayInterval);
 }
 

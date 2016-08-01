@@ -8,6 +8,7 @@ using eX_Portal.exLogic;
 using System.Data;
 using System.Data.Entity;
 using System.Text;
+using eX_Portal.ViewModel;
 
 namespace eX_Portal.Controllers {
   public class MapController : Controller {
@@ -45,9 +46,32 @@ namespace eX_Portal.Controllers {
         ViewBag.PlayerURL = String.Empty;
         ViewBag.VideoStartAt = String.Empty;
       }
-      return View();
+      return View(thisDrone);
     }
 
+    [HttpGet]
+    public JsonResult GeoTag([Bind(Prefix = "ID")]  int FlightID) {
+      if(!exLogic.User.hasAccess("FLIGHT.MAP"))
+        return Json(null, JsonRequestBehavior.AllowGet);
+      ExponentPortalEntities db = new ExponentPortalEntities();
+      var Records = (
+        from n in db.DroneDocuments
+        where n.DocumentType == "Geo Tag" &&
+        n.FlightID == FlightID
+        select new GeoTagReport {
+          ID = n.ID,
+          DocumentName = n.DocumentName,
+          FlightID = FlightID,
+          Altitude = n.Altitude,
+          DroneName = null,
+          Latitude = n.Latitude,
+          Longitude = n.Longitude,
+          UpLoadedDate = n.UploadedDate
+        }
+        ).ToList();
+
+      return Json(Records, JsonRequestBehavior.AllowGet);
+    }
     public String RFID([Bind(Prefix = "ID")]String RFID = "") {
       String SQL = @"SELECT 
         [VIN]
