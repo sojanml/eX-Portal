@@ -1,4 +1,5 @@
-﻿@{
+﻿@model eX_Portal.exLogic.Drones
+@{
   //ViewBag.Title = "Flight Data (Replay)";
   Layout = "~/Views/Shared/_exPortal.cshtml";
 
@@ -7,6 +8,7 @@
   if (!String.IsNullOrWhiteSpace(sBuffer)) {
     Double.TryParse(sBuffer, out Buffer);
   }
+  int FlightID = ViewBag.FlightID;
 }
 @Html.Action("DroneFlightDetail", "DroneFlight", new { ID = ViewBag.FlightID })
 
@@ -21,6 +23,7 @@
       </tr>
     </table>
 </div>
+  
 
   <div class="col-4 item2">
     <table cellpadding="0" cellspacing="0">
@@ -121,9 +124,22 @@
   <label for="chkShowFullPath">Show Full Path</label>
 </td>
   <td style="width:100%;"></td>
-  @if(!ViewBag.IsLive) {
-  <td><input class="button" id="clickReplay" style="display:none" type="button" value="Replay" onclick="Replay();" /></td>
+  @if(Model.getGeoTagCount(FlightID) > 0) {
+    <td><input class="button" style="margin-left:20px;"  id="btnGeoTag" type="button" value="Geo Tag" /></td>
   }
+  @if(!ViewBag.IsLive) {
+    <td><input class="button" id="clickReplay" style="margin-left:20px; display:none" type="button" value="Replay" onclick="Replay();" /></td>
+    <td>
+    <select id="ReplaySpeed" class="button"  name="ReplaySpeed">
+      <option value="1500">Very Slow</option>
+      <option value="1200">Slow</option>
+      <option selected value="1000">Normal</option>
+      <option value="500">Fast</option>
+      <option value="200">Very Fast</option>
+    </select>
+  </td>
+  }
+
 </tr>
 
 </table>

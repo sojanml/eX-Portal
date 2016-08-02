@@ -1237,3 +1237,34 @@ div.hr {
     cursor: default;
     opacity: 0.6;
 }
+
+.map-point {
+  position:absolute;
+  width:22px;
+  height:22px;
+  cursor:pointer;
+  border:0px red solid;
+  text-align:center;
+  margin-top:-22px;
+  margin-left:-11px;
+
+}
+.map-point span {
+  display:block;
+  position:absolute;
+  color:gold;
+  text-shadow:1px 1px 1px black;
+}
+.map-point:hover span {
+  color:white;
+}
+.map-point span.GeoTagIcon {
+  font-size:16px;
+  left:3px;
+  top:0px;
+}
+.map-point span.GeoTagPoint {
+  font-size:16px;
+  top:10px;
+  left:8px;
+}
