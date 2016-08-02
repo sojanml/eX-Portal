@@ -1,0 +1,26 @@
+﻿
+@{
+   
+    Layout = "~/Views/Shared/_eXPortal.cshtml";
+}
+
+
+
+
+<div id="container" style="width: 600px; height: 500px; margin: 0 auto"></div>
+
+<script type="text/javascript">
+
+    var PilotDataURL = '@Url.Action("getPilotData", "Test")';
+  
+</script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script type="text/javascript" src="~/Scripts/testchart.js"></script>
+
+@{
+//Html.AddJavaScript("https://code.highcharts.com/highcharts.js");
+//Html.AddJavaScript("https://code.highcharts.com/modules/exporting.js");
+
+}

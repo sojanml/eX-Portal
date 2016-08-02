@@ -264,6 +264,71 @@ namespace eX_Portal.exLogic {
             //return the list objects
         }
 
+        public static IList<ChartViewModel> getRecentFlightChartData()
+        {
+
+            IList<ChartViewModel> ChartList = new List<ChartViewModel>();
+
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+
+
+                    cmd.CommandText = "usp_Portal_GetFlightChartData";
+                    DbParameter Param1 = cmd.CreateParameter();
+                    Param1.ParameterName = "@AccountID";
+                    Param1.Value = Util.getAccountID();
+                    DbParameter Param2 = cmd.CreateParameter();
+                    Param2.ParameterName = "@IsAccess";
+                    if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                    {
+                        Param2.Value = 1;
+                    }
+                    else
+                    {
+                        Param2.Value = 0;
+                    }
+                    cmd.Parameters.Add(Param1);
+                    cmd.Parameters.Add(Param2);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+
+                            ChartViewModel dd = new ChartViewModel();
+                            dd.DroneName = reader["DroneName"].ToString();
+                            dd.ShortName = dd.DroneName.Split('-').Last();
+                            dd.AccountID = Util.toInt(reader["AccountID"].ToString());
+                            
+                            dd.TotalFightTime = Util.toInt(reader["TotalFlightHours"].ToString());
+                            dd.TotalFightTime = Math.Round((dd.TotalFightTime / 60), 2);
+                            dd.CurrentFlightTime = Util.toInt(reader["LastMonthHours"].ToString());
+                            dd.CurrentFlightTime = Math.Round((dd.CurrentFlightTime / 60), 2);
+                            dd.LastFlightTime = Util.toInt(reader["LastFlightHours"].ToString());
+                            dd.LastFlightTime = Math.Round((dd.LastFlightTime / 60), 2);
+                            ChartList.Add(dd);
+
+                        }
+                    }
+
+                    ctx.Database.Connection.Close();
+
+
+                }
+
+
+            }
+
+
+
+            return ChartList;
+        }
+            //return the list objects
+
+
         public static IList<ChartAlertViewModel> getAlertData()
         {
 

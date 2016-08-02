@@ -244,6 +244,7 @@
     <Compile Include="Controllers\RpasUserController.cs" />
     <Compile Include="Controllers\S3UploadController.cs" />
     <Compile Include="Controllers\SummaryController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="exLogic\Ajith.Util.cs" />
     <Compile Include="exLogic\BlackBox.cs" />
@@ -525,6 +526,7 @@
     <Compile Include="ViewModel\MenuModel.cs" />
     <Compile Include="ViewModel\S3Upload.cs" />
     <Compile Include="ViewModel\Summary.cs" />
+    <Compile Include="ViewModel\TestViewModel.cs" />
     <Compile Include="ViewModel\UserLogin.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="ViewModel\WeatherViewModel.cs" />
@@ -857,6 +859,7 @@
     <Content Include="Scripts\map.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\PayLoadMap.js" />
+    <Content Include="Scripts\RecentChart.js" />
     <Content Include="Scripts\Reports.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -865,6 +868,7 @@
     <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
+    <Content Include="Scripts\testchart.js" />
     <Content Include="Scripts\UAScreation.js" />
     <Content Include="Scripts\user.js" />
     <None Include="Properties\PublishProfiles\exportal.pubxml" />
@@ -1210,6 +1214,8 @@
     <Content Include="Views\BlackBox\DroneFilter.cshtml" />
     <Content Include="Views\Drone\DroneImaging.cshtml" />
     <Content Include="Views\Rpas\FlightRegistrationDetails.cshtml" />
+    <Content Include="Views\Test\DispChart.cshtml" />
+    <Content Include="Views\Test\DispRecentChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

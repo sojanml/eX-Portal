@@ -6,6 +6,8 @@ using System.Web;
 namespace eX_Portal.ViewModel {
   public class ChartViewModel {
     public string DroneName { set; get; }
+    public string ShortName { set; get; }
+    public int AccountID { set; get; }
     public double TotalFightTime { set; get; }
     public double CurrentFlightTime { set; get; }
         public string PilotName { set; get; }
@@ -13,5 +15,13 @@ namespace eX_Portal.ViewModel {
         public double PilotLastFlightHrs { set; get; }
         public double PilotCurrentMonthHrs { set; get; }
         public double LastFlightTime { set; get; }
+
+
+        public double LastMultiDashHrs { set; get; }
+        public double LastFixedwingHrs { set; get; }
+        public double LastMonthMultiDashHrs { set; get; }
+        public double LastMonthFixedwingHrs { set; get; }
+        public double TotalMultiDashHrs { set; get; }
+        public double TotalFixedWingHrs { set; get; }
     }
 }
