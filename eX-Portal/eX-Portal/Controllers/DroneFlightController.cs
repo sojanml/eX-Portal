@@ -699,13 +699,8 @@ String SQL = @"UPDATE [DroneFlight] SET
       return Util.jsonStat("OK");
     }
 
-        //public FileResult Download([Bind(Prefix = "ID")]int id = 0)
-        //{
-        //    int chkid = id;
-        //    return File("~/Customer1.png", System.Net.Mime.MediaTypeNames.Application.Octet);
-        //}
 
-        public ActionResult FlightDataVideo(int ID = 0) {
+      public ActionResult FlightDataVideo(int ID = 0) {
       //to get the url of the video
       Drones thisDrone = new Drones();
       string sql = "select VideoURL from DroneFlightVideo where videoId=" + ID;
