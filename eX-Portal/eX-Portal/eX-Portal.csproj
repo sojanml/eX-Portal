@@ -859,6 +859,7 @@
     <Content Include="Scripts\map.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\PayLoadMap.js" />
+    <Content Include="Scripts\PilotLogChart.js" />
     <Content Include="Scripts\RecentChart.js" />
     <Content Include="Scripts\Reports.js" />
     <Content Include="Scripts\respond.js" />
@@ -868,7 +869,6 @@
     <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
-    <Content Include="Scripts\testchart.js" />
     <Content Include="Scripts\UAScreation.js" />
     <Content Include="Scripts\user.js" />
     <None Include="Properties\PublishProfiles\exportal.pubxml" />
@@ -1216,6 +1216,8 @@
     <Content Include="Views\Rpas\FlightRegistrationDetails.cshtml" />
     <Content Include="Views\Test\DispChart.cshtml" />
     <Content Include="Views\Test\DispRecentChart.cshtml" />
+    <Content Include="Views\Drone\LastFlight.cshtml" />
+    <Content Include="Views\Drone\LastMonthFlight.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

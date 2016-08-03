@@ -105,10 +105,58 @@ namespace eX_Portal.Controllers {
             }
         }
 
+        //new chart for flights
+
+
+        [System.Web.Mvc.HttpGet]
+        public JsonResult getFlightData()
+        {
+            try
+            {
+                IList<ChartViewModel> ChartList = Util.getRecentFlightChartData();
+                return Json(ChartList, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                if (DebugOption == "True")
+                {
+                    throw ex;
+                }
+                else
+                    return null;
+
+            }
+        }
 
 
 
-    [System.Web.Mvc.HttpGet]
+        //new chart for Pilot
+
+
+
+
+        [System.Web.Mvc.HttpGet]
+        public JsonResult getPilotData()
+        {
+            try
+            {
+                IList<ChartViewModel> ChartList = Util.getCurrentPilotData(); 
+                return Json(ChartList, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                if (DebugOption == "True")
+                {
+                    throw ex;
+                }
+                else
+                    return null;
+
+            }
+        }
+
+//new chart 
+        [System.Web.Mvc.HttpGet]
     public JsonResult getAlertData() {
             try
             {

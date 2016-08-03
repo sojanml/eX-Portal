@@ -98,6 +98,76 @@ namespace eX_Portal.exLogic {
             }
             return FlightID;
         }
+        //for new chart pilot data
+        public static IList<ChartViewModel> getCurrentPilotData()
+        {
+            IList<ChartViewModel> ChartList = new List<ChartViewModel>();
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+
+                    cmd.CommandText = "usp_Portal_GetPilotData";
+                    DbParameter Param1 = cmd.CreateParameter();
+                    Param1.ParameterName = "@AccountID";
+                    Param1.Value = Util.getAccountID();
+                    DbParameter Param2 = cmd.CreateParameter();
+                    Param2.ParameterName = "@IsAccess";
+
+                    if (exLogic.User.hasAccess("PILOT"))
+                    {
+                        Param2.Value = 0;
+                    }
+                    else
+                    {
+                        if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                        {
+
+                            Param2.Value = 1;
+                        }
+                        else
+                        {
+                            Param2.Value = 0;
+                        }
+                    }
+                    cmd.Parameters.Add(Param1);
+                    cmd.Parameters.Add(Param2);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ChartViewModel dd = new ChartViewModel();
+                            dd.PilotName = reader["FirstName"].ToString();
+                            dd.UserID = Util.toInt( reader["UserID"].ToString());
+                            dd.TotalMultiDashHrs = Util.toInt(reader["TotalMultiDashHrs"].ToString());
+                            dd.TotalFixedWingHrs = Util.toInt(reader["TotalFixedWingHrs"].ToString());
+                            dd.LastMultiDashHrs = Util.toInt(reader["LastMultiDashHrs"].ToString());
+                            dd.LastFixedwingHrs = Util.toInt(reader["LastFixedwingHrs"].ToString());
+                            dd.LastMonthFixedwingHrs = Util.toInt(reader["LastMonthFixedwingHrs"].ToString());
+                            dd.LastMonthMultiDashHrs = Util.toInt(reader["LastMonthMultiDashHrs"].ToString());
+
+                            ChartList.Add(dd);
+
+                        }
+                    }
+
+                    ctx.Database.Connection.Close();
+
+
+                }
+
+
+            }
+
+
+
+            return ChartList;
+            //return the list objects
+        }
 
         public static IList<ChartViewModel> getCurrentPilotChartData() {
 
@@ -299,10 +369,12 @@ namespace eX_Portal.exLogic {
                         {
 
                             ChartViewModel dd = new ChartViewModel();
+                            dd.DroneID= Util.toInt(reader["DroneID"].ToString());
                             dd.DroneName = reader["DroneName"].ToString();
                             dd.ShortName = dd.DroneName.Split('-').Last();
                             dd.AccountID = Util.toInt(reader["AccountID"].ToString());
-                            
+                            dd.AccountName = reader["AccountName"].ToString();
+                            dd.ChartColor= reader["ChartColor"].ToString();
                             dd.TotalFightTime = Util.toInt(reader["TotalFlightHours"].ToString());
                             dd.TotalFightTime = Math.Round((dd.TotalFightTime / 60), 2);
                             dd.CurrentFlightTime = Util.toInt(reader["LastMonthHours"].ToString());
@@ -1085,6 +1157,25 @@ namespace eX_Portal.exLogic {
             int result = 0;
             using (var cotx = new ExponentPortalEntities()) {
                 String SQL = "select PilotID from DroneFlight where  ID=" + FlightId;
+                result = Util.toInt(Util.getDBVal(SQL));
+
+            }
+
+            return result;
+        }
+
+        public static int GetLastFlightFromDrone(int DroneID)
+        {
+            int result = 0;
+            using (var cotx = new ExponentPortalEntities())
+            {
+                String SQL = @"SELECT Top 1
+                                          a.[ID] 
+                            FROM droneflight a
+                            left join MSTR_Drone b
+                            on a.DroneID = b.DroneId
+                            WHERE a.DroneId = " + DroneID +
+                            " ORDER BY a.FlightDate DESC"; 
                 result = Util.toInt(Util.getDBVal(SQL));
 
             }
