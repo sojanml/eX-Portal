@@ -16,15 +16,14 @@ namespace eX_Portal.ViewModel {
     };
 
     public IEnumerable<SelectListItem> OwnerList { get; set; }
-    public MSTR_Drone Drone { get; set; }
-
+    public MSTR_Drone Drone { get; set; }   
     public IEnumerable<SelectListItem> ManufactureList { get; set; }
     public IEnumerable<SelectListItem> UAVTypeList { get; set; }
     public IEnumerable<SelectListItem> PartsGroupList { get; set; }
     public IEnumerable<SelectListItem> DronePartsList { get; set; }
     public IEnumerable<string> SelectItemsForParts { set; get; }
     public MSTR_Parts DroneParts { get; set; }
-
+    public string Name {get;set;}
     public IEnumerable<SelectListItem> RegistrationAuthority {
       get {
         return SelectListItems;
