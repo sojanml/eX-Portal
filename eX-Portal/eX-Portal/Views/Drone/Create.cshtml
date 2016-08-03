@@ -20,13 +20,26 @@
 
       @Html.DropDownListFor(model => model.Drone.AccountID, Model.OwnerList)
     </div>
-
-    <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.ManufactureId, "Manufacturer")
+    <div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Drone.ManufactureId, "Manufacturer")
+        </div>
+        <div class="editor-field" id="">
+            @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList)
+            @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
+        </div>
+        <div>
+            <input id="othermanu" value="1" name="othermanu" type="checkbox" />
+            <label for="othermanu">Other Manufacturer</label>
+        </div>
     </div>
-    <div class="editor-field">
-      @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList)
-      @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
+
+    <div class="form-group" id="divManuDetails" style="display:none;">
+        @*@Html.LabelFor(model => model.Name, "Other Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
     </div>
 
     <div class="editor-label">
@@ -155,6 +168,18 @@
         '<td><a class="delete" href="#">x</a></td>\n' +
         '</tr>';
       $('#Table_' + ID).append(HTML);
-      }
+    }
+
+
+    $('#othermanu').on("change", function (e) {
+        if ($(this).prop('checked')) {
+            $('#divManuDetails').slideDown();
+        }
+        else
+        {
+            $('#divManuDetails').slideUp();
+        }
+    })
+    
     </script>
 }

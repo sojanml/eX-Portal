@@ -23,8 +23,9 @@
                 the player...
             </div>
             <div id="deletable" style="float:left;padding:10px;">
-                <a class="video-delete" data-id="@video.VideoID" href="/DroneFlight/DeleteVdeo/@video.VideoID" onclick="">Delete</a>               
-            </div>
+                <a class="video-delete" data-id="@video.VideoID" href="/DroneFlight/DeleteVdeo/@video.VideoID" onclick="">Delete</a>
+                <a class="video-download" data-id="@video.VideoURL" href="@Html.Raw(S3Download.getURL("VOD/" + video.VideoURL))">Download</a>               
+            </div>           
         </div>
 
         <script type="text/javascript">
@@ -32,7 +33,7 @@
             $(document).ready(function () {
                 playerInstance_@video.VideoID = jwplayer('Player_@video.VideoID');
                 playerInstance_@(video.VideoID).setup({
-                    file: '@Html.Raw(S3Download.getURL("VOD/" + video.VideoURL))',
+                    file: '@Html.Raw(S3Download.getURL("VOD/" + video.VideoURL))',                    
                     width: 280,
                     height: 192,
                     description: 'Press Play to begin video.',
@@ -67,6 +68,8 @@
                     
                 }
             });
+
     })
+    
     </script>
     }

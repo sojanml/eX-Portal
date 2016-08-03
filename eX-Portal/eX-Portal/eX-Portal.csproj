@@ -53,7 +53,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FileStorageUtils">
-      <HintPath>..\..\..\..\Storage\FileStorageUtils.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\FileStorageUtils\bin\Debug\FileStorageUtils.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
@@ -61,6 +61,14 @@
     </Reference>
     <Reference Include="itextsharp.xmlworker, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\itextsharp.xmlworker.5.5.9\lib\itextsharp.xmlworker.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MaxMind.Db, Version=2.0.0.0, Culture=neutral, PublicKeyToken=66afa4cc5ae853ac, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaxMind.Db.2.0.0\lib\net45\MaxMind.Db.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MaxMind.GeoIP2, Version=2.6.0.0, Culture=neutral, PublicKeyToken=66afa4cc5ae853ac, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaxMind.GeoIP2.2.6.0\lib\net45\MaxMind.GeoIP2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -92,10 +100,15 @@
       <HintPath>..\packages\Microsoft.SqlServer.Types.11.0.2\lib\net20\Microsoft.SqlServer.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DataVisualization" />
@@ -161,9 +174,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -1214,6 +1224,7 @@
     <Content Include="Views\BlackBox\DroneFilter.cshtml" />
     <Content Include="Views\Drone\DroneImaging.cshtml" />
     <Content Include="Views\Rpas\FlightRegistrationDetails.cshtml" />
+    <Content Include="Views\DashBoard\LocalWeather.cshtml" />
     <Content Include="Views\Test\DispChart.cshtml" />
     <Content Include="Views\Test\DispRecentChart.cshtml" />
     <Content Include="Views\Drone\LastFlight.cshtml" />
@@ -1222,6 +1233,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Upload\Brand-Logo\" />
+    <Folder Include="Upload\WeatherCache\" />
     <Folder Include="Views\UserLogin\" />
     <Folder Include="Weather\" />
   </ItemGroup>

@@ -699,7 +699,8 @@ String SQL = @"UPDATE [DroneFlight] SET
       return Util.jsonStat("OK");
     }
 
-    public ActionResult FlightDataVideo(int ID = 0) {
+
+      public ActionResult FlightDataVideo(int ID = 0) {
       //to get the url of the video
       Drones thisDrone = new Drones();
       string sql = "select VideoURL from DroneFlightVideo where videoId=" + ID;
@@ -719,8 +720,8 @@ String SQL = @"UPDATE [DroneFlight] SET
       Util.doSQL(SQL);
 
       return RedirectToAction("Index");
-
     }
+
     public ActionResult PlayVideo([Bind(Prefix = "ID")]int id = 0) {
       ViewBag.Title = "Flight Data";
       ViewBag.VideoID = id;

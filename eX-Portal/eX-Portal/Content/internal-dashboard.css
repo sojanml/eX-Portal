@@ -100,7 +100,6 @@ div.weather {
 /* line 43, ../sass/internal-dashboard.scss */
 div.weather span.icon {
   font-family: Weather;
-  font-size: 30px;
   color: silver;
 }
 /* line 48, ../sass/internal-dashboard.scss */
@@ -119,6 +118,7 @@ div.weather span.icon.tiny {
 div.weather .condition {
   color: #ea050e;
   font-weight: bold;
+  text-align: center
 }
 /* line 62, ../sass/internal-dashboard.scss */
 div.weather .condition span.icon {
@@ -147,6 +147,7 @@ ul#forecast li {
   list-style: none;
   float: left;
   margin: 0px 15px 0px 0px;
+  text-align:center;
 }
 /* line 94, ../sass/internal-dashboard.scss */
 ul#forecast li span.icon {
@@ -155,8 +156,7 @@ ul#forecast li span.icon {
 /* line 98, ../sass/internal-dashboard.scss */
 ul#forecast li .status {
   font-size: 8pt;
-  color: red;
-  width: 60px;
+  color: red;  
 }
 /* Styles for Pie chart divisions*/
 .ChartDev{
