@@ -134,7 +134,7 @@ function initCharts() {
                
             },
             labels: {
-                format: '{value} M',
+                format: '{value}',
                 style: {
                     color: Highcharts.getOptions().colors[2]
                 }
@@ -153,7 +153,7 @@ function initCharts() {
                 }
             },
             labels: {
-                format: '{value} M',
+                format: '{value}',
                 style: {
                     color: Highcharts.getOptions().colors[0]
                 }
