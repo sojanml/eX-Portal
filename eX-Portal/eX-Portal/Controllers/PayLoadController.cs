@@ -169,12 +169,15 @@ namespace eX_Portal.Controllers {
         [MSTR_Drone].DroneId = PayLoadFlight.PayLoadDroneID
       ";
 
-
-      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        SQL +=
-          "WHERE\n" +
-          "  [MSTR_Drone].AccountID=" + Util.getAccountID();
-      }
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+            {
+                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                {
+                    SQL +=
+                      "WHERE\n" +
+                      "  [MSTR_Drone].AccountID=" + Util.getAccountID();
+                }
+            }
 
       qView nView = new qView(SQL);
       nView.addMenu("PayLoad Data", Url.Action("PayLoad", "Map", new { ID = "_PKey" }));
