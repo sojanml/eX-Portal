@@ -45,10 +45,13 @@ namespace eX_Portal.Controllers
             "left join MSTR_Account c on  a.AccountId=c.AccountId \n" +
             "where \n" +
             "  a.ispilot=1";
-            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
             {
-                SQL += "AND\n" +
-                  "  a.AccountID=" + Util.getAccountID();
+                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                {
+                    SQL += "AND\n" +
+                      "  a.AccountID=" + Util.getAccountID();
+                }
             }
 
             qView nView = new qView(SQL);
@@ -118,9 +121,12 @@ namespace eX_Portal.Controllers
             }
             else if (!exLogic.User.hasAccess("DRONE.MANAGE"))
             {
-                SQL +=
+                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+                {
+                    SQL +=
                   " AND\n" +
                   "  a.AccountID=" + Util.getAccountID();
+                }
             }
 
             qDetailView nView = new qDetailView(SQL);

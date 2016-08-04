@@ -329,9 +329,11 @@ namespace eX_Portal.Controllers {
       WHERE
          FlightTime >= DATEADD(month,-1,GETDATE())";
 
-      if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-        SQL = SQL + " AND [MSTR_Drone].AccountID =" + Util.getAccountID();
-
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+            {
+                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                    SQL = SQL + " AND [MSTR_Drone].AccountID =" + Util.getAccountID();
+            }
       var LiveDrones = Util.getDBRows(SQL);
       //  LiveDrones.SQL = ;
       //string JsonData=Json(LiveDrones)

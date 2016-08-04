@@ -115,6 +115,25 @@ $(document).ready(function () {
         updateCordinates();
     })
 
+    $('#GcaApproval_IsUseCamara').on("change", function () {
+        if ($(this).val() == '1') {
+            $('#cameraopt').slideDown();
+            $('#othercamera').slideDown();
+        } else {
+            $('#cameraopt').slideUp();
+            $('#othercamera').slideUp();
+        }//if
+    })
+
+    //to dynamically show the other camera textbox
+    //$('#GcaApproval_IsUseCamara').on("change", function () {
+    //    if ($(this).val() == '1') {
+    //        $('#cameraopt').slideDown();
+    //    } else {
+    //        $('#cameraopt').slideUp();
+    //    }//if
+    //})
+
     if (jQuery.ui) $('input.time-picker').timepicker({});
 
 });//$(document).ready()

@@ -41,10 +41,14 @@ namespace eX_Portal.Controllers {
         "  MSTR_Drone.DroneId = [BlackBoxData].DroneId\n" +
         "WHERE\n" +
         "  Speed > 0.00";
-      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        SQL += " AND\n" +
-          "  MSTR_Drone.AccountID=" + Util.getAccountID();
-      }
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+            {
+                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                {
+                    SQL += " AND\n" +
+                      "  MSTR_Drone.AccountID=" + Util.getAccountID();
+                }
+            }
       SQL = SQL + "\n" +
         "GROUP BY\n" +
         "  [BlackBoxData].DroneId,\n" +
@@ -85,18 +89,22 @@ namespace eX_Portal.Controllers {
         "  [DroneData]\n" +
         "LEFT JOIN MSTR_Drone ON\n" +
         "  MSTR_Drone.DroneID = [DroneData].DroneID";
-      /*
-              "  CASE isnumeric(TotalFlightTime)\n" +
-              "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), TotalFlightTime) / 60.0, 2) as numeric(36, 2))\n" +
-              "    ELSE 0.00\n" +
-              "  END as TotalFlightTime, \n " +
-      */
-      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        SQL += " AND\n" +
-          "  MSTR_Drone.AccountID=" + Util.getAccountID() + "\n" +
-          "WHERE\n" +
-          "  MSTR_Drone.DroneID IS NOT NULL";
-      }
+            /*
+                    "  CASE isnumeric(TotalFlightTime)\n" +
+                    "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), TotalFlightTime) / 60.0, 2) as numeric(36, 2))\n" +
+                    "    ELSE 0.00\n" +
+                    "  END as TotalFlightTime, \n " +
+            */
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+            {
+                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                {
+                    SQL += " AND\n" +
+                      "  MSTR_Drone.AccountID=" + Util.getAccountID() + "\n" +
+                      "WHERE\n" +
+                      "  MSTR_Drone.DroneID IS NOT NULL";
+                }
+            }
          //   SQL+= " Order By UasDataid";
 
 

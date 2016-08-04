@@ -254,7 +254,10 @@ GROUP  BY
         SQLFilter.AppendLine("AND  PortalAlertCounter.BoundaryCritical > 0");
             if (!exLogic.User.hasAccess("DRONE.MANAGE"))
             {
-                SQLFilter.AppendLine(" AND  MSTR_Drone.AccountID=" + Util.getAccountID() + "");
+                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+                {
+                    SQLFilter.AppendLine(" AND  MSTR_Drone.AccountID=" + Util.getAccountID() + "");
+                }
                
             }
 
@@ -270,8 +273,8 @@ GROUP  BY
         MSTR_Drone.DroneName as label
       FROM
         MSTR_Drone");
-      if (!User.hasAccess("DRONE.MANAGE")) {
-        SQLFilter.AppendLine("MSTR_Drone.AccountID = " + Util.getAccountID());
+      if (!User.hasAccess("DRONE.MANAGE")) {                
+        SQLFilter.AppendLine("MSTR_Drone.AccountID = " + Util.getAccountID());                
       }
       if (!String.IsNullOrEmpty(Term)) {
         if (SQLFilter.Length > 0) SQLFilter.AppendLine("  AND ");
@@ -299,7 +302,7 @@ GROUP  BY
       SQL.AppendLine("  MSTR_User.FirstName + ' ' + MSTR_User.LastName as label ");
       SQL.AppendLine("FROM ");
       SQL.AppendLine("  MSTR_User");
-      if (User.hasAccess("DRONE.MANAGE") || User.hasAccess("PILOT")) {
+      if (User.hasAccess("DRONE.MANAGE") || User.hasAccess("PILOT")|| User.hasAccess("DRONE.VIEWALL")) {
         SQL.AppendLine("WHERE \n");
         SQL.AppendLine("  MSTR_User.IsPilot = 1");
       } else {

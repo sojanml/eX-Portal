@@ -80,10 +80,13 @@ namespace eX_Portal.Controllers
 
             if (!exLogic.User.hasAccess("DRONE.MANAGE"))
             {
-                if (SQLFilter != "")
-                    SQLFilter += " AND";
-                SQLFilter += " \n" +
-                  "  MSTR_Drone.AccountID=" + Util.getAccountID();
+                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+                {
+                    if (SQLFilter != "")
+                        SQLFilter += " AND";
+                    SQLFilter += " \n" +
+                      "  MSTR_Drone.AccountID=" + Util.getAccountID();
+                }
 
             }
             qView nView = new qView(SQLFilter);

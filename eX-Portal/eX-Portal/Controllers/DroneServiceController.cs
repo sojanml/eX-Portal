@@ -27,10 +27,14 @@ namespace eX_Portal.Controllers {
         "  MSTR_DroneService a\n" +
         "Inner join  MSTR_Drone b on\n" +
         "   a.DroneId = b.DroneId";
-      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        SQL += " AND\n" +
+            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
+                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+                {
+                    SQL += " AND\n" +
           "  b.AccountID=" + Util.getAccountID();
-      }
+                }
+            }
       SQL += "\n" +
         "Inner join LUP_Drone c on\n" +
         "  a.TypeOfServiceId = c.TypeId AND\n" +
