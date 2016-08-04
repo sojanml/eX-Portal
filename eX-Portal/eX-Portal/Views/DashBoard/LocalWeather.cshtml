@@ -2,86 +2,76 @@
 @using eX_Portal.exLogic
 @{ Layout = null; }
 
-   <div class="dash-content weather">
-        <h3>Weather in @Html.DisplayFor(Model => Model.City)</h3>
-        <div>
-          <table cellpadding="0" cellspacing="0">
-            <tr>
-              <td rowspan="2" class="condition">
-                  @if (Model.ConditionCode != null) {
-                  <img style="width:120px; height:auto;" src="~/images/WorldWeatherOnline/@(Model.ConditionCode).png" /><br />                
-                  }
-                @Model.ConditionText
-              </td>
-              <td class="spacer"></td>
-              <td>
-                <span class="icon">&#xf055;</span>
-              </td>
-              <td>
-                <span class="text">
-                  @Html.DisplayFor(Model => Model.ConditionTemperature)
-                  @Html.Raw(Model.TemperatureUnit)
-                </span>
-              </td>
-              <td class="spacer"></td>
-              <td>
-                <span style="display:inline-block; transform: rotate(@(Model.Direction)deg);" class="icon">&#xf0b1;</span>
-                <label>@Html.DisplayFor(Model => Model.Direction) &deg;</label><br>
-                <span>@Html.DisplayFor(Model => Model.Speed) km/h</span><br>
-              </td>
-              <td class="spacer"></td>
-              <td>
 
-                <div>
-                  <span class="icon tiny">&#xf07a;</span>
-                  <label>Humidity: @Html.DisplayFor(Model => Model.Humidity)%</label>
-                </div>
-                <div>
-                  <span class="icon tiny">&#xf075;</span>
-                  <label>Visibility: @Html.DisplayFor(Model => Model.Visibility) KM</label>
-                </div>
-                <div>
-                  <span class="icon tiny">&#xf079;</span>
-                  <label>
-                    Pressure: @Html.DisplayFor(Model => Model.Pressure) MB
-                  </label>
-                </div>
+<h3>Weather in @Html.DisplayFor(Model => Model.City)</h3>
+<div>
 
-              </td>
-            </tr>
-            <tr>
-
-              <td class="spacer"></td>
-              <td colspan="2"><span class="caption">Temperature</span></td>
-              <td class="spacer"></td>
-              <td><span class="caption">Wind</span></td>
-              <td class="spacer"></td>
-              <td><span class="caption">Atmosphere</span></td>
-            </tr>
-          </table>
-
-
-
+  <table cellpadding="0" cellspacing="0" style="width: 100%">
+    <tr>
+      <td valign="top" style="width:25%">
+        @if(Model.ConditionCode != null) {
+          <img style="width:120px; height:auto;" src="~/images/WorldWeatherOnline/@(Model.ConditionCode).png" />
+        }
+      </td>
+      <td style="text-align:center; width:25%">
+        <div class="Temperature">
+          @Html.DisplayFor(Model => Model.ConditionTemperature)@Html.Raw(Model.TemperatureUnit)
         </div>
-        <div style="margin-top:20px;">
-          <ul id="forecast">
-            @foreach (var item in Model.Forecast) {
-            <li>
-              <span class="big">
-                <img style="width:70px; height:auto;" src="~/images/WorldWeatherOnline/@(item.Code).png" />
-              </span><br />
-              <div class="status">@item.status</div>
-              <div class="date">@item.Date</div>
-              <div class="temp">
-                <span class="tiny icon">&#xf058;</span>
-                @item.TempHigh&deg;
-                <span class="tiny icon">&#xf044;</span>
-                @item.TempLow&deg;
-              </div>
-            </li>
-            }
-          </ul>
+        <div class="Condition">
+          @Model.ConditionText
         </div>
+      </td>
+      <td valign="top" style="width:50%">
+        <table cellpadding="0" cellspacing="0" style="width: 100%">
+          <tr>
+            <td style="text-align:center"><span class="icon">&#xf050;</span></td>
+            <td>Wind:</td>
+            <td>
+              <span>@Html.DisplayFor(Model => Model.Speed) km/h</span>
+              <span style="display:inline-block; transform: rotate(@(Model.Direction)deg);" class="icon">&#xf0b1;</span>
+            </td>
+          </tr>
+          <tr>
+            <td  style="text-align:center"><span class="icon">&#xf07a;</span></td>
+            <td>Humidity :</td>
+            <td><label>@Html.DisplayFor(Model => Model.Humidity)%</label></td>
+          </tr>
+          <tr>
+            <td  style="text-align:center"><span class="icon">&#xf075;</span></td>
+            <td>Visibility:</td>
+            <td><label>@Html.DisplayFor(Model => Model.Visibility) KM</label></td>
+          </tr>
+          <tr>
+            <td  style="text-align:center"><span class="icon">&#xf079;</span></td>
+            <td>Pressure:</td>
+            <td>@Html.DisplayFor(Model => Model.Pressure) mb</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 
+</div>
 
-      </div>
+<div style="margin-top:20px;">
+  <table  id="forecast" style="width:100%;">
+    <tr>
+
+      @foreach(var item in Model.Forecast) {
+        <td style="text-align:center">
+          <span class="big">
+            <img style="width:70px; height:auto;" src="~/images/WorldWeatherOnline/@(item.Code).png" />
+          </span><br />
+          <div class="status">@item.status</div>
+          <div class="date">@item.Date</div>
+          <div class="temp">
+            @item.TempHigh&deg;C
+            |
+            @item.TempLow&deg;C
+          </div>
+        </td>
+      }
+    </tr>
+  </table>
+</div>
+

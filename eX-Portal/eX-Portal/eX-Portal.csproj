@@ -536,7 +536,6 @@
     <Compile Include="ViewModel\MenuModel.cs" />
     <Compile Include="ViewModel\S3Upload.cs" />
     <Compile Include="ViewModel\Summary.cs" />
-    <Compile Include="ViewModel\TestViewModel.cs" />
     <Compile Include="ViewModel\UserLogin.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="ViewModel\WeatherViewModel.cs" />

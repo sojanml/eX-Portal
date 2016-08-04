@@ -100,7 +100,9 @@ div.weather {
 /* line 43, ../sass/internal-dashboard.scss */
 div.weather span.icon {
   font-family: Weather;
-  color: silver;
+  color: rgb(151,187,205);
+  font-size: 16px;
+  
 }
 /* line 48, ../sass/internal-dashboard.scss */
 div.weather span.icon.big {
@@ -228,4 +230,20 @@ div.AlertSum {
 }
 div.AlertSum span {
   color:red;
+}
+
+div.weather div.Temperature {
+  font-size:40px;
+  font-family: Conv_DINNextLTPro-LightCondensed,Arial;
+  color: #ea050e;
+}
+
+#forecast div.temp {
+  color: orange;
+}
+#forecast div.status {
+  color: red;
+}
+#forecast div.date {
+  color: black;
 }

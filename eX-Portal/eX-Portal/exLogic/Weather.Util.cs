@@ -34,7 +34,9 @@ namespace eX_Portal.exLogic {
       var WeatherView = new WeatherViewModel();
       WeatherView.Forecast = new List<Forcast>();
 
-      using(var reader = new DatabaseReader(@"C:\Web\eX-Portal\eX-Portal\eX-Portal\GeoLiteCity\GeoLite2-City.mmdb")) {
+      String DatabaseLocation = HttpContext.Current.Server.MapPath("/GeoLiteCity/GeoLite2-City.mmdb");
+
+      using(var reader = new DatabaseReader(DatabaseLocation)) {
         // Replace "City" with the appropriate method for your database, e.g.,
         // "Country".
         try { 
@@ -42,6 +44,7 @@ namespace eX_Portal.exLogic {
         } catch {
           city = reader.City("80.227.122.178");
         }
+        
         WeatherView.Country = city.Country.Name; // 'United States'
         WeatherView.City = city.City.Name;
         String CacheFile = getWeatherFile(city.Country.IsoCode, city.City.Name);
