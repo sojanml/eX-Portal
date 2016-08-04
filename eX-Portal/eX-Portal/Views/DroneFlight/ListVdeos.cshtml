@@ -22,9 +22,9 @@
             <div id="Player_@video.VideoID">
                 the player...
             </div>
-            <div id="deletable" style="float:left;padding:10px;">
-                <a class="video-delete" data-id="@video.VideoID" href="/DroneFlight/DeleteVdeo/@video.VideoID" onclick="">Delete</a>
-                <a class="video-download" data-id="@video.VideoURL" href="@Html.Raw(S3Download.getURL("VOD/" + video.VideoURL))">Download</a>               
+            <div id="deletable">
+                <a class="video-delete" data-id="@video.VideoID" href="/DroneFlight/DeleteVdeo/@video.VideoID" onclick=""><span class="icon">&#xf05c;</span>Delete</a>
+                <a style="margin-left:30px;" class="video-download" data-id="@video.VideoURL" href="@Html.Raw(S3Download.getURL("VOD/" + video.VideoURL))"><span class="icon">&#xf019;</span>Download</a>               
             </div>           
         </div>
 

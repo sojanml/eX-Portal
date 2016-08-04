@@ -41,5 +41,6 @@ namespace eX_Portal.Models
         public Nullable<int> PilotUserId { get; set; }
         public Nullable<int> GroundStaffUserId { get; set; }
         public string NotificationEmails { get; set; }
+        public Nullable<int> CameraId { get; set; }
     }
 }

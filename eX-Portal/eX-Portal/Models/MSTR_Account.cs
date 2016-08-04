@@ -39,5 +39,6 @@ namespace eX_Portal.Models
         public string ContactName { get; set; }
         public string ContactTitle { get; set; }
         public Nullable<int> PilotProfileID { get; set; }
+        public string ChartColor { get; set; }
     }
 }

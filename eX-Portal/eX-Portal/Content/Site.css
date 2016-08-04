@@ -1268,3 +1268,22 @@ div.hr {
   top:10px;
   left:8px;
 }
+
+#deletable {
+  margin-top:10px;
+}
+#deletable a {
+  text-decoration:none;
+}
+
+#deletable span.icon {
+  margin-right:3px
+}
+
+#deletable a.video-delete:hover span.icon {
+  color: red;
+}
+
+#deletable a.video-download:hover span.icon {
+  color: lawngreen;
+}
