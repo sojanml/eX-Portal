@@ -386,6 +386,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="PilotUserId" Type="int" />
           <Property Name="GroundStaffUserId" Type="int" />
           <Property Name="NotificationEmails" Type="nvarchar" MaxLength="300" />
+          <Property Name="CameraId" Type="int" />
         </EntityType>
         <EntityType Name="LiveDrone">
           <Key>
@@ -549,6 +550,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="BrandColor" Type="varchar" MaxLength="50" />
           <Property Name="BrandLogo" Type="varchar" MaxLength="50" />
           <Property Name="PilotProfileID" Type="int" />
+          <Property Name="ChartColor" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MSTR_BlackBox">
           <Key>
@@ -2241,6 +2243,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="ContactName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ContactTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PilotProfileID" Type="Int32" />
+          <Property Name="ChartColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_User">
           <Key>
@@ -2464,6 +2467,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="PilotUserId" Type="Int32" />
           <Property Name="GroundStaffUserId" Type="Int32" />
           <Property Name="NotificationEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="CameraId" Type="Int32" />
         </EntityType>
         <EntityType Name="PortalAlert">
           <Key>
@@ -3475,6 +3479,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="MSTR_Account">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Account">
               <MappingFragment StoreEntitySet="MSTR_Account">
+                <ScalarProperty Name="ChartColor" ColumnName="ChartColor" />
                 <ScalarProperty Name="PilotProfileID" ColumnName="PilotProfileID" />
                 <ScalarProperty Name="ContactTitle" ColumnName="ContactTitle" />
                 <ScalarProperty Name="ContactName" ColumnName="ContactName" />
@@ -3705,6 +3710,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="GCA_Approval">
             <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
               <MappingFragment StoreEntitySet="GCA_Approval">
+                <ScalarProperty Name="CameraId" ColumnName="CameraId" />
                 <ScalarProperty Name="NotificationEmails" ColumnName="NotificationEmails" />
                 <ScalarProperty Name="GroundStaffUserId" ColumnName="GroundStaffUserId" />
                 <ScalarProperty Name="PilotUserId" ColumnName="PilotUserId" />
