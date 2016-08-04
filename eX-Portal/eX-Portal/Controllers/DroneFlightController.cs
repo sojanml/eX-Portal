@@ -66,12 +66,16 @@ namespace eX_Portal.Controllers {
         ViewBag.Title += " [" + Util.getDroneName(DroneID) + "]";
       }
 
-      if(!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        if(SQLFilter != "")
-          SQLFilter += " AND";
-        SQLFilter += " \n" +
-          "  MSTR_Drone.AccountID=" + Util.getAccountID();
-      }
+            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
+                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+                {
+                    if (SQLFilter != "")
+                        SQLFilter += " AND";
+                    SQLFilter += " \n" +
+                      "  MSTR_Drone.AccountID=" + Util.getAccountID();
+                }
+            }
 
       if(SQLFilter != "") {
         SQL += "\n WHERE\n" + SQLFilter;
