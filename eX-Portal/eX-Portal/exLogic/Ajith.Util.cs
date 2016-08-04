@@ -115,12 +115,8 @@ namespace eX_Portal.exLogic {
                     DbParameter Param2 = cmd.CreateParameter();
                     Param2.ParameterName = "@IsAccess";
 
-                    if (exLogic.User.hasAccess("PILOT"))
-                    {
-                        Param2.Value = 0;
-                    }
-                    else
-                    {
+                   
+                  
                         if (!exLogic.User.hasAccess("DRONE.MANAGE"))
                         {
 
@@ -130,7 +126,7 @@ namespace eX_Portal.exLogic {
                         {
                             Param2.Value = 0;
                         }
-                    }
+                   
                     cmd.Parameters.Add(Param1);
                     cmd.Parameters.Add(Param2);
                     cmd.CommandType = CommandType.StoredProcedure;
