@@ -15,6 +15,7 @@ var _IsDrawInitilized = false;
 var _OtherFlights = {};
 var _FlightOra = null
 var ReplayInterval = 1000;
+var DottedLine = [];
 
 var DistanceOptions = {
   Radius: 50,
@@ -147,7 +148,7 @@ function Replay() {
   _ZoomBounds = new google.maps.LatLngBounds();
   LatestLine.getPath().clear();
   OldLine.getPath().clear();
-
+  ClearDottedLine();
   //Clear the Map Data Table
   $('#MapData').html('<table class="report" id="TableMapData"></table>');
   initilizeTable();
@@ -508,6 +509,7 @@ function drawPolyLineAtIndex(Polygon) {
         var errorpath = errorpoly.getPath();
         errorpath.push(firstlatlng);
         errorpath.push(secondlatlng);
+        DottedLine.push(errorpoly);
     }
     
         Path.push(myLatLng);
@@ -517,6 +519,14 @@ function drawPolyLineAtIndex(Polygon) {
     }
  
  
+}
+
+function ClearDottedLine()
+{
+    for(var i=0;i<DottedLine.length;i++)
+    {
+        DottedLine[i].setMap(null);
+    }
 }
 
 function drawLineChart(isReset) {
