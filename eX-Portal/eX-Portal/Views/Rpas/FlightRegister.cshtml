@@ -154,6 +154,26 @@
                 </div>
             </div>
            </div>
+
+        <div id="cameraopt" style="display:none">
+            <div class="form-group">
+                @Html.LabelFor(model => model.GcaApproval.DroneID, "Select Camera")
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.GcaApproval.DroneID, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"), "--Select Camera--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.GcaApproval.DroneID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div id="othercamera" style="display:none">
+            <div class="form-group">
+                @Html.LabelFor(model => model.GcaApproval.DroneID, "Other Camera")
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.GcaApproval.DroneID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.GcaApproval.DroneID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
       
             <div id="gcacoordinates" class="form-group" style="visibility:visible;">
                 @Html.LabelFor(model => model.GcaApproval.Coordinates, "Coordinates")
