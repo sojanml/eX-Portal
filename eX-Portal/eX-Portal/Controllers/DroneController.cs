@@ -101,76 +101,8 @@ namespace eX_Portal.Controllers {
 
 
 
-        public ActionResult LastFlight([Bind(Prefix = "ID")] int DroneID = 0)
-        {
-            if (!exLogic.User.hasAccess("DRONE"))
-                return RedirectToAction("NoAccess", "Home");
-
-            ViewBag.Title = "Last  Flight";
-
-         int flightID=   Util.GetLastFlightFromDrone(DroneID);
-
-            String SQL = @"SELECT  b.DroneName
-                                        ,a.ID as [Flight ID],
-                                         a.FlightDate,
-                                          Count(*) Over() as _TotalRecords,
-                                          a.[ID] as _PKey
-                            FROM droneflight a
-							left join MSTR_Drone b
-							on a.DroneID=b.DroneId
-							WHERE a.DroneId = " + DroneID +
-                            " and a.ID=" + flightID;
-
-            qView nView = new qView(SQL);
-         
-            if (Request.IsAjaxRequest())
-            {
-                Response.ContentType = "text/javascript";
-                return PartialView("qViewData", nView);
-            }
-            else
-            {
-                return View(nView);
-            }//if(IsAjaxRequest)
-
-        }
-        public ActionResult LastMonthFlight([Bind(Prefix = "ID")] int DroneID = 0)
-        {
-            if (!exLogic.User.hasAccess("DRONE"))
-                return RedirectToAction("NoAccess", "Home");
-
-            ViewBag.Title = "Last Month Flights";
-
-
-
-
-
-
-
-            String SQL = @"SELECT  b.DroneName
-                                        ,a.ID as [Flight ID],
-                                         a.FlightDate,
-                                          Count(*) Over() as _TotalRecords,
-                                          a.[ID] as _PKey
-                            FROM droneflight a
-							left join MSTR_Drone b
-							on a.DroneID=b.DroneId
-							WHERE a.DroneId = " + DroneID +
-                          "   AND a.FlightDate >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)";
-
-            qView nView = new qView(SQL);
-
-            if (Request.IsAjaxRequest())
-            {
-                Response.ContentType = "text /javascript";
-                return PartialView("qViewData", nView);
-            }
-            else
-            {
-                return View(nView);
-            }//if(IsAjaxRequest)
-
-        }
+       
+        
         public ActionResult AuthorityApproval([Bind(Prefix = "ID")] int DroneID = 0) {
       if(!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
         return RedirectToAction("NoAccess", "Home");
