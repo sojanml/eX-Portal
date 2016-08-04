@@ -1225,8 +1225,6 @@
     <Content Include="Views\DashBoard\LocalWeather.cshtml" />
     <Content Include="Views\Test\DispChart.cshtml" />
     <Content Include="Views\Test\DispRecentChart.cshtml" />
-    <Content Include="Views\Drone\LastFlight.cshtml" />
-    <Content Include="Views\Drone\LastMonthFlight.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
