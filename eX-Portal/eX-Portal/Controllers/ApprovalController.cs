@@ -33,10 +33,14 @@ namespace eX_Portal.Controllers {
 
       String SQLWhere = "";
       if (ID > 0) SQLWhere += "g.DroneID =" + ID;
-      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        if (SQLWhere != "") SQLWhere += " AND";
-        SQLWhere += " g.AccountID=" + Util.getAccountID();
-      }
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+            {
+                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                {
+                    if (SQLWhere != "") SQLWhere += " AND";
+                    SQLWhere += " g.AccountID=" + Util.getAccountID();
+                }
+            }
       if (SQLWhere != "") SQL += " WHERE " + SQLWhere;
 
       qView nView = new qView(SQL);
