@@ -512,7 +512,8 @@ input.button,
 div.form-toolbar input,
 div.form-toolbar button,
 div.form-toolbar a.button,
-div.photo-upload div.upload-btn a {
+div.photo-upload div.upload-btn a,
+select#ReplaySpeed {
     color: white;
     font-size: 16pt;
     border-radius: 3px;
@@ -525,6 +526,12 @@ div.photo-upload div.upload-btn a {
   text-decoration: none;
 }
 
+select#ReplaySpeed {
+    border: 0px;
+    box-sizing: content-box;
+    margin-left: 10px;
+    font-size: 15pt;
+}
 
 div.form-toolbar ul {
   margin:0px;
