@@ -155,21 +155,21 @@
             </div>
            </div>
 
-        <div id="cameraopt" style="display:none">
+        <div id="cameraopt" style="display:none;padding:0px;">
             <div class="form-group">
-                @Html.LabelFor(model => model.GcaApproval.DroneID, "Select Camera")
+                @Html.LabelFor(model => model.GcaApproval.CameraId, "Select Camera")
                 <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.GcaApproval.DroneID, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"), "--Select Camera--", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.GcaApproval.DroneID, "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(model => model.GcaApproval.CameraId, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"), "--Select Camera--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.GcaApproval.CameraId, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
         <div id="othercamera" style="display:none">
             <div class="form-group">
-                @Html.LabelFor(model => model.GcaApproval.DroneID, "Other Camera")
+                @Html.LabelFor(model => model.camera, "Other Camera")
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.GcaApproval.DroneID, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.GcaApproval.DroneID, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.camera, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.camera, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
