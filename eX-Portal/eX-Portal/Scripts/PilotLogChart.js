@@ -34,31 +34,35 @@ function OnSuccessPilot_(reponse) {
 
         var TotalMultiDash = {
             y: data.TotalMultiDashHrs,
-            url: "/Pilot/PilotDetail/" + data.UserID
-
+            url: "/Pilot/PilotDetail/" + data.UserID,
+            color: "#009ACD"
         };
         var TotalFixedWing = {
             y: data.TotalFixedWingHrs,
-            url: "/Pilot/PilotDetail/" + data.UserID
-
+            url: "/Pilot/PilotDetail/" + data.UserID,
+            color: "#7AC5CD"
         };
         var LastMultiDash = {
             y: data.LastMultiDashHrs,
-            url: "/Pilot/PilotDetail/" + data.UserID
+            url: "/Pilot/PilotDetail/" + data.UserID,
+            color: "#397D02"
         };
 
         var LastFixedwing = {
             y: data.LastFixedwingHrs,
-            url: "/Pilot/PilotDetail/" + data.UserID
+            url: "/Pilot/PilotDetail/" + data.UserID,
+            color: "#8CDD81"
         };
 
         var LastMonthMultiDash = {
             y: data.LastMonthMultiDashHrs,
-            url: "/Pilot/PilotDetail/" + data.UserID
+            url: "/Pilot/PilotDetail/" + data.UserID,
+            color:"Green"
         };
         var LastMonthFixedwing = {
             y: data.LastMonthFixedwingHrs,
-            url: "/Pilot/PilotDetail/" + data.UserID
+            url: "/Pilot/PilotDetail/" + data.UserID,
+            color:"Green"
         };
 
         TotalMultiDashHrs.push(TotalMultiDash);
@@ -127,7 +131,7 @@ function initCharts() {
                 }
             },
             title: {
-                text: 'Flight Time (Minutes)',
+                text: '**                                   Last Flight Time (Minutes)',
                 style: {
                     color: Highcharts.getOptions().colors[2]
                 }
@@ -205,6 +209,7 @@ function initCharts() {
             name: 'Total Flight( Multi Dash Rotor)',
             //data: [5, 3, 4, 7, 2],
             data: TotalMultiDashHrs,
+            color: "#009ACD",
             yAxis: 1,
             stack: 'female',
             //----
@@ -221,6 +226,7 @@ function initCharts() {
         }, {
             name: 'Total Flight(Fixed Wing)',
             data: TotalFixedWingHrs,
+            color: "#BFEFFF",
             yAxis: 1,
             stack: 'female',
             //----
@@ -234,41 +240,42 @@ function initCharts() {
 }
 //-----
 
-        }, {
-            name: 'Last Month( Multi Dash Rotor)',
-            data: LastMonthMultiDashHrs,
-            yAxis: 0,
-            stack: 'male',
-            //----
-            cursor: 'pointer',
-            point: {
-                events: {
-                    click: function () {
-                        location.href = this.options.url;
-                    }
-                }
-            }
-            //-----
+//        }, {
+//            name: 'Last Month( Multi Dash Rotor)',
+//            data: LastMonthMultiDashHrs,
+//            yAxis: 0,
+            //stack: 'male',
+//            //----
+//            cursor: 'pointer',
+//            point: {
+//                events: {
+//                    click: function () {
+//                        location.href = this.options.url;
+//                    }
+//                }
+//            }
+//            //-----
 
-        }, {
-            name: 'Last Month(Fixed Wing)',
-            // data: [3, 4, 4, 2, 5],
-            data: LastMonthFixedwingHrs,
-            yAxis: 0,
-            stack: 'male',
-            //----
-            cursor: 'pointer',
-            point: {
-        events: {
-        click: function () {
-            location.href = this.options.url;
-        }
-}
-}
+//        }, {
+//            name: 'Last Month(Fixed Wing)',
+//            // data: [3, 4, 4, 2, 5],
+//            data: LastMonthFixedwingHrs,
+//            yAxis: 0,
+//            stack: 'male',
+//            //----
+//            cursor: 'pointer',
+//            point: {
+//        events: {
+//        click: function () {
+//            location.href = this.options.url;
+//        }
+//}
+//}
 //-----
         }, {
             name: 'LastFlight(Multi Dash Rotor)',
             data: LastMultiDashHrs,
+            color:"#397D02",
             yAxis: 0,
             stack: 'fem',
             //----
@@ -284,6 +291,7 @@ function initCharts() {
         }, {
             name: 'Last Flight(Fixed Wing)',
             data: LastFixedwingHrs,
+            color: "#8CDD81",
             yAxis: 0,
             stack: 'fem',
             //----
