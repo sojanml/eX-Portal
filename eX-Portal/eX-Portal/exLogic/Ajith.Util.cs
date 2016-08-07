@@ -371,11 +371,11 @@ namespace eX_Portal.exLogic {
                             dd.AccountID = Util.toInt(reader["AccountID"].ToString());
                             dd.AccountName = reader["AccountName"].ToString();
                             dd.ChartColor= reader["ChartColor"].ToString();
-                            dd.TotalFightTime = Util.toInt(reader["TotalFlightHours"].ToString());
+                            dd.TotalFightTime = Util.toDouble(reader["TotalFlightHours"].ToString());
                             dd.TotalFightTime = Math.Round((dd.TotalFightTime / 60), 2);
-                            dd.CurrentFlightTime = Util.toInt(reader["LastMonthHours"].ToString());
+                            dd.CurrentFlightTime = Util.toDouble(reader["LastMonthHours"].ToString());
                             dd.CurrentFlightTime = Math.Round((dd.CurrentFlightTime / 60), 2);
-                            dd.LastFlightTime = Util.toInt(reader["LastFlightHours"].ToString());
+                            dd.LastFlightTime = Util.toDouble(reader["LastFlightHours"].ToString());
                             dd.LastFlightTime = Math.Round((dd.LastFlightTime / 60), 2);
                             ChartList.Add(dd);
 

@@ -98,7 +98,9 @@ function initCharts() {
         chart: {
             renderTo: 'Pilotcontainer',
 
-            type: 'column'
+            type: 'column',
+            marginRight:95,
+            marginBottom:120
       
         },
         legend: {
@@ -131,7 +133,7 @@ function initCharts() {
                 }
             },
             title: {
-                text: '**                                   Last Flight Time (Minutes)',
+                text: '                                   Last Flight Time (Minutes)',
                 style: {
                     color: Highcharts.getOptions().colors[2]
                 }
