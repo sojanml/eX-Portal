@@ -17,7 +17,7 @@ namespace eX_Portal.Controllers {
     static int GL_Flight_Id;
     ExponentPortalEntities db = new ExponentPortalEntities();
     // GET: DroneFlight
-    public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0) {
+    public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0,string FlightType="") {
       if(!exLogic.User.hasAccess("FLIGHT"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "UAS Flights";
@@ -66,14 +66,36 @@ namespace eX_Portal.Controllers {
         ViewBag.Title += " [" + Util.getDroneName(DroneID) + "]";
       }
 
-      if(!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        if(SQLFilter != "")
-          SQLFilter += " AND";
-        SQLFilter += " \n" +
-          "  MSTR_Drone.AccountID=" + Util.getAccountID();
-      }
+            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
+                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+                {
+                    if (SQLFilter != "")
+                        SQLFilter += " AND";
+                    SQLFilter += " \n" +
+                      "  MSTR_Drone.AccountID=" + Util.getAccountID();
+                }
+            }
 
-      if(SQLFilter != "") {
+      //this is using when click link on the dashboard
+            if (FlightType == "LastFlight")
+            {
+                if (SQLFilter != "")
+                    SQLFilter += " AND";
+                SQLFilter += " \n" +
+                  "  DroneFlight.ID=" + Util.GetLastFlightFromDrone(DroneID);
+
+            }
+            else if(FlightType == "CurrentMonthFlight")
+            {
+                if(SQLFilter != "")
+                    SQLFilter += " AND";
+                SQLFilter += " \n" +
+                  "  DroneFlight.FlightDate >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)";
+
+            }
+         //this is using when click link on the dashboard
+            if (SQLFilter != "") {
         SQL += "\n WHERE\n" + SQLFilter;
       }
       qView nView = new qView(SQL);

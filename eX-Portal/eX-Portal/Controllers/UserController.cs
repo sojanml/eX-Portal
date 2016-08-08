@@ -200,8 +200,11 @@ namespace eX_Portal.Controllers {
       "where \n" +
       "  a.ispilot=1";
       if(!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        SQL += "AND\n" +
+                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+                {
+                    SQL += "AND\n" +
           "  a.AccountID=" + Util.getAccountID();
+                }
       }
 
       qView nView = new qView(SQL);
@@ -329,9 +332,12 @@ namespace eX_Portal.Controllers {
       if(exLogic.User.hasAccess("PILOT")) {
         //nothing
       } else if(!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        SQL +=
+                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+                {
+                    SQL +=
           " AND\n" +
           "  a.AccountID=" + Util.getAccountID();
+                }
       }
 
       qDetailView nView = new qDetailView(SQL);

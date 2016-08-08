@@ -59,12 +59,15 @@ namespace eX_Portal.Controllers {
           "Left join LUP_Drone U on\n" +
           "  UAVTypeID = U.TypeID and\n" +
           "  U.Type= 'UAVType'\n";
-
-      if(!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        SQL +=
-          "WHERE\n" +
-          "  D.AccountID=" + Util.getAccountID();
-      }
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+            {
+                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                {
+                    SQL +=
+                      "WHERE\n" +
+                      "  D.AccountID=" + Util.getAccountID();
+                }
+            }
       qView nView = new qView(SQL);
       if(exLogic.User.hasAccess("DRONE"))
         nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
@@ -98,76 +101,8 @@ namespace eX_Portal.Controllers {
 
 
 
-        public ActionResult LastFlight([Bind(Prefix = "ID")] int DroneID = 0)
-        {
-            if (!exLogic.User.hasAccess("DRONE"))
-                return RedirectToAction("NoAccess", "Home");
-
-            ViewBag.Title = "Last  Flight";
-
-         int flightID=   Util.GetLastFlightFromDrone(DroneID);
-
-            String SQL = @"SELECT  b.DroneName
-                                        ,a.ID as [Flight ID],
-                                         a.FlightDate,
-                                          Count(*) Over() as _TotalRecords,
-                                          a.[ID] as _PKey
-                            FROM droneflight a
-							left join MSTR_Drone b
-							on a.DroneID=b.DroneId
-							WHERE a.DroneId = " + DroneID +
-                            " and a.ID=" + flightID;
-
-            qView nView = new qView(SQL);
-         
-            if (Request.IsAjaxRequest())
-            {
-                Response.ContentType = "text/javascript";
-                return PartialView("qViewData", nView);
-            }
-            else
-            {
-                return View(nView);
-            }//if(IsAjaxRequest)
-
-        }
-        public ActionResult LastMonthFlight([Bind(Prefix = "ID")] int DroneID = 0)
-        {
-            if (!exLogic.User.hasAccess("DRONE"))
-                return RedirectToAction("NoAccess", "Home");
-
-            ViewBag.Title = "Last Month Flights";
-
-
-
-
-
-
-
-            String SQL = @"SELECT  b.DroneName
-                                        ,a.ID as [Flight ID],
-                                         a.FlightDate,
-                                          Count(*) Over() as _TotalRecords,
-                                          a.[ID] as _PKey
-                            FROM droneflight a
-							left join MSTR_Drone b
-							on a.DroneID=b.DroneId
-							WHERE a.DroneId = " + DroneID +
-                          "   AND a.FlightDate >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)";
-
-            qView nView = new qView(SQL);
-
-            if (Request.IsAjaxRequest())
-            {
-                Response.ContentType = "text /javascript";
-                return PartialView("qViewData", nView);
-            }
-            else
-            {
-                return View(nView);
-            }//if(IsAjaxRequest)
-
-        }
+       
+        
         public ActionResult AuthorityApproval([Bind(Prefix = "ID")] int DroneID = 0) {
       if(!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
         return RedirectToAction("NoAccess", "Home");
@@ -596,10 +531,14 @@ namespace eX_Portal.Controllers {
           "  U.Type= 'UAVType'\n" +
           "WHERE\n" +
           "  D.[DroneId]=" + DroneID;
-      if(!exLogic.User.hasAccess("DRONE.MANAGE")) {
-        SQL += " AND\n" +
-          "  D.AccountID=" + Util.getAccountID();
-      }
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+            {
+                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                {
+                    SQL += " AND\n" +
+                      "  D.AccountID=" + Util.getAccountID();
+                }
+            }
 
       qDetailView nView = new qDetailView(SQL);
       //this part for adding link to requred fields in the details
@@ -688,8 +627,11 @@ namespace eX_Portal.Controllers {
         return RedirectToAction("NoAccess", "Home");
       String OwnerListSQL = 
         "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account";
-      if(!exLogic.User.hasAccess("DRONE.MANAGE"))
-        OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+            {
+                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();
+            }
       OwnerListSQL +=" ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
         Drone = new MSTR_Drone(),
@@ -841,9 +783,15 @@ namespace eX_Portal.Controllers {
                         }
 
                     }
-                    if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
-                    else
+                    if (exLogic.User.hasAccess("DRONE.VIEWALL"))
+                    {
+                        if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
+                        else
+                            return RedirectToAction("Detail", new { ID = DroneId });
+                    }else
+                    {
                         return RedirectToAction("Detail", new { ID = DroneId });
+                    }
                 }
                 else
                 {
@@ -920,6 +868,8 @@ namespace eX_Portal.Controllers {
 
     public ActionResult ReAssign(int id) {
       if(!exLogic.User.hasAccess("DRONE.MANAGE"))
+        return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.DroneId = id;
       ExponentPortalEntities db = new ExponentPortalEntities();
@@ -1077,9 +1027,8 @@ namespace eX_Portal.Controllers {
             }
 
           }
-
-
-                    if (exLogic.User.hasAccess("DRONE.MANAGE"))
+                   
+                        if (exLogic.User.hasAccess("DRONE.MANAGE"))
                         return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
                     else
                         return RedirectToAction("Detail", new { ID = DroneView.Drone.DroneId });
