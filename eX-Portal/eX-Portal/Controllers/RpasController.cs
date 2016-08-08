@@ -1090,10 +1090,12 @@ namespace eX_Portal.Controllers
                 if (flightsetupvm.GcaApproval.GroundStaffUserId < 1 || flightsetupvm.GcaApproval.GroundStaffUserId == null)
                  //   return RedirectToAction("NoAccess", "Home");
                   return "A Ground staff should be selected.";
-
-                if (flightsetupvm.camera == null)
+               
+                    if (flightsetupvm.camera == null)
                 {
-                                    DateTime todaydate = System.DateTime.Now;
+                    if (flightsetupvm.GcaApproval.CameraId == null)
+                        flightsetupvm.GcaApproval.CameraId = 0;
+                            DateTime todaydate = System.DateTime.Now;
                                     String SQL = String.Empty;
                                     var StartDate = (flightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(-1) : (DateTime)flightsetupvm.GcaApproval.StartDate);
                                     var EndDate = (flightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(90) : (DateTime)flightsetupvm.GcaApproval.EndDate);
@@ -1141,7 +1143,7 @@ namespace eX_Portal.Controllers
                             IsUseCamara,
                             PilotUserId,
                             GroundStaffUserId,
-                            NotificationEmails
+                            NotificationEmails,
                             CameraId
                           ) values(
                             '" + flightsetupvm.GcaApproval.ApprovalName + @"',
@@ -1161,9 +1163,8 @@ namespace eX_Portal.Controllers
                             " + flightsetupvm.GcaApproval.IsUseCamara + @",
                             " + flightsetupvm.GcaApproval.PilotUserId + @",
                             " + flightsetupvm.GcaApproval.GroundStaffUserId + @",
-                            '" + flightsetupvm.GcaApproval.NotificationEmails + @"'
-                            '" + flightsetupvm.GcaApproval.CameraId + @"'
-
+                            '" + flightsetupvm.GcaApproval.NotificationEmails + @"',
+                            " + flightsetupvm.GcaApproval.CameraId + @"
                           )";
                                         //
                                     }
@@ -1306,7 +1307,7 @@ namespace eX_Portal.Controllers
                                     IsUseCamara,
                                     PilotUserId,
                                     GroundStaffUserId,
-                                    NotificationEmails
+                                    NotificationEmails,
                                     CameraId
                                   ) values(
                                     '" + flightsetupvm.GcaApproval.ApprovalName + @"',
