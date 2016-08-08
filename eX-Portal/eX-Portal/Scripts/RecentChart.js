@@ -25,7 +25,11 @@ $(document).ready(function () {
 
   
 
+    $(".tag").click(function () {
 
+
+        alert($(this).attr("id"));
+    });
 
 
 });
@@ -58,7 +62,7 @@ function OnSuccess_(reponse) {
         xLabel[value] = name;
         if (LastAccountID != data.AccountID)
         {
-            Hdata = Hdata + '<td><span  style="color:' + data.ChartColor + '; font-size:80px">.</span>' + data.AccountName + '</td></tr>'
+            Hdata = Hdata + '<td > <span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:80px">.</span>' + data.AccountName + '</td></tr>'
         }
         LastAccountID = data.AccountID;
 
@@ -101,6 +105,8 @@ function OnSuccess_(reponse) {
     //category = category + "]"
     //alert(category);
     initChart();
+
+   
     $('#RecentFlight').mousemove(function (e) {
         var chart = Highcharts.charts[0];
         
@@ -112,7 +118,10 @@ function OnSuccess_(reponse) {
     initChartTotalFlight()
 };
 
-
+function clickfn()
+{
+    alert('ok');
+}
 
 function OnErrorCall_(repo) {
     //alert("Woops something went wrong, pls try later !");
@@ -202,7 +211,20 @@ function initChart() {
         chart: {
             renderTo: 'RecentFlight',
         
-            type: 'column'
+            type: 'column',
+            events: {
+                click: function (event) {
+                    var chart1 = $('#RecentFlight').highcharts();
+                    chart1.update({
+                        title: {
+                            Exporting:false
+                        }
+                    });
+                   
+                  
+                    
+                }
+            }
         },
         title: {
             text: null
@@ -210,6 +232,8 @@ function initChart() {
         
        
         xAxis: {
+            min: 0,
+            
             categories: category,
             
             crosshair: true
@@ -275,6 +299,7 @@ function initChart() {
             data: LastFlightData,
             showInLegend: false,
             stack: 'male',
+           
             //----
             cursor: 'pointer',
             point: {
@@ -290,6 +315,7 @@ function initChart() {
             data: CurrentmonthFlightData,
             showInLegend: false,
             stack: 'female',
+          
             //----
             cursor: 'pointer',
             point: {
@@ -348,10 +374,12 @@ function initChartTotalFlight() {
         },
 
         xAxis: {
+          
             categories: category,
 
             crosshair: true
         },
+       
         yAxis: {
             min: 0,
             tickInterval: 1,
