@@ -54,6 +54,8 @@ namespace eX_Portal.Controllers {
       if(!exLogic.User.hasAccess("FLIGHT.MAP"))
         return Json(null, JsonRequestBehavior.AllowGet);
       ExponentPortalEntities db = new ExponentPortalEntities();
+      var thisDrone = new Drones();
+      var DroneName = thisDrone.getDroneNameForFlight(FlightID);
       var Records = (
         from n in db.DroneDocuments
         where n.DocumentType == "Geo Tag" &&
@@ -63,10 +65,10 @@ namespace eX_Portal.Controllers {
           DocumentName = n.DocumentName,
           FlightID = FlightID,
           Altitude = n.Altitude,
-          DroneName = null,
+          DroneName = DroneName,
           Latitude = n.Latitude,
           Longitude = n.Longitude,
-          UpLoadedDate = n.UploadedDate
+          UpLoadedDate = n.UploadedDate       
         }
         ).ToList();
 

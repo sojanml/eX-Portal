@@ -268,41 +268,29 @@ namespace eX_Portal.Controllers {
 
     // POST: BlackBox/Create
     [HttpPost]
-    public ActionResult Create(Models.MSTR_BlackBox BlackBox) {
+    public ActionResult Create(Models.MSTR_BlackBox BlackBoxData) {
       //   if (!exLogic.User.hasAccess("BLACLBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
-      try {
-        // TODO: Add insert logic here
-        // BlackBox.BlackBoxID = 1;
-        //if (!exLogic.User.hasAccess("BLACKBOX.AES"))
-        //{
-        //    ModelState.Remove("EncryptionKey");
-        //    BlackBox.EncryptionKey = "";
-        //}
+      if (ModelState.IsValid) {
+        BlackBox BB = new BlackBox();
+        //  BlackBox.BlackBoxID = 0;
+        BlackBoxData.IsActive = 1;
+        BlackBoxData.CurrentStatus = "IN";
+        BlackBoxData.LastReceiveId = 0;
+        BlackBoxData.LastRentalId = 0;
+        BlackBoxData.CreatedBy = Util.getLoginUserID();
+        BlackBoxData.CreatedOn = DateTime.Now;
+        BlackBoxData.LastUpdateDate = DateTime.Now;
+        BlackBoxData.BlackBoxCode = BB.getSerialNumber(BlackBoxData.BlackBoxSerial).ToString();
+        db.MSTR_BlackBox.Add(BlackBoxData);
 
-        if (ModelState.IsValid) {
-          //  BlackBox.BlackBoxID = 0;
-          BlackBox.IsActive = 1;
-          BlackBox.CurrentStatus = "IN";
-          BlackBox.LastReceiveId = 0;
-          BlackBox.LastRentalId = 0;
-          BlackBox.CreatedBy = Util.getLoginUserID();
-          BlackBox.CreatedOn = DateTime.Now;
-          BlackBox.LastUpdateDate = DateTime.Now;
-          db.MSTR_BlackBox.Add(BlackBox);
+        db.SaveChanges();
 
-          db.SaveChanges();
+        db.Dispose();
 
-          db.Dispose();
-
-          return RedirectToAction("BlackBoxList", "BlackBox");
-        } else {
-          ViewBag.Title = "Create BlackBox";
-          return View(BlackBox);
-        }
-
-      } catch (Exception ex) {
-        Util.ErrorHandler(ex);
-        return View("InternalError", ex);
+        return RedirectToAction("BlackBoxList", "BlackBox");
+      } else {
+        ViewBag.Title = "Create BlackBox";
+        return View(BlackBoxData);
       }
     }
 

@@ -20,6 +20,12 @@ namespace eX_Portal.exLogic {
       }
     }
 
+    public String getDroneNameForFlight(int FlightID = 0) {
+      _DroneID = getDroneIDForFlight(FlightID);
+      String SQL = "Select DroneName From MSTR_Drone WHERE DroneID=" + _DroneID;
+      return Util.getDBVal(SQL);
+    }
+
     public String getVideoStartDate(int FlightID) {
       String SQL = "select TOP 1 VideoURL from DroneFlightVideo WHERE FlightID=" + FlightID + " ORDER BY VideoURL ASC";
       String VideoURL = Util.getDBVal(SQL);

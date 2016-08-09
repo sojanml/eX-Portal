@@ -17,6 +17,24 @@ namespace eX_Portal.exLogic {
     }
 
 
+    public int getSerialNumber(Object sBlackBoxSerial) {
+      int BlackBoxSerial = 0;
+      int.TryParse(sBlackBoxSerial.ToString(), out BlackBoxSerial);
+
+
+      byte[] byteCode1 = BitConverter.GetBytes(1).Take(1).ToArray();
+      byte[] byteCode2 = BitConverter.GetBytes(DateTime.Now.Year - 2000).Take(1).ToArray();
+      byte[] byteCode3 = BitConverter.GetBytes(BlackBoxSerial).Take(2).ToArray();
+      IEnumerable<byte> Code = byteCode1.Concat(byteCode2).Concat(byteCode3);
+
+      byte[] intBytes = Code.ToArray();
+
+      UInt32 BlckBoxID = BitConverter.ToUInt32(intBytes, 0);
+
+      return (int)BlckBoxID;
+
+    }
+
     public List<BlackBoxCostCalucation> getBlackBoxCost(int NumOfDays = 0) {
       int ID = 0;
       var TheCost = new List<BlackBoxCostCalucation>();
