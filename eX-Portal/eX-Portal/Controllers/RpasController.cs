@@ -77,9 +77,6 @@ namespace eX_Portal.Controllers
       LEFT JOIN MSTR_User ON
         MSTR_User.UserID = GCA_Approval.CreatedBy
        LEFT JOIN MSTR_Drone  on GCA_Approval.DroneId= MSTR_Drone.DroneId";
-
-            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-            {
                 if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                 {
                     if (SQLFilter != "")
@@ -87,8 +84,6 @@ namespace eX_Portal.Controllers
                     SQLFilter += " \n" +
                       "  MSTR_Drone.AccountID=" + Util.getAccountID();
                 }
-
-            }
             qView nView = new qView(SQLFilter);
             if (exLogic.User.hasAccess("FLIGHTREG.DETAIL")) 
             nView.addMenu("Details", Url.Action("FlightRegistrationDetails", "RPAS", new { ID = "_PKey" }));

@@ -171,12 +171,10 @@ namespace eX_Portal.Controllers {
 
             if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
             {
-                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                {
+
                     SQL +=
                       "WHERE\n" +
                       "  [MSTR_Drone].AccountID=" + Util.getAccountID();
-                }
             }
 
       qView nView = new qView(SQL);
