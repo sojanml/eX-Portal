@@ -348,7 +348,7 @@ namespace eX_Portal.exLogic {
                     Param1.Value = Util.getAccountID();
                     DbParameter Param2 = cmd.CreateParameter();
                     Param2.ParameterName = "@IsAccess";
-                    if (!exLogic.User.hasAccess("DRONE.VEWALL"))
+                    if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                     {
                         Param2.Value = 1;
                     }
