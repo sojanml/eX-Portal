@@ -27,5 +27,19 @@ namespace eX_Portal.ViewModel {
     public double LastMonthFixedwingHrs { set; get; }
     public double TotalMultiDashHrs { set; get; }
     public double TotalFixedWingHrs { set; get; }
+
+        public double M1 { set; get; }
+        public double M2 { set; get; }
+        public double M3 { set; get; }
+        public double M4 { set; get; }
+        public double M5 { set; get; }
+        public double M6 { set; get; }
+        public double M7 { set; get; }
+        public double M8 { set; get; }
+        public double M9 { set; get; }
+        public double M10 { set; get; }
+        public double M11 { set; get; }
+        public double M12 { set; get; }
+       
     }
 }

@@ -394,7 +394,92 @@ namespace eX_Portal.exLogic {
 
             return ChartList;
         }
-            //return the list objects
+        //return the list objects
+
+//chart for getting the qumulative graph for the last 12 months
+        public static IList<ChartViewModel> getFlightHoursByAccount()
+        {
+
+            IList<ChartViewModel> ChartList = new List<ChartViewModel>();
+
+            using (var ctx = new ExponentPortalEntities())
+            {
+                using (var cmd = ctx.Database.Connection.CreateCommand())
+                {
+                    ctx.Database.Connection.Open();
+
+
+                    cmd.CommandText = "Report_FlightHours_By_Account";
+                    DbParameter Param1 = cmd.CreateParameter();
+                    Param1.ParameterName = "@AccountID";
+                    Param1.Value = Util.getAccountID();
+                    DbParameter Param2 = cmd.CreateParameter();
+                    Param2.ParameterName = "@IsAccess";
+                    if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                    {
+                        Param2.Value = 1;
+                    }
+                    else
+                    {
+                        Param2.Value = 0;
+                    }
+                    cmd.Parameters.Add(Param1);
+                    cmd.Parameters.Add(Param2);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+
+                            ChartViewModel dd = new ChartViewModel();
+                            
+                           
+                            dd.AccountID = Util.toInt(reader["AccountID"].ToString());
+                            dd.AccountName = reader["AccountName"].ToString();
+                            dd.ChartColor = reader["ChartColor"].ToString();
+                            dd.M1 = Util.toDouble(reader["M1"].ToString());
+                            dd.M1 = Math.Round((dd.M1 / 60), 2);
+                            dd.M2 = Util.toDouble(reader["M2"].ToString());
+                            dd.M2 = Math.Round((dd.M2 / 60), 2);
+                            dd.M3 = Util.toDouble(reader["M3"].ToString());
+                            dd.M3 = Math.Round((dd.M3 / 60), 2);
+                            dd.M4 = Util.toDouble(reader["M4"].ToString());
+                            dd.M4 = Math.Round((dd.M4 / 60), 2);
+                            dd.M5 = Util.toDouble(reader["M5"].ToString());
+                            dd.M5 = Math.Round((dd.M5 / 60), 2);
+                            dd.M6 = Util.toDouble(reader["M6"].ToString());
+                            dd.M6 = Math.Round((dd.M6 / 60), 2);
+                            dd.M7 = Util.toDouble(reader["M7"].ToString());
+                            dd.M7 = Math.Round((dd.M7 / 60), 2);
+                            dd.M8 = Util.toDouble(reader["M8"].ToString());
+                            dd.M8 = Math.Round((dd.M8 / 60), 2);
+                            dd.M9 = Util.toDouble(reader["M9"].ToString());
+                            dd.M9 = Math.Round((dd.M9 / 60), 2);
+                            dd.M10 = Util.toDouble(reader["M10"].ToString());
+                            dd.M10 = Math.Round((dd.M10 / 60), 2);
+                            dd.M11 = Util.toDouble(reader["M11"].ToString());
+                            dd.M11 = Math.Round((dd.M11 / 60), 2);
+                            dd.M12 = Util.toDouble(reader["M12"].ToString());
+                            dd.M12 = Math.Round((dd.M12 / 60), 2);
+                            ChartList.Add(dd);
+
+                        }
+                    }
+
+                    ctx.Database.Connection.Close();
+
+
+                }
+
+
+            }
+
+
+
+            return ChartList;
+        }
+
+//end chart for getting the qumulative graph for the last 12 months
 
 
         public static IList<ChartAlertViewModel> getAlertData()

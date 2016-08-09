@@ -3,7 +3,8 @@ var LastFlightData = [];
 var CurrentmonthFlightData = [];
 var TotalFlightData = [];
 var xLabel = new Object();
-
+var scrollData = new Object();
+var max;
 
 //var LastFlightcolors = ['red', 'green', 'blue', 'orange', 'yellow'];
 //var CurrentMonthFlightcolors = ['DarkRed', 'DarkGreen', 'DarkBlue', 'DarkOrange', 'DarkYellow'];
@@ -51,7 +52,21 @@ function OnSuccess_(reponse) {
    
     var LastAccountID = 0;
     var ColorSelector = 0;
-    var Hdata="";
+    var Hdata = "";
+    if (aData.length > 15)
+    {
+        max = 15;
+        scrollData= {
+                enabled: true
+        }
+
+    }
+    else {
+        max = aData.length - 1;
+        scrollData = {
+            enabled: false
+        }
+    }
     for (var i = 0; i < aData.length; i++) {
         var data = aData[i];
 
@@ -62,7 +77,7 @@ function OnSuccess_(reponse) {
         xLabel[value] = name;
         if (LastAccountID != data.AccountID)
         {
-            Hdata = Hdata + '<td > <span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:80px">.</span>' + data.AccountName + '</td></tr>'
+            Hdata = Hdata + '<td > <span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:9px">' + data.AccountName + '</span></td></tr>'
         }
         LastAccountID = data.AccountID;
 
@@ -212,6 +227,8 @@ function initChart() {
             renderTo: 'RecentFlight',
         
             type: 'column',
+            marginRight:0,
+            marginBottom:90,
             events: {
                 click: function (event) {
                     var chart1 = $('#RecentFlight').highcharts();
@@ -233,11 +250,14 @@ function initChart() {
        
         xAxis: {
             min: 0,
+            max:max,
             
             categories: category,
             
-            crosshair: true
+            crosshair: true,
+            scrollbar: scrollData,
         },
+        
         yAxis: {
             min: 0,
             tickInterval: 1,
@@ -367,21 +387,26 @@ function initChartTotalFlight() {
         chart: {
             renderTo: 'TotalFlight',
 
-            type: 'column'
+            type: 'column',
+            marginRight: 0,
+            marginBottom: 90,
         },
         title: {
             text: null
         },
 
         xAxis: {
-          
+            min: 0,
+            max:max,
             categories: category,
 
-            crosshair: true
+            crosshair: true,
+            scrollbar:scrollData,
         },
        
         yAxis: {
             min: 0,
+           
             tickInterval: 1,
             title: {
                 text: 'Time  (Minutes)'
