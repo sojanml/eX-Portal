@@ -324,6 +324,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="ProductRSSI" Type="nvarchar" MaxLength="50" />
           <Property Name="ReadTime" Type="datetime" />
           <Property Name="CreatedTime" Type="datetime" />
+          <Property Name="ReceivedTime" Type="datetime" />
           <Property Name="RecordType" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="ProductId" Type="int" />
@@ -2725,6 +2726,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="IsSoftFence" Type="Int32" />
           <Property Name="voltage" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="OtherFlightIDs" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="MSTR_Drone">
           <Key>
@@ -3961,6 +3963,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="FlightMapDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.FlightMapData">
               <MappingFragment StoreEntitySet="FlightMapData">
+                <ScalarProperty Name="ReceivedTime" ColumnName="ReceivedTime" />
                 <ScalarProperty Name="OtherFlightIDs" ColumnName="OtherFlightIDs" />
                 <ScalarProperty Name="voltage" ColumnName="voltage" />
                 <ScalarProperty Name="IsSoftFence" ColumnName="IsSoftFence" />

@@ -23,6 +23,8 @@ var DistanceOptions = {
   Warning: 500
 };
 
+var GeoInfoWindow = null;
+
 $(document).ready(function () {
 
   initializeMap();
@@ -32,6 +34,7 @@ $(document).ready(function () {
   initilizeChart();
 
   getLocationPoints();
+  var GeoInfoWindow = new google.maps.InfoWindow();
 
   $('#chkShowFullPath').on("change", function (e) {
     if (this.checked) {
@@ -49,6 +52,26 @@ $(document).ready(function () {
   $('#btnGeoTag').on("click", function (e) {
     ShowHideGeoTag($(this));
   });
+
+  $(document).on("click", ".map-point", function () {
+    var Lat = $(this).attr("data-lat");
+    var Lng = $(this).attr("data-lng");
+    var Doc = $(this).attr("data-doc");
+    var Thump = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc.replace(".jpg", ".t.png");
+    var DocURL = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc;
+    var Center = new google.maps.LatLng(Lat, Lng);
+    GeoInfoWindow.setPosition(Center);
+    GeoInfoWindow.setContent(
+        '<table cellpadding=0 cellspacig=0>' +
+        '<tr>'+
+        '<td><a target="_blank" href="' + DocURL + '"><img style="margin-right:10px; width:80px; height: auto;" src="' + Thump + '"></a></td>' +
+        '<td style="white-space:nowrap;">Lat: <b>' + Lat + "</b><br>" + 
+        "Lng: <b>" + Lng + "</b><br>" + 
+        "Alt: <b>" + $(this).attr("data-alt") + "</b>" +
+        "</td>" + 
+        '</tr></table>');    
+    GeoInfoWindow.open(map);
+  })
 });
 
 
@@ -77,7 +100,7 @@ function ShowHideGeoTag(btn) {
     async: true,
     success: function (GeoTagData) {
       _IsGeoTagShown = true;
-      _GeoTagLayer = new MyOverlay({ map: map }, GeoTagData);
+      _GeoTagLayer = new GeoTagOverlay({ map: map }, GeoTagData);
       if (btn.length) btn.val("Hide Geo Tag");
     },
     failure: function (msg) {
@@ -89,23 +112,23 @@ function ShowHideGeoTag(btn) {
 }
 
 
-function MyOverlay(options, GeoTagData) {
+function GeoTagOverlay(options, GeoTagData) {
   this.setValues(options);
   this.markerLayer = $('<div />').addClass('overlay');
   this.GeoTagData = GeoTagData;
 };
-MyOverlay.prototype = new google.maps.OverlayView;
+GeoTagOverlay.prototype = new google.maps.OverlayView;
 
-MyOverlay.prototype.onAdd = function () {
+GeoTagOverlay.prototype.onAdd = function () {
   var $pane = $(this.getPanes().overlayImage); // Pane 3  
   $pane.append(this.markerLayer);
 };
 
-MyOverlay.prototype.onRemove = function () {
+GeoTagOverlay.prototype.onRemove = function () {
   this.markerLayer.remove();
 };
 
-MyOverlay.prototype.draw = function () {
+GeoTagOverlay.prototype.draw = function () {
   var projection = this.getProjection();
   var zoom = this.getMap().getZoom();
   var fragment = document.createDocumentFragment();
@@ -123,6 +146,10 @@ MyOverlay.prototype.draw = function () {
     var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
     var $point = $(
         '<div class="map-point" id="p' + i + '" title="' + i + '" '
+      + 'data-lat="' + this.GeoTagData[i].Latitude + '" ' 
+      + 'data-lng="' + this.GeoTagData[i].Longitude + '" '
+      + 'data-alt="' + this.GeoTagData[i].Altitude + '" '
+      + 'data-doc="' + this.GeoTagData[i].DocumentName + '" '
       + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
       + '<span class="icon GeoTagIcon">&#xf03e;</span>'
       + '<span class="icon GeoTagPoint">&#xf0d7;</span>'
