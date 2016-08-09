@@ -268,7 +268,7 @@ GROUP  BY
         MSTR_Drone.DroneName as label
       FROM
         MSTR_Drone");
-      if (!User.hasAccess("DRONE.MANAGE")) {                
+      if (!User.hasAccess("DRONE.VIEWALL")) {                
         SQLFilter.AppendLine("MSTR_Drone.AccountID = " + Util.getAccountID());                
       }
       if (!String.IsNullOrEmpty(Term)) {

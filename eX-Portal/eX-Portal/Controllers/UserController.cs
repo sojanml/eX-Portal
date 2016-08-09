@@ -199,13 +199,13 @@ namespace eX_Portal.Controllers {
       "  on a.UserProfileId = b.ProfileId\n" +
       "where \n" +
       "  a.ispilot=1";
-      if(!exLogic.User.hasAccess("DRONE.MANAGE")) {
+     
                 if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                 {
                     SQL += "AND\n" +
                     "  a.AccountID=" + Util.getAccountID();
                 }
-      }
+      
 
       qView nView = new qView(SQL);
       if(exLogic.User.hasAccess("USER.VIEW"))
