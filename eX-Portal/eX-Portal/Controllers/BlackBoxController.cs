@@ -41,14 +41,11 @@ namespace eX_Portal.Controllers {
         "  MSTR_Drone.DroneId = [BlackBoxData].DroneId\n" +
         "WHERE\n" +
         "  Speed > 0.00";
-            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-            {
-                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                 {
                     SQL += " AND\n" +
                       "  MSTR_Drone.AccountID=" + Util.getAccountID();
                 }
-            }
       SQL = SQL + "\n" +
         "GROUP BY\n" +
         "  [BlackBoxData].DroneId,\n" +
@@ -97,13 +94,10 @@ namespace eX_Portal.Controllers {
             */
             if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
             {
-                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                {
                     SQL += " AND\n" +
                       "  MSTR_Drone.AccountID=" + Util.getAccountID() + "\n" +
                       "WHERE\n" +
                       "  MSTR_Drone.DroneID IS NOT NULL";
-                }
             }
          //   SQL+= " Order By UasDataid";
 

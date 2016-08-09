@@ -100,6 +100,33 @@ namespace eX_Portal.Controllers {
       }
     }
 
+
+        //chart for getting the qumulative graph for the last 12 months
+
+        [System.Web.Mvc.HttpGet]
+        public JsonResult FlightHoursByAccount()
+        {
+            try
+            {
+                IList<ChartViewModel> ChartList = Util.getFlightHoursByAccount();
+                return Json(ChartList, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                if (DebugOption == "True")
+                {
+                    throw ex;
+                }
+                else
+                    return null;
+
+            }
+        }
+
+
+        //chart for getting the qumulative graph for the last 12 months
+
+
         //new chart for flights
 
 

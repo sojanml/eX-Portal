@@ -203,7 +203,7 @@ namespace eX_Portal.Controllers {
                 if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                 {
                     SQL += "AND\n" +
-          "  a.AccountID=" + Util.getAccountID();
+                    "  a.AccountID=" + Util.getAccountID();
                 }
       }
 
@@ -331,13 +331,10 @@ namespace eX_Portal.Controllers {
 
       if(exLogic.User.hasAccess("PILOT")) {
         //nothing
-      } else if(!exLogic.User.hasAccess("DRONE.MANAGE")) {
-                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-                {
+      } else if(!exLogic.User.hasAccess("DRONE.VIEWALL")) {
                     SQL +=
           " AND\n" +
-          "  a.AccountID=" + Util.getAccountID();
-                }
+          "  a.AccountID=" + Util.getAccountID();                
       }
 
       qDetailView nView = new qDetailView(SQL);
@@ -489,7 +486,8 @@ namespace eX_Portal.Controllers {
       }
       if(exLogic.User.EmailExist(UserModel.User.EmailId) > 0) {
         ModelState.AddModelError("User.EmailId", "This email id already exists.");
-      }
+               
+            }
       if(RPASID == 0) {
         if(String.IsNullOrEmpty(UserModel.User.Password)) {
           ModelState.AddModelError("User.Password", "Invalid Password. Please enter again.");
@@ -626,8 +624,8 @@ namespace eX_Portal.Controllers {
         PermitCategoryList = Util.GetLists("RPASCategory")
 
       };
-
-      return View(viewModel);
+            ViewBag.IsPassowrdRequired = true;
+            return View(viewModel);
     }//Create() HTTPPost
 
 

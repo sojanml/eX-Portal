@@ -59,15 +59,13 @@ namespace eX_Portal.Controllers {
           "Left join LUP_Drone U on\n" +
           "  UAVTypeID = U.TypeID and\n" +
           "  U.Type= 'UAVType'\n";
-            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-            {
-                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                {
+         if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+         {
                     SQL +=
                       "WHERE\n" +
                       "  D.AccountID=" + Util.getAccountID();
-                }
-            }
+         }
+            
       qView nView = new qView(SQL);
       if(exLogic.User.hasAccess("DRONE"))
         nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
@@ -533,11 +531,8 @@ namespace eX_Portal.Controllers {
           "  D.[DroneId]=" + DroneID;
             if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
             {
-                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                {
                     SQL += " AND\n" +
                       "  D.AccountID=" + Util.getAccountID();
-                }
             }
 
       qDetailView nView = new qDetailView(SQL);
@@ -627,11 +622,8 @@ namespace eX_Portal.Controllers {
         return RedirectToAction("NoAccess", "Home");
       String OwnerListSQL = 
         "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account";
-            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-            {
                 if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();
-            }
+                OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();           
       OwnerListSQL +=" ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
         Drone = new MSTR_Drone(),
@@ -783,15 +775,11 @@ namespace eX_Portal.Controllers {
                         }
 
                     }
-                    if (exLogic.User.hasAccess("DRONE.VIEWALL"))
-                    {
+
                         if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
                         else
                             return RedirectToAction("Detail", new { ID = DroneId });
-                    }else
-                    {
-                        return RedirectToAction("Detail", new { ID = DroneId });
-                    }
+                  
                 }
                 else
                 {
@@ -868,8 +856,6 @@ namespace eX_Portal.Controllers {
 
     public ActionResult ReAssign(int id) {
       if(!exLogic.User.hasAccess("DRONE.MANAGE"))
-        return RedirectToAction("NoAccess", "Home");
-      if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.DroneId = id;
       ExponentPortalEntities db = new ExponentPortalEntities();
