@@ -252,15 +252,10 @@ GROUP  BY
         SQLFilter.AppendLine("AND  PortalAlertCounter.Boundary > 0");
       if (Filter.BoundaryCritical > 0)
         SQLFilter.AppendLine("AND  PortalAlertCounter.BoundaryCritical > 0");
-            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-            {
                 if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                 {
                     SQLFilter.AppendLine(" AND  MSTR_Drone.AccountID=" + Util.getAccountID() + "");
-                }
-               
-            }
-
+                }                           
                 SQL.Append(SQLFilter);
       return SQL.ToString();
     }//public String getFlightReportSQL()
@@ -302,7 +297,7 @@ GROUP  BY
       SQL.AppendLine("  MSTR_User.FirstName + ' ' + MSTR_User.LastName as label ");
       SQL.AppendLine("FROM ");
       SQL.AppendLine("  MSTR_User");
-      if (User.hasAccess("DRONE.MANAGE") || User.hasAccess("PILOT")|| User.hasAccess("DRONE.VIEWALL")) {
+      if (User.hasAccess("DRONE.VIEWALL") || User.hasAccess("PILOT")) {
         SQL.AppendLine("WHERE \n");
         SQL.AppendLine("  MSTR_User.IsPilot = 1");
       } else {

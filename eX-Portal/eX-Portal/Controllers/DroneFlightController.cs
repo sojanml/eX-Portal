@@ -66,16 +66,13 @@ namespace eX_Portal.Controllers {
         ViewBag.Title += " [" + Util.getDroneName(DroneID) + "]";
       }
 
-            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-            {
-                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-                {
-                    if (SQLFilter != "")
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+      {
+           if (SQLFilter != "")
                         SQLFilter += " AND";
                     SQLFilter += " \n" +
                       "  MSTR_Drone.AccountID=" + Util.getAccountID();
-                }
-            }
+      }
 
       //this is using when click link on the dashboard
             if (FlightType == "LastFlight")
