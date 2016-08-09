@@ -117,7 +117,7 @@ namespace eX_Portal.exLogic {
 
                    
                   
-                        if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                        if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                         {
 
                             Param2.Value = 1;
@@ -186,7 +186,7 @@ namespace eX_Portal.exLogic {
                     }
                     else
                     {
-                        if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                        if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                         {
 
                             Param2.Value = 1;
@@ -242,7 +242,7 @@ namespace eX_Portal.exLogic {
                     Param1.Value = Util.getAccountID();
                     DbParameter Param2 = cmd.CreateParameter();
                     Param2.ParameterName = "@IsAccess";
-                    if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+                    if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
 
                         Param2.Value = 1;
                     } else {
@@ -415,7 +415,7 @@ namespace eX_Portal.exLogic {
                     Param1.Value = Util.getAccountID();
                     DbParameter Param2 = cmd.CreateParameter();
                     Param2.ParameterName = "@IsAccess";
-                    if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                    if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                     {
                         Param2.Value = 1;
                     }
