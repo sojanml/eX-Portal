@@ -288,7 +288,7 @@ namespace eX_Portal.Controllers {
     }
 
     [ChildActionOnly]
-    //[OutputCache(Duration = 3600, VaryByCustom = "User")]
+    [OutputCache(Duration = 3600, VaryByCustom = "User")]
     public ActionResult LocalWeather() {
       WeatherViewModel TodaysWeather = Weather.getLocalWeather(Request.UserHostAddress);
       return View(TodaysWeather);

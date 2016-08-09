@@ -11,7 +11,7 @@
     <WebStackScaffolding_ViewDialogWidth>960</WebStackScaffolding_ViewDialogWidth>
     <ProjectView>ShowAllFiles</ProjectView>
     <WebStackScaffolding_DbContextTypeFullName>eX_Portal.Models.ExponentPortalEntities</WebStackScaffolding_DbContextTypeFullName>
-    <NameOfLastUsedPublishProfile>exportal</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>exPortal</NameOfLastUsedPublishProfile>
     <UseIISExpress>true</UseIISExpress>
     <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
   </PropertyGroup>
