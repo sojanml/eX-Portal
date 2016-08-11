@@ -125,6 +125,10 @@
   <label for="chkShowFullPath">Show Full Path</label>
 </td>
   <td style="width:100%;"></td>
+  @if(Model.getPayloadCount(FlightID) > 0) {
+    <td><input class="button" id="btnPayload" type="button" value="Payload" /></td>
+  }
+
   @if(Model.getGeoTagCount(FlightID) > 0) {
     <td><input class="button" style="margin-left:20px;"  id="btnGeoTag" type="button" value="Geo Tag" /></td>
   }

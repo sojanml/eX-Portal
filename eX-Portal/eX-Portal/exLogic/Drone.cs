@@ -70,7 +70,12 @@ namespace eX_Portal.exLogic {
     }
 
     public int getGeoTagCount(int FlightID) {
-      String SQL = "select * from DroneDocuments where flightid=" + FlightID + " and DocumentType = 'Geo Tag'";
+      String SQL = "select Count(*) from DroneDocuments where flightid=" + FlightID + " and DocumentType = 'Geo Tag'";
+      return Util.getDBInt(SQL);
+    }
+    public int getPayloadCount(int FlightID = 0) {
+      FlightID = 310;
+      String SQL = "SELECT Count(*) FROM PayLoadFlight where flightid=" + FlightID;
       return Util.getDBInt(SQL);
     }
 

@@ -74,6 +74,18 @@ namespace eX_Portal.Controllers {
 
       return Json(Records, JsonRequestBehavior.AllowGet);
     }
+
+    [HttpGet]
+    public String PayloadData([Bind(Prefix = "ID")]  int FlightID) {
+      var FlightUniqueID = "20160411095652";
+      var theGrid = new GeoGrid(FlightUniqueID);
+      Object GridInfo = theGrid.getGridKML();
+
+      Response.ContentType = "text/xml";
+      return GridInfo.ToString();
+    }
+ 
+
     public String RFID([Bind(Prefix = "ID")]String RFID = "") {
       String SQL = @"SELECT 
         [VIN]
