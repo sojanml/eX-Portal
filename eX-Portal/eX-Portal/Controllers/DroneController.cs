@@ -622,7 +622,7 @@ namespace eX_Portal.Controllers {
         return RedirectToAction("NoAccess", "Home");
       String OwnerListSQL = 
         "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account";
-                if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                 OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();           
       OwnerListSQL +=" ORDER BY Name";
       var viewModel = new ViewModel.DroneView {

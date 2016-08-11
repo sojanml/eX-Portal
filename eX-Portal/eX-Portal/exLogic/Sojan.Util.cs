@@ -349,7 +349,7 @@ namespace eX_Portal.exLogic {
           switch (TypeOfList.ToLower()) {
           case "drone":
           SQL = "SELECT [DroneId] as Value, Convert(nvarchar(20),DroneId)+'-'+[DroneName] as Name FROM [MSTR_Drone] where IsActive=1";
-          if (IsStrictFilter || !exLogic.User.hasAccess("DRONE.MANAGE")) {
+          if (IsStrictFilter || !exLogic.User.hasAccess("DRONE.VIEWALL")) {
             SQL += "\n" +
               " AND\n " +
               "  MSTR_Drone.AccountID=" + Util.getAccountID();
@@ -358,7 +358,7 @@ namespace eX_Portal.exLogic {
           break;
           case "pilot":
           SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User  WHERE \n";
-          if (IsStrictFilter || !exLogic.User.hasAccess("DRONE.MANAGE")) {
+          if (IsStrictFilter || !exLogic.User.hasAccess("DRONE.VIEWALL")) {
             SQL += "\n" +
 
               "  MSTR_User.AccountID=" + Util.getAccountID() +
@@ -368,7 +368,7 @@ namespace eX_Portal.exLogic {
           break;
           case "gsc":
           SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User";
-          if (IsStrictFilter || !exLogic.User.hasAccess("DRONE.MANAGE")) {
+          if (IsStrictFilter || !exLogic.User.hasAccess("DRONE.VIEWALL")) {
             SQL += "\n" +
               "WHERE\n" +
               "  MSTR_User.AccountID=" + Util.getAccountID();

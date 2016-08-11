@@ -132,7 +132,7 @@ namespace eX_Portal.Controllers {
           DroneFlight.ID = PortalAlert.FlightID
       LEFT JOIN MSTR_Drone ON
           MSTR_Drone.DroneID = DroneFlight.DroneID";
-      if (!exLogic.User.hasAccess("DRONE.MANAGE")) SQL = SQL + @" AND
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL")) SQL = SQL + @" AND
           MSTR_Drone.AccountID = " + AccountID;
       SQL= SQL + @"
         LEFT JOIN PortalAlert_User ON

@@ -61,7 +61,7 @@ namespace eX_Portal.Controllers {
             IList<GeoTagReport> DocsGeo =new List<GeoTagReport>();
             ExponentPortalEntities Db = new ExponentPortalEntities();
 
-            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
             {
                 IsCompany = 1;
 

@@ -30,7 +30,7 @@ namespace eX_Portal.exLogic {
             [DroneId] 
           from 
             [MSTR_Drone]";
-          if (!exLogic.User.hasAccess("DRONE.MANAGE")) cmd.CommandText += @"
+          if (!exLogic.User.hasAccess("DRONE.VIEWALL")) cmd.CommandText += @"
           where 
             [AccountID]=" + accountid;
           cmd.CommandText += @"
