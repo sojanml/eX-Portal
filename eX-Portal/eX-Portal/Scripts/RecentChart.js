@@ -78,7 +78,7 @@ function OnSuccess_(reponse) {
         xLabel[value] = name;
         if (LastAccountID != data.AccountID)
         {
-            Hdata = Hdata + '<td > <span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:9px">' + data.AccountName + '</span></td></tr>'
+            Hdata = Hdata + '<td > <span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
         }
         LastAccountID = data.AccountID;
 
@@ -356,7 +356,7 @@ function initChart() {
     function (chart) { // on complete
 
 
-        chart.renderer.text(HtmlData, 50, 245)
+        chart.renderer.text(HtmlData, 0, 245)
         
         //chart.renderer.text('This text is <span style="color: red">styled</span> and <a href="http://example.com">linked</a>', 50,250)
         //    .css({
@@ -476,7 +476,7 @@ function initChartTotalFlight() {
     function (chart) { // on complete
 
 
-        chart.renderer.text(HtmlData, 50, 245)
+        chart.renderer.text(HtmlData, 0, 245)
 
         //chart.renderer.text('This text is <span style="color: red">styled</span> and <a href="http://example.com">linked</a>', 50,250)
         //    .css({
