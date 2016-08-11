@@ -38,12 +38,14 @@ namespace eX_Portal.exLogic {
 
   public class GeoGrid {
     private int _YardID = 0;
+    private String _FlightUniqueID = String.Empty;
     public GeoGrid(int _pYardID = 0) {
       _YardID = _pYardID;
     }
 
     public GeoGrid(String FlightUniqueID) {
       _YardID = getYardID(FlightUniqueID);
+      _FlightUniqueID = FlightUniqueID;
     }
 
     public int YardID { 
@@ -107,6 +109,9 @@ namespace eX_Portal.exLogic {
       };
       return theYard;
     }
+
+
+  
 
     public String getTable(String FlightUniqueID) {
       int MaxRow = 0;
@@ -278,6 +283,170 @@ namespace eX_Portal.exLogic {
         ORDER BY 
           LeftPoint.ColumnNumber;";
       return Util.getDBRowsJson(SQL);
+    }
+
+    public Object getGridKML() {
+      String VerticalSQL = @"SELECT 
+       LeftPoint.RowNumber, 
+       LeftPoint.TopLeftLat as sLat, 
+       LeftPoint.TopLeftLon as sLon,
+       RightPoint.TopRightLat as eLat, 
+       RightPoint.TopRightLon as eLon
+      FROM 
+        PayLoadYardGrid as LeftPoint
+      LEFT JOIN PayLoadYardGrid as RightPoint ON
+        RightPoint.ColumnNumber = (SELECT MAX(ColumnNumber) FROM PayLoadYardGrid WHERE YardID=" + _YardID + @") AND
+        RightPoint.RowNumber = LeftPoint.RowNumber AND
+        RightPoint.YardID=" + _YardID + @"
+      WHERE 
+        LeftPoint.ColumnNumber = 0 AND
+        LeftPoint.RowNumber > 0 AND
+        LeftPoint.YardID=" + _YardID + @"
+      ORDER BY 
+        LeftPoint.RowNumber";
+
+      String HorizondalSQL = @"SELECT 
+         LeftPoint.ColumnNumber,
+         LeftPoint.TopLeftLat as sLat, 
+         LeftPoint.TopLeftLon as sLon,
+         RightPoint.BottomLeftLat as eLat, 
+         RightPoint.BottomLeftLon as eLon
+        FROM 
+          PayLoadYardGrid as LeftPoint
+        LEFT JOIN PayLoadYardGrid as RightPoint ON
+          RightPoint.RowNumber = (SELECT MAX(RowNumber) FROM PayLoadYardGrid WHERE YardID=" + _YardID + @") AND
+          RightPoint.ColumnNumber = LeftPoint.ColumnNumber AND
+          RightPoint.YardID=" + _YardID + @"
+        WHERE 
+          LeftPoint.RowNumber = 0 AND
+          LeftPoint.ColumnNumber > 0 AND
+          LeftPoint.YardID=" + _YardID + @"
+        ORDER BY 
+          LeftPoint.ColumnNumber;";
+
+      String BoundarySQL = "SELECT * FROM PayLoadYard WHERE YardID=" + _YardID;
+
+      StringBuilder XML = new StringBuilder();
+      XML.AppendLine(@"<kml xmlns=""http://earth.google.com/kml/2.1"">");
+      XML.AppendLine("<Document>");
+      XML.AppendLine(@"<name>Chicago Transit Map</name>
+        <description>Payload Lines</description>
+      <Style id=""GridInLine"">
+        <LineStyle>
+        <color>ffff0000</color>
+        <width>1</width>
+        </LineStyle>
+      </Style>
+      <Style id=""GridBorder"">
+        <LineStyle>
+        <color>ff000000</color>
+        <width>1</width>
+        </LineStyle>
+      </Style>");
+
+      //Adding Lines
+      XML.Append(BuildCordinates(VerticalSQL));
+      XML.Append(BuildCordinates(HorizondalSQL));
+      XML.Append(BuildBoundary(BoundarySQL));
+      XML.Append(getPayloadItems());
+
+      //Closing Document
+      XML.AppendLine("</Document>");
+      XML.AppendLine("</kml>");
+
+      return XML;
+
+    }
+
+    public StringBuilder getPayloadItems() {
+      String SQL = @"SELECT
+        PayloadMapData.RFID,
+        (TopLeftLat + BottomRightLat)/2 as Lat,
+        (TopLeftLon + BottomRightLon)/2 as Lon,
+        MSTR_Product.VIN,
+        MSTR_Product.CarMake,
+        MSTR_Product.Model,
+        MSTR_Product.[Year],
+        MSTR_Product.Color
+      FROM
+        PayloadMapData
+      LEFT JOIN PayLoadYardGrid ON
+        PayLoadYardGrid.YardID = PayloadMapData.YardID AND
+        PayLoadYardGrid.RowNumber = (PayloadMapData.RowNumber - 1) AND
+        PayLoadYardGrid.ColumnNumber = (PayloadMapData.ColumnNumber - 1)
+      LEFT JOIN MSTR_Product ON
+        MSTR_Product.RFID = PayloadMapData.RFID
+      WHERE
+        PayloadMapData.FlightUniqueID = '" + _FlightUniqueID +  @"' 
+      ORDER BY
+        PayloadMapData.RowNumber,
+        PayloadMapData.ColumnNumber
+      ";
+      StringBuilder SB = new StringBuilder();
+      var Data = Util.getDBRows(SQL);
+      foreach(var Row in Data) {
+        SB.Append(@"<Placemark>");
+        SB.AppendFormat("<name>" + Row["RFID"] + "</name>");
+        SB.Append(@"<description>");
+        SB.Append("<![CDATA[");
+        SB.AppendLine("VIN: <b>" + Row["VIN"] + "</b><br>");
+        SB.AppendLine("Make: <b>" + Row["CarMake"] + "</b><br>");
+        SB.AppendLine("Year: <b>" + Row["Year"] + "</b><br>");
+        SB.AppendLine("Color: <b>" + Row["Color"] + "</b>");
+        SB.Append("]]>");
+        SB.Append(@"</description>");
+        SB.Append(@"<Point>
+        <coordinates>");
+        SB.AppendFormat("{0},{1}\n", Row["Lon"], Row["Lat"]);
+        SB.Append(@"</coordinates>
+        </Point>
+        </Placemark>");
+      }
+      return SB;
+
+
+    }
+    
+    public StringBuilder BuildCordinates(String SQL) {
+      StringBuilder SB = new StringBuilder();
+      var Data = Util.getDBRows(SQL);
+      foreach(var Row in Data) {
+        SB.AppendLine(@"
+      <Placemark>
+        <name>Blue Line</name>
+        <styleUrl>#GridInLine</styleUrl>
+        <LineString>
+        <altitudeMode>relative</altitudeMode>
+        <coordinates>");
+        SB.AppendFormat("{0},{1},0 {2},{3},0\n", Row["sLon"], Row["sLat"], Row["eLon"], Row["eLat"]);
+        SB.AppendLine(@"</coordinates>
+        </LineString>
+      </Placemark>");
+      }
+      return SB;
+    }
+
+    public StringBuilder BuildBoundary(String SQL) {
+      StringBuilder SB = new StringBuilder();
+      var Data = Util.getDBRows(SQL);
+      foreach(var Row in Data) {
+        SB.AppendLine(@"
+      <Placemark>
+        <name>Blue Line</name>
+        <styleUrl>#GridBorder</styleUrl>
+        <LineString>
+        <altitudeMode>relative</altitudeMode>
+        <coordinates>");
+        SB.AppendFormat("{0},{1},0\n", Row["TopLeftLon"], Row["TopLeftLat"]);
+        SB.AppendFormat("{0},{1},0\n", Row["TopRightLon"], Row["TopRightLat"]);
+        SB.AppendFormat("{0},{1},0\n", Row["BottomRightLon"], Row["BottomRightLat"]);
+        SB.AppendFormat("{0},{1},0\n", Row["BottomLeftLon"], Row["BottomLeftLat"]);
+        SB.AppendFormat("{0},{1},0\n", Row["TopLeftLon"], Row["TopLeftLat"]); 
+        SB.AppendLine(@"</coordinates>
+        </LineString>
+      </Placemark>");
+      }
+      return SB;
     }
 
     public String getGrid(String FlightUniqueID, bool IsReturnJSon = false) {

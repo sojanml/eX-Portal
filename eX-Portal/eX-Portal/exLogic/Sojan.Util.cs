@@ -228,7 +228,6 @@ namespace eX_Portal.exLogic {
     }
 
 
-
     public static Dictionary<String, Object> getDBRow(String SQL) {
       var Result = new Dictionary<String, Object>();
       Result["hasRows"] = false;

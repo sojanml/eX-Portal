@@ -24,6 +24,8 @@ var DistanceOptions = {
 };
 
 var GeoInfoWindow = null;
+var PayloadLayer = null;
+var _IsPlayloadShown = false;
 
 $(document).ready(function () {
 
@@ -34,7 +36,7 @@ $(document).ready(function () {
   initilizeChart();
 
   getLocationPoints();
-  var GeoInfoWindow = new google.maps.InfoWindow();
+  GeoInfoWindow = new google.maps.InfoWindow();
 
   $('#chkShowFullPath').on("change", function (e) {
     if (this.checked) {
@@ -54,26 +56,65 @@ $(document).ready(function () {
   });
 
   $(document).on("click", ".map-point", function () {
-    var Lat = $(this).attr("data-lat");
-    var Lng = $(this).attr("data-lng");
-    var Doc = $(this).attr("data-doc");
-    var Thump = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc.replace(".jpg", ".t.png");
-    var DocURL = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc;
-    var Center = new google.maps.LatLng(Lat, Lng);
-    GeoInfoWindow.setPosition(Center);
-    GeoInfoWindow.setContent(
-        '<table cellpadding=0 cellspacig=0>' +
-        '<tr>'+
-        '<td><a target="_blank" href="' + DocURL + '"><img style="margin-right:10px; width:80px; height: auto;" src="' + Thump + '"></a></td>' +
-        '<td style="white-space:nowrap;">Lat: <b>' + Lat + "</b><br>" + 
-        "Lng: <b>" + Lng + "</b><br>" + 
-        "Alt: <b>" + $(this).attr("data-alt") + "</b>" +
-        "</td>" + 
-        '</tr></table>');    
-    GeoInfoWindow.open(map);
-  })
+    fn_MapPoint($(this));
+  });
+
+  $('#btnPayload').on("click", function () {
+    ShowHidePayload($(this));
+  });
+
 });
 
+
+function fn_MapPoint(thisObj) {
+  var Lat = thisObj.attr("data-lat");
+  var Lng = thisObj.attr("data-lng");
+  var Doc = thisObj.attr("data-doc");
+  var Thump = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc.replace(".jpg", ".t.png");
+  var DocURL = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc;
+  var Center = new google.maps.LatLng(Lat, Lng);
+  GeoInfoWindow.setPosition(Center);
+  GeoInfoWindow.setContent(
+      '<table cellpadding=0 cellspacig=0>' +
+      '<tr>'+
+      '<td><a target="_blank" href="' + DocURL + '"><img style="margin-right:10px; width:80px; height: auto;" src="' + Thump + '"></a></td>' +
+      '<td style="white-space:nowrap;">Lat: <b>' + Lat + "</b><br>" + 
+      "Lng: <b>" + Lng + "</b><br>" + 
+      "Alt: <b>" + thisObj.attr("data-alt") + "</b>" +
+      "</td>" + 
+      '</tr></table>');    
+  GeoInfoWindow.open(map);
+}
+
+function ShowHidePayload(btn) {
+  if (btn.length) btn.val("Loading...");
+
+
+  if (_IsPlayloadShown) {
+    PayloadLayer.setValues({ map: null });
+    _IsPlayloadShown = false;
+    if (btn.length) btn.val("Show Payload");
+    return;
+  }
+
+  if (PayloadLayer) {
+    PayloadLayer.setValues({ map: map });
+    _IsPlayloadShown = true;
+    if (btn.length) btn.val("Hide Payload");
+    return;
+  }
+
+  var kmlOptions = {
+    preserveViewport: false,
+    map: map
+  };
+
+  //var KmlUrl = '/Map/PayloadData/' + FlightID;
+  var KmlUrl = 'http://test.exponent-ts.com/Upload/Temp/aaa-01.xml';
+  PayloadLayer = new google.maps.KmlLayer(KmlUrl, kmlOptions);
+  if (btn.length) btn.val("Hide Payload");
+  _IsPlayloadShown = true;
+}
 
 function ShowHideGeoTag(btn) {
   if (btn.length) btn.val("Loading...");
