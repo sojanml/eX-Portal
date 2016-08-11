@@ -495,26 +495,25 @@ namespace eX_Portal.exLogic {
 
 
                     cmd.CommandText = "usp_Portal_GetAlertChartData";
-                    ////   DbParameter Param1 = cmd.CreateParameter();
-                    //  // Param1.ParameterName = "@AccountID";
-                    //   Param1.Value = Util.getAccountID();
-                    //   DbParameter Param2 = cmd.CreateParameter();
-                    //   Param2.ParameterName = "@IsAccess";
-                    //   if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                    //   {
-                    //       Param2.Value = 1;
-                    //   }
-                    //   else
-                    //   {
-                    //       Param2.Value = 0;
-                    //   }
-                    //   cmd.Parameters.Add(Param1);
-                    //   cmd.Parameters.Add(Param2);
+                       DbParameter Param1 = cmd.CreateParameter();
+                     Param1.ParameterName = "@AccountID";
+                    Param1.Value = Util.getAccountID();
+                    DbParameter Param2 = cmd.CreateParameter();
+                    Param2.ParameterName = "@IsAccess";
+                    if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+                    {
+                        Param2.Value = 1;
+                    }
+                    else
+                    {
+                        Param2.Value = 0;
+                    }
+                    cmd.Parameters.Add(Param1);
+                    cmd.Parameters.Add(Param2);
                     cmd.CommandType = CommandType.StoredProcedure;
                     using (var reader = cmd.ExecuteReader())
                     {
-                        while (reader.Read())
-                        {
+                        while (reader.Read())                        {
 
                             ChartAlertViewModel alerts = new ChartAlertViewModel();
                             alerts.AlertType = reader["AlertCategory"].ToString();
