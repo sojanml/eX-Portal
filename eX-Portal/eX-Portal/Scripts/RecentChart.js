@@ -58,7 +58,8 @@ function OnSuccess_(reponse) {
         max = 15;
         scrollData= {
             enabled: true,
-            height:8
+            height: 8
+           
         }
 
     }
