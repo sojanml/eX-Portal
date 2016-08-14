@@ -230,7 +230,9 @@ function initChart() {
         
             type: 'column',
             marginRight:0,
-            marginBottom:90,
+            marginBottom: 90,
+            spacingLeft: 0,
+            spacingBottom: 0,
             events: {
                 click: function (event) {
                     var chart1 = $('#RecentFlight').highcharts();
@@ -392,6 +394,8 @@ function initChartTotalFlight() {
             type: 'column',
             marginRight: 0,
             marginBottom: 90,
+            spacingLeft: 0,
+            spacingBottom: 0,
         },
         title: {
             text: null

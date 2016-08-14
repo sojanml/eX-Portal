@@ -1,6 +1,6 @@
 ﻿var categoryPilot = [];
 var TotalMultiDashHrs = [], TotalFixedWingHrs = [], LastMultiDashHrs = [], LastFixedwingHrs = [], LastMonthMultiDashHrs = [], LastMonthFixedwingHrs = [];
-
+var Datalength;
 $(document).ready(function () {
     $.ajax({
         type: "GET",
@@ -27,7 +27,7 @@ function OnSuccessPilot_(reponse) {
     };
     categoryPilot = [];
    
-
+    Datalength = aDatas.length;
     for (var i = 0; i < aDatas.length; i++) {
         var data = aDatas[i];
         categoryPilot.push(data.PilotName);
@@ -100,7 +100,11 @@ function initCharts() {
 
             type: 'column',
             marginRight:95,
-            marginBottom:120
+            marginBottom: 120,
+            spacingTop: 5,
+           
+            spacingLeft: 0,
+         
       
         },
         legend: {
@@ -115,10 +119,16 @@ function initCharts() {
         },
 
         xAxis: [{
-            //categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas',]
+           
             categories: categoryPilot,
-            //categories: ['Apples', 'Oranges', 'Pears', 'Grapes']
-            //category
+            
+            labels: {
+                rotation: -60,
+                style: {
+                    
+                    font: '8px'
+                }
+            }
             
             
         }],
@@ -214,6 +224,7 @@ function initCharts() {
             color: "#009ACD",
             yAxis: 1,
             stack: 'female',
+           
             //----
             cursor: 'pointer',
             point: {
