@@ -26,6 +26,8 @@ var DistanceOptions = {
 var GeoInfoWindow = null;
 var PayloadLayer = null;
 var _IsPlayloadShown = false;
+var DronePositionIcon = false;
+
 
 $(document).ready(function () {
 
@@ -282,6 +284,20 @@ function setDrawIntilize() {
     map.setZoom(20);
     drawLocationPoints();
     _IsDrawInitilized = true;
+
+    var image = {
+      path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+      strokeColor: '#393',
+      strokeWidth: '1px',
+      scale: 6,
+      rotation: parseInt(loc["Heading"])
+    };
+
+    DronePositionIcon = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      icon: image,
+    });
   }
 }
 
@@ -545,7 +561,14 @@ function drawPolyLineAtIndex(Polygon) {
     var loc = _LocationPoints[_LocationIndex];
     var myLatLng = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
     var Path = Polygon.getPath();
-    
+
+    if (DronePositionIcon) {
+      var icons = DronePositionIcon.getIcon();
+      icons.rotation = parseInt(loc['Heading']);
+      DronePositionIcon.setIcon(icons);
+      DronePositionIcon.setPosition(myLatLng);
+    }
+
     if (_LocationIndex > 0)
     {
         var FirstLat = _LocationPoints[_LocationIndex - 1];
