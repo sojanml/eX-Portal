@@ -1074,13 +1074,10 @@ warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primar
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="SMSSend" Type="int" />
           <Property Name="AlertCategory" Type="nvarchar" MaxLength="25" />
+          <Property Name="AccountID" Type="int" />
+          <Property Name="ApprovalID" Type="int" />
+          <Property Name="DroneID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'TestPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PortalAlert_User">
-          <Property Name="AlertID" Type="int" />
-          <Property Name="UserID" Type="int" />
-        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -1196,6 +1193,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="UserIPAddress" Type="nvarchar" MaxLength="45" />
           <Property Name="Browser" Type="nvarchar" MaxLength="45" />
           <Property Name="SessionID" Type="nvarchar" MaxLength="45" />
+          <Property Name="SessionStartTime" Type="datetime" />
+          <Property Name="SessionEndTime" Type="datetime" />
+          <Property Name="IsSessionEnd" Type="bit" />
+          <Property Name="ApplicationID" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
           <End Role="M2M_DroneServiceParts" Type="Self.M2M_DroneServiceParts" Multiplicity="1" />
@@ -1475,7 +1476,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
     [PortalAlert].[AlertType] AS [AlertType], 
     [PortalAlert].[CreatedOn] AS [CreatedOn], 
     [PortalAlert].[SMSSend] AS [SMSSend], 
-    [PortalAlert].[AlertCategory] AS [AlertCategory]
+    [PortalAlert].[AlertCategory] AS [AlertCategory], 
+    [PortalAlert].[AccountID] AS [AccountID], 
+    [PortalAlert].[ApprovalID] AS [ApprovalID], 
+    [PortalAlert].[DroneID] AS [DroneID]
     FROM [dbo].[PortalAlert] AS [PortalAlert]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" store:Type="Tables" store:Schema="dbo">
@@ -2486,6 +2490,9 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="SMSSend" Type="Int32" />
           <Property Name="AlertType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="AlertCategory" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="AccountID" Type="Int32" />
+          <Property Name="ApprovalID" Type="Int32" />
+          <Property Name="DroneID" Type="Int32" />
         </EntityType>
         <EntityType Name="PayLoad_AutoFix">
           <Key>
@@ -2506,6 +2513,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="UserIPAddress" Type="String" MaxLength="45" Unicode="true" FixedLength="false" />
           <Property Name="Browser" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
           <Property Name="SessionID" Type="String" MaxLength="45" Unicode="true" FixedLength="false" />
+          <Property Name="SessionStartTime" Type="DateTime" Precision="3" />
+          <Property Name="SessionEndTime" Type="DateTime" Precision="3" />
+          <Property Name="IsSessionEnd" Type="Boolean" />
+          <Property Name="ApplicationID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -3746,6 +3757,9 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="PortalAlerts">
             <EntityTypeMapping TypeName="ExponentPortalModel.PortalAlert">
               <MappingFragment StoreEntitySet="PortalAlert">
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
                 <ScalarProperty Name="AlertCategory" ColumnName="AlertCategory" />
                 <ScalarProperty Name="AlertType" ColumnName="AlertType" />
                 <ScalarProperty Name="SMSSend" ColumnName="SMSSend" />
@@ -3772,6 +3786,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="UserLogs">
             <EntityTypeMapping TypeName="ExponentPortalModel.UserLog">
               <MappingFragment StoreEntitySet="UserLog">
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="IsSessionEnd" ColumnName="IsSessionEnd" />
+                <ScalarProperty Name="SessionEndTime" ColumnName="SessionEndTime" />
+                <ScalarProperty Name="SessionStartTime" ColumnName="SessionStartTime" />
                 <ScalarProperty Name="SessionID" ColumnName="SessionID" />
                 <ScalarProperty Name="Browser" ColumnName="Browser" />
                 <ScalarProperty Name="UserIPAddress" ColumnName="UserIPAddress" />

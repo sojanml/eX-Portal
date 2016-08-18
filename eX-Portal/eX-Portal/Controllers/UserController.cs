@@ -16,6 +16,8 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Web.SessionState;
 using FileStorageUtils;
+using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace eX_Portal.Controllers {
   public class UserController :Controller {
@@ -107,9 +109,11 @@ namespace eX_Portal.Controllers {
 
       if(exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0) {
         if(exLogic.User.UserIsActive(_objuserlogin.UserName, _objuserlogin.Password) > 0) {
-          /*Redirect user to success apge after successfull login*/
-          ViewBag.Message = 1;
-          UserInfo thisUser = exLogic.User.getInfo(_objuserlogin.UserName);
+                    UserInfo thisUser = exLogic.User.getInfo(_objuserlogin.UserName);
+                    /*Redirect user to success apge after successfull login*/
+        if (Util.CheckSessionValid(thisUser.UserID))
+        {
+          ViewBag.Message = 1;         
           Session["FirstName"] = thisUser.FullName;
           Session["UserID"] = thisUser.UserID;
           Session["UserName"] = thisUser.UserName;
@@ -118,11 +122,19 @@ namespace eX_Portal.Controllers {
           Session["AccountID"] = thisUser.AccountID;
           Session["userIpAddress"] = Request.ServerVariables["REMOTE_ADDR"];
           var browser = Request.Browser.Browser;
+        var assembly = Assembly.GetExecutingAssembly();
+        var attribute = (GuidAttribute)assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0];
+        var id = attribute.Value;
+        string sessionId = this.Session.SessionID;
 
-          string sessionId = this.Session.SessionID;
-          string sql = "insert into userlog(UserID,loggedintime,UserIPAddress,Browser,SessionID) values('" + thisUser.UserID + "',getdate(),'" + Session["userIpAddress"] + "','" + browser + "','" + sessionId + "') Select @@Identity";
+          string sql = "insert into userlog(UserID,loggedintime,UserIPAddress,Browser,SessionID,ApplicationID) values('" + thisUser.UserID + "',getdate(),'" + Session["userIpAddress"] + "','" + browser + "','" + sessionId + "','"+ id+"') Select @@Identity";
           Session["uid"] = Util.InsertSQL(sql);
           return RedirectToAction("Index", "Home");
+        }
+          else
+        {
+                        ViewBag.Message = 3;
+                    }
 
         } else {
           ViewBag.Message = 2;
@@ -140,7 +152,7 @@ namespace eX_Portal.Controllers {
       if(theObj == null)
         return View();
 
-      string sql = "update UserLog set loggedoftime=getdate() where ID=" + Session["uid"];
+      string sql = "update UserLog set loggedoftime=getdate(),SessionEndTime=getdate(),IsSessionEnd=1 where ID=" + Session["uid"];
 
       int log = Util.doSQL(sql);
 

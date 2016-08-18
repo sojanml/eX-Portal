@@ -13,6 +13,10 @@
       {
         <p><span class="info">Please Activate your Account to Login!</span></p>
       }
+      if (ViewBag.Message == 3)
+      {
+        <p><span class="info">Sessions reached the limit.!</span></p>
+      }
       @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="editor-label">
       @Html.LabelFor(m => m.UserName,"Username", new { @class = "col-md-2 control-label" })

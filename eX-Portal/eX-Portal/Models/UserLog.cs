@@ -21,5 +21,9 @@ namespace eX_Portal.Models
         public string UserIPAddress { get; set; }
         public string Browser { get; set; }
         public string SessionID { get; set; }
+        public Nullable<System.DateTime> SessionStartTime { get; set; }
+        public Nullable<System.DateTime> SessionEndTime { get; set; }
+        public Nullable<bool> IsSessionEnd { get; set; }
+        public string ApplicationID { get; set; }
     }
 }
