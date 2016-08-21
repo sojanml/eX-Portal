@@ -218,9 +218,9 @@ namespace eX_Portal.Controllers
                         " ,a.SimulatedInstrument as Simulator" +
                         " ,a.AsflightInstructor " +
                         " ,a.DualRecieved  " +
-                  " ,a.FloatingCommand as PilotInCommand " +
+                        " ,a.FloatingCommand as PilotInCommand " +
                         " , a.DualRecieved + a.FloatingCommand as TotalDuration " +
-                       
+                         " ,a.FlightID  " +
                         " , a.Id as _PKey" +
                         " FROM MSTR_Pilot_Log  " +
                         "a left join mstr_drone b  " +
