@@ -44,11 +44,14 @@ namespace eX_Portal.Controllers {
         tblGSC.FirstName AS GCSName,
         tblPilot.FirstName AS CreatedBy,
         FlightDate AS 'FlightDate(UTC)',
+        ApprovalName,
         " + (exLogic.User.hasAccess("FLIGHT.VIDEOS") ? SQLVideo : "") + @"
         Count(*) OVER () AS _TotalRecords,
         DroneFlight.ID AS _PKey
       FROM 
         DroneFlight
+      LEFT JOIN GCA_Approval as g
+	    ON g.ApprovalID = DroneFlight.ApprovalID
       LEFT JOIN MSTR_Drone
         ON MSTR_Drone.DroneId = DroneFlight.DroneID
       LEFT JOIN MSTR_User AS tblPilot
