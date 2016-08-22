@@ -1,40 +1,31 @@
-﻿@{ 
-  Double Buffer = 3;
-  String sBuffer = Request.QueryString["Buffer"];
-  if (!String.IsNullOrWhiteSpace(sBuffer)) {
-    Double.TryParse(sBuffer, out Buffer);
-  }
+﻿@using eX_Portal.exLogic;
+
+@{
+  String VideoFile = "/VOD/drone100-2016-04-10T05-52-00.flv";
+  String VideoURL = S3Download.getStreamURL(VideoFile, true);
+
 }
 
 <h1>The Video</h1>
 <h2 id="VideoURL">video url</h2>
 <div id="myElement">Loading the player...</div>
+
+<div id="player"></div>
+<video id="example_video_1" class="video-js vjs-default-skin"
+       controls preload="auto" width="640" height="264"
+
+       data-setup='{"example_option":true}'>
+  <source src="@Html.Raw(VideoURL)" type="rtmp/mp4" />
+
+  <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+</video>
+
 @section scripts {
-<script src="~/jwplayer/jwplayer.js"></script>
-<script>jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";</script>
-<script type="text/javascript">
-  var playerInstance = null;
-  $(document).ready(function () {
-    var VideoURL = 'flv:VOD/drone100-1458557134.flv'
-    var StreamURL = 'rtmp://s2rpa1y1xc5k55.cloudfront.net/cfx/st/' + VideoURL;
-    $('#VideoURL').html(StreamURL);
-    playerInstance = jwplayer("myElement");
 
-    playerInstance.setup({
-      file: StreamURL,
-      width: 640,
-      height: 360,
-      title: 'Basic Video Embed',
-      description: 'A video with a basic title and description!',
-      mediaid: '123456',
-      rtmp: {
-        bufferlength: 3
-      }
-  });
-
-  
-  })
-
+<link href="~/Content/video-js.min.css" rel="stylesheet">
+<script src="~/Scripts/video.js"></script>
+<script>
+  videojs.options.flash.swf = "http://localhost:2727/Content/video-js.swf"
 </script>
 }
 

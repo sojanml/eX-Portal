@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 
+
 namespace eX_Portal.Models {
   /*
     Reference
@@ -631,4 +632,39 @@ namespace eX_Portal.Models {
     //[Display(Name = "Is Verified")]
     //public string VerifyCheck { get; set; }
   }
+
+  [MetadataType(typeof(ContentManagementHelper))]
+  public partial class ContentManagement {
+    
+  }
+
+  public class ContentManagementHelper {
+    private String _BodyContent = String.Empty;
+
+    [Required]
+    [Display(Name = "Reference URL")]
+    [RegularExpression("^([a-zA-Z0-9_]+)$", ErrorMessage = "Invalid URL Reference (No Special characters or space allowed)")]
+    public String CmsRefName;
+
+    [Required]
+    [Display(Name = "Page Title")]
+    public String PageTitle;
+
+    [Required]
+    [Display(Name = "Show in Main Menu")]
+    public int IsShowInMenu;
+
+
+    [Required]
+    [Display(Name = "Page Body (in HTML)")]
+    public String Body;
+
+    [Required]
+    [Display(Name = "Short Page Title")]
+    public String MenuTitle;
+
+  }
+
+
+
 }

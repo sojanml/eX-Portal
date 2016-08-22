@@ -44,11 +44,15 @@ namespace eX_Portal.exLogic {
 
 
 
-    public static string getStreamURL(string x_urlString) {
+    public static string getStreamURL(string x_urlString, bool isRTMP = false) {
       int DurationMinutes = 10;
       string privateKeyId = "APKAIOYYYVDBFAMEFZ7Q"; // Guid.NewGuid().ToString("N");
 
-      String newURL = "https://d1ielm2r49qz2s.cloudfront.net/" + x_urlString;
+      String newURL = (
+        isRTMP ?
+        "rtsp://s2rpa1y1xc5k55.cloudfront.net/" :
+        "https://d1ielm2r49qz2s.cloudfront.net/" 
+        ) + x_urlString;
       String pathToPrivateKey = @"C:\Amazon-Keys\CloundFront-Private-Key-File.xml";
 
       TimeSpan timeSpanInterval = new TimeSpan(0, DurationMinutes, 0);

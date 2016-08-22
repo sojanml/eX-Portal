@@ -12,11 +12,15 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BlackBoxLog
+    public partial class ContentManagement
     {
-        public int LogId { get; set; }
-        public string FileName { get; set; }
-        public Nullable<bool> IsProcessed { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public int CmsID { get; set; }
+        public string CmsRefName { get; set; }
+        public int IsShowInMenu { get; set; }
+        public string PageTitle { get; set; }
+        public string Body { get; set; }
+        public int CreatedBy { get; set; }
+        public System.DateTime CreatedOn { get; set; }
+        public string MenuTitle { get; set; }
     }
 }

@@ -26,5 +26,8 @@ namespace eX_Portal.Models
         public Nullable<int> SMSSend { get; set; }
         public string AlertType { get; set; }
         public string AlertCategory { get; set; }
+        public Nullable<int> AccountID { get; set; }
+        public Nullable<int> ApprovalID { get; set; }
+        public Nullable<int> DroneID { get; set; }
     }
 }

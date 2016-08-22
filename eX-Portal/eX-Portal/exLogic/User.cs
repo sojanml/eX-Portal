@@ -232,14 +232,12 @@ namespace eX_Portal.exLogic {
         String SQL = "select * from MSTR_Menu where Visible=1 and  MenuId" +
             " in(select b.MenuId from  MSTR_Profile a left join   M2M_ProfileMenu b" +
              "  on a.ProfileId = b.ProfileId left join MSTR_User c on b.ProfileId = c.UserProfileId" +
-             "   where c.UserId =" + UserId + ")order by SortOrder asc ";
+             "   where c.UserId =" + UserId + ") order by SortOrder asc ";
         var MenuName = db.Database.SqlQuery<MSTR_Menu>(SQL);
 
 
         foreach (MSTR_Menu mnu in MenuName) {
-
           MenuModel model = new MenuModel();
-
           model.Id = mnu.MenuId;
           model.Name = mnu.MenuName;
           model.ParentId = mnu.ParentId.GetValueOrDefault();
@@ -247,6 +245,10 @@ namespace eX_Portal.exLogic {
           model.PageUrl = mnu.PageUrl;
 
           mmList.Add(model);
+
+          if(mnu.MenuName == "Home") {
+            AddCmsMenuTo(mmList, mnu.MenuId);
+          }
         }
 
       } catch (Exception ex) {
@@ -254,7 +256,26 @@ namespace eX_Portal.exLogic {
       }
       return mmList;
     }
-  }//class
+
+    private static void AddCmsMenuTo(IList<MenuModel> mmList, int ParentID) {
+      using(var ctx = new ExponentPortalEntities()) {
+        var CmsItems = from cms in ctx.ContentManagements
+                       where cms.IsShowInMenu == 1
+                       orderby cms.PageTitle
+                       select new MenuModel {
+                         Id = cms.CmsID,
+                         Name = cms.MenuTitle,
+                         ParentId = ParentID,
+                         SortOrder = cms.CmsID,
+                         PageUrl = "/home/demo/" + cms.CmsRefName
+                       };
+        foreach(var menu in CmsItems.ToList()) {
+          mmList.Add(menu);
+        }
+      }
+    }
+
+    }//class
 
   public class UserInfo {
     public int UserID { get; set; }

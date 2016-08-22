@@ -24,7 +24,7 @@
 
 *@
   @foreach (var Row in Model) {
-    @:{sources: [{ file: "@Html.Raw(S3Download.getStreamURL("VOD/" + Row["VideoURL"].ToString()))", type: "flv"}],
+    @:{sources: [{ file: "@Html.Raw(S3Download.getStreamURL("VOD/" + Row["VideoURL"].ToString(), false))", type: "flv"}],
     @:  title: '@thisDrone.parseDate(Row["VideoURL"].ToString())',
     @:},
   }

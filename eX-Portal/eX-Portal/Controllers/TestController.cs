@@ -13,6 +13,12 @@ using System.Data;
 
 namespace eX_Portal.Controllers {
   public class TestController : Controller {
+
+    public ActionResult Video() {
+      return View();
+    }
+
+
         public string DebugOption { get; private set; }
 
         // GET: Test
@@ -30,11 +36,6 @@ namespace eX_Portal.Controllers {
     }
 
       
-
-
-        public ActionResult Video() {
-      return View();
-    }
 
     public ActionResult CompareGraph(int From = 0, int To = 0) {
       String SQL =
@@ -110,109 +111,7 @@ namespace eX_Portal.Controllers {
             return View();
         }
 
-
-
-        public ActionResult  DispRecentChart()
-        {
-            return View();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public static IList<TestViewModel> getCurrentPilotData()
-        {
-
-            IList<TestViewModel> ChartList = new List<TestViewModel>();
-
-            using (var ctx = new ExponentPortalEntities())
-            {
-                using (var cmd = ctx.Database.Connection.CreateCommand())
-                {
-                    ctx.Database.Connection.Open();
-
-                    cmd.CommandText = "usp_Portal_GetPilotData";
-                    DbParameter Param1 = cmd.CreateParameter();
-                    Param1.ParameterName = "@AccountID";
-                    Param1.Value = Util.getAccountID();
-                    DbParameter Param2 = cmd.CreateParameter();
-                    Param2.ParameterName = "@IsAccess";
-
-                    if (exLogic.User.hasAccess("PILOT"))
-                    {
-                        Param2.Value = 0;
-                    }
-                    else
-                    {
-                        if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-                        {
-
-                            Param2.Value = 1;
-                        }
-                        else
-                        {
-                            Param2.Value = 0;
-                        }
-                    }
-                    cmd.Parameters.Add(Param1);
-                    cmd.Parameters.Add(Param2);
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                           TestViewModel dd = new TestViewModel();
-                            dd.PilotName = reader["FirstName"].ToString();
-                            dd.TotalMultiDashHrs= Util.toInt(reader["TotalMultiDashHrs"].ToString());
-                            dd.TotalFixedWingHrs= Util.toInt(reader["TotalFixedWingHrs"].ToString());
-                            dd.LastMultiDashHrs= Util.toInt(reader["LastMultiDashHrs"].ToString());
-                            dd.LastFixedwingHrs= Util.toInt(reader["LastFixedwingHrs"].ToString());
-                            dd.LastMonthFixedwingHrs = Util.toInt(reader["LastMonthFixedwingHrs"].ToString());
-                            dd.LastMonthMultiDashHrs= Util.toInt(reader["LastMonthMultiDashHrs"].ToString());                        
-
-                            ChartList.Add(dd);
-
-                        }
-                    }
-
-                    ctx.Database.Connection.Close();
-
-
-                }
-
-
-            }
-
-
-
-            return ChartList;
-            //return the list objects
-        }
-
-
-
-        [System.Web.Mvc.HttpGet]
-        public JsonResult getPilotData()
-        {
-            try
-            {
-                IList<TestViewModel> ChartList = getCurrentPilotData();
-                return Json(ChartList, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                if (DebugOption == "True")
-                {
-                    throw ex;
-                }
-                else
-                    return null;
-
-            }
-        }
-
+    
 
 
         [System.Web.Mvc.HttpGet]

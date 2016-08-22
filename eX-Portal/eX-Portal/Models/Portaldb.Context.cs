@@ -27,9 +27,7 @@ namespace eX_Portal.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<DroneData> DroneDatas { get; set; }
         public virtual DbSet<DroneDefinition> DroneDefinitions { get; set; }
-        public virtual DbSet<LUP_Drone> LUP_Drone { get; set; }
         public virtual DbSet<LUP_Product> LUP_Product { get; set; }
         public virtual DbSet<M2M_DroneDetails> M2M_DroneDetails { get; set; }
         public virtual DbSet<M2M_DroneParts> M2M_DroneParts { get; set; }
@@ -65,7 +63,6 @@ namespace eX_Portal.Models
         public virtual DbSet<PayLoadFlight> PayLoadFlights { get; set; }
         public virtual DbSet<PayLoadImageData> PayLoadImageDatas { get; set; }
         public virtual DbSet<PayLoadYardGrid> PayLoadYardGrids { get; set; }
-        public virtual DbSet<GCA_Approval> GCA_Approval { get; set; }
         public virtual DbSet<PortalAlert> PortalAlerts { get; set; }
         public virtual DbSet<PayLoad_AutoFix> PayLoad_AutoFix { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
@@ -77,14 +74,18 @@ namespace eX_Portal.Models
         public virtual DbSet<PortalAlertRegistration> PortalAlertRegistrations { get; set; }
         public virtual DbSet<FlightInfo> FlightInfoes { get; set; }
         public virtual DbSet<MSTR_RPAS_User> MSTR_RPAS_User { get; set; }
-        public virtual DbSet<MSTR_BlackBox> MSTR_BlackBox { get; set; }
-        public virtual DbSet<BlackBoxTransaction> BlackBoxTransactions { get; set; }
-        public virtual DbSet<FlightMapData> FlightMapDatas { get; set; }
         public virtual DbSet<MSTR_Drone> MSTR_Drone { get; set; }
         public virtual DbSet<BlackBoxCost> BlackBoxCosts { get; set; }
-        public virtual DbSet<SMSTable> SMSTables { get; set; }
         public virtual DbSet<ApproalDetail> ApproalDetails { get; set; }
-        public virtual DbSet<BlackBoxLog> BlackBoxLogs { get; set; }
+        public virtual DbSet<BlackBoxLog1> BlackBoxLog1 { get; set; }
+        public virtual DbSet<DroneData> DroneDatas { get; set; }
+        public virtual DbSet<FlightMapData> FlightMapDatas { get; set; }
+        public virtual DbSet<GCA_Approval> GCA_Approval { get; set; }
+        public virtual DbSet<LUP_Drone> LUP_Drone { get; set; }
+        public virtual DbSet<MSTR_BlackBox> MSTR_BlackBox { get; set; }
+        public virtual DbSet<BlackBoxTransaction> BlackBoxTransactions { get; set; }
+        public virtual DbSet<ContentManagement> ContentManagements { get; set; }
+        public virtual DbSet<SMSTable> SMSTables { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

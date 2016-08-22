@@ -13,7 +13,7 @@ namespace eX_Portal.Controllers {
 
 
     public DesignController() {
-      ViewBag.Menu = eX_Portal.exLogic.User.BuildMenu();
+      //ViewBag.Menu = eX_Portal.exLogic.User.BuildMenu();
     }
 
 

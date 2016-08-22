@@ -1,0 +1,15 @@
+﻿@model eX_Portal.exLogic.qView
+
+@Html.Raw(Model.getDataTable())
+
+@section scripts {
+  <script type="text/javascript">
+@Html.Raw(Model.getScripts())
+  </script>
+}
+
+@section toolbar {
+  <a class="button" href="@Url.Action("CMSCreate")">Create Page</a>
+}
+
+

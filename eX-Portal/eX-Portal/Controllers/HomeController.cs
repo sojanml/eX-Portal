@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using eX_Portal.Models;
 
 namespace eX_Portal.Controllers {
-  public class HomeController : Controller {
+  public class HomeController :Controller {
     public ActionResult Index() {
-            //if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home")
-            ViewBag.DashBoard = Util.getDashboard();
-           
+      //if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home")
+      ViewBag.DashBoard = Util.getDashboard();
+
       return View();
     }
 
@@ -36,5 +37,17 @@ namespace eX_Portal.Controllers {
       return View(ex);
     }
 
-  }
-}
+    public ActionResult Demo(String ID = "") {
+      using(ExponentPortalEntities db = new ExponentPortalEntities()) {
+        var CMS = db.ContentManagements.Where(e => e.CmsRefName == ID);
+        if(CMS.Any()) {
+          var CMSItem = CMS.First();
+          ViewBag.Title = CMSItem.PageTitle;
+          return View(CMSItem);
+        }
+        return View("Contact");
+      }
+    }//public ActionResult Demo
+
+  }//public class HomeController
+}//namespace eX_Portal.Controllers

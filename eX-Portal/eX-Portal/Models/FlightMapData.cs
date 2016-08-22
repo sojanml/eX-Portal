@@ -24,6 +24,7 @@ namespace eX_Portal.Models
         public string ProductRSSI { get; set; }
         public Nullable<System.DateTime> ReadTime { get; set; }
         public Nullable<System.DateTime> CreatedTime { get; set; }
+        public Nullable<System.DateTime> ReceivedTime { get; set; }
         public Nullable<int> RecordType { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> ProductId { get; set; }
@@ -54,6 +55,5 @@ namespace eX_Portal.Models
         public Nullable<int> IsSoftFence { get; set; }
         public Nullable<decimal> voltage { get; set; }
         public string OtherFlightIDs { get; set; }
-        public Nullable<System.DateTime> ReceivedTime { get; set; }
     }
 }

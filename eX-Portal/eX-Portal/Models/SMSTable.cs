@@ -16,5 +16,6 @@ namespace eX_Portal.Models
     {
         public string CellNumber { get; set; }
         public int ID { get; set; }
+        public string CellReference { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="530561658f0f46cd9e30c8dc885ae2b4" Name="Diagram1" ZoomLevel="46" DisplayType="true" ShowGrid="true">
+      <Diagram DiagramId="530561658f0f46cd9e30c8dc885ae2b4" Name="Diagram1" ZoomLevel="59" DisplayType="true" ShowGrid="true">
         <EntityTypeShape EntityType="ExponentPortalModel.DroneDefinition" Width="1.5" PointX="2.125" PointY="5.5" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.LUP_Product" Width="1.5" PointX="5.5" PointY="5.5" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneDetails" Width="2.125" PointX="8.25" PointY="0.5" IsExpanded="true" />
@@ -44,18 +44,19 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PortalAlertRegistration" Width="1.5" PointX="20.75" PointY="10.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.FlightInfo" Width="1.5" PointX="20.75" PointY="13.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_RPAS_User" Width="1.5" PointX="20.75" PointY="19.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxTransaction" Width="1.5" PointX="2.75" PointY="21.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.FlightMapData" Width="1.5" PointX="4.75" PointY="21.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone" Width="1.5" PointX="6.75" PointY="21.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxCost" Width="1.5" PointX="22.75" PointY="0.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.SMSTable" Width="1.5" PointX="22.75" PointY="4.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.ApproalDetail1" Width="1.5" PointX="17.375" PointY="22.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxLog1" Width="1.5" PointX="13.375" PointY="23.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.DroneData" Width="1.5" PointX="23.375" PointY="7.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="23.375" PointY="14.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.LUP_Drone" Width="1.5" PointX="19.375" PointY="23.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneParts" Width="1.5" PointX="21.375" PointY="23.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_BlackBox" Width="1.5" PointX="23.375" PointY="22.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneData" Width="1.5" PointX="17.375" PointY="22.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.FlightMapData" Width="1.5" PointX="23.375" PointY="7.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="23.375" PointY="17.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.LUP_Drone" Width="1.5" PointX="25.375" PointY="3.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_BlackBox" Width="1.5" PointX="25.375" PointY="8.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxTransaction" Width="1.5" PointX="0.75" PointY="21.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ContentManagement" Width="1.5" PointX="3.375" PointY="21.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.SMSTable" Width="1.5" PointX="25.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

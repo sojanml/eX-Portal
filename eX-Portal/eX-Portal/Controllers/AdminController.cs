@@ -24,6 +24,143 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
+
+    public ActionResult CMS() {
+      if(!exLogic.User.hasAccess("CMS.VIEW"))
+        return RedirectToAction("NoAccess", "Home");
+      ViewBag.Title = "Content Management";
+      String SQL = @"SELECT 
+          [CmsID],
+          [CmsRefName] as URL,
+          (CASE WHEN [IsShowInMenu] = 1 THEN 'Yes' ELSE 'No' END) as InMenu ,
+          [PageTitle],
+          [MenuTitle],
+          [ContentManagement].[CreatedOn],
+          [FirstName] + ' ' + [LastName] as CreatedBy,
+          Count(*) Over() as _TotalRecords,
+          [CmsID] as _PKey
+        FROM
+          [ContentManagement]
+        LEFT JOIN MSTR_User ON
+          MSTR_User.UserID = ContentManagement.CreatedBy  ";
+
+      qView nView = new qView(SQL);
+      if(exLogic.User.hasAccess("CMS.VIEW"))
+        nView.addMenu("View Result", Url.Action("demo", "home", new { id = "URL" }));
+      if(exLogic.User.hasAccess("CMS.EDIT"))
+        nView.addMenu("Edit", Url.Action("CmsEdit", new { ID = "_PKey" }));
+      if(exLogic.User.hasAccess("CMS.DELETE"))
+        nView.addMenu("Delete", Url.Action("CmsDelete", new { ID = "_PKey" }));
+
+      if(Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
+    }//Account()
+
+    public ActionResult CMSCreate() {
+      if(!exLogic.User.hasAccess("CMS.CREATE"))
+        return RedirectToAction("NoAccess", "Home");
+
+      ViewBag.Title = "New Contenet Page";
+      return View();
+    }
+
+    public ActionResult CmsEdit(int id = 0) {
+      if(!exLogic.User.hasAccess("CMS.EDIT"))
+        return RedirectToAction("NoAccess", "Home");
+
+      var CMS = db.ContentManagements.Find(id);
+      if(CMS == null) {
+        return RedirectToAction("NoAccess", "Home");
+      }
+      ViewBag.Title = "Edit: " + CMS.PageTitle;
+
+      return View("CMSCreate", CMS);
+
+    }
+
+    public JsonResult CmsDelete(int id = 0) {
+      if(!exLogic.User.hasAccess("CMS.DELETE")) {
+        var Obj = new  {
+          status = "ERROR",
+          message = "You do not have acess to delete a CMS Content"
+        };
+        return Json(Obj, JsonRequestBehavior.AllowGet);
+      }
+
+      var CMS = db.ContentManagements.Find(id);
+      if(CMS == null) {
+        var Obj = new {
+          status = "ERROR",
+          message = "CMS Content Page can not be found"
+        };
+        return Json(Obj, JsonRequestBehavior.AllowGet);
+      }
+
+      db.ContentManagements.Remove(CMS);
+      db.SaveChanges();
+
+      var SuccessObj = new {
+        status = "OK",
+        message = "Item is removed successfully"
+      };
+      return Json(SuccessObj, JsonRequestBehavior.AllowGet);
+
+    }
+
+    [HttpPost ValidateInput(false)]
+    public ActionResult CMSCreate(ContentManagement CMS) {
+      if(!exLogic.User.hasAccess("CMS.CREATE"))
+        return RedirectToAction("NoAccess", "Home");
+
+      CMS.CreatedOn = DateTime.Now;
+      CMS.CreatedBy = Util.getLoginUserID();
+
+      //Clear any CMSID error genereated
+      if(ModelState.ContainsKey("CmsID"))
+        ModelState["CmsID"].Errors.Clear();
+
+      if(!ModelState.IsValid) {
+        return View(CMS);
+      }
+
+      try { 
+        db.ContentManagements.Add(CMS);
+        db.SaveChanges();
+      } catch (Exception ex) {
+        ModelState.AddModelError(string.Empty, ex.Message);
+        return View(CMS);
+      }
+
+      return RedirectToAction("demo", "home", new { id = CMS.CmsRefName });
+      
+    }
+
+
+    [HttpPost ValidateInput(false)]
+    public ActionResult CmsEdit(ContentManagement CMS) {
+      if(!exLogic.User.hasAccess("CMS.CREATE"))
+        return RedirectToAction("NoAccess", "Home");
+
+      CMS.CreatedOn = DateTime.Now;
+      CMS.CreatedBy = Util.getLoginUserID();
+
+ 
+      try {
+        db.Entry(CMS).State = System.Data.Entity.EntityState.Modified;
+        db.SaveChanges();
+      } catch(Exception ex) {
+        ModelState.AddModelError(string.Empty, ex.Message);
+        return View(CMS);
+      }
+
+      return RedirectToAction("demo", "home", new { id = CMS.CmsRefName });
+
+    }
+
     [ChildActionOnly]
     public ActionResult ProfileMenuGen(int ParentID = 0, int ProfileID = 0) {
       String SQL =

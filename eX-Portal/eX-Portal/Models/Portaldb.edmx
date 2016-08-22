@@ -123,6 +123,19 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="RentAcknowledged" Type="bit" />
           <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="5" />
         </EntityType>
+        <EntityType Name="ContentManagement">
+          <Key>
+            <PropertyRef Name="CmsID" />
+          </Key>
+          <Property Name="CmsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CmsRefName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsShowInMenu" Type="int" Nullable="false" />
+          <Property Name="PageTitle" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="Body" Type="text" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="MenuTitle" Type="varchar" MaxLength="120" Nullable="false" />
+        </EntityType>
         <EntityType Name="DroneCheckList">
           <Key>
             <PropertyRef Name="ID" />
@@ -388,6 +401,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="GroundStaffUserId" Type="int" />
           <Property Name="NotificationEmails" Type="nvarchar" MaxLength="300" />
           <Property Name="CameraId" Type="int" />
+          <Property Name="RpasApprovalRefNum" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="LiveDrone">
           <Key>
@@ -1074,13 +1088,10 @@ warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primar
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="SMSSend" Type="int" />
           <Property Name="AlertCategory" Type="nvarchar" MaxLength="25" />
+          <Property Name="AccountID" Type="int" />
+          <Property Name="ApprovalID" Type="int" />
+          <Property Name="DroneID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'TestPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PortalAlert_User">
-          <Property Name="AlertID" Type="int" />
-          <Property Name="UserID" Type="int" />
-        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -1170,6 +1181,7 @@ warning 6013: The table/view 'TestPortal.dbo.PortalAlert_User' does not have a p
           </Key>
           <Property Name="CellNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CellReference" Type="varchar" MaxLength="120" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1196,6 +1208,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="UserIPAddress" Type="nvarchar" MaxLength="45" />
           <Property Name="Browser" Type="nvarchar" MaxLength="45" />
           <Property Name="SessionID" Type="nvarchar" MaxLength="45" />
+          <Property Name="SessionStartTime" Type="datetime" />
+          <Property Name="SessionEndTime" Type="datetime" />
+          <Property Name="IsSessionEnd" Type="bit" />
+          <Property Name="ApplicationID" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
           <End Role="M2M_DroneServiceParts" Type="Self.M2M_DroneServiceParts" Multiplicity="1" />
@@ -1266,6 +1282,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="BlackBoxCost" EntityType="Self.BlackBoxCost" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxLog" EntityType="Self.BlackBoxLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxTransaction" EntityType="Self.BlackBoxTransaction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ContentManagement" EntityType="Self.ContentManagement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckList" EntityType="Self.DroneCheckList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckListItem" EntityType="Self.DroneCheckListItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckListValidation" EntityType="Self.DroneCheckListValidation" Schema="dbo" store:Type="Tables" />
@@ -1475,7 +1492,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
     [PortalAlert].[AlertType] AS [AlertType], 
     [PortalAlert].[CreatedOn] AS [CreatedOn], 
     [PortalAlert].[SMSSend] AS [SMSSend], 
-    [PortalAlert].[AlertCategory] AS [AlertCategory]
+    [PortalAlert].[AlertCategory] AS [AlertCategory], 
+    [PortalAlert].[AccountID] AS [AccountID], 
+    [PortalAlert].[ApprovalID] AS [ApprovalID], 
+    [PortalAlert].[DroneID] AS [DroneID]
     FROM [dbo].[PortalAlert] AS [PortalAlert]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" store:Type="Tables" store:Schema="dbo">
@@ -1496,38 +1516,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ExponentPortalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="DroneData">
-          <Key>
-            <PropertyRef Name="DroneDataId" />
-          </Key>
-          <Property Name="DroneDataId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DroneId" Type="Int32" />
-          <Property Name="DroneRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProductRSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReadTime" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
-          <Property Name="RecordType" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="ProductId" Type="Int32" />
-          <Property Name="Altitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Speed" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FixQuality" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Satellites" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Pitch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Roll" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Heading" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TotalFlightTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BBFlightID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsProcessed" Type="Int32" />
-          <Property Name="QueueMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="Voltage" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="IsLogData" Type="Boolean" />
-        </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
             <PropertyRef Name="Id" />
@@ -1544,26 +1532,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="MaxValue" Type="Int32" />
           <Property Name="DefaultValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ParentID" Type="Int32" />
-        </EntityType>
-        <EntityType Name="LUP_Drone">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Code" Type="String" MaxLength="25" Unicode="true" FixedLength="false" />
-          <Property Name="TypeId" Type="Int32" />
-          <Property Name="BinaryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="ModifiedBy" Type="Int32" />
-          <Property Name="ApprovedBy" Type="Int32" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
-          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
-          <Property Name="RecordType" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="GroupName" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="LUP_Product">
           <Key>
@@ -1787,9 +1755,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityContainer Name="ExponentPortalEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="DroneDatas" EntityType="Self.DroneData" />
           <EntitySet Name="DroneDefinitions" EntityType="Self.DroneDefinition" />
-          <EntitySet Name="LUP_Drone" EntityType="Self.LUP_Drone" />
           <EntitySet Name="LUP_Product" EntityType="Self.LUP_Product" />
           <EntitySet Name="M2M_DroneDetails" EntityType="Self.M2M_DroneDetails" />
           <EntitySet Name="M2M_DroneParts" EntityType="Self.M2M_DroneParts" />
@@ -1853,7 +1819,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="PayLoadFlights" EntityType="ExponentPortalModel.PayLoadFlight" />
           <EntitySet Name="PayLoadImageDatas" EntityType="ExponentPortalModel.PayLoadImageData" />
           <EntitySet Name="PayLoadYardGrids" EntityType="ExponentPortalModel.PayLoadYardGrid" />
-          <EntitySet Name="GCA_Approval" EntityType="ExponentPortalModel.GCA_Approval" />
           <EntitySet Name="PortalAlerts" EntityType="ExponentPortalModel.PortalAlert" />
           <EntitySet Name="PayLoad_AutoFix" EntityType="ExponentPortalModel.PayLoad_AutoFix" />
           <EntitySet Name="UserLogs" EntityType="ExponentPortalModel.UserLog" />
@@ -1865,7 +1830,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="PortalAlertRegistrations" EntityType="ExponentPortalModel.PortalAlertRegistration" />
           <EntitySet Name="FlightInfoes" EntityType="ExponentPortalModel.FlightInfo" />
           <EntitySet Name="MSTR_RPAS_User" EntityType="ExponentPortalModel.MSTR_RPAS_User" />
-          <EntitySet Name="MSTR_BlackBox" EntityType="ExponentPortalModel.MSTR_BlackBox" />
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
@@ -1912,13 +1876,18 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
             <Parameter Name="AccountID" Mode="In" Type="String" />
             <Parameter Name="IsAccess" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="BlackBoxTransactions" EntityType="ExponentPortalModel.BlackBoxTransaction" />
-          <EntitySet Name="FlightMapDatas" EntityType="ExponentPortalModel.FlightMapData" />
           <EntitySet Name="MSTR_Drone" EntityType="ExponentPortalModel.MSTR_Drone" />
           <EntitySet Name="BlackBoxCosts" EntityType="ExponentPortalModel.BlackBoxCost" />
-          <EntitySet Name="SMSTables" EntityType="ExponentPortalModel.SMSTable" />
           <EntitySet Name="ApproalDetails" EntityType="ExponentPortalModel.ApproalDetail" />
-          <EntitySet Name="BlackBoxLogs" EntityType="ExponentPortalModel.BlackBoxLog" />
+          <EntitySet Name="BlackBoxLog1" EntityType="ExponentPortalModel.BlackBoxLog1" />
+          <EntitySet Name="DroneDatas" EntityType="ExponentPortalModel.DroneData" />
+          <EntitySet Name="FlightMapDatas" EntityType="ExponentPortalModel.FlightMapData" />
+          <EntitySet Name="GCA_Approval" EntityType="ExponentPortalModel.GCA_Approval" />
+          <EntitySet Name="LUP_Drone" EntityType="ExponentPortalModel.LUP_Drone" />
+          <EntitySet Name="MSTR_BlackBox" EntityType="ExponentPortalModel.MSTR_BlackBox" />
+          <EntitySet Name="BlackBoxTransactions" EntityType="ExponentPortalModel.BlackBoxTransaction" />
+          <EntitySet Name="ContentManagements" EntityType="ExponentPortalModel.ContentManagement" />
+          <EntitySet Name="SMSTables" EntityType="ExponentPortalModel.SMSTable" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2437,39 +2406,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="Polygon" Type="Geography" />
         </EntityType>
-        <EntityType Name="GCA_Approval">
-          <Key>
-            <PropertyRef Name="ApprovalID" />
-          </Key>
-          <Property Name="ApprovalID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ApprovalName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
-          <Property Name="StartDate" Type="DateTime" Precision="3" />
-          <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="Coordinates" Type="String" MaxLength="750" FixedLength="false" Unicode="true" />
-          <Property Name="Polygon" Type="Geography" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="DroneID" Type="Int32" />
-          <Property Name="ApprovalFileUrl" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="EndTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="StartTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="InnerBoundary" Type="Geography" />
-          <Property Name="InnerBoundaryCoord" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BoundaryInMeters" Type="Int32" />
-          <Property Name="MinAltitude" Type="Int32" />
-          <Property Name="MaxAltitude" Type="Int32" />
-          <Property Name="MinDefault" Type="Int32" />
-          <Property Name="MaxDefault" Type="Int32" />
-          <Property Name="IsUseCamara" Type="Int32" />
-          <Property Name="MOD_ApprovalURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ApprovalStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ApprovalRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="PilotUserId" Type="Int32" />
-          <Property Name="GroundStaffUserId" Type="Int32" />
-          <Property Name="NotificationEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-          <Property Name="CameraId" Type="Int32" />
-        </EntityType>
         <EntityType Name="PortalAlert">
           <Key>
             <PropertyRef Name="AlertID" />
@@ -2486,6 +2422,9 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="SMSSend" Type="Int32" />
           <Property Name="AlertType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="AlertCategory" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="AccountID" Type="Int32" />
+          <Property Name="ApprovalID" Type="Int32" />
+          <Property Name="DroneID" Type="Int32" />
         </EntityType>
         <EntityType Name="PayLoad_AutoFix">
           <Key>
@@ -2506,6 +2445,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="UserIPAddress" Type="String" MaxLength="45" Unicode="true" FixedLength="false" />
           <Property Name="Browser" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
           <Property Name="SessionID" Type="String" MaxLength="45" Unicode="true" FixedLength="false" />
+          <Property Name="SessionStartTime" Type="DateTime" Precision="3" />
+          <Property Name="SessionEndTime" Type="DateTime" Precision="3" />
+          <Property Name="IsSessionEnd" Type="Boolean" />
+          <Property Name="ApplicationID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -2624,26 +2567,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="MSTR_BlackBox">
-          <Key>
-            <PropertyRef Name="BlackBoxID" />
-          </Key>
-          <Property Name="BlackBoxID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BlackBoxSerial" Type="Int32" />
-          <Property Name="BlackBoxName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Int32" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="CurrentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="CurrentUserID" Type="Int32" />
-          <Property Name="LastUpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="CurrentDroneID" Type="Int32" />
-          <Property Name="LastRentalId" Type="Int32" />
-          <Property Name="LastReceiveId" Type="Int32" />
-          <Property Name="EncryptionKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="BlackBoxCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Temp" Type="Int32" />
-        </EntityType>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
           <Property Type="Binary" Name="definition" Nullable="true" />
@@ -2655,79 +2578,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-        <EntityType Name="BlackBoxTransaction">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BlackBoxID" Type="Int32" Nullable="false" />
-          <Property Name="BBStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="IsCollectionDeposit" Type="Boolean" />
-          <Property Name="CollectionMode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="NameOnCard" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="BankName" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="Amount" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="ChequeNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="DateOfCheque" Type="DateTime" Precision="3" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="DroneID" Type="Int32" />
-          <Property Name="ApprovalID" Type="Int32" />
-          <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="RentStartDate" Type="DateTime" Precision="3" />
-          <Property Name="RentEndDate" Type="DateTime" Precision="3" />
-          <Property Name="RentType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RentAmount" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="VerifyCode" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="RentAcknowledged" Type="Boolean" />
-          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="5" />
-        </EntityType>
-        <EntityType Name="FlightMapData">
-          <Key>
-            <PropertyRef Name="FlightMapDataID" />
-          </Key>
-          <Property Name="FlightMapDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DroneId" Type="Int32" />
-          <Property Name="DroneRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProductRSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReadTime" Type="DateTime" Precision="3" />
-          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
-          <Property Name="RecordType" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="ProductId" Type="Int32" />
-          <Property Name="Altitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Speed" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="FixQuality" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Satellites" Type="Int32" />
-          <Property Name="Pitch" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Roll" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Heading" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="TotalFlightTime" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="FlightID" Type="Int32" />
-          <Property Name="BBFlightID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="avg_Altitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Min_Altitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Max_Altitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Avg_Speed" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Min_Speed" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Max_Speed" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Avg_Satellites" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Min_Satellites" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Max_Satellites" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="PointDistance" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Distance" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="IsChecked" Type="Boolean" />
-          <Property Name="IsOutSide" Type="Boolean" />
-          <Property Name="GCAID" Type="Int32" />
-          <Property Name="IsSoftFence" Type="Int32" />
-          <Property Name="voltage" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="OtherFlightIDs" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="MSTR_Drone">
           <Key>
             <PropertyRef Name="DroneId" />
@@ -2798,13 +2648,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="LastupdatedOn" Type="DateTime" Precision="3" />
           <Property Name="RentDays" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="SMSTable">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="CellNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-        </EntityType>
         <EntityType Name="ApproalDetail">
           <Key>
             <PropertyRef Name="ID" />
@@ -2842,7 +2685,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="AirtraficImpact" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Comments" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="BlackBoxLog">
+        <EntityType Name="BlackBoxLog1">
           <Key>
             <PropertyRef Name="LogId" />
           </Key>
@@ -2851,45 +2694,212 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="IsProcessed" Type="Boolean" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="DroneData">
+          <Key>
+            <PropertyRef Name="DroneDataId" />
+          </Key>
+          <Property Name="DroneDataId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DroneId" Type="Int32" />
+          <Property Name="DroneRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductRSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReadTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="RecordType" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="Altitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Speed" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FixQuality" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Satellites" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Pitch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Roll" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Heading" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TotalFlightTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BBFlightID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsProcessed" Type="Int32" />
+          <Property Name="QueueMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Voltage" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="IsLogData" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="FlightMapData">
+          <Key>
+            <PropertyRef Name="FlightMapDataID" />
+          </Key>
+          <Property Name="FlightMapDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DroneId" Type="Int32" />
+          <Property Name="DroneRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductRSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReadTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="ReceivedTime" Type="DateTime" Precision="3" />
+          <Property Name="RecordType" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="Altitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Speed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="FixQuality" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Satellites" Type="Int32" />
+          <Property Name="Pitch" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Roll" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Heading" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="TotalFlightTime" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="BBFlightID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="avg_Altitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Min_Altitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Max_Altitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Avg_Speed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Min_Speed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Max_Speed" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Avg_Satellites" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Min_Satellites" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Max_Satellites" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="PointDistance" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Distance" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="IsChecked" Type="Boolean" />
+          <Property Name="IsOutSide" Type="Boolean" />
+          <Property Name="GCAID" Type="Int32" />
+          <Property Name="IsSoftFence" Type="Int32" />
+          <Property Name="voltage" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="OtherFlightIDs" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="GCA_Approval">
+          <Key>
+            <PropertyRef Name="ApprovalID" />
+          </Key>
+          <Property Name="ApprovalID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApprovalName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="Coordinates" Type="String" MaxLength="750" FixedLength="false" Unicode="true" />
+          <Property Name="Polygon" Type="Geography" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="DroneID" Type="Int32" />
+          <Property Name="ApprovalFileUrl" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="EndTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="StartTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="InnerBoundary" Type="Geography" />
+          <Property Name="InnerBoundaryCoord" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BoundaryInMeters" Type="Int32" />
+          <Property Name="MinAltitude" Type="Int32" />
+          <Property Name="MaxAltitude" Type="Int32" />
+          <Property Name="MinDefault" Type="Int32" />
+          <Property Name="MaxDefault" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="IsUseCamara" Type="Int32" />
+          <Property Name="MOD_ApprovalURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PilotUserId" Type="Int32" />
+          <Property Name="GroundStaffUserId" Type="Int32" />
+          <Property Name="NotificationEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="CameraId" Type="Int32" />
+          <Property Name="RpasApprovalRefNum" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LUP_Drone">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="TypeId" Type="Int32" />
+          <Property Name="BinaryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ApprovedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+          <Property Name="RecordType" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="GroupName" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="MSTR_BlackBox">
+          <Key>
+            <PropertyRef Name="BlackBoxID" />
+          </Key>
+          <Property Name="BlackBoxID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BlackBoxSerial" Type="Int32" />
+          <Property Name="BlackBoxName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CurrentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CurrentUserID" Type="Int32" />
+          <Property Name="LastUpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CurrentDroneID" Type="Int32" />
+          <Property Name="LastRentalId" Type="Int32" />
+          <Property Name="LastReceiveId" Type="Int32" />
+          <Property Name="EncryptionKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="BlackBoxCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Temp" Type="Int32" />
+        </EntityType>
+        <EntityType Name="BlackBoxTransaction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BlackBoxID" Type="Int32" Nullable="false" />
+          <Property Name="BBStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsCollectionDeposit" Type="Boolean" />
+          <Property Name="CollectionMode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NameOnCard" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="BankName" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="ChequeNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="DateOfCheque" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="DroneID" Type="Int32" />
+          <Property Name="ApprovalID" Type="Int32" />
+          <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RentStartDate" Type="DateTime" Precision="3" />
+          <Property Name="RentEndDate" Type="DateTime" Precision="3" />
+          <Property Name="RentType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RentAmount" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="VerifyCode" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="RentAcknowledged" Type="Boolean" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="5" />
+        </EntityType>
+        <EntityType Name="ContentManagement">
+          <Key>
+            <PropertyRef Name="CmsID" />
+          </Key>
+          <Property Name="CmsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CmsRefName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsShowInMenu" Type="Int32" Nullable="false" />
+          <Property Name="PageTitle" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="MenuTitle" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SMSTable">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="CellNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CellReference" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ExponentPortalModelStoreContainer" CdmEntityContainer="ExponentPortalEntities">
-          <EntitySetMapping Name="DroneDatas">
-            <EntityTypeMapping TypeName="ExponentPortalModel.DroneData">
-              <MappingFragment StoreEntitySet="DroneData">
-                <ScalarProperty Name="IsLogData" ColumnName="IsLogData" />
-                <ScalarProperty Name="Voltage" ColumnName="Voltage" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="QueueMessage" ColumnName="QueueMessage" />
-                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
-                <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
-                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
-                <ScalarProperty Name="TotalFlightTime" ColumnName="TotalFlightTime" />
-                <ScalarProperty Name="Heading" ColumnName="Heading" />
-                <ScalarProperty Name="Roll" ColumnName="Roll" />
-                <ScalarProperty Name="Pitch" ColumnName="Pitch" />
-                <ScalarProperty Name="Satellites" ColumnName="Satellites" />
-                <ScalarProperty Name="FixQuality" ColumnName="FixQuality" />
-                <ScalarProperty Name="Speed" ColumnName="Speed" />
-                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
-                <ScalarProperty Name="DroneDataId" ColumnName="DroneDataId" />
-                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
-                <ScalarProperty Name="DroneRFID" ColumnName="DroneRFID" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="ProductRFID" ColumnName="ProductRFID" />
-                <ScalarProperty Name="ProductQrCode" ColumnName="ProductQrCode" />
-                <ScalarProperty Name="ProductRSSI" ColumnName="ProductRSSI" />
-                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
-                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DroneDefinitions">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneDefinition">
               <MappingFragment StoreEntitySet="DroneDefinition">
@@ -2906,27 +2916,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="LastModifiedOn" ColumnName="LastModifiedOn" />
                 </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LUP_Drone">
-            <EntityTypeMapping TypeName="ExponentPortalModel.LUP_Drone">
-              <MappingFragment StoreEntitySet="LUP_Drone">
-                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
-                <ScalarProperty Name="BinaryCode" ColumnName="BinaryCode" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
-                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
-                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-              </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="LUP_Product">
@@ -3709,43 +3698,12 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="GCA_Approval">
-            <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
-              <MappingFragment StoreEntitySet="GCA_Approval">
-                <ScalarProperty Name="CameraId" ColumnName="CameraId" />
-                <ScalarProperty Name="NotificationEmails" ColumnName="NotificationEmails" />
-                <ScalarProperty Name="GroundStaffUserId" ColumnName="GroundStaffUserId" />
-                <ScalarProperty Name="PilotUserId" ColumnName="PilotUserId" />
-                <ScalarProperty Name="ApprovalRemarks" ColumnName="ApprovalRemarks" />
-                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
-                <ScalarProperty Name="MOD_ApprovalURL" ColumnName="MOD_ApprovalURL" />
-                <ScalarProperty Name="IsUseCamara" ColumnName="IsUseCamara" />
-                <ScalarProperty Name="MaxDefault" ColumnName="MaxDefault" />
-                <ScalarProperty Name="MinDefault" ColumnName="MinDefault" />
-                <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
-                <ScalarProperty Name="MinAltitude" ColumnName="MinAltitude" />
-                <ScalarProperty Name="BoundaryInMeters" ColumnName="BoundaryInMeters" />
-                <ScalarProperty Name="InnerBoundaryCoord" ColumnName="InnerBoundaryCoord" />
-                <ScalarProperty Name="InnerBoundary" ColumnName="InnerBoundary" />
-                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
-                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
-                <ScalarProperty Name="ApprovalFileUrl" ColumnName="ApprovalFileUrl" />
-                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="Polygon" ColumnName="Polygon" />
-                <ScalarProperty Name="Coordinates" ColumnName="Coordinates" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
-                <ScalarProperty Name="ApprovalName" ColumnName="ApprovalName" />
-                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PortalAlerts">
             <EntityTypeMapping TypeName="ExponentPortalModel.PortalAlert">
               <MappingFragment StoreEntitySet="PortalAlert">
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
                 <ScalarProperty Name="AlertCategory" ColumnName="AlertCategory" />
                 <ScalarProperty Name="AlertType" ColumnName="AlertType" />
                 <ScalarProperty Name="SMSSend" ColumnName="SMSSend" />
@@ -3772,6 +3730,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="UserLogs">
             <EntityTypeMapping TypeName="ExponentPortalModel.UserLog">
               <MappingFragment StoreEntitySet="UserLog">
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="IsSessionEnd" ColumnName="IsSessionEnd" />
+                <ScalarProperty Name="SessionEndTime" ColumnName="SessionEndTime" />
+                <ScalarProperty Name="SessionStartTime" ColumnName="SessionStartTime" />
                 <ScalarProperty Name="SessionID" ColumnName="SessionID" />
                 <ScalarProperty Name="Browser" ColumnName="Browser" />
                 <ScalarProperty Name="UserIPAddress" ColumnName="UserIPAddress" />
@@ -3907,106 +3869,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MSTR_BlackBox">
-            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_BlackBox">
-              <MappingFragment StoreEntitySet="MSTR_BlackBox">
-                <ScalarProperty Name="Temp" ColumnName="Temp" />
-                <ScalarProperty Name="BlackBoxCode" ColumnName="BlackBoxCode" />
-                <ScalarProperty Name="EncryptionKey" ColumnName="EncryptionKey" />
-                <ScalarProperty Name="LastReceiveId" ColumnName="LastReceiveId" />
-                <ScalarProperty Name="LastRentalId" ColumnName="LastRentalId" />
-                <ScalarProperty Name="CurrentDroneID" ColumnName="CurrentDroneID" />
-                <ScalarProperty Name="LastUpdateDate" ColumnName="LastUpdateDate" />
-                <ScalarProperty Name="CurrentUserID" ColumnName="CurrentUserID" />
-                <ScalarProperty Name="CurrentStatus" ColumnName="CurrentStatus" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="BlackBoxName" ColumnName="BlackBoxName" />
-                <ScalarProperty Name="BlackBoxSerial" ColumnName="BlackBoxSerial" />
-                <ScalarProperty Name="BlackBoxID" ColumnName="BlackBoxID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="usp_PayLoad_AutoCorrectGrid" FunctionName="ExponentPortalModel.Store.usp_PayLoad_AutoCorrectGrid" />
           <FunctionImportMapping FunctionImportName="usp_Portal_GetFlightChartData" FunctionName="ExponentPortalModel.Store.usp_Portal_GetFlightChartData" />
           <FunctionImportMapping FunctionImportName="usp_Portal_GetLastFlightChartData" FunctionName="ExponentPortalModel.Store.usp_Portal_GetLastFlightChartData" />
           <FunctionImportMapping FunctionImportName="usp_Portal_GetPilotChartData" FunctionName="ExponentPortalModel.Store.usp_Portal_GetPilotChartData" />
-          <EntitySetMapping Name="BlackBoxTransactions">
-            <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxTransaction">
-              <MappingFragment StoreEntitySet="BlackBoxTransaction">
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="RentAcknowledged" ColumnName="RentAcknowledged" />
-                <ScalarProperty Name="VerifyCode" ColumnName="VerifyCode" />
-                <ScalarProperty Name="RentAmount" ColumnName="RentAmount" />
-                <ScalarProperty Name="RentType" ColumnName="RentType" />
-                <ScalarProperty Name="RentEndDate" ColumnName="RentEndDate" />
-                <ScalarProperty Name="RentStartDate" ColumnName="RentStartDate" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
-                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="DateOfCheque" ColumnName="DateOfCheque" />
-                <ScalarProperty Name="ChequeNumber" ColumnName="ChequeNumber" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="BankName" ColumnName="BankName" />
-                <ScalarProperty Name="NameOnCard" ColumnName="NameOnCard" />
-                <ScalarProperty Name="CollectionMode" ColumnName="CollectionMode" />
-                <ScalarProperty Name="IsCollectionDeposit" ColumnName="IsCollectionDeposit" />
-                <ScalarProperty Name="BBStatus" ColumnName="BBStatus" />
-                <ScalarProperty Name="BlackBoxID" ColumnName="BlackBoxID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FlightMapDatas">
-            <EntityTypeMapping TypeName="ExponentPortalModel.FlightMapData">
-              <MappingFragment StoreEntitySet="FlightMapData">
-                <ScalarProperty Name="ReceivedTime" ColumnName="ReceivedTime" />
-                <ScalarProperty Name="OtherFlightIDs" ColumnName="OtherFlightIDs" />
-                <ScalarProperty Name="voltage" ColumnName="voltage" />
-                <ScalarProperty Name="IsSoftFence" ColumnName="IsSoftFence" />
-                <ScalarProperty Name="GCAID" ColumnName="GCAID" />
-                <ScalarProperty Name="IsOutSide" ColumnName="IsOutSide" />
-                <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
-                <ScalarProperty Name="PointDistance" ColumnName="PointDistance" />
-                <ScalarProperty Name="Max_Satellites" ColumnName="Max_Satellites" />
-                <ScalarProperty Name="Min_Satellites" ColumnName="Min_Satellites" />
-                <ScalarProperty Name="Avg_Satellites" ColumnName="Avg_Satellites" />
-                <ScalarProperty Name="Max_Speed" ColumnName="Max_Speed" />
-                <ScalarProperty Name="Min_Speed" ColumnName="Min_Speed" />
-                <ScalarProperty Name="Avg_Speed" ColumnName="Avg_Speed" />
-                <ScalarProperty Name="Max_Altitude" ColumnName="Max_Altitude" />
-                <ScalarProperty Name="Min_Altitude" ColumnName="Min_Altitude" />
-                <ScalarProperty Name="avg_Altitude" ColumnName="avg_Altitude" />
-                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
-                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
-                <ScalarProperty Name="TotalFlightTime" ColumnName="TotalFlightTime" />
-                <ScalarProperty Name="Heading" ColumnName="Heading" />
-                <ScalarProperty Name="Roll" ColumnName="Roll" />
-                <ScalarProperty Name="Pitch" ColumnName="Pitch" />
-                <ScalarProperty Name="Satellites" ColumnName="Satellites" />
-                <ScalarProperty Name="FixQuality" ColumnName="FixQuality" />
-                <ScalarProperty Name="Speed" ColumnName="Speed" />
-                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
-                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
-                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
-                <ScalarProperty Name="ProductRSSI" ColumnName="ProductRSSI" />
-                <ScalarProperty Name="ProductQrCode" ColumnName="ProductQrCode" />
-                <ScalarProperty Name="ProductRFID" ColumnName="ProductRFID" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="DroneRFID" ColumnName="DroneRFID" />
-                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
-                <ScalarProperty Name="FlightMapDataID" ColumnName="FlightMapDataID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MSTR_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Drone">
               <MappingFragment StoreEntitySet="MSTR_Drone">
@@ -4079,14 +3945,6 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SMSTables">
-            <EntityTypeMapping TypeName="ExponentPortalModel.SMSTable">
-              <MappingFragment StoreEntitySet="SMSTable">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ApproalDetails">
             <EntityTypeMapping TypeName="ExponentPortalModel.ApproalDetail">
               <MappingFragment StoreEntitySet="ApproalDetail">
@@ -4125,8 +3983,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BlackBoxLogs">
-            <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxLog">
+          <EntitySetMapping Name="BlackBoxLog1">
+            <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxLog1">
               <MappingFragment StoreEntitySet="BlackBoxLog">
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
@@ -4135,7 +3993,215 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="DroneDatas">
+            <EntityTypeMapping TypeName="ExponentPortalModel.DroneData">
+              <MappingFragment StoreEntitySet="DroneData">
+                <ScalarProperty Name="IsLogData" ColumnName="IsLogData" />
+                <ScalarProperty Name="Voltage" ColumnName="Voltage" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="QueueMessage" ColumnName="QueueMessage" />
+                <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
+                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
+                <ScalarProperty Name="TotalFlightTime" ColumnName="TotalFlightTime" />
+                <ScalarProperty Name="Heading" ColumnName="Heading" />
+                <ScalarProperty Name="Roll" ColumnName="Roll" />
+                <ScalarProperty Name="Pitch" ColumnName="Pitch" />
+                <ScalarProperty Name="Satellites" ColumnName="Satellites" />
+                <ScalarProperty Name="FixQuality" ColumnName="FixQuality" />
+                <ScalarProperty Name="Speed" ColumnName="Speed" />
+                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+                <ScalarProperty Name="ProductRSSI" ColumnName="ProductRSSI" />
+                <ScalarProperty Name="ProductQrCode" ColumnName="ProductQrCode" />
+                <ScalarProperty Name="ProductRFID" ColumnName="ProductRFID" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="DroneRFID" ColumnName="DroneRFID" />
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+                <ScalarProperty Name="DroneDataId" ColumnName="DroneDataId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FlightMapDatas">
+            <EntityTypeMapping TypeName="ExponentPortalModel.FlightMapData">
+              <MappingFragment StoreEntitySet="FlightMapData">
+                <ScalarProperty Name="OtherFlightIDs" ColumnName="OtherFlightIDs" />
+                <ScalarProperty Name="voltage" ColumnName="voltage" />
+                <ScalarProperty Name="IsSoftFence" ColumnName="IsSoftFence" />
+                <ScalarProperty Name="GCAID" ColumnName="GCAID" />
+                <ScalarProperty Name="IsOutSide" ColumnName="IsOutSide" />
+                <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="PointDistance" ColumnName="PointDistance" />
+                <ScalarProperty Name="Max_Satellites" ColumnName="Max_Satellites" />
+                <ScalarProperty Name="Min_Satellites" ColumnName="Min_Satellites" />
+                <ScalarProperty Name="Avg_Satellites" ColumnName="Avg_Satellites" />
+                <ScalarProperty Name="Max_Speed" ColumnName="Max_Speed" />
+                <ScalarProperty Name="Min_Speed" ColumnName="Min_Speed" />
+                <ScalarProperty Name="Avg_Speed" ColumnName="Avg_Speed" />
+                <ScalarProperty Name="Max_Altitude" ColumnName="Max_Altitude" />
+                <ScalarProperty Name="Min_Altitude" ColumnName="Min_Altitude" />
+                <ScalarProperty Name="avg_Altitude" ColumnName="avg_Altitude" />
+                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="TotalFlightTime" ColumnName="TotalFlightTime" />
+                <ScalarProperty Name="Heading" ColumnName="Heading" />
+                <ScalarProperty Name="Roll" ColumnName="Roll" />
+                <ScalarProperty Name="Pitch" ColumnName="Pitch" />
+                <ScalarProperty Name="Satellites" ColumnName="Satellites" />
+                <ScalarProperty Name="FixQuality" ColumnName="FixQuality" />
+                <ScalarProperty Name="Speed" ColumnName="Speed" />
+                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="ReceivedTime" ColumnName="ReceivedTime" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+                <ScalarProperty Name="ProductRSSI" ColumnName="ProductRSSI" />
+                <ScalarProperty Name="ProductQrCode" ColumnName="ProductQrCode" />
+                <ScalarProperty Name="ProductRFID" ColumnName="ProductRFID" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="DroneRFID" ColumnName="DroneRFID" />
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+                <ScalarProperty Name="FlightMapDataID" ColumnName="FlightMapDataID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GCA_Approval">
+            <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
+              <MappingFragment StoreEntitySet="GCA_Approval">
+                <ScalarProperty Name="RpasApprovalRefNum" ColumnName="RpasApprovalRefNum" />
+                <ScalarProperty Name="CameraId" ColumnName="CameraId" />
+                <ScalarProperty Name="NotificationEmails" ColumnName="NotificationEmails" />
+                <ScalarProperty Name="GroundStaffUserId" ColumnName="GroundStaffUserId" />
+                <ScalarProperty Name="PilotUserId" ColumnName="PilotUserId" />
+                <ScalarProperty Name="ApprovalRemarks" ColumnName="ApprovalRemarks" />
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+                <ScalarProperty Name="MOD_ApprovalURL" ColumnName="MOD_ApprovalURL" />
+                <ScalarProperty Name="IsUseCamara" ColumnName="IsUseCamara" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="MaxDefault" ColumnName="MaxDefault" />
+                <ScalarProperty Name="MinDefault" ColumnName="MinDefault" />
+                <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
+                <ScalarProperty Name="MinAltitude" ColumnName="MinAltitude" />
+                <ScalarProperty Name="BoundaryInMeters" ColumnName="BoundaryInMeters" />
+                <ScalarProperty Name="InnerBoundaryCoord" ColumnName="InnerBoundaryCoord" />
+                <ScalarProperty Name="InnerBoundary" ColumnName="InnerBoundary" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="ApprovalFileUrl" ColumnName="ApprovalFileUrl" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Polygon" ColumnName="Polygon" />
+                <ScalarProperty Name="Coordinates" ColumnName="Coordinates" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="ApprovalName" ColumnName="ApprovalName" />
+                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LUP_Drone">
+            <EntityTypeMapping TypeName="ExponentPortalModel.LUP_Drone">
+              <MappingFragment StoreEntitySet="LUP_Drone">
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BinaryCode" ColumnName="BinaryCode" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_BlackBox">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_BlackBox">
+              <MappingFragment StoreEntitySet="MSTR_BlackBox">
+                <ScalarProperty Name="Temp" ColumnName="Temp" />
+                <ScalarProperty Name="BlackBoxCode" ColumnName="BlackBoxCode" />
+                <ScalarProperty Name="EncryptionKey" ColumnName="EncryptionKey" />
+                <ScalarProperty Name="LastReceiveId" ColumnName="LastReceiveId" />
+                <ScalarProperty Name="LastRentalId" ColumnName="LastRentalId" />
+                <ScalarProperty Name="CurrentDroneID" ColumnName="CurrentDroneID" />
+                <ScalarProperty Name="LastUpdateDate" ColumnName="LastUpdateDate" />
+                <ScalarProperty Name="CurrentUserID" ColumnName="CurrentUserID" />
+                <ScalarProperty Name="CurrentStatus" ColumnName="CurrentStatus" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="BlackBoxName" ColumnName="BlackBoxName" />
+                <ScalarProperty Name="BlackBoxSerial" ColumnName="BlackBoxSerial" />
+                <ScalarProperty Name="BlackBoxID" ColumnName="BlackBoxID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlackBoxTransactions">
+            <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxTransaction">
+              <MappingFragment StoreEntitySet="BlackBoxTransaction">
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="RentAcknowledged" ColumnName="RentAcknowledged" />
+                <ScalarProperty Name="VerifyCode" ColumnName="VerifyCode" />
+                <ScalarProperty Name="RentAmount" ColumnName="RentAmount" />
+                <ScalarProperty Name="RentType" ColumnName="RentType" />
+                <ScalarProperty Name="RentEndDate" ColumnName="RentEndDate" />
+                <ScalarProperty Name="RentStartDate" ColumnName="RentStartDate" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="DateOfCheque" ColumnName="DateOfCheque" />
+                <ScalarProperty Name="ChequeNumber" ColumnName="ChequeNumber" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="NameOnCard" ColumnName="NameOnCard" />
+                <ScalarProperty Name="CollectionMode" ColumnName="CollectionMode" />
+                <ScalarProperty Name="IsCollectionDeposit" ColumnName="IsCollectionDeposit" />
+                <ScalarProperty Name="BBStatus" ColumnName="BBStatus" />
+                <ScalarProperty Name="BlackBoxID" ColumnName="BlackBoxID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ContentManagements">
+            <EntityTypeMapping TypeName="ExponentPortalModel.ContentManagement">
+              <MappingFragment StoreEntitySet="ContentManagement">
+                <ScalarProperty Name="MenuTitle" ColumnName="MenuTitle" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="PageTitle" ColumnName="PageTitle" />
+                <ScalarProperty Name="IsShowInMenu" ColumnName="IsShowInMenu" />
+                <ScalarProperty Name="CmsRefName" ColumnName="CmsRefName" />
+                <ScalarProperty Name="CmsID" ColumnName="CmsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SMSTables">
+            <EntityTypeMapping TypeName="ExponentPortalModel.SMSTable">
+              <MappingFragment StoreEntitySet="SMSTable">
+                <ScalarProperty Name="CellReference" ColumnName="CellReference" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
@@ -4150,7 +4216,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>

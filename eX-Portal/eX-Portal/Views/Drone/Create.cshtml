@@ -7,10 +7,8 @@
 
 <section class="general-form" id="loginForm">
   <script src="~/Scripts/bootstrap.js"></script>
-  @using (Html.BeginForm()) {
+  @using(Html.BeginForm()) {
 
-
-      
     @Html.HiddenFor(model => model.Drone.DroneId)
 
     <div class="editor-label">

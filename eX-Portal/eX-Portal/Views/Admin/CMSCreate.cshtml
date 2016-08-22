@@ -1,0 +1,146 @@
+﻿@model eX_Portal.Models.ContentManagement
+
+@section Header{
+  <style type="text/css">
+    table.cms-edit-table {
+      width: 100%;
+    }
+
+      table.cms-edit-table td {
+        padding: 5px 0px 5px 0px;
+      }
+
+        table.cms-edit-table td.cms-label {
+          white-space: nowrap;
+          padding-right: 20px;
+        }
+
+        table.cms-edit-table td.cms-field {
+          width: 100%;
+          max-width: 100%;
+        }
+
+      table.cms-edit-table input.text-box,
+      .cke_source {
+        width: 100%;
+        max-width: 100%;
+      }
+
+  </style>
+}
+<section id="cmsForm">
+
+  @using(Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CmsID)
+    @Html.ValidationSummary(true)
+
+    <table cellpadding="0" cellspacing="0" class="cms-edit-table">
+
+
+      <tr>
+        <td class="cms-label">
+          <div class="editor-label">
+            @Html.LabelFor(model => model.PageTitle)
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            @Html.EditorFor(model => model.PageTitle)
+            @Html.ValidationMessageFor(model => model.PageTitle)
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="cms-label">
+          <div class="editor-label">
+            @Html.LabelFor(model => model.MenuTitle)
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            @Html.EditorFor(model => model.MenuTitle)
+            @Html.ValidationMessageFor(model => model.MenuTitle)
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="cms-label">
+          <div class="editor-label">
+            @Html.LabelFor(model => model.IsShowInMenu)
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            @Html.RadioButtonFor(model => model.IsShowInMenu, 1) Yes
+            @Html.RadioButtonFor(model => model.IsShowInMenu, 0) No
+            @Html.ValidationMessageFor(model => model.IsShowInMenu)
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="cms-label">
+          <div>
+            @Html.LabelFor(model => model.CmsRefName)
+          </div>
+        </td>
+        <td class="cms-field">
+          <div class="form-group">
+            @Html.EditorFor(model => model.CmsRefName)
+            @Html.ValidationMessageFor(model => model.CmsRefName)
+          </div>
+        </td>
+      </tr>
+
+    </table>
+
+    
+
+    <div class="editor-label">
+      @Html.ValidationMessageFor(model => model.Body)
+    </div>
+    <div class="editor-field">
+      @Html.TextAreaFor(model => model.Body)
+    </div>
+
+    <div class="form-toolbar">
+      <input type="submit" value="Create" />
+    </div>
+
+
+  }
+
+
+
+</section>
+
+
+@section Scripts {
+
+  @Scripts.Render("~/bundles/jqueryval")
+  <script src="~/ckeditor/ckeditor.js"></script>
+  <script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+
+      function getConfig() {
+        var theItems = {
+          toolbar: [
+            { name: 'document', items: ['Source'] },
+            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'RemoveFormat'] },
+            { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent',  '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+            { name: 'insert', items: ['Link', 'Unlink', 'Image', 'Table'] },
+            { name: 'colors', items: ['TextColor', 'BGColor'] },
+            { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] }
+          ]
+        };
+        return theItems;
+    }
+
+      CKEDITOR.replace('Body', getConfig());
+    });
+  </script>
+}
