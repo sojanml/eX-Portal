@@ -237,5 +237,19 @@ namespace eX_Portal.exLogic {
 
       return PayLoadMapDataList; //return the list objects
     }//function GetDropDowntList
+
+    public static bool CheckSessionValid(int UserId)
+    {
+            string updateSQL= @"update UserLog set IsSessionEnd=1,SessionEndTime=GETDATE()
+                                where DATEDIFF(HOUR, SessionStartTime, GETDATE())> 23";
+            Util.doSQL(updateSQL);
+
+            string sql = "select count(*) from UserLog where UserID= " + UserId + " and IsSessionEnd=0";
+            int count=Util.getDBInt(sql);
+            if (count < 5)
+                return true;
+            else
+                return false;
+    }
   }
 }

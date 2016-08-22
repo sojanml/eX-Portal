@@ -23,5 +23,21 @@ namespace eX_Portal {
       }
       return base.GetVaryByCustomString(context, arg);
     }
-  }
+        protected void Session_Start(Object sender, EventArgs e) 
+        {
+            if (Session["uid"] != null)
+            {
+              //  Console.WriteLine("Session Started");
+            }
+        }
+
+        protected void Session_End(Object sender, EventArgs e)
+        {
+            if(Session["uid"]!=null)
+            {
+                string sql = "update userlog set IsSessionEnd=1 where ID='" + Session["uid"] + "'";
+                exLogic.Util.doSQL(sql);
+            }
+        }
+    }
 }

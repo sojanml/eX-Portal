@@ -94,15 +94,15 @@ namespace eX_Portal.Controllers {
             */
             if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
             {
-                    SQL += " AND\n" +
-                      "  MSTR_Drone.AccountID=" + Util.getAccountID() + "\n" +
-                      "WHERE\n" +
-                      "  MSTR_Drone.DroneID IS NOT NULL";
+                SQL += " AND\n" +
+                  "  MSTR_Drone.AccountID=" + Util.getAccountID() + "\n" +
+                  "WHERE\n" +
+                  "  MSTR_Drone.AccountID=" + Util.getAccountID();
             }
-         //   SQL+= " Order By UasDataid";
+            //   SQL+= " Order By UasDataid";
 
 
-      qView nView = new qView(SQL);
+            qView nView = new qView(SQL);
       //if (!exLogic.User.hasAccess("BLACKBOX.LIVE")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
 
       if (Request.IsAjaxRequest()) {

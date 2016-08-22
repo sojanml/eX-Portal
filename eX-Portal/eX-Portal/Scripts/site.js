@@ -246,3 +246,13 @@ function fmtDtHeader(date) {
   return strDate + " " + strTime;
 }
 
+var closing = true;
+$(function () {
+    $("a,input[type=submit]").click(function () { closing = false; });
+    $(window).unload(function () {
+        if (closing) {
+            jQuery.ajax({ url: "/User/Logout", async: false });
+        }
+    });
+});
+

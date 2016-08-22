@@ -58,7 +58,8 @@ function OnSuccess_(reponse) {
         max = 15;
         scrollData= {
             enabled: true,
-            height:8
+            height: 8
+           
         }
 
     }
@@ -229,7 +230,9 @@ function initChart() {
         
             type: 'column',
             marginRight:0,
-            marginBottom:90,
+            marginBottom: 90,
+            spacingLeft: 0,
+            spacingBottom: 0,
             events: {
                 click: function (event) {
                     var chart1 = $('#RecentFlight').highcharts();
@@ -391,6 +394,8 @@ function initChartTotalFlight() {
             type: 'column',
             marginRight: 0,
             marginBottom: 90,
+            spacingLeft: 0,
+            spacingBottom: 0,
         },
         title: {
             text: null
