@@ -7,7 +7,9 @@ var playerInstance = null;
 var thePlayTimer = null;
 var _IsGeoTagShown = false;
 var _GeoTagLayer = null;
-
+var _IsADSBShown = null;
+var _ADSBLayer = null;
+var HomePoint = null;
 var _BlackBoxStartAt = null;
 var _ReplayTimeAt = null;
 var _VideoStartTime = new Date(1970, 0, 0, 24, 0, 0);
@@ -56,6 +58,9 @@ $(document).ready(function () {
   $('#btnGeoTag').on("click", function (e) {
     ShowHideGeoTag($(this));
   });
+  $('#btnADSB').on("click", function (e) {
+      ShowHideADSB($(this));
+  });
 
   $(document).on("click", ".map-point", function () {
     fn_MapPoint($(this));
@@ -64,7 +69,7 @@ $(document).ready(function () {
   $('#btnPayload').on("click", function () {
     ShowHidePayload($(this));
   });
-
+ 
 });
 
 
@@ -154,6 +159,129 @@ function ShowHideGeoTag(btn) {
 
 }
 
+function ShowHideADSB(btn)
+{
+    if (btn.length) btn.val("Loading...");
+
+    if (_IsADSBShown) {
+        _ADSBLayer.setValues({ map: null });
+        _IsADSBShown = false;
+        if (btn.length) btn.val("Show ADS/B Data");
+        return;
+    }
+
+    if (_ADSBLayer) {
+        _ADSBLayer.setValues({ map: map });
+        _IsADSBShown = true;
+        if (btn.length) btn.val("Hide ADS/B Data");
+        return;
+    }
+    
+    $.ajax({
+        type: "GET",
+        url: '/Map/FlightInfo/ ' + FlightID,
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        async: true,
+        success: function (FlightInfo) {
+            HomePoint = FlightInfo;
+            var RangeLat =  (HomePoint["Latitude"]-1).toString()+' '+HomePoint["Latitude"].toString();
+            var RangeLon = (HomePoint["Longitude"]).toString() + ' ' + (HomePoint["Longitude"] + 1).toString();
+            GetADSBData(RangeLat, RangeLon);
+            if (btn.length) btn.val("Hide ADSB Data");
+            //Timer for ADSBData
+
+            window.setInterval(LiveADSData, 10000);
+        },
+        failure: function (msg) {
+            alert('ADS/B data load error' + msg);
+        }
+    });
+
+}
+
+function LiveADSData()
+{
+    var RangeLat = (HomePoint["Latitude"] - 1).toString() + ' ' + HomePoint["Latitude"].toString();
+    var RangeLon = (HomePoint["Longitude"]).toString() + ' ' + (HomePoint["Longitude"] + 1).toString();
+    GetADSBData(RangeLat, RangeLon);
+}
+function GetADSBData(RangeLat,RangeLon)
+{
+    var fxml_url = 'http://catheythattil:65aa91dc1b5cf57265b2d0ce58f42f3e0c3fca71@flightxml.flightaware.com/json/FlightXML2/';
+    $.ajax({
+        type: "GET",
+        url: fxml_url + 'SearchBirdseyeInFlight',
+        contentType: "application/json;charset=utf-8",
+        data: { 'query': '{< alt 700} {range lat ' + RangeLat + '} {range lon +' + RangeLon + '}', 'howMany': 200, 'offset': 0 },
+        success : function(result) {
+            if (result.error) {
+                alert('Failed to fetch flight: ' + result.error);
+                return;
+            }
+          
+            _IsADSBShown = true;
+            _ADSBLayer = new ADSBOverlay({ map: map }, result.SearchBirdseyeInFlightResult.aircraft);
+          
+        },
+        error: function(data, text) { alert('Failed to fetch flight: ' + data); },
+        dataType: 'jsonp',
+        jsonp: 'jsonp_callback',
+        xhrFields: { withCredentials: true }
+    });
+
+}
+
+function ADSBOverlay(options, ADSBData) {
+    this.setValues(options);
+    this.markerLayer = $('<div />').addClass('overlay');
+    this.ADSBData = ADSBData;
+};
+ADSBOverlay.prototype = new google.maps.OverlayView;
+
+ADSBOverlay.prototype.onAdd = function () {
+    var $pane = $(this.getPanes().overlayImage); // Pane 3  
+    $pane.append(this.markerLayer);
+};
+
+ADSBOverlay.prototype.onRemove = function () {
+    this.markerLayer.remove();
+};
+
+ADSBOverlay.prototype.draw = function () {
+    var projection = this.getProjection();
+    var zoom = this.getMap().getZoom();
+    var fragment = document.createDocumentFragment();
+
+
+    this.markerLayer.empty(); // Empty any previous rendered markers  
+
+    for (var i = 0; i < this.ADSBData.length; i++) {
+        // Determine a random location from the bounds set previously  
+        var IconGeoPos = new google.maps.LatLng(
+                this.ADSBData[i].latitude,
+                this.ADSBData[i].longitude
+        );
+
+        var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
+        var $point = $(
+            '<div class="map-point" id="p' + i + '" title="' + i + '" '
+          + 'data-lat="' + this.ADSBData[i].latitude + '" '
+          + 'data-lng="' + this.ADSBData[i].longitude + '" '
+          + 'data-alt="' + this.ADSBData[i].altitude + '" '
+          + 'data-doc="' + this.ADSBData[i].ident + '" '
+          + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
+          + '<span class="icon FlightIcon" style="transform: rotate(' + this.ADSBData[i].heading + 'deg);">&#xf0fb;</span>'
+          + '</div>'
+        );
+
+        // Append the HTML to the fragment in memory  
+        fragment.appendChild($point.get(0));
+    }
+
+    // Now append the entire fragment from memory onto the DOM  
+    this.markerLayer.append(fragment);
+};
 
 function GeoTagOverlay(options, GeoTagData) {
   this.setValues(options);
@@ -326,6 +454,7 @@ function drawLocationPoints() {
       thePlayTimer = window.setInterval(drawNextSetFromServer, 100);
       //get the next set of points from server
       getLocationPoints();
+       
     }
     return;
   }

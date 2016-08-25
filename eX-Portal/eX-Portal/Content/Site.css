@@ -1275,6 +1275,13 @@ div.hr {
   top:10px;
   left:8px;
 }
+.map-point span.FlightIcon {
+  font-size:22px;
+  left:3px;
+  top:0px;
+  color:white;
+  display:block;
+}
 
 #deletable {
   margin-top:10px;
