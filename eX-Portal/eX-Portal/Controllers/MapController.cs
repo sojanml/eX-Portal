@@ -505,5 +505,16 @@ namespace eX_Portal.Controllers {
       // return LiveDrones;
     }
 
+        public JsonResult FlightInfo([Bind(Prefix = "ID")] int FlightID =0)
+        {
+            DroneFlight df = new DroneFlight();
+            using (ExponentPortalEntities ctx = new ExponentPortalEntities())
+            {
+                df = (from d in ctx.DroneFlights
+                                  where d.ID == FlightID
+                                  select d).FirstOrDefault();
+                 }
+            return Json(df, JsonRequestBehavior.AllowGet);
+        }
   }
 }
