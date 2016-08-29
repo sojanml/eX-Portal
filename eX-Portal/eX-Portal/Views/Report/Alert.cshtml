@@ -1,0 +1,88 @@
+﻿@model eX_Portal.exLogic.qView
+@using eX_Portal.exLogic;
+
+@{
+  ViewBag.Title = "Flight Report";
+  FlightReportFilter TheFilter = (FlightReportFilter)ViewBag.ReportFilter;
+}
+
+@Html.Action("ReportFilter", "Report", new {
+  From = TheFilter.From,
+  To = TheFilter.To,
+  Pilot = TheFilter.Pilot,
+  UAS = TheFilter.UAS
+})
+
+
+@Html.Raw(Model.getDataTable())
+
+
+
+@section header {
+  <link href="~/jquery-ui/jquery-ui.theme.css" rel="stylesheet" />
+}
+
+@section scripts {
+  <script type="text/javascript" src="~/jquery-ui/jquery-ui.js"></script>
+  <script type="text/javascript">
+@Html.Raw(Model.getScripts())
+
+  $(document).ready(function () {
+    var FORM = document.forms['ReportFilterForm'];
+    $("#PilotName").autocomplete({
+      source: "@Url.Action("getPilots","Report",null)",
+      minLength: 2,
+      select: function (event, ui) {
+        if (ui.item) {
+          event.preventDefault();
+          FORM['Pilot'].value = ui.item.value;
+          FORM['PilotName'].value = ui.item.label;
+        } else {
+          FORM['Pilot'].value = '0';
+        }
+      }
+    });
+
+    $("#UASName").autocomplete({
+      source: "@Url.Action("getUAS","Report",null)",
+      minLength: 2,
+      select: function (event, ui) {
+        if (ui.item) {
+          event.preventDefault();
+          FORM['UAS'].value = ui.item.value;
+          FORM['UASName'].value = ui.item.label;
+        } else {
+          FORM['UAS'].value = '0';
+        }
+      }
+    });
+
+
+
+    $("#UASName").on("blur", function (e) {
+      if ($(this).val() == "") FORM['UAS'].value = '0';
+    });
+    $("#PilotName").on("blur", function (e) {
+      if ($(this).val() == "") FORM['Pilot'].value = '0';
+    });
+  })
+
+
+  function _fnDrawCallback() {
+    if ($('#qViewTable_filter').find('#pdf_download').length <= 0) {
+      $('#qViewTable_filter').append('<div id="pdf_download"><span class="icon">&#xf1c1;</span> Download PDF</div>');
+
+      $('#pdf_download').on("click", function () {
+        var URL = '@Html.Raw(Url.Action("AlertPDF", "Report", TheFilter))';
+        top.location.href = URL;
+      });
+
+    }
+  }
+
+  </script>
+
+}
+
+
+

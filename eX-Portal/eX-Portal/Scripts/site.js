@@ -246,6 +246,7 @@ function fmtDtHeader(date) {
   return strDate + " " + strTime;
 }
 
+/*
 var closing = true;
 $(function () {
     $("a,input[type=submit]").click(function () { closing = false; });
@@ -256,3 +257,4 @@ $(function () {
     });
 });
 
+*/

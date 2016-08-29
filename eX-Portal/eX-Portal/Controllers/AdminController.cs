@@ -108,7 +108,6 @@ namespace eX_Portal.Controllers {
         message = "Item is removed successfully"
       };
       return Json(SuccessObj, JsonRequestBehavior.AllowGet);
-
     }
 
     [HttpPost ValidateInput(false)]

@@ -20,7 +20,7 @@ using iTextSharp.tool.xml;
 using Microsoft.Reporting.WebForms;
 
 namespace eX_Portal.Controllers {
-  public class ReportController : Controller {
+  public class ReportController :Controller {
     public ExponentPortalEntities db = new ExponentPortalEntities();
     // GET: Report
     public ActionResult Index() {
@@ -29,10 +29,11 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult Flights(FlightReportFilter ReportFilter) {
-      if (!exLogic.User.hasAccess("REPORT.FLIGHTS")) return RedirectToAction("NoAccess", "Home");
-      var theReport = new exLogic.Report();            
+      if(!exLogic.User.hasAccess("REPORT.FLIGHTS"))
+        return RedirectToAction("NoAccess", "Home");
+      var theReport = new exLogic.Report();
       qView nView = new qView(theReport.getFlightReportSQL(ReportFilter));
-      if (Request.IsAjaxRequest()) {
+      if(Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -41,51 +42,62 @@ namespace eX_Portal.Controllers {
       }//if(IsAjaxRequest)
 
     }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ReportFilter"></param>
-        /// <returns></returns>
-        public ActionResult GeoTag(FlightReportFilter ReportFilter)
-        {
-            if (!exLogic.User.hasAccess("REPORT.FLIGHTS")) return RedirectToAction("NoAccess", "Home");
-            ViewBag.ReportFilter = ReportFilter;
-            int DroneID = ReportFilter.UAS;
-            int IsCompany=0;   
-            DateTime FromDate = DateTime.Parse(ReportFilter.From);
-            DateTime ToDate = DateTime.Parse(ReportFilter.To);
-           
-            ToDate = ToDate.AddHours(24);
-           
-            List<DroneDocument> Docs=new List<DroneDocument>();
-            IList<GeoTagReport> DocsGeo =new List<GeoTagReport>();
-            ExponentPortalEntities Db = new ExponentPortalEntities();
 
-            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-            {
-                IsCompany = 1;
+    public ActionResult Alert(FlightReportFilter ReportFilter) {
+      //if(!exLogic.User.hasAccess("REPORT.ALERT"))
+      //  return RedirectToAction("NoAccess", "Home");
+      var theReport = new exLogic.Report();
+      qView nView = new qView(theReport.getAlertSQL(ReportFilter));
+      if(Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("qViewData", nView);
+      } else {
+        ViewBag.ReportFilter = ReportFilter;
+        return View(nView);
+      }//if(IsAjaxRequest)
+    }
 
-            }
-            else
-            {
-                IsCompany = 0;
-            }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ReportFilter"></param>
+    /// <returns></returns>
+    public ActionResult GeoTag(FlightReportFilter ReportFilter) {
+      if(!exLogic.User.hasAccess("REPORT.FLIGHTS"))
+        return RedirectToAction("NoAccess", "Home");
+      ViewBag.ReportFilter = ReportFilter;
+      int DroneID = ReportFilter.UAS;
+      int IsCompany = 0;
+      DateTime FromDate = DateTime.Parse(ReportFilter.From);
+      DateTime ToDate = DateTime.Parse(ReportFilter.To);
+
+      ToDate = ToDate.AddHours(24);
+
+      List<DroneDocument> Docs = new List<DroneDocument>();
+      IList<GeoTagReport> DocsGeo = new List<GeoTagReport>();
+      ExponentPortalEntities Db = new ExponentPortalEntities();
+
+      if(!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+        IsCompany = 1;
+
+      } else {
+        IsCompany = 0;
+      }
 
 
-          
 
-            DocsGeo = Util.getAllGeoTag(FromDate, ToDate,IsCompany,DroneID);
 
-                
+      DocsGeo = Util.getAllGeoTag(FromDate, ToDate, IsCompany, DroneID);
 
-           
-            return View(DocsGeo);
-        }
 
-    public ActionResult GeoReportFilter(FlightReportFilter ReportFilter)
-        {
-            return View(ReportFilter);
-        }
+
+
+      return View(DocsGeo);
+    }
+
+    public ActionResult GeoReportFilter(FlightReportFilter ReportFilter) {
+      return View(ReportFilter);
+    }
     /*
     public ActionResult Alerts(FlightReportFilter ReportFilter) {
       if (!exLogic.User.hasAccess("REPORT.ALERTS")) return RedirectToAction("NoAccess", "Home");
@@ -150,6 +162,56 @@ namespace eX_Portal.Controllers {
       return File(renderedBytes, mimeType);
     }
 
+
+
+
+    public ActionResult AlertPDF(FlightReportFilter ReportFilter) {
+      var myReport = new ReportData();
+      LocalReport localReport = new LocalReport();
+
+      ReportParameter[] TheParams = {
+        new ReportParameter("ReportFilterInfo", ReportFilter.getReadableFilter(), false)
+      };
+      localReport.ReportPath = Server.MapPath("~/ReportsManager/AlertReport.rdlc");
+      ReportDataSource reportDataSource = new ReportDataSource("AlertReportDataSet", myReport.getAlertReportData(ReportFilter));
+      //localReport.SetParameters(TheParams);
+      localReport.DataSources.Add(reportDataSource);
+
+      string reportType = "PDF";
+      string mimeType;
+      string encoding;
+      string fileNameExtension;
+
+      //The DeviceInfo settings should be changed based on the reportType
+      //http://msdn2.microsoft.com/en-us/library/ms155397.aspx
+      string deviceInfo =
+      "<DeviceInfo>" +
+      "  <OutputFormat>PDF</OutputFormat>" +
+      "  <PageWidth>11.69in</PageWidth>" +
+      "  <PageHeight>8.27in</PageHeight>" +
+      "  <MarginTop>0.5in</MarginTop>" +
+      "  <MarginLeft>0.5in</MarginLeft>" +
+      "  <MarginRight>0.5in</MarginRight>" +
+      "  <MarginBottom>0.5in</MarginBottom>" +
+      "</DeviceInfo>";
+
+      Warning[] warnings;
+      string[] streams;
+      byte[] renderedBytes;
+
+      //Render the report
+      renderedBytes = localReport.Render(
+          reportType,
+          deviceInfo,
+          out mimeType,
+          out encoding,
+          out fileNameExtension,
+          out streams,
+          out warnings);
+      Response.AddHeader("content-disposition", "attachment; filename=AlertReport." + fileNameExtension);
+      return File(renderedBytes, mimeType);
+    }
+
     public ActionResult ReportFilter(FlightReportFilter ReportFilter) {
       return View(ReportFilter);
     }
@@ -165,11 +227,11 @@ namespace eX_Portal.Controllers {
     }
 
 
-    public String GoogleMap([Bind(Prefix = "ID")]int FlightID = 0, int ApprovalID=0) {
+    public String GoogleMap([Bind(Prefix = "ID")]int FlightID = 0, int ApprovalID = 0) {
       String GoogleURL = String.Empty;
       var GoogleAPI = ConfigurationManager.AppSettings["GoogleAPI"];
       var GeoPoints = (from n in db.FlightMapDatas
-                       where n.FlightID == FlightID 
+                       where n.FlightID == FlightID
                        orderby n.FlightMapDataID
                        select new GeoLocation {
                          Latitude = (Double)n.Latitude,
@@ -178,10 +240,10 @@ namespace eX_Portal.Controllers {
                     ).ToList();
       if(GeoPoints.Count < 1) {
         GoogleURL = "/images/world.jpg";
-      } else { 
+      } else {
         var FirstPoint = GeoPoints.First();
         GoogleURL = "https://maps.googleapis.com/maps/api/staticmap" +
-        "?key=" + GoogleAPI + 
+        "?key=" + GoogleAPI +
         "&center=" + FirstPoint.Latitude + "," + FirstPoint.Longitude +
         "&size=640x400" +
         getGoogleBoundary(FlightID, ApprovalID) +
@@ -192,7 +254,7 @@ namespace eX_Portal.Controllers {
 
     }//public ActionResult GoogleMap
 
-    public String getGoogleBoundary([Bind(Prefix = "ID")]int FlightID = 0, int ApprovalID=0) {
+    public String getGoogleBoundary([Bind(Prefix = "ID")]int FlightID = 0, int ApprovalID = 0) {
       /*select Coordinates, InnerBoundaryCoord  from GCA_Approval where droneid=50*/
       StringBuilder GoogleURL = new StringBuilder();
       List<GeoLocation>
@@ -212,14 +274,14 @@ namespace eX_Portal.Controllers {
           Inner = t1.InnerBoundaryCoord
         });
 
-      foreach (var Row in GeoPoints.ToList()) {
+      foreach(var Row in GeoPoints.ToList()) {
         Outer = toPoints(Row.Outer);
         Inner = toPoints(Row.Inner);
         //Inner.RemoveAt(Inner.Count - 1);
 
         //Polygon.Add(Outer.FirstOrDefault());
         //Polygon.AddRange(Inner));
-        for (var i = Inner.Count - 1; i >= 0; i--) {
+        for(var i = Inner.Count - 1; i >= 0; i--) {
           Polygon.Add(Inner[i]);
         }
         Polygon.AddRange(Outer);
@@ -242,7 +304,7 @@ namespace eX_Portal.Controllers {
       PointList = PointList.Replace("POLYGON ((", "");
       PointList = PointList.Replace("))", "");
 
-      foreach (String Cord in PointList.Split(',')) {
+      foreach(String Cord in PointList.Split(',')) {
         var LatLnt = Cord.Trim().Split(' ');
         var thisCord = new GeoLocation {
           Latitude = Util.toDouble(LatLnt[0]),
@@ -297,11 +359,12 @@ namespace eX_Portal.Controllers {
           DroneID = n.DroneID,
           CreatedOn = n.CreatedOn,
         }).ToList().FirstOrDefault();
-      if (FlightData.FlightHours == null) FlightData.FlightHours = 0;
+      if(FlightData.FlightHours == null)
+        FlightData.FlightHours = 0;
       FlightData.PilotName = (
         from n in db.MSTR_User
         where n.UserId == FlightData.PilotID
-        select n.FirstName + " " +  n.LastName).FirstOrDefault();
+        select n.FirstName + " " + n.LastName).FirstOrDefault();
 
       FlightData.GSCName = (
         from n in db.MSTR_User
@@ -343,34 +406,34 @@ namespace eX_Portal.Controllers {
         select n).FirstOrDefault();
 
 
-      if ((bool)thisApproval["hasRows"])
+      if((bool)thisApproval["hasRows"])
         ViewBag.ApprovalID = ((bool)thisApproval["IsInside"] ? thisApproval["ApprovalID"] : 0);
-     return View(FlightData);
+      return View(FlightData);
     }
 
 
     private void setReportMessages(IList<PortalAlert> Messages, Dictionary<String, Object> thisApproval) {
-      
-      foreach(var Message in Messages) {
-      if((bool)thisApproval["hasRows"]) { 
-        var FlightInfo = (
-          from f in db.FlightMapDatas
-          where f.FlightMapDataID == Message.FlightDataID
-          select f
-        ).FirstOrDefault();
-        switch (Message.AlertCategory)  {
-        case "Height":
-          Message.AlertMessage = "UAS is above proposed height of " + thisApproval["MaxAltitude"] + " Meter at " + Message.Altitude + " Meter";
-        break;
-        case "Boundary":
-          Message.AlertCategory = "Perimeter";
-          Message.AlertMessage = "UAS is outside approved perimeter at " + fmtGPS((Double)Message.Latitude, (Double)Message.Longitude);
-        break;
-        case "Proximity":
-          Message.AlertMessage = getProximityMessage(FlightInfo.OtherFlightIDs, (int)FlightInfo.FlightID);
-        break;
 
-        }//switch
+      foreach(var Message in Messages) {
+        if((bool)thisApproval["hasRows"]) {
+          var FlightInfo = (
+            from f in db.FlightMapDatas
+            where f.FlightMapDataID == Message.FlightDataID
+            select f
+          ).FirstOrDefault();
+          switch(Message.AlertCategory) {
+            case "Height":
+              Message.AlertMessage = "UAS is above proposed height of " + thisApproval["MaxAltitude"] + " Meter at " + Message.Altitude + " Meter";
+              break;
+            case "Boundary":
+              Message.AlertCategory = "Perimeter";
+              Message.AlertMessage = "UAS is outside approved perimeter at " + fmtGPS((Double)Message.Latitude, (Double)Message.Longitude);
+              break;
+            case "Proximity":
+              Message.AlertMessage = getProximityMessage(FlightInfo.OtherFlightIDs, (int)FlightInfo.FlightID);
+              break;
+
+          }//switch
         } else {
           //nothing.
         }
@@ -387,7 +450,8 @@ namespace eX_Portal.Controllers {
         var nDist = Util.toDouble(ThisInfo[3]);
         if(FlightID != nFlightID) {
           String TheMessage = "Flight " + nFlightID + " is close in proximity of " + nDist.ToString("###") + " Meter";
-          if (SB.Length > 0) SB.Append(", ");
+          if(SB.Length > 0)
+            SB.Append(", ");
           SB.Append(TheMessage);
         }
       }
@@ -446,10 +510,10 @@ namespace eX_Portal.Controllers {
         [MSTR_DroneCheckList].[CheckListTitle]='Pre-Flight Checklist' AND
         [DroneCheckList].[FlightID]=" + FlightID;
       int CheckListCount = Util.getDBInt(SQL);
-      if (CheckListCount >= 3) {
+      if(CheckListCount >= 3) {
         CheckListMessage = "<div class=\"authorise\"><span class=\"icon\">&#xf214;</span>" +
         "CheckList Completed</div>";
-      } else if (CheckListCount >= 1) {
+      } else if(CheckListCount >= 1) {
         CheckListMessage = "<div class=\"warning\"><span class=\"icon\">&#xf071;</span>" +
         "CheckList Incomplete</div>";
       } else {
@@ -466,7 +530,7 @@ namespace eX_Portal.Controllers {
       "  FlightID = " + FlightID.ToString() + " and\n" +
       "  DocumentType = 'Regulator Approval'\n";
       int TheCount = Util.getDBInt(SQL);
-      if (TheCount < 1) {
+      if(TheCount < 1) {
         UploadedDocs = "<div class=\"warning\"><span class=\"icon\">&#xf071;</span>" +
         "Please upload your Regulatory Authorisation document before the flight</div>";
       } else {
@@ -484,8 +548,9 @@ namespace eX_Portal.Controllers {
                                   where (int)r.FlightID == FlightID
                                   select r).ToList();
       theList.Append("<UL>");
-      foreach (var Doc in Docs) {
-        if (DroneName == "") DroneName = Util.getDroneName(Doc.DroneID);
+      foreach(var Doc in Docs) {
+        if(DroneName == "")
+          DroneName = Util.getDroneName(Doc.DroneID);
         theList.AppendLine("<LI><span class=\"icon\">&#xf0f6;</span> <a href=\"/upload/Drone/" + DroneName + "/" + FlightID +
         "/" + Doc.DocumentName + "\">" + Util.getFilePart(Doc.DocumentName) + "</a></LI>");
       }
@@ -555,15 +620,15 @@ namespace eX_Portal.Controllers {
                                  Speed = x.Speed,
                                  ReadTime = x.ReadTime
                                }).ToList();
-      for (int i = 0; i < fl.Count; i++) {
+      for(int i = 0; i < fl.Count; i++) {
         String Label = fl[i].ReadTime.Value.ToString("HH:mm");
         chart.Series["Altitude"].Points.AddXY(Label, fl[i].Altitude);
         chart.Series["Speed"].Points.AddXY(Label, fl[i].Speed);
         chart.Series["Roll"].Points.AddXY(Label, fl[i].Roll);
         chart.Series["Pitch"].Points.AddXY(Label, fl[i].Pitch);
-        chart.Series["Satellites"].Points.AddXY(Label, fl[i].Satellites); 
+        chart.Series["Satellites"].Points.AddXY(Label, fl[i].Satellites);
       }
-      using (var chartimage = new MemoryStream()) {
+      using(var chartimage = new MemoryStream()) {
         // chart.RenderControl();
         chart.SaveImage(chartimage, ChartImageFormat.Png);
         //System.Drawing.Image returnImage = System.Drawing.Image.FromStream(chartimage);
@@ -599,7 +664,7 @@ namespace eX_Portal.Controllers {
 
     protected ActionResult Pdf(string fileDownloadName, string viewName, object model) {
       // Based on View() code in Controller base class from MVC
-      if (model != null) {
+      if(model != null) {
         ViewData.Model = model;
       }
       PdfResult pdf = new PdfResult() {
@@ -613,12 +678,12 @@ namespace eX_Portal.Controllers {
     }
   }//public class ReportController
 
-  public class PdfResult : PartialViewResult {
+  public class PdfResult :PartialViewResult {
     // Setting a FileDownloadName downloads the PDF instead of viewing it
     public string FileDownloadName { get; set; }
 
     public override void ExecuteResult(ControllerContext context) {
-      if (context == null) {
+      if(context == null) {
         throw new ArgumentNullException("context");
       }
 
@@ -629,24 +694,24 @@ namespace eX_Portal.Controllers {
 
 
       // Get the view name
-      if (string.IsNullOrEmpty(ViewName)) {
+      if(string.IsNullOrEmpty(ViewName)) {
         ViewName = context.RouteData.GetRequiredString("action");
       }
 
       // Get the view
       ViewEngineResult viewEngineResult = null;
-      if (View == null) {
+      if(View == null) {
         viewEngineResult = FindView(context);
         View = viewEngineResult.View;
       }
 
       // Render the view
       StringBuilder sb = new StringBuilder();
-      using (TextWriter tr = new StringWriter(sb)) {
+      using(TextWriter tr = new StringWriter(sb)) {
         ViewContext viewContext = new ViewContext(context, View, ViewData, TempData, tr);
         View.Render(viewContext, tr);
       }
-      if (viewEngineResult != null) {
+      if(viewEngineResult != null) {
         viewEngineResult.ViewEngine.ReleaseView(context, View);
       }
 

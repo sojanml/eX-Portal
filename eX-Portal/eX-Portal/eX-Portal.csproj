@@ -1649,6 +1649,7 @@
     <Content Include="Views\Admin\CMS.cshtml" />
     <Content Include="Views\Admin\CMSCreate.cshtml" />
     <Content Include="Views\Home\Demo.cshtml" />
+    <Content Include="Views\Report\Alert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1673,6 +1674,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ReportsManager\AlertReport.rdlc" />
     <EmbeddedResource Include="ReportsManager\FlightReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

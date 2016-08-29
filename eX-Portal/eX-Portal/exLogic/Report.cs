@@ -152,7 +152,71 @@ namespace eX_Portal.exLogic {
     public int Height { get; set; }
   }
 
+  public class AlertReportData {
+    public int AlertID { get; set; }
+    public int FlightID { get; set; }
+    public DateTime CreatedOn { get; set; }
+    public String DroneName { get; set; }
+    public String Pilot { get; set; }
+    public String SMS { get; set; }
+    public String AlertCategory { get; set; }
+    public String AlertType { get; set; }
+    public Decimal Latitude { get; set; }
+    public Decimal Longitude { get; set; }
+    public Decimal Altitude { get; set; }
+
+  }
+
   public class Report {
+
+    public String getAlertSQL(FlightReportFilter Filter) {
+      StringBuilder SQL = new StringBuilder();
+      SQL.Append(
+        @"Select  
+        PortalAlert.AlertID,
+        FlightID,
+        PortalAlert.CreatedOn,
+        MSTR_Drone.DroneName,
+        MSTR_User.FirstName + ' ' + MSTR_User.LastName as Pilot,
+        CASE WHEN SMSSend = 1 THEN 'Yes' Else 'No' END as SMS,
+        AlertCategory,
+        AlertType,
+        PortalAlert.Latitude,
+        PortalAlert.Longitude,
+        PortalAlert.Altitude,
+        Count(*)  OVER() AS _TotalRecords,
+        PortalAlert.AlertID AS _PKey
+      From 
+        PortalAlert
+      LEFT JOIN MSTR_Drone On
+        MSTR_Drone.DroneID = PortalAlert.DroneID
+      LEFT JOIN MSTR_User On
+        MSTR_User.UserID = PortalAlert.PilotID
+      ");
+      SQL.AppendLine("WHERE");
+      SQL.AppendLine("  PortalAlert.CreatedOn BETWEEN '" + Filter.FromSQL() + "' AND '" + Filter.ToSQL() + "'");
+      if (Filter.Pilot > 0)
+        SQL.AppendLine("AND  PortalAlert.PilotID=" + Filter.Pilot);
+      if (Filter.UAS > 0)
+        SQL.AppendLine("AND  PortalAlert.DroneID=" + Filter.UAS);
+      if (Filter.Proximity > 0)
+        SQL.AppendLine("AND  PortalAlert.AlertCategory='Proximity'");
+      if (Filter.Height > 0)
+        SQL.AppendLine("AND  PortalAlert.AlertCategory = 'Height'");
+      if (Filter.Boundary > 0)
+        SQL.AppendLine("AND  PortalAlert.AlertCategory = 'Boundary'");
+
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+      {
+        SQL.AppendLine(" AND  PortalAlert.AccountID=" + Util.getAccountID());
+      }
+
+      return SQL.ToString();
+
+    }
+
+
+
     public String getFlightReportSQL(FlightReportFilter Filter, bool IsReturnExtraInfo = false) {
       StringBuilder SQLFilter = new StringBuilder();
       StringBuilder SQL = new StringBuilder();

@@ -21,6 +21,42 @@ namespace eX_Portal.Models {
       }
     }
 
+    public List<AlertReportData> getAlertReportData(FlightReportFilter Filter = null) {
+      var Request = HttpContext.Current.Request;
+      var thisReport = new exLogic.Report();
+      var Records = new List<AlertReportData>();
+
+      if (Filter == null) Filter = new FlightReportFilter();
+      var SQL = thisReport.getAlertSQL(Filter);
+      SQL = SQL + "\nORDER BY PortalAlert.CreatedOn DESC";
+      using (var db = new ExponentPortalEntities()) {
+        using (var cmd = db.Database.Connection.CreateCommand()) {
+          db.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          using (var reader = cmd.ExecuteReader()) {
+            while (reader.Read()) {
+              var TheRow = new AlertReportData {
+                 AlertID = reader.GetInt32(reader.GetOrdinal("AlertID")),
+                 FlightID = reader.GetInt32(reader.GetOrdinal("FlightID")),
+                 CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
+                 DroneName = reader["DroneName"].ToString(),
+                 Pilot = reader["Pilot"].ToString(),
+                 SMS = reader["Pilot"].ToString(),
+                 AlertCategory = reader["AlertCategory"].ToString(),
+                 AlertType = reader["AlertType"].ToString(),
+                 Latitude = reader.GetDecimal(reader.GetOrdinal("Latitude")),
+                Longitude = reader.GetDecimal(reader.GetOrdinal("Longitude")),
+                Altitude = reader.GetInt32(reader.GetOrdinal("Altitude"))
+              };
+              Records.Add(TheRow);
+            }//while
+          }//using reader
+        }
+      }//using (var db = new ExponentPortalEntities())
+
+      return Records;
+    }
+
     public List<FlightReportData>getFlightReportData(FlightReportFilter Filter = null) {
       var Request = HttpContext.Current.Request;
       var thisReport = new exLogic.Report();
