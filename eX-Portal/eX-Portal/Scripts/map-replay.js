@@ -18,6 +18,16 @@ var _OtherFlights = {};
 var _FlightOra = null
 var ReplayInterval = 1000;
 var DottedLine = [];
+var ADSBLine = {
+  Message: "Some message is here...",
+  Show: function() {
+    alert(this.Message);
+  },
+  Modify: function() {
+    this.Message = "Changed the message here";
+  }
+};
+
 
 var DistanceOptions = {
   Radius: 50,
@@ -66,6 +76,10 @@ $(document).ready(function () {
     fn_MapPoint($(this));
   });
 
+  $(document).on("click", ".adsb-point", function () {
+    fn_AdsbPoint($(this));
+  });
+
   $('#btnPayload').on("click", function () {
     ShowHidePayload($(this));
   });
@@ -91,8 +105,6 @@ function fn_MapPoint(thisObj) {
   }
   if (Title != '') {
     Title = '<b style="color:red">' + Title + '</b><br>';
-    Alt = parseInt(Alt);
-    Alt = (isNaN(Alt) ? 0 : Alt * 100) + ' feet';
   }
   var Content = 
   '<table cellpadding=0 cellspacig=0>' +
@@ -110,6 +122,48 @@ function fn_MapPoint(thisObj) {
   GeoInfoWindow.open(map);
 }
 
+
+function fn_AdsbPoint(thisObj) {
+  ADSBLine.Modify();
+  ADSBLine.Show();
+
+
+  var Lat = thisObj.attr("data-lat");
+  var Lng = thisObj.attr("data-lng");
+  var Doc = thisObj.attr("data-doc");
+  var Title = thisObj.attr("data-ident");
+  var Alt = thisObj.attr("data-alt");
+  var Center = new google.maps.LatLng(Lat, Lng);
+  var TD_Tumb = '';
+
+  Alt = parseInt(Alt);
+  Alt = (isNaN(Alt) ? 0 : Alt * 100) + ' feet';
+  
+  if (Doc == '') {
+    var Thump = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc.replace(".jpg", ".t.png");
+    var DocURL = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc;
+    TD_Tumb = '<td><a target="_blank" href="' + DocURL + '"><img style="margin-right:10px; width:80px; height: auto;" src="' + Thump + '"></a></td>';
+
+  }
+  if (Title != '') {
+    Title = '<b style="color:red">' + Title + '</b><br>';
+  }
+  var Content =
+  '<table cellpadding=0 cellspacig=0>' +
+  '<tr>' +
+  TD_Tumb +
+  '<td style="white-space:nowrap;">' +
+  Title +
+  'Lat: <b>' + Lat + "</b><br>" +
+  "Lng: <b>" + Lng + "</b><br>" +
+  "Alt: <b>" + Alt + "</b>" +
+  "</td>" +
+  '</tr></table>'
+
+  GeoInfoWindow.setPosition(Center);
+  GeoInfoWindow.setContent(Content);
+  GeoInfoWindow.open(map);
+}
 
 function ShowHidePayload(btn) {
   if (btn.length) btn.val("Loading...");
@@ -227,14 +281,35 @@ function LiveADSData() {
   GetADSBData(RangeLat, RangeLon);
 }
 
+
+
+
 function GetADSBData(RangeLat,RangeLon)
 {
+  var query = '{< alt 700}' +
+            '{in {orig OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}}' + 
+            '{in {dest OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}}' +
+            '{range lat ' + RangeLat + '} ' +
+            '{range lon +' + RangeLon + '}';
+
+  var query = '{< alt 700} ' +
+            '{in orig {OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}} ' +
+            '{in dest {OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}} ' + 
+            '{range lat ' + RangeLat + '} ' +
+            '{range lon ' + RangeLon + '}';
+
+
     var fxml_url = 'http://catheythattil:65aa91dc1b5cf57265b2d0ce58f42f3e0c3fca71@flightxml.flightaware.com/json/FlightXML2/';
     $.ajax({
         type: "GET",
         url: fxml_url + 'SearchBirdseyeInFlight',
         contentType: "application/json;charset=utf-8",
-        data: { 'query': '{< alt 700} {range lat ' + RangeLat + '} {range lon +' + RangeLon + '}', 'howMany': 200, 'offset': 0 },
+      /*data: { 'query': '{< alt 700} {in {orig OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}} {in {dest OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}} {range lat ' + RangeLat + '} {range lon +' + RangeLon + '}', 'howMany': 200, 'offset': 0 },*/
+        data: {
+          'query':query,
+          'howMany': 200,
+          'offset': 0
+        },
         success : function(result) {
             if (result.error) {
                 alert('Failed to fetch flight: ' + result.error);
@@ -258,6 +333,7 @@ function GetADSBData(RangeLat,RangeLon)
 function ADSBOverlay(options, ADSBData) {
     this.setValues(options);
     this.markerLayer = $('<div />').addClass('overlay');
+    
     this.ADSBData = ADSBData;
 };
 ADSBOverlay.prototype = new google.maps.OverlayView;
@@ -288,13 +364,13 @@ ADSBOverlay.prototype.draw = function () {
 
         var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
         var $point = $(
-            '<div class="map-point" id="p' + i + '" title="' + i + '" '
+            '<div class="adsb-point" id="p' + i + '" title="' + this.ADSBData[i].ident + '" '
           + 'data-lat="' + this.ADSBData[i].latitude + '" '
           + 'data-lng="' + this.ADSBData[i].longitude + '" '
           + 'data-alt="' + this.ADSBData[i].altitude + '" '
           + 'data-ident="' + this.ADSBData[i].ident + '" '
           + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
-          + '<span class="icon FlightIcon" style="transform: rotate(' + this.ADSBData[i].heading + 'deg);">&#xf0fb;</span>'
+          + '<span class="icon FlightIcon" style="transform: rotate(' + (this.ADSBData[i].heading - 90) + 'deg);">&#xf0fb;</span>'
           + '</div>'
         );
 

@@ -1245,6 +1245,8 @@ div.hr {
     opacity: 0.6;
 }
 
+
+.adsb-point,
 .map-point {
   position:absolute;
   width:22px;
@@ -1256,31 +1258,39 @@ div.hr {
   margin-left:-11px;
 
 }
+.adsb-point span,
 .map-point span {
   display:block;
   position:absolute;
   color:gold;
   text-shadow:1px 1px 1px black;
 }
+.adsb-point:hover span,
 .map-point:hover span {
   color:white;
 }
+
 .map-point span.GeoTagIcon {
   font-size:16px;
   left:3px;
   top:0px;
 }
+
 .map-point span.GeoTagPoint {
   font-size:16px;
   top:10px;
   left:8px;
 }
-.map-point span.FlightIcon {
-  font-size:22px;
+
+.adsb-point span.FlightIcon {
+  font-size:35px;
   left:3px;
   top:0px;
   color:#4bc2ff !important;
   display:block;
+  text-shadow:none;
+     -webkit-text-stroke-width: 1px;
+   -webkit-text-stroke-color: black;
 }
 
 #deletable {
