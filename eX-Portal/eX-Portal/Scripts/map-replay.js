@@ -77,21 +77,39 @@ function fn_MapPoint(thisObj) {
   var Lat = thisObj.attr("data-lat");
   var Lng = thisObj.attr("data-lng");
   var Doc = thisObj.attr("data-doc");
-  var Thump = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc.replace(".jpg", ".t.png");
-  var DocURL = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc;
+  var Title = thisObj.attr("data-ident");
+  var Alt = thisObj.attr("data-alt");
+
   var Center = new google.maps.LatLng(Lat, Lng);
   GeoInfoWindow.setPosition(Center);
-  GeoInfoWindow.setContent(
-      '<table cellpadding=0 cellspacig=0>' +
-      '<tr>'+
-      '<td><a target="_blank" href="' + DocURL + '"><img style="margin-right:10px; width:80px; height: auto;" src="' + Thump + '"></a></td>' +
-      '<td style="white-space:nowrap;">Lat: <b>' + Lat + "</b><br>" + 
-      "Lng: <b>" + Lng + "</b><br>" + 
-      "Alt: <b>" + thisObj.attr("data-alt") + "</b>" +
-      "</td>" + 
-      '</tr></table>');    
+  var TD_Tumb = '';
+  if (Doc == '') {
+    var Thump = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc.replace(".jpg", ".t.png");
+    var DocURL = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc;
+    TD_Tumb = '<td><a target="_blank" href="' + DocURL + '"><img style="margin-right:10px; width:80px; height: auto;" src="' + Thump + '"></a></td>';
+
+  }
+  if (Title != '') {
+    Title = '<b style="color:red">' + Title + '</b><br>';
+    Alt = parseInt(Alt);
+    Alt = (isNaN(Alt) ? 0 : Alt * 100) + ' feet';
+  }
+  var Content = 
+  '<table cellpadding=0 cellspacig=0>' +
+  '<tr>' +
+  TD_Tumb +
+  '<td style="white-space:nowrap;">' +
+  Title + 
+  'Lat: <b>' + Lat + "</b><br>" +
+  "Lng: <b>" + Lng + "</b><br>" +
+  "Alt: <b>" + Alt + "</b>" +
+  "</td>" +
+  '</tr></table>'
+
+  GeoInfoWindow.setContent(Content);    
   GeoInfoWindow.open(map);
 }
+
 
 function ShowHidePayload(btn) {
   if (btn.length) btn.val("Loading...");
@@ -187,11 +205,13 @@ function ShowHideADSB(btn)
             HomePoint = FlightInfo;
             var RangeLat =  (HomePoint["Latitude"]-1).toString()+' '+HomePoint["Latitude"].toString();
             var RangeLon = (HomePoint["Longitude"]).toString() + ' ' + (HomePoint["Longitude"] + 1).toString();
+            _ADSBLayer = new ADSBOverlay({ map: map }, []);
+
             GetADSBData(RangeLat, RangeLon);
             if (btn.length) btn.val("Hide ADSB Data");
             //Timer for ADSBData
 
-            window.setInterval(LiveADSData, 10000);
+            window.setInterval(LiveADSData, 10 * 1000);
         },
         failure: function (msg) {
             alert('ADS/B data load error' + msg);
@@ -200,12 +220,13 @@ function ShowHideADSB(btn)
 
 }
 
-function LiveADSData()
-{
-    var RangeLat = (HomePoint["Latitude"] - 1).toString() + ' ' + HomePoint["Latitude"].toString();
-    var RangeLon = (HomePoint["Longitude"]).toString() + ' ' + (HomePoint["Longitude"] + 1).toString();
-    GetADSBData(RangeLat, RangeLon);
+function LiveADSData() {
+  if(!_IsADSBShown) return;
+  var RangeLat = (HomePoint["Latitude"] - 1).toString() + ' ' + HomePoint["Latitude"].toString();
+  var RangeLon = (HomePoint["Longitude"]).toString() + ' ' + (HomePoint["Longitude"] + 1).toString();
+  GetADSBData(RangeLat, RangeLon);
 }
+
 function GetADSBData(RangeLat,RangeLon)
 {
     var fxml_url = 'http://catheythattil:65aa91dc1b5cf57265b2d0ce58f42f3e0c3fca71@flightxml.flightaware.com/json/FlightXML2/';
@@ -221,7 +242,9 @@ function GetADSBData(RangeLat,RangeLon)
             }
           
             _IsADSBShown = true;
-            _ADSBLayer = new ADSBOverlay({ map: map }, result.SearchBirdseyeInFlightResult.aircraft);
+          //_ADSBLayer = new ADSBOverlay({ map: map }, result.SearchBirdseyeInFlightResult.aircraft);
+            _ADSBLayer.ADSBData = result.SearchBirdseyeInFlightResult.aircraft;
+            _ADSBLayer.setMap(map);
           
         },
         error: function(data, text) { alert('Failed to fetch flight: ' + data); },
@@ -269,7 +292,7 @@ ADSBOverlay.prototype.draw = function () {
           + 'data-lat="' + this.ADSBData[i].latitude + '" '
           + 'data-lng="' + this.ADSBData[i].longitude + '" '
           + 'data-alt="' + this.ADSBData[i].altitude + '" '
-          + 'data-doc="' + this.ADSBData[i].ident + '" '
+          + 'data-ident="' + this.ADSBData[i].ident + '" '
           + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
           + '<span class="icon FlightIcon" style="transform: rotate(' + this.ADSBData[i].heading + 'deg);">&#xf0fb;</span>'
           + '</div>'
