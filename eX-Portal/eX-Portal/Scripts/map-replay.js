@@ -18,14 +18,61 @@ var _OtherFlights = {};
 var _FlightOra = null
 var ReplayInterval = 1000;
 var DottedLine = [];
+
+var gADSBData = {};
+var ADSBTimer = null;
+
 var ADSBLine = {
-  Message: "Some message is here...",
-  Show: function() {
-    alert(this.Message);
+  FlightID: "",
+  EndPos: null,
+  StartPos: null,
+  AltABS: 0,
+  AltEnd: 0,
+
+  PolyLine: new google.maps.Polyline({
+    path: [],
+    geodesic: true,
+    strokeColor: '#0000FF',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  }),
+
+  setABSPos: function (lat, lng, alt) {
+    this.EndPos = new google.maps.LatLng(lat, lng);
+    this.AltABS = alt * 0.3048 * 100;
   },
-  Modify: function() {
-    this.Message = "Changed the message here";
+  setStart: function (lat, lng, alt) {
+    this.StartPos = new google.maps.LatLng(lat, lng);
+    this.AltEnd = alt;
+  },
+  Show: function () {
+    if (this.EndPos == null) return;
+    if (this.StartPos == null) return;
+    this.PolyLine.setPath([this.EndPos, this.StartPos]);
+    if (FlightID == "") return;
+    this.PolyLine.setMap(map);
+  },
+
+  Hide: function () {
+    this.PolyLine.setMap(null);
+    this.FlightID = ""
+  },
+
+  getDistance: function () {
+    var distance = getDistanceFromLatLonInKm(
+      this.StartPos.lat(),
+      this.StartPos.lng(),
+      this.EndPos.lat(),
+      this.EndPos.lng()
+    );
+    return distance.toFixed(2);
+  },
+
+  getAltDiff: function () {
+    var alt = (this.AltABS - this.AltEnd) / 0.3048;
+    return alt.toFixed(0);
   }
+
 };
 
 
@@ -58,9 +105,13 @@ $(document).ready(function () {
     } else {
       OldLine.setMap(null);
     }
-  })
+  });
 
-  $('#ReplaySpeed').on("change", function(e) {
+  google.maps.event.addListener(GeoInfoWindow, 'closeclick', function () {
+    ADSBLine.Hide();
+  });
+
+  $('#ReplaySpeed').on("change", function (e) {
     ReplayInterval = parseInt($(this).val(), 0);
     startReplayTimer();
   });
@@ -69,7 +120,7 @@ $(document).ready(function () {
     ShowHideGeoTag($(this));
   });
   $('#btnADSB').on("click", function (e) {
-      ShowHideADSB($(this));
+    ShowHideADSB($(this));
   });
 
   $(document).on("click", ".map-point", function () {
@@ -83,7 +134,7 @@ $(document).ready(function () {
   $('#btnPayload').on("click", function () {
     ShowHidePayload($(this));
   });
- 
+
 });
 
 
@@ -106,39 +157,40 @@ function fn_MapPoint(thisObj) {
   if (Title != '') {
     Title = '<b style="color:red">' + Title + '</b><br>';
   }
-  var Content = 
+  var Content =
   '<table cellpadding=0 cellspacig=0>' +
   '<tr>' +
   TD_Tumb +
   '<td style="white-space:nowrap;">' +
-  Title + 
+  Title +
   'Lat: <b>' + Lat + "</b><br>" +
   "Lng: <b>" + Lng + "</b><br>" +
   "Alt: <b>" + Alt + "</b>" +
   "</td>" +
   '</tr></table>'
 
-  GeoInfoWindow.setContent(Content);    
+  GeoInfoWindow.setContent(Content);
   GeoInfoWindow.open(map);
 }
 
 
 function fn_AdsbPoint(thisObj) {
-  ADSBLine.Modify();
-  ADSBLine.Show();
 
 
   var Lat = thisObj.attr("data-lat");
   var Lng = thisObj.attr("data-lng");
   var Doc = thisObj.attr("data-doc");
-  var Title = thisObj.attr("data-ident");
+  var FlightID = Title = thisObj.attr("data-ident");
   var Alt = thisObj.attr("data-alt");
   var Center = new google.maps.LatLng(Lat, Lng);
   var TD_Tumb = '';
-
   Alt = parseInt(Alt);
+
+  ADSBLine.FlightID = FlightID;
+  ADSBLine.setABSPos(Lat, Lng, Alt);
+
   Alt = (isNaN(Alt) ? 0 : Alt * 100) + ' feet';
-  
+
   if (Doc == '') {
     var Thump = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc.replace(".jpg", ".t.png");
     var DocURL = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc;
@@ -152,16 +204,23 @@ function fn_AdsbPoint(thisObj) {
   '<table cellpadding=0 cellspacig=0>' +
   '<tr>' +
   TD_Tumb +
-  '<td style="white-space:nowrap;">' +
+  '<td style="white-space:nowrap;" valign="top">' +
   Title +
   'Lat: <b>' + Lat + "</b><br>" +
   "Lng: <b>" + Lng + "</b><br>" +
-  "Alt: <b>" + Alt + "</b>" +
+  "Alt: <b>" + Alt + "</b><br>" +
+  '</td><td valign="top" style="padding-left:20px;">' +
+  '<b style="color:green">Separation</b><br>\n' +
+  "Distance : <b>" + ADSBLine.getDistance() + ' KM</b><br>\n' +
+  "Height: <b>" + ADSBLine.getAltDiff() + " feet</b>" +
   "</td>" +
   '</tr></table>'
 
   GeoInfoWindow.setPosition(Center);
   GeoInfoWindow.setContent(Content);
+
+  ADSBLine.Show();
+
   GeoInfoWindow.open(map);
 }
 
@@ -231,155 +290,172 @@ function ShowHideGeoTag(btn) {
 
 }
 
-function ShowHideADSB(btn)
-{
-    if (btn.length) btn.val("Loading...");
+function ShowHideADSB(btn) {
+  if (btn.length) btn.val("Loading...");
 
-    if (_IsADSBShown) {
-        _ADSBLayer.setValues({ map: null });
-        _IsADSBShown = false;
-        if (btn.length) btn.val("Show ADS/B Data");
-        return;
-    }
+  if (_IsADSBShown) {
+    _ADSBLayer.setValues({ map: null });
+    _IsADSBShown = false;
+    if (btn.length) btn.val("Show ADS/B Data");
+    return;
+  }
 
-    if (_ADSBLayer) {
-        _ADSBLayer.setValues({ map: map });
-        _IsADSBShown = true;
-        if (btn.length) btn.val("Hide ADS/B Data");
-        return;
-    }
-    
-    $.ajax({
-        type: "GET",
-        url: '/Map/FlightInfo/ ' + FlightID,
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        async: true,
-        success: function (FlightInfo) {
-            HomePoint = FlightInfo;
-            var RangeLat =  (HomePoint["Latitude"]-1).toString()+' '+HomePoint["Latitude"].toString();
-            var RangeLon = (HomePoint["Longitude"]).toString() + ' ' + (HomePoint["Longitude"] + 1).toString();
-            _ADSBLayer = new ADSBOverlay({ map: map }, []);
+  if (_ADSBLayer) {
+    _ADSBLayer.setValues({ map: map });
+    _IsADSBShown = true;
+    if (btn.length) btn.val("Hide ADS/B Data");
+    GetADSBData(0, 0);
+    return;
+  }
 
-            GetADSBData(RangeLat, RangeLon);
-            if (btn.length) btn.val("Hide ADSB Data");
-            //Timer for ADSBData
-
-            window.setInterval(LiveADSData, 10 * 1000);
-        },
-        failure: function (msg) {
-            alert('ADS/B data load error' + msg);
-        }
-    });
-
+  _ADSBLayer = new ADSBOverlay({ map: map }, []);
+  GetADSBData(0, 0);
+  if (btn.length) btn.val("Hide ADSB Data");
+  
 }
 
 function LiveADSData() {
-  if(!_IsADSBShown) return;
-  var RangeLat = (HomePoint["Latitude"] - 1).toString() + ' ' + HomePoint["Latitude"].toString();
-  var RangeLon = (HomePoint["Longitude"]).toString() + ' ' + (HomePoint["Longitude"] + 1).toString();
-  GetADSBData(RangeLat, RangeLon);
+  if (!_IsADSBShown) return;
+  //var RangeLat = (HomePoint["Latitude"] - 1).toString() + ' ' + HomePoint["Latitude"].toString();
+  //var RangeLon = (HomePoint["Longitude"]).toString() + ' ' + (HomePoint["Longitude"] + 1).toString();
+  GetADSBData(0,0);
 }
 
 
+function GetADSBData(RangeLat, RangeLon) {
+  RangeLat = '23.85438 26.39335';
+  RangeLon = '52.99612 59.31375';
 
-
-function GetADSBData(RangeLat,RangeLon)
-{
-  var query = '{< alt 700}' +
-            '{in {orig OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}}' + 
-            '{in {dest OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}}' +
+  var query = '{> alt 5} ' +
+            '{> speed 200} ' +
+            '{true inAir} ' +
             '{range lat ' + RangeLat + '} ' +
             '{range lon +' + RangeLon + '}';
+  var Offset = 100;
 
-  var query = '{< alt 700} ' +
-            '{in orig {OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}} ' +
-            '{in dest {OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}} ' + 
-            '{range lat ' + RangeLat + '} ' +
-            '{range lon ' + RangeLon + '}';
+  var fxml_url = 'http://catheythattil:9f8b8719108bdaa973fe4a96fef5646cd3fd32ea@flightxml.flightaware.com/json/FlightXML2/';
+  $.ajax({
+    type: "GET",
+    url: fxml_url + 'SearchBirdseyeInFlight',
+    contentType: "application/json;charset=utf-8",
+    data: {
+      'query': query,
+      'howMany': 104,
+      'offset': 0
+    },
+    success: function (result) {
+      if (result.error) {
+        alert('Failed to fetch flight: ' + result.error);
+        return;
+      }
 
-
-    var fxml_url = 'http://catheythattil:65aa91dc1b5cf57265b2d0ce58f42f3e0c3fca71@flightxml.flightaware.com/json/FlightXML2/';
-    $.ajax({
-        type: "GET",
-        url: fxml_url + 'SearchBirdseyeInFlight',
-        contentType: "application/json;charset=utf-8",
-      /*data: { 'query': '{< alt 700} {in {orig OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}} {in {dest OMAA OMAD OMAL OMAM OMDB OMDM OMFJ OMRK OMSJ OMDW OMNK}} {range lat ' + RangeLat + '} {range lon +' + RangeLon + '}', 'howMany': 200, 'offset': 0 },*/
-        data: {
-          'query':query,
-          'howMany': 200,
-          'offset': 0
-        },
-        success : function(result) {
-            if (result.error) {
-                alert('Failed to fetch flight: ' + result.error);
-                return;
-            }
-          
-            _IsADSBShown = true;
-          //_ADSBLayer = new ADSBOverlay({ map: map }, result.SearchBirdseyeInFlightResult.aircraft);
-            _ADSBLayer.ADSBData = result.SearchBirdseyeInFlightResult.aircraft;
-            _ADSBLayer.setMap(map);
-          
-        },
-        error: function(data, text) { alert('Failed to fetch flight: ' + data); },
-        dataType: 'jsonp',
-        jsonp: 'jsonp_callback',
-        xhrFields: { withCredentials: true }
-    });
+      _IsADSBShown = true;
+      //_ADSBLayer = new ADSBOverlay({ map: map }, result.SearchBirdseyeInFlightResult.aircraft);
+      _ADSBLayer.setADSB(result.SearchBirdseyeInFlightResult.aircraft);
+      //_ADSBLayer.setMap(map);
+      if (ADSBTimer) window.clearTimeout(ADSBTimer);
+      ADSBTimer = window.setTimeout(LiveADSData, 10 * 1000);
+    },
+    error: function (data, text) { alert('Failed to fetch flight: ' + data); },
+    dataType: 'jsonp',
+    jsonp: 'jsonp_callback',
+    xhrFields: { withCredentials: true }
+  });
 
 }
 
 function ADSBOverlay(options, ADSBData) {
-    this.setValues(options);
-    this.markerLayer = $('<div />').addClass('overlay');
-    
+  this.setValues(options);
+  this.markerLayer = $('<div />').addClass('overlay');
+  this.ADSBData = ADSBData;  
+  this.ResetDraw = false;
+  this.DrawCount = 0;
+  this.setADSB = function (ADSBData) {
     this.ADSBData = ADSBData;
+    this.ResetDraw = true;
+    this.draw();
+    
+  }
 };
+
 ADSBOverlay.prototype = new google.maps.OverlayView;
 
 ADSBOverlay.prototype.onAdd = function () {
-    var $pane = $(this.getPanes().overlayImage); // Pane 3  
-    $pane.append(this.markerLayer);
+  var $pane = $(this.getPanes().overlayImage); // Pane 3  
+  $pane.append(this.markerLayer);
 };
 
 ADSBOverlay.prototype.onRemove = function () {
-    this.markerLayer.remove();
+  this.markerLayer.remove();
 };
 
 ADSBOverlay.prototype.draw = function () {
-    var projection = this.getProjection();
-    var zoom = this.getMap().getZoom();
-    var fragment = document.createDocumentFragment();
+  var projection = this.getProjection();
+  var zoom = this.getMap().getZoom();
+  var fragment = document.createDocumentFragment();
+  //this.markerLayer.empty(); // Empty any previous rendered markers  
+  if (this.ResetDraw) this.DrawCount++;
 
+  for (var i = 0; i < this.ADSBData.length; i++) {
+    var lat = this.ADSBData[i].latitude;
+    var lng = this.ADSBData[i].longitude;
+    var alt = this.ADSBData[i].altitude;
+    var title = this.ADSBData[i].ident;
+    var heading = this.ADSBData[i].heading;
 
-    this.markerLayer.empty(); // Empty any previous rendered markers  
+    // Determine a random location from the bounds set previously  
+    var IconGeoPos = new google.maps.LatLng(lat, lng)
+    var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
+    var DivID = 'adsb-' + title;
 
-    for (var i = 0; i < this.ADSBData.length; i++) {
-        // Determine a random location from the bounds set previously  
-        var IconGeoPos = new google.maps.LatLng(
-                this.ADSBData[i].latitude,
-                this.ADSBData[i].longitude
-        );
+    if (gADSBData[DivID]) {
+      var $point = $('#' + DivID);      
+      $point.animate({ left: IconLocation.x, top: IconLocation.y });
+      $point.css({transform: 'rotate(' + (heading - 90) + 'deg)'});
+      $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });        
+    } else {
+      var $point = $(
+          '<div  class="adsb-point" id="' + DivID + '" title="' + title + '" '
+        + 'data-lat="' + lat + '" '
+        + 'data-lng="' + lng + '" '
+        + 'data-alt="' + alt + '" '
+        + 'data-ident="' + title + '" '
+        + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px; transform: rotate(' + (heading - 90) + 'deg);">'
+        + '<span class="icon FlightIcon" style="">&#xf0fb;</span>'
+        + '</div>'
+      );
 
-        var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
-        var $point = $(
-            '<div class="adsb-point" id="p' + i + '" title="' + this.ADSBData[i].ident + '" '
-          + 'data-lat="' + this.ADSBData[i].latitude + '" '
-          + 'data-lng="' + this.ADSBData[i].longitude + '" '
-          + 'data-alt="' + this.ADSBData[i].altitude + '" '
-          + 'data-ident="' + this.ADSBData[i].ident + '" '
-          + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
-          + '<span class="icon FlightIcon" style="transform: rotate(' + (this.ADSBData[i].heading - 90) + 'deg);">&#xf0fb;</span>'
-          + '</div>'
-        );
-
-        // Append the HTML to the fragment in memory  
-        fragment.appendChild($point.get(0));
+      // Append the HTML to the fragment in memory  
+      fragment.appendChild($point.get(0));
     }
 
-    // Now append the entire fragment from memory onto the DOM  
-    this.markerLayer.append(fragment);
+    if (this.ResetDraw) gADSBData[DivID] = this.DrawCount;
+
+    if (ADSBLine.FlightID == title) {
+      ADSBLine.setABSPos(lat, lng, alt);
+      ADSBLine.Show();
+      $('#' + DivID).trigger("click");
+    }
+
+  }//for (var i = 0)
+
+  //if the item does not exists in 20 request, then remove it from the screen
+  if (this.ResetDraw) {
+    var AllKeys = Object.keys(gADSBData);
+    for (i = 0; i <= AllKeys.length; i++) {
+      var TheKey = AllKeys[i];
+      if (this.DrawCount - gADSBData[TheKey] > 5) {
+        $('#' + TheKey).fadeOut();
+        delete gADSBData[TheKey];
+      }//if (gADSBData[key] > 20) 
+    }//for (var key in gADSBData)
+  }//f (ResetDraw)
+
+  //Reset the draw, so it will not be counted.
+  this.ResetDraw = false;
+
+  // Now append the entire fragment from memory onto the DOM  
+  this.markerLayer.append(fragment);
 };
 
 function GeoTagOverlay(options, GeoTagData) {
@@ -416,7 +492,7 @@ GeoTagOverlay.prototype.draw = function () {
     var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
     var $point = $(
         '<div class="map-point" id="p' + i + '" title="' + i + '" '
-      + 'data-lat="' + this.GeoTagData[i].Latitude + '" ' 
+      + 'data-lat="' + this.GeoTagData[i].Latitude + '" '
       + 'data-lng="' + this.GeoTagData[i].Longitude + '" '
       + 'data-alt="' + this.GeoTagData[i].Altitude + '" '
       + 'data-doc="' + this.GeoTagData[i].DocumentName + '" '
@@ -511,11 +587,12 @@ function setDrawIntilize() {
     map.setZoom(20);
     drawLocationPoints();
     _IsDrawInitilized = true;
+    ADSBLine.setStart(loc['Latitude'], loc['Longitude'], loc['Altitude']);
 
     var image = {
       path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-      strokeColor: '#393',
-      strokeWidth: '1px',
+      strokeColor: '#FF2A6A',
+      strokeWidth: '10px',
       scale: 6,
       rotation: parseInt(loc["Heading"])
     };
@@ -548,12 +625,12 @@ function drawLocationPoints() {
 
     //Here, the first set from the server is completed
     //Run the timer
-    if(_IsLiveMode) {
+    if (_IsLiveMode) {
       if (thePlayTimer) window.clearInterval(thePlayTimer);
       thePlayTimer = window.setInterval(drawNextSetFromServer, 100);
       //get the next set of points from server
       getLocationPoints();
-       
+
     }
     return;
   }
@@ -584,7 +661,7 @@ function drawLocationPointsTimer() {
   //When the item reaches the end
 
 
-  if (_LocationIndex < locationLength - 1) {    
+  if (_LocationIndex < locationLength - 1) {
     //Check if the last point time is ready to ploat, then
     //ploat it and move to next index
     if (_LocationIndex < 0) _LocationIndex = 0;
@@ -592,10 +669,10 @@ function drawLocationPointsTimer() {
     if (loc['ReadTimeObject'] <= _ReplayTimeAt) {
       drawLocationAtIndexTimer();
       _LocationIndex++;
-    }    
-    
+    }
+
   } else {
-    if(thePlayTimer) window.clearTimeout(thePlayTimer);
+    if (thePlayTimer) window.clearTimeout(thePlayTimer);
     thePlayTimer = null;
   }
 
@@ -624,7 +701,7 @@ function addOtherFlightInfoAtIndex() {
   var OtherFlight = loc['OtherFlight'];
   var ProcessedIDs = {};
   var thisFlightDistance = 2000;
-  for(var i = 0; i < OtherFlight.length; i++) {    
+  for (var i = 0; i < OtherFlight.length; i++) {
     var FlightID = OtherFlight[i]['FlightID'];
     var Center = new google.maps.LatLng(OtherFlight[i]['Lat'], OtherFlight[i]['Lng']);
     if (_OtherFlights[FlightID] + '' == 'undefined') {
@@ -637,7 +714,7 @@ function addOtherFlightInfoAtIndex() {
         center: Center,
         radius: DistanceOptions['Radius']
       });
-     var InfoWindow = new google.maps.InfoWindow({
+      var InfoWindow = new google.maps.InfoWindow({
         content: '<a href="/Map/FlightData/' + FlightID + '">View Flight ' + FlightID + '</a>',
         position: Center
       });
@@ -744,7 +821,7 @@ function drawLocationAtIndexTimer() {
   //Add the line to old one after 20 points
   if (_LocationIndex >= 20) {
     var LastPoint = LatestLine.getPath().removeAt(0);
-    if(OldLine.getPath().length == 0) OldLine.getPath().push(LastPoint);
+    if (OldLine.getPath().length == 0) OldLine.getPath().push(LastPoint);
 
     var LastPoint = LatestLine.getPath().getAt(0);
     OldLine.getPath().push(LastPoint);
@@ -754,7 +831,7 @@ function drawLocationAtIndexTimer() {
 
 function drawMarkerAtIndex(Opacity) {
   var loc = _LocationPoints[_LocationIndex];
-  var body = 
+  var body =
     'Lat: <b>' + loc['Latitude'] + '</b>,' +
     'Lng:  <b>' + loc['Longitude'] + "</b><br>" +
     "Time (UTC): <b>" + loc['ReadTime'] + '</b>';
@@ -786,66 +863,59 @@ function drawMarkerAtIndex(Opacity) {
 
 
 function drawPolyLineAtIndex(Polygon) {
-    var loc = _LocationPoints[_LocationIndex];
-    var myLatLng = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
-    var Path = Polygon.getPath();
+  var loc = _LocationPoints[_LocationIndex];
+  var myLatLng = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
+  var Path = Polygon.getPath();
 
-    if (DronePositionIcon) {
-      var icons = DronePositionIcon.getIcon();
-      icons.rotation = parseInt(loc['Heading']);
-      DronePositionIcon.setIcon(icons);
-      DronePositionIcon.setPosition(myLatLng);
+  if (DronePositionIcon) {
+    var icons = DronePositionIcon.getIcon();
+    icons.rotation = parseInt(loc['Heading']);
+    DronePositionIcon.setIcon(icons);
+    DronePositionIcon.setPosition(myLatLng);
+  }
+  ADSBLine.setStart(loc['Latitude'], loc['Longitude'], loc['Altitude']);
+
+  if (_LocationIndex > 0) {
+    var FirstLat = _LocationPoints[_LocationIndex - 1];
+    var SecondLat = _LocationPoints[_LocationIndex];
+    var seconds = (SecondLat.ReadTimeObject.getTime() - FirstLat.ReadTimeObject.getTime()) / 1000;
+    if (seconds > 5) {
+      var firstlatlng = new google.maps.LatLng(FirstLat['Latitude'], FirstLat['Longitude']);
+      var secondlatlng = new google.maps.LatLng(SecondLat['Latitude'], SecondLat['Longitude']);
+      var lineSymbol = {
+        path: 'M 0,-1 0,1',
+        strokeOpacity: 1,
+        scale: 4
+      };
+      var errpolyOptions = {
+        strokeColor: "red",
+        strokeOpacity: 0.4,
+        strokeWeight: 1,
+        icons: [{
+          icon: lineSymbol,
+          offset: '0',
+          repeat: '20px'
+        }]
+      }
+      var errorpoly = new google.maps.Polyline(errpolyOptions);
+      errorpoly.setMap(map);
+      var errorpath = errorpoly.getPath();
+      errorpath.push(firstlatlng);
+      errorpath.push(secondlatlng);
+      DottedLine.push(errorpoly);
     }
 
-    if (_LocationIndex > 0)
-    {
-        var FirstLat = _LocationPoints[_LocationIndex - 1];
-        var SecondLat=_LocationPoints[_LocationIndex ];
-        var seconds = (SecondLat.ReadTimeObject.getTime() - FirstLat.ReadTimeObject.getTime()) / 1000;
-        if(seconds>5)
-        {
-        var firstlatlng = new google.maps.LatLng(FirstLat['Latitude'], FirstLat['Longitude']);
-        var secondlatlng = new google.maps.LatLng(SecondLat['Latitude'], SecondLat['Longitude']);
-        var lineSymbol = {
-            path: 'M 0,-1 0,1',
-            strokeOpacity: 1,
-            scale: 4
-        };
-        var errpolyOptions = {
-        
-            strokeColor: "red",
-            strokeOpacity: 0.4,
-            strokeWeight: 1,
-            icons: [{
-                icon: lineSymbol,
-                offset: '0',
-                repeat: '20px'
-            }]
+    Path.push(myLatLng);
+  } else {
+    Path.push(myLatLng);
+  }
 
-        }
-        var  errorpoly = new google.maps.Polyline(errpolyOptions);
-        errorpoly.setMap(map);
-        var errorpath = errorpoly.getPath();
-        errorpath.push(firstlatlng);
-        errorpath.push(secondlatlng);
-        DottedLine.push(errorpoly);
-    }
-    
-        Path.push(myLatLng);
-   }else
-    {
-        Path.push(myLatLng);
-    }
- 
- 
 }
 
-function ClearDottedLine()
-{
-    for(var i=0;i<DottedLine.length;i++)
-    {
-        DottedLine[i].setMap(null);
-    }
+function ClearDottedLine() {
+  for (var i = 0; i < DottedLine.length; i++) {
+    DottedLine[i].setMap(null);
+  }
 }
 
 function drawLineChart(isReset) {
@@ -875,7 +945,7 @@ function addDataToTableAtIntex() {
   var tSpeedData = '<td>' + _LastValue['Speed'] + '</td>';
   var tFxQltyData = '<td>' + _LastValue['FixQuality'] + '</td>';
   var tSatelliteData = '<td>' + _LastValue['Satellites'] + '</td>';
-  var tDrTime = '<td>' +  _LastValue['ReadTime'] + '</td>';
+  var tDrTime = '<td>' + _LastValue['ReadTime'] + '</td>';
   var tPitchData = '<td>' + _LastValue['Pitch'] + '</td>';
   var tRollData = '<td>' + _LastValue['Roll'] + '</td>';
   var tHeadData = '<td>' + _LastValue['Heading'] + '</td>';
@@ -897,7 +967,7 @@ function addDataToTableAtIntex() {
   if ($('#TableMapData tbody tr').length > 20) {
     $('#TableMapData tbody tr:last-child').remove();
   }
-  if($('#TableMapData tbody tr').length > 0)  {
+  if ($('#TableMapData tbody tr').length > 0) {
     $('#TableMapData tbody tr:first').before(loctr);
   } else {
     $('#TableMapData').append(loctr);
@@ -934,7 +1004,7 @@ function setInformationAtIntex() {
   $.each(_LastValue, function (key, value) {
     $('#data_' + key).html(value);
   });
-  
+
 
 }
 
@@ -990,3 +1060,20 @@ function startReplayTimer() {
   }, ReplayInterval);
 }
 
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2 - lat1);  // deg2rad below
+  var dLon = deg2rad(lon2 - lon1);
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2)
+  ;
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI / 180)
+}
