@@ -13,9 +13,13 @@
   function OnSuccess_(reponse) {
 
     var aData = reponse;
-    var TotalAlerts = {};
-    var LastFlightAlert = {};
-    var ThisMonth = {};
+    var TotalAlerts = {
+      Height: 0,
+      Boundary: 0,
+      Proximity: 0
+    };
+    var LastFlightAlert = TotalAlerts;
+    var ThisMonth = TotalAlerts;
     var Sum = {
       TotalAlert: 0,
       LastFlightAlert: 0,

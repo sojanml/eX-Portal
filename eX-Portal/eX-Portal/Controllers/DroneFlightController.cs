@@ -12,13 +12,13 @@ using System.Web.Mvc;
 using eX_Portal.ViewModel;
 
 namespace eX_Portal.Controllers {
-  public class DroneFlightController :Controller {
+  public class DroneFlightController : Controller {
     static String RootUploadDir = "~/Upload/Drone/";
     static int GL_Flight_Id;
     ExponentPortalEntities db = new ExponentPortalEntities();
     // GET: DroneFlight
-    public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0,string FlightType="") {
-      if(!exLogic.User.hasAccess("FLIGHT"))
+    public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0, string FlightType = "") {
+      if (!exLogic.User.hasAccess("FLIGHT"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "UAS Flights";
       ViewBag.DroneID = DroneID;
@@ -61,67 +61,63 @@ namespace eX_Portal.Controllers {
       LEFT JOIN MSTR_User AS tblCreated
         ON tblCreated.UserID = DroneFlight.CreatedBy
       ";
-      if(DroneID > 0) {
-        if(SQLFilter != "")
+      if (DroneID > 0) {
+        if (SQLFilter != "")
           SQLFilter += " AND";
         SQLFilter += "\n" +
         "  DroneFlight.DroneID=" + DroneID;
         ViewBag.Title += " [" + Util.getDroneName(DroneID) + "]";
       }
 
-      if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-      {
-           if (SQLFilter != "")
-                        SQLFilter += " AND";
-                    SQLFilter += " \n" +
-                      "  MSTR_Drone.AccountID=" + Util.getAccountID();
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+        if (SQLFilter != "")
+          SQLFilter += " AND";
+        SQLFilter += " \n" +
+          "  MSTR_Drone.AccountID=" + Util.getAccountID();
       }
 
       //this is using when click link on the dashboard
-            if (FlightType == "LastFlight")
-            {
-                if (SQLFilter != "")
-                    SQLFilter += " AND";
-                SQLFilter += " \n" +
-                  "  DroneFlight.ID=" + Util.GetLastFlightFromDrone(DroneID);
+      if (FlightType == "LastFlight") {
+        if (SQLFilter != "")
+          SQLFilter += " AND";
+        SQLFilter += " \n" +
+          "  DroneFlight.ID=" + Util.GetLastFlightFromDrone(DroneID);
 
-            }
-            else if(FlightType == "CurrentMonthFlight")
-            {
-                if(SQLFilter != "")
-                    SQLFilter += " AND";
-                SQLFilter += " \n" +
-                  "  DroneFlight.FlightDate >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)";
+      } else if (FlightType == "CurrentMonthFlight") {
+        if (SQLFilter != "")
+          SQLFilter += " AND";
+        SQLFilter += " \n" +
+          "  DroneFlight.FlightDate >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)";
 
-            }
-         //this is using when click link on the dashboard
-            if (SQLFilter != "") {
+      }
+      //this is using when click link on the dashboard
+      if (SQLFilter != "") {
         SQL += "\n WHERE\n" + SQLFilter;
       }
       qView nView = new qView(SQL);
 
 
       // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
-      if(exLogic.User.hasAccess("FLIGHT.EDIT"))
+      if (exLogic.User.hasAccess("FLIGHT.EDIT"))
         nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-      if(exLogic.User.hasAccess("FLIGHT.VIEW"))
+      if (exLogic.User.hasAccess("FLIGHT.VIEW"))
         nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
-      if(exLogic.User.hasAccess("FLIGHT.MAP"))
+      if (exLogic.User.hasAccess("FLIGHT.MAP"))
         nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
       nView.addMenu("Flight Data", Url.Action("FlightDataView", "Map", new { ID = "_PKey" }));
-      if(exLogic.User.hasAccess("FLIGHT.VIDEOS"))
+      if (exLogic.User.hasAccess("FLIGHT.VIDEOS"))
         nView.addMenu("Flight Videos", Url.Action("ListVdeos", "DroneFlight", new { ID = "_PKey" }));
       //nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
-      if(exLogic.User.hasAccess("FLIGHT.REPORT"))
+      if (exLogic.User.hasAccess("FLIGHT.REPORT"))
         nView.addMenu("Post Flight Report", "/PostFlightReport/_PKey.pdf");
-      if(exLogic.User.hasAccess("FLIGHT.GEOTAG"))
+      if (exLogic.User.hasAccess("FLIGHT.GEOTAG"))
         nView.addMenu("Geo-Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
-     if (exLogic.User.hasAccess("FLIGHT.EXPORTCSV"))
-                nView.addMenu("Export-CSV", Url.Action("ExportExcel", new { ID = "_PKey" }));
-     if (exLogic.User.hasAccess("FLIGHT.DELETE"))
+      if (exLogic.User.hasAccess("FLIGHT.EXPORTCSV"))
+        nView.addMenu("Export-CSV", Url.Action("ExportExcel", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("FLIGHT.DELETE"))
         nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
 
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -132,7 +128,7 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult GeoTag([Bind(Prefix = "ID")] int FlightID = 0) {
-      if(!exLogic.User.hasAccess("FLIGHT.GEOTAG"))
+      if (!exLogic.User.hasAccess("FLIGHT.GEOTAG"))
         return RedirectToAction("NoAccess", "Home");
       ExponentPortalEntities Db = new ExponentPortalEntities();
       ViewBag.FlightID = FlightID;
@@ -168,7 +164,7 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult Create([Bind(Prefix = "ID")] int DroneID = 0) {
-      if(!exLogic.User.hasAccess("FLIGHT.CREATE"))
+      if (!exLogic.User.hasAccess("FLIGHT.CREATE"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Create UAS Flight";
       DroneFlight InitialData = new DroneFlight();
@@ -178,13 +174,13 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public ActionResult Create(DroneFlight theFlight) {
-      if(!exLogic.User.hasAccess("FLIGHT.CREATE"))
+      if (!exLogic.User.hasAccess("FLIGHT.CREATE"))
         return RedirectToAction("NoAccess", "Home");
-      if(theFlight.DroneID < 1 || theFlight.DroneID == null)
+      if (theFlight.DroneID < 1 || theFlight.DroneID == null)
         ModelState.AddModelError("DroneID", "You must select a Drone.");
-      if(theFlight.PilotID < 1 || theFlight.PilotID == null)
+      if (theFlight.PilotID < 1 || theFlight.PilotID == null)
         ModelState.AddModelError("PilotID", "Pilot is required for a Flight.");
-      if(theFlight.GSCID < 1 || theFlight.GSCID == null)
+      if (theFlight.GSCID < 1 || theFlight.GSCID == null)
         ModelState.AddModelError("GSCID", "A Ground Station Controller should be slected.");
 
       //if (Request != null)
@@ -194,7 +190,7 @@ namespace eX_Portal.Controllers {
       //    if(file==null) ModelState.AddModelError("fileinput", "You must select a Document.");
       //}
 
-      if(ModelState.IsValid) {
+      if (ModelState.IsValid) {
         int ID = 0;
         ExponentPortalEntities db = new ExponentPortalEntities();
         db.DroneFlights.Add(theFlight);
@@ -203,7 +199,7 @@ namespace eX_Portal.Controllers {
         db.Dispose();
 
         //Move the uploaded file to correct path
-        if(Request["FileName"] != null)
+        if (Request["FileName"] != null)
           MoveUploadFileTo((int)theFlight.DroneID, theFlight.ID);
 
         //insert into log table
@@ -220,7 +216,7 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult Edit([Bind(Prefix = "ID")] int FlightID = 0) {
-      if(!exLogic.User.hasAccess("FLIGHT.EDIT"))
+      if (!exLogic.User.hasAccess("FLIGHT.EDIT"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Edit UAS Flight";
       ExponentPortalEntities db = new ExponentPortalEntities();
@@ -230,18 +226,18 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public ActionResult Edit(DroneFlight InitialData) {
-      if(!exLogic.User.hasAccess("FLIGHT.EDIT"))
+      if (!exLogic.User.hasAccess("FLIGHT.EDIT"))
         return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "Edit UAS Flight";
       // ExponentPortalEntities db = new ExponentPortalEntities();
       // db.Entry(InitialData).State = EntityState.Modified;
       // db.SaveChanges();
-      if(InitialData.PilotID == null)
+      if (InitialData.PilotID == null)
         InitialData.PilotID = 0;
-      if(InitialData.GSCID == null)
+      if (InitialData.GSCID == null)
         InitialData.GSCID = 0;
-String SQL = @"UPDATE [DroneFlight] SET
+      String SQL = @"UPDATE [DroneFlight] SET
         PilotID=" + InitialData.PilotID + @",
         GSCID=" + InitialData.GSCID + @",
         FlightDate='" + ((DateTime)InitialData.FlightDate).ToString("yyyy-MM-dd HH:mm:ss") + @"',
@@ -255,7 +251,7 @@ String SQL = @"UPDATE [DroneFlight] SET
       //insert/update in log table
       string sqlcheck = "select Id from MSTR_Pilot_Log where FlightID=" + InitialData.ID;
       int result = Convert.ToInt32(Util.getDBInt(sqlcheck));
-      if(result > 0) {
+      if (result > 0) {
         string sql = "update MSTR_Pilot_Log set DroneId=" + InitialData.DroneID + ",PilotId=" + InitialData.PilotID + ",MultiDashRotor=" + (InitialData.FlightHours == null ? 0 : (InitialData.FlightHours / 60)) + "where FlightID=" + InitialData.ID;
         Util.doSQL(sql);
       } else {
@@ -272,16 +268,16 @@ String SQL = @"UPDATE [DroneFlight] SET
     public String Delete([Bind(Prefix = "ID")]int FlightID = 0) {
       String SQL = "";
       Response.ContentType = "text/json";
-      if(!exLogic.User.hasAccess("FLIGHT.DELETE"))
+      if (!exLogic.User.hasAccess("FLIGHT.DELETE"))
         return Util.jsonStat("ERROR", "Access Denied");
 
       //Delete the drone from database if there is no checklist is created
       SQL = "SELECT Count(*) FROM [DroneCheckList] WHERE FlightID = " + FlightID;
-      if(Util.getDBInt(SQL) != 0)
+      if (Util.getDBInt(SQL) != 0)
         return Util.jsonStat("ERROR", "You can not delete a flight after creating checklist");
 
       SQL = "SELECT Count(*) FROM [FlightMapData] WHERE FlightID = " + FlightID;
-      if(Util.getDBInt(SQL) != 0)
+      if (Util.getDBInt(SQL) != 0)
         return Util.jsonStat("ERROR", "You can not delete a flight when contain the GPS data");
 
       SQL = "DELETE FROM [DroneFlight] WHERE ID = " + FlightID;
@@ -294,9 +290,9 @@ String SQL = @"UPDATE [DroneFlight] SET
     }
 
     public ActionResult Detail(int ID = 0) {
-      if(!exLogic.User.hasAccess("FLIGHT.VIEW"))
+      if (!exLogic.User.hasAccess("FLIGHT.VIEW"))
         return RedirectToAction("NoAccess", "Home");
-      if(!exLogic.User.hasDrone(Util.GetDroneIdFromFlight(ID)))
+      if (!exLogic.User.hasDrone(Util.GetDroneIdFromFlight(ID)))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "UAS Flight Details";
       ViewBag.FlightID = ID;
@@ -321,7 +317,7 @@ String SQL = @"UPDATE [DroneFlight] SET
 
       qView nView = new qView(SQL);
       nView.addMenu("View", Url.Action("View", "DroneCheckList", new { ID = "_PKey" }));
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -332,7 +328,7 @@ String SQL = @"UPDATE [DroneFlight] SET
 
     public String DroneFlightDetail(int ID = 0) {
       String CheckListMessage = "";
-      if(!exLogic.User.hasAccess("FLIGHT.VIEW"))
+      if (!exLogic.User.hasAccess("FLIGHT.VIEW"))
         return "Access Denied";
       int DroneId, UserId;
 
@@ -382,10 +378,10 @@ String SQL = @"UPDATE [DroneFlight] SET
         [MSTR_DroneCheckList].[CheckListTitle]='Pre-Flight Checklist' AND
         [DroneCheckList].[FlightID]=" + ID;
       int CheckListCount = Util.getDBInt(SQL);
-      if(CheckListCount >= 3) {
+      if (CheckListCount >= 3) {
         CheckListMessage = "<div class=\"authorise\"><span class=\"icon\">&#xf214;</span>" +
         "You have successfully completed all the checklist</div>";
-      } else if(CheckListCount >= 1) {
+      } else if (CheckListCount >= 1) {
         CheckListMessage = "<div class=\"warning\"><span class=\"icon\">&#xf071;</span>" +
         "Please complete all the checklist for the flight.</div>";
       } else {
@@ -402,7 +398,7 @@ String SQL = @"UPDATE [DroneFlight] SET
       "  FlightID = " + ID.ToString() + " and\n" +
       "  DocumentType = 'Regulator Approval'\n";
       int TheCount = Util.getDBInt(SQL);
-      if(TheCount < 1) {
+      if (TheCount < 1) {
         UploadedDocs = "<div class=\"warning\"><span class=\"icon\">&#xf071;</span>" +
         "Please upload your Regulatory Authorisation document before the flight</div>";
       } else {
@@ -422,11 +418,11 @@ String SQL = @"UPDATE [DroneFlight] SET
       ExponentPortalEntities db = new ExponentPortalEntities();
       List<DroneDocument> Docs = (from r in db.DroneDocuments
                                   where (int)r.FlightID == FlightID &&
-                                  r.DocumentType== "Regulator Approval"
+                                  r.DocumentType == "Regulator Approval"
                                   select r).ToList();
       theList.Append("<UL>");
-      foreach(var Doc in Docs) {
-        if(DroneName == "")
+      foreach (var Doc in Docs) {
+        if (DroneName == "")
           DroneName = Util.getDroneName(Doc.DroneID);
         theList.AppendLine("<LI><span class=\"icon\">&#xf0f6;</span> <a href=\"/upload/Drone/" +
         "/" + Doc.DocumentName + "\">" + Util.getFilePart(Doc.DocumentName) + "</a></LI>");
@@ -437,7 +433,7 @@ String SQL = @"UPDATE [DroneFlight] SET
 
 
     public String ByDrone([Bind(Prefix = "ID")] int DroneID = 0) {
-      if(!exLogic.User.hasAccess("FLIGHT"))
+      if (!exLogic.User.hasAccess("FLIGHT"))
         return "Access Denied";
       String SQL =
       "SELECT TOP 5" +
@@ -462,7 +458,7 @@ String SQL = @"UPDATE [DroneFlight] SET
       "  DroneFlight.ID DESC";
 
       qView nView = new qView(SQL, false);
-      if(nView.HasRows) {
+      if (nView.HasRows) {
         return
           "<h2>Recent Flights</h2>\n" +
           nView.getDataTable(true, false);
@@ -471,7 +467,7 @@ String SQL = @"UPDATE [DroneFlight] SET
       return "";
 
     }
-       
+
     public String DeleteFile([Bind(Prefix = "ID")] int FlightID = 0, String file = "") {
 
       //now add the uploaded file to the database
@@ -507,7 +503,7 @@ String SQL = @"UPDATE [DroneFlight] SET
         String FileURL = DroneName + "/" + DocumentType + "/" + FileName;
         String FullName = UploadDir + FileName;
 
-        if(!Directory.Exists(UploadDir))
+        if (!Directory.Exists(UploadDir))
           Directory.CreateDirectory(UploadDir);
         TheFile.SaveAs(FullName);
         JsonText.Append("{");
@@ -529,7 +525,7 @@ String SQL = @"UPDATE [DroneFlight] SET
           ")";
         Util.doSQL(SQL);
 
-      } catch(Exception ex) {
+      } catch (Exception ex) {
         JsonText.Clear();
         JsonText.Append("{");
         JsonText.Append(Util.Pair("status", "error", true));
@@ -544,16 +540,16 @@ String SQL = @"UPDATE [DroneFlight] SET
     public String UploadFile([Bind(Prefix = "ID")] int FlightID = 0, int DroneID = 0, String DocumentType = "Regulator Approval", String CreatedOn = "") {
       DateTime FileCreatedOn = DateTime.MinValue;
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
-            //send information in JSON Format always
-           
+      //send information in JSON Format always
+
       StringBuilder JsonText = new StringBuilder();
       GPSInfo GPS = new GPSInfo();
       Response.ContentType = "text/json";
 
       try {
         FileCreatedOn = DateTime.ParseExact(CreatedOn, "ddd, d MMM yyyy HH:mm:ss GMT", CultureInfo.InvariantCulture);
-                string FileCreated_ON=FileCreatedOn.ToString();
-            } catch { }
+        string FileCreated_ON = FileCreatedOn.ToString();
+      } catch { }
 
       //when there are files in the request, save and return the file information
       try {
@@ -567,12 +563,12 @@ String SQL = @"UPDATE [DroneFlight] SET
         String GPSFixName = UploadDir + "GPS-" + FileName;
 
         //Save the file to Disk
-        if(!Directory.Exists(UploadDir))
+        if (!Directory.Exists(UploadDir))
           Directory.CreateDirectory(UploadDir);
         TheFile.SaveAs(FullName);
 
         //Do the calculation for GPS
-        if(DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".jpg") {
+        if (DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".jpg") {
           //here find the code to find the GPS Cordinate
           ExifLib GeoTag = new ExifLib(FullName, GPSFixName);
           GPS = GeoTag.getGPS(FlightID, FileCreatedOn);
@@ -599,14 +595,14 @@ String SQL = @"UPDATE [DroneFlight] SET
         JsonText.Append(",");
         JsonText.Append("\"Altitude\":");
         JsonText.Append(GPS.Altitude);
-                JsonText.Append(",");              
-                JsonText.Append(Util.Pair("CreatedDate", FileCreatedOn.ToString("dd-MMM-yyyy hh:mm"), false));
-                JsonText.Append(",");
-                JsonText.Append("\"FlightID\":");
-                JsonText.Append(FlightID);
-                JsonText.Append("},");               
+        JsonText.Append(",");
+        JsonText.Append(Util.Pair("CreatedDate", FileCreatedOn.ToString("dd-MMM-yyyy hh:mm"), false));
+        JsonText.Append(",");
+        JsonText.Append("\"FlightID\":");
+        JsonText.Append(FlightID);
+        JsonText.Append("},");
 
-                JsonText.Append("\"addFile\":[");
+        JsonText.Append("\"addFile\":[");
         JsonText.Append(Util.getFileInfo(FullName, FileURL));
         JsonText.Append("]}");
 
@@ -626,7 +622,7 @@ String SQL = @"UPDATE [DroneFlight] SET
           ")";
         int DocumentID = Util.InsertSQL(SQL);
 
-      } catch(Exception ex) {
+      } catch (Exception ex) {
         JsonText.Clear();
         JsonText.Append("{");
         JsonText.Append(Util.Pair("status", "error", true));
@@ -642,15 +638,15 @@ String SQL = @"UPDATE [DroneFlight] SET
       String OldUploadDir = UploadPath + "0\\0\\";
       String DroneName = DroneID == 0 ? "0" : Util.getDroneName(DroneID);
       String NewUploadDir = UploadPath + DroneName + "\\" + FlightID + "\\";
-      foreach(String file in Files) {
-        if(String.IsNullOrEmpty(file))
+      foreach (String file in Files) {
+        if (String.IsNullOrEmpty(file))
           continue;
         String OldFullPath = OldUploadDir + file;
         String NewFullPath = NewUploadDir + file;
-        if(System.IO.File.Exists(OldFullPath)) {
-          if(!Directory.Exists(NewFullPath))
+        if (System.IO.File.Exists(OldFullPath)) {
+          if (!Directory.Exists(NewFullPath))
             Directory.CreateDirectory(NewUploadDir);
-          if(!System.IO.File.Exists(NewFullPath))
+          if (!System.IO.File.Exists(NewFullPath))
             System.IO.File.Move(OldFullPath, NewFullPath);
           String SQL = "UPDATE DroneDocuments SET\n" +
           "  DroneID=" + DroneID + ",\n" +
@@ -673,7 +669,7 @@ String SQL = @"UPDATE [DroneFlight] SET
       String SQL = "SELECT [AlertID] ,[FlightID] ,[FlightReadTime],[Latitude],[Longitude],[Altitude],[FlightDataID],[AlertMessage],[CreatedOn],Count(*) Over() as _TotalRecords,FlightID as _PKey FROM[ExponentPortal].[dbo].[PortalAlert]";
       qView nView = new qView(SQL);
       nView.addMenu("Report", Url.Action("Index", "Drone", new { ID = "_PKey" }));
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -682,7 +678,7 @@ String SQL = @"UPDATE [DroneFlight] SET
     }
 
     public ActionResult List([Bind(Prefix = "ID")]int FlightID = 0) {
-      if(!exLogic.User.hasAccess("FLIGHT.VIDEOS"))
+      if (!exLogic.User.hasAccess("FLIGHT.VIDEOS"))
         return RedirectToAction("NoAccess", "Home");
       //using (var  = new ExponentPortalEntities())
       {
@@ -697,7 +693,7 @@ String SQL = @"UPDATE [DroneFlight] SET
 
 
     public ActionResult ListVdeos([Bind(Prefix = "ID")]int FlightID = 0) {
-      if(!exLogic.User.hasAccess("FLIGHT.VIDEOS"))
+      if (!exLogic.User.hasAccess("FLIGHT.VIDEOS"))
         return RedirectToAction("NoAccess", "Home");
 
       ViewBag.FlightID = FlightID;
@@ -710,7 +706,7 @@ String SQL = @"UPDATE [DroneFlight] SET
     }
 
     public string DeleteVdeo([Bind(Prefix = "ID")]int id = 0) {
-      if(!exLogic.User.hasAccess("FLIGHT.DELTVIDEOS"))
+      if (!exLogic.User.hasAccess("FLIGHT.DELTVIDEOS"))
         return "Access Denied";
       Response.ContentType = "text/json";
       string sql = "Update DroneFlightVideo set IsDeleted=1 where VideoID=" + id;
@@ -722,7 +718,7 @@ String SQL = @"UPDATE [DroneFlight] SET
     }
 
 
-      public ActionResult FlightDataVideo(int ID = 0) {
+    public ActionResult FlightDataVideo(int ID = 0) {
       //to get the url of the video
       Drones thisDrone = new Drones();
       string sql = "select VideoURL from DroneFlightVideo where videoId=" + ID;
@@ -733,11 +729,11 @@ String SQL = @"UPDATE [DroneFlight] SET
 
 
     public ActionResult Deleted([Bind(Prefix = "ID")]int FlightID = 0) {
-      if(!exLogic.User.hasAccess("FLIGHT.VIDEOS"))
+      if (!exLogic.User.hasAccess("FLIGHT.VIDEOS"))
         return RedirectToAction("NoAccess", "Home");
       String SQL = "";
-      using(var ctx = new ExponentPortalEntities())
-        if(exLogic.User.hasAccess("FLIGHT.VIDEOS"))
+      using (var ctx = new ExponentPortalEntities())
+        if (exLogic.User.hasAccess("FLIGHT.VIDEOS"))
           SQL = "Update [DroneFlightVideo] set IsDeleted=1 WHERE VideoID = " + FlightID;
       Util.doSQL(SQL);
 
@@ -759,15 +755,14 @@ String SQL = @"UPDATE [DroneFlight] SET
 
 
 
-        public ActionResult ExportExcel([Bind(Prefix = "ID")]int FlightID = 0)
-        {
-            if (exLogic.User.hasAccess("FLIGHT.EXPORTCSV"))
+    public ActionResult ExportExcel([Bind(Prefix = "ID")]int FlightID = 0) {
+      if (exLogic.User.hasAccess("FLIGHT.EXPORTCSV"))
 
-                Util.ExportFlightDataCSV(Response, FlightID);
-            return RedirectToAction("Index", "DroneFlight", new { ID =0 });
-        }
+        Util.ExportFlightDataCSV(Response, FlightID);
+      return RedirectToAction("Index", "DroneFlight", new { ID = 0 });
+    }
 
-        public String CheckAlert(int id = 0) {
+    public String CheckAlert(int id = 0) {
       StringBuilder AlertMsg = new StringBuilder();
       int AccountID = Util.getDBInt("SELECT AccountID From MSTR_User WHERE UserID=" + id);
       String SQL = @"SELECT
@@ -789,9 +784,9 @@ String SQL = @"UPDATE [DroneFlight] SET
           PortalAlert_User.UserID IS NULL AND
           PortalAlert.CreatedOn > DATEADD(minute, -30, GETDATE())";
       var Rows = Util.getDBRows(SQL);
-      foreach(var Row in Rows) {
+      foreach (var Row in Rows) {
         String AlertType = Row["AlertType"].ToString();
-        if(String.IsNullOrEmpty(AlertType))
+        if (String.IsNullOrEmpty(AlertType))
           AlertType = "High";
         AlertMsg.Append("<LI");
         AlertMsg.Append(" class=\"");
@@ -810,8 +805,18 @@ String SQL = @"UPDATE [DroneFlight] SET
     }
 
 
+    private String RevCord(String theCord) {
+      StringBuilder AllCord = new StringBuilder();
+      foreach(String sLatLng in theCord.Split(',')) {
+        var Coord = sLatLng.Trim().Split(' ');
+        if (AllCord.Length > 0) AllCord.Append(",");
+        AllCord.AppendFormat("{0} {1}", Coord[1].Trim(), Coord[0].Trim());
+      }
+      return AllCord.ToString();
+    }
+
     public ActionResult FlightSetup() {
-      if(!exLogic.User.hasAccess("FLIGHT.SETUP"))
+      if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
         return RedirectToAction("NoAccess", "Home");
       ViewData["accountid"] = Convert.ToInt32(Session["AccountID"].ToString());
       return View();
@@ -821,13 +826,13 @@ String SQL = @"UPDATE [DroneFlight] SET
     public string FlightSetup(FlightSetupViewModel flightsetupvm)//Models.MSTR_Drone_Setup droneSetup)
     {
       try {
-        if(!exLogic.User.hasAccess("FLIGHT.SETUP"))
+        if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
           return "You do not have accesss to this page";
-        if(flightsetupvm.DroneSetup == null || flightsetupvm.DroneSetup.DroneId < 1)
+        if (flightsetupvm.DroneSetup == null || flightsetupvm.DroneSetup.DroneId < 1)
           return "You must select a Drone.";
-        if(flightsetupvm.DroneSetup.PilotUserId < 1 || flightsetupvm.DroneSetup.PilotUserId == null)
+        if (flightsetupvm.DroneSetup.PilotUserId < 1 || flightsetupvm.DroneSetup.PilotUserId == null)
           return "You must select a pilot.";
-        if(flightsetupvm.DroneSetup.GroundStaffUserId < 1 || flightsetupvm.DroneSetup.GroundStaffUserId == null)
+        if (flightsetupvm.DroneSetup.GroundStaffUserId < 1 || flightsetupvm.DroneSetup.GroundStaffUserId == null)
           return "A Ground staff should be selected.";
 
         DateTime todaydate = System.DateTime.Now;
@@ -841,7 +846,7 @@ String SQL = @"UPDATE [DroneFlight] SET
         int ApprovalID = flightsetupvm.GcaApproval.ApprovalID;
         String ApprovalName = flightsetupvm.GcaApproval.ApprovalName;
         String Coordinates = flightsetupvm.GcaApproval.Coordinates;
-        if(String.IsNullOrEmpty(Coordinates))
+        if (String.IsNullOrEmpty(Coordinates))
           Coordinates =
 "24.949901 55.337585," +
 "25.218555 55.620971," +
@@ -850,11 +855,11 @@ String SQL = @"UPDATE [DroneFlight] SET
         string[] Coord = Coordinates.Split(',');
         string Poly = Coordinates + "," + Coord[0];
 
-        if(ApprovalID == 0 && String.IsNullOrEmpty(ApprovalName)) {
+        if (ApprovalID == 0 && String.IsNullOrEmpty(ApprovalName)) {
           //Approval is not selected or no name is specifeid
           //then do not update approvals
           SQL = String.Empty;
-        } else if(!String.IsNullOrEmpty(ApprovalName)) {
+        } else if (!String.IsNullOrEmpty(ApprovalName)) {
           //when a new name is specified for approval
           //save it as new approval     
           SQL = @"insert into GCA_Approval(
@@ -863,7 +868,6 @@ String SQL = @"UPDATE [DroneFlight] SET
             StartDate,
             EndDate,
             Coordinates,
-            Polygon,
             CreatedOn,
             CreatedBy,
             DroneID,
@@ -878,7 +882,6 @@ String SQL = @"UPDATE [DroneFlight] SET
             '" + StartDate.ToString("yyyy-MM-dd") + @"',
             '" + EndDate.ToString("yyyy-MM-dd") + @"',
             '" + Coordinates + @"',
-            geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
             GETDATE(),
             " + Session["UserID"] + "," +
               flightsetupvm.DroneSetup.DroneId + @",
@@ -898,7 +901,6 @@ String SQL = @"UPDATE [DroneFlight] SET
             StartDate ='" + StartDate.ToString("yyyy-MM-dd") + @"',
             EndDate = '" + EndDate.ToString("yyyy-MM-dd") + @"',
             Coordinates  = '" + Coordinates + @"',
-            Polygon=geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
             EndTime='" + flightsetupvm.GcaApproval.EndTime + @"',
             StartTime='" + flightsetupvm.GcaApproval.StartTime + @"',
             BoundaryInMeters=50,
@@ -907,7 +909,7 @@ String SQL = @"UPDATE [DroneFlight] SET
           where 
             ApprovalID=" + ApprovalID;
         }
-        if(!String.IsNullOrEmpty(SQL)) {
+        if (!String.IsNullOrEmpty(SQL)) {
           //Execute the sql statement generated
           Util.doSQL(SQL);
         }
@@ -915,7 +917,7 @@ String SQL = @"UPDATE [DroneFlight] SET
         int DroneID = flightsetupvm.DroneSetup.DroneId;
         SQL = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + DroneID;
         int DroneSetupId = Util.getDBInt(SQL);
-        if(DroneSetupId == 0) {
+        if (DroneSetupId == 0) {
           SQL = @"INSERT INTO MSTR_Drone_Setup (
             DroneID,
             CreatedBy,
@@ -929,7 +931,7 @@ String SQL = @"UPDATE [DroneFlight] SET
           )";
           Util.doSQL(SQL);
         }
-        if(flightsetupvm.DroneSetup.BatteryVoltage == null)
+        if (flightsetupvm.DroneSetup.BatteryVoltage == null)
           flightsetupvm.DroneSetup.BatteryVoltage = 0;
 
         SQL = @"update 
@@ -947,7 +949,7 @@ String SQL = @"UPDATE [DroneFlight] SET
           [DroneId]=" + DroneID;
         Util.doSQL(SQL);
         return "OK";
-      } catch(Exception ex) {
+      } catch (Exception ex) {
         return ex.Message;
       }
     }//public string FlightSetup
@@ -957,7 +959,7 @@ String SQL = @"UPDATE [DroneFlight] SET
     public ActionResult FillPilot(int droneid = 0) {
       DateTime? Today = DateTime.Now;
       DateTime? Expired = DateTime.Now.AddDays(90);
-      if(exLogic.User.hasAccess("FLIGHT.SETUP")) {
+      if (exLogic.User.hasAccess("FLIGHT.SETUP")) {
         String SQL = "SELECT * FROM MSTR_Drone_Setup where DroneId=" + droneid;
         var Row = Util.getDBRow(SQL);
         var Approvals = (
