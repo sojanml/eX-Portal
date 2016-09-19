@@ -1249,7 +1249,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\map-common.js" />
-    <Content Include="Scripts\map-replay.js" />
+    <Content Include="Scripts\map-replay-v02.js" />
     <Content Include="Scripts\map.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\PayLoadMap.js" />

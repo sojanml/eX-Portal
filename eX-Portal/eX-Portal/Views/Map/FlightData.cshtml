@@ -9,7 +9,6 @@
     Double.TryParse(sBuffer, out Buffer);
   }
   int FlightID = ViewBag.FlightID;
-
 }
 @Html.Action("DroneFlightDetail", "DroneFlight", new { ID = ViewBag.FlightID })
 
@@ -189,7 +188,7 @@
   var DroneName = '@Model.getDroneNameForFlight(FlightID)';
 </script>
 <script src="~/Scripts/Chart.js" type="text/javascript"></script>
-<script type="text/javascript" src="~/Scripts/map-replay.js"></script>
+<script type="text/javascript" src="~/Scripts/map-replay-v02.js"></script>
 <script type="text/javascript" src="~/Scripts/map-common.js"></script>
   @if(!String.IsNullOrEmpty(ViewBag.PlayerURL)) {
   <script src="~/jwplayer/jwplayer.js"></script>
