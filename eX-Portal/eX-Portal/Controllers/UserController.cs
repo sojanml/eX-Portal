@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 
 namespace eX_Portal.Controllers {
-  public class UserController :Controller {
+  public class UserController : Controller {
     // GET: UserLogin
     public ExponentPortalEntities db = new ExponentPortalEntities();
     static String RootUploadDir = "~/Upload/User/";
@@ -36,7 +36,7 @@ namespace eX_Portal.Controllers {
 
 
     public string ExponentCertificateDetails([Bind(Prefix = "ID")] int PilotID) {
-      if(!exLogic.User.hasAccess("EXPCERT.VIEW"))
+      if (!exLogic.User.hasAccess("EXPCERT.VIEW"))
         return "Access Denied";
 
       string SQL = " select b.name as Certification,\n " +
@@ -53,7 +53,7 @@ namespace eX_Portal.Controllers {
             "  and \n" +
             "  a.UserId =" + PilotID;
       qView nView = new qView(SQL);
-      if(nView.HasRows) {
+      if (nView.HasRows) {
         nView.isFilterByTop = false;
         return
           "<h2>Exponent Certification Details</h2>\n" +
@@ -64,7 +64,7 @@ namespace eX_Portal.Controllers {
 
     }
     public String PilotCertificateDetails([Bind(Prefix = "ID")] int PilotID) {
-      if(!exLogic.User.hasAccess("PILOTCERT.VIEW"))
+      if (!exLogic.User.hasAccess("PILOTCERT.VIEW"))
         return "Access Denied";
 
       String SQL = "  select b.name as Certification, \n" +
@@ -85,7 +85,7 @@ namespace eX_Portal.Controllers {
        "  and a.UserId =" + PilotID;
       qView nView = new qView(SQL);
 
-      if(nView.HasRows) {
+      if (nView.HasRows) {
         nView.isFilterByTop = false;
         return
           "<h2>Pilot Certification Details</h2>\n" +
@@ -107,34 +107,39 @@ namespace eX_Portal.Controllers {
       ExponentPortalEntities objentity = new ExponentPortalEntities();
       /*Getting data from database for user validation*/
 
-      if(exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0) {
-        if(exLogic.User.UserIsActive(_objuserlogin.UserName, _objuserlogin.Password) > 0) {
-                    UserInfo thisUser = exLogic.User.getInfo(_objuserlogin.UserName);
-                    /*Redirect user to success apge after successfull login*/
-        if (Util.CheckSessionValid(thisUser.UserID))
-        {
-          ViewBag.Message = 1;         
-          Session["FirstName"] = thisUser.FullName;
-          Session["UserID"] = thisUser.UserID;
-          Session["UserName"] = thisUser.UserName;
-          Session["BrandLogo"] = thisUser.BrandLogo;
-          Session["BrandColor"] = thisUser.BrandColor;
-          Session["AccountID"] = thisUser.AccountID;
-          Session["userIpAddress"] = Request.ServerVariables["REMOTE_ADDR"];
-          var browser = Request.Browser.Browser;
-        var assembly = Assembly.GetExecutingAssembly();
-        var attribute = (GuidAttribute)assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0];
-        var id = attribute.Value;
-        string sessionId = this.Session.SessionID;
+      if (exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0) {
+        if (exLogic.User.UserIsActive(_objuserlogin.UserName, _objuserlogin.Password) > 0) {
+          UserInfo thisUser = exLogic.User.getInfo(_objuserlogin.UserName);
+          /*Redirect user to success apge after successfull login*/
+          if (Util.CheckSessionValid(thisUser.UserID)) {
+            ViewBag.Message = 1;
+            Session["FirstName"] = thisUser.FullName;
+            Session["UserID"] = thisUser.UserID;
+            Session["UserName"] = thisUser.UserName;
+            Session["BrandLogo"] = thisUser.BrandLogo;
+            Session["BrandColor"] = thisUser.BrandColor;
+            Session["AccountID"] = thisUser.AccountID;
+            Session["userIpAddress"] = Request.ServerVariables["REMOTE_ADDR"];
+            var browser = Request.Browser.Browser;
+            var assembly = Assembly.GetExecutingAssembly();
+            var attribute = (GuidAttribute)assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0];
+            var id = attribute.Value;
+            string sessionId = this.Session.SessionID;
 
-          string sql = "insert into userlog(UserID,loggedintime,UserIPAddress,Browser,SessionID,ApplicationID) values('" + thisUser.UserID + "',getdate(),'" + Session["userIpAddress"] + "','" + browser + "','" + sessionId + "','"+ id+"') Select @@Identity";
-          Session["uid"] = Util.InsertSQL(sql);
-          return RedirectToAction("Index", "Home");
-        }
-          else
-        {
-                        ViewBag.Message = 3;
-                    }
+            string sql = "insert into userlog(UserID,loggedintime,UserIPAddress,Browser,SessionID,ApplicationID) values('" + thisUser.UserID + "',getdate(),'" + Session["userIpAddress"] + "','" + browser + "','" + sessionId + "','" + id + "') Select @@Identity";
+            var UID = Util.InsertSQL(sql);
+            Session["uid"] = UID.ToString();
+
+            HttpCookie myCookie = new HttpCookie("uid");
+            myCookie.Value = UID.ToString();
+            myCookie.Expires = DateTime.Now.AddHours(1);
+            Response.Cookies.Add(myCookie);
+
+
+            return RedirectToAction("Index", "Home");
+          } else {
+            ViewBag.Message = 3;
+          }
 
         } else {
           ViewBag.Message = 2;
@@ -149,7 +154,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult Logout() {
       var theObj = Session["uid"];
-      if(theObj == null)
+      if (theObj == null)
         return View();
 
       string sql = "update UserLog set loggedoftime=getdate(),SessionEndTime=getdate(),IsSessionEnd=1 where ID=" + Session["uid"];
@@ -166,27 +171,27 @@ namespace eX_Portal.Controllers {
     }//Login()
 
     public ActionResult UserList() {
-      if(!exLogic.User.hasAccess("USER.VIEW"))
+      if (!exLogic.User.hasAccess("USER.VIEW"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "User View";
       string SQL = "select a.UserName,a.FirstName,a.MobileNo,b.ProfileName, Count(*) Over() as _TotalRecords ,  a.UserId as _PKey " +
           " from MSTR_User a left join MSTR_Profile b on a.UserProfileId = b.ProfileId  ";
 
       qView nView = new qView(SQL);
-      if(!exLogic.User.hasAccess("USER.SESSIONLOG"))
+      if (!exLogic.User.hasAccess("USER.SESSIONLOG"))
         return RedirectToAction("NoAccess", "Home");
 
       nView.addMenu("Session Log", Url.Action("UserLogList", new { ID = "_PKey" }));
 
-      if(exLogic.User.hasAccess("USER.VIEW"))
+      if (exLogic.User.hasAccess("USER.VIEW"))
         nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
-      if(exLogic.User.hasAccess("USER.EDIT"))
+      if (exLogic.User.hasAccess("USER.EDIT"))
         nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-      if(exLogic.User.hasAccess("USER.DELETE"))
+      if (exLogic.User.hasAccess("USER.DELETE"))
         nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
-      if(exLogic.User.hasAccess("PILOTLOG.VIEW"))
+      if (exLogic.User.hasAccess("PILOTLOG.VIEW"))
         nView.addMenu("Pilot Log", Url.Action("Detail", "PilotLog", new { ID = "_PKey" }));
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -195,7 +200,7 @@ namespace eX_Portal.Controllers {
 
     }
     public ActionResult PilotList() {
-      if(!exLogic.User.hasAccess("PILOT"))
+      if (!exLogic.User.hasAccess("PILOT"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "User View";
       string SQL = "select\n" +
@@ -211,23 +216,22 @@ namespace eX_Portal.Controllers {
       "  on a.UserProfileId = b.ProfileId\n" +
       "where \n" +
       "  a.ispilot=1";
-     
-                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-                {
-                    SQL += "AND\n" +
-                    "  a.AccountID=" + Util.getAccountID();
-                }
-      
+
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+        SQL += "AND\n" +
+        "  a.AccountID=" + Util.getAccountID();
+      }
+
 
       qView nView = new qView(SQL);
-      if(exLogic.User.hasAccess("USER.VIEW"))
+      if (exLogic.User.hasAccess("USER.VIEW"))
         nView.addMenu("Detail", Url.Action("UserDetail", new { ID = "_PKey" }));
-      if(exLogic.User.hasAccess("USER.EDIT"))
+      if (exLogic.User.hasAccess("USER.EDIT"))
         nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-      if(exLogic.User.hasAccess("USER.DELETE"))
+      if (exLogic.User.hasAccess("USER.DELETE"))
         nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
       // if (exLogic.User.hasAccess("PILOTLOG.VIEW")) nView.addMenu("Pilot Log", Url.Action("Detail", "PilotLog", new { ID = "_PKey" }));
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -242,7 +246,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Create([Bind(Prefix = "ID")] int RPASID = 0) {
 
       ViewBag.Title = "Create User";
-      if(!exLogic.User.hasAccess("USER.CREATE"))
+      if (!exLogic.User.hasAccess("USER.CREATE"))
         return RedirectToAction("NoAccess", "Home");
 
 
@@ -271,7 +275,7 @@ namespace eX_Portal.Controllers {
 
       ViewBag.IsPassowrdRequired = true;
       MSTR_User EPASValues = new MSTR_User();
-      if(RPASID != 0) {
+      if (RPASID != 0) {
         ViewBag.RPASid = RPASID;
         ViewBag.IsPassowrdRequired = false;
         var RPASoList = (from p in db.MSTR_RPAS_User where p.RpasId == RPASID select p).ToList();
@@ -301,12 +305,12 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult UserDetail([Bind(Prefix = "ID")] int UserID = 0) {
-      if(!exLogic.User.hasAccess("USER.VIEW"))
+      if (!exLogic.User.hasAccess("USER.VIEW"))
         return RedirectToAction("NoAccess", "Home");
 
 
       Models.MSTR_User User = db.MSTR_User.Find(UserID);
-      if(User == null)
+      if (User == null)
         return RedirectToAction("Error", "Home");
       ViewBag.Title = User.FirstName;
       return View(User);
@@ -341,12 +345,12 @@ namespace eX_Portal.Controllers {
                   "on a.UserProfileId=d.ProfileId" +
                   " where a.userid=" + UserID;
 
-      if(exLogic.User.hasAccess("PILOT")) {
+      if (exLogic.User.hasAccess("PILOT")) {
         //nothing
-      } else if(!exLogic.User.hasAccess("DRONE.VIEWALL")) {
-                    SQL +=
-          " AND\n" +
-          "  a.AccountID=" + Util.getAccountID();                
+      } else if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+        SQL +=
+" AND\n" +
+"  a.AccountID=" + Util.getAccountID();
       }
 
       qDetailView nView = new qDetailView(SQL);
@@ -369,7 +373,7 @@ namespace eX_Portal.Controllers {
         String FileName = System.Guid.NewGuid() + "~" + TheFile.FileName;
         String FullName = UploadPath + FileName;
 
-        if(!Directory.Exists(UploadPath))
+        if (!Directory.Exists(UploadPath))
           Directory.CreateDirectory(UploadPath);
         TheFile.SaveAs(FullName);
         JsonText.Append("{");
@@ -378,7 +382,7 @@ namespace eX_Portal.Controllers {
         JsonText.Append(Util.getFileInfo(FullName));
         JsonText.Append("]}");
 
-      } catch(Exception ex) {
+      } catch (Exception ex) {
         JsonText.Clear();
         JsonText.Append("{");
         JsonText.Append(Util.Pair("status", "error", true));
@@ -392,7 +396,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Edit(int id) {
 
 
-      if(!exLogic.User.hasAccess("USER.EDIT"))
+      if (!exLogic.User.hasAccess("USER.EDIT"))
         return RedirectToAction("NoAccess", "Home");
       var viewModel = new ViewModel.UserViewModel {
         User = db.MSTR_User.Find(id),
@@ -410,11 +414,11 @@ namespace eX_Portal.Controllers {
     [HttpPost]
     public ActionResult Edit(ViewModel.UserViewModel UserModel) {
       String Pass_SQL = "\n";
-      if(!exLogic.User.hasAccess("USER.EDIT"))
+      if (!exLogic.User.hasAccess("USER.EDIT"))
         return RedirectToAction("NoAccess", "Home");
-      if(ModelState.IsValid) {
-        if(!String.IsNullOrEmpty(UserModel.User.Password) && !String.IsNullOrEmpty(UserModel.User.ConfirmPassword)) {
-          if(UserModel.User.Password != UserModel.User.ConfirmPassword) {
+      if (ModelState.IsValid) {
+        if (!String.IsNullOrEmpty(UserModel.User.Password) && !String.IsNullOrEmpty(UserModel.User.ConfirmPassword)) {
+          if (UserModel.User.Password != UserModel.User.ConfirmPassword) {
             ModelState.AddModelError("User.Password", "Password doesn't match.");
           } else {
             Pass_SQL = ",\n  Password='" + Util.GetEncryptedPassword(UserModel.User.Password).ToString() + "'\n";
@@ -422,7 +426,7 @@ namespace eX_Portal.Controllers {
         }
       }
 
-      if(ModelState.IsValid) {
+      if (ModelState.IsValid) {
         string SQL = "UPDATE MSTR_USER SET\n" +
           "  UserProfileId=" + Util.toInt(UserModel.User.UserProfileId.ToString()) + ",\n" +
           "  FirstName='" + Util.FirstLetterToUpper(UserModel.User.FirstName) + "',\n" +
@@ -490,38 +494,38 @@ namespace eX_Portal.Controllers {
       //int RPASID = string.IsNullOrEmpty(hdnRPASid) ? 0 : Convert.ToInt16(hdnRPASid);
       int RPASID = ID;
 
-      if(!exLogic.User.hasAccess("USER.CREATE"))
+      if (!exLogic.User.hasAccess("USER.CREATE"))
         return RedirectToAction("NoAccess", "Home");
       //if (ModelState.IsValid) {
-      if(exLogic.User.UserExist(UserModel.User.UserName) > 0) {
+      if (exLogic.User.UserExist(UserModel.User.UserName) > 0) {
         ModelState.AddModelError("User.UserName", "This username already exists.");
       }
-      if(exLogic.User.EmailExist(UserModel.User.EmailId) > 0) {
+      if (exLogic.User.EmailExist(UserModel.User.EmailId) > 0) {
         ModelState.AddModelError("User.EmailId", "This email id already exists.");
-               
-            }
-      if(RPASID == 0) {
-        if(String.IsNullOrEmpty(UserModel.User.Password)) {
+
+      }
+      if (RPASID == 0) {
+        if (String.IsNullOrEmpty(UserModel.User.Password)) {
           ModelState.AddModelError("User.Password", "Invalid Password. Please enter again.");
         }
       }
 
-      if(UserModel.User.IsPilot == true) {
-        if(String.IsNullOrEmpty(UserModel.Pilot.EmiratesId)) {
+      if (UserModel.User.IsPilot == true) {
+        if (String.IsNullOrEmpty(UserModel.Pilot.EmiratesId)) {
           ModelState.AddModelError("Pilot.EmiratesId", "Emirates ID is required.");
         }
-        if(String.IsNullOrEmpty(UserModel.Pilot.PassportNo)) {
+        if (String.IsNullOrEmpty(UserModel.Pilot.PassportNo)) {
           ModelState.AddModelError("Pilot.PassportNo", "Passport  ID is required.");
         }
-        if(String.IsNullOrEmpty(UserModel.Pilot.Department)) {
+        if (String.IsNullOrEmpty(UserModel.Pilot.Department)) {
           ModelState.AddModelError("Pilot.Department", "Department is required.");
         }
       }//if(UserModel.User.IsPilot == true) {
        //}
 
-      if(ModelState.IsValid) {
+      if (ModelState.IsValid) {
         string Password;
-        if(RPASID == 0)
+        if (RPASID == 0)
           Password = Util.GetEncryptedPassword(UserModel.User.Password).ToString();
         else
           Password = "";
@@ -606,13 +610,13 @@ namespace eX_Portal.Controllers {
         String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
         String newPath = UploadPath + id + "/";
         String PhotoURL = UploadPath + "0/" + UserModel.User.PhotoUrl;
-        if(!System.IO.Directory.Exists(newPath))
+        if (!System.IO.Directory.Exists(newPath))
           Directory.CreateDirectory(newPath);
-        if(!String.IsNullOrEmpty(UserModel.User.PhotoUrl) &&
+        if (!String.IsNullOrEmpty(UserModel.User.PhotoUrl) &&
             System.IO.File.Exists(PhotoURL)) {
           System.IO.File.Move(PhotoURL, newPath + UserModel.User.PhotoUrl);
         }
-        if(RPASID != 0) {
+        if (RPASID != 0) {
           //var mailurl = Url.Action("RPASUserCreated", "Email", new { UserID = id });
           var mailurl = "/Email/RPASUserCreated/" + id;
           var mailsubject = "User has been created";
@@ -636,15 +640,15 @@ namespace eX_Portal.Controllers {
         PermitCategoryList = Util.GetLists("RPASCategory")
 
       };
-            ViewBag.IsPassowrdRequired = true;
-            return View(viewModel);
+      ViewBag.IsPassowrdRequired = true;
+      return View(viewModel);
     }//Create() HTTPPost
 
 
 
 
     public String Delete([Bind(Prefix = "ID")]int UserID = 0) {
-      if(!exLogic.User.hasAccess("USER.DELETE"))
+      if (!exLogic.User.hasAccess("USER.DELETE"))
 
         return Util.jsonStat("ERROR", "Access Denied");
       String SQL = "";
@@ -654,14 +658,14 @@ namespace eX_Portal.Controllers {
       //Delete the drone from database if there is no user createdby
       SQL = "SELECT Count(*) FROM MSTR_User where CreatedBy = " + UserID;
 
-      if(Util.getDBInt(SQL) != 0)
+      if (Util.getDBInt(SQL) != 0)
         return Util.jsonStat("ERROR", "You can not delete a the User Attached to another user");
 
       SQL = "select count(*) from Mstr_Drone where CreatedBy=" + UserID;
-      if(Util.getDBInt(SQL) != 0)
+      if (Util.getDBInt(SQL) != 0)
         return Util.jsonStat("ERROR", "You can not delete a the User Attached to Drone Creation");
       SQL = "select count(*) from Mstr_DroneService where CreatedBy=" + UserID;
-      if(Util.getDBInt(SQL) != 0)
+      if (Util.getDBInt(SQL) != 0)
         return Util.jsonStat("ERROR", "You can not delete a the User Attached to DroneService Creation");
 
 
@@ -678,7 +682,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult PilotCertificationCreate([Bind(Prefix = "ID")] int PilotID = 0) {
 
-      if(!exLogic.User.hasAccess("PILOTCERT.CREATE"))
+      if (!exLogic.User.hasAccess("PILOTCERT.CREATE"))
         return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "Create Pilot Certificate";
@@ -690,15 +694,15 @@ namespace eX_Portal.Controllers {
     // POST: user/PilotCertificationCreate
     [HttpPost]
     public ActionResult PilotCertificationCreate(MSTR_User_Pilot_Certification PCertificate) {
-      if(!exLogic.User.hasAccess("PILOTCERT.CREATE"))
+      if (!exLogic.User.hasAccess("PILOTCERT.CREATE"))
         return RedirectToAction("NoAccess", "Home");
 
-      if(PCertificate.CertificateId < 1 || PCertificate.CertificateId == null)
+      if (PCertificate.CertificateId < 1 || PCertificate.CertificateId == null)
         ModelState.AddModelError("CertificateId", "You must select a Certificate.");
-      if(PCertificate.IssuingAuthorityId < 1 || PCertificate.IssuingAuthorityId == null)
+      if (PCertificate.IssuingAuthorityId < 1 || PCertificate.IssuingAuthorityId == null)
         ModelState.AddModelError("IssuingAuthorityId", "Please Select Issuing Authority.");
 
-      if(ModelState.IsValid) {
+      if (ModelState.IsValid) {
         int ID = 0;
 
 
@@ -720,7 +724,7 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult PilotCertificationEdit([Bind(Prefix = "ID")] int PCertId = 0) {
-      if(!exLogic.User.hasAccess("PILOTCERT.EDIT"))
+      if (!exLogic.User.hasAccess("PILOTCERT.EDIT"))
         return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "Edit Pilot Certificate";
@@ -731,7 +735,7 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public ActionResult PilotCertificationEdit(MSTR_User_Pilot_Certification PCertificate) {
-      if(!exLogic.User.hasAccess("PILOTCERT.EDIT"))
+      if (!exLogic.User.hasAccess("PILOTCERT.EDIT"))
         return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "Edit Piltot Certificate";
@@ -747,7 +751,7 @@ namespace eX_Portal.Controllers {
 
 
     public String PilotCertificationDelete([Bind(Prefix = "ID")]int PCertId = 0) {
-      if(!exLogic.User.hasAccess("PILOTCERT.DELETE"))
+      if (!exLogic.User.hasAccess("PILOTCERT.DELETE"))
         return Util.jsonStat("ERROR", "Access Denied");
 
       string SQL = "DELETE FROM MSTR_User_Pilot_Certification WHERE Id = " + PCertId;
@@ -760,7 +764,7 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult ExponentCertificationCreate([Bind(Prefix = "ID")] int PilotID = 0) {
-      if(!exLogic.User.hasAccess("EXPCERT.CREATE"))
+      if (!exLogic.User.hasAccess("EXPCERT.CREATE"))
         return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "Create Exponent Certificate";
@@ -772,14 +776,14 @@ namespace eX_Portal.Controllers {
     // POST: user/PilotCertificationCreate
     [HttpPost]
     public ActionResult ExponentCertificationCreate(MSTR_User_Pilot_ExponentUAS ExpCertificate) {
-      if(!exLogic.User.hasAccess("EXPCERT.CREATE"))
+      if (!exLogic.User.hasAccess("EXPCERT.CREATE"))
         return RedirectToAction("NoAccess", "Home");
 
-      if(ExpCertificate.CertificateId < 1 || ExpCertificate.CertificateId == null)
+      if (ExpCertificate.CertificateId < 1 || ExpCertificate.CertificateId == null)
         ModelState.AddModelError("CertificateId", "You must select a Certificate.");
 
 
-      if(ModelState.IsValid) {
+      if (ModelState.IsValid) {
         int ID = 0;
 
 
@@ -802,7 +806,7 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult ExponentCertificationEdit([Bind(Prefix = "ID")] int ExpCertId = 0) {
-      if(!exLogic.User.hasAccess("EXPCERT.EDIT"))
+      if (!exLogic.User.hasAccess("EXPCERT.EDIT"))
         return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "Edit Exponent Certificate";
@@ -814,7 +818,7 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public ActionResult ExponentCertificationEdit(MSTR_User_Pilot_ExponentUAS ExpCertificate) {
-      if(!exLogic.User.hasAccess("EXPCERT.EDIT"))
+      if (!exLogic.User.hasAccess("EXPCERT.EDIT"))
         return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "Edit Exponent Certificate";
@@ -831,7 +835,7 @@ namespace eX_Portal.Controllers {
 
     public String ExponentCertificationDelete([Bind(Prefix = "ID")]int ExpCertId = 0) {
 
-      if(!exLogic.User.hasAccess("EXPCERT.DELETE"))
+      if (!exLogic.User.hasAccess("EXPCERT.DELETE"))
         return Util.jsonStat("ERROR", "Access Denied");
       string SQL = "DELETE FROM  MSTR_User_Pilot_ExponentUAS WHERE Id = " + ExpCertId;
       Util.doSQL(SQL);
@@ -847,17 +851,17 @@ namespace eX_Portal.Controllers {
     [HttpPost]
     public ActionResult ResetPassword(ChangePasswordViewModel password) {
 
-      if(ModelState.IsValid) {
-        if(String.IsNullOrEmpty(password.OldPassword) && String.IsNullOrEmpty(password.NewPassword) && String.IsNullOrEmpty(password.ConfirmPassword))
+      if (ModelState.IsValid) {
+        if (String.IsNullOrEmpty(password.OldPassword) && String.IsNullOrEmpty(password.NewPassword) && String.IsNullOrEmpty(password.ConfirmPassword))
           ModelState.AddModelError("Error", "Enter password");
         {
           MSTR_User mu = new MSTR_User();
           string code = Util.GetEncryptedPassword(password.OldPassword).ToString();
           string sql = "Select password from MSTR_USER where password ='" + code + "' and UserId='" + Session["UserID"] + "'";
           {
-            if(Util.getDBRows(sql).Count > 0) {
+            if (Util.getDBRows(sql).Count > 0) {
               try {
-                if(password.NewPassword == password.ConfirmPassword) {
+                if (password.NewPassword == password.ConfirmPassword) {
                   string Password = Util.GetEncryptedPassword(password.NewPassword).ToString();
                   string SQL = "UPDATE MSTR_User SET Password='" + Password + "' where Userid='" + Session["UserID"] + "'";
 
@@ -870,7 +874,7 @@ namespace eX_Portal.Controllers {
                   ViewBag.MessageText = "Password Does not match....";
 
                 }
-              } catch(Exception ex) {
+              } catch (Exception ex) {
 
                 ViewBag.Message = 0;
                 ViewBag.MessageText = "Please Enter NewPassword and ConfirmPassword";
@@ -894,7 +898,7 @@ namespace eX_Portal.Controllers {
     public ActionResult UserLogList([Bind(Prefix = "ID")]int UserID = 0) {
       String SQL = "SELECT [ID]\n ,[UserID]\n,[LoggedInTime]\n,[LoggedOfTime]\n ,[UserIPAddress]\n ,[Browser]\n,[SessionID]\n,Count(*) Over() as _TotalRecords,ID as _PKey FROM [ExponentPortal].[dbo].[UserLog] Where UserID = " + UserID;
       qView nView = new qView(SQL);
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -908,11 +912,11 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public String ForgotPassword(MSTR_User mSTR_USER) {
-      if(String.IsNullOrEmpty(mSTR_USER.UserName)) {
+      if (String.IsNullOrEmpty(mSTR_USER.UserName)) {
         return "Please enter your Username/Email";
       } else {
         int userexist = exLogic.User.UserExist(mSTR_USER.UserName);
-        if(userexist == 1) {
+        if (userexist == 1) {
           var UserInfo = (from n in db.MSTR_User
                           where (n.UserName == mSTR_USER.UserName)
                           select new {
@@ -920,7 +924,7 @@ namespace eX_Portal.Controllers {
                             EmailId = n.EmailId,
                           }).ToList();
 
-          if(String.IsNullOrEmpty(UserInfo[0].EmailId)) {
+          if (String.IsNullOrEmpty(UserInfo[0].EmailId)) {
             return "Your Email is not updated in the system,kindly update your Email Id.";
           } else {
             var toaddress = UserInfo[0].EmailId.ToString();
@@ -934,14 +938,14 @@ namespace eX_Portal.Controllers {
           }
         } else {
           int emailexist = exLogic.User.EmailExist(mSTR_USER.UserName);
-          if(emailexist == 1) {
+          if (emailexist == 1) {
             var UserInfo = (from n in db.MSTR_User
                             where (n.EmailId == mSTR_USER.UserName)
                             select new {
                               UserID = n.UserId,
                               EmailId = n.EmailId,
                             }).ToList();
-            if(String.IsNullOrEmpty(UserInfo[0].EmailId)) {
+            if (String.IsNullOrEmpty(UserInfo[0].EmailId)) {
               return "Your Email is not updated in the system,kindly update your Email Id.";
             } else {
               var toaddress = UserInfo[0].EmailId.ToString();

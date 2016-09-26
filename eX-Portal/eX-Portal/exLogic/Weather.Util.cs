@@ -28,6 +28,8 @@ namespace eX_Portal.exLogic {
     
 
     public static WeatherViewModel getLocalWeather(String UserIP) {
+      String JSonContent = String.Empty;
+      int DelayHours = 0;
       //If local server set it to dubai address
       MaxMind.GeoIP2.Responses.CityResponse city = new MaxMind.GeoIP2.Responses.CityResponse();
       var WeatherView = new WeatherViewModel();
@@ -48,72 +50,79 @@ namespace eX_Portal.exLogic {
       }//using(var reader)
 
       if(String.IsNullOrEmpty(WeatherView.Country))
-        WeatherView.Country = "AE";
+        WeatherView.Country = "United Arab Emirates";
       if(String.IsNullOrEmpty(WeatherView.City))
         WeatherView.City = "Dubai";
 
-      String CacheFile = getWeatherFile(WeatherView.Country, WeatherView.City);
-      String JSonContent = String.Empty;
-
-      if(!File.Exists(CacheFile)) {
-        JSonContent = DownloadWeatherInfo(WeatherView.Country, WeatherView.City, CacheFile);
-      } else {
-        JSonContent = File.ReadAllText(CacheFile);
-      }
+      do {
+        String CacheFile = getWeatherFile(WeatherView.Country, WeatherView.City, DelayHours);
+        if (!File.Exists(CacheFile)) {
+          JSonContent = DownloadWeatherInfo(WeatherView.Country, WeatherView.City, CacheFile);
+        } else {
+          JSonContent = File.ReadAllText(CacheFile);
+        }
+        DelayHours = DelayHours - 4;
+      } while (JSonContent.Length <= 10);
 
       dynamic WeatherInfo = System.Web.Helpers.Json.Decode(JSonContent);
-      var WeatherNow = WeatherInfo.data.current_condition[0];
-      WeatherView.ConditionText = WeatherNow.weatherDesc[0].value;
-      WeatherView.ConditionCode = WeatherNow.weatherCode;
-      WeatherView.Speed = WeatherNow.windspeedKmph;
-      WeatherView.ConditionTemperature = WeatherNow.temp_C;
-      WeatherView.TemperatureUnit = "&deg;C";
-      WeatherView.Pressure = Util.toDouble(WeatherNow.pressure);
-      WeatherView.Wind = WeatherNow.windspeedKmph;
-      WeatherView.Direction = WeatherNow.winddirDegree;
-      WeatherView.Visibility = Util.toDouble(WeatherNow.visibility);
-      WeatherView.Humidity = WeatherNow.humidity;
+      if(WeatherInfo != null) { 
+        var WeatherNow = WeatherInfo.data.current_condition[0];
+        WeatherView.ConditionText = WeatherNow.weatherDesc[0].value;
+        WeatherView.ConditionCode = WeatherNow.weatherCode;
+        WeatherView.Speed = WeatherNow.windspeedKmph;
+        WeatherView.ConditionTemperature = Util.toDouble(WeatherNow.temp_C).ToString("0.0");
+        if (WeatherView.ConditionTemperature == "0.0") {
+          Double Temp = (Util.toDouble(WeatherNow.temp_F) - 32) / 1.8;
+          WeatherView.ConditionTemperature = Temp.ToString("0.0");
+        }
+        WeatherView.TemperatureUnit = "&deg;C";
+        WeatherView.Pressure = Util.toDouble(WeatherNow.pressure);
+        WeatherView.Wind = WeatherNow.windspeedKmph;
+        WeatherView.Direction = WeatherNow.winddirDegree;
+        WeatherView.Visibility = Util.toDouble(WeatherNow.visibility);
+        WeatherView.Humidity = WeatherNow.humidity;
 
-      foreach(var ForcastDay in WeatherInfo.data.weather) {
-        var thisForcast = new Forcast {
-          Code = Util.toInt(ForcastDay.hourly[3].weatherCode),
-          Date = (DateTime.Parse(ForcastDay.date)).ToString("dd MMM"),
-          status = ForcastDay.hourly[3].weatherDesc[0].value,
-          TempHigh = ForcastDay.maxtempC,
-          TempLow = ForcastDay.mintempC
-        };
-        WeatherView.Forecast.Add(thisForcast);
-      }      
-
+        foreach(var ForcastDay in WeatherInfo.data.weather) {
+          var thisForcast = new Forcast {
+            Code = Util.toInt(ForcastDay.hourly[3].weatherCode),
+            Date = (DateTime.Parse(ForcastDay.date)).ToString("dd MMM"),
+            status = ForcastDay.hourly[3].weatherDesc[0].value,
+            TempHigh = ForcastDay.maxtempC,
+            TempLow = ForcastDay.mintempC
+          };
+          WeatherView.Forecast.Add(thisForcast);
+        }
+      }
       //var intAddress = BitConverter.ToInt64(IPAddress.Parse(UserIP).GetAddressBytes(), 0);
 
       return WeatherView;
     }
-
+     
     private static String DownloadWeatherInfo(String Country, String City, String CacheFile) {
       String WebURL = "http" + 
         "://api.worldweatheronline.com/premium/v1/weather.ashx?key=fea5347e9616488ab8760228163107" +
         "&q=" + City + "," + Country + "&format=json&num_of_days=5";
       using(var webClient = new System.Net.WebClient()) {
         webClient.Encoding = System.Text.Encoding.UTF8;
-        var json2 = webClient.DownloadString(WebURL);
+        String json2 = webClient.DownloadString(WebURL);
+        if (String.IsNullOrEmpty(json2)) return String.Empty;
 
         String PathOnly = Path.GetDirectoryName(CacheFile);
         if(!Directory.Exists(PathOnly)) Directory.CreateDirectory(PathOnly);
 
         using(System.IO.StreamWriter file = new System.IO.StreamWriter(CacheFile, false)) {
-          file.WriteLine(json2);
+          file.Write(json2);
         }//using(System.IO.StreamWriter)
 
         return json2;
-
 
       }//using(var webClient)
 
     }
 
-    private static String getWeatherFile(String Country, String City) {
-      String CacheFile = DateTime.Now.ToString("yyyy-MM-dd-Z") + (DateTime.Now.Hour / 4);
+    private static String getWeatherFile(String Country, String City, int DelayHours = 0) {
+      DateTime CasheFileTile = DateTime.Now.AddHours(DelayHours);
+      String CacheFile = CasheFileTile.ToString("yyyy-MM-dd-Z") + (CasheFileTile.Hour / 4);
 
       String FolderLocation = Path.Combine(
         HttpContext.Current.Server.MapPath("/Upload/WeatherCache"),

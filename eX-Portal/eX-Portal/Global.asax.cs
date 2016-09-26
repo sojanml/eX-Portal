@@ -19,25 +19,25 @@ namespace eX_Portal {
 
     public override string GetVaryByCustomString(HttpContext context, string arg) {
       if (arg.Equals("User", StringComparison.InvariantCultureIgnoreCase)) {
-        return context.Session["UserName"] == null ? "" : context.Session["UserName"].ToString();
+        String SessionKey = "uid";
+        var TheCookies = context.Request.Cookies;
+        if (TheCookies.AllKeys.Contains(SessionKey)) return TheCookies[SessionKey].Value;
+        return "0";
       }
       return base.GetVaryByCustomString(context, arg);
     }
-        protected void Session_Start(Object sender, EventArgs e) 
-        {
-            if (Session["uid"] != null)
-            {
-              //  Console.WriteLine("Session Started");
-            }
-        }
 
-        protected void Session_End(Object sender, EventArgs e)
-        {
-            if(Session["uid"]!=null)
-            {
-                string sql = "update userlog set IsSessionEnd=1 where ID='" + Session["uid"] + "'";
-                exLogic.Util.doSQL(sql);
-            }
-        }
+    protected void Session_Start(Object sender, EventArgs e) {
+      if (Session["uid"] != null) {
+        //  Console.WriteLine("Session Started");
+      }
     }
+
+    protected void Session_End(Object sender, EventArgs e) {
+      if (Session["uid"] != null) {
+        string sql = "update userlog set IsSessionEnd=1 where ID='" + Session["uid"] + "'";
+        exLogic.Util.doSQL(sql);
+      }
+    }
+  }
 }

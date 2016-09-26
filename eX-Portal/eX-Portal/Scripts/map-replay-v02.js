@@ -316,8 +316,9 @@ function LiveADSData() {
   if (!_IsADSBShown) return;
   //var RangeLat = (HomePoint["Latitude"] - 1).toString() + ' ' + HomePoint["Latitude"].toString();
   //var RangeLon = (HomePoint["Longitude"]).toString() + ' ' + (HomePoint["Longitude"] + 1).toString();
-  GetADSBData(0,0);
+  GetADSBData(0, 0);
 }
+
 
 
 function GetADSBData(RangeLat, RangeLon) {
@@ -409,7 +410,7 @@ ADSBOverlay.prototype.draw = function () {
     if (gADSBData[DivID]) {
       var $point = $('#' + DivID);      
       $point.animate({ left: IconLocation.x, top: IconLocation.y });
-      $point.css({transform: 'rotate(' + (heading - 90) + 'deg)'});
+      $point.css({transform: 'rotate(' + (heading - 45) + 'deg)'});
       $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });        
     } else {
       var $point = $(
@@ -419,7 +420,7 @@ ADSBOverlay.prototype.draw = function () {
         + 'data-alt="' + alt + '" '
         + 'data-ident="' + title + '" '
         + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px; transform: rotate(' + (heading - 90) + 'deg);">'
-        + '<span class="icon FlightIcon" style="">&#xf0fb;</span>'
+        + '<span class="icon FlightIcon" style="">&#xf072;</span>'
         + '</div>'
       );
 
@@ -705,10 +706,9 @@ function addOtherFlightInfoAtIndex() {
     if (_OtherFlights[FlightID] + '' == 'undefined') {
       _OtherFlights[FlightID] = new google.maps.Circle({
         strokeColor: '#FF0000',
-        strokeOpacity: 0.8,
-        strokeWeight: 0,
-        fillColor: '#FF0000',
-        fillOpacity: 0.3,
+        strokeOpacity: 1,
+        strokeWeight: 2,
+        fillOpacity: 0,
         center: Center,
         radius: DistanceOptions['Radius']
       });
@@ -730,13 +730,13 @@ function addOtherFlightInfoAtIndex() {
     var Options = {};
 
     if (OtherFlight[i]['Distance'] <= DistanceOptions['Critical']) {
-      Options.fillColor = 'red';
+      //Options.fillColor = 'red';
       Options.strokeColor = 'red';
     } else if (OtherFlight[i]['Distance'] <= DistanceOptions['Warning']) {
-      Options.fillColor = 'orange';
+      //Options.fillColor = 'orange';
       Options.strokeColor = 'orange';
     } else {
-      Options.fillColor = 'green';
+      //Options.fillColor = 'green';
       Options.strokeColor = 'green';
     }
     Options.center = Center;
@@ -767,11 +767,10 @@ function addThisFlightInfoAtIndex(MinDistance) {
   var Center = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
   if (_OtherFlights[thisFlight] + '' == 'undefined') {
     _OtherFlights[thisFlight] = new google.maps.Circle({
-      strokeColor: null,
-      strokeOpacity: 0.8,
-      strokeWeight: 0,
-      fillColor: '#FF0000',
-      fillOpacity: 0.3,
+      strokeColor: '#4E648E',
+      strokeOpacity: 1,
+      strokeWeight: 2,
+      fillOpacity: 0,
       center: Center,
       radius: DistanceOptions['Radius']
     });
@@ -783,10 +782,10 @@ function addThisFlightInfoAtIndex(MinDistance) {
   };
   if (MinDistance <= DistanceOptions['Critical']) {
     Options.fillColor = null;
-    Options.strokeColor = 'blue';
+    Options.strokeColor = '#4E648E';
   } else if (MinDistance <= DistanceOptions['Warning']) {
     Options.fillColor = null;
-    Options.strokeColor = 'blue';
+    Options.strokeColor = '#4E648E';
   } else {
     Options.map = null;
   }

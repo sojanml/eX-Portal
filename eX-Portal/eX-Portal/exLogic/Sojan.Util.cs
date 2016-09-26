@@ -190,7 +190,7 @@ namespace eX_Portal.exLogic {
 
     public static Double toDouble(Object Num) {
       Double theNum = 0;
-      Double.TryParse(Num.ToString(), out theNum);
+      if(Num != null) Double.TryParse(Num.ToString(), out theNum);
       return theNum;
     }
 

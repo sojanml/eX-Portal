@@ -14,7 +14,7 @@ using System.Xml;
 using System.Configuration;
 
 namespace eX_Portal.Controllers {
-  public class DashBoardController :Controller {
+  public class DashBoardController : Controller {
     // GET: DashBoard
 
     public string DebugOption = ConfigurationManager.AppSettings["DebugOption"];
@@ -75,7 +75,7 @@ namespace eX_Portal.Controllers {
         List<double> lst_dataItem_5 = new List<double>();
 
         IList<ChartViewModel> ChartList = Util.getUASLastFlightChartData();
-        foreach(ChartViewModel FMD in ChartList) {
+        foreach (ChartViewModel FMD in ChartList) {
           DroneName = FMD.DroneName;
           labels.Add(FMD.DroneName);
           labelsShort.Add(DroneName.Split('-').Last());
@@ -92,8 +92,8 @@ namespace eX_Portal.Controllers {
         //iData.Add(lst_dataItem_5);
 
         return Json(iData, JsonRequestBehavior.AllowGet);
-      } catch(Exception ex) {
-        if(DebugOption == "True") {
+      } catch (Exception ex) {
+        if (DebugOption == "True") {
           throw ex;
         } else
           return null;
@@ -101,90 +101,72 @@ namespace eX_Portal.Controllers {
     }
 
 
-        //chart for getting the qumulative graph for the last 12 months
+    //chart for getting the qumulative graph for the last 12 months
 
-        [System.Web.Mvc.HttpGet]
-        public JsonResult FlightHoursByAccount()
-        {
-            try
-            {
-                IList<ChartViewModel> ChartList = Util.getFlightHoursByAccount();
-                return Json(ChartList, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                if (DebugOption == "True")
-                {
-                    throw ex;
-                }
-                else
-                    return null;
+    [System.Web.Mvc.HttpGet]
+    public JsonResult FlightHoursByAccount() {
+      try {
+        IList<ChartViewModel> ChartList = Util.getFlightHoursByAccount();
+        return Json(ChartList, JsonRequestBehavior.AllowGet);
+      } catch (Exception ex) {
+        if (DebugOption == "True") {
+          throw ex;
+        } else
+          return null;
 
-            }
-        }
+      }
+    }
 
 
-        //chart for getting the qumulative graph for the last 12 months
+    //chart for getting the qumulative graph for the last 12 months
 
 
-        //new chart for flights
+    //new chart for flights
 
 
-        [System.Web.Mvc.HttpGet]
-        public JsonResult getFlightData()
-        {
-            try
-            {
-                IList<ChartViewModel> ChartList = Util.getRecentFlightChartData();
-                return Json(ChartList, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                if (DebugOption == "True")
-                {
-                    throw ex;
-                }
-                else
-                    return null;
+    [System.Web.Mvc.HttpGet]
+    public JsonResult getFlightData() {
+      try {
+        IList<ChartViewModel> ChartList = Util.getRecentFlightChartData();
+        return Json(ChartList, JsonRequestBehavior.AllowGet);
+      } catch (Exception ex) {
+        if (DebugOption == "True") {
+          throw ex;
+        } else
+          return null;
 
-            }
-        }
+      }
+    }
 
 
 
-        //new chart for Pilot
+    //new chart for Pilot
 
 
 
 
-        [System.Web.Mvc.HttpGet]
-        public JsonResult getPilotData()
-        {
-            try
-            {
-                IList<ChartViewModel> ChartList = Util.getCurrentPilotData(); 
-                return Json(ChartList, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                if (DebugOption == "True")
-                {
-                    throw ex;
-                }
-                else
-                    return null;
+    [System.Web.Mvc.HttpGet]
+    public JsonResult getPilotData() {
+      try {
+        IList<ChartViewModel> ChartList = Util.getCurrentPilotData();
+        return Json(ChartList, JsonRequestBehavior.AllowGet);
+      } catch (Exception ex) {
+        if (DebugOption == "True") {
+          throw ex;
+        } else
+          return null;
 
-            }
-        }
+      }
+    }
 
-//new chart 
-        [System.Web.Mvc.HttpGet]
+    //new chart 
+    [System.Web.Mvc.HttpGet]
     public JsonResult getAlertData() {
       try {
         IList<ChartAlertViewModel> ChartList = Util.getAlertData();
         return Json(ChartList, JsonRequestBehavior.AllowGet);
-      } catch(Exception ex) {
-        if(DebugOption == "True") {
+      } catch (Exception ex) {
+        if (DebugOption == "True") {
           throw ex;
         } else
           return null;
@@ -209,7 +191,7 @@ namespace eX_Portal.Controllers {
 
 
         IList<ChartViewModel> ChartList = Util.getCurrentFlightChartData();
-        foreach(ChartViewModel FMD in ChartList) {
+        foreach (ChartViewModel FMD in ChartList) {
           //labels.Add(FMD.DroneName);
           DroneName = FMD.DroneName;
           labels.Add(FMD.DroneName);
@@ -231,8 +213,8 @@ namespace eX_Portal.Controllers {
         //iData.Add(lst_dataItem_5);
 
         return Json(iData, JsonRequestBehavior.AllowGet);
-      } catch(Exception ex) {
-        if(DebugOption == "True") {
+      } catch (Exception ex) {
+        if (DebugOption == "True") {
           throw ex;
         } else
           return null;
@@ -253,7 +235,7 @@ namespace eX_Portal.Controllers {
 
 
         IList<ChartViewModel> ChartList = Util.getCurrentPilotChartData();
-        foreach(ChartViewModel FMD in ChartList) {
+        foreach (ChartViewModel FMD in ChartList) {
           labels.Add(FMD.PilotName);
           lst_dataItem_1.Add(Convert.ToInt32(FMD.PilotTotalHrs));
           lst_dataItem_2.Add(Convert.ToInt32(FMD.PilotCurrentMonthHrs));
@@ -269,8 +251,8 @@ namespace eX_Portal.Controllers {
         //iData.Add(lst_dataItem_5);
 
         return Json(iData, JsonRequestBehavior.AllowGet);
-      } catch(Exception ex) {
-        if(DebugOption == "True") {
+      } catch (Exception ex) {
+        if (DebugOption == "True") {
           throw ex;
         } else
           return null;
@@ -284,7 +266,7 @@ namespace eX_Portal.Controllers {
       return Json(System.DateTime.Now.ToString(), JsonRequestBehavior.AllowGet);
     }
     public ActionResult Internal() {
-        return View();
+      return View();
     }
 
     [ChildActionOnly]
@@ -297,12 +279,12 @@ namespace eX_Portal.Controllers {
     public ActionResult RPAS() {
 
       string City, Lat = null, Lng = null, woeid = "";
-      if(Session["Lat"] != null) {
+      if (Session["Lat"] != null) {
         Lat = Session["Lat"].ToString();
       } else {
         Lat = "25.2048";
       }
-      if(Session["Long"] != null) {
+      if (Session["Long"] != null) {
 
         Lng = Session["Long"].ToString();
 
@@ -346,7 +328,7 @@ namespace eX_Portal.Controllers {
                             group by t.DroneId,v.DroneName";
 
       qView nView = new qView(SQL);
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text /javascript";
         return PartialView("qViewData", nView);
       } else {

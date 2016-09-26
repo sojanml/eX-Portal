@@ -1651,6 +1651,7 @@
     <Content Include="Views\Admin\CMSCreate.cshtml" />
     <Content Include="Views\Home\Demo.cshtml" />
     <Content Include="Views\Report\Alert.cshtml" />
+    <Content Include="Upload\temp\adsb.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

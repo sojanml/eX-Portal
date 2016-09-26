@@ -227,20 +227,21 @@ namespace eX_Portal.exLogic {
   MSTR_Drone.DroneName as UAS,
   convert(varchar, DATEADD(ms, DroneFlight.FlightHours * 1000, 0),108) as FlightTime,
   DroneFlight.MaxAltitude,
-  Convert(Varchar(10), PortalAlertCounter.BoundaryCritical) + ' of ' + 
-  Convert(Varchar(10), PortalAlertCounter.Boundary)  as BoundaryAlerts,
-  Convert(Varchar(10), PortalAlertCounter.ProximityCritical) + ' of ' + 
-  Convert(Varchar(10), PortalAlertCounter.Proximity)  as ProximityAlerts,
-  Convert(Varchar(10), PortalAlertCounter.HeightCritical) + ' of ' + 
-  Convert(Varchar(10), PortalAlertCounter.Height)  as AltitudeAlerts,");
+  Convert(Varchar(10), DroneFlight.BoundaryCritical) + ' of ' + 
+  Convert(Varchar(10), BoundaryHigh + BoundaryWarning + BoundaryCritical )  as BoundaryAlerts,
+  Convert(Varchar(10), DroneFlight.ProximityCritical) + ' of ' + 
+  Convert(Varchar(10), ProximityHigh + ProximityCritical + ProximityWarning)  as ProximityAlerts,
+  Convert(Varchar(10), DroneFlight.HeightCritical) + ' of ' + 
+  Convert(Varchar(10), HeightHigh + HeightCritical + HeightWarning)  as AltitudeAlerts,");
       if (IsReturnExtraInfo) SQL.AppendLine(@"
-  PortalAlertCounter.BoundaryCritical,
-  PortalAlertCounter.Boundary,
-  PortalAlertCounter.ProximityCritical,
-  PortalAlertCounter.Proximity,
+  BoundaryCritical,
+  BoundaryHigh + BoundaryWarning + BoundaryCritical as Boundary,
+  ProximityCritical,
+  ProximityHigh + ProximityCritical + ProximityWarning as Proximity,
   PortalAlertCounter.HeightCritical,
-  PortalAlertCounter.Height,");
-  SQL.AppendLine(@"
+  HeightHigh + HeightCritical + HeightWarning as Height,");
+
+      SQL.AppendLine(@"
   Count(*)
     OVER() AS _TotalRecords,
   DroneFlight.ID AS _PKey
@@ -250,6 +251,9 @@ INNER JOIN MSTR_Drone ON
   MSTR_Drone.DroneID = DroneFlight.DroneID
 LEFT JOIN  MSTR_User ON
   MSTR_User.UserID = DroneFlight.PilotID
+  ");
+
+      /*
 LEFT JOIN  (SELECT
   FlightID,
   Sum(CASE
@@ -296,8 +300,7 @@ FROM
 GROUP  BY
   FlightID) AS PortalAlertCounter ON
   PortalAlertCounter.FlightID = DroneFlight.ID
-  ");
-
+  */
       SQLFilter.AppendLine("WHERE");
       SQLFilter.AppendLine("  DroneFlight.FlightDate BETWEEN '" + Filter.FromSQL() + "' AND '" + Filter.ToSQL() + "'");
       if (Filter.Pilot > 0)
@@ -305,22 +308,21 @@ GROUP  BY
       if (Filter.UAS > 0)
         SQLFilter.AppendLine("AND  DroneFlight.DroneID=" + Filter.UAS);
       if (Filter.Proximity > 0)
-        SQLFilter.AppendLine("AND  PortalAlertCounter.Proximity > 0");
+        SQLFilter.AppendLine("AND  (ProximityHigh + ProximityCritical + ProximityWarning) > 0");
       if (Filter.ProximityCritical > 0)
-        SQLFilter.AppendLine("AND  PortalAlertCounter.ProximityCritical > 0");
+        SQLFilter.AppendLine("AND  DroneFlight.ProximityCritical > 0");
       if (Filter.Height > 0)
-        SQLFilter.AppendLine("AND  PortalAlertCounter.Height > 0");
+        SQLFilter.AppendLine("AND  (HeightHigh + HeightCritical + HeightWarning) > 0");
       if (Filter.HeightCritical > 0)
-        SQLFilter.AppendLine("AND  PortalAlertCounter.HeightCritical > 0");
+        SQLFilter.AppendLine("AND  DroneFlight.HeightCritical > 0");
       if (Filter.Boundary > 0)
-        SQLFilter.AppendLine("AND  PortalAlertCounter.Boundary > 0");
+        SQLFilter.AppendLine("AND  (BoundaryHigh + BoundaryWarning + BoundaryCritical) > 0");
       if (Filter.BoundaryCritical > 0)
-        SQLFilter.AppendLine("AND  PortalAlertCounter.BoundaryCritical > 0");
-                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-                {
-                    SQLFilter.AppendLine(" AND  MSTR_Drone.AccountID=" + Util.getAccountID() + "");
-                }                           
-                SQL.Append(SQLFilter);
+        SQLFilter.AppendLine("AND  DroneFlight.BoundaryCritical > 0");
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+          SQLFilter.AppendLine(" AND  MSTR_Drone.AccountID=" + Util.getAccountID() + "");
+      }                           
+      SQL.Append(SQLFilter);
       return SQL.ToString();
     }//public String getFlightReportSQL()
 
@@ -388,5 +390,5 @@ GROUP  BY
     }//public String getPilots
 
     /* End of Class closing brackets*/
-  }//public class Report
-}//namespace eX_Portal.exLogic
+    }//public class Report
+  }//namespace eX_Portal.exLogic
