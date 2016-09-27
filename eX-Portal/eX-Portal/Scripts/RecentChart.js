@@ -79,7 +79,7 @@ function OnSuccess_(reponse) {
         xLabel[value] = name;
         if (LastAccountID != data.AccountID)
         {
-            Hdata = Hdata + '<td > <span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
+          Hdata = Hdata + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
         }
         LastAccountID = data.AccountID;
 
@@ -254,7 +254,10 @@ function initChart() {
        
         xAxis: {
             min: 0,
-            max:max,
+            max: max,
+            title: {
+              text: 'UAS Name'
+            },
             
             categories: category,
             
@@ -405,6 +408,9 @@ function initChartTotalFlight() {
             min: 0,
             max:max,
             categories: category,
+            title: {
+              text: 'UAS Name'
+            },
 
             crosshair: true,
             scrollbar:scrollData,
