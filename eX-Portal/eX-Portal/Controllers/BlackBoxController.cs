@@ -650,7 +650,12 @@ namespace eX_Portal.Controllers {
             string StartDate = Request.Form["hdnRentStartDate"];
             string tAmount = Request.Form["hdnTotalAmount"];
             string DroneID = Request.Form["DroneID"];
-
+            if ((Convert.ToDateTime(Btx.RentEndDate)) < (Convert.ToDateTime(StartDate)))
+            {
+                ModelState.AddModelError("RentEndDate", "Rent End Date should be greater than Start Date!!");
+                Btx.BBStatus = "IN";
+                return View(Btx);
+            }
             string sDate = Convert.ToDateTime(StartDate).ToString("yyyy/MM/dd");
             string eDate = Convert.ToDateTime(Btx.RentEndDate).ToString("yyyy/MM/dd");
 
@@ -728,16 +733,29 @@ namespace eX_Portal.Controllers {
         {
            Nullable<int> DroneID = Btx.DroneID;
             Nullable<int> BlackBoxID = Btx.BlackBoxID;
-
+            ModelState.Remove("Amount");
             if (Btx.DroneID < 1 || Btx.DroneID == null)
+            {
                 ModelState.AddModelError("DroneID", "You must select a Drone.");
-            //if (Util.IsAssignToDrone(DroneID, BlackBoxID))
-            //{
-            //    ModelState.AddModelError("BlackBoxID", "Black Box Already Assigned to This  Drone !");
-            //}
+                Btx.BBStatus = "OUT";
+                return View(Btx);
+            }
+
+            if ((Btx.RentStartDate==null)||(Btx.RentEndDate==null))
+            {
+                ModelState.AddModelError("RentStartDate", "Please select both dates!!");
+                Btx.BBStatus = "OUT";
+                return View(Btx);
+            }
+            
             string sDate = Convert.ToDateTime(Btx.RentStartDate).ToString("yyyy/MM/dd");
             string eDate = Convert.ToDateTime(Btx.RentEndDate).ToString("yyyy/MM/dd");
-            
+            if (Convert.ToDateTime(Btx.RentEndDate).Date < Convert.ToDateTime(Btx.RentStartDate).Date)
+            {
+                ModelState.AddModelError("RentEndDate", "Rent end date should be greater than rent start date!!");
+                Btx.BBStatus = "OUT";
+                return View(Btx);
+            }
             string SQL = "insert into blackboxtransaction(DroneID,BBstatus,Note,createdby,Blackboxid,amount,rentamount,RentStartDate,RentEndDate) values("+Btx.DroneID +",'OUT','" + Btx.Note + "'," + Util.getLoginUserID() + "," +BlackBoxID + "," + Util.toInt(Btx.Amount) + "," + Util.toInt(Btx.RentAmount) + ",'"+ sDate + "','"+ eDate +"')";
             //  string SQL = "update BlackBoxTransaction set DroneID = '0', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "' where ID = " + Btx.ID;
 

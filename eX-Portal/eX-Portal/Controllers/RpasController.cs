@@ -1085,8 +1085,10 @@ namespace eX_Portal.Controllers
                 if (flightsetupvm.GcaApproval.GroundStaffUserId < 1 || flightsetupvm.GcaApproval.GroundStaffUserId == null)
                  //   return RedirectToAction("NoAccess", "Home");
                   return "A Ground staff should be selected.";
-               
-                    if (flightsetupvm.camera == null)
+                if (flightsetupvm.GcaApproval.ApprovalName == null)
+                    return "Please enter approval name.";
+
+                if (flightsetupvm.camera == null)
                 {
                     if (flightsetupvm.GcaApproval.CameraId == null)
                         flightsetupvm.GcaApproval.CameraId = 0;
