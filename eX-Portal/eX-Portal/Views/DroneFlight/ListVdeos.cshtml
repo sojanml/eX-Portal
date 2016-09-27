@@ -59,7 +59,14 @@
                         type: "GET",
                         url: href,
                         success: function (msg) {
-                            $("#map-video_" + id).slideUp();
+                            if (msg == "Access Denied")
+                            {
+                                location.href = "/Home/NoAccess"
+                            }
+                            else
+                            {
+                                $("#map-video_" + id).slideUp();
+                            }                            
                         }
                     });
                 }
