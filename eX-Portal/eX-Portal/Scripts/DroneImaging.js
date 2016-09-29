@@ -54,11 +54,14 @@ $(document).ready(function () {
 
         $("#dialog").dialog('open');
     });
+    //$(document).on('click', '#GPS-Images', function (e) {
+    //    popup.slideUp();
+    //});
 
 
     $(':file').change(AddToUploadQueue);
 
-   
+  
     //initialize();
 
 });
@@ -71,10 +74,11 @@ function showimg(img)
     new_image.src = img.getAttribute('src').replace(".t.png", ".jpg");
 
     var newlink = document.createElement('a');
+    //document.onclick(newlink.setAttribute('href', ''));
     newlink.text = "close";
     newlink.setAttribute('href', '');
     var popup = document.createElement("div");
-    popup.style.cssText = "background:lightgrey;position:absolute;border-radius: 6px;padding:50px 30px 50px 30px;height:50%; width:50%;margin-left:-350px;top:200px;left:50%;bottom: 125%;";
+    popup.style.cssText = "position:absolute;border-radius: 6px;padding:50px 30px 50px 30px;height:50%; width:50%;margin-left:-350px;top:200px;left:50%;bottom: 125%;";
     popup.appendChild(newlink);
     popup.appendChild(new_image);
 
