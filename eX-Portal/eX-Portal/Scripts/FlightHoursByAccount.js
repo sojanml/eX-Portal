@@ -109,7 +109,13 @@ function initChartsMonthly() {
 
             },
             xAxis: {
-                categories: MonthData
+              categories: MonthData,
+              title: {
+                text: 'Month',
+                style: {
+                  color: 'black'
+                }
+              }
             },
             yAxis: [{ // Primary yAxis
                 tickPixelInterval: 50,

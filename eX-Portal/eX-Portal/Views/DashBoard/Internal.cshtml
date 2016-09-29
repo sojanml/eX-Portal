@@ -101,17 +101,19 @@
 
 
 
-    <script type="text/javascript" src="~/Scripts/DashBoardAlertChart.js"></script>
+   
     @*<script src="https://code.highcharts.com/highcharts.js"></script>*@
     <script src="http://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script type="text/javascript" src="~/Scripts/PilotLogChart.js"></script>
     <script type="text/javascript" src="~/Scripts/RecentChart.js"></script>
     <script type="text/javascript" src="~/Scripts/FlightHoursByAccount.js"></script>
+<script type="text/javascript" src="~/Scripts/DashBoardAlertChart.js"></script>
 
     @{
-        Html.AddJavaScript("//maps.google.com/maps/api/js?sensor=false");
-        Html.AddJavaScript("/Scripts/infobox.js");
-        Html.AddJavaScript("/Scripts/HomeMap.js");
-        Html.AddJavaScript("/Scripts/Chart.js");
+      Html.AddJavaScript("//maps.google.com/maps/api/js?sensor=false");
+      Html.AddJavaScript("/Scripts/Chart.js");
+      Html.AddJavaScript("/Scripts/infobox.js");
+      Html.AddJavaScript("/Scripts/HomeMap.js");
+
     }
