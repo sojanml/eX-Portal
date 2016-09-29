@@ -326,7 +326,7 @@ namespace eX_Portal.Controllers {
 
     // GET: Parts/Edit/5
     public ActionResult Edit(int id) {
-      //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Edit Blackbox";
       ViewBag.IsAESVisible = false;
       if (exLogic.User.hasAccess("BLACKBOX.AES"))
@@ -344,7 +344,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Edit(MSTR_BlackBox BB) {
       try {
         // TODO: Add update logic here
-        //if (!exLogic.User.hasAccess("BlackBox.EDIT")) return RedirectToAction("NoAccess", "Home");
+        if (!exLogic.User.hasAccess("BlackBox.EDIT")) return RedirectToAction("NoAccess", "Home");
         if (ModelState.IsValid) {
           ViewBag.Title = "Edit BlackBox";
           BB.CreatedBy = Util.getLoginUserID();
@@ -454,7 +454,7 @@ namespace eX_Portal.Controllers {
 
     // GET: BlackBox/Issue/5
     public ActionResult Rental([Bind(Prefix = "ID")] int approvalid = 0) {
-      //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.RENT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Blackbox Rental";
       var dronedet = (from d in db.GCA_Approval
                       where d.ApprovalID == approvalid
@@ -478,6 +478,7 @@ namespace eX_Portal.Controllers {
         [HttpPost]
         public ActionResult Rental(BlackBoxTransaction BBTransaction)
         {
+            if (!exLogic.User.hasAccess("BLACKBOX.RENT")) return RedirectToAction("NoAccess", "Home");
             ModelState.Remove("Note");
             ModelState.Remove("VerifyCode");
             if (ModelState.IsValid)
@@ -625,6 +626,7 @@ namespace eX_Portal.Controllers {
 
         public ActionResult ReceiveBlackBox([Bind(Prefix = "ID")] int BlackBoxTransID = 0)
         {
+            if (!exLogic.User.hasAccess("BLACKBOX.RECEIVE")) return RedirectToAction("NoAccess", "Home");
             BlackBoxTransaction btx = new BlackBoxTransaction();
             if (BlackBoxTransID != 0)
             {
@@ -647,6 +649,7 @@ namespace eX_Portal.Controllers {
         [HttpPost]
         public ActionResult ReceiveBlackBox(BlackBoxTransaction Btx)
         {
+            if (!exLogic.User.hasAccess("BLACKBOX.RECEIVE")) return RedirectToAction("NoAccess", "Home");            
             string StartDate = Request.Form["hdnRentStartDate"];
             string tAmount = Request.Form["hdnTotalAmount"];
             string DroneID = Request.Form["DroneID"];
