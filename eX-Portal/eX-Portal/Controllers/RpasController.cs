@@ -1337,7 +1337,7 @@ namespace eX_Portal.Controllers
                                                 SQL = @"Update 
                                     [GCA_Approval] 
                                   set 
-                                    StartDate ='" + StartDate.ToString("yyyy-MM-dd") + @"',
+                                    StartDateE ='" + StartDate.ToString("yyyy-MM-dd") + @"',
                                     EndDate = '" + EndDate.ToString("yyyy-MM-dd") + @"',
                                     Coordinates  = '" + Coordinates + @"',
                                     Polygon=geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
@@ -1705,15 +1705,17 @@ namespace eX_Portal.Controllers
                 //if (DCAAFlightsetupvm.GcaApproval.GroundStaffUserId < 1 || DCAAFlightsetupvm.GcaApproval.GroundStaffUserId == null)
                 //    //   return RedirectToAction("NoAccess", "Home");
                 //    return "A Ground staff should be selected.";
-
+                
                 DateTime todaydate = System.DateTime.Now;
                 String SQL = String.Empty;
                 String SQL1 = String.Empty;
+
                 var StartDate = (DCAAFlightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(-1) : (DateTime)DCAAFlightsetupvm.GcaApproval.StartDate);
                 var EndDate = (DCAAFlightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(90) : (DateTime)DCAAFlightsetupvm.GcaApproval.EndDate);
                 var MinAltitude = (DCAAFlightsetupvm.GcaApproval.MinAltitude == null ? 0 : DCAAFlightsetupvm.GcaApproval.MinAltitude);
                 var MaxAltidute = (DCAAFlightsetupvm.GcaApproval.MaxAltitude == null ? 40 : DCAAFlightsetupvm.GcaApproval.MaxAltitude);
-
+                if((StartDate<todaydate.AddDays(-1)) || (EndDate< todaydate.AddDays(-1)))
+                    return "Please Select Correct Date..";
 
                 int ApprovalID = DCAAFlightsetupvm.GcaApproval.ApprovalID;
                 String ApprovalName = DCAAFlightsetupvm.GcaApproval.ApprovalName;
@@ -1765,8 +1767,8 @@ namespace eX_Portal.Controllers
             '" + Coordinates + @"',
             geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
             GETDATE(),
-            " + Session["UserID"] + "," +
-                        DCAAFlightsetupvm.GcaApproval.DroneID + @",
+            " + Session["UserID"] + @",
+         ' " + DCAAFlightsetupvm.GcaApproval.DroneID + @"',
             '" + DCAAFlightsetupvm.GcaApproval.EndTime + @"',
             '" + DCAAFlightsetupvm.GcaApproval.StartTime + @"',
             50,
