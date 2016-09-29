@@ -58,36 +58,60 @@ $(document).ready(function () {
 
     $(':file').change(AddToUploadQueue);
 
+   
     //initialize();
 
 });
 
 function showimg(img)
 {
-    var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
-    $('#dialog').append('<img id="abc" src="' + ActualSrc + '" align="center"/><br/>').append($(this).html());
-    $("#dialog").dialog({
-        autoOpen: false,
-        height: 'auto',
-        width: 'auto',
-        minheight: 'auto',
-        maxWidth: 'auto',
-        modal: true,
-        droppable: false,
-       
-        open: function (event, ui) { 
-            $('#dialog').bind('click', function () {
-                $('#dialog').dialog('close');
-                $("img#abc").remove();
-            });
-        }
-    });
+    //var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
+    //$('#dialog').append('<img id="abc" src="' + ActualSrc + '" height="400px" width="400px"/><br/>').append($(this).html());
+    var new_image = document.createElement("img");
+    new_image.src = img.getAttribute('src').replace(".t.png", ".jpg");
 
-   
-    $(".ui-dialog-titlebar").hide();
-   
-    $("#dialog").dialog('open')
+    var newlink = document.createElement('a');
+    newlink.text = "close";
+    newlink.setAttribute('href', '');
+    var popup = document.createElement("div");
+    popup.style.cssText = "background:lightgrey;position:absolute;border-radius: 6px;padding:50px 30px 50px 30px;height:50%; width:50%;margin-left:-350px;top:200px;left:50%;bottom: 125%;";
+    popup.appendChild(newlink);
+    popup.appendChild(new_image);
 
+    document.body.appendChild(popup);
+    
+    //$(".imgetest").click(function () {
+    //    alert('fdsfdsf');
+    //    //   alert("dfdf");
+    //    //$("#dialog").dialog({
+    //    //    height:300,
+    //    //    width:300,
+    //    //    modal: true,
+    //    //    close: function (event, ui) {
+    //    //                $("img#abc").remove();
+    //    //            }
+    //    //});
+
+    //    //trying popup
+    //    var popup = document.createElement("div");
+    //    popup.style.cssText ="background:grey;position: relative;border-radius: 6px;height: 50%; width: 50%;margin-left: -80px;top:center;left:50%;bottom: 125%;modal:true";
+    //    popup.appendChild(new_image);
+    //    document.body.appendChild(popup);
+    //});
+    //$("#dialog").dialog('open');
+    //$("#dialog").dialog({
+    //    autoOpen: false,
+    //    maxWidth: 600,
+    //    maxHeight: 500,
+    //    width: 1000,
+    //    height: 600,
+    //    modal: true, buttons: {     
+    //    },
+    //    close: function (event, ui) {
+    //        $("img#abc").remove();
+    //    }
+    //});
+    //$("#dialog").dialog('open');
 }
 
 

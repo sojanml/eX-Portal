@@ -7,7 +7,7 @@
 }
 
 
-<div id="dialog" title="Image"></div>
+<div id="dialog" ></div>
 @*<h2>Drone Images</h2>*@
 <ul id="GPS-Images">
     @foreach (var item in Model)
@@ -19,8 +19,8 @@
             <div class="download-icon"><a href="/upload/drone/@DroneName/@DroneID/@item.DocumentName" download><span class="download icon">&#xf019;</span></a></div>
 
         }
-            <div  class="thumbnail">
-            <img onclick="showimg(this)" id="@item.ID" width="50px" height="50px" src="/upload/drone/@DroneName/@DroneID/@item.DocumentName.Replace(".jpg", ".t.png")" />    
+            <div class="thumbnail">
+            <img  id="@item.ID" onclick="showimg(this)" width="50px" height="50px" class="imgetest" src="/upload/drone/@DroneName/@DroneID/@item.DocumentName.Replace(".jpg", ".t.png")" />      
             </div>
             
         </li>
@@ -44,13 +44,6 @@
     <script type="text/javascript">
       var UploadDroneURL = '@Url.Action("UploadDroneFile","Drone", new { ID = ViewBag.DroneID, DocumentType="Drone Image"})';
         var DeleteDroneURL = '@Url.Action("DeleteDroneFile", "Drone",new { ID = ViewBag.DroneID, DocumentType="Drone Image"})';
-
-        $(document).ready(function () {
-            $("imgenlarge").click(function () {
-           
-            
-        });
-                });
 
       @*var GpsTags = [
       @foreach (var item in Model) {<text>
