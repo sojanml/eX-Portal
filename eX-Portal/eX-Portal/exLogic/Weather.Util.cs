@@ -99,9 +99,7 @@ namespace eX_Portal.exLogic {
     }
      
     private static String DownloadWeatherInfo(String Country, String City, String CacheFile) {
-      String WebURL = "http" + 
-        "://api.worldweatheronline.com/premium/v1/weather.ashx?key=fea5347e9616488ab8760228163107" +
-        "&q=" + City + "," + Country + "&format=json&num_of_days=5";
+      String WebURL = Exponent.WeatherAPI + "&q=" + City + "," + Country;
       using(var webClient = new System.Net.WebClient()) {
         webClient.Encoding = System.Text.Encoding.UTF8;
         String json2 = webClient.DownloadString(WebURL);

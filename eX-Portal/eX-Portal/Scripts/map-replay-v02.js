@@ -193,7 +193,6 @@ function fn_AdsbPoint(thisObj) {
     var Thump = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc.replace(".jpg", ".t.png");
     var DocURL = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc;
     TD_Tumb = '<td><a target="_blank" href="' + DocURL + '"><img style="margin-right:10px; width:80px; height: auto;" src="' + Thump + '"></a></td>';
-
   }
   if (Title != '') {
     Title = '<b style="color:red">' + Title + '</b><br>';
@@ -302,12 +301,12 @@ function ShowHideADSB(btn) {
     _ADSBLayer.setValues({ map: map });
     _IsADSBShown = true;
     if (btn.length) btn.val("Hide ADS/B Data");
-    GetADSBData(0, 0);
+    getLocalADSB(); /*GetADSBData(0, 0);*/
     return;
   }
 
   _ADSBLayer = new ADSBOverlay({ map: map }, []);
-  GetADSBData(0, 0);
+  getLocalADSB(); /*GetADSBData(0, 0);*/
   if (btn.length) btn.val("Hide ADSB Data");
   
 }
@@ -316,9 +315,13 @@ function LiveADSData() {
   if (!_IsADSBShown) return;
   //var RangeLat = (HomePoint["Latitude"] - 1).toString() + ' ' + HomePoint["Latitude"].toString();
   //var RangeLon = (HomePoint["Longitude"]).toString() + ' ' + (HomePoint["Longitude"] + 1).toString();
-  GetADSBData(0, 0);
+  getLocalADSB(); /*GetADSBData(0, 0);*/
 }
 
+
+function getLocalADSB() {
+
+}
 
 
 function GetADSBData(RangeLat, RangeLon) {
