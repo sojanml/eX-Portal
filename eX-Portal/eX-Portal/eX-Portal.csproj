@@ -265,6 +265,7 @@
     <Compile Include="exLogic\DroneFlightSetup.cs" />
     <Compile Include="exLogic\ExifLib.cs" />
     <Compile Include="exLogic\GeoGrid.cs" />
+    <Compile Include="exLogic\GlobalVariables.cs" />
     <Compile Include="exLogic\HtmlHelperExtensions.cs" />
     <Compile Include="exLogic\Listing.cs" />
     <Compile Include="exLogic\qDetailView.cs" />
