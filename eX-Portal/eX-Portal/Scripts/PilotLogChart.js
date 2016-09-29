@@ -120,7 +120,10 @@ function initCharts() {
 
         xAxis: [{
            
-            categories: categoryPilot,
+          categories: categoryPilot,
+          title: {
+            text: 'Pilot Name'
+          },
             
             labels: {
                 rotation: -60,
@@ -140,7 +143,8 @@ function initCharts() {
 
                 style: {
                     color: Highcharts.getOptions().colors[2]
-                }
+                },
+
             },
             title: {
                 text: '                                   Last Flight Time (Minutes)',

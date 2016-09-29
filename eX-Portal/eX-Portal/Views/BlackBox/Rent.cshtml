@@ -79,10 +79,11 @@
                 </div>
             </div>
         </div>
-
+        <br />
         <h2>Rent Calculation</h2>
-        <div id="RentCalculation">Please select a blackbox from list for calculation...</div>
-        <div></div>
+        <div id="msg" style="font-size:small">Please select blackbox,rent start date and end date to view rent calculations...</div>
+        <div id="RentCalculation"></div>
+        <div><br /></div>
         <div class="two-column-form-group">
           
             <div class="form-group">
@@ -110,7 +111,7 @@
     var RentEndDate = null;
 
     $(document).ready(function () {
-      @*$('#ID').on("change", function () {
+        @*$('#ID').on("change", function () {
         var URL = '@Url.Action("BlackBoxInfo")' + "/" + $(this).val();
         $('#RecBlackBox :input').prop("disabled", true);
         $('#RentCalculation').slideUp();
@@ -118,10 +119,10 @@
           method: 'GET',
           url: URL
         }).done(ShowRentCalcualtion);
-      })//$('#ID').on("change")*@
-
+      })//$('#ID').on("change")*@                
+        $('#RentStartDate').val(fmtDt(new Date()));
+        $('#Amount').attr("disabled", "disabled");
         $('#RentEndDate').on("change", function () {
-            
             RentStartDate =new Date( FORM['RentStartDate'].value);            
             RentEndDate = new Date($(this).val());
            // RentEndDate = FORM['RentEndDate'].value;

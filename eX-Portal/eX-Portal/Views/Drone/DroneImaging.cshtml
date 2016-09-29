@@ -16,16 +16,16 @@
         <li>@if (ViewBag.Actions != "View")
         {
             <div class="delete-icon"><a href="#" class="delete" data-documentid="@item.ID" data-file="@item.DocumentName"><span class="delete icon">&#xf057;</span></a></div>
-            <div class="download-icon"><a href="/upload/drone/@DroneName/@DroneID/@item.DocumentName"><span class="download icon">&#xf019;</span></a></div>
+            <div class="download-icon"><a href="/upload/drone/@DroneName/@DroneID/@item.DocumentName" download><span class="download icon">&#xf019;</span></a></div>
 
         }
-            <div class="thumbnail">
-                <img  onclick="ShowImageDialog(this)" id="@item.ID"  width="50px" height="50px" src="/upload/drone/@DroneName/@DroneID/@item.DocumentName.Replace(".jpg", ".t.png")" />
+            <div  class="thumbnail">
+            <img onclick="showimg(this)" id="@item.ID" width="50px" height="50px" src="/upload/drone/@DroneName/@DroneID/@item.DocumentName.Replace(".jpg", ".t.png")" />    
             </div>
             
         </li>
     }
-
+    
 </ul>
 <div style="clear:both"></div>
 @if (ViewBag.Actions != "View")
@@ -43,7 +43,15 @@
 @section Scripts{
     <script type="text/javascript">
       var UploadDroneURL = '@Url.Action("UploadDroneFile","Drone", new { ID = ViewBag.DroneID, DocumentType="Drone Image"})';
-      var DeleteDroneURL = '@Url.Action("DeleteDroneFile", "Drone",new { ID = ViewBag.DroneID, DocumentType="Drone Image"})';
+        var DeleteDroneURL = '@Url.Action("DeleteDroneFile", "Drone",new { ID = ViewBag.DroneID, DocumentType="Drone Image"})';
+
+        $(document).ready(function () {
+            $("imgenlarge").click(function () {
+           
+            
+        });
+                });
+
       @*var GpsTags = [
       @foreach (var item in Model) {<text>
         {
@@ -61,7 +69,7 @@
     </script>
 
     <script type="text/javascript">
-  @*var GeoMapURL = '@Url.Action("GetGeoTagInfo", "DroneFlight")';
+        @*var GeoMapURL = '@Url.Action("GetGeoTagInfo", "DroneFlight")';
   var  GetDroneURL='@Url.Action("GetDroneName", "DroneFlight")';*@
     </script>
     @*<script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>

@@ -8,33 +8,23 @@ var count = 0;
 var Pinfowindow = false;
 var FileDateUtc;
 $(document).ready(function () {
-
     $(document).on('click', 'a.delete', function (e) {
         e.preventDefault();
         DeleteFile($(this));
     });
-   
-
-
-
     $(document).on('click', 'img#ThumbNail', function (e) {
         count += 1;
         var img = document.getElementById('ThumbNail');
-
         var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
-
-
         $('#dialog').append('<img id="abc" src="' + ActualSrc + '" height="400px" width="400px"/><br/>').append($(this).html());
-
-
         $("#dialog").dialog({
             autoOpen: false,
-
             maxWidth: 600,
             maxHeight: 500,
             width: 1000,
             height: 600,
             modal: true,
+            
             buttons: {
                 "DownLoad": function () {
 
@@ -72,20 +62,40 @@ $(document).ready(function () {
 
 });
 
+function showimg(img)
+{
+    var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
+    $('#dialog').append('<img id="abc" src="' + ActualSrc + '" align="center"/><br/>').append($(this).html());
+    $("#dialog").dialog({
+        autoOpen: false,
+        height: 'auto',
+        width: 'auto',
+        minheight: 'auto',
+        maxWidth: 'auto',
+        modal: true,
+        droppable: false,
+       
+        open: function (event, ui) { 
+            $('#dialog').bind('click', function () {
+                $('#dialog').dialog('close');
+                $("img#abc").remove();
+            });
+        }
+    });
+
+   
+    $(".ui-dialog-titlebar").hide();
+   
+    $("#dialog").dialog('open')
+
+}
+
 
 
 function ShowImageDialog(img) {
-
-
-    
   
-
     var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
-
-
     $('#dialog').append('<img id="abc" src="' + ActualSrc + '" height="400px" width="400px"/><br/>').append($(this).html());
-
-
     $("#dialog").dialog({
         autoOpen: false,
 
@@ -93,8 +103,7 @@ function ShowImageDialog(img) {
         maxHeight: 500,
         width: 1000,
         height: 600,
-        modal: true,
-        buttons: {
+        modal: true, buttons: {
             "DownLoad": function () {
 
                 var ActualUrl = img.getAttribute('src').replace(".t.png", ".jpg");
@@ -305,7 +314,7 @@ function AddToThumbnail(theData) {
     var HTML = '  <li>\n' +
     '<div class="delete-icon"><a href="#" class="delete"    data-documentid="' + theID + '"  data-file="' + theData.addFile[0].name + '"><span class="delete icon">&#xf057;</span></a></div>\n' +
         '<div class="thumbnail">\n' +
-        '  <img idd="' + theID + '" onclick="ShowImageDialog(this)" width="50px" height="50px" src="' + Thump + '" />\n' +
+        '  <img id="' + theID + '" onclick="ShowImageDialog(this)" width="50px" height="50px" src="' + Thump + '" />\n' +
         '</div>\n' +
        
       '</li>\n';
