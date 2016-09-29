@@ -326,7 +326,7 @@ namespace eX_Portal.Controllers {
 
     // GET: Parts/Edit/5
     public ActionResult Edit(int id) {
-      //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Edit Blackbox";
       ViewBag.IsAESVisible = false;
       if (exLogic.User.hasAccess("BLACKBOX.AES"))
@@ -344,7 +344,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Edit(MSTR_BlackBox BB) {
       try {
         // TODO: Add update logic here
-        //if (!exLogic.User.hasAccess("BlackBox.EDIT")) return RedirectToAction("NoAccess", "Home");
+        if (!exLogic.User.hasAccess("BlackBox.EDIT")) return RedirectToAction("NoAccess", "Home");
         if (ModelState.IsValid) {
           ViewBag.Title = "Edit BlackBox";
           BB.CreatedBy = Util.getLoginUserID();
@@ -454,7 +454,7 @@ namespace eX_Portal.Controllers {
 
     // GET: BlackBox/Issue/5
     public ActionResult Rental([Bind(Prefix = "ID")] int approvalid = 0) {
-      //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.RENT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Blackbox Rental";
       var dronedet = (from d in db.GCA_Approval
                       where d.ApprovalID == approvalid
@@ -478,6 +478,7 @@ namespace eX_Portal.Controllers {
         [HttpPost]
         public ActionResult Rental(BlackBoxTransaction BBTransaction)
         {
+            if (!exLogic.User.hasAccess("BLACKBOX.RENT")) return RedirectToAction("NoAccess", "Home");
             ModelState.Remove("Note");
             ModelState.Remove("VerifyCode");
             if (ModelState.IsValid)
@@ -625,6 +626,7 @@ namespace eX_Portal.Controllers {
 
         public ActionResult ReceiveBlackBox([Bind(Prefix = "ID")] int BlackBoxTransID = 0)
         {
+            if (!exLogic.User.hasAccess("BLACKBOX.RECEIVE")) return RedirectToAction("NoAccess", "Home");
             BlackBoxTransaction btx = new BlackBoxTransaction();
             if (BlackBoxTransID != 0)
             {
@@ -647,10 +649,16 @@ namespace eX_Portal.Controllers {
         [HttpPost]
         public ActionResult ReceiveBlackBox(BlackBoxTransaction Btx)
         {
+            if (!exLogic.User.hasAccess("BLACKBOX.RECEIVE")) return RedirectToAction("NoAccess", "Home");            
             string StartDate = Request.Form["hdnRentStartDate"];
             string tAmount = Request.Form["hdnTotalAmount"];
             string DroneID = Request.Form["DroneID"];
-
+            if ((Convert.ToDateTime(Btx.RentEndDate)) < (Convert.ToDateTime(StartDate)))
+            {
+                ModelState.AddModelError("RentEndDate", "Rent End Date should be greater than Start Date!!");
+                Btx.BBStatus = "IN";
+                return View(Btx);
+            }
             string sDate = Convert.ToDateTime(StartDate).ToString("yyyy/MM/dd");
             string eDate = Convert.ToDateTime(Btx.RentEndDate).ToString("yyyy/MM/dd");
 
@@ -728,16 +736,29 @@ namespace eX_Portal.Controllers {
         {
            Nullable<int> DroneID = Btx.DroneID;
             Nullable<int> BlackBoxID = Btx.BlackBoxID;
-
+            ModelState.Remove("Amount");
             if (Btx.DroneID < 1 || Btx.DroneID == null)
+            {
                 ModelState.AddModelError("DroneID", "You must select a Drone.");
-            //if (Util.IsAssignToDrone(DroneID, BlackBoxID))
-            //{
-            //    ModelState.AddModelError("BlackBoxID", "Black Box Already Assigned to This  Drone !");
-            //}
+                Btx.BBStatus = "OUT";
+                return View(Btx);
+            }
+
+            if ((Btx.RentStartDate==null)||(Btx.RentEndDate==null))
+            {
+                ModelState.AddModelError("RentStartDate", "Please select both dates!!");
+                Btx.BBStatus = "OUT";
+                return View(Btx);
+            }
+            
             string sDate = Convert.ToDateTime(Btx.RentStartDate).ToString("yyyy/MM/dd");
             string eDate = Convert.ToDateTime(Btx.RentEndDate).ToString("yyyy/MM/dd");
-            
+            if (Convert.ToDateTime(Btx.RentEndDate).Date < Convert.ToDateTime(Btx.RentStartDate).Date)
+            {
+                ModelState.AddModelError("RentEndDate", "Rent end date should be greater than rent start date!!");
+                Btx.BBStatus = "OUT";
+                return View(Btx);
+            }
             string SQL = "insert into blackboxtransaction(DroneID,BBstatus,Note,createdby,Blackboxid,amount,rentamount,RentStartDate,RentEndDate) values("+Btx.DroneID +",'OUT','" + Btx.Note + "'," + Util.getLoginUserID() + "," +BlackBoxID + "," + Util.toInt(Btx.Amount) + "," + Util.toInt(Btx.RentAmount) + ",'"+ sDate + "','"+ eDate +"')";
             //  string SQL = "update BlackBoxTransaction set DroneID = '0', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "' where ID = " + Btx.ID;
 
