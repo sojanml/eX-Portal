@@ -528,6 +528,7 @@
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\AccountViewModel.cs" />
+    <Compile Include="ViewModel\AdsbData.cs" />
     <Compile Include="ViewModel\BlackBoxViewModel.cs" />
     <Compile Include="ViewModel\ChartAlertViewModel.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
