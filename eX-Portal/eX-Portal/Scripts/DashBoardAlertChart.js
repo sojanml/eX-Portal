@@ -18,8 +18,16 @@
       Boundary: 0,
       Proximity: 0
     };
-    var LastFlightAlert = TotalAlerts;
-    var ThisMonth = TotalAlerts;
+    var LastFlightAlert = {
+      Height: 0,
+      Boundary: 0,
+      Proximity: 0
+    };
+    var ThisMonth = {
+      Height: 0,
+      Boundary: 0,
+      Proximity: 0
+    };
     var Sum = {
       TotalAlert: 0,
       LastFlightAlert: 0,
@@ -36,6 +44,7 @@
         case "Height":
         case "Boundary":
         case "Proximity":
+          
           Sum.TotalAlert += data.TotalAlert;
           Sum.LastFlightAlert += data.LastFlightAlert;
           Sum.CurrentMonthAlert += data.CurrentMonthAlert;
@@ -45,7 +54,8 @@
 
 
     var ctx1 = $("canvas#TotalAlerts").get(0).getContext('2d');
-    var data1 = getChartData(TotalAlerts);
+   var data1 = getChartData(TotalAlerts);
+   
     ctx1.canvas.height = 210;  // setting height of canvas
     ctx1.canvas.width = 250; // setting width of canvas
     if (data1.length < 1) {
@@ -56,7 +66,7 @@
   
 
     var ctx2 = $("canvas#ThisMonthAlerts").get(0).getContext('2d');
-    var data2 = getChartData(ThisMonth);
+    var data2 = getChartData(ThisMonth);  
     ctx2.canvas.height = 210;  // setting height of canvas
     ctx2.canvas.width = 250; // setting width of canvas
     if (data2.length < 1) {
@@ -66,7 +76,7 @@
     }
 
     var ctx3 = $("canvas#LastFlightAlerts").get(0).getContext('2d');
-    var data3 = getChartData(LastFlightAlert);
+    var data3 = getChartData(LastFlightAlert);   
     ctx3.canvas.height = 210;  // setting height of canvas
     ctx3.canvas.width = 250; // setting width of canvas
     if (data3.length < 1) {
@@ -91,6 +101,7 @@
 
   function getChartData(TheData) {
 
+   
     if (TheData.Height == 0 && TheData.Boundary == 0 && TheData.Proximity == 0) {
       var Chart_Data = [];
       return Chart_Data;
@@ -100,11 +111,12 @@
     var Chart_Data = [
       {
         label: "Altitude",
-        value: TheData.Height,
+        value: TheData.Height,        
         color: "rgba(151,187,205,0.5)",
       }, {
         label: "Boundary",
         value: TheData.Boundary,
+       
         color: "#FF6384",
       }, {
         label: "Proximity",
@@ -119,21 +131,27 @@
 
   function getChartOptions() {
     return {
-      segmentShowStroke: true,
-      segmentStrokeColor: "#fff",
-      segmentStrokeWidth: 0,
-      animation: true,
-      animationSteps: 200,
-      animationEasing: "easeOutBounce",
-      animateRotate: true,
-      animateScale: false,
-      onAnimationComplete: null,
+      //segmentShowStroke: true,
+      //segmentStrokeColor: "/#fff",
+     // segmentStrokeWidth:3,
+      //animation: true,
+  
+    //  onAnimationComplete: null,
       labelFontFamily: "'Arial'",
       labelFontStyle: "normal",
-      labelFontSize: 12,
+      labelFontSize: 6,
       labelFontColor: "white",
       labelVisible: true,
-      onAnimationComplete: null
+     // segmentShowStroke: true,
+    //  segmentStrokeColor: "#fff",     
+     // animationSteps: 200,
+     // animationEasing: "easeOutBounce",
+     // animateRotate: true,
+     // animateScale: true,
+      responsive: true,
+     // maintainAspectRatio: true,
+     // scaleSteps: 60,
+     // onAnimationComplete: null
     };
   }
 
