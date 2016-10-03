@@ -8,15 +8,15 @@ namespace eX_Portal.ViewModel {
 
    
     public string FlightId { get; set; }
-    public string Heading { get; set; }
-    public string TailNumber { get; set; }
+    public string heading { get; set; }
+    public string ident { get; set; }
     public string FlightSource { get; set; }
     public string CallSign { get; set; }
-    public Nullable<double> Lon { get; set; }
-    public Nullable<double> Lat { get; set; }
-    public Nullable<double> Speed { get; set; }
-    public Nullable<double> Altitude { get; set; }
-    public string Adsbsdate { get; set; }
-    public  string CreatedDate { get; set; }
+    public Nullable<double> longitude { get; set; }
+    public Nullable<double> latitude { get; set; }
+    public Nullable<double> speed { get; set; }
+    public Nullable<double> altitude { get; set; }
+    public DateTime AdsbsDate { get; set; }
+    public  DateTime CreatedDate { get; set; }
   }
 }
