@@ -142,15 +142,15 @@
       labelFontSize: 6,
       labelFontColor: "white",
       labelVisible: true,
-     // segmentShowStroke: true,
-    //  segmentStrokeColor: "#fff",     
-     // animationSteps: 200,
-     // animationEasing: "easeOutBounce",
-     // animateRotate: true,
-     // animateScale: true,
+     segmentShowStroke: true,
+     segmentStrokeColor: "#fff",     
+      animationSteps: 200,
+      animationEasing: "easeOutBounce",
+      animateRotate: true,
+      animateScale: true,
       responsive: true,
-     // maintainAspectRatio: true,
-     // scaleSteps: 60,
+      maintainAspectRatio: true,
+      scaleSteps: 60,
      // onAnimationComplete: null
     };
   }

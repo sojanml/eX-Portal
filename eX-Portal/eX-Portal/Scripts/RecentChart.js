@@ -467,7 +467,7 @@ function initChartTotalFlight() {
             name: 'Total Flight Time',
             data: TotalFlightData,
             showInLegend: false,
-
+            minPointLength: .10,
             //----
             cursor: 'pointer',
             point: {
