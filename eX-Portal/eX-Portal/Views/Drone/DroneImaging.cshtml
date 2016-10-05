@@ -7,23 +7,19 @@
 }
 
 
-<div id="dialog" ></div>
+<div id="dialog"></div>
 @*<h2>Drone Images</h2>*@
 <ul id="GPS-Images">
     @foreach (var item in Model)
     {
-
-        <li>@if (ViewBag.Actions != "View")
+  <li>@if (ViewBag.Actions != "View")
         {
             <div class="delete-icon"><a href="#" class="delete" data-documentid="@item.ID" data-file="@item.DocumentName"><span class="delete icon">&#xf057;</span></a></div>
-            <div class="download-icon"><a href="/upload/drone/@DroneName/@DroneID/@item.DocumentName" download><span class="download icon">&#xf019;</span></a></div>
-
-        }
+            <div class="download-icon"><a href="/upload/drone/@DroneName/@DroneID/@item.DocumentName" download><span class="download icon">&#xf019;</span></a></div>   
+         }
             <div class="thumbnail">
-            <img  id="@item.ID" onclick="showimg(this)" width="50px" height="50px" class="imgetest" src="/upload/drone/@DroneName/@DroneID/@item.DocumentName.Replace(".jpg", ".t.png")" />      
-            </div>
-            
-        </li>
+            <img id="@item.ID" onclick="showimg(this)" width="50px" height="50px" padding="0px" margin="0" src="/upload/drone/@DroneName/@DroneID/@item.DocumentName.Replace(".jpg",".t.png")"/></div>
+     </li>
     }
     
 </ul>
