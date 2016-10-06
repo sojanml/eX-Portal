@@ -29,5 +29,6 @@ namespace eX_Portal.Models
         public Nullable<int> RecordType { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public string GroupName { get; set; }
+        public int Seq { get; set; }
     }
 }

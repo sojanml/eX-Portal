@@ -281,6 +281,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ADSBData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ApproalDetail.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -324,6 +327,9 @@
     <Compile Include="Models\DroneFlightVideo.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DroneGPSLog.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FlightInfo.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -334,6 +340,9 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ip2location.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LiveDrone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -381,6 +390,9 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MSTR_Menu.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MSTR_NoFlyZone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MSTR_Parts.cs">

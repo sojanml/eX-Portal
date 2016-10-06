@@ -55,5 +55,14 @@ namespace eX_Portal.Models
         public int ApprovalID { get; set; }
         public Nullable<decimal> MaxSpeed { get; set; }
         public Nullable<decimal> MaxAltitude { get; set; }
+        public Nullable<int> BoundaryCritical { get; set; }
+        public Nullable<int> BoundaryHigh { get; set; }
+        public Nullable<int> BoundaryWarning { get; set; }
+        public Nullable<int> HeightCritical { get; set; }
+        public Nullable<int> HeightHigh { get; set; }
+        public Nullable<int> HeightWarning { get; set; }
+        public Nullable<int> ProximityCritical { get; set; }
+        public Nullable<int> ProximityHigh { get; set; }
+        public Nullable<int> ProximityWarning { get; set; }
     }
 }

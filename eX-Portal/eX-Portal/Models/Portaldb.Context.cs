@@ -86,6 +86,10 @@ namespace eX_Portal.Models
         public virtual DbSet<BlackBoxTransaction> BlackBoxTransactions { get; set; }
         public virtual DbSet<ContentManagement> ContentManagements { get; set; }
         public virtual DbSet<SMSTable> SMSTables { get; set; }
+        public virtual DbSet<ADSBData> ADSBDatas { get; set; }
+        public virtual DbSet<DroneGPSLog> DroneGPSLogs { get; set; }
+        public virtual DbSet<MSTR_NoFlyZone> MSTR_NoFlyZone { get; set; }
+        public virtual DbSet<ip2location> ip2location { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

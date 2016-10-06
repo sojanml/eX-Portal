@@ -15,7 +15,8 @@ namespace eX_Portal.exLogic {
     static IEnumerable<SelectListItem> DropDownList = Enumerable.Empty<SelectListItem>();
     public static IEnumerable<SelectListItem> getListSQL(string SQL) {
       List<SelectListItem> SelectList = new List<SelectListItem>();
-      using(var ctx = new ExponentPortalEntities()) {
+      SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
+      using (var ctx = new ExponentPortalEntities()) {
         using(var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
@@ -37,7 +38,8 @@ namespace eX_Portal.exLogic {
     public static IEnumerable<SelectListItem> GetDropDowntList(string TypeField, string NameField, string ValueField, string SPName) {
       //  ctx=new ExponentPortalEntities();
       List<SelectListItem> SelectList = new List<SelectListItem>();
-      using(var ctx = new ExponentPortalEntities()) {
+      SelectList.Add(new SelectListItem { Text = "Please Select...", Value ="0" });
+      using (var ctx = new ExponentPortalEntities()) {
         using(var cmd = ctx.Database.Connection.CreateCommand()) {
 
           ctx.Database.Connection.Open();
