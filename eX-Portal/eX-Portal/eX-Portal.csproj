@@ -1364,6 +1364,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\rpas-user.js" />
+    <Content Include="Scripts\RpasApproval.js" />
     <Content Include="Scripts\RpasFlightSetup.js" />
     <Content Include="Scripts\RpasGCAAflight.js" />
     <Content Include="Scripts\rpasUpload.js" />
@@ -1765,6 +1766,8 @@
     <Content Include="Upload\temp\adsb.json" />
     <Content Include="Views\Rpas\FlightDCAARegister.cshtml" />
     <Content Include="Views\Rpas\FlightGCAARegister.cshtml" />
+    <Content Include="Views\Rpas\FlightAproval.cshtml" />
+    <Content Include="Views\Rpas\FlightApproval.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
