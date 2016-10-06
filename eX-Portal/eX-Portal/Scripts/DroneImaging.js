@@ -254,8 +254,21 @@ function processDeleteFile(Obj) {
 
 
 function SubmitFile(file) {
-    var Elem = $('#file_' + file.uploadKey);
+  var Elem = $('#file_' + file.uploadKey);
+
+  if (file.size > 1024 * 1024 * 2)
+  {
+    var HTML = "Please upload image files with size 2 Mb or  less.'";
+    Elem.addClass("error");
+    Elem.html(HTML);
+    setTimeout(function () {
+      Elem.slideUp().remove();
+
+    }, 2000);
+    return false;
+  }
     var HTML = 'Uploading ' + file.name + ' (' + Math.floor(file.size / 1024) + ' KB)';
+
     Elem.html(HTML);
     var formData = new FormData();
     var FileDate = file.lastModifiedDate.toUTCString();

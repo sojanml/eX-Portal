@@ -411,18 +411,35 @@ function initChartTotalFlight() {
             title: {
               text: 'UAS Name'
             },
+            labels: {
+              rotation: -60,
+              style: {
+                    
+                font: '8px'
+              }
+            },
 
             crosshair: true,
             scrollbar:scrollData,
         },
        
         yAxis: {
-            min: 0,
-           
-            tickInterval: 1,
+         
+          tickPixelInterval: 5,
+            // min:.01,
+          max:800,
+          type: 'logarithmic',
+            //minorTickInterval: 0.1,
+           // tickInterval: 10,
             title: {
                 text: 'Time  (Minutes)'
             }
+        
+        },
+        plotOptions: {
+          column: {
+            minPointLength: 5
+          }
         },
         legend: {
             display: null
@@ -467,7 +484,7 @@ function initChartTotalFlight() {
             name: 'Total Flight Time',
             data: TotalFlightData,
             showInLegend: false,
-
+            minPointLength: 1,
             //----
             cursor: 'pointer',
             point: {

@@ -29,5 +29,6 @@ namespace eX_Portal.Models
         public Nullable<int> AccountID { get; set; }
         public Nullable<int> ApprovalID { get; set; }
         public Nullable<int> DroneID { get; set; }
+        public Nullable<int> PilotID { get; set; }
     }
 }

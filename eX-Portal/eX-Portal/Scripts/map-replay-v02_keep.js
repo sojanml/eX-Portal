@@ -21,8 +21,7 @@ var DottedLine = [];
 
 var gADSBData = {};
 var ADSBTimer = null;
-var _ADSBAnimationSec = 5;
-var _ADSBAnimationTimer = null;
+var _ADSBAnimationSec = 10;
 
 var ADSBLine = {
   FlightID: "",
@@ -41,7 +40,7 @@ var ADSBLine = {
 
   setABSPos: function (lat, lng, alt) {
     this.EndPos = new google.maps.LatLng(lat, lng);
-    this.AltABS = alt * 0.3048;
+    this.AltABS = alt * 0.3048 * 100;
   },
   setStart: function (lat, lng, alt) {
     this.StartPos = new google.maps.LatLng(lat, lng);
@@ -189,7 +188,7 @@ function fn_AdsbPoint(thisObj) {
   ADSBLine.FlightID = FlightID;
   ADSBLine.setABSPos(Lat, Lng, Alt);
 
-  Alt = (isNaN(Alt) ? 0 : Alt * 1) + ' feet';
+  Alt = (isNaN(Alt) ? 0 : Alt * 100) + ' feet';
 
   if (Doc == '') {
     var Thump = '/Upload/Drone/' + DroneName + '/' + FlightID + '/' + Doc.replace(".jpg", ".t.png");
@@ -289,6 +288,8 @@ function ShowHideGeoTag(btn) {
 
 }
 
+var _ADSBAnimationTimer = null;
+
 function ShowHideADSB(btn) {
   if (btn.length) btn.val("Loading...");
 
@@ -314,7 +315,7 @@ function ShowHideADSB(btn) {
   getLocalADSB(); /*GetADSBData(0, 0);*/
   if (btn.length) btn.val("Hide ADSB Data");
   _ADSBAnimationTimer = window.setInterval(ADSBAnimation, _ADSBAnimationSec * 1000);
-
+  
 }
 
 function ADSBAnimation() {
@@ -329,12 +330,11 @@ function LiveADSData() {
 }
 
 
-
 function getLocalADSB() {
   var loc = _LocationPoints[_LocationIndex];
-  var RequestURL =
+  var RequestURL = 
     '/map/getadsbdata?' +
-    'ID=0' + /*loc['FlightMapDataID'] +*/
+    'ID=' + loc['FlightMapDataID'] + 
     '&Lat=' + loc['Latitude'] +
     '&Lng=' + loc['Longitude'];
 
@@ -391,7 +391,7 @@ function GetADSBData(RangeLat, RangeLon) {
       _ADSBLayer.setADSB(result.SearchBirdseyeInFlightResult.aircraft);
       //_ADSBLayer.setMap(map);
       if (ADSBTimer) window.clearTimeout(ADSBTimer);
-      ADSBTimer = window.setTimeout(LiveADSData, 10 * 1000);
+      ADSBTimer = window.setTimeout(LiveADSData, 60 * 1000);
     },
     error: function (data, text) { alert('Failed to fetch flight: ' + data); },
     dataType: 'jsonp',
@@ -401,23 +401,50 @@ function GetADSBData(RangeLat, RangeLon) {
 
 }
 
+
+function toRad(Num) {
+  return Num * Math.PI / 180;
+}
+
+function toDeg  (Num) {
+  return Num * 180 / Math.PI;
+}
+
+function destinationPoint (Point, brng, dist) {
+  dist = dist / 6371;
+  brng = toRad(brng);
+
+  var lat1 = toRad(Point.lat()), lon1 = toRad(Point.lng());
+
+  var lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist) +
+                       Math.cos(lat1) * Math.sin(dist) * Math.cos(brng));
+
+  var lon2 = lon1 + Math.atan2(Math.sin(brng) * Math.sin(dist) *
+                               Math.cos(lat1),
+                               Math.cos(dist) - Math.sin(lat1) *
+                               Math.sin(lat2));
+
+  if (isNaN(lat2) || isNaN(lon2)) return null;
+
+  return new google.maps.LatLng(toDeg(lat2), toDeg(lon2));
+}
+
 function ADSBOverlay(options, ADSBData) {
   this.setValues(options);
   this.markerLayer = $('<div />').addClass('overlay');
-  this.ADSBData = ADSBData;
-  this.ResetDraw = false;
+  this.ADSBData = ADSBData;  
+  this.IsSetADSB = false;
   this.DrawCount = 0;
   this.MovePointsToSecond = 0;
   this.setADSB = function (ADSBData) {
     this.ADSBData = ADSBData;
-    this.ResetDraw = true;
+    this.IsSetADSB = true;
     this.MovePointsToSecond = 0;
     this.draw();
-
   }
 };
-
 ADSBOverlay.prototype = new google.maps.OverlayView;
+
 
 ADSBOverlay.prototype.onAdd = function () {
   var $pane = $(this.getPanes().overlayImage); // Pane 3  
@@ -428,13 +455,12 @@ ADSBOverlay.prototype.onRemove = function () {
   this.markerLayer.remove();
 };
 
-ADSBOverlay.prototype.draw = function () {
+ADSBOverlay.prototype.draw = function (IsFromTimer) {
   var projection = this.getProjection();
   var zoom = this.getMap().getZoom();
   var fragment = document.createDocumentFragment();
-
   //this.markerLayer.empty(); // Empty any previous rendered markers  
-  if (this.ResetDraw) {
+  if (this.IsSetADSB) {
     this.DrawCount++;
   } else {
     this.MovePointsToSecond += _ADSBAnimationSec;
@@ -444,25 +470,29 @@ ADSBOverlay.prototype.draw = function () {
     var lat = this.ADSBData[i].latitude;
     var lng = this.ADSBData[i].longitude;
     var alt = this.ADSBData[i].altitude;
-    var title = this.ADSBData[i].CallSign.trim();
+    var title = this.ADSBData[i].CallSign;
     var heading = this.ADSBData[i].heading;
-
+    var DivID = 'adsb-' + title;
+    var LogMsg = "DivID: " + DivID + ", Sec: " + this.MovePointsToSecond
     // Determine a random location from the bounds set previously  
     var IconGeoPos = new google.maps.LatLng(lat, lng)
-    if (this.MovePointsToSecond > _ADSBAnimationSec) {
-      var DistaceTravelInSec = ((this.ADSBData[i].speed / 3600) * this.MovePointsToSecond) /* 1.60934 */;
-      //LogMsg = LogMsg + ", Distance: " + DistaceTravelInSec;
+    LogMsg = LogMsg + ", Location: " + lat + "," + lng;
+    if (this.MovePointsToSecond > 0) {
+      var DistaceTravelInSec = ((this.ADSBData[i].speed / 3600) * this.MovePointsToSecond) * 1.60934;
+      LogMsg = LogMsg + ", Distance: " + DistaceTravelInSec;
       IconGeoPos = destinationPoint(IconGeoPos, heading, DistaceTravelInSec);
     }
     var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
-    var DivID = 'adsb-' + title;
-    var IconColor = getIconColor(alt);
+
+    LogMsg = LogMsg + ", New Location: " + IconGeoPos.lat() + "," + IconGeoPos.lng();
+    console.log(LogMsg);
 
     if (gADSBData[DivID]) {
-      var $point = $('#' + DivID);
+      //console.log("DivID: " + DivID);
+      var $point = $('#' + DivID);      
       $point.animate({ left: IconLocation.x, top: IconLocation.y });
-      $point.find(".icon").css({ transform: 'rotate(' + (heading - 45) + 'deg)', color: IconColor});
-      $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });
+      $point.css({transform: 'rotate(' + (heading - 45) + 'deg)'});
+      $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });        
     } else {
       var $point = $(
           '<div  class="adsb-point" id="' + DivID + '" title="' + title + '" '
@@ -470,9 +500,8 @@ ADSBOverlay.prototype.draw = function () {
         + 'data-lng="' + lng + '" '
         + 'data-alt="' + alt + '" '
         + 'data-ident="' + title + '" '
-        + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
-        + '<span class="icon FlightIcon" style=" transform: rotate(' + (heading - 45) + 'deg); color: ' + IconColor + '">&#xf072;</span>'
-        + '<span class="flight-title" style="">' + title + '</span>' +
+        + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px; transform: rotate(' + (heading - 90) + 'deg);">'
+        + '<span class="icon FlightIcon" style="">&#xf072;</span>'
         + '</div>'
       );
 
@@ -480,7 +509,7 @@ ADSBOverlay.prototype.draw = function () {
       fragment.appendChild($point.get(0));
     }
 
-    if (this.ResetDraw) gADSBData[DivID] = this.DrawCount;
+    if (this.IsSetADSB) gADSBData[DivID] = this.DrawCount;
 
     if (ADSBLine.FlightID == title) {
       ADSBLine.setABSPos(lat, lng, alt);
@@ -491,22 +520,24 @@ ADSBOverlay.prototype.draw = function () {
   }//for (var i = 0)
 
   //if the item does not exists in 20 request, then remove it from the screen
-  if (this.ResetDraw) {
+  if (this.IsSetADSB) {
     var AllKeys = Object.keys(gADSBData);
     for (i = 0; i <= AllKeys.length; i++) {
       var TheKey = AllKeys[i];
-      if (this.DrawCount - gADSBData[TheKey] > 0) {
+      if (this.DrawCount - gADSBData[TheKey] > 5) {
         $('#' + TheKey).fadeOut();
         delete gADSBData[TheKey];
       }//if (gADSBData[key] > 20) 
     }//for (var key in gADSBData)
-  }//f (ResetDraw)
+  }//f (IsSetADSB)
 
   //Reset the draw, so it will not be counted.
-  this.ResetDraw = false;
+  this.IsSetADSB = false;
 
   // Now append the entire fragment from memory onto the DOM  
   this.markerLayer.append(fragment);
+
+
 };
 
 function GeoTagOverlay(options, GeoTagData) {
@@ -1125,52 +1156,4 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 
 function deg2rad(deg) {
   return deg * (Math.PI / 180)
-}
-
-
-function toRad(Num) {
-  return Num * Math.PI / 180;
-}
-
-function toDeg(Num) {
-  return Num * 180 / Math.PI;
-}
-
-function destinationPoint(Point, brng, dist) {
-  dist = dist / 6371;
-  brng = toRad(brng);
-
-  var lat1 = toRad(Point.lat()), lon1 = toRad(Point.lng());
-
-  var lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist) +
-                       Math.cos(lat1) * Math.sin(dist) * Math.cos(brng));
-
-  var lon2 = lon1 + Math.atan2(Math.sin(brng) * Math.sin(dist) *
-                               Math.cos(lat1),
-                               Math.cos(dist) - Math.sin(lat1) *
-                               Math.sin(lat2));
-
-  if (isNaN(lat2) || isNaN(lon2)) return null;
-
-  return new google.maps.LatLng(toDeg(lat2), toDeg(lon2));
-}
-
-function getIconColor(Height) {
-
-  var Colors = [
-  '#FF0000', //Red
-  '#FF9600', //Yellow
-  '#00ff10' //Green
-  ];
-  
-
-  if (Height < 1000) {
-    return Colors[0];
-  } else if (Height < 2000) {
-    return Colors[1];
-  } else {
-    return Colors[2];
-  }
-  
-
 }

@@ -43,10 +43,10 @@ namespace eX_Portal.Controllers {
         ViewBag.IsLive = false;
         ViewBag.Title = "Flight Map (Replay)";
         ViewBag.VideoStartAt = thisDrone.getVideoStartDate(FlightID);
-        ViewBag.PlayerURL = thisDrone.getPlayListURL(FlightID);      
+        ViewBag.PlayerURL = thisDrone.getPlayListURL(FlightID);
       }
       //if (IsLive == 1) IsLive = ViewBag.IsLive = true;
-      if(!exLogic.User.hasAccess("FLIGHT.VIDEOS")) { 
+      if (!exLogic.User.hasAccess("FLIGHT.VIDEOS")) {
         ViewBag.PlayerURL = String.Empty;
         ViewBag.VideoStartAt = String.Empty;
       }
@@ -55,7 +55,7 @@ namespace eX_Portal.Controllers {
 
     [HttpGet]
     public JsonResult GeoTag([Bind(Prefix = "ID")]  int FlightID) {
-      if(!exLogic.User.hasAccess("FLIGHT.MAP"))
+      if (!exLogic.User.hasAccess("FLIGHT.MAP"))
         return Json(null, JsonRequestBehavior.AllowGet);
       ExponentPortalEntities db = new ExponentPortalEntities();
       var thisDrone = new Drones();
@@ -72,7 +72,7 @@ namespace eX_Portal.Controllers {
           DroneName = DroneName,
           Latitude = n.Latitude,
           Longitude = n.Longitude,
-          UpLoadedDate = n.UploadedDate       
+          UpLoadedDate = n.UploadedDate
         }
         ).ToList();
 
@@ -85,136 +85,68 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("FLIGHT.MAP"))
         return Json(null, JsonRequestBehavior.AllowGet);
 
-      String BoxID = "";
-      ExponentPortalEntities db = new ExponentPortalEntities();
-      String SQL = @"select a.[ID]
-      ,b.[FlightId]
-      ,b.[Heading]
-      ,b.[TailNumber]
-      ,b.[FlightSource]
-      ,b.[CallSign]
-      ,b.[Lon]
-      ,b.[Lat]
-      ,b.[SpeedMph]
-      ,b.[Altitude]
-      ,b.[CreatedDate]
-      ,b.[AdsbDate]
-      ,b.[BoxID]
- from AdsbFlightData a left
- join AdsbHistory b
-on a.HistoryID = b.ID
-where a.[FlightMapDataId]=" + FlightMapID;
-
-
       List<AdsbData> AdsbRecords = new List<AdsbData>();
       using (SqlConnection MainDBcon = new SqlConnection(strConnection)) {
         MainDBcon.Open();
+        String SQL = "SELECT Count(*) FROM AdsbFlightData Where [FlightMapDataId]=" + FlightMapID;
+        int HistoryCount = 0;
+        using (var cmd = new SqlCommand(SQL, MainDBcon)) {
+          var TheCount = cmd.ExecuteScalar();
+          int.TryParse(TheCount.ToString(), out HistoryCount);
+        }
+        if (HistoryCount > 0) {
+          SQL = @"select 
+            a.[ID], b.[FlightId], b.[Heading], b.[TailNumber],
+            b.[FlightSource],b.[CallSign],
+            b.[Lon],b.[Lat],b.[SpeedMph],b.[Altitude],
+            b.[CreatedDate],b.[AdsbDate],b.[BoxID]
+           from AdsbFlightData a left
+           join AdsbHistory b
+            on a.HistoryID = b.ID
+          where a.[FlightMapDataId]=" + FlightMapID;
+        } else {
+          String BoxID = String.Empty;
+
+          //finding box id using lat and long
+          SQL = @"SELECT [BoxID]      
+            FROM [AdsbBoundingBox]
+            WHERE  (BottomLat>=" + Lat + " and TopLat<=" + Lat + " )and " +
+                  "(LeftLon<=" + Lng + " and RightLon>=" + Lng + ")";
+          using (var cmd = new SqlCommand(SQL, MainDBcon)) {
+            var TheBoxID = cmd.ExecuteScalar();
+            BoxID = TheBoxID == null ? String.Empty : TheBoxID.ToString();
+          }
+          SQL = @"select
+            [FlightId], [Heading], [TailNumber],[FlightSource],[CallSign],
+            [Lon],[Lat],[SpeedMph],[Altitude],
+            [CreatedDate],[AdsbDate],[BoxID]
+          from 
+            adsblive 
+          where 
+            boxid='" + BoxID + "'";
+        }
 
         using (var cmd = new SqlCommand(SQL, MainDBcon)) {
-
           using (var sdr = cmd.ExecuteReader()) {
             while (sdr.Read()) {
               AdsbData Adsb_Data = new AdsbData();
               Adsb_Data.FlightId = sdr["FlightId"].ToString();
-              Adsb_Data.Heading = sdr["Heading"].ToString();
-              Adsb_Data.TailNumber = sdr["TailNumber"].ToString();
+              Adsb_Data.heading = sdr["Heading"].ToString();
+              Adsb_Data.ident = sdr["TailNumber"].ToString();
               Adsb_Data.FlightSource = sdr["FlightSource"].ToString();
               Adsb_Data.CallSign = sdr["CallSign"].ToString();
-              Adsb_Data.Lon = Util.toDouble(sdr["Lon"].ToString());
-              Adsb_Data.Lat = Util.toDouble(sdr["Lat"].ToString());
-              Adsb_Data.Speed = Util.toDouble(sdr["SpeedMph"].ToString());
-              Adsb_Data.Altitude = Util.toDouble(sdr["Altitude"].ToString());
-              Adsb_Data.CreatedDate = sdr["CreatedDate"].ToString();
-              Adsb_Data.Adsbsdate =sdr["AdsbDate"].ToString();
+              Adsb_Data.longitude = Util.toDouble(sdr["Lon"].ToString());
+              Adsb_Data.latitude = Util.toDouble(sdr["Lat"].ToString());
+              Adsb_Data.speed = Util.toDouble(sdr["SpeedMph"].ToString());
+              Adsb_Data.altitude = Util.toDouble(sdr["Altitude"].ToString());
+              Adsb_Data.CreatedDate = sdr.GetDateTime(sdr.GetOrdinal("CreatedDate"));
+              Adsb_Data.AdsbsDate = sdr.GetDateTime(sdr.GetOrdinal("AdsbDate"));
               AdsbRecords.Add(Adsb_Data);
-            }
-          }
-        }
-
-        //if not found in the hsitory table
-
-        if (AdsbRecords.Count() == 0) {
-
-          //finding box id using lat and long
-          SQL = @" SELECT 
-                               [BoxID]      
-                 FROM [AdsbBoundingBox]
-                 WHERE  (BottomLat>=" + Lat + " and TopLat<=" + Lat + " )and " +
-                         "(LeftLon<=" + Lng + " and RightLon>=" + Lng + ")";
-          using (SqlConnection sqlExp = new SqlConnection(strConnection)) {
-            sqlExp.Open();
-
-            SqlCommand Cmd = new SqlCommand(SQL, sqlExp);
-            SqlDataReader RS = Cmd.ExecuteReader();
-
-            if (RS.Read()) {
-              BoxID = RS["BoxID"].ToString();       
-
-
-
-
-            }//if read
-
-
-            RS.Close();
-            Cmd.Dispose();
-
-          }//using
-
-
-          //if box id exist
-          if (BoxID != "") {
-            SQL = @"select
-            [FlightId]
-           ,[Heading]
-           ,[TailNumber]
-           ,[FlightSource]
-           ,[CallSign]
-           ,[Lon]
-           ,[Lat]
-           ,[SpeedMph]
-           ,[Altitude]
-           ,[CreatedDate]
-      ,[AdsbDate]
-      ,[BoxID]
-       from adsblive where boxid='" + BoxID + "'";
-
-
-            using (var cmd = new SqlCommand(SQL, MainDBcon)) {
-
-              using (var sdr = cmd.ExecuteReader()) {
-                while (sdr.Read()) {
-                  AdsbData Adsb_Data = new AdsbData();
-                  Adsb_Data.FlightId = sdr["FlightId"].ToString();
-                  Adsb_Data.Heading = sdr["Heading"].ToString();
-                  Adsb_Data.TailNumber = sdr["TailNumber"].ToString();
-                  Adsb_Data.FlightSource = sdr["FlightSource"].ToString();
-                  Adsb_Data.CallSign = sdr["CallSign"].ToString();
-                  Adsb_Data.Lon = Util.toDouble(sdr["Lon"].ToString());
-                  Adsb_Data.Lat = Util.toDouble(sdr["Lat"].ToString());
-                  Adsb_Data.Speed = Util.toDouble(sdr["SpeedMph"].ToString());
-                  Adsb_Data.Altitude = Util.toDouble(sdr["Altitude"].ToString());
-                  Adsb_Data.CreatedDate = sdr["CreatedDate"].ToString();
-                  Adsb_Data.Adsbsdate = sdr["AdsbDate"].ToString();
-                  AdsbRecords.Add(Adsb_Data);
-                }
-              }
-            }
-
-
-          }//if boxid
-
-
-
-          }//if count
-
-
-
-
-
-
-        return Json(AdsbRecords, JsonRequestBehavior.AllowGet);
-      }
+            }//while (sdr.Read())
+          }//using (var sdr = cmd.ExecuteReader())
+        }//using (var cmd = new SqlCommand(SQL, MainDBcon))
+      }//using (SqlConnection MainDBcon = new SqlConnection(strConnection))
+      return Json(AdsbRecords, JsonRequestBehavior.AllowGet);
     }
 
     [HttpGet]
@@ -226,7 +158,7 @@ where a.[FlightMapDataId]=" + FlightMapID;
       Response.ContentType = "text/xml";
       return GridInfo.ToString();
     }
- 
+
 
     public String RFID([Bind(Prefix = "ID")]String RFID = "") {
       String SQL = @"SELECT 
@@ -276,7 +208,7 @@ where a.[FlightMapDataId]=" + FlightMapID;
           MSTR_Drone.DroneID = DroneFlight.DroneID";
       if (!exLogic.User.hasAccess("DRONE.VIEWALL")) SQL = SQL + @" AND
           MSTR_Drone.AccountID = " + AccountID;
-      SQL= SQL + @"
+      SQL = SQL + @"
         LEFT JOIN PortalAlert_User ON
           PortalAlert_User.AlertID = PortalAlert.AlertID and
           PortalAlert_User.UserID =  " + id + @"
@@ -359,7 +291,7 @@ where a.[FlightMapDataId]=" + FlightMapID;
 
 
     public ActionResult PayLoadIndoor([Bind(Prefix = "ID")] String FlightUniqueID = "") {
-      if (!exLogic.User.hasAccess("PAYLOAD.INDOOR")) return RedirectToAction("NoAccess", "Home"); 
+      if (!exLogic.User.hasAccess("PAYLOAD.INDOOR")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Indoor Payload Data";
       String SQL =
       @"SELECT DISTINCT
@@ -377,13 +309,13 @@ where a.[FlightMapDataId]=" + FlightMapID;
       //return View("PayLoadIndoor", new { ID = FlightUniqueID });
       var Rows = Util.getDBRows(SQL);
       ViewBag.FlightUniqueID = FlightUniqueID;
-        return View(Rows);
+      return View(Rows);
     }
 
     public ActionResult PayLoadIndoorShelf(String ShelfID, String FlightUniqueID) {
-    if (!exLogic.User.hasAccess("PAYLOAD.INDOOR")) return RedirectToAction("NoAccess", "Home");
-    String SQL =
-    @"SELECT
+      if (!exLogic.User.hasAccess("PAYLOAD.INDOOR")) return RedirectToAction("NoAccess", "Home");
+      String SQL =
+      @"SELECT
         [PayLoadMapData].[RFID],
         ISNULL(MSTR_Product.Product_Name, [PayLoadMapData].[RFID]) as ProductName
       FROM 
@@ -485,10 +417,9 @@ where a.[FlightMapDataId]=" + FlightMapID;
       WHERE
          FlightTime >= DATEADD(month,-1,GETDATE())";
 
-            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-            {
-                    SQL = SQL + " AND [MSTR_Drone].AccountID =" + Util.getAccountID();
-            }
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+        SQL = SQL + " AND [MSTR_Drone].AccountID =" + Util.getAccountID();
+      }
       var LiveDrones = Util.getDBRows(SQL);
       //  LiveDrones.SQL = ;
       //string JsonData=Json(LiveDrones)
@@ -513,7 +444,7 @@ where a.[FlightMapDataId]=" + FlightMapID;
         var FlightMapDataList = Flights
           .OrderBy(x => x.FlightMapDataID)
           .Take(MaxRecords).ToList();
-        
+
         return Json(FlightMapDataList, JsonRequestBehavior.AllowGet);
         // return LiveDrones;
 
@@ -647,16 +578,14 @@ where a.[FlightMapDataId]=" + FlightMapID;
       // return LiveDrones;
     }
 
-        public JsonResult FlightInfo([Bind(Prefix = "ID")] int FlightID =0)
-        {
-            DroneFlight df = new DroneFlight();
-            using (ExponentPortalEntities ctx = new ExponentPortalEntities())
-            {
-                df = (from d in ctx.DroneFlights
-                                  where d.ID == FlightID
-                                  select d).FirstOrDefault();
-                 }
-            return Json(df, JsonRequestBehavior.AllowGet);
-        }
+    public JsonResult FlightInfo([Bind(Prefix = "ID")] int FlightID = 0) {
+      DroneFlight df = new DroneFlight();
+      using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
+        df = (from d in ctx.DroneFlights
+              where d.ID == FlightID
+              select d).FirstOrDefault();
+      }
+      return Json(df, JsonRequestBehavior.AllowGet);
+    }
   }
 }

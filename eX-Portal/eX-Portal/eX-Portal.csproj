@@ -53,7 +53,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FileStorageUtils">
-      <HintPath>..\..\..\..\..\..\..\FileStorageUtils\bin\Debug\FileStorageUtils.dll</HintPath>
+      <HintPath>..\..\..\..\..\Storage\FileStorageUtils.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
@@ -281,6 +281,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ADSBData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ApproalDetail.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -324,6 +327,9 @@
     <Compile Include="Models\DroneFlightVideo.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DroneGPSLog.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FlightInfo.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -334,6 +340,9 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ip2location.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LiveDrone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -381,6 +390,9 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MSTR_Menu.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MSTR_NoFlyZone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MSTR_Parts.cs">
@@ -1342,6 +1354,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\map-common.js" />
     <Content Include="Scripts\map-replay-v02.js" />
+    <Content Include="Scripts\map-replay-v02_keep.js" />
     <Content Include="Scripts\map.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\PayLoadMap.js" />

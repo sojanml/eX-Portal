@@ -57,6 +57,10 @@
         <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxTransaction" Width="1.5" PointX="0.75" PointY="21.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.ContentManagement" Width="1.5" PointX="3.375" PointY="21.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.SMSTable" Width="1.5" PointX="25.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ADSBData" Width="1.5" PointX="3.375" PointY="25.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneGPSLog" Width="1.5" PointX="9.375" PointY="25.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_NoFlyZone" Width="1.5" PointX="25.375" PointY="13.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ip2location" Width="1.5" PointX="25.375" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
