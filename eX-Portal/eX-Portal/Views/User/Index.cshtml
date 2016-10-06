@@ -31,7 +31,7 @@
         @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
       </div>
       <div class="editor-field">
-        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" ,oncopy = "return false", onpaste = "return false" })
         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
       </div>
 
@@ -46,4 +46,9 @@
       </div>
 
   }
+    <script type="text/javascript">
+   function preventBack(){window.history.forward();}
+    setTimeout("preventBack()", 0);
+    window.onunload=function(){null};
+    </script>
 </section>
