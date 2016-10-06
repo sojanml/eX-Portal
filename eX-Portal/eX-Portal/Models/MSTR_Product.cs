@@ -36,5 +36,6 @@ namespace eX_Portal.Models
         public string Model { get; set; }
         public Nullable<int> Year { get; set; }
         public string Color { get; set; }
+        public string SlotNo { get; set; }
     }
 }

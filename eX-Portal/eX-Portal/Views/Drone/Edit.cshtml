@@ -19,6 +19,7 @@
     </div>
     <div class="editor-field">
       @Html.DropDownListFor(model => model.Drone.AccountID, Model.OwnerList)
+      @Html.ValidationMessageFor(model => model.Drone.AccountID)
     </div>
 
     <div class="editor-label">
@@ -103,6 +104,18 @@
       $('#Table_SelectItemsForParts').on("click", "a.delete", function () {
         $(this).parent().parent().remove();
       })
+
+
+      $('#Drone_ManufactureId').on('change', function () {
+
+        if ($('#othermanu').prop('checked')) {
+
+          $('#Name').val("");
+          $('#divManuDetails').slideUp();
+          $('#othermanu').attr('checked', false);
+        }
+
+      });
     });
 
     function AutoCompleteSelect(event, ui) {

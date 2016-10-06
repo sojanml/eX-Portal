@@ -626,7 +626,8 @@ namespace eX_Portal.Controllers {
                 OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();           
       OwnerListSQL +=" ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
-        Drone = new MSTR_Drone(),
+        Drone = new MSTR_Drone() ,
+        
         OwnerList = Util.getListSQL(OwnerListSQL),
         UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
         ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
@@ -635,6 +636,7 @@ namespace eX_Portal.Controllers {
             //deleting if unwanted files exist in drone documents;
             string SQL = " Delete from droneDocuments where droneid=0 and documenttype='Drone Image'";
             Util.doSQL(SQL);
+     
 
             return View(viewModel);
     }
@@ -692,8 +694,12 @@ namespace eX_Portal.Controllers {
       if(!exLogic.User.hasAccess("DRONE.CREATE")) return RedirectToAction("NoAccess", "Home");      
       try {
         // TODO: Add insert logic here   
-       
-        if(DroneView.Name==null||DroneView.Name=="") {
+
+        ModelState.Remove("Drone.RpasSerialNo");
+        ModelState.Remove("Drone.RefName");
+        ModelState.Remove("Drone.MakeID");
+        ModelState.Remove("Drone.ModelID");
+        if (DroneView.Name==null||DroneView.Name=="") {
 
        
 
@@ -715,7 +721,7 @@ namespace eX_Portal.Controllers {
             ModelState.AddModelError("Drone.ModelName", "Maximum 100 characters are allowed.");
           }
         }
-
+      
         if (!ModelState.IsValid) {
 
           String OwnerListSQL =
@@ -731,6 +737,7 @@ namespace eX_Portal.Controllers {
           
           //PartsGroupList = Util.GetDropDowntList();
         };
+         
           return View(viewModel);
         }
         //insert into LUP_Drone table -- to insert the manufacturer then to use it for inserting to the other table       
@@ -1018,6 +1025,31 @@ namespace eX_Portal.Controllers {
       ModelState.Remove("Drone.RefName");
       ModelState.Remove("Drone.MakeID");
       ModelState.Remove("Drone.ModelID");
+
+
+      if (DroneView.Name == null || DroneView.Name == "") {
+
+
+
+        if (DroneView.Drone.ManufactureId < 1 || DroneView.Drone.ManufactureId == null) {
+          ModelState.AddModelError("Drone.ManufactureId", "Please Select Manufacture.");
+        }
+
+      }
+
+        if (DroneView.Drone.AccountID< 1 || DroneView.Drone.AccountID == null) {
+          ModelState.AddModelError("Drone.AccountID", "Please Select Owner.");
+        }
+
+        if (DroneView.Drone.CommissionDate == null) {
+          ModelState.AddModelError("Drone.CommissionDate", "Commission Date is Required.");
+        }
+
+        if (DroneView.Drone.ModelName != null) {
+          if (DroneView.Drone.ModelName.Length > 100) {
+            ModelState.AddModelError("Drone.ModelName", "Maximum 100 characters are allowed.");
+          }
+        }
       try {
         // TODO: Add update logic here
         if(ModelState.IsValid) {

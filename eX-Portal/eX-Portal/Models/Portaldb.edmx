@@ -5,6 +5,19 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ExponentPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ADSBData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ADSBFlightDate" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="ADSBFlightID" Type="nvarchar" MaxLength="30" />
+          <Property Name="ADSBLatitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="ADSBLongitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="ADSBIdent" Type="nvarchar" MaxLength="30" />
+          <Property Name="FlightID" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="ApproalDetail">
           <Key>
             <PropertyRef Name="ID" />
@@ -56,7 +69,7 @@
           <Property Name="RentDays" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BlackBoxData">
           <Key>
             <PropertyRef Name="BlackBoxDataID" />
@@ -287,6 +300,15 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="ApprovalID" Type="int" Nullable="false" />
           <Property Name="MaxSpeed" Type="numeric" Precision="12" Scale="5" />
           <Property Name="MaxAltitude" Type="numeric" Precision="12" Scale="5" />
+          <Property Name="BoundaryCritical" Type="int" />
+          <Property Name="BoundaryHigh" Type="int" />
+          <Property Name="BoundaryWarning" Type="int" />
+          <Property Name="HeightCritical" Type="int" />
+          <Property Name="HeightHigh" Type="int" />
+          <Property Name="HeightWarning" Type="int" />
+          <Property Name="ProximityCritical" Type="int" />
+          <Property Name="ProximityHigh" Type="int" />
+          <Property Name="ProximityWarning" Type="int" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -299,6 +321,37 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="VideoDateTime" Type="datetime" />
           <Property Name="IsDeleted" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DroneGPSLog">
+          <Key>
+            <PropertyRef Name="DroneGPSLogId" />
+          </Key>
+          <Property Name="DroneGPSLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DroneId" Type="int" />
+          <Property Name="DroneRFID" Type="varchar" MaxLength="50" />
+          <Property Name="Latitude" Type="nvarchar" MaxLength="50" />
+          <Property Name="Longitude" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductRFID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductQrCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductRSSI" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReadTime" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedTime" Type="datetime" />
+          <Property Name="RecordType" Type="int" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="ProductId" Type="int" />
+          <Property Name="Altitude" Type="nvarchar" MaxLength="50" />
+          <Property Name="Speed" Type="nvarchar" MaxLength="50" />
+          <Property Name="FixQuality" Type="nvarchar" MaxLength="50" />
+          <Property Name="Satellites" Type="nvarchar" MaxLength="50" />
+          <Property Name="Pitch" Type="nvarchar" MaxLength="50" />
+          <Property Name="Roll" Type="nvarchar" MaxLength="50" />
+          <Property Name="Heading" Type="nvarchar" MaxLength="50" />
+          <Property Name="TotalFlightTime" Type="nvarchar" MaxLength="50" />
+          <Property Name="BBFlightID" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsProcessed" Type="int" />
+          <Property Name="QueueMessage" Type="nvarchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="Voltage" Type="nvarchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="FlightInfo">
           <Key>
@@ -368,6 +421,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="IsSoftFence" Type="int" />
           <Property Name="voltage" Type="decimal" Precision="18" Scale="5" />
           <Property Name="OtherFlightIDs" Type="varchar" MaxLength="500" />
+          <Property Name="IsAdsbProcessed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="GCA_Approval">
           <Key>
@@ -403,6 +457,20 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="CameraId" Type="int" />
           <Property Name="RpasApprovalRefNum" Type="int" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ExponentPortal.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ip2location">
+          <Key>
+            <PropertyRef Name="ip_from" />
+            <PropertyRef Name="ip_to" />
+            <PropertyRef Name="country_code" />
+            <PropertyRef Name="country_name" />
+          </Key>
+          <Property Name="ip_from" Type="float" Nullable="false" />
+          <Property Name="ip_to" Type="float" Nullable="false" />
+          <Property Name="country_code" Type="nvarchar" MaxLength="2" Nullable="false" />
+          <Property Name="country_name" Type="nvarchar" MaxLength="64" Nullable="false" />
+        </EntityType>
         <EntityType Name="LiveDrone">
           <Key>
             <PropertyRef Name="ID" />
@@ -432,6 +500,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="RecordType" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="GroupName" Type="varchar" MaxLength="60" />
+          <Property Name="Seq" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="LUP_Product">
           <Key>
@@ -623,7 +692,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="CommissionReportNote" Type="varchar(max)" />
           <Property Name="UATReportNote" Type="varchar(max)" />
           <Property Name="IncidentReportNote" Type="nvarchar(max)" />
-          <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModelName" Type="nvarchar" MaxLength="100" />
           <Property Name="IsLiveVideo" Type="int" />
           <Property Name="Latitude" Type="decimal" Precision="18" Scale="5" />
           <Property Name="Longitude" Type="decimal" Precision="18" Scale="5" />
@@ -722,6 +791,15 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="Visible" Type="bit" />
           <Property Name="PermissionId" Type="nvarchar" MaxLength="25" />
         </EntityType>
+        <EntityType Name="MSTR_NoFlyZone">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Coordinates" Type="nvarchar(max)" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="MSTR_Parts">
           <Key>
             <PropertyRef Name="PartsId" />
@@ -785,6 +863,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="Model" Type="nvarchar" MaxLength="50" />
           <Property Name="Year" Type="int" />
           <Property Name="Color" Type="nvarchar" MaxLength="50" />
+          <Property Name="SlotNo" Type="nvarchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="MSTR_Profile">
           <Key>
@@ -913,7 +992,7 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="Col" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'ExponentPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadData">
           <Key>
             <PropertyRef Name="PayLoadDataID" />
@@ -941,7 +1020,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadData' does not have a primar
           <Property Name="CellID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'ExponentPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadFlight">
           <Key>
             <PropertyRef Name="PayLoadFlightID" />
@@ -959,7 +1038,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadFlight' does not have a prim
           <Property Name="PayLoadDroneID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'ExponentPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadImageData">
           <Key>
             <PropertyRef Name="PayLoadImageDataID" />
@@ -978,7 +1057,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadImageData' does not have a p
           <Property Name="LogFilePath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadMapData">
           <Key>
             <PropertyRef Name="PayLoadDataMapID" />
@@ -1047,7 +1126,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadMapData' does not have a pri
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadYardGrid">
           <Key>
             <PropertyRef Name="CellID" />
@@ -1071,7 +1150,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadYardGrid' does not have a pr
           <Property Name="Polygon" Type="geography" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PortalAlert">
           <Key>
             <PropertyRef Name="AlertID" />
@@ -1091,7 +1170,14 @@ warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primar
           <Property Name="AccountID" Type="int" />
           <Property Name="ApprovalID" Type="int" />
           <Property Name="DroneID" Type="int" />
+          <Property Name="PilotID" Type="int" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="PortalAlert_User">
+          <Property Name="AlertID" Type="int" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -1184,7 +1270,7 @@ warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primar
           <Property Name="CellReference" Type="varchar" MaxLength="120" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="sysdiagrams">
           <Key>
             
@@ -1278,6 +1364,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Parameter Name="IsAccess" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="ExponentPortalModelStoreContainer">
+          <EntitySet Name="ADSBData" EntityType="Self.ADSBData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApproalDetail" EntityType="Self.ApproalDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxCost" EntityType="Self.BlackBoxCost" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxLog" EntityType="Self.BlackBoxLog" Schema="dbo" store:Type="Tables" />
@@ -1291,6 +1378,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="DroneDocuments" EntityType="Self.DroneDocuments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneFlight" EntityType="Self.DroneFlight" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneFlightVideo" EntityType="Self.DroneFlightVideo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DroneGPSLog" EntityType="Self.DroneGPSLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FlightInfo" EntityType="Self.FlightInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FlightMapData" EntityType="Self.FlightMapData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GCA_Approval" EntityType="Self.GCA_Approval" Schema="dbo" store:Type="Tables" />
@@ -1310,6 +1398,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="MSTR_DroneCheckListItems" EntityType="Self.MSTR_DroneCheckListItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_DroneService" EntityType="Self.MSTR_DroneService" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Menu" EntityType="Self.MSTR_Menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MSTR_NoFlyZone" EntityType="Self.MSTR_NoFlyZone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Parts" EntityType="Self.MSTR_Parts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Pilot_Log" EntityType="Self.MSTR_Pilot_Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Product" EntityType="Self.MSTR_Product" Schema="dbo" store:Type="Tables" />
@@ -1357,6 +1446,14 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
     [BlackBoxData].[FlightID] AS [FlightID], 
     [BlackBoxData].[BBFlightID] AS [BBFlightID]
     FROM [dbo].[BlackBoxData] AS [BlackBoxData]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ip2location" EntityType="Self.ip2location" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ip2location].[ip_from] AS [ip_from], 
+    [ip2location].[ip_to] AS [ip_to], 
+    [ip2location].[country_code] AS [country_code], 
+    [ip2location].[country_name] AS [country_name]
+    FROM [dbo].[ip2location] AS [ip2location]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadData" EntityType="Self.PayLoadData" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1495,7 +1592,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
     [PortalAlert].[AlertCategory] AS [AlertCategory], 
     [PortalAlert].[AccountID] AS [AccountID], 
     [PortalAlert].[ApprovalID] AS [ApprovalID], 
-    [PortalAlert].[DroneID] AS [DroneID]
+    [PortalAlert].[DroneID] AS [DroneID], 
+    [PortalAlert].[PilotID] AS [PilotID]
     FROM [dbo].[PortalAlert] AS [PortalAlert]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" store:Type="Tables" store:Schema="dbo">
@@ -1708,6 +1806,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Year" Type="Int32" />
           <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SlotNo" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_Profile">
           <Key>
@@ -1888,6 +1987,10 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="BlackBoxTransactions" EntityType="ExponentPortalModel.BlackBoxTransaction" />
           <EntitySet Name="ContentManagements" EntityType="ExponentPortalModel.ContentManagement" />
           <EntitySet Name="SMSTables" EntityType="ExponentPortalModel.SMSTable" />
+          <EntitySet Name="ADSBDatas" EntityType="ExponentPortalModel.ADSBData" />
+          <EntitySet Name="DroneGPSLogs" EntityType="ExponentPortalModel.DroneGPSLog" />
+          <EntitySet Name="MSTR_NoFlyZone" EntityType="ExponentPortalModel.MSTR_NoFlyZone" />
+          <EntitySet Name="ip2location" EntityType="ExponentPortalModel.ip2location" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2183,6 +2286,15 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="ApprovalID" Type="Int32" Nullable="false" />
           <Property Name="MaxSpeed" Type="Decimal" Precision="12" Scale="5" />
           <Property Name="MaxAltitude" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="BoundaryCritical" Type="Int32" />
+          <Property Name="BoundaryHigh" Type="Int32" />
+          <Property Name="BoundaryWarning" Type="Int32" />
+          <Property Name="HeightCritical" Type="Int32" />
+          <Property Name="HeightHigh" Type="Int32" />
+          <Property Name="HeightWarning" Type="Int32" />
+          <Property Name="ProximityCritical" Type="Int32" />
+          <Property Name="ProximityHigh" Type="Int32" />
+          <Property Name="ProximityWarning" Type="Int32" />
         </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
@@ -2425,6 +2537,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="AccountID" Type="Int32" />
           <Property Name="ApprovalID" Type="Int32" />
           <Property Name="DroneID" Type="Int32" />
+          <Property Name="PilotID" Type="Int32" />
         </EntityType>
         <EntityType Name="PayLoad_AutoFix">
           <Key>
@@ -2614,7 +2727,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CommissionReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="UATReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IncidentReportNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModelName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IsLiveVideo" Type="Int32" />
           <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
@@ -2771,6 +2884,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="IsSoftFence" Type="Int32" />
           <Property Name="voltage" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="OtherFlightIDs" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IsAdsbProcessed" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="GCA_Approval">
           <Key>
@@ -2825,6 +2939,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="RecordType" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="GroupName" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="Seq" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="MSTR_BlackBox">
           <Key>
@@ -2893,6 +3008,71 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CellNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CellReference" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ADSBData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ADSBFlightDate" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="ADSBFlightID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ADSBLatitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="ADSBLongitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="ADSBIdent" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="DroneGPSLog">
+          <Key>
+            <PropertyRef Name="DroneGPSLogId" />
+          </Key>
+          <Property Name="DroneGPSLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DroneId" Type="Int32" />
+          <Property Name="DroneRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductRSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReadTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="RecordType" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="Altitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Speed" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FixQuality" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Satellites" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Pitch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Roll" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Heading" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TotalFlightTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BBFlightID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsProcessed" Type="Int32" />
+          <Property Name="QueueMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Voltage" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MSTR_NoFlyZone">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Coordinates" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ip2location">
+          <Key>
+            <PropertyRef Name="ip_from" />
+            <PropertyRef Name="ip_to" />
+            <PropertyRef Name="country_code" />
+            <PropertyRef Name="country_name" />
+          </Key>
+          <Property Name="ip_from" Type="Double" Nullable="false" />
+          <Property Name="ip_to" Type="Double" Nullable="false" />
+          <Property Name="country_code" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="country_name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3076,6 +3256,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="MSTR_Product">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Product">
               <MappingFragment StoreEntitySet="MSTR_Product">
+                <ScalarProperty Name="SlotNo" ColumnName="SlotNo" />
                 <ScalarProperty Name="Color" ColumnName="Color" />
                 <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="Model" ColumnName="Model" />
@@ -3423,6 +3604,15 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="DroneFlights">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="ProximityWarning" ColumnName="ProximityWarning" />
+                <ScalarProperty Name="ProximityHigh" ColumnName="ProximityHigh" />
+                <ScalarProperty Name="ProximityCritical" ColumnName="ProximityCritical" />
+                <ScalarProperty Name="HeightWarning" ColumnName="HeightWarning" />
+                <ScalarProperty Name="HeightHigh" ColumnName="HeightHigh" />
+                <ScalarProperty Name="HeightCritical" ColumnName="HeightCritical" />
+                <ScalarProperty Name="BoundaryWarning" ColumnName="BoundaryWarning" />
+                <ScalarProperty Name="BoundaryHigh" ColumnName="BoundaryHigh" />
+                <ScalarProperty Name="BoundaryCritical" ColumnName="BoundaryCritical" />
                 <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
                 <ScalarProperty Name="MaxSpeed" ColumnName="MaxSpeed" />
                 <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
@@ -3701,6 +3891,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="PortalAlerts">
             <EntityTypeMapping TypeName="ExponentPortalModel.PortalAlert">
               <MappingFragment StoreEntitySet="PortalAlert">
+                <ScalarProperty Name="PilotID" ColumnName="PilotID" />
                 <ScalarProperty Name="DroneID" ColumnName="DroneID" />
                 <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
                 <ScalarProperty Name="AccountID" ColumnName="AccountID" />
@@ -4029,6 +4220,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="FlightMapDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.FlightMapData">
               <MappingFragment StoreEntitySet="FlightMapData">
+                <ScalarProperty Name="IsAdsbProcessed" ColumnName="IsAdsbProcessed" />
                 <ScalarProperty Name="OtherFlightIDs" ColumnName="OtherFlightIDs" />
                 <ScalarProperty Name="voltage" ColumnName="voltage" />
                 <ScalarProperty Name="IsSoftFence" ColumnName="IsSoftFence" />
@@ -4111,6 +4303,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="LUP_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.LUP_Drone">
               <MappingFragment StoreEntitySet="LUP_Drone">
+                <ScalarProperty Name="Seq" ColumnName="Seq" />
                 <ScalarProperty Name="GroupName" ColumnName="GroupName" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="RecordType" ColumnName="RecordType" />
@@ -4198,6 +4391,72 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="CellReference" ColumnName="CellReference" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ADSBDatas">
+            <EntityTypeMapping TypeName="ExponentPortalModel.ADSBData">
+              <MappingFragment StoreEntitySet="ADSBData">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="ADSBIdent" ColumnName="ADSBIdent" />
+                <ScalarProperty Name="ADSBLongitude" ColumnName="ADSBLongitude" />
+                <ScalarProperty Name="ADSBLatitude" ColumnName="ADSBLatitude" />
+                <ScalarProperty Name="ADSBFlightID" ColumnName="ADSBFlightID" />
+                <ScalarProperty Name="ADSBFlightDate" ColumnName="ADSBFlightDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DroneGPSLogs">
+            <EntityTypeMapping TypeName="ExponentPortalModel.DroneGPSLog">
+              <MappingFragment StoreEntitySet="DroneGPSLog">
+                <ScalarProperty Name="Voltage" ColumnName="Voltage" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="QueueMessage" ColumnName="QueueMessage" />
+                <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
+                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
+                <ScalarProperty Name="TotalFlightTime" ColumnName="TotalFlightTime" />
+                <ScalarProperty Name="Heading" ColumnName="Heading" />
+                <ScalarProperty Name="Roll" ColumnName="Roll" />
+                <ScalarProperty Name="Pitch" ColumnName="Pitch" />
+                <ScalarProperty Name="Satellites" ColumnName="Satellites" />
+                <ScalarProperty Name="FixQuality" ColumnName="FixQuality" />
+                <ScalarProperty Name="Speed" ColumnName="Speed" />
+                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+                <ScalarProperty Name="ProductRSSI" ColumnName="ProductRSSI" />
+                <ScalarProperty Name="ProductQrCode" ColumnName="ProductQrCode" />
+                <ScalarProperty Name="ProductRFID" ColumnName="ProductRFID" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="DroneRFID" ColumnName="DroneRFID" />
+                <ScalarProperty Name="DroneId" ColumnName="DroneId" />
+                <ScalarProperty Name="DroneGPSLogId" ColumnName="DroneGPSLogId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_NoFlyZone">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_NoFlyZone">
+              <MappingFragment StoreEntitySet="MSTR_NoFlyZone">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Coordinates" ColumnName="Coordinates" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ip2location">
+            <EntityTypeMapping TypeName="ExponentPortalModel.ip2location">
+              <MappingFragment StoreEntitySet="ip2location">
+                <ScalarProperty Name="country_name" ColumnName="country_name" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="ip_to" ColumnName="ip_to" />
+                <ScalarProperty Name="ip_from" ColumnName="ip_from" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
