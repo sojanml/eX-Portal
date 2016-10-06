@@ -49,15 +49,14 @@ namespace eX_Portal.exLogic {
     }
 
     public static int UserValidation(String UserName, String Password) {
-
-
-      string PasswordCrypto = Util.GetEncryptedPassword(Password);
+           
+            string PasswordCrypto = Util.GetEncryptedPassword(Password);
       int result = 0;
       using (var ctx = new ExponentPortalEntities()) {
         var _objuserdetail = (from data in ctx.MSTR_User
-                              where (data.UserName == UserName
-                              && (data.Password == PasswordCrypto
-                              ||data.GeneratedPassword== PasswordCrypto))
+                              where ((data.UserName.Equals(UserName)
+                              && (data.Password.Equals(PasswordCrypto)))
+                              || (data.GeneratedPassword.Equals(PasswordCrypto)))
                               select data).ToList();
                 if (_objuserdetail.Count > 0)
                 {

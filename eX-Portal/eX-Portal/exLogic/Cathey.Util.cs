@@ -248,7 +248,7 @@ namespace eX_Portal.exLogic {
 
             string sql = "select count(*) from UserLog where UserID= " + UserId + " and IsSessionEnd=0";
             int count=Util.getDBInt(sql);
-            if (count < 5)
+            if (count < 50)
                 return true;
             else
                 return false;
