@@ -20,7 +20,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0, string FlightType = "") {
       if (!exLogic.User.hasAccess("FLIGHT"))
         return RedirectToAction("NoAccess", "Home");
-      ViewBag.Title = "UAS Flights";
+      ViewBag.Title = "RPAS Flights";
       ViewBag.DroneID = DroneID;
       String SQLVideo = @"CASE 
       WHEN 
@@ -39,11 +39,11 @@ namespace eX_Portal.Controllers {
       String SQLFilter = "";
       String SQL = @"SELECT 
         DroneFlight.ID,
-        MSTR_Drone.DroneName AS UAS,
+        MSTR_Drone.DroneName AS RPAS,
         tblPilot.FirstName AS PilotName,
         tblGSC.FirstName AS GCSName,
         tblPilot.FirstName AS CreatedBy,
-        FlightDate AS 'FlightDate(UTC)',
+        FlightDate AS 'FlightDate',
         ApprovalName,
         " + (exLogic.User.hasAccess("FLIGHT.VIDEOS") ? SQLVideo : "") + @"
         Count(*) OVER () AS _TotalRecords,

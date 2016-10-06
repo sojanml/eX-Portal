@@ -38,7 +38,7 @@ namespace eX_Portal.Controllers {
       if(!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
 
-      ViewBag.Title = "UAS Listing";
+      ViewBag.Title = "RPAS";
 
       String SQL = "SELECT \n" +
           "  D.[DroneName] as UAS,\n" +
@@ -96,12 +96,8 @@ namespace eX_Portal.Controllers {
       }//if(IsAjaxRequest)
 
     }
-
-
-
-       
         
-        public ActionResult AuthorityApproval([Bind(Prefix = "ID")] int DroneID = 0) {
+    public ActionResult AuthorityApproval([Bind(Prefix = "ID")] int DroneID = 0) {
       if(!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.DroneID = DroneID;
@@ -503,7 +499,7 @@ namespace eX_Portal.Controllers {
 
     // GET: Drone/Details/5
     public String DroneDetail([Bind(Prefix = "ID")]  int DroneID) {
-      string OwnerFormat;
+      //string OwnerFormat;
       int OwnerId;
       if(!exLogic.User.hasAccess("DRONE"))
         return "Access Denied";
@@ -538,10 +534,13 @@ namespace eX_Portal.Controllers {
       qDetailView nView = new qDetailView(SQL);
       //this part for adding link to requred fields in the details
       OwnerId = Util.GetAccountIDFromDrone(DroneID);
-      OwnerFormat = "<a  href='/Admin/AccountDetail/" + OwnerId + "'>$OwnerName$</a>";//url
 
-      nView.FormatCols.Add("OwnerName", OwnerFormat); //Adding the Column required for formatting  
-      return
+            //OwnerFormat = "<a  href='/Admin/AccountDetail/" + OwnerId + "'>$OwnerName$</a>";//url
+            //nView.FormatCols.Add("OwnerName", OwnerFormat); //Adding the Column required for formatting  
+
+
+            return
+
         ReassignDetail(DroneID) +
         DecommissionDetail(DroneID) +
         nView.getTable() +

@@ -75,7 +75,6 @@ function showimg(img)
         height:'auto',
         width: 'auto',
         modal: true,
-      
         open: function (event, ui) {
             $(".ui-dialog-content").css("padding", 0);
             $(".ui-dialog-content").dialog({ minHeight:'50'});
