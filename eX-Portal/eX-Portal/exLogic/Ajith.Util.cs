@@ -1188,7 +1188,22 @@ namespace eX_Portal.exLogic {
         }
 
 
-        public static string GetUASFromFlight(int FlightId) {
+    public static bool CheckUserIsPilot(int UserId) {
+      bool result = false;
+
+      using (var ctx = new ExponentPortalEntities()) {
+        
+          var list = ctx.MSTR_User.Where(e => e.IsPilot == true && e.UserId == UserId).FirstOrDefault();
+          if (list != null) {
+            result = true;
+          }//if
+
+          return result;
+        }//using
+      
+    }
+
+    public static string GetUASFromFlight(int FlightId) {
             string result = "";
 
             String SQL = @"SELECT
