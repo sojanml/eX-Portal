@@ -6,6 +6,7 @@ var xLabel = new Object();
 var scrollData = new Object();
 var max;
 
+
 //var LastFlightcolors = ['red', 'green', 'blue', 'orange', 'yellow'];
 //var CurrentMonthFlightcolors = ['DarkRed', 'DarkGreen', 'DarkBlue', 'DarkOrange', 'DarkYellow'];
 
@@ -53,6 +54,7 @@ function OnSuccess_(reponse) {
     var LastAccountID = 0;
     var ColorSelector = 0;
     var Hdata = "";
+    var Hdata1 = "";
     if (aData.length > 15)
     {
         max = 15;
@@ -69,6 +71,7 @@ function OnSuccess_(reponse) {
             enabled: false
         }
     }
+    var count = 0;
     for (var i = 0; i < aData.length; i++) {
         var data = aData[i];
 
@@ -79,7 +82,20 @@ function OnSuccess_(reponse) {
         xLabel[value] = name;
         if (LastAccountID != data.AccountID)
         {
-          Hdata = Hdata + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
+          if (count < 4) {
+
+            Hdata = Hdata + '<td id=rectangle style="width:5px;height:1px;background:' + data.ChartColor + '"></td ><td  style="font-size:7px">' + data.AccountName + '</td>'
+
+           // Hdata = Hdata + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
+           // Hdata = Hdata + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
+          }
+          else
+          {
+            Hdata1 = Hdata1 + '<td id=rectangle style="width:5px;height:1px;background:' + data.ChartColor + '"></td ><td  style="font-size:7px">' + data.AccountName + '</td>'
+           // Hdata1 = Hdata1 + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
+          }
+          
+            count = count + 1;
         }
         LastAccountID = data.AccountID;
 
@@ -116,8 +132,14 @@ function OnSuccess_(reponse) {
 
     }
 
-    
-    HtmlData = '<table><tr>'+Hdata+'</tr></table>';
+    if (Hdata1 != "") {
+      HtmlData = '<table><tr>' + Hdata + '</tr><tr>'+ Hdata1 +'</tr></table>';
+    }
+    else
+    {
+      HtmlData = '<table><tr>' + Hdata + '</tr></table>';
+    }
+    console.log(HtmlData);
     
     //category = category + "]"
     //alert(category);
@@ -230,7 +252,7 @@ function initChart() {
         
             type: 'column',
             marginRight:0,
-            marginBottom: 90,
+            marginBottom: 65,
             spacingLeft: 0,
             spacingBottom: 0,
             events: {
@@ -369,15 +391,17 @@ function initChart() {
     },
     function (chart) { // on complete
 
-
-        chart.renderer.text(HtmlData, 0, 275)
+      $('#LegendRecent').html(HtmlData);
+      
+     // chart.renderer.text(HtmlData, 0, 275)
+     
         
         //chart.renderer.text('This text is <span style="color: red">styled</span> and <a href="http://example.com">linked</a>', 50,250)
         //    .css({
         //        color: '#4572A7',
         //        fontSize: '10px'
         //    })
-            .add();
+           
     });
 
 
@@ -404,7 +428,7 @@ function initChartTotalFlight() {
 
             type: 'column',
             marginRight: 0,
-            marginBottom: 90,
+            marginBottom: 65,
             spacingLeft: 0,
             spacingBottom: 0,
         },
@@ -518,14 +542,14 @@ function initChartTotalFlight() {
     },
     function (chart) { // on complete
 
-
-        chart.renderer.text(HtmlData, 0, 275)
+      $('#LegendTotal').html(HtmlData);
+       // chart.renderer.text(HtmlData, 0, 275)
 
         //chart.renderer.text('This text is <span style="color: red">styled</span> and <a href="http://example.com">linked</a>', 50,250)
         //    .css({
         //        color: '#4572A7',
         //        fontSize: '10px'
         //    })
-            .add();
+//.add();
     });
 }
