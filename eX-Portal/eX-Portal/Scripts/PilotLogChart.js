@@ -11,7 +11,20 @@ $(document).ready(function () {
         success: OnSuccessPilot_,
         error: OnErrorCall_
     });
+
+
+
+
+    
+
 });
+
+
+
+  
+ 
+
+  
 
 
 function OnSuccessPilot_(reponse) {
@@ -97,10 +110,13 @@ function initCharts() {
     var chart2 = new Highcharts.Chart({
         chart: {
             renderTo: 'Pilotcontainer',
-
+            //events: {
+            //  load: moveLegend,
+            //  redraw: moveLegend
+            //},
             type: 'column',
             marginRight:95,
-            marginBottom: 120,
+            marginBottom: 110,
             spacingTop: 5,
            
             spacingLeft: 0,
@@ -108,6 +124,12 @@ function initCharts() {
       
         },
         legend: {
+          padding: 0,
+          margin:5,
+          //  align: 'top',
+           // verticalAlign: 'top',
+          //  y: 180,
+         
             itemStyle: {
                 
                 fontSize:'8px'
@@ -115,17 +137,34 @@ function initCharts() {
         },
 
         title: {
-            text: null
+          text: "Total Pilot Time",
+          align: 'left',
+        
+          style: {
+            "fontFamily": 'Conv_DINNextLTPro-Light',
+            "fontSize": "15px",
+            color: '#ff6666',
+            "fontWeight": "bold"
+          }
         },
 
         xAxis: [{
            
           categories: categoryPilot,
           title: {
+         
             text: 'Pilot Name'
           },
             
-            labels: {
+          labels: {
+
+            formatter: function () {
+              var text = this.value,
+						    formatted = text.length > 5 ? text.substring(0, 5) + '..' : text;
+
+              return '<div class="js-ellipse" style="width:150px; overflow:hidden" title="' + text + '">' + formatted + '</div>';
+            },
+            
                 rotation: -60,
                 style: {
                     

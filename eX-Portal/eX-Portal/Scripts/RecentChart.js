@@ -248,7 +248,15 @@ function initChart() {
             }
         },
         title: {
-            text: null
+          
+          text: "Recent Flight Time",
+        align: 'left',
+        style: {
+          "fontFamily": 'Conv_DINNextLTPro-Light',
+          "fontSize": "15px" ,
+          color: '#ff6666',
+          "fontWeight": "bold"
+        }
         },
         
        
@@ -362,7 +370,7 @@ function initChart() {
     function (chart) { // on complete
 
 
-        chart.renderer.text(HtmlData, 0, 245)
+        chart.renderer.text(HtmlData, 0, 275)
         
         //chart.renderer.text('This text is <span style="color: red">styled</span> and <a href="http://example.com">linked</a>', 50,250)
         //    .css({
@@ -401,7 +409,14 @@ function initChartTotalFlight() {
             spacingBottom: 0,
         },
         title: {
-            text: null
+          text: "Total Flight Time",
+          align: 'left',
+          style: {
+            "fontFamily": 'Conv_DINNextLTPro-Light',
+            "fontSize": "15px" ,
+            color: '#ff6666',
+            "fontWeight": "bold"
+          }
         },
 
         xAxis: {
@@ -426,9 +441,9 @@ function initChartTotalFlight() {
         yAxis: {
          
           tickPixelInterval: 5,
-            // min:.01,
-          max:800,
-          type: 'logarithmic',
+             //min:.01,
+          max:2000,
+          type: 'Logarthmic',
             //minorTickInterval: 0.1,
            // tickInterval: 10,
             title: {
@@ -504,7 +519,7 @@ function initChartTotalFlight() {
     function (chart) { // on complete
 
 
-        chart.renderer.text(HtmlData, 0, 245)
+        chart.renderer.text(HtmlData, 0, 275)
 
         //chart.renderer.text('This text is <span style="color: red">styled</span> and <a href="http://example.com">linked</a>', 50,250)
         //    .css({
