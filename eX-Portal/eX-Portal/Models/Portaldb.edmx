@@ -799,6 +799,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.ip2location' does not have a pr
           <Property Name="Coordinates" Type="nvarchar(max)" />
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="FillColour" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="MSTR_Parts">
           <Key>
@@ -3061,6 +3062,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
           <Property Name="Coordinates" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="FillColour" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ip2location">
           <Key>
@@ -4443,6 +4445,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
           <EntitySetMapping Name="MSTR_NoFlyZone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_NoFlyZone">
               <MappingFragment StoreEntitySet="MSTR_NoFlyZone">
+                <ScalarProperty Name="FillColour" ColumnName="FillColour" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Coordinates" ColumnName="Coordinates" />
