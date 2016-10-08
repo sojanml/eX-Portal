@@ -12,6 +12,7 @@ using eX_Portal.ViewModel;
 using FileStorageUtils;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace eX_Portal.Controllers
 {
@@ -1428,14 +1429,78 @@ namespace eX_Portal.Controllers
                 if (flightsetupvm.GcaApproval.DroneID == null || flightsetupvm.GcaApproval.DroneID < 1)
                    
                return "You must select a Drone.";
-                if (flightsetupvm.GcaApproval.PilotUserId < 1 || flightsetupvm.GcaApproval.PilotUserId == null)
-                   
+                if (flightsetupvm.GcaApproval.PilotUserId < 1 || flightsetupvm.GcaApproval.PilotUserId == null)                   
                  return "You must select a pilot.";
                 if (flightsetupvm.GcaApproval.GroundStaffUserId < 1 || flightsetupvm.GcaApproval.GroundStaffUserId == null)
                  //   return RedirectToAction("NoAccess", "Home");
                   return "A Ground staff should be selected.";
-                if (flightsetupvm.GcaApproval.ApprovalName == null)
-                    return "Please enter approval name.";
+
+        //checking email validation
+
+        string Email = "";
+        if (flightsetupvm.GcaApproval.NotificationEmails == null) {
+          Email = "";
+        } else {
+          if (flightsetupvm.GcaApproval.NotificationEmails != null || flightsetupvm.GcaApproval.NotificationEmails != "") {
+            Email = flightsetupvm.GcaApproval.NotificationEmails;
+          }//end if
+
+          if (!IsValidMultipleEmails(Email)) {
+
+            return "Not a valid Email! Seperated by[,]";
+
+          }//end of validate email
+
+        }
+
+
+        if(flightsetupvm.GcaApproval.StartDate>flightsetupvm.GcaApproval.EndDate) {
+
+          return "Start date is greater than end date";
+        }
+
+        
+        if (Util.toDecimal( flightsetupvm.GcaApproval.StartTime.Replace(":","."))>Util.toDecimal(flightsetupvm.GcaApproval.EndTime.Replace(":", "."))) {
+          return "Start time is greater than end time";
+        }
+
+
+        if (flightsetupvm.GcaApproval.ApprovalName == null) {
+          return "Please enter approval name.";
+        }
+        else if(flightsetupvm.GcaApproval.ApprovalName.Length>50) {
+          return "Approval name Max 50 characters are allowed.";
+        }
+
+        
+                    
+          
+          
+
+                if(flightsetupvm.GcaApproval.MinAltitude==null|| flightsetupvm.GcaApproval.MinAltitude<1) {
+                       return "Please enter Min Altitude.";
+
+                   }
+               if (flightsetupvm.GcaApproval.MaxAltitude == null|| flightsetupvm.GcaApproval.MaxAltitude < 1) {
+                    return "Please enter Max Altitude.";
+
+                   }
+
+        if (flightsetupvm.GcaApproval.IsUseCamara < 1)
+          return "Please select camera being Used.";
+
+        //
+        
+        if (flightsetupvm.GcaApproval.IsUseCamara==1&& (flightsetupvm.GcaApproval.CameraId<1|| flightsetupvm.GcaApproval.CameraId== null)) {
+          return "Please select camera.";
+        }
+      
+
+        if(flightsetupvm.GcaApproval.Coordinates==null) {
+
+          return "Please select coordinates";
+        }
+
 
                 if (flightsetupvm.camera == null)
                 {
@@ -2011,7 +2076,30 @@ namespace eX_Portal.Controllers
 
 
 
-        public ActionResult FlightGCAARegister([Bind(Prefix = "ID")]int ID = 0)
+    //********************starts function to check email with comma seperated...
+
+
+
+   public bool IsValidMultipleEmails(string value) {
+      Regex _Regex = new Regex(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
+
+      string[] _emails = value.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+      foreach (string email in _emails) {
+        if (!_Regex.IsMatch(email))
+          return false;
+      }
+
+      return true;
+    }
+
+
+
+    //*******************************code ends
+
+
+
+    public ActionResult FlightGCAARegister([Bind(Prefix = "ID")]int ID = 0)
 
 
         {
@@ -2035,6 +2123,12 @@ namespace eX_Portal.Controllers
             return View(viewModel);
 
         }
+
+
+
+
+
+
 
         [HttpPost]
         public String FlightGCAARegister(GCAAFlightApproval DCAAFlightsetupvm)
