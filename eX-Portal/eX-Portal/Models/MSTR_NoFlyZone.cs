@@ -18,5 +18,6 @@ namespace eX_Portal.Models
         public string Coordinates { get; set; }
         public string Name { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
+        public string FillColour { get; set; }
     }
 }

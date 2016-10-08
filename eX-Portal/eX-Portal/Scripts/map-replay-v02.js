@@ -18,7 +18,7 @@ var _OtherFlights = {};
 var _FlightOra = null
 var ReplayInterval = 1000;
 var DottedLine = [];
-
+var NoFlyZone = null;
 var gADSBData = {};
 var ADSBTimer = null;
 var _ADSBAnimationSec = 5;
@@ -97,6 +97,7 @@ $(document).ready(function () {
   //drawLocationPoints();
   initilizeTable();
   initilizeChart();
+
 
   getLocationPoints();
   GeoInfoWindow = new google.maps.InfoWindow();
@@ -246,8 +247,8 @@ function ShowHidePayload(btn) {
     map: map
   };
 
-  //var KmlUrl = '/Map/PayloadData/' + FlightID;
-  var KmlUrl = 'http://test.exponent-ts.com/Upload/Temp/aaa-01.xml';
+  var KmlUrl = '/Map/PayloadData/' + FlightID;
+  //var KmlUrl = 'http://test.exponent-ts.com/Upload/Temp/aaa-01.xml';
   PayloadLayer = new google.maps.KmlLayer(KmlUrl, kmlOptions);
   if (btn.length) btn.val("Hide Payload");
   _IsPlayloadShown = true;
@@ -344,7 +345,7 @@ function getLocalADSB() {
     contentType: "application/json",
     success: function (result) {
       if (result.error) {
-        alert('Failed to fetch flight: ' + result.error);
+        //alert('Failed to fetch flight: ' + result.error);
         return;
       }
       _IsADSBShown = true;
@@ -353,13 +354,13 @@ function getLocalADSB() {
       ADSBTimer = window.setTimeout(LiveADSData, 60 * 1000);
     },
     error: function (data, text) {
-      alert('Failed to fetch flight: ' + data);
+      //alert('Failed to fetch flight: ' + data);
     }
   });
 }
 
 
-function GetADSBData(RangeLat, RangeLon) {
+function xx_GetADSBData(RangeLat, RangeLon) {
   RangeLat = '23.85438 26.39335';
   RangeLon = '52.99612 59.31375';
 
@@ -446,19 +447,27 @@ ADSBOverlay.prototype.draw = function () {
     var alt = this.ADSBData[i].altitude;
     var title = this.ADSBData[i].CallSign.trim();
     var heading = this.ADSBData[i].heading;
+    heading = parseFloat(heading);
+    if (isNaN(heading)) heading = 0;
 
     // Determine a random location from the bounds set previously  
     var IconGeoPos = new google.maps.LatLng(lat, lng)
     if (this.MovePointsToSecond > _ADSBAnimationSec) {
-      var DistaceTravelInSec = ((this.ADSBData[i].speed / 3600) * this.MovePointsToSecond) /* 1.60934 */;
+      var SpeedKmPerHour = this.ADSBData[i].speed * 1.60934;
+      var SpeedPerSec = SpeedKmPerHour/ 3600;
+      var DistaceTravelInSec = SpeedPerSec * this.MovePointsToSecond;
       //LogMsg = LogMsg + ", Distance: " + DistaceTravelInSec;
       IconGeoPos = destinationPoint(IconGeoPos, heading, DistaceTravelInSec);
+      lat = IconGeoPos.lat();
+      lng = IconGeoPos.lng();
     }
     var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
     var DivID = 'adsb-' + title;
     var IconColor = getIconColor(alt);
 
-    if (gADSBData[DivID]) {
+    if (heading == 0) {
+      //Landed flight - Ignore movement
+    } else if (gADSBData[DivID]) {
       var $point = $('#' + DivID);
       $point.animate({ left: IconLocation.x, top: IconLocation.y });
       $point.find(".icon").css({ transform: 'rotate(' + (heading - 45) + 'deg)', color: IconColor});
@@ -475,7 +484,6 @@ ADSBOverlay.prototype.draw = function () {
         + '<span class="flight-title" style="">' + title + '</span>' +
         + '</div>'
       );
-
       // Append the HTML to the fragment in memory  
       fragment.appendChild($point.get(0));
     }
@@ -628,6 +636,16 @@ function getLocationPoints() {
 }
 
 function setDrawIntilize() {
+
+  //Load no Fly Zone Area from KML File
+  var KmlUrl = 'http://test.exponent-ts.com/Map/NoFlyzone';
+  var kmlOptions = {
+    preserveViewport: true,
+    map: map
+  };
+  NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
+  NoFlyZone.setValues({ map: map });
+
   if (_LocationPoints.length > 1) {
     var loc = _LocationPoints[0];
     var myLatLng = new google.maps.LatLng(loc['Latitude'], loc['Longitude']);
@@ -1137,6 +1155,9 @@ function toDeg(Num) {
 }
 
 function destinationPoint(Point, brng, dist) {
+  /*
+  reference http://stackoverflow.com/questions/2637023/how-to-calculate-the-latlng-of-a-point-a-certain-distance-away-from-another
+  */
   dist = dist / 6371;
   brng = toRad(brng);
 
