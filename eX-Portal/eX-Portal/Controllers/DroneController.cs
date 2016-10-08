@@ -509,10 +509,10 @@ namespace eX_Portal.Controllers {
           "  D.[DroneSerialNo] as [UAS S.no],\n" +
           "  O.Name as OwnerName,\n" +
           "  M.Name as ManufactureName,\n" +
-          "  U.Name as UASType,\n" +
-          "  D.[DroneIdHexa] as UASHexaId,\n" +
-          "  D.[ModelName] as Description,\n" +
-          "  RegistrationAuthority as RegistrationAuthority\n" +
+          "  U.Name as UASType\n" +
+          //"  D.[DroneIdHexa] as UASHexaId,\n" +
+          //"  D.[ModelName] as Description,\n" +
+          //"  RegistrationAuthority as RegistrationAuthority\n" +
           "FROM\n" +
           "  [MSTR_Drone] D\n" +
           "Left join MSTR_Account  O on\n" +
