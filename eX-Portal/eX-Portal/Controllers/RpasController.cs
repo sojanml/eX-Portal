@@ -12,6 +12,7 @@ using eX_Portal.ViewModel;
 using FileStorageUtils;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace eX_Portal.Controllers
 {
@@ -89,8 +90,10 @@ namespace eX_Portal.Controllers
             nView.addMenu("Details", Url.Action("FlightRegistrationDetails", "RPAS", new { ID = "_PKey" }));
 
             if (exLogic.User.hasAccess("RPAS.APPLICATION"))
-            nView.addMenu("Approve/Reject", Url.Action("Application", "RPAS", new { ID = "_PKey" }));
-            if (exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
+        nView.addMenu("Approve/Reject", Url.Action("FlightApproval", "RPAS", new { ID = "_PKey" }));
+      // nView.addMenu("Approve/Reject", Url.Action("Application", "RPAS", new { ID = "_PKey" }));
+     
+      if (exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
                 nView.addMenu("Authority Approval", Url.Action("AuthorityApproval","Rpas", new { ID = "ApprovalID" }));
             if (exLogic.User.hasAccess("FLIGHT.SETUP"))
                 nView.addMenu("Edit", Url.Action("FlightRegister", "rpas", new { ID = "_PKey", Approval ="Status"  }));
@@ -940,7 +943,354 @@ namespace eX_Portal.Controllers
             var UKeyEnd = FileOnly.IndexOf('_');
             return FileOnly.Substring(UKeyEnd + 1);
         }
-        public ActionResult FlightRegister([Bind(Prefix = "ID")]int  ID=0)
+
+    //** flight APPROVAL NEW RQUIREMENT
+    public ActionResult FlightApproval([Bind(Prefix = "ID")]int ID = 0) {
+      //to create gcaapproval
+      if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
+        return RedirectToAction("NoAccess", "Home");
+
+      if (Util.IsGcaApproved(ID)) {
+        return RedirectToAction("NoAccessApplication", "Rpas", new { ID = ID });
+      }
+
+
+      ViewData["accountid"] = Convert.ToInt32(Session["AccountID"].ToString());
+
+      var viewModel = new ViewModel.FlightSetupViewModel {
+
+
+
+        GcaApproval = db.GCA_Approval.Find(ID)
+
+
+      };
+      return View(viewModel);
+
+    }
+
+    [HttpPost]
+    public String FlightApproval(FlightSetupViewModel flightsetupvm) {
+      try {
+        if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
+          // return RedirectToAction("NoAccess", "Home");
+          return "You do not have accesss to this page";
+        if (flightsetupvm.GcaApproval.DroneID == null || flightsetupvm.GcaApproval.DroneID < 1)
+
+          return "You must select a Drone.";
+        if (flightsetupvm.GcaApproval.PilotUserId < 1 || flightsetupvm.GcaApproval.PilotUserId == null)
+
+          return "You must select a pilot.";
+        if (flightsetupvm.GcaApproval.GroundStaffUserId < 1 || flightsetupvm.GcaApproval.GroundStaffUserId == null)
+          //   return RedirectToAction("NoAccess", "Home");
+          return "A Ground staff should be selected.";
+        if (flightsetupvm.GcaApproval.ApprovalName == null)
+          return "Please enter approval name.";
+
+        if (flightsetupvm.camera == null) {
+          if (flightsetupvm.GcaApproval.CameraId == null)
+            flightsetupvm.GcaApproval.CameraId = 0;
+          DateTime todaydate = System.DateTime.Now;
+          String SQL = String.Empty;
+          var StartDate = (flightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(-1) : (DateTime)flightsetupvm.GcaApproval.StartDate);
+          var EndDate = (flightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(90) : (DateTime)flightsetupvm.GcaApproval.EndDate);
+          var MinAltitude = (flightsetupvm.GcaApproval.MinAltitude == null ? 0 : flightsetupvm.GcaApproval.MinAltitude);
+          var MaxAltidute = (flightsetupvm.GcaApproval.MaxAltitude == null ? 40 : flightsetupvm.GcaApproval.MaxAltitude);
+
+
+          int ApprovalID = flightsetupvm.GcaApproval.ApprovalID;
+          String ApprovalName = flightsetupvm.GcaApproval.ApprovalName;
+          String Coordinates = flightsetupvm.GcaApproval.Coordinates;
+          if (String.IsNullOrEmpty(Coordinates))
+            Coordinates =
+  "24.949901 55.337585," +
+  "25.218555 55.620971," +
+  "25.387706 55.414978," +
+  "25.087092 55.137084";
+          string[] Coord = Coordinates.Split(',');
+          string Poly = Coordinates + "," + Coord[0];
+
+          if (ApprovalID == 0 && String.IsNullOrEmpty(ApprovalName)) {
+            //Approval is not selected or no name is specifeid
+            //then do not update approvals
+            SQL = String.Empty;
+          } else if (!String.IsNullOrEmpty(ApprovalName) && ApprovalID == 0) {
+            //when a new name is specified for approval
+            //save it as new approval     
+            SQL = @"insert into GCA_Approval(
+                            ApprovalName,
+                            ApprovalDate,
+                            StartDate,
+                            EndDate,
+                            Coordinates,
+                            Polygon,
+                            CreatedOn,
+                            CreatedBy,
+                            DroneID,
+                            EndTime,
+                            StartTime,
+                            BoundaryInMeters,
+                            MinAltitude,
+                            MaxAltitude,
+                            IsUseCamara,
+                            PilotUserId,
+                            GroundStaffUserId,
+                            NotificationEmails,
+                            CameraId
+                          ) values(
+                            '" + flightsetupvm.GcaApproval.ApprovalName + @"',
+                            GETDATE(),
+                            '" + StartDate.ToString("yyyy-MM-dd") + @"',
+                            '" + EndDate.ToString("yyyy-MM-dd") + @"',
+                            '" + Coordinates + @"',
+                            geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+                            GETDATE(),
+                            " + Session["UserID"] + "," +
+                flightsetupvm.GcaApproval.DroneID + @",
+                            '" + flightsetupvm.GcaApproval.EndTime + @"',
+                            '" + flightsetupvm.GcaApproval.StartTime + @"',
+                            50,
+                            " + MinAltitude + @",
+                            " + MaxAltidute + @",
+                            " + flightsetupvm.GcaApproval.IsUseCamara + @",
+                            " + flightsetupvm.GcaApproval.PilotUserId + @",
+                            " + flightsetupvm.GcaApproval.GroundStaffUserId + @",
+                            '" + flightsetupvm.GcaApproval.NotificationEmails + @"',
+                            " + flightsetupvm.GcaApproval.CameraId + @"
+                          )";
+            //
+          } else {
+            //Got an approval ID 
+            //Update the selected Approval ID
+            SQL = @"Update 
+                            [GCA_Approval] 
+                          set 
+                            StartDate ='" + StartDate.ToString("yyyy-MM-dd") + @"',
+                            EndDate = '" + EndDate.ToString("yyyy-MM-dd") + @"',
+                            Coordinates  = '" + Coordinates + @"',
+                            Polygon=geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+                            EndTime='" + flightsetupvm.GcaApproval.EndTime + @"',
+                            StartTime='" + flightsetupvm.GcaApproval.StartTime + @"',
+                            BoundaryInMeters=50,
+                            MinAltitude = " + MinAltitude + @",
+                            MaxAltitude = " + MaxAltidute + @",
+                            IsUseCamara= " + flightsetupvm.GcaApproval.IsUseCamara + @",
+                            PilotUserId=" + flightsetupvm.GcaApproval.PilotUserId + @",
+                            GroundStaffUserId=" + flightsetupvm.GcaApproval.GroundStaffUserId + @",
+                            NotificationEmails='" + flightsetupvm.GcaApproval.NotificationEmails + @"',
+                            CameraId='" + flightsetupvm.GcaApproval.CameraId + @"',
+                            ApprovalStatus = '" + flightsetupvm.GcaApproval.ApprovalStatus +  @"', 
+                            ApprovalRemarks = '" + flightsetupvm.GcaApproval.ApprovalRemarks + @"'
+                          where 
+                            ApprovalID=" + ApprovalID;
+          }
+          if (!String.IsNullOrEmpty(SQL)) {
+            //Execute the sql statement generated
+            Util.doSQL(SQL);
+          }
+
+          int DroneID = Util.toInt(flightsetupvm.GcaApproval.DroneID);
+          SQL = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + DroneID;
+          int DroneSetupId = Util.getDBInt(SQL);
+          if (DroneSetupId == 0) {
+            SQL = @"INSERT INTO MSTR_Drone_Setup (
+                            DroneID,
+                            CreatedBy,
+                            CreatedOn,
+                            [ModifiedOn]
+                          ) VALUES (
+                            " + DroneID + @",
+                            " + Session["UserID"] + @",
+                            GETDATE(),
+                            GETDATE()
+                          )";
+            Util.doSQL(SQL);
+          }
+          //        if (flightsetupvm.DroneSetup.BatteryVoltage == null)
+          //            flightsetupvm.DroneSetup.BatteryVoltage = 0;
+
+          SQL = @"update 
+                         MSTR_Drone_Setup 
+                        set 
+                          PilotUserId=" + flightsetupvm.GcaApproval.PilotUserId + @",
+                          GroundStaffUserId=" + flightsetupvm.GcaApproval.GroundStaffUserId + @",        
+                          [ModifiedBy]=" + Util.getLoginUserID() + @",
+                         [ModifiedOn]=GETDATE(),
+                         [NotificationEmails]='" + flightsetupvm.GcaApproval.NotificationEmails + @"'
+                        where 
+                         [DroneId]=" + DroneID;
+          Util.doSQL(SQL);
+          //  return RedirectToAction("Applications", "Rpas","");
+        } else {
+          int typeid = Util.getDBInt("SELECT Max(TypeId) + 1 from [LUP_Drone] where [Type]='Camera'");
+          string BinaryCode = Util.DecToBin(typeid);
+          string s = flightsetupvm.camera.ToString();
+          string code = s;
+          string SQL1 = "INSERT INTO LUP_DRONE(\n" +
+          "  Type,\n" +
+          "  Code,\n" +
+          "  TypeId,\n" +
+          "  BinaryCode,\n" +
+          "  Name,\n" +
+          "  CreatedBy,\n" +
+          "  CreatedOn,\n" +
+          "  IsActive\n" +
+          ") VALUES(\n" +
+          "  'Camera',\n" +
+          "  '" + code + "',\n" +
+          "  " + typeid + ",\n" +
+          "  '" + BinaryCode + "',\n" +
+          "  '" + flightsetupvm.camera + "',\n" +
+          "  " + Util.getLoginUserID() + ",\n" +
+          "  GETDATE(),\n" +
+          "  'True'" +
+          ")";
+          int cameraid = Util.InsertSQL(SQL1);
+
+          DateTime todaydate = System.DateTime.Now;
+          String SQL = String.Empty;
+          var StartDate = (flightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(-1) : (DateTime)flightsetupvm.GcaApproval.StartDate);
+          var EndDate = (flightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(90) : (DateTime)flightsetupvm.GcaApproval.EndDate);
+          var MinAltitude = (flightsetupvm.GcaApproval.MinAltitude == null ? 0 : flightsetupvm.GcaApproval.MinAltitude);
+          var MaxAltidute = (flightsetupvm.GcaApproval.MaxAltitude == null ? 40 : flightsetupvm.GcaApproval.MaxAltitude);
+
+
+          int ApprovalID = flightsetupvm.GcaApproval.ApprovalID;
+          String ApprovalName = flightsetupvm.GcaApproval.ApprovalName;
+          String Coordinates = flightsetupvm.GcaApproval.Coordinates;
+          if (String.IsNullOrEmpty(Coordinates))
+            Coordinates =
+  "24.949901 55.337585," +
+  "25.218555 55.620971," +
+  "25.387706 55.414978," +
+  "25.087092 55.137084";
+          string[] Coord = Coordinates.Split(',');
+          string Poly = Coordinates + "," + Coord[0];
+
+          if (ApprovalID == 0 && String.IsNullOrEmpty(ApprovalName)) {
+            //Approval is not selected or no name is specifeid
+            //then do not update approvals
+            SQL = String.Empty;
+          } else if (!String.IsNullOrEmpty(ApprovalName) && ApprovalID == 0) {
+            //when a new name is specified for approval
+            //save it as new approval     
+            SQL = @"insert into GCA_Approval(
+                                    ApprovalName,
+                                    ApprovalDate,
+                                    StartDate,
+                                    EndDate,
+                                    Coordinates,
+                                    Polygon,
+                                    CreatedOn,
+                                    CreatedBy,
+                                    DroneID,
+                                    EndTime,
+                                    StartTime,
+                                    BoundaryInMeters,
+                                    MinAltitude,
+                                    MaxAltitude,
+                                    IsUseCamara,
+                                    PilotUserId,
+                                    GroundStaffUserId,
+                                    NotificationEmails,
+                                    CameraId
+                                  ) values(
+                                    '" + flightsetupvm.GcaApproval.ApprovalName + @"',
+                                    GETDATE(),
+                                    '" + StartDate.ToString("yyyy-MM-dd") + @"',
+                                    '" + EndDate.ToString("yyyy-MM-dd") + @"',
+                                    '" + Coordinates + @"',
+                                    geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+                                    GETDATE(),
+                                    " + Session["UserID"] + "," +
+                flightsetupvm.GcaApproval.DroneID + @",
+                                    '" + flightsetupvm.GcaApproval.EndTime + @"',
+                                    '" + flightsetupvm.GcaApproval.StartTime + @"',
+                                    50,
+                                    " + MinAltitude + @",
+                                    " + MaxAltidute + @",
+                                    " + flightsetupvm.GcaApproval.IsUseCamara + @",
+                                    " + flightsetupvm.GcaApproval.PilotUserId + @",
+                                    " + flightsetupvm.GcaApproval.GroundStaffUserId + @",
+                                    '" + flightsetupvm.GcaApproval.NotificationEmails + @"'
+                                    '" + cameraid + @"'
+
+                                  )";
+            //
+          } else {
+            //Got an approval ID 
+            //Update the selected Approval ID
+            SQL = @"Update 
+                                    [GCA_Approval] 
+                                  set 
+                                    StartDateE ='" + StartDate.ToString("yyyy-MM-dd") + @"',
+                                    EndDate = '" + EndDate.ToString("yyyy-MM-dd") + @"',
+                                    Coordinates  = '" + Coordinates + @"',
+                                    Polygon=geography::STGeomFromText('POLYGON((" + Poly + @"))', 4326).MakeValid(),
+                                    EndTime='" + flightsetupvm.GcaApproval.EndTime + @"',
+                                    StartTime='" + flightsetupvm.GcaApproval.StartTime + @"',
+                                    BoundaryInMeters=50,
+                                    MinAltitude = " + MinAltitude + @",
+                                    MaxAltitude = " + MaxAltidute + @",
+                                    IsUseCamara= " + flightsetupvm.GcaApproval.IsUseCamara + @",
+                                    PilotUserId=" + flightsetupvm.GcaApproval.PilotUserId + @",
+                                    GroundStaffUserId=" + flightsetupvm.GcaApproval.GroundStaffUserId + @",
+                                    NotificationEmails='" + flightsetupvm.GcaApproval.NotificationEmails + @"'
+                                    CameraId='" + cameraid + @"'
+                                  where 
+                                    ApprovalID=" + ApprovalID;
+          }
+          if (!String.IsNullOrEmpty(SQL)) {
+            //Execute the sql statement generated
+            Util.doSQL(SQL);
+          }
+
+          int DroneID = Util.toInt(flightsetupvm.GcaApproval.DroneID);
+          SQL = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + DroneID;
+          int DroneSetupId = Util.getDBInt(SQL);
+          if (DroneSetupId == 0) {
+            SQL = @"INSERT INTO MSTR_Drone_Setup (
+                                    DroneID,
+                                    CreatedBy,
+                                    CreatedOn,
+                                    [ModifiedOn]
+                                  ) VALUES (
+                                    " + DroneID + @",
+                                    " + Session["UserID"] + @",
+                                    GETDATE(),
+                                    GETDATE()
+                                  )";
+            Util.doSQL(SQL);
+          }
+          //        if (flightsetupvm.DroneSetup.BatteryVoltage == null)
+          //            flightsetupvm.DroneSetup.BatteryVoltage = 0;
+
+          SQL = @"update 
+                                 MSTR_Drone_Setup 
+                                set 
+                                  PilotUserId=" + flightsetupvm.GcaApproval.PilotUserId + @",
+                                  GroundStaffUserId=" + flightsetupvm.GcaApproval.GroundStaffUserId + @",        
+                                  [ModifiedBy]=" + Util.getLoginUserID() + @",
+                                 [ModifiedOn]=GETDATE(),
+                                 [NotificationEmails]='" + flightsetupvm.GcaApproval.NotificationEmails + @"'
+                                where 
+                                 [DroneId]=" + DroneID;
+          Util.doSQL(SQL);
+        }
+        return "OK";
+
+      } catch (Exception ex) {
+        return ex.Message;
+      }
+    }
+
+
+    //*****END **************************
+
+
+
+
+    public ActionResult FlightRegister([Bind(Prefix = "ID")]int  ID=0)
         {
             //to create gcaapproval
             if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
@@ -1079,14 +1429,78 @@ namespace eX_Portal.Controllers
                 if (flightsetupvm.GcaApproval.DroneID == null || flightsetupvm.GcaApproval.DroneID < 1)
                    
                return "You must select a Drone.";
-                if (flightsetupvm.GcaApproval.PilotUserId < 1 || flightsetupvm.GcaApproval.PilotUserId == null)
-                   
+                if (flightsetupvm.GcaApproval.PilotUserId < 1 || flightsetupvm.GcaApproval.PilotUserId == null)                   
                  return "You must select a pilot.";
                 if (flightsetupvm.GcaApproval.GroundStaffUserId < 1 || flightsetupvm.GcaApproval.GroundStaffUserId == null)
                  //   return RedirectToAction("NoAccess", "Home");
                   return "A Ground staff should be selected.";
-                if (flightsetupvm.GcaApproval.ApprovalName == null)
-                    return "Please enter approval name.";
+
+        //checking email validation
+
+        string Email = "";
+        if (flightsetupvm.GcaApproval.NotificationEmails == null) {
+          Email = "";
+        } else {
+          if (flightsetupvm.GcaApproval.NotificationEmails != null || flightsetupvm.GcaApproval.NotificationEmails != "") {
+            Email = flightsetupvm.GcaApproval.NotificationEmails;
+          }//end if
+
+          if (!IsValidMultipleEmails(Email)) {
+
+            return "Not a valid Email! Seperated by[,]";
+
+          }//end of validate email
+
+        }
+
+
+        if(flightsetupvm.GcaApproval.StartDate>flightsetupvm.GcaApproval.EndDate) {
+
+          return "Start date is greater than end date";
+        }
+
+        
+        if (Util.toDecimal( flightsetupvm.GcaApproval.StartTime.Replace(":","."))>Util.toDecimal(flightsetupvm.GcaApproval.EndTime.Replace(":", "."))) {
+          return "Start time is greater than end time";
+        }
+
+
+        if (flightsetupvm.GcaApproval.ApprovalName == null) {
+          return "Please enter approval name.";
+        }
+        else if(flightsetupvm.GcaApproval.ApprovalName.Length>50) {
+          return "Approval name Max 50 characters are allowed.";
+        }
+
+        
+                    
+          
+          
+
+                if(flightsetupvm.GcaApproval.MinAltitude==null|| flightsetupvm.GcaApproval.MinAltitude<1) {
+                       return "Please enter Min Altitude.";
+
+                   }
+               if (flightsetupvm.GcaApproval.MaxAltitude == null|| flightsetupvm.GcaApproval.MaxAltitude < 1) {
+                    return "Please enter Max Altitude.";
+
+                   }
+
+        if (flightsetupvm.GcaApproval.IsUseCamara < 1)
+          return "Please select camera being Used.";
+
+        //
+        
+        if (flightsetupvm.GcaApproval.IsUseCamara==1&& (flightsetupvm.GcaApproval.CameraId<1|| flightsetupvm.GcaApproval.CameraId== null)) {
+          return "Please select camera.";
+        }
+      
+
+        if(flightsetupvm.GcaApproval.Coordinates==null) {
+
+          return "Please select coordinates";
+        }
+
 
                 if (flightsetupvm.camera == null)
                 {
@@ -1662,7 +2076,30 @@ namespace eX_Portal.Controllers
 
 
 
-        public ActionResult FlightGCAARegister([Bind(Prefix = "ID")]int ID = 0)
+    //********************starts function to check email with comma seperated...
+
+
+
+   public bool IsValidMultipleEmails(string value) {
+      Regex _Regex = new Regex(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
+
+      string[] _emails = value.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+      foreach (string email in _emails) {
+        if (!_Regex.IsMatch(email))
+          return false;
+      }
+
+      return true;
+    }
+
+
+
+    //*******************************code ends
+
+
+
+    public ActionResult FlightGCAARegister([Bind(Prefix = "ID")]int ID = 0)
 
 
         {
@@ -1686,6 +2123,12 @@ namespace eX_Portal.Controllers
             return View(viewModel);
 
         }
+
+
+
+
+
+
 
         [HttpPost]
         public String FlightGCAARegister(GCAAFlightApproval DCAAFlightsetupvm)

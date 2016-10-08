@@ -15,8 +15,8 @@ using System.Data.SqlClient;
 namespace eX_Portal.Controllers {
   public class MapController : Controller {
     // GET: Map
-
     string strConnection = ConfigurationManager.ConnectionStrings["ADSB_DB"].ConnectionString;
+
     public ActionResult Index() {
       return View();
     }
@@ -159,6 +159,23 @@ namespace eX_Portal.Controllers {
       return GridInfo.ToString();
     }
 
+
+    [HttpGet]
+    public String NoFlyZone() {
+      Response.ContentType = "application/vnd.google-earth.kml+xml";
+      NoFlyZoneMap TheMap = new NoFlyZoneMap();
+      //if (!exLogic.User.hasAccess("FLIGHT.MAP")) return "";
+      using (ExponentPortalEntities db = new ExponentPortalEntities()) { 
+        var AllZone =
+          from m in db.MSTR_NoFlyZone
+          select m;
+        foreach(var Row in AllZone) {
+          var Zone = new FlyZone(Row.FillColour, Row.Coordinates);
+          TheMap.NoFlyZone.Add(Zone);
+        }
+      }
+      return TheMap.GetKML().ToString();
+    }
 
     public String RFID([Bind(Prefix = "ID")]String RFID = "") {
       String SQL = @"SELECT 

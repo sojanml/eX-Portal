@@ -5,6 +5,7 @@
     ViewBag.Title = "Flight Registration";
    
 }
+
 @using (Html.BeginForm(null, null, FormMethod.Get, new { name = "frmDroneSetup", id = "frmDroneSetup" }))
 {
 
@@ -33,10 +34,15 @@
           new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.GcaApproval.PilotUserId, "", new { @class = "text-danger" })
             </div>
-            <div>
-                <input id="ispilot" value="1" name="ispilot" type="checkbox" />
-                <label for="ispilot">I am the pilot</label>
-            </div>
+         @if (Util.CheckUserIsPilot(Int32.Parse(Session["UserID"].ToString()))) {
+
+          <div>
+            <input id="ispilot" value="1" name="ispilot" type="checkbox" />
+            <label for="ispilot">I am the pilot</label>
+          </div>
+
+         }
+           
         </div>
 
         <div class="form-group">
@@ -48,10 +54,13 @@
           new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.GcaApproval.GroundStaffUserId, "", new { @class = "text-danger" })
             </div>
+
+            @if (Util.CheckUserIsPilot(Int32.Parse(Session["UserID"].ToString()))) {
             <div>
                 <input id="isgroundstaff" name="isgroundstaff" type="checkbox" />
                 <label for="isgroundstaff">I am the ground staff</label>
             </div>
+            }
         </div>
 
         <h2>Flight Details</h2>
@@ -159,7 +168,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.GcaApproval.CameraId, "Select Camera")
                 <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.GcaApproval.CameraId, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"), "--Select Camera--", new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.GcaApproval.CameraId, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"),  new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.GcaApproval.CameraId, "", new { @class = "text-danger" })
                 </div>
             </div>

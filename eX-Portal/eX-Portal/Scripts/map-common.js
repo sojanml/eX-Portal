@@ -279,15 +279,16 @@ function setFormatData(_LastValue) {
       case "TotalFlightTime":
         value = parseFloat(value);
         if (isNaN(value)) value = 0;
+        /*
         //First time only
         if (_FirstTotalFlightTime < 0) {
           _FirstTotalFlightTime = value;
         }
         //Set the offset for flightime
         value = value - _FirstTotalFlightTime;
+        */
         if (value > 0) value = value / 60;
         value = value.toFixed(3);
-
         break;
       case "Heading":
         value = parseFloat(value);
