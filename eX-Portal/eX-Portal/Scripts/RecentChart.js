@@ -284,17 +284,40 @@ function initChart() {
        
         xAxis: {
             min: 0,
-            max: max,
+          max: max,
+          //  max: category.length > 3 ? 3 : category.length-1,
             title: {
               text: 'UAS Name'
             },
-            
+            labels: {
+              rotation: -60,
+              style: {
+
+                font: '8px'
+              }
+            },
             categories: category,
-            
+           
             crosshair: true,
             scrollbar: scrollData,
         },
         
+        exporting: {
+          enabled: true,
+          sourceWidth: 960,
+          sourceHeight: 400,
+          chartOptions: {
+            xAxis: [{
+              categories: category,
+              min: 0,
+              minRange: category.length - 1,
+              max: category.length - 1
+            }],
+            scrollbar: {
+              enabled: false
+            }
+          }
+        },
         yAxis: {
             min: 0,
             tickInterval: 1,
@@ -339,7 +362,10 @@ function initChart() {
         plotOptions: {
             column: {
                 stacking: 'normal',
-                pointPadding: 0.2,
+                pointPadding: 0,
+                groupPadding: 0,
+                pointWidth: 10,
+               
                 borderWidth: 0
             }
         },
@@ -460,6 +486,24 @@ function initChartTotalFlight() {
 
             crosshair: true,
             scrollbar:scrollData,
+        },
+
+
+        exporting: {
+          enabled: true,
+          sourceWidth: 960,
+          sourceHeight: 400,
+          chartOptions: {
+            xAxis: [{
+              categories: category,
+              min: 0,
+              minRange: category.length - 1,
+              max: category.length - 1
+            }],
+            scrollbar: {
+              enabled: false
+            }
+          }
         },
        
         yAxis: {
