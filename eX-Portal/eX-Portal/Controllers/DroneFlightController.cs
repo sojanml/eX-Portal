@@ -108,7 +108,7 @@ namespace eX_Portal.Controllers {
         nView.addMenu("Flight Videos", Url.Action("ListVdeos", "DroneFlight", new { ID = "_PKey" }));
       //nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.REPORT"))
-        nView.addMenu("Post Flight Report", "/PostFlightReport/_PKey.pdf");
+        nView.addMenu("Post Flight Report", Url.Action("PostFlightReport", "Report", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.GEOTAG"))
         nView.addMenu("Geo-Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.EXPORTCSV"))

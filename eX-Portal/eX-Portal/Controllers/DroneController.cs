@@ -1109,7 +1109,7 @@ namespace eX_Portal.Controllers {
                         if (exLogic.User.hasAccess("DRONE.MANAGE"))
                         return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
                     else
-                        return RedirectToAction("Index", new { ID = DroneView.Drone.DroneId });
+                        return RedirectToAction("Detail", new { ID = DroneView.Drone.DroneId });
                   //  
         } else {
 
