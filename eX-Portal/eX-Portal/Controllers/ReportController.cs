@@ -264,14 +264,10 @@ namespace eX_Portal.Controllers {
 
       var GeoPoints = (
         from t1 in db.GCA_Approval
-        join t2 in db.DroneFlights on t1.DroneID equals t2.DroneID
-        where t2.ID == FlightID &&
-        t2.FlightDate >= t1.StartDate &&
-        t2.FlightDate <= t1.EndDate &&
-        t1.ApprovalID == ApprovalID
+        where t1.ApprovalID == ApprovalID
         select new {
           Outer = t1.Polygon.AsText(),
-          Inner = t1.InnerBoundaryCoord
+          Inner = t1.InnerBoundary.AsText()
         });
 
       foreach(var Row in GeoPoints.ToList()) {
@@ -289,7 +285,7 @@ namespace eX_Portal.Controllers {
 
         GoogleURL.Append("&path=fillcolor:0xFF9B5255|weight:0|enc:" + gEncode(Polygon));
         GoogleURL.Append("&path=fillcolor:0x5AD74655|weight:0|enc:" + gEncode(Outer));
-        GoogleURL.Append("&path=color:0xF42D2DAA|weight:1|enc:" + gEncode(Inner));
+        //GoogleURL.Append("&path=color:0xF42D2DAA|weight:1|enc:" + gEncode(Inner));
 
       }
 
@@ -307,8 +303,8 @@ namespace eX_Portal.Controllers {
       foreach(String Cord in PointList.Split(',')) {
         var LatLnt = Cord.Trim().Split(' ');
         var thisCord = new GeoLocation {
-          Latitude = Util.toDouble(LatLnt[0]),
-          Longitude = Util.toDouble(LatLnt[1])
+          Latitude = Util.toDouble(LatLnt[1]),
+          Longitude = Util.toDouble(LatLnt[0])
         };
         AllPoints.Add(thisCord);
       }//foreach
@@ -318,7 +314,7 @@ namespace eX_Portal.Controllers {
     public ActionResult FlightReport([Bind(Prefix = "ID")]int FlightID = 0) {
       // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       ViewBag.FlightID = FlightID;
-
+      /*
       String SQL = @"
       SELECT TOP 1
        GCA_Approval.ApprovalID,
@@ -344,7 +340,8 @@ namespace eX_Portal.Controllers {
       ORDER BY
         IsInside DESC
       ";
-      var thisApproval = Util.getDBRow(SQL);
+      */
+      
 
       var FlightData = (
         from n in db.DroneFlights
@@ -358,6 +355,7 @@ namespace eX_Portal.Controllers {
           FlightDistance = n.FlightDistance,
           DroneID = n.DroneID,
           CreatedOn = n.CreatedOn,
+          ApprovalID = n.ApprovalID
         }).ToList().FirstOrDefault();
       if(FlightData.FlightHours == null)
         FlightData.FlightHours = 0;
@@ -381,8 +379,14 @@ namespace eX_Portal.Controllers {
         where n.FlightID == FlightID
         select n).ToList();
 
+
+      var thisApproval = 
+        from n in db.GCA_Approval
+        where n.ApprovalID == FlightData.ApprovalID
+        select n;
+
       //set Alert message for Report
-      setReportMessages(FlightData.PortalAlerts, thisApproval);
+      setReportMessages(FlightData.PortalAlerts, thisApproval.FirstOrDefault());
 
       FlightData.Videos = (
         from n in db.DroneFlightVideos
@@ -406,16 +410,14 @@ namespace eX_Portal.Controllers {
         select n).FirstOrDefault();
 
 
-      if((bool)thisApproval["hasRows"])
-        ViewBag.ApprovalID = ((bool)thisApproval["IsInside"] ? thisApproval["ApprovalID"] : 0);
       return View(FlightData);
     }
 
 
-    private void setReportMessages(IList<PortalAlert> Messages, Dictionary<String, Object> thisApproval) {
+    private void setReportMessages(IList<PortalAlert> Messages, GCA_Approval thisApproval) {
 
       foreach(var Message in Messages) {
-        if((bool)thisApproval["hasRows"]) {
+        if(thisApproval != null) {
           var FlightInfo = (
             from f in db.FlightMapDatas
             where f.FlightMapDataID == Message.FlightDataID
@@ -423,11 +425,11 @@ namespace eX_Portal.Controllers {
           ).FirstOrDefault();
           switch(Message.AlertCategory) {
             case "Height":
-              Message.AlertMessage = "UAS is above proposed height of " + thisApproval["MaxAltitude"] + " Meter at " + Message.Altitude + " Meter";
+              Message.AlertMessage = "RPAS is above proposed height of " + thisApproval.MaxAltitude + " Meter at " + Message.Altitude + " Meter";
               break;
             case "Boundary":
               Message.AlertCategory = "Perimeter";
-              Message.AlertMessage = "UAS is outside approved perimeter at " + fmtGPS((Double)Message.Latitude, (Double)Message.Longitude);
+              Message.AlertMessage = "RPAS is outside approved perimeter at " + fmtGPS((Double)Message.Latitude, (Double)Message.Longitude);
               break;
             case "Proximity":
               Message.AlertMessage = getProximityMessage(FlightInfo.OtherFlightIDs, (int)FlightInfo.FlightID);
@@ -605,11 +607,11 @@ namespace eX_Portal.Controllers {
         chart.Series[Item].BorderWidth = 2;
       }
 
-      chart.Series["Altitude"].Color = Color.DarkRed;
-      chart.Series["Speed"].Color = Color.DeepPink;
-      chart.Series["Roll"].Color = Color.DarkTurquoise;
-      chart.Series["Pitch"].Color = Color.Coral;
-      chart.Series["Satellites"].Color = Color.DarkViolet;
+      chart.Series["Altitude"].Color = Color.FromArgb(219, 211, 1);
+      chart.Series["Speed"].Color = Color.FromArgb(11, 144, 118);
+      chart.Series["Roll"].Color = Color.FromArgb(153, 131, 199);
+      chart.Series["Pitch"].Color = Color.FromArgb(255, 89, 0);
+      chart.Series["Satellites"].Color = Color.FromArgb(101, 186, 25);
 
       IList<FlightMapData> fl = query.ToList()
                                .Select(x => new FlightMapData() {

@@ -8,7 +8,7 @@
 
 
 <div id="dialog"></div>
-@*<h2>Drone Images</h2>*@
+@*<h2>RPAS Images</h2>*@
 <ul id="GPS-Images">
     @foreach (var item in Model)
     {
@@ -26,7 +26,7 @@
 <div style="clear:both"></div>
 @if (ViewBag.Actions != "View")
 {
-<h2>Upload Images for UAV</h2>
+<h2>Upload Images for RPAS</h2>
 <ul id="FileUploadProgress"></ul>
 <div>Choose the files that you like to upload for above flight using the option bellow.</div>
 <div><input type="file" multiple name="fileinput" id="fileinput" accept="image/*" /></div>

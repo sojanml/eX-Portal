@@ -17,7 +17,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Live() {
       if(!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
-      ViewBag.Title = "Live UAS";
+      ViewBag.Title = "Live RPAS";
       return View();
     }
     public String LiveData() {
@@ -41,12 +41,12 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "RPAS";
 
       String SQL = "SELECT \n" +
-          "  D.[DroneName] as UAS,\n" +
+          "  D.[DroneName] as RPAS,\n" +
           "  D.[ModelName] as Description,\n" +
           "  D.[CommissionDate],\n" +
           "  O.Name as OwnerName,\n" +
           "  M.Name as Manufacture,\n" +
-          "  U.Name as UASType,\n" +
+          "  U.Name as RPASType,\n" +
           "  Count(*) Over() as _TotalRecords,\n" +
           "  D.[DroneId] as _PKey\n" +
           "FROM\n" +
@@ -339,7 +339,7 @@ namespace eX_Portal.Controllers {
 
       if(!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT")) {
         JsonText.Append(Util.Pair("status", "error", true));
-        JsonText.Append(Util.Pair("message", "You do not have access to UAS Documents", false));        
+        JsonText.Append(Util.Pair("message", "You do not have access to RPAS Documents", false));        
       } else { 
         String SQL = "SELECT Count(*) FROM DroneDocuments\n" +
           "WHERE\n" +
@@ -504,13 +504,13 @@ namespace eX_Portal.Controllers {
       if(!exLogic.User.hasAccess("DRONE"))
         return "Access Denied";
       String SQL = "SELECT \n" +
-          "  D.[DroneName] as UAS,\n" +
+          "  D.[DroneName] as RPAS,\n" +
           "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
           "  D.[DroneSerialNo] as [UAS S.no],\n" +
           "  O.Name as OwnerName,\n" +
           "  M.Name as ManufactureName,\n" +
-          "  U.Name as UASType,\n" +
-          "  D.[DroneIdHexa] as UASHexaId,\n" +
+          "  U.Name as RPASType,\n" +
+          "  D.[DroneIdHexa] as RPASHexaId,\n" +
           "  D.[ModelName] as Description,\n" +
           "  RegistrationAuthority as RegistrationAuthority\n" +
           "FROM\n" +
@@ -557,9 +557,9 @@ namespace eX_Portal.Controllers {
 
       string SQL = "select\n" +
           "  ISNULL(a.isactive, 'True') as IsActive,\n" +
-          "  a.DroneId as UASSno,\n" +
+          "  a.DroneId as RPASno,\n" +
           "  a.ReAssignNote,\n" +
-          "  a.DroneName as UAS,\n" +
+          "  a.DroneName as RPAS,\n" +
           "  Convert(varchar, a.ReAssignDate, 9) as ReAssignDate,\n" +
           "  c.UserName as ReAssignedBy \n" +
           "from \n" +
@@ -576,7 +576,7 @@ namespace eX_Portal.Controllers {
       if((bool)Row["hasRows"] && Row["IsActive"].ToString() != "True") {
         Detail.AppendLine("<div class=\"decommission-info\">");
         Detail.AppendLine("ReAssigned For");
-        Detail.AppendLine("<span>" + Row["UAS"] + "</span>");
+        Detail.AppendLine("<span>" + Row["RPAS"] + "</span>");
         Detail.AppendLine("on");
         Detail.AppendLine("<span>" + Row["ReAssignDate"] + "</span>");
         Detail.AppendLine("by");
