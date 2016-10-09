@@ -209,7 +209,7 @@ namespace eX_Portal.Controllers
             if (!exLogic.User.hasAccess("PILOTLOG.VIEW")) return "Access Denied";
             string SQL = "SELECT \n" +
                         " CONVERT(NVARCHAR, a.Date, 103) AS Date\n   " +   
-                        " ,b.DroneName as UASName " +
+                        " ,b.DroneName as RPASName " +
                         " ,a.RouteFrom " +
                         ",a.RouteTo    " +
                         " ,a.Remarks   " +
