@@ -89,9 +89,12 @@ function initChartsMonthly() {
 
         },
         legend: {
+           align: 'Right',
+           verticalAlign: 'bottom',
+            y: 180,
             itemStyle: {
                 
-                fontSize:'10px'
+                fontSize:'8px'
             }
         },
         credits: {
@@ -100,8 +103,15 @@ function initChartsMonthly() {
 
       
             title: {
-                text: null,
-               // x: -20 //center
+              text: "Last 12 Months Analysis",
+              align: 'left',
+
+              style: {
+                "fontFamily": 'Conv_DINNextLTPro-Light',
+                "fontSize": "15px",
+                color: '#ff6666',
+                "fontWeight": "bold"
+              }
             },
             subtitle: {
                  text: null,

@@ -402,6 +402,10 @@ namespace eX_Portal.Controllers
             {
                 if (!String.IsNullOrEmpty(UserModel.User.Password) && !String.IsNullOrEmpty(UserModel.User.ConfirmPassword))
                 {
+                    //if(UserModel.User.Password.Length<=5)
+                    //{
+                    //    ModelState.AddModelError("User.Password", "Password character should be minimum 6");
+                    //}
                     if (UserModel.User.Password != UserModel.User.ConfirmPassword)
                     {
                         ModelState.AddModelError("User.Password", "Password doesn't match.");

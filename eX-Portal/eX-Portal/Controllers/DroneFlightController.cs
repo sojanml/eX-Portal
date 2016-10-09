@@ -35,14 +35,13 @@ namespace eX_Portal.Controllers {
         THEN ''
       ELSE '<span class=icon>&#xf03d;</span>'
       END AS Video,";
-
+            //tblPilot.FirstName AS CreatedBy,
       String SQLFilter = "";
       String SQL = @"SELECT 
         DroneFlight.ID,
         MSTR_Drone.DroneName AS RPAS,
         tblPilot.FirstName AS PilotName,
         tblGSC.FirstName AS GCSName,
-        tblPilot.FirstName AS CreatedBy,
         FlightDate AS 'FlightDate',
         ApprovalName,
         " + (exLogic.User.hasAccess("FLIGHT.VIDEOS") ? SQLVideo : "") + @"
