@@ -16,6 +16,9 @@ namespace eX_Portal.ViewModel {
   }
 
   public class FlightViewModel {
+    public FlightViewModel() {
+      ApprovalID = 0;
+    }
     public int ID { get; set; }
     public Nullable<int> PilotID { get; set; }
     public Nullable<int> GSCID { get; set; }
@@ -74,5 +77,7 @@ namespace eX_Portal.ViewModel {
       TimeSpan time = TimeSpan.FromSeconds((int)FlightHours);
       return time.ToString(@"hh\:mm\:ss");
     }
+
+    public int ApprovalID { get; set; }
   }
 }

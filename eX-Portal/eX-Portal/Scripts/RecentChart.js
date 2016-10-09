@@ -252,7 +252,7 @@ function initChart() {
         
             type: 'column',
             marginRight:0,
-            marginBottom: 65,
+            marginBottom: 68,
             spacingLeft: 0,
             spacingBottom: 0,
             events: {
@@ -287,7 +287,7 @@ function initChart() {
           max: max,
           //  max: category.length > 3 ? 3 : category.length-1,
             title: {
-              text: 'UAS Name'
+              text: 'RPAS Name'
             },
             labels: {
               rotation: -60,
@@ -454,7 +454,7 @@ function initChartTotalFlight() {
 
             type: 'column',
             marginRight: 0,
-            marginBottom: 65,
+            marginBottom:68,
             spacingLeft: 0,
             spacingBottom: 0,
         },
@@ -474,7 +474,7 @@ function initChartTotalFlight() {
             max:max,
             categories: category,
             title: {
-              text: 'UAS Name'
+              text: 'RPAS Name'
             },
             labels: {
               rotation: -60,

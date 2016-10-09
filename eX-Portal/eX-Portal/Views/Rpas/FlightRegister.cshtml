@@ -17,7 +17,7 @@
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.GcaApproval.DroneID, "UAS Name")
+            @Html.LabelFor(model => model.GcaApproval.DroneID, "RPAS Name")
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.GcaApproval.DroneID, DroneFlightSetup.GetDdListDrone(Convert.ToInt32(Session["AccountID"].ToString())),
         "--Select Drone--",
