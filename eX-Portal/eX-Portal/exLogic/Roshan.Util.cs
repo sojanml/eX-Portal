@@ -83,7 +83,7 @@ namespace eX_Portal.exLogic
             if(NeedSelect)
                 SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
             SelectList.Add(new SelectListItem { Text = "True", Value = "1" });
-            SelectList.Add(new SelectListItem { Text = "false", Value = "0" });
+            SelectList.Add(new SelectListItem { Text = "false", Value = "2" });
             return SelectList; //return the list objects
         }//function GetDropDowntList
 
