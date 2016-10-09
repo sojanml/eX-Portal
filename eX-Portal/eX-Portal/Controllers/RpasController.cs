@@ -987,6 +987,75 @@ namespace eX_Portal.Controllers
         if (flightsetupvm.GcaApproval.ApprovalName == null)
           return "Please enter approval name.";
 
+
+        string Email = "";
+        if (flightsetupvm.GcaApproval.NotificationEmails == null) {
+          Email = "";
+        } else {
+          if (flightsetupvm.GcaApproval.NotificationEmails != null || flightsetupvm.GcaApproval.NotificationEmails != "") {
+            Email = flightsetupvm.GcaApproval.NotificationEmails;
+          }//end if
+
+          if (!IsValidMultipleEmails(Email)) {
+
+            return "Not a valid Email! Seperated by[,]";
+
+          }//end of validate email
+
+        }
+
+
+        if (flightsetupvm.GcaApproval.StartDate > flightsetupvm.GcaApproval.EndDate) {
+
+          return "Start date is greater than end date";
+        }
+
+
+        if (Util.toDecimal(flightsetupvm.GcaApproval.StartTime.Replace(":", ".")) > Util.toDecimal(flightsetupvm.GcaApproval.EndTime.Replace(":", "."))) {
+          return "Start time is greater than end time";
+        }
+
+
+        if (flightsetupvm.GcaApproval.ApprovalName == null) {
+          return "Please enter approval name.";
+        } else if (flightsetupvm.GcaApproval.ApprovalName.Length > 50) {
+          return "Approval name Max 50 characters are allowed.";
+        }
+
+
+
+
+
+
+        if (flightsetupvm.GcaApproval.MinAltitude == null || flightsetupvm.GcaApproval.MinAltitude < 1) {
+          return "Please enter Min Altitude.";
+
+        }
+        if (flightsetupvm.GcaApproval.MaxAltitude == null || flightsetupvm.GcaApproval.MaxAltitude < 1) {
+          return "Please enter Max Altitude.";
+
+        }
+
+        if (flightsetupvm.GcaApproval.IsUseCamara < 1)
+          return "Please select camera being Used.";
+
+        //
+
+        if (flightsetupvm.GcaApproval.IsUseCamara == 1 && (flightsetupvm.GcaApproval.CameraId < 1 || flightsetupvm.GcaApproval.CameraId == null)) {
+          return "Please select camera.";
+        }
+
+
+        if (flightsetupvm.GcaApproval.Coordinates == null) {
+
+          return "Please select coordinates";
+        }
+
+
+
+
+
+
         if (flightsetupvm.camera == null) {
           if (flightsetupvm.GcaApproval.CameraId == null)
             flightsetupvm.GcaApproval.CameraId = 0;

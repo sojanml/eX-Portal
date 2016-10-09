@@ -509,20 +509,26 @@ function initChartTotalFlight() {
         yAxis: {
          
           tickPixelInterval: 5,
-             //min:.01,
-          max:2000,
-          type: 'Logarthmic',
+           //  min:.00,
+         // max:2000
+         // type: 'Logarthmic',
+          //allowDecimals: true,
+          //startOnTick: false,
+          minPadding: 0,
             //minorTickInterval: 0.1,
-           // tickInterval: 10,
+          //  tickInterval: 2.5,
             title: {
                 text: 'Time  (Minutes)'
             }
         
         },
         plotOptions: {
-          column: {
-            minPointLength: 5
-          }
+          series: {
+            minPointLength: 3
+          },
+          //column: {
+          //  minPointLength: 5
+          //}
         },
         legend: {
             display: null
@@ -559,7 +565,7 @@ function initChartTotalFlight() {
         //},
         plotOptions: {
             column: {
-                pointPadding: 0.2,
+                pointPadding: 0.1,
                 borderWidth: 0
             }
         },
@@ -567,7 +573,7 @@ function initChartTotalFlight() {
             name: 'Total Flight Time',
             data: TotalFlightData,
             showInLegend: false,
-            minPointLength: 1,
+            minPointLength: 3,
             //----
             cursor: 'pointer',
             point: {
