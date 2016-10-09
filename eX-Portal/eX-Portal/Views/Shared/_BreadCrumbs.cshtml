@@ -2,6 +2,13 @@
 @{
   String ControllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
   String ActionName = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+  var ParamID = Request["ID"] != null ? Request["ID"].ToString() : "";
+
+  String ShowControllerName = ControllerName;
+  //if (ShowControllerName.Equals("Drone")) { ShowControllerName = "RPAS"; }
+  if (ShowControllerName.IndexOf("Drone") >= 0) { ShowControllerName = ControllerName.Replace("Drone", "RPAS"); }
+
+
 }
 <ul>
 
@@ -20,12 +27,14 @@
     }
     break;
   default:
-    if (ActionName != "Index") {
-      <li><a href="">@Util.toCaption(ControllerName)</a></li>
+    if (ActionName != "Index" ) {
+      <li><a href="@Url.Action("Index", ControllerName)">@Util.toCaption(ShowControllerName)</a></li>
     }
     break;
   }
-  <li>@ViewBag.Title</li>
+  @if(!String.IsNullOrEmpty(ViewBag.Title)) { 
+    <li>@ViewBag.Title</li>
+  }
 
 
 </ul>
