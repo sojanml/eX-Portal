@@ -86,6 +86,7 @@ namespace eX_Portal.Models {
 
     [Compare("Password")]
     [Display(Name = "Confirm Password")]
+    [StringLength(30, MinimumLength = 6, ErrorMessage = "Password character should be minimum 6")]
     public string ConfirmPassword { get; set; }
 
     [Required(ErrorMessage = "Please enter First Name")]
@@ -120,6 +121,8 @@ namespace eX_Portal.Models {
 
     [Required(ErrorMessage = "Please enter Mobile Number")]
     [Display(Name = "Mobile Number")]
+    [DataType(DataType.PhoneNumber)]
+    [RegularExpression(@"^\(?([0-9]{5})\)?[ ]?([0-9]{9})$", ErrorMessage = "Entered phone format '00971 123456789' is not valid.")]
     public string MobileNo { get; set; }
 
     [Display(Name = "Office Number")]
