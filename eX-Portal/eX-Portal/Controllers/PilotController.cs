@@ -457,6 +457,7 @@ namespace eX_Portal.Controllers
 
                 SQL = "UPDATE MSTR_USER_PILOT SET\n" +
                  "  DateOfExpiry='" + UserModel.Pilot.DateOfExpiry + "',\n" +
+                 "  PassportNo= '" + UserModel.Pilot.PassportNo + "',\n"+
                  "  Department='" + UserModel.Pilot.Department + "',\n" +
                  "  EmiratesId='" + UserModel.Pilot.EmiratesId + "',\n" +
                  "  Title='" + UserModel.Pilot.Title + "'\n" +
