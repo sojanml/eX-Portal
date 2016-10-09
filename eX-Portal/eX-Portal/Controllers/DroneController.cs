@@ -59,14 +59,19 @@ namespace eX_Portal.Controllers {
           "Left join LUP_Drone U on\n" +
           "  UAVTypeID = U.TypeID and\n" +
           "  U.Type= 'UAVType'\n";
-         if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-         {
-                    SQL +=
-                      "WHERE\n" +
-                      "  D.AccountID=" + Util.getAccountID();
-         }
-            
-      qView nView = new qView(SQL);
+         //if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+         //{
+         //           SQL +=
+         //             "WHERE\n" +
+         //             "  D.AccountID=" + Util.getAccountID();
+         //}else 
+            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
+                SQL +=
+                  "WHERE\n" +
+                  "  D.AccountID=" + Util.getAccountID();
+            }
+            qView nView = new qView(SQL);
       if(exLogic.User.hasAccess("DRONE"))
         nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
       if(exLogic.User.hasAccess("DRONE.EDIT")) {
@@ -504,12 +509,12 @@ namespace eX_Portal.Controllers {
       if(!exLogic.User.hasAccess("DRONE"))
         return "Access Denied";
       String SQL = "SELECT \n" +
-          "  D.[DroneName] as UAS,\n" +
+          "  D.[DroneName] as RPAS,\n" +
           "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
-          "  D.[DroneSerialNo] as [UAS S.no],\n" +
+          "  D.[DroneSerialNo] as [RPAS S.no],\n" +
           "  O.Name as OwnerName,\n" +
           "  M.Name as ManufactureName,\n" +
-          "  U.Name as UASType\n" +
+          "  U.Name as RPASType\n" +
           //"  D.[DroneIdHexa] as UASHexaId,\n" +
           //"  D.[ModelName] as Description,\n" +
           //"  RegistrationAuthority as RegistrationAuthority\n" +
@@ -625,10 +630,9 @@ namespace eX_Portal.Controllers {
                 OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();           
       OwnerListSQL +=" ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
-        Drone = new MSTR_Drone() ,
-        
-        OwnerList = Util.getListSQL(OwnerListSQL),
-        UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
+        Drone = new MSTR_Drone(),
+          OwnerList = Util.getListSQL(GetsqlforOwner(exLogic.User.hasAccess("DRONE.MANAGE"))),
+          UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
         ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
         //PartsGroupList = Util.GetDropDowntList();
       };
@@ -998,16 +1002,33 @@ namespace eX_Portal.Controllers {
       }
     }
 
-    // GET: Drone/Edit/5
+        // GET: Drone/Edit/5
+        
+    public string GetsqlforOwner(bool Value)
+        {
+            string OwnerListSQL="";
+            if (Value)
+            { OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name"; }
+            else
+            {
+                OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account where accountID = '" + Convert.ToString(Util.getAccountID()) + "' ORDER BY Name";
+            }
+            return OwnerListSQL;
+        }
     public ActionResult Edit(int id) {
       if(!exLogic.User.hasAccess("DRONE.EDIT"))
         return RedirectToAction("NoAccess", "Home");
-      ViewBag.DroneId = id;
+            //bool IsmanageAccess = true;
+            //if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+            //{
+            //    IsmanageAccess = false;
+            //}
+            ViewBag.DroneId = id;
       ExponentPortalEntities db = new ExponentPortalEntities();
-      String OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name";
+      //String OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
         Drone = db.MSTR_Drone.Find(id),
-        OwnerList = Util.getListSQL(OwnerListSQL),
+        OwnerList = Util.getListSQL(GetsqlforOwner(exLogic.User.hasAccess("DRONE.MANAGE"))),
         UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
         ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
         //PartsGroupList = Util.GetDropDowntList();
@@ -1088,7 +1109,7 @@ namespace eX_Portal.Controllers {
                         if (exLogic.User.hasAccess("DRONE.MANAGE"))
                         return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
                     else
-                        return RedirectToAction("Detail", new { ID = DroneView.Drone.DroneId });
+                        return RedirectToAction("Index", new { ID = DroneView.Drone.DroneId });
                   //  
         } else {
 

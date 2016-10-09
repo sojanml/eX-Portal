@@ -180,8 +180,14 @@ function resetBounds() {
 
 
 function AddToUploadQueue() {
+
     for (var i = 0; i < this.files.length; i++) {
         QueID++;
+        if (QueID > 4) {
+            var HTML = "Maximum 5 images is allowed.'";
+            $('#FileUploadProgress').append(Elem);
+            return;
+        }
         var file = this.files[i];
         file.uploadKey = QueID;
         FilesInQueue.push(file);
@@ -197,6 +203,8 @@ function AddToUploadQueue() {
 }
 
 function startUploadQueue() {
+    var value = FilesInQueue.length;
+
     if (FilesInQueue.length <= 0) return;
     var file = FilesInQueue.shift();
     SubmitFile(file);
