@@ -588,6 +588,17 @@ function Replay() {
   //Clear the Graph
   drawLineChart(1);
 
+  //Stop the Video
+  playerInstance.stop();
+
+
+  //Reset the date to start time
+  var iDt = _LocationPoints[0]['ReadTime'];
+  _ReplayTimeAt = new Date(iDt);
+  _ElapsedTime = 0;
+  //_BlackBoxStartAt = _ReplayTimeAt;
+  //_BlackBoxStartAt.setMinutes(_BlackBoxStartAt.getMinutes() + Now.getTimezoneOffset());
+
   //Start the timer
   _LocationIndex = -1;
   _IsLiveMode = false;
@@ -1072,7 +1083,6 @@ function setInformationAtIntex() {
     $('#data_' + key).html(value);
   });
 
-
 }
 
 function setMapInfo() {
@@ -1101,7 +1111,7 @@ function fn_on_pause(theData) {
 function startReplayTimer() {
   if (thePlayTimer) {
     window.clearInterval(thePlayTimer);
-    window.clearTimeout(thePlayTimer);
+    //window.clearTimeout(thePlayTimer);
   }
 
   thePlayTimer = window.setInterval(function () {

@@ -50,7 +50,7 @@ namespace eX_Portal.Controllers {
       FROM 
         DroneFlight
       LEFT JOIN GCA_Approval as g
-	    ON g.ApprovalID = DroneFlight.ApprovalID
+      ON g.ApprovalID = DroneFlight.ApprovalID
       LEFT JOIN MSTR_Drone
         ON MSTR_Drone.DroneId = DroneFlight.DroneID
       LEFT JOIN MSTR_User AS tblPilot
@@ -165,7 +165,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Create([Bind(Prefix = "ID")] int DroneID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.CREATE"))
         return RedirectToAction("NoAccess", "Home");
-      ViewBag.Title = "Create UAS Flight";
+      ViewBag.Title = "Create RPAS Flight";
       DroneFlight InitialData = new DroneFlight();
       InitialData.DroneID = DroneID;
       return View(InitialData);
@@ -207,7 +207,7 @@ namespace eX_Portal.Controllers {
 
         return RedirectToAction("Detail", new { ID = ID });
       } else {
-        ViewBag.Title = "Create UAS Flight";
+        ViewBag.Title = "Create RPAS Flight";
         return View(theFlight);
       }
 
@@ -217,7 +217,7 @@ namespace eX_Portal.Controllers {
     public ActionResult Edit([Bind(Prefix = "ID")] int FlightID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.EDIT"))
         return RedirectToAction("NoAccess", "Home");
-      ViewBag.Title = "Edit UAS Flight";
+      ViewBag.Title = "Edit RPAS Flight";
       ExponentPortalEntities db = new ExponentPortalEntities();
       DroneFlight InitialData = db.DroneFlights.Find(FlightID);
       return View(InitialData);
@@ -228,7 +228,7 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("FLIGHT.EDIT"))
         return RedirectToAction("NoAccess", "Home");
 
-      ViewBag.Title = "Edit UAS Flight";
+      ViewBag.Title = "Edit RPAS Flight";
       // ExponentPortalEntities db = new ExponentPortalEntities();
       // db.Entry(InitialData).State = EntityState.Modified;
       // db.SaveChanges();
@@ -293,7 +293,7 @@ namespace eX_Portal.Controllers {
         return RedirectToAction("NoAccess", "Home");
       if (!exLogic.User.hasDrone(Util.GetDroneIdFromFlight(ID)))
         return RedirectToAction("NoAccess", "Home");
-      ViewBag.Title = "UAS Flight Details";
+      ViewBag.Title = "RPAS Flight Details";
       ViewBag.FlightID = ID;
 
       String SQL =
@@ -336,8 +336,8 @@ namespace eX_Portal.Controllers {
 
       String SQL =
       "SELECT\n" +
-      "   DroneFlight.ID UASFlightId,\n" +
-      "   MSTR_Drone.DroneName as UAS,\n" +
+      "   DroneFlight.ID RPASFlightId,\n" +
+      "   MSTR_Drone.DroneName as RPAS,\n" +
       "   tblPilot.FirstName + ' ' + tblPilot.LastName  as PilotName,\n" +
       "   tblGSC.FirstName + ' ' + tblGSC.LastName as [GroundStation],\n" +
       "   tblPilot.FirstName + ' ' + tblPilot.LastName as CreatedBy,\n" +
@@ -363,7 +363,7 @@ namespace eX_Portal.Controllers {
 
       UASFormat = "<a href='/Drone/Detail/" + DroneId + "'>" + Util.GetUASFromFlight(ID) + "</a>";//url
       PilotFormat = "<a href='/User/UserDetail/" + UserId + "'>" + Util.GetPilotFromFlight(ID) + "</a>";//url
-      theView.FormatCols.Add("UAS", UASFormat); //Adding the Column required for formatting  
+      theView.FormatCols.Add("RPAS", UASFormat); //Adding the Column required for formatting  
       theView.FormatCols.Add("PilotName", PilotFormat); // //Adding the Column required for formatting  
 
       SQL = @"
@@ -436,7 +436,7 @@ namespace eX_Portal.Controllers {
         return "Access Denied";
       String SQL =
       "SELECT TOP 5" +
-      "   MSTR_Drone.DroneName as UAS,\n" +
+      "   MSTR_Drone.DroneName as RPAS,\n" +
       "   tblPilot.FirstName as PilotName,\n" +
       "   tblGSC.FirstName as GSCName,\n" +
       "   tblCreated.FirstName as CreatedBy,\n" +
