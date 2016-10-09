@@ -1278,6 +1278,7 @@
     <Content Include="Views\Rpas\FlightGCAARegister.cshtml" />
     <Content Include="Views\Rpas\FlightAproval.cshtml" />
     <Content Include="Views\Rpas\FlightApproval.cshtml" />
+    <Content Include="Views\Report\PostFlightReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -83,15 +83,7 @@ namespace eX_Portal.Controllers {
       } else {
         IsCompany = 0;
       }
-
-
-
-
       DocsGeo = Util.getAllGeoTag(FromDate, ToDate, IsCompany, DroneID);
-
-
-
-
       return View(DocsGeo);
     }
 
@@ -311,6 +303,24 @@ namespace eX_Portal.Controllers {
 
       return AllPoints;
     }
+
+    public ActionResult PostFlightReport([Bind(Prefix ="ID")] int FlightID = 0) {
+      //check if the PDF is generated
+      String FullPath = System.IO.Path.Combine("C:\\Reports", String.Format("{0}.pdf", FlightID));
+      if(System.IO.File.Exists(FullPath)) {
+        var ReturnData = System.IO.File.ReadAllBytes(FullPath);
+        var ReturnType = System.Web.MimeMapping.GetMimeMapping(FullPath);
+        var cd = new System.Net.Mime.ContentDisposition {
+          FileName = "FlightReport-" + FlightID + DateTime.Now.ToString("-yyyymmddhhMMss") + ".pdf",
+          Inline = false,
+        };
+        Response.AppendHeader("Content-Disposition", cd.ToString());
+        return File(ReturnData, ReturnType);
+      }
+      ViewBag.Title = "Report not found";
+      return View();
+    }
+
     public ActionResult FlightReport([Bind(Prefix = "ID")]int FlightID = 0) {
       // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       ViewBag.FlightID = FlightID;
