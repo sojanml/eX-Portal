@@ -589,7 +589,7 @@ function Replay() {
   drawLineChart(1);
 
   //Stop the Video
-  playerInstance.stop();
+  if(playerInstance) playerInstance.stop();
 
 
   //Reset the date to start time
@@ -649,7 +649,7 @@ function getLocationPoints() {
 function setDrawIntilize() {
 
   //Load no Fly Zone Area from KML File
-  var KmlUrl = 'http://test.exponent-ts.com/Map/NoFlyzone';
+  var KmlUrl = 'http://test.exponent-ts.com/Map/NoFlyzone?R=' + Math.random();
   var kmlOptions = {
     preserveViewport: true,
     map: map
