@@ -93,6 +93,14 @@ var DronePositionIcon = false;
 $(document).ready(function () {
 
   initializeMap();
+
+  var KmlUrl = 'http://test.exponent-ts.com/Map/NoFlyzone?R=' + Math.random();
+  var kmlOptions = {
+    preserveViewport: true,
+    map: map
+  };
+  NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
+  NoFlyZone.setValues({ map: map });
   setAllowedRegion();
   //drawLocationPoints();
   initilizeTable();
