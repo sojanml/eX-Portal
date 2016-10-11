@@ -93,13 +93,9 @@
         <div class="two-column-form-group">
             <div class="form-group">
                 @Html.LabelFor(model => model.GcaApproval.StartDate)
-                <div class="col-md-10">                
-                       
-                  
+                <div class="col-md-10">    
                         @Html.EditorFor(model => model.GcaApproval.StartDate, "{0:dd-MM-yyyy}", new { htmlAttributes = new { @class = "form-control date-picker" } })
-                     
-                  
-                   
+                    
                     @Html.ValidationMessageFor(model => model.GcaApproval.StartDate, "", new { @class = "text-danger" })
                 </div>
             </div>
