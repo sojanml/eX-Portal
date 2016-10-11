@@ -1027,10 +1027,10 @@ namespace eX_Portal.Controllers
 
 
 
-        if (flightsetupvm.GcaApproval.MinAltitude == null || flightsetupvm.GcaApproval.MinAltitude < 1) {
-          return "Please enter Min Altitude.";
+        //if (flightsetupvm.GcaApproval.MinAltitude == null || flightsetupvm.GcaApproval.MinAltitude < 1) {
+        //  return "Please enter Min Altitude.";
 
-        }
+        //}
         if (flightsetupvm.GcaApproval.MaxAltitude == null || flightsetupvm.GcaApproval.MaxAltitude < 1) {
           return "Please enter Max Altitude.";
 
@@ -1546,10 +1546,10 @@ namespace eX_Portal.Controllers
           
           
 
-                if(flightsetupvm.GcaApproval.MinAltitude==null|| flightsetupvm.GcaApproval.MinAltitude<1) {
-                       return "Please enter Min Altitude.";
+                //if(flightsetupvm.GcaApproval.MinAltitude==null|| flightsetupvm.GcaApproval.MinAltitude<1) {
+                //       return "Please enter Min Altitude.";
 
-                   }
+                //   }
                if (flightsetupvm.GcaApproval.MaxAltitude == null|| flightsetupvm.GcaApproval.MaxAltitude < 1) {
                     return "Please enter Max Altitude.";
 
