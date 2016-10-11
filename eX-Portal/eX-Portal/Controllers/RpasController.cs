@@ -1669,7 +1669,7 @@ namespace eX_Portal.Controllers
                             IsUseCamara= " + flightsetupvm.GcaApproval.IsUseCamara + @",
                             PilotUserId=" + flightsetupvm.GcaApproval.PilotUserId + @",
                             GroundStaffUserId=" + flightsetupvm.GcaApproval.GroundStaffUserId + @",
-                            NotificationEmails='" + flightsetupvm.GcaApproval.NotificationEmails + @"'
+                            NotificationEmails='" + flightsetupvm.GcaApproval.NotificationEmails + @"',
                             CameraId='" + flightsetupvm.GcaApproval.CameraId + @"'
                           where 
                             ApprovalID=" + ApprovalID;
