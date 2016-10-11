@@ -970,7 +970,7 @@ namespace eX_Portal.Controllers
     }
 
     [HttpPost]
-    public String FlightApproval(FlightSetupViewModel flightsetupvm) {
+    public string FlightApproval(FlightSetupViewModel flightsetupvm) {
       try {
         if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
           // return RedirectToAction("NoAccess", "Home");
@@ -1346,9 +1346,11 @@ namespace eX_Portal.Controllers
                                  [DroneId]=" + DroneID;
           Util.doSQL(SQL);
         }
-        return "OK";
+                //RedirectToAction("FlightRegistrationDetails", "RPAS", new { ID = flightsetupvm.GcaApproval.ApprovalID });
+                return "OK|"+Url.Action("FlightRegistrationDetails", "RPAS", new { ID = flightsetupvm.GcaApproval.ApprovalID });
+       
 
-      } catch (Exception ex) {
+            } catch (Exception ex) {
         return ex.Message;
       }
     }
@@ -2452,7 +2454,6 @@ namespace eX_Portal.Controllers
         where 
          [DroneId]=" + DroneID;
                 Util.doSQL(SQL);
-                //  return RedirectToAction("Applications", "Rpas","");
                 return "OK";
             }
             catch (Exception ex)

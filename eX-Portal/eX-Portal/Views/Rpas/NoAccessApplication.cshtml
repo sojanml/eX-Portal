@@ -8,7 +8,7 @@
 
 
 <h2>Requested By</h2>
-@Html.Action("UserDetailView", "User", new { ID = Model.CreatedBy })
+@Html.Action("UserDetailView", "User", new { ID = Model.PilotUserId })
 
 <h2>UAS Details</h2>
 @Html.Action("DroneDetail", "Drone", new { ID = Model.DroneID })
