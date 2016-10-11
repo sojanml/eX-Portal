@@ -324,7 +324,7 @@ namespace eX_Portal.Controllers {
                   " ,a.[FirstName] \n " +
                   ",a.[MiddleName]\n " +
                   ",a.[LastName]\n  " +
-                  ",a.[Remarks]\n   " +
+                  //",a.[Remarks]\n   " +
                   ",a.[MobileNo]\n  " +
                   ",a.[OfficeNo]\n  " +
                   ",a.[HomeNo]\n" +
@@ -334,8 +334,8 @@ namespace eX_Portal.Controllers {
                   ",b.[Department]\n  " +
                   " ,b.[EmiratesId] \n   " +
                   ",b.[Title] as JobTitle\n   " +
-                  ",c.[Name] as OrganizationName\n   " +
-                  ",d.[ProfileName]\n   " +
+                  ",c.[Name] as Authority\n   " +
+                  //",d.[ProfileName]\n   " +
                   " FROM[MSTR_User] a\n   " +
                   " left join mstr_user_pilot b\n  " +
                   "on a.UserId=b.UserId\n   " +
