@@ -20,7 +20,8 @@
   </style>
     <title>Google Map Editor</title>
   <script type="text/javascript">
-    var geoXmlDoc = null;    var Polygon = [];
+    var geoXmlDoc = null;
+    var Polygon = [];
     window.onload = initializeMap;
     var Coordinates = [
       { lat: 25.24247, lng: 55.32145 },
@@ -52,7 +53,7 @@
       map = new google.maps.Map(document.getElementById('map_canvas'),
           mapOptions);
       
-      /*
+
       var cityCircle1 = new google.maps.Circle({
         strokeColor: '#0000FF',
         strokeOpacity: 0.8,
@@ -80,7 +81,7 @@
         draggable: true,
         zIndex: 0
       });
-      */
+
       //  myInterval = setInterval(function () { }, 500);
       for (var i = 0; i < MapData.length; i++) {
         // Construct the polygon.
@@ -91,7 +92,7 @@
           strokeWeight: 1,
           fillColor: MapData[i].FillColor,
           fillOpacity: 0.35,
-          editable: false,
+          editable: true,
           draggable: false,
           title: MapData[i].ZoneName,
           zIndex:(100  + i)

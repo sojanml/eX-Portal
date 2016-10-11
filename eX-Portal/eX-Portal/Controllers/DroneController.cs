@@ -65,13 +65,13 @@ namespace eX_Portal.Controllers {
          //             "WHERE\n" +
          //             "  D.AccountID=" + Util.getAccountID();
          //}else 
-            if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-            {
-                SQL +=
-                  "WHERE\n" +
-                  "  D.AccountID=" + Util.getAccountID();
-            }
-            qView nView = new qView(SQL);
+      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+        SQL +=
+          "WHERE\n" +
+          "  D.AccountID=" + Util.getAccountID();
+      }
+      qView nView = new qView(SQL);
+
       if(exLogic.User.hasAccess("DRONE"))
         nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
       if(exLogic.User.hasAccess("DRONE.EDIT")) {

@@ -9,13 +9,16 @@
   if (ShowControllerName.IndexOf("Drone") >= 0) { ShowControllerName = ControllerName.Replace("Drone", "RPAS"); }
 }
 <ul>
-
   <li><a href="@Url.Action("Index", "Home")">Dashboard</a></li>
-  @switch (ControllerName) {
-  case "Report":
+  @switch (ControllerName.ToLower()) {
+  case "report":
     <li>Report</li>
     break;
-  case "DroneCheckList":
+  case "rpas":
+  case "droneflight":
+    <li><a href="@Url.Action("Index", "DroneFlight")">RPAS</a></li>
+    break;
+  case "dronechecklist":
     var DroneID = Request["DroneID"] != null ? Request["DroneID"].ToString() : "";
     var FlightID = Request["FlightID"] != null ? Request["FlightID"].ToString() : "";
     if (DroneID != "") {
@@ -28,7 +31,7 @@
     }
     break;
   default:
-    if (ActionName != "Index" ) {
+    if (ActionName.ToLower() != "index" ) {
       <li><a href="@Url.Action("Index", ControllerName)">@Util.toCaption(ShowControllerName)</a></li>
     }
     break;
