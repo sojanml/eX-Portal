@@ -219,7 +219,7 @@ namespace eX_Portal.Controllers
                         " ,a.AsflightInstructor " +
                         " ,a.DualRecieved  " +
                         " ,a.FloatingCommand as PilotInCommand " +
-                        " , a.DualRecieved + a.FloatingCommand as TotalDuration " +
+                        " , a.DualRecieved + a.FloatingCommand + a.FixedWing+a.MultiDashRotor+a.SimulatedInstrument+a.DualRecieved as TotalDuration " +
                          " ,a.FlightID  " +
                         " , a.Id as _PKey" +
                         " FROM MSTR_Pilot_Log  " +
@@ -239,7 +239,7 @@ namespace eX_Portal.Controllers
       "  sum(AsflightInstructor) as AsflightInstructor, \n" +
       "  sum(DualRecieved) as DualRecieved,\n" +
       "  sum(FloatingCommand) as PilotInCommandm,\n" +
-      "  SUM( DualRecieved + FloatingCommand) as TotalDuration \n" +
+      "  SUM( DualRecieved + FloatingCommand+FixedWing+MultiDashRotor+SimulatedInstrument+AsflightInstructor) as TotalDuration \n" +
       "FROM \n" +
       "  [MSTR_Pilot_Log] \n" +
       "where \n" +
