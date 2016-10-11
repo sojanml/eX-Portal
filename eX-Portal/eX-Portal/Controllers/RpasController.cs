@@ -970,7 +970,7 @@ namespace eX_Portal.Controllers
     }
 
     [HttpPost]
-    public String FlightApproval(FlightSetupViewModel flightsetupvm) {
+    public string FlightApproval(FlightSetupViewModel flightsetupvm) {
       try {
         if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
           // return RedirectToAction("NoAccess", "Home");
@@ -1346,9 +1346,11 @@ namespace eX_Portal.Controllers
                                  [DroneId]=" + DroneID;
           Util.doSQL(SQL);
         }
-        return "OK";
+                //RedirectToAction("FlightRegistrationDetails", "RPAS", new { ID = flightsetupvm.GcaApproval.ApprovalID });
+                return "OK|"+Url.Action("FlightRegistrationDetails", "RPAS", new { ID = flightsetupvm.GcaApproval.ApprovalID });
+       
 
-      } catch (Exception ex) {
+            } catch (Exception ex) {
         return ex.Message;
       }
     }
@@ -1376,12 +1378,10 @@ namespace eX_Portal.Controllers
             var viewModel = new ViewModel.FlightSetupViewModel
             {
 
-
-
                 GcaApproval = db.GCA_Approval.Find(ID)
-
                
             };
+            //viewModel.GcaApproval.EndDate = Convert.ToDateTime(db.GCA_Approval.Find(ID).EndDate).ToString("dd-MMM-yyyy");
             return View(viewModel);
 
         }
@@ -1667,7 +1667,7 @@ namespace eX_Portal.Controllers
                             IsUseCamara= " + flightsetupvm.GcaApproval.IsUseCamara + @",
                             PilotUserId=" + flightsetupvm.GcaApproval.PilotUserId + @",
                             GroundStaffUserId=" + flightsetupvm.GcaApproval.GroundStaffUserId + @",
-                            NotificationEmails='" + flightsetupvm.GcaApproval.NotificationEmails + @"'
+                            NotificationEmails='" + flightsetupvm.GcaApproval.NotificationEmails + @"',
                             CameraId='" + flightsetupvm.GcaApproval.CameraId + @"'
                           where 
                             ApprovalID=" + ApprovalID;
@@ -2452,7 +2452,6 @@ namespace eX_Portal.Controllers
         where 
          [DroneId]=" + DroneID;
                 Util.doSQL(SQL);
-                //  return RedirectToAction("Applications", "Rpas","");
                 return "OK";
             }
             catch (Exception ex)

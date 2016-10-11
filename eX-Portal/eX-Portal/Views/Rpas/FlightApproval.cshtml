@@ -8,7 +8,7 @@
 
 
 <h2>Requested By</h2>
-@Html.Action("UserDetailView", "User", new { ID = Model.GcaApproval.CreatedBy })
+@Html.Action("UserDetailView", "User", new { ID = Model.GcaApproval.PilotUserId })
 
 <h2>RPAS Details</h2>
 @Html.Action("DroneDetail", "Drone", new { ID = Model.GcaApproval.DroneID })
