@@ -430,12 +430,12 @@ namespace eX_Portal.Controllers {
           AND M.Type = 'Manufacturer'
       LEFT JOIN LUP_Drone U
         ON [MSTR_Drone].UAVTypeID = U.TypeID
-          AND U.Type = 'UAVType'
-      WHERE
-         FlightTime >= DATEADD(month,-1,GETDATE())";
+          AND U.Type = 'UAVType'";
+
+      // FlightTime >= DATEADD(month,-1,GETDATE())";
 
       if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
-        SQL = SQL + " AND [MSTR_Drone].AccountID =" + Util.getAccountID();
+        SQL = SQL + " where  [MSTR_Drone].AccountID =" + Util.getAccountID();
       }
       var LiveDrones = Util.getDBRows(SQL);
       //  LiveDrones.SQL = ;
