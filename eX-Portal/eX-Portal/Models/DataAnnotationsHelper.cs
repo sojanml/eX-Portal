@@ -481,6 +481,7 @@ namespace eX_Portal.Models {
   [MetadataType(typeof(GCA_Approval_Helper))]
   public partial class GCA_Approval {
     public string S3Url { get; set; }
+
   }
 
   public class GCA_Approval_Helper {
@@ -501,10 +502,12 @@ namespace eX_Portal.Models {
 
     [Required(ErrorMessage = "Please Enter Start Date")]
     [Display(Name = "Start Date")]
+    [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
     public string StartDate { get; set; }
 
     [Required(ErrorMessage = "Please Enter End Date")]
     [Display(Name = "End Date")]
+    [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
     public string EndDate { get; set; }
 
     [Required(ErrorMessage = "Please Enter Start Time")]
