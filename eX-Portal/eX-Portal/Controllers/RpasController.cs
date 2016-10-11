@@ -1378,12 +1378,10 @@ namespace eX_Portal.Controllers
             var viewModel = new ViewModel.FlightSetupViewModel
             {
 
-
-
                 GcaApproval = db.GCA_Approval.Find(ID)
-
                
             };
+            //viewModel.GcaApproval.EndDate = Convert.ToDateTime(db.GCA_Approval.Find(ID).EndDate).ToString("dd-MMM-yyyy");
             return View(viewModel);
 
         }
