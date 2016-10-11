@@ -33,12 +33,15 @@
   @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "Commission" })
 </div>
   <div style="clear:both"></div>
-  @section scripts {
-    <script type="text/javascript">
 
-    </script>
-<script type="text/javascript" src="~/Scripts/DroneImaging.js"></script>
-  }
+@section scripts {
+    <script type="text/javascript" src="~/Scripts/DroneImaging.js"></script>
+}
 @section header{
-    <link href="~/Content/black-box.css" rel="stylesheet" />
+<link href="~/Content/black-box.css" rel="stylesheet" />
+  <style type="text/css">
+    #dialog {
+      overflow:hidden;
+    }
+  </style>
 }

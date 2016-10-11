@@ -17,26 +17,15 @@
 <table class="qDetailView">
     <tr>
         <td>@Html.DisplayNameFor(model => model.ApprovalName): <span class="value">@Html.DisplayFor(model => model.ApprovalName)</span></td>
-        <td>Start Date: <span class="value">@Html.DisplayFor(model => model.StartDate)</span></td>
+        <td>Start Date: <span class="value">@Html.DisplayFor(model => model.StartDate, "{dd-MMM-yy}")</span></td>
         <td>Start Time: <span class="value">@Html.DisplayFor(model => model.StartTime)</span></td>
     </tr>
     <tr>
-        <td>&nbsp;</td>
+        <td>Camara : <span class="value">@(Model.IsUseCamara == 1 ? "Yes" : "No")</span></td>
         <td>End Date    : <span class="value">@Html.DisplayFor(model => model.EndDate, "ShortDateTime")</span></td>
         <td>End Time    : <span class="value">@Html.DisplayFor(model => model.EndTime)</span></td>
     </tr>
-    <tr>
-        @if(Model.IsUseCamara==1)
-        {
-             <td>Camara Being Used:Yes </td>
-        }
-        else
-        {
-            <td>Camara Being Used:No </td>
-        }
 
-
-    </tr>
 </table>
 <div id="map_canvas" style="width: 100%; height: 450px"></div>
 
