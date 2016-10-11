@@ -139,12 +139,12 @@ namespace eX_Portal.exLogic {
                             ChartViewModel dd = new ChartViewModel();
                             dd.PilotName = reader["FirstName"].ToString();
                             dd.UserID = Util.toInt( reader["UserID"].ToString());
-                            dd.TotalMultiDashHrs = Util.toInt(reader["TotalMultiDashHrs"].ToString());
-                            dd.TotalFixedWingHrs = Util.toInt(reader["TotalFixedWingHrs"].ToString());
-                            dd.LastMultiDashHrs = Util.toInt(reader["LastMultiDashHrs"].ToString());
-                            dd.LastFixedwingHrs = Util.toInt(reader["LastFixedwingHrs"].ToString());
-                            dd.LastMonthFixedwingHrs = Util.toInt(reader["LastMonthFixedwingHrs"].ToString());
-                            dd.LastMonthMultiDashHrs = Util.toInt(reader["LastMonthMultiDashHrs"].ToString());
+                            dd.TotalMultiDashHrs = Util.toDouble(reader["TotalMultiDashHrs"].ToString());
+                            dd.TotalFixedWingHrs = Util.toDouble(reader["TotalFixedWingHrs"].ToString());
+                            dd.LastMultiDashHrs = Util.toDouble(reader["LastMultiDashHrs"].ToString());
+                            dd.LastFixedwingHrs = Util.toDouble(reader["LastFixedwingHrs"].ToString());
+                            dd.LastMonthFixedwingHrs = Util.toDouble(reader["LastMonthFixedwingHrs"].ToString());
+                            dd.LastMonthMultiDashHrs = Util.toDouble(reader["LastMonthMultiDashHrs"].ToString());
 
                             ChartList.Add(dd);
 

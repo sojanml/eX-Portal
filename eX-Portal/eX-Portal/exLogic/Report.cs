@@ -238,7 +238,7 @@ namespace eX_Portal.exLogic {
   BoundaryHigh + BoundaryWarning + BoundaryCritical as Boundary,
   ProximityCritical,
   ProximityHigh + ProximityCritical + ProximityWarning as Proximity,
-  PortalAlertCounter.HeightCritical,
+  HeightCritical,
   HeightHigh + HeightCritical + HeightWarning as Height,");
 
       SQL.AppendLine(@"

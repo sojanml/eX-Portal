@@ -12,6 +12,9 @@
 
   <li><a href="@Url.Action("Index", "Home")">Dashboard</a></li>
   @switch (ControllerName) {
+  case "Report":
+    <li>Report</li>
+    break;
   case "DroneCheckList":
     var DroneID = Request["DroneID"] != null ? Request["DroneID"].ToString() : "";
     var FlightID = Request["FlightID"] != null ? Request["FlightID"].ToString() : "";

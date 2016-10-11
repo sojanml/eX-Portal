@@ -17,20 +17,27 @@ namespace eX_Portal.exLogic {
       XML.AppendLine(@"<name>Dubai No Fly Zone</name>
         <description>Zones</description>
       <Style id=""RedPoly"">
+                <LineStyle> 
+                        <color>55000000</color> 
+                        <width>1</width> 
+                </LineStyle>
         <PolyStyle>
           <color>550000ff</color>
           <colorMode>normal</colorMode>
           <fill>1</fill>
-          <outline>0</outline>
+          <outline>1</outline>
         </PolyStyle>
       </Style>
       <Style id=""GreenPoly"">
-        <LineStyle>
-        <color>ff000000</color>
-        <width>1</width>
-        </LineStyle>
+                <LineStyle> 
+                        <color>55000000</color> 
+                        <width>1</width> 
+                </LineStyle>
         <PolyStyle>
-          <color>7d00ff00</color>
+          <colorMode>normal</colorMode>
+          <color>5500ff00</color>
+          <fill>1</fill>
+          <outline>1</outline>
         </PolyStyle>
       </Style>");
 
