@@ -15,7 +15,7 @@
     @Html.HiddenFor(model => model.Drone.DroneId)
     <div class="error" id="error-message" style="display:none;margin-bottom:20px;"></div>
     <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.AccountID, "Owner")
+      @Html.LabelFor(model => model.Drone.AccountID, "Authority")
     </div>
     <div class="editor-field">
       @Html.DropDownListFor(model => model.Drone.AccountID, Model.OwnerList)
