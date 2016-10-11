@@ -35,35 +35,9 @@
 <br />
 
 
-
-@*@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "AllicationForm" }))
-{
-    <h2>Approve/Reject</h2>
-    <section class="general-form" id="loginForm">
-
-        <input type="hidden" name="ApprovalID" value="@Model.ApprovalID" />
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ApprovalStatus, "Approve/Reject")
-        </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.ApprovalStatus, Util.GetApporveRejectList())
-            @Html.ValidationMessageFor(model => model.ApprovalStatus)
-        </div>
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ApprovalRemarks, "Remarks")
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.ApprovalRemarks)
-            @Html.ValidationMessageFor(model => model.ApprovalRemarks)
-        </div>
-        <div class="form-toolbar">
-            <input type="submit" id="btn-submit" value="Save" />
-        </div>
-    </section>
-}*@
 @Scripts.Render("~/bundles/jqueryval")
 @section scripts {
-    <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyDY6IHXH4-fUAzYq6HBR_ndu_lnyyopcTs&sensor=false"></script>
 
     <script type="text/javascript">
                 var map = null;

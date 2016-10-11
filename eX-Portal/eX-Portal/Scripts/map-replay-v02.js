@@ -596,6 +596,9 @@ function Replay() {
   //Clear the Graph
   drawLineChart(1);
 
+  _ReplayTimeAt = new Date(_LocationPoints[0].ReadTime);
+  setMapInfo();
+
   //Stop the Video
   if(playerInstance) playerInstance.stop();
 
@@ -656,14 +659,7 @@ function getLocationPoints() {
 
 function setDrawIntilize() {
 
-  //Load no Fly Zone Area from KML File
-  var KmlUrl = 'http://test.exponent-ts.com/Map/NoFlyzone?R=' + Math.random();
-  var kmlOptions = {
-    preserveViewport: true,
-    map: map
-  };
-  NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
-  NoFlyZone.setValues({ map: map });
+
 
   if (_LocationPoints.length > 1) {
     var loc = _LocationPoints[0];
@@ -684,6 +680,9 @@ function setDrawIntilize() {
       scale: 6,
       rotation: parseInt(loc["Heading"])
     };
+
+
+
 
     DronePositionIcon = new google.maps.Marker({
       position: myLatLng,
@@ -775,6 +774,9 @@ function drawLocationAtIndex() {
     drawPolyLineAtIndex(LatestLine);
     addDataToTableAtIntex();
     addDataToChartAtIntex();
+    _ReplayTimeAt = new Date(_LocationPoints[_LocationIndex].ReadTime);
+    setMapInfo();
+
     if (_LocationIndex == MarkerIndexStartAt) drawPolyLineAtIndex(OldLine);
   } else {
     drawPolyLineAtIndex(OldLine);
@@ -965,7 +967,7 @@ function drawPolyLineAtIndex(Polygon) {
     var FirstLat = _LocationPoints[_LocationIndex - 1];
     var SecondLat = _LocationPoints[_LocationIndex];
     var seconds = (SecondLat.ReadTimeObject.getTime() - FirstLat.ReadTimeObject.getTime()) / 1000;
-    if (seconds > 5) {
+    if (seconds > 10) {
       var firstlatlng = new google.maps.LatLng(FirstLat['Latitude'], FirstLat['Longitude']);
       var secondlatlng = new google.maps.LatLng(SecondLat['Latitude'], SecondLat['Longitude']);
       var lineSymbol = {
