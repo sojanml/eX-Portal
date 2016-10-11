@@ -16,7 +16,21 @@ function showMsg(Message) {
 }
 
 $(document).ready(function () {
-    initialize();
+  initialize();
+
+
+  //code for no fly zones
+
+  var KmlUrl = 'http://test.exponent-ts.com/Map/NoFlyzone?R=' + Math.random();
+  var kmlOptions = {
+    preserveViewport: true,
+    map: map
+  };
+  NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
+  NoFlyZone.setValues({ map: map });
+
+
+  //****************************
 
     $("#submitButton").on("click", function (e) {
         e.preventDefault();
