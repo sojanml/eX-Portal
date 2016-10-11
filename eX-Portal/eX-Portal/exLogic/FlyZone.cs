@@ -22,7 +22,7 @@ namespace eX_Portal.exLogic {
                         <width>1</width> 
                 </LineStyle>
         <PolyStyle>
-          <color>550000ff</color>
+          <color>880000ff</color>
           <colorMode>normal</colorMode>
           <fill>1</fill>
           <outline>1</outline>
@@ -35,7 +35,7 @@ namespace eX_Portal.exLogic {
                 </LineStyle>
         <PolyStyle>
           <colorMode>normal</colorMode>
-          <color>5500ff00</color>
+          <color>8800ff00</color>
           <fill>1</fill>
           <outline>1</outline>
         </PolyStyle>
@@ -75,9 +75,12 @@ namespace eX_Portal.exLogic {
 
     public StringBuilder GetKML(String ID) {
       StringBuilder KML = new StringBuilder();
-      String StyleURL = FillColor.Equals("Green") ? "GreenPoly" : "RedPoly";
+      String StyleURL = FillColor.ToLower().Equals("green") ? "GreenPoly" : "RedPoly";
+      String Tilte = FillColor.ToLower().Equals("green") ? 
+        "DCAA Permission is required for all flights" : 
+        "Inner circle 3km and extended Departure and Arrival Path 5km NO FLY ZONE";
       KML.Append(@"<Placemark>
-          <name>No FlyZone</name>
+          <name>" + Tilte + @"</name>
           <visibility>1</visibility>
           <styleUrl>#" + StyleURL + @"</styleUrl>
           <Polygon id=""#" + ID + @""">
