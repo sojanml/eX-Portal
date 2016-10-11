@@ -363,16 +363,12 @@ GROUP  BY
       SQL.AppendLine("  MSTR_User.FirstName + ' ' + MSTR_User.LastName as label ");
       SQL.AppendLine("FROM ");
       SQL.AppendLine("  MSTR_User");
+      SQL.AppendLine("WHERE \n");
+      SQL.AppendLine("  MSTR_User.IsPilot = 1");
+
       if (User.hasAccess("DRONE.VIEWALL") || User.hasAccess("PILOT")) {
-        SQL.AppendLine("WHERE \n");
-        SQL.AppendLine("  MSTR_User.IsPilot = 1");
-      } else {
-        SQL.AppendLine(",");
-        SQL.AppendLine("  MSTR_User as AccountHolder");
-        SQL.AppendLine("WHERE");
-        SQL.AppendLine("  MSTR_User.IsPilot = 1  AND");
-        SQL.AppendLine("  MSTR_User.CreatedBy = AccountHolder.UserID and");
-        SQL.AppendLine("  AccountHolder.AccountID = " + Util.getAccountID());
+      } else { 
+        SQL.AppendLine("  AND MSTR_User.AccountID = " + Util.getAccountID());
       }
       if (!String.IsNullOrEmpty(Term)) {
         SQL.AppendLine("  AND (");
