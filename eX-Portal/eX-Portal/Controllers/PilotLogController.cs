@@ -206,7 +206,7 @@ namespace eX_Portal.Controllers
         public string PilotLogDetails([Bind(Prefix = "ID")] int PilotID)
         {
 
-            if (!exLogic.User.hasAccess("PILOTLOG.VIEW")) return "Access Denied";
+            if (!exLogic.User.hasAccess("PILOTLOG.VIEWDETAIL")) return "Access Denied";
             string SQL = "SELECT \n" +
                         " CONVERT(NVARCHAR, a.Date, 103) AS Date\n   " +   
                         " ,b.DroneName as RPASName " +
