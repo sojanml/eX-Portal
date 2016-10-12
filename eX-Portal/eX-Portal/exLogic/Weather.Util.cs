@@ -100,22 +100,24 @@ namespace eX_Portal.exLogic {
      
     private static String DownloadWeatherInfo(String Country, String City, String CacheFile) {
       String WebURL = Exponent.WeatherAPI + "&q=" + City + "," + Country;
-      using(var webClient = new System.Net.WebClient()) {
-        webClient.Encoding = System.Text.Encoding.UTF8;
-        String json2 = webClient.DownloadString(WebURL);
-        if (String.IsNullOrEmpty(json2)) return String.Empty;
+      String json2 = String.Empty;
+      try { 
+        using (var webClient = new System.Net.WebClient()) {
+          webClient.Encoding = System.Text.Encoding.UTF8;
+          webClient.DownloadString(WebURL);
+          if (String.IsNullOrEmpty(json2)) return String.Empty;
 
-        String PathOnly = Path.GetDirectoryName(CacheFile);
-        if(!Directory.Exists(PathOnly)) Directory.CreateDirectory(PathOnly);
+          String PathOnly = Path.GetDirectoryName(CacheFile);
+          if(!Directory.Exists(PathOnly)) Directory.CreateDirectory(PathOnly);
 
-        using(System.IO.StreamWriter file = new System.IO.StreamWriter(CacheFile, false)) {
-          file.Write(json2);
-        }//using(System.IO.StreamWriter)
-
-        return json2;
-
-      }//using(var webClient)
-
+          using(System.IO.StreamWriter file = new System.IO.StreamWriter(CacheFile, false)) {
+            file.Write(json2);
+          }//using(System.IO.StreamWriter)
+        }//using(var webClient)
+      } catch {
+        //nothing - do not show the error
+      }
+      return json2;
     }
 
     private static String getWeatherFile(String Country, String City, int DelayHours = 0) {

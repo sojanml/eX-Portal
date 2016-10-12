@@ -1,0 +1,39 @@
+﻿{
+  "coord": {
+    "lon": 55.46,
+    "lat": 25.02
+  },
+  "weather": [
+    {
+      "id": 800,
+      "main": "Clear",
+      "description": "clear sky",
+      "icon": "01d"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 305.352,
+    "pressure": 1021.87,
+    "humidity": 81,
+    "temp_min": 305.352,
+    "temp_max": 305.352,
+    "sea_level": 1023.96,
+    "grnd_level": 1021.87
+  },
+  "wind": {
+    "speed": 2.81,
+    "deg": 195
+  },
+  "clouds": { "all": 0 },
+  "dt": 1476247984,
+  "sys": {
+    "message": 0.0033,
+    "country": "AE",
+    "sunrise": 1476238507,
+    "sunset": 1476280414
+  },
+  "id": 290624,
+  "name": "‘Ūd al Bayḑā’",
+  "cod": 200
+}

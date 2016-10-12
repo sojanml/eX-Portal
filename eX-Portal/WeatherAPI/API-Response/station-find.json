@@ -1,0 +1,1278 @@
+﻿[
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7100,
+      "name": "OMDB",
+      "type": 1,
+      "status": 1,
+      "zoom": 6,
+      "coord": {
+        "lng": 55.3644,
+        "lat": 25.2528
+      }
+    },
+    "distance": 37.05,
+    "last": {
+      "main": {
+        "temp": 300.15,
+        "pressure": 1010,
+        "humidity": 61
+      },
+      "wind": {
+        "speed": 3.1,
+        "deg": 200,
+        "var_beg": 170,
+        "var_end": 240
+      },
+      "visibility": {
+        "distance": 7000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 292.15,
+        "humidex": 306.75,
+        "heatindex": 301.15
+      },
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7104,
+      "name": "OMSJ",
+      "type": 1,
+      "status": 1,
+      "zoom": 10,
+      "coord": {
+        "lng": 55.5172,
+        "lat": 25.3286
+      }
+    },
+    "distance": 42.189,
+    "last": {
+      "main": {
+        "temp": 300.15,
+        "pressure": 1011,
+        "humidity": 65
+      },
+      "wind": {
+        "speed": 3.1,
+        "deg": 200
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 293.15,
+        "humidex": 307.55,
+        "heatindex": 302.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7099,
+      "name": "OMAL",
+      "type": 1,
+      "status": 1,
+      "zoom": 7,
+      "coord": {
+        "lng": 55.6092,
+        "lat": 24.2617
+      }
+    },
+    "distance": 77.024,
+    "last": {
+      "main": {
+        "temp": 298.15,
+        "pressure": 1012,
+        "humidity": 50
+      },
+      "wind": {
+        "speed": 1.5,
+        "deg": 80
+      },
+      "visibility": {
+        "distance": 7000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 287.15,
+        "humidex": 301.45,
+        "heatindex": 299.15
+      },
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7102,
+      "name": "OMFJ",
+      "type": 1,
+      "status": 1,
+      "zoom": 8,
+      "coord": {
+        "lng": 56.324,
+        "lat": 25.1122
+      }
+    },
+    "distance": 83.402,
+    "last": {
+      "main": {
+        "temp": 304.15,
+        "pressure": 1010,
+        "humidity": 38
+      },
+      "wind": {
+        "speed": 2.1,
+        "deg": 260
+      },
+      "visibility": {
+        "distance": 6000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 288.15,
+        "humidex": 308.05,
+        "heatindex": 304.15
+      },
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7103,
+      "name": "OMRK",
+      "type": 1,
+      "status": 1,
+      "zoom": 8,
+      "coord": {
+        "lng": 55.9388,
+        "lat": 25.6135
+      }
+    },
+    "distance": 85.227,
+    "last": {
+      "main": {
+        "temp": 300.15,
+        "pressure": 1011,
+        "humidity": 61
+      },
+      "wind": {
+        "speed": 1,
+        "deg": 230
+      },
+      "visibility": {
+        "distance": 7000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 292.15,
+        "humidex": 306.75,
+        "heatindex": 301.15
+      },
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7066,
+      "name": "OIBA",
+      "type": 1,
+      "status": 1,
+      "zoom": 8,
+      "coord": {
+        "lng": 55.033,
+        "lat": 25.8757
+      }
+    },
+    "distance": 113.872,
+    "last": {
+      "main": {
+        "temp": 302.15,
+        "pressure": 1008,
+        "humidity": 74
+      },
+      "wind": {
+        "speed": 2.1,
+        "deg": 210
+      },
+      "visibility": {
+        "distance": 5000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 297.15,
+        "humidex": 313.15,
+        "heatindex": 306.15
+      },
+      "clouds": [
+        {
+          "distance": 610,
+          "condition": "SCT"
+        }
+      ],
+      "weather": [
+        {
+          "precipitation": false,
+          "descriptor": false,
+          "intensity": false,
+          "obscuration": "HZ"
+        }
+      ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7097,
+      "name": "OMAD",
+      "type": 1,
+      "status": 1,
+      "zoom": 7,
+      "coord": {
+        "lng": 54.4581,
+        "lat": 24.4283
+      }
+    },
+    "distance": 121.564,
+    "last": {
+      "main": {
+        "temp": 299.15,
+        "pressure": 1010,
+        "humidity": 69
+      },
+      "wind": {
+        "speed": 2.1,
+        "deg": 150,
+        "var_beg": 110,
+        "var_end": 190
+      },
+      "visibility": {
+        "distance": 9000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 293.15,
+        "humidex": 306.55,
+        "heatindex": 300.15
+      },
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7070,
+      "name": "OIBS",
+      "type": 1,
+      "status": 1,
+      "zoom": 9,
+      "coord": {
+        "lng": 54.5394,
+        "lat": 25.9089
+      }
+    },
+    "distance": 144.933,
+    "last": {
+      "main": {
+        "temp": 303.15,
+        "pressure": 1009,
+        "humidity": 74
+      },
+      "wind": {
+        "speed": 3.1,
+        "deg": 230
+      },
+      "visibility": {
+        "distance": 4000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 298.15,
+        "humidex": 315.15,
+        "heatindex": 309.15
+      },
+      "weather": [
+        {
+          "precipitation": false,
+          "descriptor": false,
+          "intensity": false,
+          "obscuration": "HZ"
+        }
+      ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7021,
+      "name": "OIBL",
+      "type": 1,
+      "status": 1,
+      "zoom": 7,
+      "coord": {
+        "lng": 54.8248,
+        "lat": 26.532
+      }
+    },
+    "distance": 189.126,
+    "last": {
+      "main": {
+        "temp": 301.15,
+        "pressure": 1009,
+        "humidity": 78
+      },
+      "wind": {
+        "speed": 2.1,
+        "deg": 50
+      },
+      "visibility": {
+        "distance": 4000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 297.15,
+        "humidex": 312.15,
+        "heatindex": 305.15
+      },
+      "weather": [
+        {
+          "precipitation": false,
+          "descriptor": false,
+          "intensity": false,
+          "obscuration": "BR"
+        }
+      ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7065,
+      "name": "OIZJ",
+      "type": 1,
+      "status": 1,
+      "zoom": 6,
+      "coord": {
+        "lng": 57.46,
+        "lat": 25.38
+      }
+    },
+    "distance": 201.425,
+    "last": {
+      "main": {
+        "temp": 301.15,
+        "pressure": 1008,
+        "humidity": 74
+      },
+      "wind": {
+        "speed": 2.1,
+        "deg": 250
+      },
+      "visibility": {
+        "distance": 7000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 296.15,
+        "humidex": 311.15,
+        "heatindex": 304.15
+      },
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7040,
+      "name": "OIKQ",
+      "type": 1,
+      "status": 1,
+      "zoom": 8,
+      "coord": {
+        "lng": 55.9024,
+        "lat": 26.7546
+      }
+    },
+    "distance": 204.442,
+    "last": {
+      "main": {
+        "temp": 301.15,
+        "pressure": 1009,
+        "humidity": 78
+      },
+      "wind": {
+        "speed": 0,
+        "deg": 0
+      },
+      "visibility": {
+        "distance": 4000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 297.15,
+        "humidex": 312.15,
+        "heatindex": 305.15
+      },
+      "weather": [
+        {
+          "precipitation": false,
+          "descriptor": false,
+          "intensity": false,
+          "obscuration": "BR"
+        }
+      ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7020,
+      "name": "OIBK",
+      "type": 1,
+      "status": 1,
+      "zoom": 6,
+      "coord": {
+        "lng": 53.9802,
+        "lat": 26.5262
+      }
+    },
+    "distance": 233.26,
+    "last": {
+      "main": {
+        "temp": 302.15,
+        "pressure": 1009,
+        "humidity": 79
+      },
+      "wind": {
+        "speed": 3.1,
+        "deg": 100
+      },
+      "visibility": {
+        "distance": 3000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 298.15,
+        "humidex": 314.15,
+        "heatindex": 307.15
+      },
+      "weather": [
+        {
+          "precipitation": false,
+          "descriptor": false,
+          "intensity": false,
+          "obscuration": "BR"
+        }
+      ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7037,
+      "name": "OIKB",
+      "type": 1,
+      "status": 1,
+      "zoom": 5,
+      "coord": {
+        "lng": 56.3779,
+        "lat": 27.2183
+      }
+    },
+    "distance": 266.59,
+    "last": {
+      "main": {
+        "temp": 301.15,
+        "pressure": 1010,
+        "humidity": 74
+      },
+      "wind": {
+        "speed": 2.1,
+        "deg": 30
+      },
+      "visibility": {
+        "distance": 4000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 296.15,
+        "humidex": 311.15,
+        "heatindex": 304.15
+      },
+      "weather": [
+        {
+          "precipitation": false,
+          "descriptor": false,
+          "intensity": false,
+          "obscuration": "HZ"
+        }
+      ],
+      "dt": 1476246600
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7071,
+      "name": "OIBV",
+      "type": 1,
+      "status": 1,
+      "zoom": 8,
+      "coord": {
+        "lng": 53.3563,
+        "lat": 26.8103
+      }
+    },
+    "distance": 299.168,
+    "last": {
+      "main": {
+        "temp": 302.15,
+        "pressure": 1008,
+        "humidity": 79
+      },
+      "wind": {
+        "speed": 3.1,
+        "deg": 130
+      },
+      "visibility": {
+        "distance": 5000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 298.15,
+        "humidex": 314.15,
+        "heatindex": 307.15
+      },
+      "weather": [
+        {
+          "precipitation": false,
+          "descriptor": false,
+          "intensity": false,
+          "obscuration": "BR"
+        }
+      ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7079,
+      "name": "OISL",
+      "type": 1,
+      "status": 1,
+      "zoom": 8,
+      "coord": {
+        "lng": 54.3833,
+        "lat": 27.6747
+      }
+    },
+    "distance": 323.403,
+    "last": {
+      "main": {
+        "temp": 294.15,
+        "pressure": 1014,
+        "humidity": 40
+      },
+      "wind": {
+        "speed": 0,
+        "deg": 0
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 280.15,
+        "humidex": 294.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7080,
+      "name": "OISR",
+      "type": 1,
+      "status": 1,
+      "zoom": 9,
+      "coord": {
+        "lng": 53.1888,
+        "lat": 27.3727
+      }
+    },
+    "distance": 355.741,
+    "last": {
+      "main": {
+        "temp": 300.15,
+        "pressure": 1011,
+        "humidity": 42
+      },
+      "wind": {
+        "speed": 0,
+        "deg": 0
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 286.15,
+        "humidex": 302.85,
+        "heatindex": 300.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7068,
+      "name": "OIBP",
+      "type": 1,
+      "status": 1,
+      "zoom": 8,
+      "coord": {
+        "lng": 52.44,
+        "lat": 27.23
+      }
+    },
+    "distance": 398.317,
+    "last": {
+      "main": {
+        "temp": 301.15,
+        "pressure": 1008,
+        "humidity": 58
+      },
+      "wind": {
+        "speed": 6.2,
+        "deg": 150
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 292.15,
+        "humidex": 307.75,
+        "heatindex": 302.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476246600
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7171,
+      "name": "OTBD",
+      "type": 1,
+      "status": 1,
+      "zoom": 7,
+      "coord": {
+        "lng": 51.5651,
+        "lat": 25.2611
+      }
+    },
+    "distance": 399.311,
+    "last": {
+      "main": {
+        "temp": 302.15,
+        "pressure": 1010,
+        "humidity": 45
+      },
+      "wind": {
+        "speed": 1,
+        "deg": 0
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 289.15,
+        "humidex": 306.65,
+        "heatindex": 302.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7067,
+      "name": "OIBJ",
+      "type": 1,
+      "status": 1,
+      "zoom": 7,
+      "coord": {
+        "lng": 52.3522,
+        "lat": 27.8205
+      }
+    },
+    "distance": 448.57,
+    "last": {
+      "main": {
+        "temp": 298.15,
+        "pressure": 1014,
+        "humidity": 23
+      },
+      "wind": {
+        "speed": 2.1,
+        "deg": 170
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 276.15,
+        "humidex": 296.75,
+        "heatindex": 298.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7052,
+      "name": "OISF",
+      "type": 1,
+      "status": 1,
+      "zoom": 7,
+      "coord": {
+        "lng": 53.7233,
+        "lat": 28.8918
+      }
+    },
+    "distance": 473.034,
+    "last": {
+      "main": {
+        "temp": 289.15,
+        "pressure": 1017,
+        "humidity": 36
+      },
+      "wind": {
+        "speed": 0,
+        "deg": 0
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 274.15,
+        "humidex": 287.25
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 6974,
+      "name": "OBBI",
+      "type": 1,
+      "status": 1,
+      "zoom": 1,
+      "coord": {
+        "lng": 50.6336,
+        "lat": 26.2708
+      }
+    },
+    "distance": 511.098,
+    "last": {
+      "main": {
+        "temp": 301.15,
+        "pressure": 1010,
+        "humidity": 42
+      },
+      "wind": {
+        "speed": 3.6,
+        "deg": 270
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 287.15,
+        "humidex": 304.45,
+        "heatindex": 301.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 6981,
+      "name": "OEDR",
+      "type": 1,
+      "status": 1,
+      "zoom": 9,
+      "coord": {
+        "lng": 50.152,
+        "lat": 26.2654
+      }
+    },
+    "distance": 557.366,
+    "last": {
+      "main": {
+        "temp": 297.15,
+        "pressure": 1009,
+        "humidity": 14
+      },
+      "wind": {
+        "speed": 6.2,
+        "deg": 300
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 268.15,
+        "humidex": 293.95,
+        "heatindex": 297.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7064,
+      "name": "OIZI",
+      "type": 1,
+      "status": 1,
+      "zoom": 4,
+      "coord": {
+        "lng": 60.72,
+        "lat": 27.2361
+      }
+    },
+    "distance": 578.48,
+    "last": {
+      "main": {
+        "temp": 299.15,
+        "pressure": 1013,
+        "humidity": 26
+      },
+      "wind": {
+        "speed": 0,
+        "deg": 0
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 278.15,
+        "humidex": 298.45,
+        "heatindex": 299.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7053,
+      "name": "OISS",
+      "type": 1,
+      "status": 1,
+      "zoom": 6,
+      "coord": {
+        "lng": 52.5898,
+        "lat": 29.5392
+      }
+    },
+    "distance": 586.595,
+    "last": {
+      "main": {
+        "temp": 292.15,
+        "pressure": 1021,
+        "humidity": 29
+      },
+      "wind": {
+        "speed": 0,
+        "deg": 0
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 274.15,
+        "humidex": 290.25
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476246600
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 6976,
+      "name": "OEAH",
+      "type": 1,
+      "status": 1,
+      "zoom": 7,
+      "coord": {
+        "lng": 49.4852,
+        "lat": 25.2853
+      }
+    },
+    "distance": 608.28,
+    "last": {
+      "main": {
+        "temp": 299.15,
+        "pressure": 1011,
+        "humidity": 13
+      },
+      "wind": {
+        "speed": 6.2,
+        "deg": 290
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 269.15,
+        "humidex": 296.15,
+        "heatindex": 299.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7038,
+      "name": "OIKK",
+      "type": 1,
+      "status": 1,
+      "zoom": 5,
+      "coord": {
+        "lng": 56.9511,
+        "lat": 30.2744
+      }
+    },
+    "distance": 608.764,
+    "last": {
+      "main": {
+        "temp": 287.15,
+        "pressure": 1024,
+        "humidity": 28
+      },
+      "wind": {
+        "speed": 2.1,
+        "deg": 160
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 269.15,
+        "humidex": 284.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 6980,
+      "name": "OEDF",
+      "type": 1,
+      "status": 1,
+      "zoom": 8,
+      "coord": {
+        "lng": 49.48,
+        "lat": 26.28
+      }
+    },
+    "distance": 622.966,
+    "last": {
+      "main": {
+        "temp": 297.15,
+        "pressure": 1011,
+        "humidity": 16
+      },
+      "wind": {
+        "speed": 4.6,
+        "deg": 280
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 270.15,
+        "humidex": 294.35,
+        "heatindex": 297.15
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7019,
+      "name": "OIBB",
+      "type": 1,
+      "status": 1,
+      "zoom": 7,
+      "coord": {
+        "lng": 50.8346,
+        "lat": 28.9448
+      }
+    },
+    "distance": 642.291,
+    "last": {
+      "main": {
+        "temp": 299.15,
+        "pressure": 1009,
+        "humidity": 61
+      },
+      "wind": {
+        "speed": 2.1,
+        "deg": 60
+      },
+      "visibility": {
+        "distance": 6000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 291.15,
+        "humidex": 305.05,
+        "heatindex": 300.15
+      },
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7069,
+      "name": "OIBQ",
+      "type": 1,
+      "status": 1,
+      "zoom": 9,
+      "coord": {
+        "lng": 50.3239,
+        "lat": 29.2603
+      }
+    },
+    "distance": 702.61,
+    "last": {
+      "main": {
+        "temp": 299.15,
+        "pressure": 1009,
+        "humidity": 94
+      },
+      "wind": {
+        "speed": 2.1,
+        "deg": 260
+      },
+      "visibility": {
+        "distance": 7000,
+        "prefix": 0
+      },
+      "calc": {
+        "dewpoint": 298.15,
+        "humidex": 311.15,
+        "heatindex": 301.15
+      },
+      "dt": 1476244800
+    }
+  },
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7051,
+      "name": "OISA",
+      "type": 1,
+      "status": 1,
+      "zoom": 6,
+      "coord": {
+        "lng": 52.4,
+        "lat": 31.1
+      }
+    },
+    "distance": 749.099,
+    "last": {
+      "main": {
+        "temp": 281.15,
+        "pressure": 1024,
+        "humidity": 20
+      },
+      "wind": {
+        "speed": 2.1,
+        "deg": 340
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 260.15,
+        "humidex": 276.85
+      },
+      "clouds": [ { "condition": "CAVOK" } ],
+      "dt": 1476244800
+    }
+  }
+]
