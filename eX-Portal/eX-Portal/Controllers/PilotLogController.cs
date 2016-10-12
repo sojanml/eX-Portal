@@ -195,7 +195,7 @@ namespace eX_Portal.Controllers {
        a.MultiDashRotor,
        a.SimulatedInstrument AS Simulator,
        a.AsflightInstructor,
-       a.DualRecieved,
+       a.DualRecieved as DualReceived,
        a.FloatingCommand AS PilotInCommand,
        (a.FixedWing + a.MultiDashRotor + a.SimulatedInstrument + a.AsflightInstructor + a.DualRecieved + a.FloatingCommand) AS Total,
        a.Id AS _PKey

@@ -69,7 +69,7 @@ namespace eX_Portal.Controllers
         EndTime,
         MaxAltitude,
         MinAltitude,        
-        case IsUseCamara when 1 then 'Yes' else 'No' end as IsUseCamara,       
+        case IsUseCamara when 1 then 'Yes' else 'No' end as Camara,       
         ApprovalStatus as Status,
         Count(*) Over() as _TotalRecords,
         ApprovalID as _PKey
@@ -81,7 +81,7 @@ namespace eX_Portal.Controllers
                 if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                 {
                     if (SQLFilter != "")
-                        SQLFilter += " AND";
+                        SQLFilter += " where ";
                     SQLFilter += " \n" +
                       "  MSTR_Drone.AccountID=" + Util.getAccountID();
                 }

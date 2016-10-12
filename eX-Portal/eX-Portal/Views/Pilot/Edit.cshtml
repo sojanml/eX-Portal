@@ -186,7 +186,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Pilot.DateOfExpiry, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Pilot.DateOfExpiry, new { htmlAttributes = new { @class = "date-picker" } })
+                    @Html.EditorFor(model => model.Pilot.DateOfExpiry, "{0:dd-MM-yyyy}", new { htmlAttributes = new { @class = "date-picker" } })
                     @Html.ValidationMessageFor(model => model.Pilot.DateOfExpiry, "", new { @class = "text-danger" })
                 </div>
             </div>
