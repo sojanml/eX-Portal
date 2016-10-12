@@ -1655,6 +1655,7 @@ namespace eX_Portal.Controllers
                                         SQL = @"Update 
                             [GCA_Approval] 
                           set 
+                            ApprovalName = '" + flightsetupvm.GcaApproval.ApprovalName + @"',
                             StartDate ='" + StartDate.ToString("yyyy-MM-dd") + @"',
                             EndDate = '" + EndDate.ToString("yyyy-MM-dd") + @"',
                             Coordinates  = '" + Coordinates + @"',
@@ -1820,6 +1821,7 @@ namespace eX_Portal.Controllers
                                                 SQL = @"Update 
                                     [GCA_Approval] 
                                   set 
+                                    ApprovalName = '" + flightsetupvm.GcaApproval.ApprovalName + @"',
                                     StartDateE ='" + StartDate.ToString("yyyy-MM-dd") + @"',
                                     EndDate = '" + EndDate.ToString("yyyy-MM-dd") + @"',
                                     Coordinates  = '" + Coordinates + @"',

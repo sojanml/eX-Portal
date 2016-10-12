@@ -163,7 +163,7 @@
         <div id="cameraopt" style="display:none;padding:0px;">
             <div class="form-group">
                 @Html.LabelFor(model => model.GcaApproval.CameraId, "Select Camera")
-                <div class="col-md-10">
+                <div class="col-md-10">othercamera
                     @Html.DropDownListFor(model => model.GcaApproval.CameraId, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"),  new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.GcaApproval.CameraId, "", new { @class = "text-danger" })
                 </div>

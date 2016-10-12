@@ -439,7 +439,7 @@ namespace eX_Portal.Controllers {
       "   MSTR_Drone.DroneName as RPAS,\n" +
       "   tblPilot.FirstName as PilotName,\n" +
       "   tblGSC.FirstName as GSCName,\n" +
-      "   tblCreated.FirstName as CreatedBy,\n" +
+      //"   tblCreated.FirstName as CreatedBy,\n" +
       "   FlightDate as 'FlightDate(UTC)'\n" +
       "FROM\n" +
       "  DroneFlight\n" +
