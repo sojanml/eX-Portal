@@ -1,0 +1,33 @@
+﻿
+@model Exponent.WeatherForcast
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Test</title>
+</head>
+<body>
+    <div> 
+
+      City: @Model.City<br />
+      Country: @Model.Country
+
+      <h2>@Model.Today.ConditionDate</h2>
+      ConditionCode: @Model.Today.ConditionCode<br />
+      ConditionText: @Model.Today.ConditionText<br />
+
+      @foreach(var Weather in Model.Forecast) {
+        <h2>@Weather.ConditionDate</h2>
+        <div>
+          ConditionCode: @Weather.ConditionCode<br />
+          ConditionText: @Weather.ConditionText<br />
+        </div>
+      }
+    </div>
+</body>
+</html>

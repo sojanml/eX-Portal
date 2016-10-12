@@ -104,7 +104,7 @@ namespace eX_Portal.exLogic {
       try { 
         using (var webClient = new System.Net.WebClient()) {
           webClient.Encoding = System.Text.Encoding.UTF8;
-          webClient.DownloadString(WebURL);
+          json2 = webClient.DownloadString(WebURL);
           if (String.IsNullOrEmpty(json2)) return String.Empty;
 
           String PathOnly = Path.GetDirectoryName(CacheFile);

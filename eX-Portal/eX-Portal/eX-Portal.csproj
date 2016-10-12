@@ -1279,6 +1279,7 @@
     <Content Include="Views\Rpas\FlightAproval.cshtml" />
     <Content Include="Views\Rpas\FlightApproval.cshtml" />
     <Content Include="Views\Report\PostFlightReport.cshtml" />
+    <Content Include="Views\Test\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1306,6 +1307,12 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ReportsManager\MSTR_Drone.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WeatherAPI\WeatherAPI.csproj">
+      <Project>{bfaf2d75-0aff-4dfb-ab56-23fcc4070f60}</Project>
+      <Name>WeatherAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
