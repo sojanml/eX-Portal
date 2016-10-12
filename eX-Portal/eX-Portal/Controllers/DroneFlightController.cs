@@ -362,7 +362,7 @@ namespace eX_Portal.Controllers {
       UserId = Util.GetPilotIdFromFlight(ID);
 
       UASFormat = "<a href='/Drone/Detail/" + DroneId + "'>" + Util.GetUASFromFlight(ID) + "</a>";//url
-      PilotFormat = "<a href='/User/UserDetail/" + UserId + "'>" + Util.GetPilotFromFlight(ID) + "</a>";//url
+      PilotFormat = "<a href='/Pilot/PilotDetail/" + UserId + "'>" + Util.GetPilotFromFlight(ID) + "</a>";//url
       theView.FormatCols.Add("RPAS", UASFormat); //Adding the Column required for formatting  
       theView.FormatCols.Add("PilotName", PilotFormat); // //Adding the Column required for formatting  
 
