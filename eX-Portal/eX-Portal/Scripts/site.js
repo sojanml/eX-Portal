@@ -201,7 +201,7 @@ function getqViewMenu(data) {
     //replace all the variables in query string
     for (var key in data) {
       var KeyResult = data[key];
-      var RegPattern = '(^|=|/)(' + key + ')($|&|\\?/)';
+      var RegPattern = '(^|=|/)(' + key + ')($|&|\\?|\/)';
       var Exp = new RegExp(RegPattern, "i");
       URL = URL.replace(Exp, '$1' + KeyResult + '$3');
     }
