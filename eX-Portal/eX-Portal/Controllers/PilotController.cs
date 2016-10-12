@@ -101,7 +101,7 @@ namespace eX_Portal.Controllers
                         ",b.[Department]\n  " +
                         " ,b.[EmiratesId]  as [Emirates ID]\n   " +
                         ",b.[Title] as JobTitle\n   " +
-                        ",c.[Name] as OrganizationName\n   " +
+                        //",c.[Name] as OrganizationName\n   " +
                         //",d.[ProfileName]\n   " +
                         " FROM[MSTR_User] a\n   " +
                         " left join mstr_user_pilot b\n  " +

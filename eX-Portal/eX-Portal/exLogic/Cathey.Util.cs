@@ -59,6 +59,9 @@ namespace eX_Portal.exLogic {
 
             }
           }
+          if(TypeField == "Camera")
+                        SelectList.Add(new SelectListItem { Text = "Other", Value = "1" });
+
           DropDownList = SelectList.ToList();
           ctx.Database.Connection.Close();
           return DropDownList; //return the list objects

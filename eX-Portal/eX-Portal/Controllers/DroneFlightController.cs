@@ -99,8 +99,8 @@ namespace eX_Portal.Controllers {
       // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       if (exLogic.User.hasAccess("FLIGHT.EDIT"))
         nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-      if (exLogic.User.hasAccess("FLIGHT.VIEW"))
-        nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
+      //if (exLogic.User.hasAccess("FLIGHT.VIEW"))
+      //  nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.MAP"))
         nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
       nView.addMenu("Flight Data", Url.Action("FlightDataView", "Map", new { ID = "_PKey" }));
@@ -439,7 +439,7 @@ namespace eX_Portal.Controllers {
       "   MSTR_Drone.DroneName as RPAS,\n" +
       "   tblPilot.FirstName as PilotName,\n" +
       "   tblGSC.FirstName as GSCName,\n" +
-      "   tblCreated.FirstName as CreatedBy,\n" +
+      //"   tblCreated.FirstName as CreatedBy,\n" +
       "   FlightDate as 'FlightDate(UTC)'\n" +
       "FROM\n" +
       "  DroneFlight\n" +
