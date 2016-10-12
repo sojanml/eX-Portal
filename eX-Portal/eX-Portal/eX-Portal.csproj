@@ -254,7 +254,6 @@
     <Compile Include="Controllers\RpasUserController.cs" />
     <Compile Include="Controllers\S3UploadController.cs" />
     <Compile Include="Controllers\SummaryController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="exLogic\Ajith.Util.cs" />
     <Compile Include="exLogic\BlackBox.cs" />

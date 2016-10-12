@@ -186,7 +186,11 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Pilot.DateOfExpiry, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Pilot.DateOfExpiry, "{0:dd-MM-yyyy}", new { htmlAttributes = new { @class = "date-picker" } })
+                    <input class="date-picker text-box single-line" data-val="true"
+                            data-val-date="The field Date Of Expiry must be a date." 
+                           id="Pilot_DateOfExpiry" name="Pilot.DateOfExpiry" type="datetime" 
+                           value="@(Model.Pilot.DateOfExpiry == null ? "" :
+                                                     ((DateTime)(Model.Pilot.DateOfExpiry)).ToString("dd-MMM-yyyy"))">
                     @Html.ValidationMessageFor(model => model.Pilot.DateOfExpiry, "", new { @class = "text-danger" })
                 </div>
             </div>
