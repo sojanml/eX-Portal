@@ -108,7 +108,7 @@ namespace eX_Portal.exLogic {
       }//if(_Pilot > 0)
 
       if(_UAS > 0) {
-        TheFilter.Append("\nUAS: ");
+        TheFilter.Append("\nRPAS: ");
         TheFilter.Append(getUASName());
       }//if(_UAS > 0)
 
@@ -176,7 +176,7 @@ namespace eX_Portal.exLogic {
         PortalAlert.AlertID,
         FlightID,
         PortalAlert.CreatedOn,
-        MSTR_Drone.DroneName,
+        MSTR_Drone.DroneName as RPAS,
         MSTR_User.FirstName + ' ' + MSTR_User.LastName as Pilot,
         CASE WHEN SMSSend = 1 THEN 'Yes' Else 'No' END as SMS,
         AlertCategory,
