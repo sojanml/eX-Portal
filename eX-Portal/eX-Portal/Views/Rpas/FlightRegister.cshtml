@@ -94,7 +94,13 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.GcaApproval.StartDate)
                 <div class="col-md-10">    
-                        @Html.EditorFor(model => model.GcaApproval.StartDate, "{0:dd-MM-yyyy}", new { htmlAttributes = new { @class = "form-control date-picker" } })
+                    <input class="form-control date-picker text-box single-line " 
+                           data-val="true" data-val-date="The field Start Date must be a date." 
+                           data-val-required="Please Enter Start Date" id="GcaApproval_StartDate" 
+                           name="GcaApproval.StartDate" type="datetime" 
+                           value="@(
+        Model.GcaApproval.StartDate == null ? "" :
+        ((DateTime)(Model.GcaApproval.StartDate)).ToString("dd-MMM-yyyy"))">
                     
                     @Html.ValidationMessageFor(model => model.GcaApproval.StartDate, "", new { @class = "text-danger" })
                 </div>
@@ -102,7 +108,12 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.GcaApproval.EndDate)
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.GcaApproval.EndDate, "{0:dd-MM-yyyy}", new { htmlAttributes = new { @class = "form-control date-picker" } })
+                    <input class="form-control date-picker text-box single-line" 
+                           data-val="true" data-val-date="The field End Date must be a date." 
+                           data-val-required="Please Enter End Date" id="GcaApproval_EndDate" 
+                           name="GcaApproval.EndDate" type="datetime" value="@(
+        Model.GcaApproval.EndDate == null ? "" :
+        ((DateTime)(Model.GcaApproval.EndDate)).ToString("dd-MMM-yyyy"))">
                     @Html.ValidationMessageFor(model => model.GcaApproval.EndDate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -159,11 +170,10 @@
                 </div>
             </div>
            </div>
-        @*style="@(Convert.ToString(Model.GcaApproval.IsUseCamara) == "2" ? "display:none;padding:0px;" : "display:Block;padding:0px;")"*@ 
-        <div id="cameraopt" style="display:none;padding:0px;" >
+       <div id="cameraopt" style="display:none;padding:0px;" >
             <div class="form-group">
                 @Html.LabelFor(model => model.GcaApproval.CameraId, "Select Camera")
-                <div class="col-md-10">othercamera
+                <div class="col-md-10">Other Camera
                     @Html.DropDownListFor(model => model.GcaApproval.CameraId, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"),  new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.GcaApproval.CameraId, "", new { @class = "text-danger" })
                 </div>

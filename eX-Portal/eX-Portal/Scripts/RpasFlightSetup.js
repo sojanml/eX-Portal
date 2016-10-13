@@ -137,6 +137,14 @@ $(document).ready(function () {
         }//if
     })
 
+
+    if ($(('#GcaApproval_IsUseCamara')).val() == '1') {
+        $('#cameraopt').slideDown();
+    } else {
+        $('#cameraopt').slideUp();
+    }//if
+
+
     //to dynamically show the other camera textbox
     $('#GcaApproval_CameraId').on("change", function () {
         if ($(this).val() == '1') {

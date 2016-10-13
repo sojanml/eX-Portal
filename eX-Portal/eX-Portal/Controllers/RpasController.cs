@@ -1381,6 +1381,8 @@ namespace eX_Portal.Controllers
                 GcaApproval = db.GCA_Approval.Find(ID)
                
             };
+
+            if (viewModel.GcaApproval == null) viewModel.GcaApproval = new GCA_Approval();
             //viewModel.GcaApproval.EndDate = Convert.ToDateTime(db.GCA_Approval.Find(ID).EndDate).ToString("dd-MMM-yyyy");
             return View(viewModel);
 
