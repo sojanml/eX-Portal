@@ -14,9 +14,12 @@
   case "report":
     <li>Report</li>
     break;
-  case "rpas":
   case "droneflight":
-    <li><a href="@Url.Action("Index", "DroneFlight")">RPAS</a></li>
+  case "map":
+    <li><a href="@Url.Action("Index", "DroneFlight")">Flights</a></li>
+    break;
+  case "rpas":
+    <li><a href="@Url.Action("Index", "Drone")">RPAS</a></li>
     break;
   case "dronechecklist":
     var DroneID = Request["DroneID"] != null ? Request["DroneID"].ToString() : "";
