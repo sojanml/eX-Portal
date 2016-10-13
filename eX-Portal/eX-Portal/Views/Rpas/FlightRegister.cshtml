@@ -29,7 +29,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.GcaApproval.PilotUserId, "Pilot")
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.GcaApproval.PilotUserId, DroneFlightSetup.getAllUsers(Session["AccountID"]),
+                @Html.DropDownListFor(model => model.GcaApproval.PilotUserId, DroneFlightSetup.getPilotAllUsers(Session["AccountID"]),
          "--Select Pilot--",
           new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.GcaApproval.PilotUserId, "", new { @class = "text-danger" })
@@ -49,7 +49,7 @@
             @Html.LabelFor(model => model.GcaApproval.GroundStaffUserId, "Ground Staff")
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.GcaApproval.GroundStaffUserId,
-          DroneFlightSetup.getAllUsers(Session["AccountID"]),
+          DroneFlightSetup.getPilotAllUsers(Session["AccountID"]),
           "--Select Ground Staff--",
           new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.GcaApproval.GroundStaffUserId, "", new { @class = "text-danger" })
@@ -162,17 +162,16 @@
                     @Html.ValidationMessageFor(model => model.GcaApproval.IsUseCamara)
                 </div>
             </div>
-
-
             <div class="form-group">               
                 <div class="col-md-10">
                    <p><font color="white">p</font></p>
                 </div>
             </div>
-           </div>
-       <div id="cameraopt" style="display:none;padding:0px;" >
+       </div>
+       
+        <div id="cameraopt" style="text-align:left;display:none;padding:0px;" >
             <div class="form-group">
-                @Html.LabelFor(model => model.GcaApproval.CameraId, "Select Camera")
+                @*@Html.LabelFor(model => model.GcaApproval.CameraId, "Select Camera")*@
                 <div class="col-md-10">Other Camera
                     @Html.DropDownListFor(model => model.GcaApproval.CameraId, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"),  new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.GcaApproval.CameraId, "", new { @class = "text-danger" })
@@ -190,12 +189,17 @@
         </div>
 
       
-            <div id="gcacoordinates" class="form-group" style="visibility:visible;">
-                @Html.LabelFor(model => model.GcaApproval.Coordinates, "Coordinates")
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.GcaApproval.Coordinates)
-                    @Html.ValidationMessageFor(model => model.GcaApproval.Coordinates)
+
+
+            <div id="gcacoordinates"  style="visibility:visible;">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.GcaApproval.Coordinates, "Coordinates")
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.GcaApproval.Coordinates)
+                        @Html.ValidationMessageFor(model => model.GcaApproval.Coordinates)
+                    </div>
                 </div>
+               
             </div>
 
            

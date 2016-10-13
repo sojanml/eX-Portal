@@ -101,6 +101,8 @@ namespace eX_Portal.Controllers
                         ",b.[Department]\n  " +
                         " ,b.[EmiratesId]  as [Emirates ID]\n   " +
                         ",b.[Title] as JobTitle\n   " +
+                        ",a.[RPASPermitNo] as [RPAS Permit No.]\n  " +
+                        ",a.[PermitCategory] as [Permit Category]\n  " +
                         //",c.[Name] as OrganizationName\n   " +
                         //",d.[ProfileName]\n   " +
                         " FROM[MSTR_User] a\n   " +
