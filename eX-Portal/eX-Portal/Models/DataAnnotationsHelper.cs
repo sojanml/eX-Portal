@@ -86,6 +86,7 @@ namespace eX_Portal.Models {
 
     [Compare("Password")]
     [Display(Name = "Confirm Password")]
+    [StringLength(30, MinimumLength = 6, ErrorMessage = "Password character should be minimum 6")]
     public string ConfirmPassword { get; set; }
 
     [Required(ErrorMessage = "Please enter First Name")]
@@ -120,6 +121,8 @@ namespace eX_Portal.Models {
 
     [Required(ErrorMessage = "Please enter Mobile Number")]
     [Display(Name = "Mobile Number")]
+    [DataType(DataType.PhoneNumber)]
+    [RegularExpression(@"^\(?([0-9]{5})\)?[ ]?([0-9]{9})$", ErrorMessage = "Entered phone format '00971 123456789' is not valid.")]
     public string MobileNo { get; set; }
 
     [Display(Name = "Office Number")]
@@ -478,6 +481,7 @@ namespace eX_Portal.Models {
   [MetadataType(typeof(GCA_Approval_Helper))]
   public partial class GCA_Approval {
     public string S3Url { get; set; }
+
   }
 
   public class GCA_Approval_Helper {
@@ -498,10 +502,12 @@ namespace eX_Portal.Models {
 
     [Required(ErrorMessage = "Please Enter Start Date")]
     [Display(Name = "Start Date")]
+    [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
     public string StartDate { get; set; }
 
     [Required(ErrorMessage = "Please Enter End Date")]
     [Display(Name = "End Date")]
+    [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
     public string EndDate { get; set; }
 
     [Required(ErrorMessage = "Please Enter Start Time")]

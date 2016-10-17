@@ -1,0 +1,137 @@
+﻿{
+  "city": {
+    "id": 292223,
+    "name": "Dubai",
+    "coord": {
+      "lon": 55.304722,
+      "lat": 25.258169
+    },
+    "country": "AE",
+    "population": 0
+  },
+  "cod": "200",
+  "message": 0.0076,
+  "cnt": 5,
+  "list": [
+    {
+      "dt": 1476259200,
+      "temp": {
+        "day": 307.07,
+        "min": 301.88,
+        "max": 307.18,
+        "night": 301.88,
+        "eve": 304.68,
+        "morn": 307.07
+      },
+      "pressure": 1020.49,
+      "humidity": 74,
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "speed": 2.46,
+      "deg": 319,
+      "clouds": 0
+    },
+    {
+      "dt": 1476345600,
+      "temp": {
+        "day": 306.64,
+        "min": 300.38,
+        "max": 306.64,
+        "night": 301.18,
+        "eve": 303.93,
+        "morn": 300.38
+      },
+      "pressure": 1020.77,
+      "humidity": 77,
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "speed": 1.66,
+      "deg": 307,
+      "clouds": 0
+    },
+    {
+      "dt": 1476432000,
+      "temp": {
+        "day": 306.41,
+        "min": 299.64,
+        "max": 306.62,
+        "night": 301.42,
+        "eve": 304.27,
+        "morn": 299.64
+      },
+      "pressure": 1021.79,
+      "humidity": 77,
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "speed": 2.92,
+      "deg": 350,
+      "clouds": 0
+    },
+    {
+      "dt": 1476518400,
+      "temp": {
+        "day": 305.78,
+        "min": 299.8,
+        "max": 307.95,
+        "night": 301.91,
+        "eve": 307.95,
+        "morn": 299.8
+      },
+      "pressure": 1019.4,
+      "humidity": 0,
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "speed": 1.67,
+      "deg": 151,
+      "clouds": 0
+    },
+    {
+      "dt": 1476604800,
+      "temp": {
+        "day": 305.98,
+        "min": 300.06,
+        "max": 307.64,
+        "night": 302.33,
+        "eve": 307.64,
+        "morn": 300.06
+      },
+      "pressure": 1019.94,
+      "humidity": 0,
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "speed": 0.47,
+      "deg": 271,
+      "clouds": 0
+    }
+  ]
+}

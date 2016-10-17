@@ -8,7 +8,7 @@
 
 
 <div id="dialog"></div>
-@*<h2>Drone Images</h2>*@
+@*<h2>RPAS Images</h2>*@
 <ul id="GPS-Images">
     @foreach (var item in Model)
     {
@@ -18,7 +18,9 @@
             <div class="download-icon"><a href="/upload/drone/@DroneName/@DroneID/@item.DocumentName" download><span class="download icon">&#xf019;</span></a></div>   
          }
             <div class="thumbnail">
-            <img id="@item.ID" onclick="showimg(this)" width="50px" height="50px" padding="0px" margin="0" src="/upload/drone/@DroneName/@DroneID/@item.DocumentName.Replace(".jpg",".t.png")"/></div>
+            <img id="@item.ID" onclick="showimg(this)" width="100"
+                 style="marign:0px; padding:0px; border:0px"
+                 src="/upload/drone/@DroneName/@DroneID/@item.DocumentName.Replace(".jpg",".t.png")"/></div>
      </li>
     }
   
@@ -26,9 +28,9 @@
 <div style="clear:both"></div>
 @if (ViewBag.Actions != "View")
 {
-<h2>Upload Images for UAV</h2>
+<h2>Upload Images for RPAS</h2>
 <ul id="FileUploadProgress"></ul>
-<div>Choose the files that you like to upload for above flight using the option bellow.</div>
+<div>Choose the files that you like to upload using the option below.</div>
 <div><input type="file" multiple name="fileinput" id="fileinput" accept="image/*" /></div>
 }
 

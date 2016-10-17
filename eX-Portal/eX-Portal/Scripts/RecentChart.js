@@ -6,6 +6,7 @@ var xLabel = new Object();
 var scrollData = new Object();
 var max;
 
+
 //var LastFlightcolors = ['red', 'green', 'blue', 'orange', 'yellow'];
 //var CurrentMonthFlightcolors = ['DarkRed', 'DarkGreen', 'DarkBlue', 'DarkOrange', 'DarkYellow'];
 
@@ -53,6 +54,7 @@ function OnSuccess_(reponse) {
     var LastAccountID = 0;
     var ColorSelector = 0;
     var Hdata = "";
+    var Hdata1 = "";
     if (aData.length > 15)
     {
         max = 15;
@@ -69,6 +71,7 @@ function OnSuccess_(reponse) {
             enabled: false
         }
     }
+    var count = 0;
     for (var i = 0; i < aData.length; i++) {
         var data = aData[i];
 
@@ -79,7 +82,20 @@ function OnSuccess_(reponse) {
         xLabel[value] = name;
         if (LastAccountID != data.AccountID)
         {
-          Hdata = Hdata + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
+          if (count < 4) {
+
+            Hdata = Hdata + '<td id=rectangle style="width:5px;height:1px;background:' + data.ChartColor + '"></td ><td  style="font-size:7px">' + data.AccountName + '</td>'
+
+           // Hdata = Hdata + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
+           // Hdata = Hdata + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
+          }
+          else
+          {
+            Hdata1 = Hdata1 + '<td id=rectangle style="width:5px;height:1px;background:' + data.ChartColor + '"></td ><td  style="font-size:7px">' + data.AccountName + '</td>'
+           // Hdata1 = Hdata1 + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
+          }
+          
+            count = count + 1;
         }
         LastAccountID = data.AccountID;
 
@@ -116,8 +132,14 @@ function OnSuccess_(reponse) {
 
     }
 
-    
-    HtmlData = '<table><tr>'+Hdata+'</tr></table>';
+    if (Hdata1 != "") {
+      HtmlData = '<table><tr>' + Hdata + '</tr><tr>'+ Hdata1 +'</tr></table>';
+    }
+    else
+    {
+      HtmlData = '<table><tr>' + Hdata + '</tr></table>';
+    }
+    console.log(HtmlData);
     
     //category = category + "]"
     //alert(category);
@@ -230,7 +252,7 @@ function initChart() {
         
             type: 'column',
             marginRight:0,
-            marginBottom: 90,
+            marginBottom: 68,
             spacingLeft: 0,
             spacingBottom: 0,
             events: {
@@ -248,23 +270,54 @@ function initChart() {
             }
         },
         title: {
-            text: null
+          
+          text: "Recent Flight Time",
+        align: 'left',
+        style: {
+          "fontFamily": 'Conv_DINNextLTPro-Light',
+          "fontSize": "15px" ,
+          color: '#ff6666',
+          "fontWeight": "bold"
+        }
         },
         
        
         xAxis: {
             min: 0,
-            max: max,
+          max: max,
+          //  max: category.length > 3 ? 3 : category.length-1,
             title: {
-              text: 'UAS Name'
+              text: 'RPAS Name'
             },
-            
+            labels: {
+              rotation: -60,
+              style: {
+
+                font: '8px'
+              }
+            },
             categories: category,
-            
+           
             crosshair: true,
             scrollbar: scrollData,
         },
         
+        exporting: {
+          enabled: true,
+          sourceWidth: 960,
+          sourceHeight: 400,
+          chartOptions: {
+            xAxis: [{
+              categories: category,
+              min: 0,
+              minRange: category.length - 1,
+              max: category.length - 1
+            }],
+            scrollbar: {
+              enabled: false
+            }
+          }
+        },
         yAxis: {
             min: 0,
             tickInterval: 1,
@@ -309,7 +362,10 @@ function initChart() {
         plotOptions: {
             column: {
                 stacking: 'normal',
-                pointPadding: 0.2,
+                pointPadding: 0,
+                groupPadding: 0,
+                pointWidth: 10,
+               
                 borderWidth: 0
             }
         },
@@ -361,15 +417,17 @@ function initChart() {
     },
     function (chart) { // on complete
 
-
-        chart.renderer.text(HtmlData, 0, 245)
+      $('#LegendRecent').html(HtmlData);
+      
+     // chart.renderer.text(HtmlData, 0, 275)
+     
         
         //chart.renderer.text('This text is <span style="color: red">styled</span> and <a href="http://example.com">linked</a>', 50,250)
         //    .css({
         //        color: '#4572A7',
         //        fontSize: '10px'
         //    })
-            .add();
+           
     });
 
 
@@ -396,12 +454,19 @@ function initChartTotalFlight() {
 
             type: 'column',
             marginRight: 0,
-            marginBottom: 90,
+            marginBottom:68,
             spacingLeft: 0,
             spacingBottom: 0,
         },
         title: {
-            text: null
+          text: "Total Flight Time",
+          align: 'left',
+          style: {
+            "fontFamily": 'Conv_DINNextLTPro-Light',
+            "fontSize": "15px" ,
+            color: '#ff6666',
+            "fontWeight": "bold"
+          }
         },
 
         xAxis: {
@@ -409,7 +474,7 @@ function initChartTotalFlight() {
             max:max,
             categories: category,
             title: {
-              text: 'UAS Name'
+              text: 'RPAS Name'
             },
             labels: {
               rotation: -60,
@@ -422,24 +487,48 @@ function initChartTotalFlight() {
             crosshair: true,
             scrollbar:scrollData,
         },
+
+
+        exporting: {
+          enabled: true,
+          sourceWidth: 960,
+          sourceHeight: 400,
+          chartOptions: {
+            xAxis: [{
+              categories: category,
+              min: 0,
+              minRange: category.length - 1,
+              max: category.length - 1
+            }],
+            scrollbar: {
+              enabled: false
+            }
+          }
+        },
        
         yAxis: {
          
           tickPixelInterval: 5,
-            // min:.01,
-          max:800,
-          type: 'logarithmic',
+           //  min:.00,
+         // max:2000
+         // type: 'Logarthmic',
+          //allowDecimals: true,
+          //startOnTick: false,
+          minPadding: 0,
             //minorTickInterval: 0.1,
-           // tickInterval: 10,
+          //  tickInterval: 2.5,
             title: {
                 text: 'Time  (Minutes)'
             }
         
         },
         plotOptions: {
-          column: {
-            minPointLength: 5
-          }
+          series: {
+            minPointLength: 3
+          },
+          //column: {
+          //  minPointLength: 5
+          //}
         },
         legend: {
             display: null
@@ -476,7 +565,7 @@ function initChartTotalFlight() {
         //},
         plotOptions: {
             column: {
-                pointPadding: 0.2,
+                pointPadding: 0.1,
                 borderWidth: 0
             }
         },
@@ -484,7 +573,7 @@ function initChartTotalFlight() {
             name: 'Total Flight Time',
             data: TotalFlightData,
             showInLegend: false,
-            minPointLength: 1,
+            minPointLength: 3,
             //----
             cursor: 'pointer',
             point: {
@@ -503,14 +592,14 @@ function initChartTotalFlight() {
     },
     function (chart) { // on complete
 
-
-        chart.renderer.text(HtmlData, 0, 245)
+      $('#LegendTotal').html(HtmlData);
+       // chart.renderer.text(HtmlData, 0, 275)
 
         //chart.renderer.text('This text is <span style="color: red">styled</span> and <a href="http://example.com">linked</a>', 50,250)
         //    .css({
         //        color: '#4572A7',
         //        fontSize: '10px'
         //    })
-            .add();
+//.add();
     });
 }

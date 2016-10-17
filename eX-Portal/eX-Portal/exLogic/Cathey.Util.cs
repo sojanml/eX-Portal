@@ -59,6 +59,9 @@ namespace eX_Portal.exLogic {
 
             }
           }
+          if(TypeField == "Camera")
+                        SelectList.Add(new SelectListItem { Text = "Other", Value = "1" });
+
           DropDownList = SelectList.ToList();
           ctx.Database.Connection.Close();
           return DropDownList; //return the list objects
@@ -248,7 +251,7 @@ namespace eX_Portal.exLogic {
 
             string sql = "select count(*) from UserLog where UserID= " + UserId + " and IsSessionEnd=0";
             int count=Util.getDBInt(sql);
-            if (count < 50)
+            if (count < 100)
                 return true;
             else
                 return false;

@@ -95,7 +95,8 @@
   function drawCircle(context) {
     context.beginPath();
     context.arc(125, 105, 105, 0, 2 * Math.PI, false);
-    context.fillStyle = 'rgb(230,230,230)';
+   // context.fillStyle = 'rgb(230,230,230)';
+    context.fillStyle = 'rgb(204, 255, 204)';
     context.fill();
   }
 

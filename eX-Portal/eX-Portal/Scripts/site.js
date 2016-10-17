@@ -1,7 +1,7 @@
 ﻿var AlertHideTimer = null;
 var _isUTCFormat = false;
 
-$(document).ready(function () {  
+$(document).ready(function () {
 
   // $('Table.report tbody').on("click", 'tr', function () {
   //   var data = qViewDataTable.row(this).data();
@@ -10,7 +10,7 @@ $(document).ready(function () {
   //console.log(data);
   // });
 
- 
+
   $(document).on("click", function () {
     $('UL.qViewMenu').fadeOut();
     $('#user-menu-items').slideUp();
@@ -75,15 +75,15 @@ $(document).ready(function () {
 
   checkTime();
   setAlertTimer();
-  
+
 
 });
 
 
 
 function setAlertTimer() {
-    window.setInterval(checkAlert, 10 * 1000);
-    window.setInterval(setClockTime,60* 1000);
+  window.setInterval(checkAlert, 10 * 1000);
+  window.setInterval(setClockTime, 60 * 1000);
 }
 
 function checkAlert() {
@@ -97,36 +97,35 @@ function checkAlert() {
 }
 
 function checkTime() {
-    var URL = '/Dashboard/getCurrentTime';
-    var d=''
-    $.ajax({
-        url: URL
-    }).done(function (data) {
-        var dt = new Date(data);
-        d = data;
-        ClockTime = dt;
-      //  var t = dt.getHours() + ':' + dt.getMinutes();
-      
-        $("#Clock").html(fmtDtHeader(dt) + ' UTC');
-    });
+  var URL = '/Dashboard/getCurrentTime';
+  var d = ''
+  $.ajax({
+    url: URL
+  }).done(function (data) {
+    var dt = new Date(data);
+    d = data;
+    ClockTime = dt;
+    //  var t = dt.getHours() + ':' + dt.getMinutes();
+
+    $("#Clock").html(fmtDtHeader(dt) + ' UTC');
+  });
 }
 
 
-function setClockTime()
-{
-    var dt = new Date(ClockTime);
-    
-    dt.setMinutes(dt.getMinutes() + 1, 0, 0);
-    ClockTime = dt;
+function setClockTime() {
+  var dt = new Date(ClockTime);
+
+  dt.setMinutes(dt.getMinutes() + 1, 0, 0);
+  ClockTime = dt;
   //  var t = dt.getHours() + ':' + dt.getMinutes();
-    $("#Clock").html(fmtDtHeader(dt) + ' UTC');
+  $("#Clock").html(fmtDtHeader(dt) + ' UTC');
 }
 
 
 function alertLine(Message) {
   $('#alertLine').html("<ul>" + Message + "</ul>").slideDown();
   if (AlertHideTimer) window.clearTimeout(AlertHideTimer);
-  AlertHideTimer = window.setTimeout( function () {
+  AlertHideTimer = window.setTimeout(function () {
     $('#alertLine').slideUp();
   }, 10 * 1000);
 }
@@ -201,8 +200,10 @@ function getqViewMenu(data) {
     var URL = Menu.url;
     //replace all the variables in query string
     for (var key in data) {
-      var Exp = new RegExp(key, "ig");
-      URL = URL.replace(Exp, data[key]);
+      var KeyResult = data[key];
+      var RegPattern = '(^|=|/)(' + key + ')($|&|\\?|\/)';
+      var Exp = new RegExp(RegPattern, "i");
+      URL = URL.replace(Exp, '$1' + KeyResult + '$3');
     }
     var LI = $('<LI><A class="' + Menu.class + '" href="' + URL + '">' + Menu.caption + '</a></LI>');
     List.append(LI);
@@ -211,13 +212,13 @@ function getqViewMenu(data) {
 }
 
 function _fnFooterCallback(nFoot, aData, iStart, iEnd, aiDisplay) {
- 
+
 }
 
 function _fnDrawCallback() {
   $('#qViewTable_paginate').append('<span class="refresh">&#xf021;</span>');
-  if($('#qViewTable_filter').find('.refresh').length <= 0) 
-  $('#qViewTable_filter').append('<span class="refresh">&#xf021;</span>');
+  if ($('#qViewTable_filter').find('.refresh').length <= 0)
+    $('#qViewTable_filter').append('<span class="refresh">&#xf021;</span>');
 
 }
 

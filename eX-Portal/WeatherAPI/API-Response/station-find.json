@@ -1,0 +1,49 @@
+﻿{
+  {
+    "info": {
+      "formatversion": 2,
+      "channal": "METAR_GDP",
+      "type": 1
+    },
+    "station": {
+      "id": 7100,
+      "name": "OMDB",
+      "type": 1,
+      "status": 1,
+      "zoom": 6,
+      "coord": {
+        "lng": 55.3644,
+        "lat": 25.2528
+      }
+    },
+    "distance": 6.526,
+    "last": {
+      "main": {
+        "temp": 307.15,
+        "pressure": 1008,
+        "humidity": 46
+      },
+      "wind": {
+        "speed": 5.1,
+        "deg": 290,
+        "var_beg": 250,
+        "var_end": 320
+      },
+      "visibility": {
+        "distance": 10000,
+        "prefix": 1
+      },
+      "calc": {
+        "dewpoint": 294.15,
+        "humidex": 315.35,
+        "heatindex": 310.15
+      },
+      "clouds": [
+        {
+          "condition": "CAVOK"
+        }
+      ],
+      "dt": 1476270000
+    }
+  }
+}

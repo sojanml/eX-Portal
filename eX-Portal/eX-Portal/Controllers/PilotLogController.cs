@@ -8,25 +8,20 @@ using System.Data.Entity;
 using eX_Portal.exLogic;
 using System.Text;
 
-namespace eX_Portal.Controllers
-{
-    public class PilotLogController : Controller
-    {
+namespace eX_Portal.Controllers {
+  public class PilotLogController : Controller {
         // GET: PilotLog
-        public ActionResult Index()
-        {
+    public ActionResult Index() {
             return View();
         }
 
         // GET: PilotLog/Details/5
-        public ActionResult Details(int id)
-        {
+    public ActionResult Details(int id) {
             return View();
         }
 
         // GET: PilotLog/Create
-        public ActionResult Create([Bind(Prefix = "ID")] int PilotID = 0)
-        {
+    public ActionResult Create([Bind(Prefix = "ID")] int PilotID = 0) {
             if (!exLogic.User.hasAccess("PILOTLOG.CREATE")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Create Pilot Log";
             MSTR_Pilot_Log PilotLog = new MSTR_Pilot_Log();
@@ -39,22 +34,19 @@ namespace eX_Portal.Controllers
 
         // POST: PilotLog/Create
         [HttpPost]
-        public ActionResult Create(MSTR_Pilot_Log PilotLog)
-        {
+    public ActionResult Create(MSTR_Pilot_Log PilotLog) {
             if (!exLogic.User.hasAccess("PILOTLOG.CREATE")) return RedirectToAction("NoAccess", "Home");
             if (PilotLog.DroneId < 1 || PilotLog.DroneId == null) ModelState.AddModelError("DroneID", "You must select a UAS.");
 
 
-            if (ModelState.IsValid)
-            {
+      if (ModelState.IsValid) {
                 ExponentPortalEntities db = new ExponentPortalEntities();
                 db.MSTR_Pilot_Log.Add(PilotLog);
                 db.SaveChanges();
               
                 db.Dispose();
         return RedirectToAction("UserDetail", "User", new { ID = PilotLog.PilotId });
-            }
-      else {
+      } else {
                 ViewBag.Title = "Create Drone Flight";
                 return View(PilotLog);
             }
@@ -62,8 +54,7 @@ namespace eX_Portal.Controllers
         }
 
         // GET: PilotLog/Edit/5
-        public ActionResult Edit([Bind(Prefix = "ID")] int LogId = 0)
-        {
+    public ActionResult Edit([Bind(Prefix = "ID")] int LogId = 0) {
             if (!exLogic.User.hasAccess("PILOTLOG.EDIT")) return RedirectToAction("NoAccess", "Home");
             ViewBag.Title = "Edit Pilot Log";
             ExponentPortalEntities db = new ExponentPortalEntities();
@@ -74,10 +65,8 @@ namespace eX_Portal.Controllers
 
         // POST: PilotLog/Edit/5
         [HttpPost]
-        public ActionResult Edit(MSTR_Pilot_Log PilotLog)
-        {
-            try
-            {
+    public ActionResult Edit(MSTR_Pilot_Log PilotLog) {
+      try {
                 if (!exLogic.User.hasAccess("PILOTLOG.EDIT")) return RedirectToAction("NoAccess", "Home");
                 ViewBag.Title = "Edit Pilot Log";
                 ExponentPortalEntities db = new ExponentPortalEntities();
@@ -86,9 +75,7 @@ namespace eX_Portal.Controllers
         return RedirectToAction("UserDetail", "User", new { ID = PilotLog.PilotId });
 
 
-            }
-            catch
-            {
+      } catch {
                 return View();
             }
         }
@@ -97,10 +84,8 @@ namespace eX_Portal.Controllers
 
         // POST: PilotLog/Delete/5
         
-        public string Delete([Bind(Prefix = "ID")]int LogId = 0)
-        {
-            try
-            {
+    public string Delete([Bind(Prefix = "ID")]int LogId = 0) {
+      try {
                 // TODO: Add delete logic here
                 if (!exLogic.User.hasAccess("PILOTLOG.DELETE")) return "Access Denied";
 
@@ -108,16 +93,13 @@ namespace eX_Portal.Controllers
                 Util.doSQL(SQL);
                
                 return Util.jsonStat("OK");
-            }
-            catch
-            {
+      } catch {
                 return Util.jsonStat("Error");
             }
         }
 
 
-        public ActionResult Detail([Bind(Prefix = "ID")] int UserID)
-        {
+    public ActionResult Detail([Bind(Prefix = "ID")] int UserID) {
             if (!exLogic.User.hasAccess("PILOTLOG.VIEW")) return RedirectToAction("NoAccess", "Home");
 
             ExponentPortalEntities db = new ExponentPortalEntities();
@@ -128,8 +110,7 @@ namespace eX_Portal.Controllers
             return View(User);
 
         }//UserDetail()
-        public string PilotLogTotal([Bind(Prefix = "ID")] int PilotID)
-        {
+    public string PilotLogTotal([Bind(Prefix = "ID")] int PilotID) {
       return "";
       /*
             if (!exLogic.User.hasAccess("PILOTLOG.VIEW")) return "Access Denied";
@@ -203,65 +184,56 @@ namespace eX_Portal.Controllers
             return Table.ToString();
       */
         }
-        public string PilotLogDetails([Bind(Prefix = "ID")] int PilotID)
-        {
+    public string PilotLogDetails([Bind(Prefix = "ID")] int PilotID) {
 
-            if (!exLogic.User.hasAccess("PILOTLOG.VIEW")) return "Access Denied";
-            string SQL = "SELECT \n" +
-                        " CONVERT(NVARCHAR, a.Date, 103) AS Date\n   " +   
-                        " ,b.DroneName as UASName " +
-                        " ,a.RouteFrom " +
-                        ",a.RouteTo    " +
-                        " ,a.Remarks   " +
-                        " ,a.FixedWing " +
-                        ",a.MultiDashRotor" +                      
-                        " ,a.SimulatedInstrument as Simulator" +
-                        " ,a.AsflightInstructor " +
-                        " ,a.DualRecieved  " +
-                        " ,a.FloatingCommand as PilotInCommand " +
-                        " , a.DualRecieved + a.FloatingCommand as TotalDuration " +
-                         " ,a.FlightID  " +
-                        " , a.Id as _PKey" +
-                        " FROM MSTR_Pilot_Log  " +
-                        "a left join mstr_drone b  " +
-                        "on a.DroneId = b.DroneId  " +
-                        " where a.PilotId=" + PilotID;
+      if (!exLogic.User.hasAccess("PILOTLOG.VIEWDETAIL")) return "Access Denied";
+      string SQL =
+      @"SELECT REPLACE(CONVERT(NVARCHAR, a.DATE, 106), ' ', '-') AS DATE,
+       b.DroneName AS RPAS,
+       a.FlightID,
+       a.FixedWing,
+       a.MultiDashRotor,
+       a.SimulatedInstrument AS Simulator,
+       a.AsflightInstructor,
+       a.DualRecieved as DualReceived,
+       a.FloatingCommand AS PilotInCommand,
+       (a.FixedWing + a.MultiDashRotor + a.SimulatedInstrument + a.AsflightInstructor + a.DualRecieved + a.FloatingCommand) AS Total,
+       a.Id AS _PKey
+      FROM MSTR_Pilot_Log a
+      LEFT JOIN mstr_drone b
+       ON a.DroneId = b.DroneId
+      WHERE a.PilotId = " + +PilotID;
 
-      string TotalSQL = "SELECT \n" +
-      "  'Total' as Date,\n" +
-      "  '' as UASName,\n" +
-      "  '' as RouteFrom,\n" +
-      "  '' as RouteTo,\n" +
-      "  '' as Remarks,\n" +
-      "  sum(FixedWing) as FixedWing, \n" +
-      "  sum(MultiDashRotor) as MultiDashRotor,\n" +
-      "  sum(SimulatedInstrument) as Simulator,\n" +
-      "  sum(AsflightInstructor) as AsflightInstructor, \n" +
-      "  sum(DualRecieved) as DualRecieved,\n" +
-      "  sum(FloatingCommand) as PilotInCommandm,\n" +
-      "  SUM( DualRecieved + FloatingCommand) as TotalDuration \n" +
-      "FROM \n" +
-      "  [MSTR_Pilot_Log] \n" +
-      "where \n" +
-      "  PilotId=" + PilotID;
+      string TotalSQL = @"SELECT 
+        'Total' AS DATE,
+        '' AS UASName,
+        '' AS FlightID,
+        sum(FixedWing) AS FixedWing,
+        sum(MultiDashRotor) AS MultiDashRotor,
+        sum(SimulatedInstrument) AS Simulator,
+        sum(AsflightInstructor) AS AsflightInstructor,
+        sum(DualRecieved) AS DualRecieved,
+        sum(FloatingCommand) AS PilotInCommandm,
+        sum(FixedWing + MultiDashRotor + SimulatedInstrument + AsflightInstructor + DualRecieved + FloatingCommand) AS Total
+      FROM [MSTR_Pilot_Log]
+      WHERE PilotId = " + PilotID;
 
-            qView nView = new qView(SQL);
+      qView nView = new qView(SQL);
       nView.TotalSQL = TotalSQL;
-            if (nView.HasRows)
-            {
-                nView.isFilterByTop = false;
-                return
-                  "<h2>Pilot Log Details</h2>\n" +
-          nView.getDataTable(
-            isIncludeData: true, 
-            isIncludeFooter: false, 
-            qDataTableID: "PilotLogDetails"
-          );
-            }
+      if (nView.HasRows) {
+        nView.isFilterByTop = false;
+        return
+          "<h2>Pilot Log Details</h2>\n" +
+  nView.getDataTable(
+    isIncludeData: true,
+    isIncludeFooter: false,
+    qDataTableID: "PilotLogDetails"
+  );
+      }
 
-            return "";
+      return "";
 
 
-        }
     }
-    }
+  }
+}

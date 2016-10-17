@@ -80,28 +80,28 @@ function getChartData() {
   var ChartDataSet = [];
   if (_lineChartLegend['Altitude']) ChartDataSet.push({
     label: "Altitude",
-    strokeColor: "rgb(236, 215, 101)",
-    pointColor: "rgb(236, 215, 101)",
+    strokeColor: "rgb(219, 211, 1)",
+    pointColor: "rgb(219, 211, 1)",
     pointStrokeColor: "#fff",
-    pointHighlightStroke: "rgb(236, 215, 101)",
+    pointHighlightStroke: "rgb(219, 211, 1)",
     data: _lineChartData['Altitude']
   });
 
   if (_lineChartLegend['Satellites']) ChartDataSet.push({
     label: "Satellites",
-    strokeColor: "rgba(151,187,205,1)",
-    pointColor: "rgba(151,187,205,1)",
+    strokeColor: "rgba(101, 186, 25,1)",
+    pointColor: "rgba(101, 186, 25,1)",
     pointStrokeColor: "#fff",
-    pointHighlightStroke: "rgba(151,187,205,1)",
+    pointHighlightStroke: "rgba(101, 186, 25,1)",
     data: _lineChartData['Satellites']
   });
 
   if (_lineChartLegend['Pitch']) ChartDataSet.push({
     label: "Pitch",
-    strokeColor: "rgba(255,119,119,1)",
-    pointColor: "rgba(255,119,119,1)",
+    strokeColor: "rgba(255, 89, 0,1)",
+    pointColor: "rgba(255, 89, 0,1)",
     pointStrokeColor: "#fff",
-    pointHighlightStroke: "rgba(255,119,119,1)",
+    pointHighlightStroke: "rgba(255, 89, 0,1)",
     data: _lineChartData['Pitch']
   });
 
@@ -116,10 +116,10 @@ function getChartData() {
 
   if (_lineChartLegend['Speed']) ChartDataSet.push({
     label: "Speed",
-    strokeColor: "rgb(117, 237, 251)",
-    pointColor: "rgb(117, 237, 251)",
+    strokeColor: "rgb(11, 144, 118)",
+    pointColor: "rgb(11, 144, 118)",
     pointStrokeColor: "#fff",
-    pointHighlightStroke: "rgba(187,17,17,1)",
+    pointHighlightStroke: "rgba(11, 144, 118,1)",
     data: _lineChartData['Speed']
   });
 
@@ -279,15 +279,16 @@ function setFormatData(_LastValue) {
       case "TotalFlightTime":
         value = parseFloat(value);
         if (isNaN(value)) value = 0;
+        /*
         //First time only
         if (_FirstTotalFlightTime < 0) {
           _FirstTotalFlightTime = value;
         }
         //Set the offset for flightime
         value = value - _FirstTotalFlightTime;
+        */
         if (value > 0) value = value / 60;
         value = value.toFixed(3);
-
         break;
       case "Heading":
         value = parseFloat(value);

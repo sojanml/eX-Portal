@@ -55,7 +55,7 @@ namespace eX_Portal.Controllers
             if (exLogic.User.hasAccess("PILOTS.VIEW")) nView.addMenu("Detail", Url.Action("PilotDetail", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("PILOTS.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("PILOTS.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
-            if (exLogic.User.hasAccess("PILOTLOG.VIEW")) nView.addMenu("Add Pilot Log", Url.Action("Create", "PilotLog", new { ID = "_PKey" }));
+            //if (exLogic.User.hasAccess("PILOTLOG.VIEW")) nView.addMenu("Add Pilot Log", Url.Action("Create", "PilotLog", new { ID = "_PKey" }));
             if (Request.IsAjaxRequest())
             {
                 Response.ContentType = "text/javascript";
@@ -91,7 +91,7 @@ namespace eX_Portal.Controllers
                         " ,a.[FirstName] \n " +
                         ",a.[MiddleName]\n " +
                         ",a.[LastName]\n  " +
-                        ",a.[Remarks]\n   " +
+                        //",a.[Remarks]\n   " +
                         ",a.[MobileNo]\n  " +
                         ",a.[OfficeNo]\n  " +
                         ",a.[HomeNo]\n" +
@@ -101,8 +101,10 @@ namespace eX_Portal.Controllers
                         ",b.[Department]\n  " +
                         " ,b.[EmiratesId]  as [Emirates ID]\n   " +
                         ",b.[Title] as JobTitle\n   " +
-                        ",c.[Name] as OrganizationName\n   " +
-                        ",d.[ProfileName]\n   " +
+                        ",a.[RPASPermitNo] as [RPAS Permit No.]\n  " +
+                        ",a.[PermitCategory] as [Permit Category]\n  " +
+                        //",c.[Name] as OrganizationName\n   " +
+                        //",d.[ProfileName]\n   " +
                         " FROM[MSTR_User] a\n   " +
                         " left join mstr_user_pilot b\n  " +
                         "on a.UserId=b.UserId\n   " +
@@ -402,6 +404,10 @@ namespace eX_Portal.Controllers
             {
                 if (!String.IsNullOrEmpty(UserModel.User.Password) && !String.IsNullOrEmpty(UserModel.User.ConfirmPassword))
                 {
+                    //if(UserModel.User.Password.Length<=5)
+                    //{
+                    //    ModelState.AddModelError("User.Password", "Password character should be minimum 6");
+                    //}
                     if (UserModel.User.Password != UserModel.User.ConfirmPassword)
                     {
                         ModelState.AddModelError("User.Password", "Password doesn't match.");
@@ -453,6 +459,7 @@ namespace eX_Portal.Controllers
 
                 SQL = "UPDATE MSTR_USER_PILOT SET\n" +
                  "  DateOfExpiry='" + UserModel.Pilot.DateOfExpiry + "',\n" +
+                 "  PassportNo= '" + UserModel.Pilot.PassportNo + "',\n"+
                  "  Department='" + UserModel.Pilot.Department + "',\n" +
                  "  EmiratesId='" + UserModel.Pilot.EmiratesId + "',\n" +
                  "  Title='" + UserModel.Pilot.Title + "'\n" +

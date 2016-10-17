@@ -2,66 +2,46 @@
 @{
   String ControllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
   String ActionName = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+  var ParamID = Request["ID"] != null ? Request["ID"].ToString() : "";
+
+  String ShowControllerName = ControllerName;
+  //if (ShowControllerName.Equals("Drone")) { ShowControllerName = "RPAS"; }
+  if (ShowControllerName.IndexOf("Drone") >= 0) { ShowControllerName = ControllerName.Replace("Drone", "RPAS"); }
 }
 <ul>
-  @*<li><a href="@Url.Action("Index", "Home")" class="disabled">Dashboard</a></li>
-  @switch (ControllerName) {
-    case "DroneCheckList":
-
-      var DroneID = Request["DroneID"] != null ? Request["DroneID"].ToString() : "";
-      var FlightID = Request["FlightID"] != null ? Request["FlightID"].ToString() : "";
-      if (DroneID != "") {
-        <li><a href="@Url.Action("Index", "Drone")" class="disabled">Drone</a></li>
-        <li><a href="@Url.Action("Detail", "Drone", new { ID = DroneID })" class="disabled">Details</a></li>
-      }
-      if (FlightID != "") {
-        <li><a href="@Url.Action("Index", "DroneFlight")" class="disabled">Drone Flight</a></li>
-        <li><a href="@Url.Action("Detail", "DroneFlight", new { ID = FlightID })" class="disabled">Details</a></li>
-      }
-      break;
-    default:
-      if (ActionName != "Index") {
-      <li><a href="@Url.Action("Index", ControllerName)" class="disabled">@Util.toCaption(ControllerName)</a></li>
+  <li><a href="@Url.Action("Index", "Home")">Dashboard</a></li>
+  @switch (ControllerName.ToLower()) {
+  case "report":
+    <li>Report</li>
+    break;
+  case "droneflight":
+  case "map":
+    <li><a href="@Url.Action("Index", "DroneFlight")">Flights</a></li>
+    break;
+  case "rpas":
+    <li><a href="@Url.Action("Index", "Drone")">RPAS</a></li>
+    break;
+  case "dronechecklist":
+    var DroneID = Request["DroneID"] != null ? Request["DroneID"].ToString() : "";
+    var FlightID = Request["FlightID"] != null ? Request["FlightID"].ToString() : "";
+    if (DroneID != "") {
+      <li><a href="@Url.Action("Index", "Drone")">RPAS</a></li>
+      <li><a href="@Url.Action("Detail", "Drone", new { ID = DroneID })">Details</a></li>
+    }
+    if (FlightID != "") {
+      <li><a href="@Url.Action("Index", "DroneFlight")">RPAS Flight</a></li>
+      <li><a href="@Url.Action("Detail", "DroneFlight", new { ID = FlightID })">Details</a></li>
+    }
+    break;
+  default:
+    if (ActionName.ToLower() != "index" ) {
+      <li><a href="@Url.Action("Index", ControllerName)">@Util.toCaption(ShowControllerName)</a></li>
     }
     break;
   }
-  <li>@ViewBag.Title</li>*@
-    @*//disabling breadcrumblinks*@
-
-
-    <li><a href="" class="disabled">Dashboard</a></li>
-        @switch (ControllerName) {
-          case "DroneCheckList":
-
-            var DroneID = Request["DroneID"] != null ? Request["DroneID"].ToString() : "";
-            var FlightID = Request["FlightID"] != null ? Request["FlightID"].ToString() : "";
-            if (DroneID != "") {
-              <li><a href="" class="disabled">Drone</a></li>
-              <li><a href="" class="disabled">Details</a></li>
-            }
-            if (FlightID != "") {
-              <li><a href="" class="disabled">Drone Flight</a></li>
-              <li><a href="" class="disabled">Details</a></li>
-            }
-            break;
-          default:
-            if (ActionName != "Index") {
-            <li><a href="" class="disabled">@Util.toCaption(ControllerName)</a></li>
-          }
-          break;
-        }
-        <li>@ViewBag.Title</li>
+  @if(!String.IsNullOrEmpty(ViewBag.Title)) { 
+    <li>@ViewBag.Title</li>
+  }
 
 
 </ul>
-@section Scripts { 
-    <style>
-        .disabled {
-        pointer-events: none;
-        cursor: default;
-        opacity: 0.6;
-
-    }
-    </style>
-
-    }

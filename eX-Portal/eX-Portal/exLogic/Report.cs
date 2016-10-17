@@ -108,7 +108,7 @@ namespace eX_Portal.exLogic {
       }//if(_Pilot > 0)
 
       if(_UAS > 0) {
-        TheFilter.Append("\nUAS: ");
+        TheFilter.Append("\nRPAS: ");
         TheFilter.Append(getUASName());
       }//if(_UAS > 0)
 
@@ -176,7 +176,7 @@ namespace eX_Portal.exLogic {
         PortalAlert.AlertID,
         FlightID,
         PortalAlert.CreatedOn,
-        MSTR_Drone.DroneName,
+        MSTR_Drone.DroneName as RPAS,
         MSTR_User.FirstName + ' ' + MSTR_User.LastName as Pilot,
         CASE WHEN SMSSend = 1 THEN 'Yes' Else 'No' END as SMS,
         AlertCategory,
@@ -238,7 +238,7 @@ namespace eX_Portal.exLogic {
   BoundaryHigh + BoundaryWarning + BoundaryCritical as Boundary,
   ProximityCritical,
   ProximityHigh + ProximityCritical + ProximityWarning as Proximity,
-  PortalAlertCounter.HeightCritical,
+  HeightCritical,
   HeightHigh + HeightCritical + HeightWarning as Height,");
 
       SQL.AppendLine(@"
@@ -363,16 +363,12 @@ GROUP  BY
       SQL.AppendLine("  MSTR_User.FirstName + ' ' + MSTR_User.LastName as label ");
       SQL.AppendLine("FROM ");
       SQL.AppendLine("  MSTR_User");
+      SQL.AppendLine("WHERE \n");
+      SQL.AppendLine("  MSTR_User.IsPilot = 1");
+
       if (User.hasAccess("DRONE.VIEWALL") || User.hasAccess("PILOT")) {
-        SQL.AppendLine("WHERE \n");
-        SQL.AppendLine("  MSTR_User.IsPilot = 1");
-      } else {
-        SQL.AppendLine(",");
-        SQL.AppendLine("  MSTR_User as AccountHolder");
-        SQL.AppendLine("WHERE");
-        SQL.AppendLine("  MSTR_User.IsPilot = 1  AND");
-        SQL.AppendLine("  MSTR_User.CreatedBy = AccountHolder.UserID and");
-        SQL.AppendLine("  AccountHolder.AccountID = " + Util.getAccountID());
+      } else { 
+        SQL.AppendLine("  AND MSTR_User.AccountID = " + Util.getAccountID());
       }
       if (!String.IsNullOrEmpty(Term)) {
         SQL.AppendLine("  AND (");
