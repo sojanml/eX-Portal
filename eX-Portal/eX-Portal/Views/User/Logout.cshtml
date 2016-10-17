@@ -2,6 +2,7 @@
   Layout = "~/Views/Shared/_eXPortalBeforeLogin.cshtml";
 }
 
+
 <div>
 Thank you for using the portal. 
 </div>
@@ -9,8 +10,15 @@ Thank you for using the portal.
   Please @Html.ActionLink("Log in", "Index", "User") again to use the site.
 
 </div>
+
 <script type="text/javascript">
-   function preventBack(){window.history.forward();}
-    setTimeout("preventBack()", 0);
-    window.onunload=function(){null};
+   
+    history.pushState(null, null, 'Logout');
+    window.addEventListener('popstate', function (event) {
+        history.pushState(null, null, 'Logout');
+    });
+   
 </script>
+
+
+   
