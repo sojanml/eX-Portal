@@ -45,6 +45,11 @@ namespace eX_Portal.exLogic {
 
 
     public static string getStreamURL(string x_urlString, bool isRTMP = false) {
+
+      if(HttpContext.Current.Request.Url.Host == "localhost" || HttpContext.Current.Request.Url.Host == "rpas.dcaa.gov.ae") {
+        return "http://localhost/" + x_urlString;
+      }
+
       int DurationMinutes = 10;
       string privateKeyId = "APKAIOYYYVDBFAMEFZ7Q"; // Guid.NewGuid().ToString("N");
 

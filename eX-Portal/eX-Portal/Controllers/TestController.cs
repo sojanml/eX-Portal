@@ -16,7 +16,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult Test() {
       Exponent.WeatherAPI TheWeather = new Exponent.WeatherAPI();
-      var Today = TheWeather.GetByIP("80.227.121.154");
+      var Today = TheWeather.GetByLocation(25.2048, 55.2708);
       return View(Today);
     }
 

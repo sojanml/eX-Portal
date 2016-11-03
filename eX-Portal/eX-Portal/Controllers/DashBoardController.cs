@@ -12,6 +12,7 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using System.Configuration;
+using Exponent;
 
 namespace eX_Portal.Controllers {
   public class DashBoardController : Controller {
@@ -269,10 +270,12 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-    [ChildActionOnly]
+    /*[ChildActionOnly]
     [OutputCache(Duration = 3600, VaryByCustom = "User")]
+    */
     public ActionResult LocalWeather() {
-      WeatherViewModel TodaysWeather = Weather.getLocalWeather(Request.UserHostAddress);
+      var API = new Exponent.WeatherAPI();
+      Exponent.WeatherForcast TodaysWeather = API.GetByIP(Request.UserHostAddress);
       return View(TodaysWeather);
     }
 

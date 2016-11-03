@@ -1,0 +1,170 @@
+﻿@import "compass";
+
+$BaseColor: red;
+$MenuFont: Arial;
+
+.default-list {
+  font-family: $MenuFont;
+  font-size: 10pt;
+  color: darkgray;
+
+  ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+
+    li {
+      float: left;
+      margin-right: 10px;
+      padding-right: 10px;
+      position: relative;
+
+      a {
+        text-decoration: none;
+        color: black;
+        &:hover {
+          color: $BaseColor;
+        }
+      }
+
+      ul {
+        display: none;
+        position: absolute;
+        left: -10px;
+        top: 14px;
+        padding: 10px;
+
+        li {
+          float: none;
+          margin-right: 0px;
+          padding-right: 0px;
+          padding-bottom: 5px;
+          position: unset;
+          white-space: nowrap;
+
+          &:last-child {
+            padding-bottom: 0px;
+          }
+        }
+      }
+
+      &:hover { 
+        & > a{
+          color: $BaseColor;
+        }
+        ul {
+        display: block;
+      }
+
+      }
+
+      &:last-child {
+        margin-right: 0px;
+        padding-right: 0px;
+        border-right: 0px silver none;
+      }
+    }
+  }
+}
+
+
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+section {
+  width: 920px;
+  margin: 0px auto 10px auto;
+}
+
+div.clearfix {
+}
+
+div.clearfix:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+div.logo {
+  width: 300px;
+  height: 60px;
+  float: left;
+
+  img {
+    width: 100%;
+    height: auto !important;
+  }
+}
+
+nav.main-menu{
+  float: right;
+  @extend .default-list;
+}
+
+nav.user-management {
+  float: right;
+  @extend .default-list;
+  b {
+    color: black;
+  }
+}
+
+
+
+nav.main-menu > ul {
+  margin-top: 30px;
+
+  & > li {
+    text-transform: uppercase;
+
+    & > ul {
+      background-color: white;
+      z-index: 10;
+
+      & > li {
+        text-transform: none;
+      }
+    }
+  }
+}
+
+nav.breadcrumbs {
+  float: left;
+  @extend .default-list;
+  ul li {    
+    font-size:8pt;
+    margin-right:0px;
+    padding-right:5px;
+    &::after {
+      margin-left:5px;
+      content: ">";
+    }
+    &:last-child::after {
+      content: "";
+    }
+  }
+
+
+  &::after {
+    clear: both;
+    display: block;
+    content: "";
+  }
+}
+
+h1.page-title {
+  margin: 0px;
+  padding: 0px;
+  font-family: $MenuFont;
+  color: $BaseColor;
+  font-size:12pt;
+  &::before {
+    clear: both;
+    display: block;
+    content: "";
+  }
+}

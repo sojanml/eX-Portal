@@ -6,7 +6,9 @@ namespace eX_Portal {
     // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
     public static void RegisterBundles(BundleCollection bundles) {
       bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                  "~/Scripts/jquery-1.11.3.js"));
+                  "~/Scripts/jquery-1.11.3.js",
+                  "~/jquery-ui/jquery-ui.min.js"
+                  ));
 
       bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                   "~/Scripts/jquery.validate*"));
@@ -24,7 +26,6 @@ namespace eX_Portal {
                       "~/Content/site.css"));
 
       bundles.Add(new ScriptBundle("~/bundles/dataTableScript").Include(
-                "~/jquery-ui/jquery-ui.min.js",
                 "~/dataTable/js/jquery.dataTables.js"
                 ));
       bundles.Add(new StyleBundle("~/bundles/dataTableCss").Include(
@@ -32,6 +33,12 @@ namespace eX_Portal {
                 "~/jquery-ui/jquery-ui.min.css"
                 ));
 
+      bundles.Add(new StyleBundle("~/bundles/eXPortalWidget").Include(
+                "~/jquery-ui/jquery-ui.min.css",
+                "~/Content/eXPortalWidget.css"
+                ));
+
+      
 
 
     }

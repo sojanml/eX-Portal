@@ -20,12 +20,21 @@
       <h2>@Model.Today.ConditionDate</h2>
       ConditionCode: @Model.Today.ConditionCode<br />
       ConditionText: @Model.Today.ConditionText<br />
+      Temperature: @Model.Today.Temperature (@Model.Today.High High @Model.Today.Low Law) <br />
+      Pressure: @Model.Today.Pressure hPa<br />
+      Visibility: @Model.Today.Visibility<br />
+      Wind: @Model.Today.WindSpeed km/h @@ @(Model.Today.WindDirection)&deg;
+      
 
       @foreach(var Weather in Model.Forecast) {
         <h2>@Weather.ConditionDate</h2>
         <div>
           ConditionCode: @Weather.ConditionCode<br />
           ConditionText: @Weather.ConditionText<br />
+          Temperature: @Weather.Temperature (@Weather.High High @Weather.Low Law) <br />
+          Pressure: @Weather.Pressure hPa<br />
+          Visibility: @Weather.Visibility<br />
+          Wind: @Weather.WindSpeed km/h @@ @(Weather.WindDirection)&deg;
         </div>
       }
     </div>

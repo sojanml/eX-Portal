@@ -23,6 +23,7 @@ var gADSBData = {};
 var ADSBTimer = null;
 var _ADSBAnimationSec = 5;
 var _ADSBAnimationTimer = null;
+var _ADSBTimerCount = 0;
 
 var ADSBLine = {
   FlightID: "",
@@ -41,10 +42,12 @@ var ADSBLine = {
 
   setABSPos: function (lat, lng, alt) {
     this.EndPos = new google.maps.LatLng(lat, lng);
+    alt = parseFloat(alt + '');
     this.AltABS = alt * 0.3048;
   },
   setStart: function (lat, lng, alt) {
     this.StartPos = new google.maps.LatLng(lat, lng);
+    alt = parseFloat(alt + '');
     this.AltEnd = alt;
   },
   Show: function () {
@@ -186,8 +189,8 @@ function fn_MapPoint(thisObj) {
 
 
 function fn_AdsbPoint(thisObj) {
-  var Lat = thisObj.attr("data-lat");
-  var Lng = thisObj.attr("data-lng");
+  var Lat = parseFloat(thisObj.attr("data-lat"));
+  var Lng = parseFloat(thisObj.attr("data-lng"));
   var Doc = thisObj.attr("data-doc");
   var FlightID = Title = thisObj.attr("data-ident");
   var Alt = thisObj.attr("data-alt");
@@ -214,9 +217,9 @@ function fn_AdsbPoint(thisObj) {
   TD_Tumb +
   '<td style="white-space:nowrap;" valign="top">' +
   Title +
-  'Lat: <b>' + Lat + "</b><br>" +
-  "Lng: <b>" + Lng + "</b><br>" +
-  "Alt: <b>" + Alt + "</b><br>" +
+  'Lat: <b>' + Lat.toFixed(4) + "</b><br>" +
+  "Lng: <b>" + Lng.toFixed(4) + "</b><br>" +
+  "Alt: <b>" + Alt.toFixed(1) + "</b><br>" +
   '</td><td valign="top" style="padding-left:20px;">' +
   '<b style="color:green">Separation</b><br>\n' +
   "Distance : <b>" + ADSBLine.getDistance() + ' KM</b><br>\n' +
@@ -300,11 +303,14 @@ function ShowHideGeoTag(btn) {
 
 function ShowHideADSB(btn) {
   if (btn.length) btn.val("Loading...");
+  _ADSBTimerCount = 0;
 
   if (_IsADSBShown) {
     _ADSBLayer.setValues({ map: null });
     _IsADSBShown = false;
     if (btn.length) btn.val("Show ADS/B Data");
+    GeoInfoWindow.close();
+    ADSBLine.Hide();
     if (_ADSBAnimationTimer) window.clearInterval(_ADSBAnimationTimer);
     _ADSBAnimationTimer = null;
     return;
@@ -314,13 +320,13 @@ function ShowHideADSB(btn) {
     _ADSBLayer.setValues({ map: map });
     _IsADSBShown = true;
     if (btn.length) btn.val("Hide ADS/B Data");
-    getLocalADSB(); /*GetADSBData(0, 0);*/
+    GetADSBData(0, 0);  /*getLocalADSB(); */
     _ADSBAnimationTimer = window.setInterval(ADSBAnimation, _ADSBAnimationSec * 1000);
     return;
   }
 
   _ADSBLayer = new ADSBOverlay({ map: map }, []);
-  getLocalADSB(); /*GetADSBData(0, 0);*/
+  GetADSBData(0, 0);  /*getLocalADSB(); */
   if (btn.length) btn.val("Hide ADSB Data");
   _ADSBAnimationTimer = window.setInterval(ADSBAnimation, _ADSBAnimationSec * 1000);
 
@@ -332,9 +338,15 @@ function ADSBAnimation() {
 
 function LiveADSData() {
   if (!_IsADSBShown) return;
+  _ADSBTimerCount++;
+  if (_ADSBTimerCount > (6 * 5)) {
+    _IsADSBShown = true;
+    ShowHideADSB($('#btnADSB'));
+    return;
+  }
   //var RangeLat = (HomePoint["Latitude"] - 1).toString() + ' ' + HomePoint["Latitude"].toString();
   //var RangeLon = (HomePoint["Longitude"]).toString() + ' ' + (HomePoint["Longitude"] + 1).toString();
-  getLocalADSB(); /*GetADSBData(0, 0);*/
+  GetADSBData(0, 0);  /*getLocalADSB(); */
 }
 
 
@@ -368,7 +380,8 @@ function getLocalADSB() {
 }
 
 
-function xx_GetADSBData(RangeLat, RangeLon) {
+function GetADSBData(RangeLat, RangeLon) {
+  console.log("ADSB Timer Count: " + _ADSBTimerCount);
   RangeLat = '23.85438 26.39335';
   RangeLon = '52.99612 59.31375';
 
@@ -386,7 +399,7 @@ function xx_GetADSBData(RangeLat, RangeLon) {
     contentType: "application/json;charset=utf-8",
     data: {
       'query': query,
-      'howMany': 104,
+      'howMany': 30,
       'offset': 0
     },
     success: function (result) {
@@ -452,8 +465,8 @@ ADSBOverlay.prototype.draw = function () {
   for (var i = 0; i < this.ADSBData.length; i++) {
     var lat = this.ADSBData[i].latitude;
     var lng = this.ADSBData[i].longitude;
-    var alt = this.ADSBData[i].altitude;
-    var title = this.ADSBData[i].CallSign.trim();
+    var alt = this.ADSBData[i].altitude * 100;
+    var title = this.ADSBData[i].ident.trim();
     var heading = this.ADSBData[i].heading;
     heading = parseFloat(heading);
     if (isNaN(heading)) heading = 0;
@@ -462,10 +475,10 @@ ADSBOverlay.prototype.draw = function () {
     var IconGeoPos = new google.maps.LatLng(lat, lng)
     if (this.MovePointsToSecond > _ADSBAnimationSec) {
       var SpeedKmPerHour = this.ADSBData[i].speed * 1.60934;
-      var SpeedPerSec = SpeedKmPerHour/ 3600;
+      var SpeedPerSec = SpeedKmPerHour / 3600;
       var DistaceTravelInSec = SpeedPerSec * this.MovePointsToSecond;
       //LogMsg = LogMsg + ", Distance: " + DistaceTravelInSec;
-      IconGeoPos = destinationPoint(IconGeoPos, heading, DistaceTravelInSec);
+      //IconGeoPos = destinationPoint(IconGeoPos, heading, DistaceTravelInSec);
       lat = IconGeoPos.lat();
       lng = IconGeoPos.lng();
     }
@@ -478,7 +491,7 @@ ADSBOverlay.prototype.draw = function () {
     } else if (gADSBData[DivID]) {
       var $point = $('#' + DivID);
       $point.animate({ left: IconLocation.x, top: IconLocation.y });
-      $point.find(".icon").css({ transform: 'rotate(' + (heading - 45) + 'deg)', color: IconColor});
+      $point.find(".icon").css({ transform: 'rotate(' + (heading - 45) + 'deg)', color: IconColor });
       $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });
     } else {
       var $point = $(
@@ -600,7 +613,7 @@ function Replay() {
   setMapInfo();
 
   //Stop the Video
-  if(playerInstance) playerInstance.stop();
+  if (playerInstance) playerInstance.stop();
 
 
   //Reset the date to start time
@@ -739,6 +752,9 @@ function drawNextSetFromServer() {
     if (_LocationIndex < 0) _LocationIndex = 0;
     drawLocationAtIndexTimer();
     _LocationIndex++;
+
+    //here
+    setMapInfo();
   }
 }
 
@@ -1203,7 +1219,7 @@ function getIconColor(Height) {
   '#FF9600', //Yellow
   '#00ff10' //Green
   ];
-  
+
 
   if (Height < 1000) {
     return Colors[0];
@@ -1212,6 +1228,6 @@ function getIconColor(Height) {
   } else {
     return Colors[2];
   }
-  
+
 
 }

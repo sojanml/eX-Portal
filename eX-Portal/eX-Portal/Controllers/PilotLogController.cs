@@ -197,7 +197,6 @@ namespace eX_Portal.Controllers {
        a.AsflightInstructor,
        a.DualRecieved as DualReceived,
        a.FloatingCommand AS PilotInCommand,
-       (a.FixedWing + a.MultiDashRotor + a.SimulatedInstrument + a.AsflightInstructor + a.DualRecieved + a.FloatingCommand) AS Total,
        a.Id AS _PKey
       FROM MSTR_Pilot_Log a
       LEFT JOIN mstr_drone b
@@ -213,8 +212,7 @@ namespace eX_Portal.Controllers {
         sum(SimulatedInstrument) AS Simulator,
         sum(AsflightInstructor) AS AsflightInstructor,
         sum(DualRecieved) AS DualRecieved,
-        sum(FloatingCommand) AS PilotInCommandm,
-        sum(FixedWing + MultiDashRotor + SimulatedInstrument + AsflightInstructor + DualRecieved + FloatingCommand) AS Total
+        sum(FloatingCommand) AS PilotInCommandm
       FROM [MSTR_Pilot_Log]
       WHERE PilotId = " + PilotID;
 
