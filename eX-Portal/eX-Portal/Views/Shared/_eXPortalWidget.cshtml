@@ -18,16 +18,14 @@
 <body>
   <section>
     <header>
-      <div class="clearfix">
+      <div class="clearfix newsection">
         <div class="logo"><img src="~/images/rta-logo.png" /></div>
         <nav class="main-menu">
           @Html.Action("SystemMenu", "Design")
         </nav>
       </div>
 
-      <div class="clearfix">
-
-
+      <div class="clearfix newsection">
         <nav class="user-management">
           <ul>
             @if (Session["UserID"] == null) {
@@ -55,8 +53,8 @@
     </header>
   </section>
 
-  <div>
+  <section>
     @RenderBody()
-  </div>
+  </section>
 </body>
 </html>

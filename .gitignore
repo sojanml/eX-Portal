@@ -65,11 +65,10 @@ bld/
 *.sln
 
 #Files
-*.csproj
 eX-Portal/eX-Portal/obj/Debug/edmxResourcesToEmbed/Models/Portaldb.csdl
 eX-Portal/eX-Portal/obj/Debug/edmxResourcesToEmbed/Models/Portaldb.csdl
 
 \obj\
-
 /eX-Portal/eX-Portal/AssemblyInfo.cs
 /eX-Portal/.sass-cache
+/eX-Portal/HtmlRenderer
