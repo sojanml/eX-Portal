@@ -229,6 +229,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdsbController.cs" />
     <Compile Include="Controllers\ApprovalController.cs" />
     <Compile Include="Controllers\AutoCompleteController.cs" />
     <Compile Include="Controllers\BlackBoxController.cs" />
@@ -637,6 +638,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\GoboldThinLight.svg" />
+    <Content Include="fonts\OpenSans.svg" />
     <Content Include="fonts\vjs.svg" />
     <Content Include="fonts\weathericons-regular-webfont.svg" />
     <Content Include="Global.asax" />
@@ -725,7 +728,16 @@
     <Content Include="images\map\bottom-right.png" />
     <Content Include="images\map\top-left.png" />
     <Content Include="images\map\top-right.png" />
+    <Content Include="images\marker.png" />
     <Content Include="images\rta-logo.png" />
+    <Content Include="images\rta\AvgSpeed.png" />
+    <Content Include="images\rta\Heading.png" />
+    <Content Include="images\rta\MaxSpeed.png" />
+    <Content Include="images\rta\MedSpeed.png" />
+    <Content Include="images\rta\MinSpeed.png" />
+    <Content Include="images\rta\RpasID.png" />
+    <Content Include="images\rta\VechileCount.png" />
+    <Content Include="images\rta\zone.png" />
     <Content Include="images\weather\00.png" />
     <Content Include="images\weather\01.png" />
     <Content Include="images\weather\02.png" />
@@ -946,6 +958,14 @@
     <Content Include="fonts\vjs.eot" />
     <Content Include="Content\video-js.less" />
     <Content Include="config.rb" />
+    <Content Include="fonts\OpenSans.eot" />
+    <Content Include="fonts\OpenSans.ttf" />
+    <Content Include="fonts\OpenSans.woff" />
+    <Content Include="fonts\OpenSans.woff2" />
+    <Content Include="fonts\GoboldThinLight.eot" />
+    <Content Include="fonts\GoboldThinLight.ttf" />
+    <Content Include="fonts\GoboldThinLight.woff" />
+    <Content Include="fonts\GoboldThinLight.woff2" />
     <None Include="Properties\PublishProfiles\exportal.pubxml" />
     <Content Include="sass\dashboard.scss" />
     <Content Include="sass\internal-dashboard.scss" />
@@ -1333,6 +1353,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Adsb\" />
     <Folder Include="Views\UserLogin\" />
     <Folder Include="Weather\" />
   </ItemGroup>
@@ -1359,6 +1380,10 @@
     <EmbeddedResource Include="ReportsManager\MSTR_Drone.rdlc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\SourceCode\Exponent.ADSB\ADSB\ADSB.csproj">
+      <Project>{4c22df85-5a52-4d44-a2ff-4b40223d87f5}</Project>
+      <Name>ADSB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WeatherAPI\WeatherAPI.csproj">
       <Project>{bfaf2d75-0aff-4dfb-ab56-23fcc4070f60}</Project>
       <Name>WeatherAPI</Name>

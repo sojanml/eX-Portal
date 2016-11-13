@@ -287,10 +287,7 @@ namespace eX_Portal.Controllers {
 
       qView nView = new qView(SQL);
       nView.addMenu("Detail", Url.Action("Detail", "Payload", new { ID = "_Pkey" }));
-
       ViewBag.FlightUniqueID = FlightUniqueID;
-
-
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";

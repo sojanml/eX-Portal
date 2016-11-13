@@ -1,15 +1,31 @@
 ﻿@import "compass";
 
+@include font-face("FontAwesome", font-files("../fonts/FontAwesome.ttf", "../fonts/FontAwesome.otf"));
+@include font-face("OpenSans", font-files("../fonts/OpenSans.ttf", "../fonts/OpenSans.otf"));
+@include font-face("Gobold_Light", 
+  font-files(
+    "../fonts/GoboldThinLight.ttf", 
+    "../fonts/GoboldThinLight.otf",
+    "../fonts/GoboldThinLight.eot",
+    "../fonts/GoboldThinLight.svg",
+    "../fonts/GoboldThinLight.woff",
+    "../fonts/GoboldThinLight.woff2"
+  ));
+
 $HiliteColor: red;
-$BaseFont: Arial;
+$BaseFont: OpenSans, Arial;
 $BaseColor: #333333;
+$BoxColor: #ededed;
 $MenuColor: black;
 
-@include font-face("FontAwesome", "../fonts/FontAwesome");
+$TotalGridWidth: 950px;
+$OneGridWidth: 110px;
+$GridMargin: 10px;
+
 
 .default-list {
   font-family: $BaseFont;
-  font-size: 10pt;
+  font-size: 9pt;
   color: darkgray;
 
   ul {
@@ -19,8 +35,8 @@ $MenuColor: black;
 
     li {
       float: left;
-      margin-right: 10px;
-      padding-right: 10px;
+      margin-right: $GridMargin;
+      padding-right: $GridMargin;
       position: relative;
 
       a {
@@ -35,9 +51,9 @@ $MenuColor: black;
       ul {
         display: none;
         position: absolute;
-        left: -10px;
+        left: (-1 * $GridMargin);
         top: 14px;
-        padding: 10px;
+        padding: $GridMargin;
 
         li {
           float: none;
@@ -82,11 +98,13 @@ body, html {
   margin: 0px;
   padding: 0px;
   color: $BaseColor;
+  font-family: $BaseFont;
+  font-size: 9pt;  
 }
 
 section {
-  width: 920px;
-  margin: 0px auto 10px auto;
+  width: $TotalGridWidth;
+  margin: 0px auto 5px auto;
 }
 
 header {
@@ -133,6 +151,7 @@ nav.user-management {
   & > ul > li {
     margin-right: 0px;
     padding-right: 5px;
+
     &::after {
       margin-left: 5px;
       content: "|";
@@ -202,5 +221,250 @@ h1.page-title {
     clear: both;
     display: block;
     content: "";
+    height:5px;
   }
 }
+
+
+div.grid-section {
+  width: $TotalGridWidth;
+  margin-bottom: $GridMargin;
+  & > div {
+    float:left;
+    background-clip: padding-box;
+    border-right: 10px solid transparent;
+    min-height: 30px;
+    &:last-child {
+      border-right: 0px none;
+    }
+     
+  }
+
+  & > div.grid-2of8 {
+    width: ($OneGridWidth * 2 + $GridMargin * 1);
+  }
+
+  & > div.grid-3of8 {
+    width: ($OneGridWidth * 3 + $GridMargin * 2);
+  }
+
+  & > div.grid-4of8 {
+    width: ($OneGridWidth * 4 + $GridMargin * 3);
+  }
+
+  &:after {
+    clear: both;
+    display: block;
+    content: "";
+    height:  0px;
+  }
+}
+
+div.grid-section.flight-info > div {
+  background-color: $BoxColor;
+  text-transform: uppercase;
+
+  * {
+    font-size: 8pt;
+  }
+
+  & > table {
+    height:70px;
+    padding:10px 10px 10px 10px;
+    th {
+      margin:0px;
+      padding:0px;
+    }
+    td {
+      margin:0px;
+      padding:0px 0px 0px 15px;
+    }
+  }
+
+  th {
+    text-align: left;
+  }
+}
+
+
+table.warning {
+  tr {
+    td, th {
+      padding:3px;
+    }
+    th {
+      span.icon {
+        font-size: 15pt;
+      }
+    }
+
+    &.yellow {
+      td, th {
+        color: #fe8400;
+      }
+    }
+
+    &.red {
+      td, th {
+        color: #ed1c22;
+      }
+    }
+  }
+}
+
+div#traffic_map {
+  width: 100%;
+  height:260px;
+}
+div#traffic_chart {
+  width: 100%;
+  height:125px;
+}
+
+div.traffic_data {
+  height:125px;
+  background-color: $BoxColor;
+}
+table#traffic_data {
+  width: 100%;
+  thead {
+    background-color: black;
+    color: $HiliteColor;
+    th {
+      padding:6px 2px 6px 2px;
+      font-size:6pt;
+      text-align:left;
+    }
+    th:first-child {
+      padding-left:12px;
+    }
+  }
+  
+  tbody {
+        td {
+      padding:1px 2px 1px 2px;
+      border-bottom:1px #dedede solid;
+      font-size:7pt;
+      color: black;
+    }
+        td:first-child {
+          padding-left:12px;
+        }
+  }
+}
+
+ul.tiles {
+  list-style:none;
+  margin:0px;
+  padding:0px;
+  li {
+    width: $OneGridWidth;
+    float:left;
+    margin-right: $GridMargin;
+    height:125px;
+    background-color: #e62a38;
+    &:last-child {
+      margin-right: 0px;
+    }
+    div.tile-icon {
+      border-bottom: 1px white solid;
+      width:100%;
+      text-align:center;
+      img {
+        width:40px;
+        height: auto;
+        padding:0px 0px 3px 0px;
+      }
+    }
+    div.tile-title {
+      width:100%;
+      color: white;
+      text-align:center;
+      text-transform: uppercase;
+      padding:8px 0px 8px 0px;
+      font-size: 8pt;
+    } 
+
+    div.tile-detail {
+            font-family: Gobold_Light;
+      width:100%;
+      color: white;
+      text-align:center;
+      text-transform: uppercase;
+      padding:3px 0px 3px 0px;
+      font-size: 26pt;
+    }
+  }
+  
+}
+
+
+a[href^="http://maps.google.com/maps"]{display:none !important}
+a[href^="https://maps.google.com/maps"]{display:none !important}
+
+.gmnoprint a, .gmnoprint span, .gm-style-cc {
+    display:none;
+}
+
+
+
+
+.adsb-point,
+.map-point {
+  position: absolute;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  border: 0px red solid;
+  text-align: center;
+  margin-top: -22px;
+  margin-left: -11px;
+}
+
+  .adsb-point span,
+  .map-point span {
+    display: block;
+    position: absolute;
+    color: gold;
+    text-shadow: 1px 1px 1px black;
+  }
+
+  .adsb-point:hover span,
+  .map-point:hover span,
+  .adsb-point:hover span.flight-title {
+    display: block;
+  }
+
+  .map-point span.GeoTagIcon {
+    font-size: 16px;
+    left: 3px;
+    top: 0px;
+  }
+
+  .map-point span.GeoTagPoint {
+    font-size: 16px;
+    top: 10px;
+    left: 8px;
+  }
+
+  .adsb-point span.FlightIcon {
+    font-size: 35px;
+    left: 3px;
+    top: 0px;
+    /*color: #d5ff00 !important;*/
+    display: block;
+    text-shadow: none;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+  }
+
+
+  .adsb-point span.flight-title {
+    color: #5f0702;
+    left: 0px;
+    bottom: -5px;
+    text-shadow: none;
+    background-color: rgba(243, 124, 1, 0.38);
+    padding: 0px 3px 0px 3px;
+    display: none;
+  }

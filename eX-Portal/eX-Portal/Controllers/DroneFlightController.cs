@@ -68,7 +68,8 @@ namespace eX_Portal.Controllers {
         ViewBag.Title += " [" + Util.getDroneName(DroneID) + "]";
       }
 
-      if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+      if (exLogic.User.hasAccess("DRONE.VIEWALL") || exLogic.User.hasAccess("DRONE.MANAGE")) {
+      } else { 
         if (SQLFilter != "")
           SQLFilter += " AND";
         SQLFilter += " \n" +

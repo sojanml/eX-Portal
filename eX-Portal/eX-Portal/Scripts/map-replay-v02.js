@@ -219,7 +219,7 @@ function fn_AdsbPoint(thisObj) {
   Title +
   'Lat: <b>' + Lat.toFixed(4) + "</b><br>" +
   "Lng: <b>" + Lng.toFixed(4) + "</b><br>" +
-  "Alt: <b>" + Alt.toFixed(1) + "</b><br>" +
+  "Alt: <b>" + Alt + "</b><br>" +
   '</td><td valign="top" style="padding-left:20px;">' +
   '<b style="color:green">Separation</b><br>\n' +
   "Distance : <b>" + ADSBLine.getDistance() + ' KM</b><br>\n' +
