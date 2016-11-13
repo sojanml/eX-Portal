@@ -56,12 +56,12 @@ function _fnDrawCallback() {
 
 $(document).ready(function () {
   initialize();
-  setGridBox();
-  drawGridLines(GridLinesRows);
-  drawGridLines(GridLinesCols);
+   setGridBox();
+   drawGridLines(GridLinesRows);
+   drawGridLines(GridLinesCols);
   //drawLabels();
   //drawProducts();
-  setCordinatesEditable();
+   setCordinatesEditable();
 
 
   $('#chkNewSetting').on("click", function (e) {

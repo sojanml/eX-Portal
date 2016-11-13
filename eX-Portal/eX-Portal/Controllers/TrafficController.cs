@@ -23,9 +23,7 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult RTA() {
-      Session["UserID"] = 1;
-      Session["FullName"] = "Sojan";
-      Session["FirstName"] = "Sojan";
+      if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       return View();
     }
 
