@@ -257,7 +257,7 @@ namespace eX_Portal.Controllers {
 
     //Get:BlackBox/Create
     public ActionResult Create() {
-      //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
       //ViewBag.IsAESVisible = false;
       //if (exLogic.User.hasAccess("BLACKBOX.AES"))
       //    ViewBag.IsAESVisible = true;
@@ -269,7 +269,7 @@ namespace eX_Portal.Controllers {
     // POST: BlackBox/Create
     [HttpPost]
     public ActionResult Create(Models.MSTR_BlackBox BlackBoxData) {
-      //   if (!exLogic.User.hasAccess("BLACLBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
       if (ModelState.IsValid) {
         BlackBox BB = new BlackBox();
         //  BlackBox.BlackBoxID = 0;
@@ -713,7 +713,7 @@ namespace eX_Portal.Controllers {
 
     //Get:BlackBoxCost/Rent
     public ActionResult Rent([Bind(Prefix = "ID")] int BlackBoxID = 0) {
-            //if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+            if (!exLogic.User.hasAccess("BLACKBOX.RENT")) return RedirectToAction("NoAccess", "Home");
 
             //BlackBoxViewModel BV = new BlackBoxViewModel();
             //BV.BlackBoxCostList = new List<List<BlackBoxCostCalucation>>();
@@ -734,7 +734,8 @@ namespace eX_Portal.Controllers {
         [HttpPost]
         public ActionResult Rent(BlackBoxTransaction Btx)
         {
-           Nullable<int> DroneID = Btx.DroneID;
+            if (!exLogic.User.hasAccess("BLACKBOX.RENT")) return RedirectToAction("NoAccess", "Home");
+            Nullable<int> DroneID = Btx.DroneID;
             Nullable<int> BlackBoxID = Btx.BlackBoxID;
             ModelState.Remove("Amount");
             if (Btx.DroneID < 1 || Btx.DroneID == null)
