@@ -53,9 +53,6 @@
       <HintPath>..\packages\AWSSDK.S3.3.2.3.0-beta\lib\net45\AWSSDK.S3.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FileStorageUtils">
-      <HintPath>..\..\..\..\..\Storage\FileStorageUtils.dll</HintPath>
-    </Reference>
     <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
@@ -1380,9 +1377,13 @@
     <EmbeddedResource Include="ReportsManager\MSTR_Drone.rdlc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\SourceCode\Exponent.ADSB\ADSB\ADSB.csproj">
+    <ProjectReference Include="..\Exponent.ADSB\ADSB\ADSB.csproj">
       <Project>{4c22df85-5a52-4d44-a2ff-4b40223d87f5}</Project>
       <Name>ADSB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileStorageUtils\FileStorageUtils.csproj">
+      <Project>{6cabaa57-63d3-446f-b44c-6ffa9acb1367}</Project>
+      <Name>FileStorageUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\WeatherAPI\WeatherAPI.csproj">
       <Project>{bfaf2d75-0aff-4dfb-ab56-23fcc4070f60}</Project>

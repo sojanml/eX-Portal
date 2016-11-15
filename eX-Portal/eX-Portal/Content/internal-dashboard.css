@@ -99,47 +99,46 @@ div.weather {
 /* line 43, ../sass/internal-dashboard.scss */
 div.weather span.icon {
   font-family: Weather;
-  font-size: 30px;
   color: silver;
 }
-/* line 48, ../sass/internal-dashboard.scss */
+/* line 47, ../sass/internal-dashboard.scss */
 div.weather span.icon.big {
   font-size: 35px;
 }
-/* line 52, ../sass/internal-dashboard.scss */
+/* line 51, ../sass/internal-dashboard.scss */
 div.weather span.icon.small {
   font-size: 25px;
 }
-/* line 56, ../sass/internal-dashboard.scss */
+/* line 55, ../sass/internal-dashboard.scss */
 div.weather span.icon.tiny {
   font-size: 15px;
 }
-/* line 61, ../sass/internal-dashboard.scss */
+/* line 60, ../sass/internal-dashboard.scss */
 div.weather .condition {
   color: #ea050e;
   font-weight: bold;
 }
-/* line 62, ../sass/internal-dashboard.scss */
+/* line 61, ../sass/internal-dashboard.scss */
 div.weather .condition span.icon {
   color: #ea050e;
   font-size: 60px;
 }
-/* line 71, ../sass/internal-dashboard.scss */
+/* line 70, ../sass/internal-dashboard.scss */
 div.weather span.caption {
   font-size: 8pt;
 }
-/* line 76, ../sass/internal-dashboard.scss */
+/* line 75, ../sass/internal-dashboard.scss */
 div.weather span.text.big {
   font-size: 40px;
 }
 
-/* line 82, ../sass/internal-dashboard.scss */
+/* line 81, ../sass/internal-dashboard.scss */
 ul#forecast {
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
-/* line 87, ../sass/internal-dashboard.scss */
+/* line 86, ../sass/internal-dashboard.scss */
 ul#forecast li {
   margin: 0px;
   padding: 0px;
@@ -147,12 +146,95 @@ ul#forecast li {
   float: left;
   margin: 0px 15px 0px 0px;
 }
-/* line 94, ../sass/internal-dashboard.scss */
+/* line 93, ../sass/internal-dashboard.scss */
 ul#forecast li span.icon {
   color: #F58387;
 }
-/* line 98, ../sass/internal-dashboard.scss */
+/* line 97, ../sass/internal-dashboard.scss */
 ul#forecast li .status {
   font-size: 8pt;
+  color: red;
+}
+
+/* line 106, ../sass/internal-dashboard.scss */
+div.ChartDev h4 {
+  color: rgba(234, 5, 14, 0.6);
+  margin: 10px 5px 0px 90px;
+  padding: 0px;
+  font-size: 12pt;
+}
+
+/* line 114, ../sass/internal-dashboard.scss */
+.chart-legend li span {
+  display: inline-block;
+  height: 12px;
+  margin-right: -10px;
+  margin-left: 20px;
+}
+
+/* line 121, ../sass/internal-dashboard.scss */
+div.weather div.Temperature {
+  font-size: 40px;
+  font-family: Conv_DINNextLTPro-LightCondensed,Arial;
+  color: #ea050e;
+}
+
+/* line 127, ../sass/internal-dashboard.scss */
+#forecast div.temp {
+  color: orange;
+}
+
+/* line 131, ../sass/internal-dashboard.scss */
+#forecast div.status {
+  color: red;
+}
+
+/* line 135, ../sass/internal-dashboard.scss */
+#forecast div.date {
+  color: black;
+}
+
+/* line 140, ../sass/internal-dashboard.scss */
+.Pichart {
+  width: 100%;
+  border: solid;
+  border-width: 1px;
+  border-color: rgba(255, 0, 0, 0.2);
+  margin-top: 10px;
+}
+/* line 147, ../sass/internal-dashboard.scss */
+.Pichart div.ChartDev {
+  width: 25%;
+}
+/* line 151, ../sass/internal-dashboard.scss */
+.Pichart ul.pie-legend {
+  margin: 20px 20px 0px 0px;
+  padding: 0px;
+  list-style: none;
+}
+/* line 156, ../sass/internal-dashboard.scss */
+.Pichart ul.pie-legend li {
+  margin: 20px 20px 0px 0px;
+  padding: 0px;
+  line-height: 30px;
+}
+/* line 161, ../sass/internal-dashboard.scss */
+.Pichart ul.pie-legend li span {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  vertical-align: middle;
+  margin-right: 10px;
+  border-radius: 20px;
+}
+
+/* line 176, ../sass/internal-dashboard.scss */
+div.AlertSum {
+  text-align: center;
+  color: gray;
+}
+/* line 180, ../sass/internal-dashboard.scss */
+div.AlertSum span {
   color: red;
 }

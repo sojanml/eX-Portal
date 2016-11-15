@@ -29,10 +29,10 @@ namespace FileStorageUtils
             var policy = new UploadPolicy(DateTime.Now.AddHours(10));
 
             policy.AddCondition(new List<string> { "eq", "$bucket", BucketName });
-            policy.AddCondition(new List<string> { "eq", "$acl", "private" });
+            policy.AddCondition(new List<string> { "eq", "$acl", "public-read" });
             policy.AddCondition(new List<string> { "content-length-range", "0", "100000000" });
-            policy.AddCondition(new List<string> { "eq", "$key", fileId });
-            policy.AddCondition(new List<string> { "eq", "$redirect", redirectUrl });
+            policy.AddCondition(new List<string> { "starts-with", "$key", "" });
+            //policy.AddCondition(new List<string> { "eq", "$redirect", redirectUrl });
 
             var ser = new DataContractJsonSerializer(typeof(UploadPolicy));
             var ms = new MemoryStream();
@@ -42,5 +42,9 @@ namespace FileStorageUtils
 
             return json;
         }
+
+
+
+
     }
 }

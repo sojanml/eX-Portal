@@ -42,7 +42,6 @@ div.weather {
 
   span.icon {
     font-family: Weather;
-    font-size: 30px;
     color: silver;
 
     &.big {
@@ -101,3 +100,86 @@ ul#forecast {
     }
   }
 }
+
+
+
+div.ChartDev h4 {
+  color: rgba(234, 5, 14, 0.6);
+  margin: 10px 5px 0px 90px;
+  padding: 0px;
+  font-size: 12pt;
+}
+
+
+.chart-legend li span {
+  display: inline-block;
+  height: 12px;
+  margin-right: -10px;
+  margin-left: 20px;
+}
+
+div.weather div.Temperature {
+  font-size: 40px;
+  font-family: Conv_DINNextLTPro-LightCondensed,Arial;
+  color: #ea050e;
+}
+
+#forecast div.temp {
+  color: orange;
+}
+
+#forecast div.status {
+  color: red;
+}
+
+#forecast div.date {
+  color: black;
+}
+
+
+.Pichart {
+  width: 100%;
+  border: solid;
+  border-width: 1px;
+  border-color: rgba(255, 0, 0, 0.2);
+  margin-top: 10px;
+
+  div.ChartDev {
+    width: 25%;
+  }
+
+  ul.pie-legend {
+    margin: 20px 20px 0px 0px;
+    padding: 0px;
+    list-style: none;
+
+    li {
+      margin: 20px 20px 0px 0px;
+      padding: 0px;
+      line-height: 30px;
+
+      span {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        vertical-align: middle;
+        margin-right: 10px;
+        border-radius: 20px;
+      }
+    }
+  }
+}
+
+
+
+div.AlertSum {
+  text-align: center;
+  color: gray;
+
+  span {
+    color: red;
+  }
+}
+
+

@@ -23,53 +23,59 @@ namespace  Exponent  {
 
     public WeatherForcast GetByLocation(Double Lat, Double Lng) {
       WeatherForcast ThisWeather = new WeatherForcast();
-      
-      DateTime LastCashedOn = getLastProcessedDateTime(Lat, Lng);
-      DateTime MaxCashedTime = LastCashedOn.AddMinutes(30);
-      if (MaxCashedTime > DateTime.Now) {
-        return CashedWeather(Lat, Lng);
-      }
+      try {
+        DateTime LastCashedOn = getLastProcessedDateTime(Lat, Lng);
+        DateTime MaxCashedTime = LastCashedOn.AddMinutes(30);
+        if (MaxCashedTime > DateTime.Now) {
+          return CashedWeather(Lat, Lng);
+        }
 
-      String URL = APIUrl + "forecast/daily?APIKey=" + APIKey + "&units=metric&cnt=5&lat=" + Lat + "&lon=" + Lng;
-      String JsonData = getWeatherJson(URL);
-      if (String.IsNullOrEmpty(JsonData)) {
-        return CashedWeather(Lat, Lng);
-      } else { 
-        dynamic WeatherJson = JObject.Parse(JsonData);
-        SetWeatherInfo(ThisWeather, WeatherJson);
-        ThisWeather.City = WeatherJson.city.name;
-        ThisWeather.Country = WeatherJson.city.country;
-        SetWeatherStation(ThisWeather.Today, Lat, Lng);
-        String LatLngFolder = String.Format("#{0}#{1}", Convert.ToInt32(Lat), Convert.ToInt32(Lng));
-        SaveWeatherCashe(ThisWeather, LatLngFolder);
+        String URL = APIUrl + "forecast/daily?APIKey=" + APIKey + "&units=metric&cnt=5&lat=" + Lat + "&lon=" + Lng;
+        String JsonData = getWeatherJson(URL);
+        if (String.IsNullOrEmpty(JsonData)) {
+          return CashedWeather(Lat, Lng);
+        } else {
+          dynamic WeatherJson = JObject.Parse(JsonData);
+          SetWeatherInfo(ThisWeather, WeatherJson);
+          ThisWeather.City = WeatherJson.city.name;
+          ThisWeather.Country = WeatherJson.city.country;
+          SetWeatherStation(ThisWeather.Today, Lat, Lng);
+          String LatLngFolder = String.Format("#{0}#{1}", Convert.ToInt32(Lat), Convert.ToInt32(Lng));
+          SaveWeatherCashe(ThisWeather, LatLngFolder);
+        }
+      } catch (Exception ex) {
+        ThisWeather.Today.ConditionText = "Error";
       }
-
       return ThisWeather;
     }
 
     public WeatherForcast GetByIP(String IPAddress) {
       WeatherForcast ThisWeather = new WeatherForcast();
-      CityInfo ThisCity = GetCityByIP(IPAddress);
+      try { 
+        CityInfo ThisCity = GetCityByIP(IPAddress);
+ 
+        DateTime LastCashedOn = getLastProcessedDateTime(ThisCity.Country, ThisCity.City);
+        DateTime MaxCashedTime = LastCashedOn.AddMinutes(30);
+        if (MaxCashedTime > DateTime.Now) {
+          return CashedWeather(ThisCity.Country, ThisCity.City);
+        }
 
-      DateTime LastCashedOn = getLastProcessedDateTime(ThisCity.Country, ThisCity.City);
-      DateTime MaxCashedTime = LastCashedOn.AddMinutes(30);
-      if (MaxCashedTime > DateTime.Now) {
-        return CashedWeather(ThisCity.Country, ThisCity.City);
+        //Get todays weather and forecast
+        String URL = APIUrl + "forecast/daily?APIKey=" + APIKey + "&cnt=5&units=metric&q=" + ThisCity.City + "," + ThisCity.Country;
+        ThisWeather.Country = ThisCity.Country;
+        ThisWeather.City = ThisCity.City;
+        String JsonData = getWeatherJson(URL);
+        if(String.IsNullOrEmpty(JsonData)) {
+          return CashedWeather(ThisCity.City, ThisCity.Country);
+        } else { 
+          dynamic WeatherJson = JObject.Parse(JsonData);
+          SetWeatherInfo(ThisWeather, WeatherJson);
+          SetWeatherStation(ThisWeather.Today, ThisCity.Lat, ThisCity.Lng);
+        }
+        SaveWeatherCashe(ThisWeather);
+      } catch(Exception ex) {
+        ThisWeather.Today.ConditionText = "Error";
       }
-
-      //Get todays weather and forecast
-      String URL = APIUrl + "forecast/daily?APIKey=" + APIKey + "&cnt=5&units=metric&q=" + ThisCity.City + "," + ThisCity.Country;
-      ThisWeather.Country = ThisCity.Country;
-      ThisWeather.City = ThisCity.City;
-      String JsonData = getWeatherJson(URL);
-      if(String.IsNullOrEmpty(JsonData)) {
-        return CashedWeather(ThisCity.City, ThisCity.Country);
-      } else { 
-        dynamic WeatherJson = JObject.Parse(JsonData);
-        SetWeatherInfo(ThisWeather, WeatherJson);
-        SetWeatherStation(ThisWeather.Today, ThisCity.Lat, ThisCity.Lng);
-      }
-      SaveWeatherCashe(ThisWeather);
       return ThisWeather;
     }
 
