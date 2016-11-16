@@ -11,69 +11,69 @@
   <div class="dash-column col1">
     <div class="dash-content">
       @*<h3>Recent Flight Time</h3>*@
-        @*<div id="RecentFlight" style="width: 480px; height: 280px"></div>*@
+      @*<div id="RecentFlight" style="width: 480px; height: 280px"></div>*@
       <div id="RecentFlight" style="width: 480px; height: 260px"></div>
 
       <div id="LegendRecent" style="width: 480px; height: 20px"></div>
 
-     
+
     </div>
   </div>
 
   <div class="dash-column col2">
     <div class="dash-content">
       @*<h3>Total Flight Time</h3>*@
-     
-       <div id="TotalFlight" style="width: 480px; height: 260px;"></div>   
-      <div id="LegendTotal" style="width: 480px; height: 20px"></div>    
+
+      <div id="TotalFlight" style="width: 480px; height: 260px;"></div>
+      <div id="LegendTotal" style="width: 480px; height: 20px"></div>
     </div>
   </div>
 
   <div class="dash-column col1">
-      <div class="dash-content weather">
-        @Html.Action("LocalWeather", "DashBoard")
-      </div>
+    <div class="dash-content weather">
+      @Html.Action("LocalWeather", "DashBoard")
     </div>
+  </div>
 
   <div class="dash-column col2">
     <div class="dash-content">
       @*<h3>Total Pilot Time</h3>*@
-        <div id="Pilotcontainer" style="width:490px; height: 300px; "></div>  
-    
+      <div id="Pilotcontainer" style="width:490px; height: 300px; "></div>
+
     </div>
   </div>
 </div>
 
 <div id="MonthlyChart" class="Pichart" style="width:100%;height:300px">
-    
-        <div class="dash-row">
-          
-        
-            @*<h3>&nbsp&nbspLast 12 Months Analysis</h3>*@
-         </div>
-            <div id="MonthlyFlight" style="width:100%; height: 300px; "></div>
-     
-    </div>
+
+  <div class="dash-row">
+
+
+    @*<h3>&nbsp&nbspLast 12 Months Analysis</h3>*@
+  </div>
+  <div id="MonthlyFlight" style="width:100%; height: 300px; "></div>
+
+</div>
 
 
 <div class="Pichart">
-    <div style="float:left" class="ChartDev" >
-        <h4>Total Alerts</h4>
-        <canvas id="TotalAlerts" ></canvas>
-      <div class="AlertSum" id="TotalAlerts_Sum">Loading...</div>
-    </div>   
+  <div style="float:left" class="ChartDev">
+    <h4>Total Alerts</h4>
+    <canvas id="TotalAlerts"></canvas>
+    <div class="AlertSum" id="TotalAlerts_Sum">Loading...</div>
+  </div>
 
-    <div style="float:left" class="ChartDev">
-        <h4>This Month</h4>
-        <canvas id="ThisMonthAlerts"></canvas>
-      <div class="AlertSum" id="ThisMonthAlerts_Sum">Loading...</div>
-    </div>
+  <div style="float:left" class="ChartDev">
+    <h4>This Month</h4>
+    <canvas id="ThisMonthAlerts"></canvas>
+    <div class="AlertSum" id="ThisMonthAlerts_Sum">Loading...</div>
+  </div>
 
-    <div style="float:left" class="ChartDev">
-        <h4>Last Flight</h4>
-        <canvas id="LastFlightAlerts"></canvas>
-      <div class="AlertSum" id="LastFlightAlerts_Sum">Loading...</div>
-    </div>
+  <div style="float:left" class="ChartDev">
+    <h4>Last Flight</h4>
+    <canvas id="LastFlightAlerts"></canvas>
+    <div class="AlertSum" id="LastFlightAlerts_Sum">Loading...</div>
+  </div>
 
   <div style="float:left" class="ChartDev">
     <h4>Legend</h4>
@@ -85,42 +85,40 @@
       </ul>
 
     </div>
-  </div>   
+  </div>
 
-  
+
   <div style="clear:both"></div>
 </div>
 
 
+<div id="map_canvas" style="margin-top:10px; width: 100%; height: 480px;"></div>
+<div style="height:10px;">&nbsp;</div>
 
+<script type="text/javascript">
+  var HomeMapURL = '@Url.Action("GetDrones", "Map")';
 
-    <div id="map_canvas" style="margin-top:10px; width: 100%; height: 480px;"></div>
-    <div style="height:10px;">&nbsp;</div>
-
-
-    <script type="text/javascript">
-        var DashBoardAlertChartDataURL = '@Url.Action("getAlertData", "Dashboard")';
-        var PilotDataURL = '@Url.Action("getPilotData", "Dashboard")';
-        var FlightDataURL = '@Url.Action("getFlightData", "Dashboard")';
-        var HomeMapURL = '@Url.Action("GetDrones", "Map")';
-        var MonthlyDataURL = '@Url.Action("FlightHoursByAccount", "Dashboard")';
-    </script>
+  var DashBoardAlertChartDataURL = '@Url.Action("getAlertData", "Dashboard")';
+  var PilotDataURL = '@Url.Action("getPilotData", "Dashboard")';
+  var FlightDataURL = '@Url.Action("getFlightData", "Dashboard")';
+  var MonthlyDataURL = '@Url.Action("FlightHoursByAccount", "Dashboard")';
+</script>
 
 
 
-   
-    @*<script src="https://code.highcharts.com/highcharts.js"></script>*@
-    <script src="http://code.highcharts.com/stock/highstock.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script type="text/javascript" src="~/Scripts/PilotLogChart.js"></script>
-    <script type="text/javascript" src="~/Scripts/RecentChart.js"></script>
-    <script type="text/javascript" src="~/Scripts/FlightHoursByAccount.js"></script>
-<script type="text/javascript" src="~/Scripts/DashBoardAlertChart.js"></script>
+@{
+  Html.AddJavaScript("//maps.google.com/maps/api/js?sensor=false");
+  Html.AddJavaScript("//code.highcharts.com/highcharts.js");
+  //Html.AddJavaScript("//code.highcharts.com/stock/highstock.js");
+  Html.AddJavaScript("//code.highcharts.com/modules/exporting.js");
 
-    @{
-      Html.AddJavaScript("//maps.google.com/maps/api/js?sensor=false");
-      Html.AddJavaScript("/Scripts/Chart.js");
-      Html.AddJavaScript("/Scripts/infobox.js");
-      Html.AddJavaScript("/Scripts/HomeMap.js");
+  Html.AddJavaScript("/Scripts/Chart.js");
+  Html.AddJavaScript("/Scripts/infobox.js");
+  Html.AddJavaScript("/Scripts/HomeMap.js");
 
-    }
+  Html.AddJavaScript("/Scripts/PilotLogChart.js");
+  Html.AddJavaScript("/Scripts/RecentChart.js");
+  Html.AddJavaScript("/Scripts/FlightHoursByAccount.js");
+  Html.AddJavaScript("/Scripts/DashBoardAlertChart.js");
+
+}
