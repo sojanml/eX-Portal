@@ -90,6 +90,15 @@ namespace eX_Portal.Controllers {
           "  DroneFlight.FlightDate >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)";
 
       }
+      if( Util.getLoginUserID()==202             )
+            {
+                if (SQLFilter != "")
+                    SQLFilter += " AND";
+                SQLFilter += " \n" +
+                  "  DroneFlight.FlightDate BETWEEN '2016-06-26' AND '2016-08-01'";
+
+            
+        }
       //this is using when click link on the dashboard
       if (SQLFilter != "") {
         SQL += "\n WHERE\n" + SQLFilter;

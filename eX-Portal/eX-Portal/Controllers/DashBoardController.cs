@@ -120,11 +120,7 @@ namespace eX_Portal.Controllers {
 
 
     //chart for getting the qumulative graph for the last 12 months
-
-
     //new chart for flights
-
-
     [System.Web.Mvc.HttpGet]
     public JsonResult getFlightData() {
       try {
@@ -270,9 +266,8 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-    /*[ChildActionOnly]
+    [ChildActionOnly]
     [OutputCache(Duration = 3600, VaryByCustom = "User")]
-    */
     public ActionResult LocalWeather() {
       var API = new Exponent.WeatherAPI();
       Exponent.WeatherForcast TodaysWeather = API.GetByIP(Request.UserHostAddress);
