@@ -259,7 +259,11 @@ namespace eX_Portal.exLogic {
       }
       break;
       case "System.Decimal":
-      FieldValue = reader.GetDecimal(i).ToString("###,##0.00");
+        try {
+          FieldValue = ((Decimal)reader.GetDecimal(i)).ToString("###,##0.00");
+        } catch {
+          FieldValue = "0.00";
+        }
       break;
       default:
       FieldValue = reader.GetValue(i).ToString();
