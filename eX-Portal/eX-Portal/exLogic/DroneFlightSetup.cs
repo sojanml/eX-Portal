@@ -81,19 +81,34 @@ namespace eX_Portal.exLogic {
 
             int iAccountID = 0;
             int.TryParse(accountid.ToString(), out iAccountID);
-
+            List<SelectListItem> SelectList = new List<SelectListItem>();
             var ctx = new ExponentPortalEntities();
-            List<SelectListItem> SelectList = (
-              from m in ctx.MSTR_User
-              where m.AccountId == iAccountID && m.IsPilot==true
-              orderby m.FirstName ascending
-              select new SelectListItem
-              {
-                  Text = m.FirstName + " " + m.LastName,
-                  Value = m.UserId.ToString()
-              }
-            ).ToList();
-
+            if (Convert.ToInt32(accountid)==1)
+            {              
+                 SelectList = (
+                  from m in ctx.MSTR_User
+                  where m.IsPilot == true
+                  orderby m.FirstName ascending
+                  select new SelectListItem
+                  {
+                      Text = m.FirstName + " " + m.LastName,
+                      Value = m.UserId.ToString()
+                  }
+                ).ToList();
+            }
+            else
+            {
+                SelectList = (
+                from m in ctx.MSTR_User
+                where m.AccountId == iAccountID && m.IsPilot == true
+                orderby m.FirstName ascending
+                select new SelectListItem
+                {
+                    Text = m.FirstName + " " + m.LastName,
+                    Value = m.UserId.ToString()
+                }
+                ).ToList();
+            }                     
             return SelectList;
         }
 
