@@ -108,7 +108,7 @@ namespace Exponent.ADSB {
           " + Position.Lon + @",
           " + Position.Lat + @",
           " + Position.Speed + @",
-          " + (Position.Altitude * 1000) + @",
+          " + (Position.Altitude * 100) + @",
           '" + Position.ADSBDate.ToString("yyyy-MM-dd hh:mm:ss") + @"',
           '" + Position.FlightSource + @"',
           GETDATE()
