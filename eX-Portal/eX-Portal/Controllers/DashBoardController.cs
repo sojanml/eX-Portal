@@ -266,8 +266,8 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-    [ChildActionOnly]
-    [OutputCache(Duration = 3600, VaryByCustom = "User")]
+    //[ChildActionOnly]
+    //[OutputCache(Duration = 3600, VaryByCustom = "User")]
     public ActionResult LocalWeather() {
       var API = new Exponent.WeatherAPI();
       Exponent.WeatherForcast TodaysWeather = API.GetByIP(Request.UserHostAddress);

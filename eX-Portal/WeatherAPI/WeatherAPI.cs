@@ -15,10 +15,14 @@ namespace  Exponent  {
     private const String APIKey = "e925e5f9b310f96d54cb45e01bfb3fe0";
     private const String APIUrl = "http://api.openweathermap.org/data/2.5/";
     private String ApplicationPah = String.Empty;
+    private System.Net.WebClient webClient ;
     
+
     public WeatherAPI() {
-      ApplicationPah = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);      
-      ApplicationPah = Path.Combine(ApplicationPah.Replace("file:\\", ""), "OpenWeatherMap");      
+      //ApplicationPah = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);      
+      //ApplicationPah = Path.Combine(ApplicationPah.Replace("file:\\", ""), "OpenWeatherMap");
+      ApplicationPah = @"C:\WWW\OpenWeatherMap";
+
     }
 
     public WeatherForcast GetByLocation(Double Lat, Double Lng) {
@@ -26,6 +30,7 @@ namespace  Exponent  {
       try {
         DateTime LastCashedOn = getLastProcessedDateTime(Lat, Lng);
         DateTime MaxCashedTime = LastCashedOn.AddMinutes(30);
+
         if (MaxCashedTime > DateTime.Now) {
           return CashedWeather(Lat, Lng);
         }
@@ -51,7 +56,6 @@ namespace  Exponent  {
 
     public WeatherForcast GetByIP(String IPAddress) {
       WeatherForcast ThisWeather = new WeatherForcast();
-      try { 
         CityInfo ThisCity = GetCityByIP(IPAddress);
  
         DateTime LastCashedOn = getLastProcessedDateTime(ThisCity.Country, ThisCity.City);
@@ -73,9 +77,7 @@ namespace  Exponent  {
           SetWeatherStation(ThisWeather.Today, ThisCity.Lat, ThisCity.Lng);
         }
         SaveWeatherCashe(ThisWeather);
-      } catch(Exception ex) {
-        ThisWeather.Today.ConditionText = "Error";
-      }
+
       return ThisWeather;
     }
 
@@ -110,22 +112,28 @@ namespace  Exponent  {
     }
     private void SaveWeatherCashe(WeatherForcast ThisWeather, String LatLngFolder = "") {
       //save the cached file
-      String FileDir = String.IsNullOrEmpty(LatLngFolder) ?
-        Path.Combine(ApplicationPah, ThisWeather.Country, ThisWeather.City) :
-        Path.Combine(ApplicationPah, LatLngFolder);
-      String LastCachedFileRef = Path.Combine(FileDir, "CachedDate.txt");
+      String Country = ThisWeather.Country.Replace(" ", "");
+      String City = ThisWeather.City.Replace(" ", "");
 
-      if (!Directory.Exists(FileDir)) Directory.CreateDirectory(FileDir);
-      
-      using (StreamWriter newTask = new StreamWriter(LastCachedFileRef, false)) {
-        newTask.Write(DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss"));
-      }
-      //Save Json
+      String FileDir = String.IsNullOrEmpty(LatLngFolder) ?
+        Path.Combine(ApplicationPah, Country, City) :
+        Path.Combine(ApplicationPah, LatLngFolder);
+
+
+      String LastCachedFileRef = Path.Combine(FileDir, "CachedDate.txt");
       String LastCachedFile = Path.Combine(FileDir, "CachedWeather.json");
-      using (StreamWriter newTask = new StreamWriter(LastCachedFile, false)) {
-        var json = JsonConvert.SerializeObject(ThisWeather);
-        newTask.Write(json);
-      }
+     
+      if (!Directory.Exists(FileDir)) Directory.CreateDirectory(FileDir);
+      if (File.Exists(LastCachedFileRef)) File.Delete(LastCachedFileRef);
+      if (File.Exists(LastCachedFile)) File.Delete(LastCachedFile);
+
+      String TheTime = DateTime.Now.ToString("yyyy-MMM-dd HH:mm:ss");
+      System.IO.File.WriteAllText(LastCachedFileRef, TheTime);
+
+      //Save Json
+      var json = JsonConvert.SerializeObject(ThisWeather);
+      System.IO.File.WriteAllText(LastCachedFile, TheTime);
+
     }
 
     private DateTime getLastProcessedDateTime(String Country, String City) {
@@ -166,7 +174,7 @@ namespace  Exponent  {
       dynamic CurrentWeatherJson = JObject.Parse(CurrentWeather);
       Today.ConditionCode = CurrentWeatherJson.weather[0].icon;
       Today.ConditionText = CurrentWeatherJson.weather[0].main;
-      Today.WindDirection = CurrentWeatherJson.wind.deg;
+      Today.WindDirection = CurrentWeatherJson.wind.deg ==  null ? 0 : CurrentWeatherJson.wind.deg;
       Today.WindSpeed = CurrentWeatherJson.wind.speed * 3.6;
 
       Today.ConditionDate = DateTime.Now.ToUniversalTime();
@@ -209,22 +217,18 @@ namespace  Exponent  {
 
     private String getWeatherJson(String WebURL) {
       String json2 = String.Empty;
-      try {
-        using (var webClient = new System.Net.WebClient()) {
-          webClient.Encoding = System.Text.Encoding.UTF8;
-          json2 = webClient.DownloadString(WebURL);
-          if (String.IsNullOrEmpty(json2)) return String.Empty;
-        }//using(var webClient)
-      } catch {
-        //nothing - do not show the error
+      using (System.Net.WebClient wc = new System.Net.WebClient()) {
+        json2 = wc.DownloadString(WebURL);
       }
+      if (String.IsNullOrEmpty(json2)) return String.Empty;
       return json2;
     }
 
     private CityInfo GetCityByIP(String IPAddress) {
       //Weather Information
       CityInfo ThisCity = new CityInfo();
-
+      ThisCity.Lat = 25.2048;
+      ThisCity.Lng = 55.2708;
       //If local server set it to dubai address
       MaxMind.GeoIP2.Responses.CityResponse city = new MaxMind.GeoIP2.Responses.CityResponse();
       String DatabaseLocation = HttpContext.Current.Server.MapPath("/GeoLiteCity/GeoLite2-City.mmdb");
