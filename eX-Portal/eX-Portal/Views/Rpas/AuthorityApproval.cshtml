@@ -5,29 +5,10 @@
 }
 @*@Html.Action("FlightDetail", new { ID = ViewBag.FlightID })*@
 
-<h2>Dubai Civil Aviation Authority (DCAA)</h2>
 
-<table cellpadding="0" cellspacing="0">
-    <tr>
-        <td>
-            Dubai Civil Aviation Authority was established as an autonomous
-            body by the decree issued by His Highness Sheikh Mohammed
-            Bin Rashid Al Maktoum, Vice President and Prime Minister
-            of the UAE and Ruler of Dubai, by proclamation of Law No.
-            (21) of 2007, to undertake development of air transport industry
-            in the Emirate of Dubai and to oversee all aviation related activities.
-        </td>
-        <td style="width:300px;"><img style="float:right; padding:0px 0px 20px 20px;" src="~/images/dcaa_logo.png" /></td>
-    </tr>
-    <tr>
-        <td style="width:300px;">
-            @Html.Action("AuthorityDocuments", new { ApprovalID = ViewBag.ApprovalID, Authority = "DCAA" })
-        </td>
-        <td></td>
-    </tr>
-</table>
 
-<div class="hr"></div>
+
+
 <h2>General Civil Aviation Authority (GCAA)</h2>
 
 <table cellpadding="0" cellspacing="0">
@@ -77,6 +58,29 @@
 
 
 <div class="hr"></div>
+<h2>Dubai Civil Aviation Authority (DCAA)</h2>
+
+<table cellpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            Dubai Civil Aviation Authority was established as an autonomous
+            body by the decree issued by His Highness Sheikh Mohammed
+            Bin Rashid Al Maktoum, Vice President and Prime Minister
+            of the UAE and Ruler of Dubai, by proclamation of Law No.
+            (21) of 2007, to undertake development of air transport industry
+            in the Emirate of Dubai and to oversee all aviation related activities.
+        </td>
+        <td style="width:300px;"><img style="float:right; padding:0px 0px 20px 20px;" src="~/images/dcaa_logo.png" /></td>
+    </tr>
+    <tr>
+        <td style="width:300px;">
+            @Html.Action("AuthorityDocuments", new { ApprovalID = ViewBag.ApprovalID, Authority = "DCAA" })
+        </td>
+        <td></td>
+    </tr>
+</table>
+<div class="hr"></div>
+
 <h2>Other Authorities</h2>
 
 <table cellpadding="0" cellspacing="0">
