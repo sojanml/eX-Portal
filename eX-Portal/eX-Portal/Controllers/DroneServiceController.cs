@@ -17,7 +17,7 @@ namespace eX_Portal.Controllers {
 
       String SQL = "select\n" +
         "  a.ServiceId As ServiceId,\n" +
-        "  b.DroneName as UAS,\n" +
+        "  b.DroneName as RPAS,\n" +
         "  c.Name as ServiceType,\n" +
         "  a.DateOfService as DateOfService,\n" +
         "  a.FlightHour,\n" +
@@ -111,10 +111,10 @@ namespace eX_Portal.Controllers {
 
     public String DroneServiceDetail(int ID = 0) {
             string UASFormat;
-           
+            int DroneId;
       if (!exLogic.User.hasAccess("SERVICE.VIEW")) return "Access Denied";
       string SQL = "select a.ServiceId as ServiceId ,a.DateOfService as " +
-          "ServiceDate,b.DroneId as UASId,b.DroneName as UAS,c.UserName as  " +
+          "ServiceDate,b.DroneId as UASId,b.DroneName as RPAS,c.UserName as  " +
           " ServicedBy, Count(*) Over() as _TotalRecords from MSTR_DroneService" +
           " a left join MSTR_Drone b on a.DroneId=b.DroneId  " +
           " left join MSTR_User c on a.CreatedBy=c.UserId where a.ServiceId=" + ID;
@@ -122,14 +122,14 @@ namespace eX_Portal.Controllers {
       theView.Columns = 3;
 
             //this part for adding link to requred fields in the details
-           
-            UASFormat = "<a  href='/Drone/Detail/$UASId'>$UAS</a>";//url
-          
-            theView.FormatCols.Add("UAS", UASFormat); //Adding the Column required for formatting  
-            
+            string sqldroneid = "select b.DroneId as UASId,a.ServiceId as ServiceId from MSTR_DroneService a left join MSTR_Drone b on a.DroneId = b.DroneId where a.ServiceId =" + ID ;
+            DroneId =Convert.ToInt32(Util.getDBInt(sqldroneid));
+            string sqldronename = "select DroneName from MSTR_Drone where droneid=" + DroneId;
+            string rpasname = Util.getDBVal(sqldronename);
+            UASFormat = "<a href='/Drone/Detail/" + DroneId + "'>" + rpasname + "</a>";//url
+            theView.FormatCols.Add("RPAS", UASFormat); //Adding the Column required for formatting                        
 
             return theView.getTable();
-
     }
 
 
@@ -216,9 +216,7 @@ namespace eX_Portal.Controllers {
               
                 // TODO: Add insert logic here
                 if (ModelState.IsValid)
-                {
-
-                   
+                {                   
                     
                          if (Session["UserId"] == null)
                                 {
