@@ -132,7 +132,7 @@ namespace  Exponent  {
 
       //Save Json
       var json = JsonConvert.SerializeObject(ThisWeather);
-      System.IO.File.WriteAllText(LastCachedFile, TheTime);
+      System.IO.File.WriteAllText(LastCachedFile, json);
 
     }
 

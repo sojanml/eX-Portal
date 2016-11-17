@@ -271,6 +271,7 @@ namespace eX_Portal.Controllers {
     public ActionResult LocalWeather() {
       var API = new Exponent.WeatherAPI();
       Exponent.WeatherForcast TodaysWeather = API.GetByIP(Request.UserHostAddress);
+      //Exponent.WeatherForcast TodaysWeather = API.GetByIP("144.48.250.74");
       return View(TodaysWeather);
     }
 
