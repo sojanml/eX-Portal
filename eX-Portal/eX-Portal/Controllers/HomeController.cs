@@ -9,7 +9,7 @@ using eX_Portal.Models;
 namespace eX_Portal.Controllers {
   public class HomeController :Controller {
 
-    [OutputCache(Duration = 3600, VaryByCustom = "User")]
+    //[OutputCache(Duration = 3600, VaryByCustom = "User")]
     public ActionResult Index() {
       //if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home")
       ViewBag.DashBoard = Util.getDashboard();
