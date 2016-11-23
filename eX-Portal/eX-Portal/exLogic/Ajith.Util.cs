@@ -95,11 +95,44 @@ namespace eX_Portal.exLogic {
             {
                 FlightID = Util.toInt(Row["FlightID"]);
 
+          
+                  
+
             }
+            else {
+                FlightID = Util.getOtherFlightID(DroneID, FileCreatedOn);       
+                 }
             return FlightID;
         }
-        //for new chart pilot data
-        public static IList<ChartViewModel> getCurrentPilotData()
+
+    public static int getOtherFlightID(int DroneID, DateTime FileCreatedOn) {
+
+      int FlightID = 0;
+
+      String SQL = @"Select TOP 1 
+                                ID       
+                                 from 
+                                 DroneFlight
+                                             where 
+                                DroneID=" + DroneID + @" AND
+                                FlightDate <=  '" + Util.toSQLDate(FileCreatedOn.ToUniversalTime()) + @"'                               
+                                ORDER BY                              
+                                FlightDate DESC";
+      var Row = Util.getDBRow(SQL);
+      var theGPS = new GPSInfo();
+      if (Row["hasRows"].ToString() == "True") {
+        FlightID = Util.toInt(Row["ID"]);
+
+
+
+
+      }
+      return FlightID;
+    }
+
+
+    //for new chart pilot data
+    public static IList<ChartViewModel> getCurrentPilotData()
         {
             IList<ChartViewModel> ChartList = new List<ChartViewModel>();
             using (var ctx = new ExponentPortalEntities())

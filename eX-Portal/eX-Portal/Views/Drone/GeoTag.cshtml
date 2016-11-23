@@ -32,7 +32,9 @@
                 <div class="delete-icon"><a href="#" class="delete" data-documentid="@item.ID" data-file="@item.DocumentName"><span class="delete icon">&#xf057;</span></a></div>
                 <div class="download-icon"><a href="/upload/drone/@DroneName/@item.FlightID/@item.DocumentName"><span class="download icon">&#xf019;</span></a></div>
                 <div class="thumbnail">
-                    <img width:50px src="/upload/drone/@DroneName/@item.FlightID/@item.DocumentName.Replace(".jpg", ".t.png")" />
+               
+                    <img  class="FileIcon" id="@item.ID" height="42" width="42" docid="@item.DocumentName" src="/upload/drone/@DroneName/@item.FlightID/@item.DocumentName.Replace(".mp4", ".png").Replace(".jpg", ".t.png").Replace(".flv",".png").Replace(".mov",".png")" />
+                
                 </div>
                 <div class="gps">@GPS.getInfo()</div>
             </li>
@@ -56,7 +58,8 @@
             var UploadURL = '@Url.Action("UploadGeoFile", new { ID = ViewBag.DroneID, DocumentType="Geo Tag"})';
             var DeleteURL = '@Url.Action("DeleteFile", new { ID = ViewBag.DroneID, DocumentType="Geo Tag"})';
 
-            var GpsTags = [
+          var GpsTags = [
+
             @foreach (var item in Model) {<text>
               {
 
@@ -67,7 +70,7 @@
                   DroneID: @DroneID,
                   FlightID:@item.FlightID,
                   UpLoadedDate: "@item.DocumentDate",
-                  Thumbnail: "/upload/drone/@DroneName/@item.FlightID/@item.DocumentName.Replace(".jpg", ".t.png")",
+                  Thumbnail: "/upload/drone/@DroneName/@item.FlightID/@item.DocumentName.Replace(".jpg", ".t.png").Replace(".mp4",".png").Replace(".flv",".png").Replace(".mov",".png")",
                   DocumentID: @item.ID
                   },
             </text>}
@@ -83,6 +86,8 @@
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="~/jwplayer/jwplayer.js"></script>
+        <script>jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";</script>
 
     }
 

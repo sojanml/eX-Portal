@@ -8,6 +8,9 @@ using Amazon.S3.Model;
 using System.Text;
 using System.Security.Cryptography;
 using System.Xml;
+using System.IO;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace eX_Portal.exLogic {
 
@@ -39,6 +42,35 @@ namespace eX_Portal.exLogic {
       //return "";
       return client.GetPreSignedURL(request1);
 
+    }
+
+
+
+    public static String getThumbnail(String CachedVideo) {
+      CachedVideo = CachedVideo.Replace("/", "\\");
+      String VideoFile =  CachedVideo;
+      String Thumbnail =  CachedVideo.Replace(".mp4", ".png").Replace(".flv",".png").Replace(".mov",".png");
+     // Thumbnail = Thumbnail.Replace("VOD\\", "VOD\\Thumbnail\\");
+      if (File.Exists(Thumbnail)) return Thumbnail;
+
+      String Arguments = String.Format("-i \"{0}\" -ss 00:00:15 -vframes 1 \"{1}\"", VideoFile, Thumbnail);
+      Process proc = new Process();
+      proc.StartInfo.FileName = @"C:\Tools\ffmpeg\bin\ffmpeg.exe";
+      proc.StartInfo.Arguments = Arguments;
+      proc.StartInfo.RedirectStandardError = true;
+      proc.StartInfo.UseShellExecute = false;
+      if (!proc.Start()) {
+        Console.WriteLine("Error starting");
+        return String.Empty;
+      }
+      StreamReader reader = proc.StandardError;
+      string line;
+      while ((line = reader.ReadLine()) != null) {
+        Console.WriteLine(line);
+      }
+      proc.Close();
+
+      return Thumbnail;
     }
 
 

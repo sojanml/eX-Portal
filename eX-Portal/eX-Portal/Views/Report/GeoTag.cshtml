@@ -59,7 +59,7 @@
              DroneID: @DroneID,
              FlightID:@item.FlightID,
              UpLoadedDate:"@item.UpLoadedDate",
-             Thumbnail: "/upload/drone/@item.DroneName/@item.FlightID/@item.DocumentName.Replace(".jpg", ".t.png")",
+             Thumbnail: "/upload/drone/@item.DroneName/@item.FlightID/@item.DocumentName.Replace(".jpg", ".t.png").Replace(".mp4",".png").Replace(".flv",".png").Replace(".mov",".png")",
             DocumentID: @item.ID
 
        },

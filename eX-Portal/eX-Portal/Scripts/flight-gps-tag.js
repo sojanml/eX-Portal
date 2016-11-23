@@ -13,6 +13,89 @@ $(document).ready(function () {
         e.preventDefault();
         DeleteFile($(this));
     });
+
+
+    $(document).on('click', 'img.FileIcon', function (e) {
+     
+      count += 1;
+      e.preventDefault();
+     // var img = document.getElementById($(this));
+  
+      var ActualSrc = $(this).attr('src').replace("t.png", "jpg");
+      var Filename = $(this).attr('docid');
+       
+      var img = $(this);
+      var ext = Filename.split('.').pop();
+       
+      if (ext != 'jpg') {
+        var ActualSrc = $(this).attr('src').replace(".png", "." + ext);
+        var VideoType;
+        if (ext == 'mp4')
+        {
+          VideoType = "video/mp4";
+        }
+        else if (ext=='flv') {
+          VideoType = "rtmp/flv";
+        }
+        else if (ext == 'mov')
+        {
+          VideoType = "video/mov";
+        }
+         
+      //  $('#dialog').append('<div id="player" style="width:"200px" height:"200px" " ><video width="600" height="400" controls><source src=' + ActualSrc + ' type='+VideoType +'> </video></div>').append($(this).html());
+               
+        $('#dialog').append('<div id="player" style="width:"200px" height:"200px" " ><video width="600" height="400" controls><source src=' + ActualSrc + ' > </video></div>').append($(this).html());
+
+
+      }
+      else {
+        $('#dialog').append('<img id="abc" src="' + ActualSrc + '" height="400px" width="400px"/><br/>').append($(this).html());
+      }
+       
+      $("#dialog").dialog({
+        autoOpen: false,
+               
+        maxWidth: 600,
+        maxHeight: 500,
+        width: 1000,
+        height: 600,
+        modal: true,
+        buttons: {
+          "DownLoad": function () {
+
+            var Filename = img.attr('docid');
+            var ext = Filename.split('.').pop();
+            var ActualUrl = img.attr('src').replace("t.png", "jpg").replace(".png","."+ext);
+                      
+            var Link = document.createElement('a');
+            Link.href = ActualUrl;  // use realtive url 
+                      
+            Link.download = ActualUrl.substring(ActualUrl.lastIndexOf("~") + 1)
+                       
+            document.body.appendChild(Link);
+            Link.click();
+
+          },
+          Cancel: function () {
+            $(this).dialog("close");
+          }
+        },
+        close: function (event, ui) {
+                   
+          $("img#abc" ).remove();
+          $("div#player").remove();
+        }
+
+      });
+
+
+
+      $("#dialog").dialog('open');
+  
+
+
+
+    });
     //$('a').click(function () {
     //    $("#dialog").dialog({
     //        autoOpen: true,
@@ -50,10 +133,25 @@ $(document).ready(function () {
         var img = document.getElementById('ThumbNail');
 
         var ActualSrc = img.getAttribute('src').replace("t.png", "jpg");
+        var Filename = img.getAttribute('docid');
        
+
+        var ext = Filename.split('.').pop();
+       
+        if (ext != 'jpg') {
+          var ActualSrc = img.getAttribute('src').replace(".png", "."+ext);
+         
+          $('#dialog').append('<div id="player" style="width:"200px" height:"200px" " ><video width="600" height="400" controls><source src=' + ActualSrc + ' type="video/mp4"> </video></div>').append($(this).html());
+         
         
-        $('#dialog').append('<img id="abc" src="' + ActualSrc + '" height="400px" width="400px"/><br/>').append($(this).html());
-       
+
+         
+
+
+        }
+        else {
+          $('#dialog').append('<img id="abc" src="' + ActualSrc + '" height="400px" width="400px"/><br/>').append($(this).html());
+        }
        
             $("#dialog").dialog({
                 autoOpen: false,
@@ -64,11 +162,14 @@ $(document).ready(function () {
                 height: 600,
                 modal: true,
                 buttons: {
-                    "DownLoad": function () {
+                  "DownLoad": function () {
 
-                        var ActualUrl = img.getAttribute('src').replace("t.png", "jpg");
+                    var Filename = img.getAttribute('docid');
+                    
+                      var ext = Filename.split('.').pop();
+                      var ActualUrl = img.getAttribute('src').replace("t.png", "jpg").replace(".png","."+ext);                      
                         var Link = document.createElement('a');
-                        Link.href = ActualUrl;  // use realtive url 
+                        Link.href = ActualUrl; // use realtive url 
                       
                         Link.download = ActualUrl.substring(ActualUrl.lastIndexOf("~") + 1)
                        
@@ -83,7 +184,7 @@ $(document).ready(function () {
                 close: function (event, ui) {
                    
                     $("img#abc" ).remove();
-
+                    $("div#player").remove();
                 }
 
             });
@@ -140,7 +241,7 @@ function setMarker(map, _GeoInfo) {
 function setMarkerOne(GeoInfo) {
     var body = '<b>' + "" + '</b><br>\n' +
         '<table ><tr><td>'+
-        '<img  id="ThumbNail"   docid= "' + GeoInfo['Thumbnail'] + '" src="' + GeoInfo['Thumbnail'] + '"    width="100px" />' +
+        '<img  id="ThumbNail"   docid= "' + GeoInfo['DocumentName'] + '" src="' + GeoInfo['Thumbnail'] + '"    width="100px" />' +
         '</td><td>&nbsp;<font color="red" >Flight Id&nbsp;&nbsp;&nbsp;&nbsp;:</font><a  href="/Map/FlightData/' + GeoInfo['FlightID'] + '"> ' + GeoInfo['FlightID'] + '</a> <br>&nbsp; <font color="red" >Latitude&nbsp;&nbsp;   :</font> ' + GeoInfo['Latitude'] + '<br>&nbsp;<font color="red" > Longitude:</font> '
         + GeoInfo['Longitude'] + '<br>&nbsp;<font color="red" > Altitude&nbsp;&nbsp;&nbsp;&nbsp;:</font> ' + GeoInfo['Altitude'] + ' <br>&nbsp;<font color="red" > Date(UTC):</font>' + GeoInfo['UpLoadedDate'] + '</td> </tr></table>'
     var myLatLng = new google.maps.LatLng(GeoInfo['Latitude'], GeoInfo['Longitude']);
@@ -343,12 +444,14 @@ function progressHandlingFunction(evt, Elem, HTML) {
 }
 
 function AddToThumbnail(theData) {
-  var Thump = theData.url.replace(".jpg", ".t.png");
+
+  var ext = theData.addFile[0].name.split('.').pop();
+  var Thump = theData.url.replace(".jpg", ".t.png").replace("."+ext,".png");
   var theID = "x" + refID++;
   var HTML = '  <li>\n' +
   '<div class="delete-icon"><a href="#" class="delete"    data-documentid="' + theID + '"  data-file="' + theData.addFile[0].name + '"><span class="delete icon">&#xf057;</span></a></div>\n' +
       '<div class="thumbnail">\n' +
-      '  <img src="'  + Thump + '" />\n' +
+      '  <img class="FileIcon"  height="42" width="42" id="' + theID + '"    docid="' + theData.addFile[0].name + '"  src="' + Thump + '" />\n' +
       '</div>\n' +
       '<div class="gps">' + theData.GPS.Info + '</div>\n' +
     '</li>\n';
@@ -362,6 +465,7 @@ function AddToThumbnail(theData) {
       Latitude:  theData.GPS.Latitude,
       Longitude: theData.GPS.Longitude,
       Altitude: theData.GPS.Altitude,
+      DocumentName:theData.addFile[0].name,
       FlightID: theData.GPS.FlightID,
       UpLoadedDate: theData.GPS.CreatedDate
    };

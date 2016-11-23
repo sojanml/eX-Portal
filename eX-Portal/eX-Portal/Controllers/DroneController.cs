@@ -282,6 +282,22 @@ namespace eX_Portal.Controllers {
           FileURL = "GPS-" + FileName;
         }
 
+        if (DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".mp4") {
+
+          String Thumbnail = S3Download.getThumbnail(FullName);
+
+        }
+        else if (DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".flv") 
+          {
+
+          String Thumbnail = S3Download.getThumbnail(FullName);
+
+        }
+        else if(DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".mov") 
+          {
+          String Thumbnail = S3Download.getThumbnail(FullName);
+        }
+
 
         JsonText.Append("{");
         JsonText.Append(Util.Pair("status", "success", true));
