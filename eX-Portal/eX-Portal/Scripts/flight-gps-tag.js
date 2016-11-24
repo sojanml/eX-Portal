@@ -29,22 +29,38 @@ $(document).ready(function () {
        
       if (ext != 'jpg') {
         var ActualSrc = $(this).attr('src').replace(".png", "." + ext);
-        var VideoType;
-        if (ext == 'mp4')
-        {
-          VideoType = "video/mp4";
-        }
-        else if (ext=='flv') {
-          VideoType = "rtmp/flv";
-        }
-        else if (ext == 'mov')
-        {
-          VideoType = "video/mov";
-        }
+        //var VideoType;
+        //if (ext == 'mp4')
+        //{
+        //  VideoType = "video/mp4";
+        //}
+        //else if (ext=='flv') {
+        //  VideoType = "rtmp/flv";
+        //}
+        //else if (ext == 'mov')
+        //{
+        //  VideoType = "video/mov";
+        //}
          
       //  $('#dialog').append('<div id="player" style="width:"200px" height:"200px" " ><video width="600" height="400" controls><source src=' + ActualSrc + ' type='+VideoType +'> </video></div>').append($(this).html());
                
-        $('#dialog').append('<div id="player" style="width:"200px" height:"200px" " ><video width="600" height="400" controls><source src=' + ActualSrc + ' > </video></div>').append($(this).html());
+       // $('#dialog').append('<div id="player" style="width:"200px" height:"200px" " ><video width="600" height="400" controls><source src=' + ActualSrc + ' > </video></div>').append($(this).html());
+
+        $('#dialog').append('<div id="Player_P">the player... </div>').append($(this).html());
+
+        var playerInstance_P = null;
+        $(document).ready(function () {
+          playerInstance_P = jwplayer('Player_P');
+          playerInstance_P.setup({
+            file: ActualSrc,
+            width: 800,
+            height: 450,
+            description: 'Press Play to begin video.',
+            mediaid: '123456',
+          });
+
+        })
+
 
 
       }
@@ -84,6 +100,7 @@ $(document).ready(function () {
                    
           $("img#abc" ).remove();
           $("div#player").remove();
+          $("div#Player_P").remove();
         }
 
       });
@@ -141,9 +158,23 @@ $(document).ready(function () {
         if (ext != 'jpg') {
           var ActualSrc = img.getAttribute('src').replace(".png", "."+ext);
          
-          $('#dialog').append('<div id="player" style="width:"200px" height:"200px" " ><video width="600" height="400" controls><source src=' + ActualSrc + ' type="video/mp4"> </video></div>').append($(this).html());
-         
-        
+        //  $('#dialog').append('<div id="player" style="width:"200px" height:"200px" " ><video width="600" height="400" controls><source src=' + ActualSrc + ' type="video/mp4"> </video></div>').append($(this).html());
+         // $('#dialog').append('<div id="player"  height:"200px" " ><video class="video-js vjs-default-skin" style="width:"200px" width="600" height="400"  controls><source src=' + ActualSrc + ' type="video/x-flv"> </video></div>').append($(this).html());
+          $('#dialog').append('<div id="Player_P">the player... </div>').append($(this).html());
+           
+          var playerInstance_P = null;
+          $(document).ready(function () {
+            playerInstance_P = jwplayer('Player_P');
+            playerInstance_P.setup({
+              file: ActualSrc,
+              width: 800,
+              height: 450,
+              description: 'Press Play to begin video.',
+              mediaid: '123456',
+            });
+
+          })
+
 
          
 
@@ -185,6 +216,7 @@ $(document).ready(function () {
                    
                     $("img#abc" ).remove();
                     $("div#player").remove();
+                    $("div#Player_P").remove();
                 }
 
             });
