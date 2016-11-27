@@ -6,6 +6,7 @@ var _LocationPoints = [];
 var _LocationIndex = -1;
 var _ZoomBounds = new google.maps.LatLngBounds();
 var _AllMarkers = [];
+var _Boundary = [];
 
 var _FirstTotalFlightTime = -100;
 var _lineChart = null;
@@ -206,6 +207,7 @@ function setAllowedRegion() {
       draggable: false
     });
     OuterBoundary.setMap(map);
+    _Boundary.push(OuterBoundary);
 
     var InnerBoundary = new google.maps.Polygon({
       paths: AllowedLocation[i].Outer,
@@ -216,7 +218,7 @@ function setAllowedRegion() {
       draggable: false
     });
     InnerBoundary.setMap(map);
-
+    _Boundary.push(InnerBoundary);
 
     var OuterBorder = new google.maps.Polygon({
       paths: AllowedLocation[i].Inner,
@@ -228,7 +230,7 @@ function setAllowedRegion() {
       draggable: false
     });
     OuterBorder.setMap(map);
-
+    _Boundary.push(OuterBorder);
   }
 }
 

@@ -459,7 +459,29 @@ namespace eX_Portal.Controllers {
           .OrderBy(x => x.FlightMapDataID)
           .Take(MaxRecords).ToList();
 
-        return Json(FlightMapDataList, JsonRequestBehavior.AllowGet);
+        //filtering the data
+        var FilteredMapData = new List<FlightMapData>();
+        var isRecordAdded = false;
+        Double LastLat = 0;
+        Double LastLng = 0;
+        foreach(var MapData in FlightMapDataList) {
+          isRecordAdded = false;
+          Double Lat = MapData.Latitude == null ? 0 : (Double)MapData.Latitude;
+          Double Lng = MapData.Longitude == null ? 0 : (Double)MapData.Longitude;
+          Double DiffGeo = (Double)Math.Abs(Lat - LastLat) + (Double)Math.Abs(Lng - LastLng);
+          LastLat = Lat;
+          LastLng = Lng;
+          //DiffGeo = 1;
+          if (DiffGeo > 0.00001) {
+            FilteredMapData.Add(MapData);
+            isRecordAdded = true;
+          }
+        }
+
+        if (!isRecordAdded && FlightMapDataList.Count() > 0) FilteredMapData.Add(FlightMapDataList.Last());
+
+        return Json(FilteredMapData, JsonRequestBehavior.AllowGet);
+        //return Json(FlightMapDataList, JsonRequestBehavior.AllowGet);
         // return LiveDrones;
 
       }

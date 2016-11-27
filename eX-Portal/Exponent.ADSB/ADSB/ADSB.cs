@@ -16,7 +16,7 @@ namespace Exponent.ADSB {
     private const String APIKey = "";
     private const String ApiID = "";
     private SqlConnection CN;
-    private const int NewFlightTime = -15;
+    private const int NewFlightTime = 120;
     private bool isDemoMode = false;
     public List<FlightPosition> FlightStat(String DSN, bool DemoMode = false)  {
       var Data = new List<FlightPosition>();
@@ -53,14 +53,17 @@ namespace Exponent.ADSB {
       using(var Cmd = new SqlCommand(SQL, CN)) {
         var RS = Cmd.ExecuteReader();
         while(RS.Read()) {
+          int fSpeed = RS.GetOrdinal("Speed");
+          int fHeading = RS.GetOrdinal("Heading");
+
           var Position = new FlightPosition {
             FlightID = RS["FlightId"].ToString(),
-            Heading = (Double)RS.GetDecimal(RS.GetOrdinal("Heading")),
+            Heading = RS.IsDBNull(fHeading) ? 0 : (Double)RS.GetDecimal(fHeading),
             TailNumber = RS["TailNumber"].ToString(),
             CallSign = RS["CallSign"].ToString(),
             Lon = (Double)RS.GetDecimal(RS.GetOrdinal("Lon")),
             Lat = (Double)RS.GetDecimal(RS.GetOrdinal("Lat")),
-            Speed = (Double)RS.GetDecimal(RS.GetOrdinal("Speed")),
+            Speed = RS.IsDBNull(fSpeed) ? 0 : (Double)RS.GetDecimal(fSpeed),
             Altitude = (Double)RS.GetDecimal(RS.GetOrdinal("Altitude")),
             ADSBDate = RS.GetDateTime(RS.GetOrdinal("AdsbDate"))
           };
@@ -124,7 +127,7 @@ namespace Exponent.ADSB {
     }
     private int getActiveFlights() {
       int Result = 0;
-      String SQL = "select count(*) from AdsbLive where CreatedDate > (DATEADD(SECOND, -15, GETDATE()))";
+      String SQL = "select count(*) from AdsbLive where CreatedDate > (DATEADD(SECOND, -" + NewFlightTime + ", GETDATE()))";
       using(var RS = new SqlCommand(SQL, CN)) {
         var ObjResult = RS.ExecuteScalar();
         Result = ObjResult == null ? 0 : (int)ObjResult;

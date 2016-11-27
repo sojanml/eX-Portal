@@ -1370,6 +1370,10 @@ div.hr {
     display: none;
   }
 
+  .adsb-point .green {
+    fill: currentColor;
+  }
+
 #deletable {
   margin-top: 10px;
 }
