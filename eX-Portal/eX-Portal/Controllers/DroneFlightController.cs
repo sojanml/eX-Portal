@@ -95,7 +95,7 @@ namespace eX_Portal.Controllers {
                 if (SQLFilter != "")
                     SQLFilter += " AND";
                 SQLFilter += " \n" +
-                  "  DroneFlight.FlightDate BETWEEN '2016-06-26' AND '2016-08-01'";
+                  "  (DroneFlight.FlightDate BETWEEN '2016-06-26' AND '2016-08-01') or (DroneFlight.FlightDate between  '2016-11-27' and '2016-12-02') ";
 
             
         }
