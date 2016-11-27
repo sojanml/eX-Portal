@@ -720,6 +720,8 @@
     <Content Include="images\logo.png" />
     <Content Include="images\map\bottom-left.png" />
     <Content Include="images\map\bottom-right.png" />
+    <Content Include="images\map\drone-icon-map.png" />
+    <Content Include="images\map\drone-vector.svg" />
     <Content Include="images\map\top-left.png" />
     <Content Include="images\map\top-right.png" />
     <Content Include="images\marker.png" />
