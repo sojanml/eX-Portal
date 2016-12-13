@@ -576,6 +576,7 @@
     <Content Include="bullet_blue.png" />
     <Content Include="bullet_green.png" />
     <Content Include="bullet_red.png" />
+    <Content Include="Content\ADSB.css" />
     <Content Include="Content\black-box.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -591,6 +592,7 @@
     <Content Include="Content\print.css" />
     <Content Include="Content\screen.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\temp.css" />
     <Content Include="Content\video-js.css" />
     <Content Include="Content\video-js.min.css" />
     <Content Include="Content\video-js.swf" />
@@ -700,6 +702,9 @@
     <Content Include="images\512px\zip.png" />
     <Content Include="images\512px\_blank.png" />
     <Content Include="images\512px\_page.png" />
+    <Content Include="images\adsb-check-off.png" />
+    <Content Include="images\adsb-check-on.png" />
+    <Content Include="images\adsb-logo.png" />
     <Content Include="images\bullet.png" />
     <Content Include="images\cal-icon.png" />
     <Content Include="images\car-icon.png" />
@@ -831,6 +836,7 @@
     </Content>
     <Content Include="red.png" />
     <Content Include="ReportsManager\WebForm1.aspx" />
+    <Content Include="Scripts\ADSB.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="GreenDrone.png" />
@@ -946,7 +952,7 @@
     <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
-    <Content Include="Scripts\TrafficControl.js" />
+    <Content Include="Scripts\TrafficControlLive.js" />
     <Content Include="Scripts\UAScreation.js" />
     <Content Include="Scripts\user.js" />
     <Content Include="fonts\vjs.woff" />
@@ -992,6 +998,7 @@
     <Content Include="stylesheets\ie.css" />
     <Content Include="stylesheets\print.css" />
     <Content Include="stylesheets\screen.css" />
+    <Content Include="temp\temp.html" />
     <Content Include="test.txt" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -1344,12 +1351,15 @@
     <Content Include="Views\Test\Test.cshtml" />
     <Content Include="Views\Traffic\Index.cshtml" />
     <Content Include="Views\Traffic\Detail.cshtml" />
-    <Content Include="Views\Shared\_eXPortalWidget.cshtml" />
     <Content Include="Views\Traffic\RTA.cshtml" />
+    <Content Include="sass\ADSB.scss" />
+    <Content Include="Views\Adsb\Dashboard.cshtml" />
+    <Content Include="Views\Shared\_ADSB.cshtml" />
+    <Content Include="Views\Traffic\Live.cshtml" />
+    <Content Include="temp\test.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Adsb\" />
     <Folder Include="Views\UserLogin\" />
     <Folder Include="Weather\" />
   </ItemGroup>

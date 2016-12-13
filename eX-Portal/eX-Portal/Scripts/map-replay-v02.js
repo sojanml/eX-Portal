@@ -24,6 +24,7 @@ var ADSBTimer = null;
 var _ADSBAnimationSec = 5;
 var _ADSBAnimationTimer = null;
 var _ADSBTimerCount = 0;
+var _isShowRPAS = true;
 
 var ADSBLine = {
   FlightID: "",
@@ -336,6 +337,7 @@ function ShowHideADSB(btn) {
 }
 
 function ShowHideRPAS(isShowRPAS) {
+  _isShowRPAS = isShowRPAS;
 
   var MapObj = isShowRPAS ? map : null;
   LatestLine.setMap(MapObj);
@@ -350,7 +352,7 @@ function ShowHideRPAS(isShowRPAS) {
   for (var i = 0; i < _Boundary.length; i++) {
     _Boundary[i].setMap(MapObj);
   }
-  
+
 
 }
 
@@ -454,7 +456,7 @@ function GetADSBData(RangeLat, RangeLon) {
       _ADSBLayer.setADSB(result);
       //_ADSBLayer.setMap(map);
       if (ADSBTimer) window.clearTimeout(ADSBTimer);
-      ADSBTimer = window.setTimeout(LiveADSData, 5 * 1000);
+      ADSBTimer = window.setTimeout(LiveADSData, 15 * 1000);
     }
   });
 }
@@ -464,7 +466,7 @@ function ADSBOverlay(options, ADSBData) {
   this.markerLayer = $('<div />').addClass('overlay');
   this.ADSBData = ADSBData;
   this.ResetDraw = false;
-  this.DrawCount = 0;
+  this.DrawCount = 1;
   this.MovePointsToSecond = 0;
   this.setADSB = function (ADSBData) {
     this.ADSBData = ADSBData;
@@ -496,7 +498,8 @@ ADSBOverlay.prototype.draw = function () {
   var ThisKeys = {};
 
 
-  var ThisCounter = this.DrawCount++;
+  this.DrawCount++;
+  var ThisCounter = this.DrawCount;
 
   for (var i = 0; i < this.ADSBData.length; i++) {
     var lat = this.ADSBData[i].Lat;
@@ -516,9 +519,7 @@ ADSBOverlay.prototype.draw = function () {
     var DivID = 'adsb-' + title;
     var IconColor = getIconColor(alt);
 
-    if (heading == 0) {
-      //Landed flight - Ignore movement
-    } else if (gADSBData[DivID]) {
+    if (gADSBData[DivID]) {
       var $point = $('#' + DivID);
       $point.animate({ left: IconLocation.x, top: IconLocation.y });
       $point.find(".icon").css({ transform: 'rotate(' + (heading - 45) + 'deg)', color: IconColor });
@@ -535,9 +536,9 @@ ADSBOverlay.prototype.draw = function () {
         heading: (heading - 45),
         IconColor: IconColor
       };
-      var $point = getADSBIcon(data);
+      var HTML = getADSBIcon(data);
       // Append the HTML to the fragment in memory  
-      fragment.appendChild($point.get(0));
+      fragment.appendChild($(HTML).get(0));
       IsAdded = true;
     }
 
@@ -563,38 +564,36 @@ ADSBOverlay.prototype.draw = function () {
 
 
   // Now append the entire fragment from memory onto the DOM  
-  if(IsAdded) this.markerLayer.append(fragment);
+  if (IsAdded) this.markerLayer.append(fragment);
 };
 
 
 function getADSBIcon(data) {
   var ThePoint = '';
   if (data.title.substr(0, 3) == 'DRN') {
-    ThePoint = $(
+    ThePoint =
         '<div  class="adsb-point" id="' + data.id + '" title="' + data.title + '" '
       + 'data-lat="' + data.lat + '" '
       + 'data-lng="' + data.lng + '" '
       + 'data-alt="' + data.alt + '" '
       + 'data-ident="' + data.title + '" '
       + 'style="left:' + data.x + 'px; top:' + data.y + 'px;">'
-      + '<span class="icon FlightIcon" style=" transform: rotate(' + (data.heading) + 'deg); color: ' + data.IconColor + '">' 
-      + '<img class="green" src="/images/map/drone-vector.svg" width="50" height="50">'
+      + '<span class="icon FlightIcon" style=" transform: rotate(' + (data.heading) + 'deg); color: ' + data.IconColor + '">'
+      + '<img class="green" src="/images/map/drone-vector.svg" width="50" height="50"/>'
       + '</span>'
       + '<span class="flight-title" style="">' + data.title + '</span>' +
       + '</div>'
-    );
   } else {
-  ThePoint = $(
-      '<div  class="adsb-point" id="' + data.id + '" title="' + data.title + '" '
-    + 'data-lat="' + data.lat + '" '
-    + 'data-lng="' + data.lng + '" '
-    + 'data-alt="' + data.alt + '" '
-    + 'data-ident="' + data.title + '" '
-    + 'style="left:' + data.x + 'px; top:' + data.y + 'px;">'
-    + '<span class="icon FlightIcon" style=" transform: rotate(' + (data.heading) + 'deg); color: ' + data.IconColor + '">&#xf072;</span>'
-    + '<span class="flight-title" style="">' + data.title + '</span>' +
-    + '</div>'
-  );
+    ThePoint =
+        '<div  class="adsb-point" id="' + data.id + '" title="' + data.title + '" '
+      + 'data-lat="' + data.lat + '" '
+      + 'data-lng="' + data.lng + '" '
+      + 'data-alt="' + data.alt + '" '
+      + 'data-ident="' + data.title + '" '
+      + 'style="left:' + data.x + 'px; top:' + data.y + 'px;">'
+      + '<span class="icon FlightIcon" style=" transform: rotate(' + (data.heading) + 'deg); color: ' + data.IconColor + '">&#xf072;</span>'
+      + '<span class="flight-title" style="">' + data.title + '</span>' +
+      + '</div>'
   }
   return ThePoint;
 }
@@ -767,7 +766,7 @@ function setDrawIntilize() {
       strokeColor: 'black',
       strokeWeight: 0.2
 
-      };
+    };
 
     DronePositionIcon = new google.maps.Marker({
       position: myLatLng,
@@ -1016,7 +1015,7 @@ function drawMarkerAtIndex(Opacity) {
   var image = IsOutSide ? '/bullet_red.png' : '/bullet_blue.png';
   var marker = new google.maps.Marker({
     position: myLatLng,
-    map: map,
+    map: (_isShowRPAS ? map : null),
     icon: image,
     title: loc['DroneRFID'],
     zIndex: 99
@@ -1028,9 +1027,10 @@ function drawMarkerAtIndex(Opacity) {
     });
     infowindow.open(map, marker);
   });
-  map.setCenter(myLatLng);
-  _ZoomBounds.extend(myLatLng);
-
+  if (_isShowRPAS) {
+    map.setCenter(myLatLng);
+    _ZoomBounds.extend(myLatLng)
+  }
 
   //Add to global marker array
   _AllMarkers.push(marker);

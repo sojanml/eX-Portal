@@ -1,0 +1,731 @@
+@import "compass";
+
+$SpaceBetweenColumns: 10px;
+$TotalColumns: 12;
+$TotalWidth: 920px;
+
+$MenuColor: #e5e5e5;
+$ShadedColur: #ededed;
+$MenuHiliteColor: #cacaca;
+$MenuPadding: 5px;
+$MenuSpaceFromRight: 12px;
+$SelectedItemColor: #53a100;
+$BreachColor: #fe0000;
+$TitleHeading:#222222 ;
+
+
+@include font-face("FontAwesome", font-files( "../fonts/fontawesome-webfont.ttf", "../fonts/FontAwesome.otf", "../fonts/fontawesome-webfont.svg", "../fonts/fontawesome-webfont.eot", "../fonts/fontawesome-webfont.woff", "../fonts/fontawesome-webfont.woff2" ));
+
+@include font-face("OpenSans", font-files( "../fonts/OpenSans.ttf", "../fonts/OpenSans.eot", "../fonts/OpenSans.svg", "../fonts/OpenSans.woff", "../fonts/OpenSans.woff2" ));
+@include font-face("Gobold_Light", font-files( "../fonts/GoboldThinLight.ttf", "../fonts/GoboldThinLight.eot", "../fonts/GoboldThinLight.svg", "../fonts/GoboldThinLight.woff", "../fonts/GoboldThinLight.woff2" ));
+
+
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+span.icon {
+  font-family: FontAwesome;
+}
+
+#adsb_map {
+  min-height: 460px;
+}
+
+div.label {
+  display: inline-block;
+  padding:0px 5px 0px 5px;
+  background-color: white;
+  border-radius:10px;
+  width:30px;
+}
+@mixin MultiResolution($TotalWidth, $Gap, $FontSize: 1em) {
+  width: $TotalWidth;
+  font-size: $FontSize;
+
+  td.spacer {
+    width: $Gap;
+  }
+
+  div.column {
+    margin-right: $Gap;
+  }
+
+  div.column-half {
+    $CalulatedWidth: (($TotalWidth - $Gap) / 2);
+    width: $CalulatedWidth;
+
+    div.column-2-of-6 {
+      width: ($CalulatedWidth - $Gap) * 0.4;
+    }
+
+    div.column-4-of-6 {
+      width: ($CalulatedWidth - $Gap) * 0.6;
+    }
+
+
+  }
+
+  div.column-2-of-6 {
+    width: ($TotalWidth - $Gap *5)/6 * 2 + ($Gap * 1);
+  }
+
+  div.column-4-of-6 {
+    width: ($TotalWidth - $Gap*5)/6 * 4 + ($Gap * 3);
+  }
+
+  div.title {
+
+    padding:3px 0px 3px 5px;
+    border-bottom: 2px white solid;
+    margin-bottom: 5px;
+    vertical-align: text-bottom
+  }
+
+  div.hr {
+    width:100%;
+    height:2px;
+    background-color: white;
+    margin-bottom: 2px;
+
+  }
+  table.info-tiles {
+    $CalulatedWidth: (($TotalWidth - $Gap) / 2);
+    width: $CalulatedWidth;
+    tr td:first-child {
+      width: $CalulatedWidth  * 0.2;
+    }
+    
+    div.tile {
+      width:100%;
+    }
+
+    $BoxWidth: $CalulatedWidth * 0.8;
+    $LeftBox: 0.25;
+    div.detail {
+      width: $BoxWidth;
+    }
+
+    div.detail_left,
+    div.detail_right {
+      height:74px;
+     font-size: $FontSize * 1;
+    }
+     div.detail, 
+     div.detail_left,
+    div.detail_right{
+          height:85px;
+         }
+
+     div.detail_left {
+       width: $BoxWidth * $LeftBox;
+     }
+     div.detail_right {
+       width: $BoxWidth * (1 - $LeftBox);
+     }
+
+  }
+
+  div.fixed-height-1 {
+    height: 165px;
+  }
+
+  .top-space,
+  &.top-space {
+    margin-top: $Gap;
+  }
+
+}
+
+
+
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+input.spinner{
+  width:30px;
+}
+
+ul.simple-list {
+  list-style:none;
+  margin:0px 0px 0px 5px;
+  padding:0px;
+  li {
+    margin:0px;
+    margin:5px 0px 5px 0px;
+  }
+
+  input[type="checkbox"] {
+    display:none;
+    width:16px;
+    height:16px;
+    vertical-align:text-bottom;
+    &+label {
+      padding-left:20px;
+      background-image: url('/images/adsb-check-off.png');
+      background-repeat: no-repeat;
+      background-position:left center;
+    }
+    &:checked+label {
+      background-image: url('/images/adsb-check-on.png');
+    }
+  }
+}
+
+ul.multi-select {
+  margin: 10px 0px 5px 5px;
+  padding: 0px;
+
+  li {
+    display: inline-block;
+  }
+
+  input[type="checkbox"] {
+    display:none;
+    &+label {
+      margin: 0px 6px 3px 0px;
+      padding: 0px 5px 0px 5px;
+      border-radius: 6px;
+      background-color: white;
+
+    }
+
+    &:checked+label {
+      background-color: scale-saturation($SelectedItemColor,20);
+      color: white;
+    }
+
+   &+label:hover {
+        background-color: #87d534;
+      }
+  }
+
+}
+
+table.traffic_status {
+  width:100%;
+  padding-bottom:10px;
+  td {
+    padding:1px 0px 0px 5px;
+  }
+
+  div.traffic_stat {
+    width:15px;
+    height: 40px;  
+  border-radius:10px;
+  }
+
+  div.breach {
+    background-color: $BreachColor;
+  }
+
+  div.alert {
+    background-color: #ff4e00;
+  }
+
+
+  div.safe  {
+    background-color: #0189ff;
+  }
+
+}
+
+@mixin clearfix() {
+  &:after {
+    clear: both;
+    display: block;
+    content: "";
+  }
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  font-family: OpenSans;
+  color: #292929;
+  text-transform: uppercase;
+}
+
+body {
+  padding: 10px 30px 10px 30px;
+  box-sizing: border-box;
+}
+
+
+div.clearfix {
+  @include clearfix;
+}
+
+.shaded  {
+  background-color: $ShadedColur;
+}
+
+header {
+  div.left-section {
+    float: left;
+  }
+
+  div.right-section {
+    float: right;
+  }
+
+  div.logo img {
+    width: 400px;
+    height: auto;
+  }
+
+  @include clearfix;
+}
+
+.ui-spinner-input {
+  margin: 0px 16px 0px 3px ;
+}
+
+nav.user-management,
+nav.main-menu,
+nav.breadcrumbs {
+  ul {
+    float: right;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+
+    li {
+      float: left;
+      padding-right: $MenuPadding;
+      padding-left: $MenuPadding;
+      position: relative;
+
+
+      ul {
+        position: absolute;
+        top: 18px;
+        left: 0px;
+        display: none;
+        z-index: 10;
+
+        li {
+          padding-right: $MenuPadding;
+          padding-left: $MenuPadding;
+          box-sizing: border-box;
+        }
+      }
+
+      &:hover {
+        ul {
+          display: block;
+        }
+      }
+
+      a {
+        text-decoration: none;
+        color:#292929;
+      }
+    }
+  }
+
+  @include clearfix;
+}
+
+nav.user-management {
+  ul {
+    margin-right: $MenuSpaceFromRight;
+
+    li {
+      border-right: 1px black solid;
+
+      &:last-child {
+        border-right: 0px white none;
+      }
+
+      span.icon {
+        display: inline-block;
+      }
+
+      &:hover span.icon {
+        -webkit-animation: spin 3s linear infinite;
+        -moz-animation: spin 3s linear infinite;
+        animation: spin 3s linear infinite;
+      }
+
+      &#user-menu:hover {
+        background-color: $MenuHiliteColor;
+      }
+
+      ul {
+        background-color: $MenuColor;
+        min-width: 100%;
+
+        li {
+          border-right: 0px white none;
+          min-width: 100%;
+                &:hover {
+            background-color: $MenuHiliteColor;
+          }
+        }
+      }
+    }
+  }
+}
+
+nav.main-menu {
+  margin-top:5px;
+  ul {
+    li {
+      padding:5px $MenuSpaceFromRight 5px $MenuSpaceFromRight;
+      background-color: $MenuColor;
+      a {
+        display:block;
+        width:100%;
+      }
+      ul {
+        top:25px;
+        background-color: $MenuHiliteColor;
+        width: auto;
+        li {
+          min-width: 100%;
+          white-space: nowrap;
+          box-sizing: border-box;
+          padding:5px $MenuSpaceFromRight 5px $MenuSpaceFromRight;
+          background-color: $MenuHiliteColor;
+          &:hover {
+            background-color: $MenuColor;
+          }
+        }
+      }
+      &:last-child {
+        padding-right: ($MenuSpaceFromRight + $MenuPadding);
+      }
+
+      &:hover {
+        background-color: $MenuHiliteColor;
+      }
+    }
+  }
+}
+
+nav.breadcrumbs {
+  margin-top:5px;
+  ul {
+    li {
+      padding:0px 3px 0px 0px;
+      &:after {
+        display: inline-block;
+        padding-left:3px;
+        content: ">";
+      }
+
+      &:last-child {
+        color: red;
+        padding-right: ($MenuSpaceFromRight);
+      &:after {
+        display: none;
+        padding:0px;
+        content: "";
+      }
+      }
+    }
+  }
+}
+
+
+
+div.column-group,
+table.info-tiles {
+  @include clearfix;
+}
+
+section {
+  margin: 0px auto 0px auto;
+  @include clearfix;
+
+  div.column {
+    box-sizing: border-box;
+    float: left;
+
+    &:last-child {
+      border-right: 0px red none;
+      margin-right: 0;
+    }
+  }
+
+  div.column-half {
+  }
+
+  div.column-2-of-6 {
+  }
+
+  div.column-4-of-6 {
+
+  }
+}
+
+
+.alert-text {
+  color: #ff4e00;
+}
+table.info-tiles {
+  div.dataTables_info {
+    display:none !important;
+  }
+  div.tile,
+  div.detail {
+    float: left;
+  }
+  div.detail {
+    background-color: $ShadedColur;
+  }
+
+    div.detail_left,
+    div.detail_right {
+      display:block;
+      float:left;
+      height:100%;
+      background-color: $ShadedColur;
+      padding:10px;
+      box-sizing: border-box;
+
+
+    }
+    div.detail_right {
+      background-color: $TitleHeading;
+      color: white;
+    }
+    div.detail_left {
+      text-align: center;
+    }
+  &.breach {
+    div.breach-info {
+      background-color: $TitleHeading;
+      color:white;
+      padding:5px 0px 5px 10px;
+      margin-top:1px;
+      span#breach-aircraft {
+        color: $BreachColor;
+        padding-left:20px;
+        display: inline-block;
+      }
+    }
+    div.tile {
+      background-color: $BreachColor;
+    }
+  }
+
+  &.alert div.tile {
+    background-color: #ff4e00;
+  }
+
+
+  &.safe div.tile {
+    background-color: #0189ff;
+  }
+
+  div.tile-title {
+    width: 100%;
+    text-align: center;
+    background-color: #222222;
+    color: white;
+    font-size: 1.5em;
+    padding: 2px 0px 2px 0px;
+    text-transform: uppercase;
+  }
+
+  div.tile-detail {
+    padding-bottom:5px;
+    padding-top:5px;
+    & > table {
+    width: 100%;
+
+    td {
+      width: 50%;
+      text-align: center;
+      &:first-child {
+        border-right: 3px white solid;
+      }
+    }
+  }}
+
+  div.tile-number {
+    color: white;
+    font-size: 3em;
+    width: 100%;
+    text-align: center;
+    margin:-4px 0px -5px 0px;
+  }
+  div.tile-caption {
+    color: white;
+    width: 100%;
+    font-size: 0.8em;
+    text-align: center;
+    text-transform:uppercase;
+  }
+}
+
+  td.safe  {
+    background-color: #0189ff;
+  }
+
+table.scroll-table {
+
+  th,td {
+    text-align: center;
+    border-right: 1px $BreachColor solid;
+
+  }
+  td {
+     padding:1px 0px 1px 0px;
+  }
+  th {
+    border-bottom: 1px $BreachColor solid;
+    font-size: 0.8em;
+    white-space: nowrap;
+    padding:5px 0px 5px 0px;
+  }
+  td {
+    color: $BreachColor;
+  }
+  & tr td:last-child,
+  & tr th:last-child {
+      border-right: 0px $BreachColor none;      
+    }
+  
+}
+
+
+table.safe-status {
+  padding-left:5px;
+  td {
+    padding:0px 5px 3px 0px;
+    white-space: nowrap;
+  }
+}
+
+div.adsb-point {
+  position:absolute;
+  cursor: pointer;
+  width:100px;
+  height:100px;
+  margin-left:-50px;
+  margin-top:-50px;
+
+  span.tail {
+    position:absolute;
+    background-color:aquamarine;
+    width: 2px;
+    height:2px;
+    margin-left:-1px;
+    margin-top:-1px;
+    border-radius:50%;
+    display:block;
+    font-size:1px;
+  }
+  span.FlightIcon {
+    position: absolute;
+    left:50px;
+    top:50px;
+    font-size:18px;
+    width:16px;
+    height:16px;
+    
+    margin-left:-8px;
+    margin-top:-8px;
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+
+  }
+
+  span.flight-title {
+     position:absolute;
+     top:60px;
+     left:40px;
+      z-index:10;
+      color: white;
+      display: none;
+
+      padding:0px 2px 0px 2px;
+      font-size:9px;
+   }
+
+
+  &:hover {
+    span.flight-title {
+      display:block;
+    }
+  }
+
+  &.breach {
+    color:$BreachColor;
+    span.flight-title,
+    span.tail {
+      background-color:$BreachColor;
+    }
+  }
+  &.alert {
+    color:#ff4e00;
+    span.flight-title,
+    span.tail {
+      background-color:#ff4e00;
+    }
+  }
+  &.safe {
+    color: #0189ff;
+    span.flight-title,
+    span.tail {
+      background-color:#0189ff;
+    }
+  }
+  &.breach,
+  &.alert,
+  &.safe {
+
+
+  }
+
+   
+}
+
+div.adsb-history {
+  color:white;
+  position:absolute;
+  font-size:3px;
+}
+
+div#safe-aircraft {
+  
+  padding-left:5px;
+}
+@media screen and (min-width: 960px) {
+  section {
+    @include MultiResolution(920px,10px, 10px);
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  section {
+    @include MultiResolution(1150px,15px, 11px);
+  }
+}

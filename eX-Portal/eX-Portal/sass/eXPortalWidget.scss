@@ -1,11 +1,23 @@
 ﻿@import "compass";
 
-@include font-face("FontAwesome", font-files("../fonts/FontAwesome.ttf", "../fonts/FontAwesome.otf"));
-@include font-face("OpenSans", font-files("../fonts/OpenSans.ttf", "../fonts/OpenSans.otf"));
+@include font-face("FontAwesome", font-files(
+  "../fonts/fontawesome-webfont.ttf", 
+  "../fonts/FontAwesome.otf",
+  "../fonts/fontawesome-webfont.svg", 
+  "../fonts/fontawesome-webfont.eot", 
+  "../fonts/fontawesome-webfont.woff", 
+  "../fonts/fontawesome-webfont.woff2"
+));
+@include font-face("OpenSans", font-files(
+  "../fonts/OpenSans.ttf", 
+  "../fonts/OpenSans.eot",
+  "../fonts/OpenSans.svg",
+  "../fonts/OpenSans.woff",
+  "../fonts/OpenSans.woff2"
+));
 @include font-face("Gobold_Light", 
   font-files(
     "../fonts/GoboldThinLight.ttf", 
-    "../fonts/GoboldThinLight.otf",
     "../fonts/GoboldThinLight.eot",
     "../fonts/GoboldThinLight.svg",
     "../fonts/GoboldThinLight.woff",
@@ -22,7 +34,7 @@ $TotalGridWidth: 950px;
 $OneGridWidth: 110px;
 $GridMargin: 10px;
 
-
+ 
 .default-list {
   font-family: $BaseFont;
   font-size: 9pt;

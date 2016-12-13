@@ -17,5 +17,20 @@ namespace Exponent.ADSB {
     public Double Altitude { get; set; }
     public DateTime ADSBDate { get; set; }
 
+    public List<Double> History { get; set; }
+
+    public FlightPosition() {
+      History = new List<Double>();
+    }
+
   }
+
+  public class FlightDistance {
+    public String FromFlightID { get; set; }
+    public String ToFlightID { get; set; }
+    public Double vDistance { get; set; }
+    public Double hDistance { get; set; }
+  }
+
+
 }

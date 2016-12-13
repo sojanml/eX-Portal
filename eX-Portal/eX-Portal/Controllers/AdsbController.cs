@@ -14,5 +14,14 @@ namespace eX_Portal.Controllers {
 
       return Json(Data, JsonRequestBehavior.AllowGet);
     }
+
+    public ActionResult Dashboard() {
+      Session["UID"] = 77;
+      Session["FullName"] = "Sojan";
+      Session["UserId"] = 77;
+
+
+      return View();
+    }
   }
 }

@@ -1,0 +1,100 @@
+/* line 38, ../sass/temp.scss */
+body, html {
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+}
+
+/* line 45, ../sass/temp.scss */
+body {
+  padding: 10px 30px 10px 30px;
+  box-sizing: border-box;
+}
+
+/* line 31, ../sass/temp.scss */
+div.clearfix:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+/* line 55, ../sass/temp.scss */
+div.container {
+  margin: 0px auto 0px auto;
+  background-color: hotpink;
+}
+/* line 31, ../sass/temp.scss */
+div.container:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+/* line 60, ../sass/temp.scss */
+div.container div.column {
+  box-sizing: border-box;
+  background-color: aqua;
+  float: left;
+}
+/* line 65, ../sass/temp.scss */
+div.container div.column:last-child {
+  border-right: 0px red none;
+  margin-right: 0;
+}
+/* line 72, ../sass/temp.scss */
+div.container div.column-half {
+  background-color: darkorange;
+}
+/* line 76, ../sass/temp.scss */
+div.container div.column-2-of-6 {
+  background-color: darkred;
+}
+/* line 80, ../sass/temp.scss */
+div.container div.column-4-of-6 {
+  background-color: chartreuse;
+}
+
+@media screen and (min-width: 960px) {
+  /* line 87, ../sass/temp.scss */
+  div.container {
+    width: 920px;
+  }
+  /* line 10, ../sass/temp.scss */
+  div.container div.column {
+    margin-right: 10px;
+  }
+  /* line 14, ../sass/temp.scss */
+  div.container div.column-half {
+    width: 455px;
+  }
+  /* line 18, ../sass/temp.scss */
+  div.container div.column-2-of-6 {
+    width: 300px;
+  }
+  /* line 22, ../sass/temp.scss */
+  div.container div.column-4-of-6 {
+    width: 610px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  /* line 93, ../sass/temp.scss */
+  div.container {
+    width: 1150px;
+  }
+  /* line 10, ../sass/temp.scss */
+  div.container div.column {
+    margin-right: 15px;
+  }
+  /* line 14, ../sass/temp.scss */
+  div.container div.column-half {
+    width: 567.5px;
+  }
+  /* line 18, ../sass/temp.scss */
+  div.container div.column-2-of-6 {
+    width: 373.33333px;
+  }
+  /* line 22, ../sass/temp.scss */
+  div.container div.column-4-of-6 {
+    width: 761.66667px;
+  }
+}

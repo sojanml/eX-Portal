@@ -56,6 +56,7 @@ namespace  Exponent  {
 
     public WeatherForcast GetByIP(String IPAddress) {
       WeatherForcast ThisWeather = new WeatherForcast();
+      try { 
         CityInfo ThisCity = GetCityByIP(IPAddress);
  
         DateTime LastCashedOn = getLastProcessedDateTime(ThisCity.Country, ThisCity.City);
@@ -77,7 +78,9 @@ namespace  Exponent  {
           SetWeatherStation(ThisWeather.Today, ThisCity.Lat, ThisCity.Lng);
         }
         SaveWeatherCashe(ThisWeather);
-
+      } catch {
+        ThisWeather.Today.ConditionText = "Error";
+      }
       return ThisWeather;
     }
 
@@ -217,8 +220,12 @@ namespace  Exponent  {
 
     private String getWeatherJson(String WebURL) {
       String json2 = String.Empty;
-      using (System.Net.WebClient wc = new System.Net.WebClient()) {
-        json2 = wc.DownloadString(WebURL);
+      try { 
+        using (System.Net.WebClient wc = new System.Net.WebClient()) {
+          json2 = wc.DownloadString(WebURL);
+        }
+      } catch {
+        //Nothing
       }
       if (String.IsNullOrEmpty(json2)) return String.Empty;
       return json2;

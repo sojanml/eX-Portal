@@ -448,6 +448,14 @@ namespace eX_Portal.Controllers {
       ViewBag.FlightID = FlightID;
 
       using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
+
+        var MinFlightHour = (from d in ctx.FlightMapDatas
+                             where d.FlightID == FlightID
+                             orderby d.FlightMapDataID ascending
+                             select d.TotalFlightTime).FirstOrDefault();
+
+        if (!MinFlightHour.HasValue) MinFlightHour = 0;
+
         var Flights = (
             from d in ctx.FlightMapDatas
             where d.FlightID == FlightID &&
@@ -469,8 +477,14 @@ namespace eX_Portal.Controllers {
           Double Lat = MapData.Latitude == null ? 0 : (Double)MapData.Latitude;
           Double Lng = MapData.Longitude == null ? 0 : (Double)MapData.Longitude;
           Double DiffGeo = (Double)Math.Abs(Lat - LastLat) + (Double)Math.Abs(Lng - LastLng);
+          Decimal? TotalHours = MapData.TotalFlightTime;
+          if (!TotalHours.HasValue) TotalHours = 0;
+          TotalHours = TotalHours - MinFlightHour;
+
           LastLat = Lat;
           LastLng = Lng;
+          MapData.TotalFlightTime = TotalHours;
+
           //DiffGeo = 1;
           if (DiffGeo > 0.00001) {
             FilteredMapData.Add(MapData);

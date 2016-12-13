@@ -25,7 +25,7 @@ namespace Exponent.ADSB {
       //connect to database for reading data
       using (CN = new SqlConnection(DSN)) {
         CN.Open();
-        setActiveFlights();
+        //setActiveFlights();
 
         //get active positions
         Data = getLivePositions();
@@ -33,6 +33,43 @@ namespace Exponent.ADSB {
 
 
       return Data;
+    }
+
+    public List<FlightDistance> FlightDist(String DSN, Double hDistance = 5, Double vDistance = 2) {
+      var Dist = new List<FlightDistance>();
+      String SQL = @"Select 
+        ADSBDetail.FromFlightID,
+        ADSBDetail.ToFlightID,
+        ADSBDetail.VerticalDistance,
+        ADSBDetail.HorizontalDistance
+      FROM
+        ADSBDetail
+      Where
+        ADSBDetail.HorizontalDistance <= " + hDistance + @" AND
+        ADSBDetail.VerticalDistance <= " + vDistance;
+      using (CN = new SqlConnection(DSN)) {
+        CN.Open();
+        using (var Cmd = new SqlCommand(SQL, CN)) {
+          var RS = Cmd.ExecuteReader();
+          while (RS.Read()) {
+            Dist.Add(new FlightDistance {
+              FromFlightID = RS["FromFlightID"].ToString(),
+              ToFlightID = RS["ToFlightID"].ToString(),
+              vDistance = toDouble(RS["VerticalDistance"].ToString()),
+              hDistance = toDouble(RS["HorizontalDistance"].ToString())
+            });
+          }//while
+          RS.Close();
+        }//using (var Cmd)
+        CN.Close();
+      }//using (CN)
+      return Dist;
+    }
+
+    private Double toDouble(String Num) {
+      Double dNum = 0;
+      Double.TryParse(Num, out dNum);
+      return dNum;
     }
 
     private List<FlightPosition> getLivePositions() {
@@ -46,6 +83,7 @@ namespace Exponent.ADSB {
         [Lon],
         [Lat],
         [Speed],
+        HeadingHistory,
         [Altitude],
         [AdsbDate]
       from
@@ -65,13 +103,25 @@ namespace Exponent.ADSB {
             Lat = (Double)RS.GetDecimal(RS.GetOrdinal("Lat")),
             Speed = RS.IsDBNull(fSpeed) ? 0 : (Double)RS.GetDecimal(fSpeed),
             Altitude = (Double)RS.GetDecimal(RS.GetOrdinal("Altitude")),
-            ADSBDate = RS.GetDateTime(RS.GetOrdinal("AdsbDate"))
+            ADSBDate = RS.GetDateTime(RS.GetOrdinal("AdsbDate")),
+            History = getHistory(RS["HeadingHistory"].ToString())
           };
           PositionDatas.Add(Position);
         }//while
       }//using
 
       return PositionDatas;
+    }
+
+    private List<Double> getHistory(String HeadingHistory) {
+      List<Double> History = new List<Double>();
+      if (String.IsNullOrEmpty(HeadingHistory)) return History;
+      foreach (String sHeading in HeadingHistory.Split(',')) {
+        Double Heading = 0;
+        Double.TryParse(sHeading, out Heading);
+        History.Add(Heading);
+      }
+      return History;
     }
 
     private void setActiveFlights() {
@@ -82,8 +132,8 @@ namespace Exponent.ADSB {
       var NewPositions =  getFlightAware();
 
       //remove any old records from LIVE tabe
-      SQL = "DELETE FROM AdsbLive WHERE  CreatedDate < (DATEADD(SECOND, -120, GETDATE()))";
-      doSQL(SQL);
+      //SQL = "DELETE FROM AdsbLive WHERE  CreatedDate < (DATEADD(SECOND, -120, GETDATE()))";
+      //doSQL(SQL);
 
       //go through each postion and add to database
       foreach (var Position in NewPositions) {
@@ -102,7 +152,8 @@ namespace Exponent.ADSB {
         [Altitude],
         [AdsbDate],
         [FlightSource],
-        [CreatedDate]
+        [CreatedDate],
+        [HeadingHistory]
         ) VALUES (
           '" + Position.FlightID + @"',
           " + Position.Heading + @",
@@ -114,7 +165,8 @@ namespace Exponent.ADSB {
           " + (Position.Altitude * 100) + @",
           '" + Position.ADSBDate.ToString("yyyy-MM-dd hh:mm:ss") + @"',
           '" + Position.FlightSource + @"',
-          GETDATE()
+          GETDATE(),
+          Position.Heading
         )";
         doSQL(SQL);
       }

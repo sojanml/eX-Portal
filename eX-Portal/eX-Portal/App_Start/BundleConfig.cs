@@ -37,7 +37,10 @@ namespace eX_Portal {
                 "~/jquery-ui/jquery-ui.min.css",
                 "~/Content/eXPortalWidget.css"
                 ));
-
+      bundles.Add(new StyleBundle("~/bundles/ADSB").Include(
+          "~/jquery-ui/jquery-ui.min.css",
+          "~/Content/ADSB.css"
+          ));
       
 
 

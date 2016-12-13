@@ -256,6 +256,30 @@ namespace eX_Portal.exLogic {
       }
     }
 
+    public static List<Dictionary<string, object>> jsonRS(String SQL) {
+      List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
+
+      using (var ctx = new ExponentPortalEntities()) {
+        ctx.Database.Connection.Open();
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          //ctx.Database.Connection.Open();
+          cmd.CommandText = SQL;
+          using (var reader = cmd.ExecuteReader()) {
+            while (reader.Read()) {
+              Dictionary<string, object> dict = new Dictionary<string, object>();            
+              for (int i = 0; i < reader.FieldCount; i++) {
+                  dict[reader.GetName(i)] = reader.GetValue(i);
+                }
+              list.Add(dict);
+            }//while
+          }//using reader
+        }//using ctx.Database.Connection.CreateCommand
+      }
+
+      return list;
+    }
+
+
     public static String getDBRowsJson(String SQL, ExponentPortalEntities ctx) {
       StringBuilder SB = new StringBuilder();
       StringBuilder sRow = new StringBuilder();
