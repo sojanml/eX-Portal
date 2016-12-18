@@ -524,7 +524,8 @@ namespace eX_Portal.Controllers {
       int OwnerId;
       if(!exLogic.User.hasAccess("DRONE"))
         return "Access Denied";
-      String SQL = "SELECT \n" +
+          
+            String SQL = "SELECT \n" +
           "  D.[DroneName] as RPAS,\n" +
           "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
           "  D.[DroneSerialNo] as [RPAS S.no],\n" +
@@ -718,20 +719,22 @@ namespace eX_Portal.Controllers {
         ModelState.Remove("Drone.RefName");
         ModelState.Remove("Drone.MakeID");
         ModelState.Remove("Drone.ModelID");
-        if (DroneView.Name==null||DroneView.Name=="") {
+        if (DroneView.Name==null||DroneView.Name=="") { 
 
-       
+        if (DroneView.Drone.ManufactureId < 1 || DroneView.Drone.ManufactureId == null)
+            {
+             ModelState.AddModelError("Drone.ManufactureId", "Please Select Manufacture.");
+             }
+           }
+               
 
-        if (DroneView.Drone.ManufactureId < 1 || DroneView.Drone.ManufactureId == null) {
-          ModelState.AddModelError("Drone.ManufactureId", "Please Select Manufacture.");
-        }
-        }
-
-        if (DroneView.Drone.AccountID< 1 || DroneView.Drone.AccountID == null) {
+       if (DroneView.Drone.AccountID< 1 || DroneView.Drone.AccountID == null) {
           ModelState.AddModelError("Drone.AccountID", "Please Select Owner.");
         }
 
-        if (DroneView.Drone.CommissionDate == null) {
+       
+
+       if (DroneView.Drone.CommissionDate == null) {
           ModelState.AddModelError("Drone.CommissionDate", "Commission Date is Required.");
         }
 
@@ -740,9 +743,9 @@ namespace eX_Portal.Controllers {
             ModelState.AddModelError("Drone.ModelName", "Maximum 100 characters are allowed.");
           }
         }
-      
-        if (!ModelState.IsValid) {
-
+               
+                if (!ModelState.IsValid) {
+          
           String OwnerListSQL =
       "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account";
           if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
@@ -762,7 +765,13 @@ namespace eX_Portal.Controllers {
         //insert into LUP_Drone table -- to insert the manufacturer then to use it for inserting to the other table       
         if (DroneView.Name != null)
                 {
-                    int typeid = Util.getDBInt("SELECT Max(TypeId) + 1 from [LUP_Drone] where [Type]='Manufacturer'");
+                    if (DroneView.Name.Length > 100)
+                    {
+                        ModelState.AddModelError("DroneView.Name", "Maximum 100 characters are allowed.");
+
+                    }
+
+                        int typeid = Util.getDBInt("SELECT Max(TypeId) + 1 from [LUP_Drone] where [Type]='Manufacturer'");
                     string BinaryCode = Util.DecToBin(typeid);
                     string s = DroneView.Name.ToString();
                     string code = s.Substring(0, 3);
@@ -790,7 +799,8 @@ namespace eX_Portal.Controllers {
                     if (DroneSerialNo < 1001)
                         DroneSerialNo = 1001;
                     MSTR_Drone Drone = DroneView.Drone;
-                    if (Drone.CommissionDate == null) Drone.CommissionDate = DateTime.Now;
+                    
+                    if (Drone.CommissionDate == null) Drone.CommissionDate = DateTime.Now.Date;
                     if (Drone.ModelName == null) Drone.ModelName = "Other";
                     Drone.RegistrationDocument = String.IsNullOrEmpty(Request["FileName"]) ? "" : Request["FileName"];
                     String SQL = "INSERT INTO MSTR_DRONE(\n" +
@@ -808,7 +818,7 @@ namespace eX_Portal.Controllers {
                                  "  CreatedOn\n" +
                                  ") VALUES(\n" +
                                  "  '" + Drone.AccountID + "',\n" +
-                                 "  '" + manufacturerid + "',\n" +
+                                 "  '" + typeid + "',\n" +
                                  "  '" + Drone.UavTypeId + "',\n" +
                                  "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
                                  "  11,\n" +
@@ -839,7 +849,7 @@ namespace eX_Portal.Controllers {
                                     ");";
                             int ID = Util.doSQL(SQL);
                         }
-
+                      
                     }
 
                         if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
