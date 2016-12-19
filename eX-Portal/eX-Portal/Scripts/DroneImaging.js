@@ -266,100 +266,114 @@ function processDeleteFile(Obj) {
 }
 
 
-function SubmitFile(file) {
-  var Elem = $('#file_' + file.uploadKey);
+    function SubmitFile(file) {
+        var Elem = $('#file_' + file.uploadKey);
+        var ext = FileName.substr(FileName.lastIndexOf('.') + 1);
+        if (file.ext != "jpg" && file.ext != "png" && file.ext != "tif" && file.ext != "gif" && file.ext != "bmg" && file.size > 1024 * 1024 * 2) {
+            var HTML = "Invalid file format...Please upload an image File with size 2 MB ot less.'";
+            Elem.addClass("error");
+            Elem.html(HTML);
+            setTimeout(function () {
+                Elem.slideUp().remove();
 
-  if (file.size > 1024 * 1024 * 2) {
-    var HTML = "Please upload image files with size 2 Mb or  less.'";
-    Elem.addClass("error");
-    Elem.html(HTML);
-    setTimeout(function () {
-      Elem.slideUp().remove();
+            }, 2000);
+            return false;
+        }
 
-    }, 2000);
-    return false;
-  }
-  var HTML = 'Uploading ' + file.name + ' (' + Math.floor(file.size / 1024) + ' KB)';
+        else if (file.size > 1024 * 1024 * 2) {
+            var HTML = "Please upload image files with size 2 Mb or  less.'";
+            Elem.addClass("error");
+            Elem.html(HTML);
+            setTimeout(function () {
+                Elem.slideUp().remove();
 
-  Elem.html(HTML);
-  var formData = new FormData();
-  var FileDate = file.lastModifiedDate.toUTCString();
-  FileDateUtc = file.lastModifiedDate;
-  formData.append("upload-file", file);
-  $.ajax({
-    url: UploadDroneURL + '&CreatedOn=' + encodeURI(FileDate),  //server script to process data
-    type: 'POST',
-    xhr: function () {  // custom xhr
-      myXhr = $.ajaxSettings.xhr();
-      if (myXhr.upload) { // if upload property exists
-        myXhr.upload.addEventListener('progress', function (evt) {
-          progressHandlingFunction(evt, Elem, HTML);
-        }, false); // progressbar
-      }
-      return myXhr;
-    },
-    //Ajax events
-    success: completeHandler = function (data) {
-      Elem.html("");
-      if (data.status == 'success') {
-        AddToThumbnail(data);
-        Elem.append(file.name + " - Upload Completed.<br>" + data.GPS.Info);
-        Elem.addClass("success");
-      } else {
-        Elem.addClass("error");
-        Elem.html(HTML + ' - ' + data.message);
-      }
-      window.setTimeout(function () {
-        Elem.slideUp("slow", function () { $(this).remove() });
-      }, 2000);
-      window.setTimeout(startUploadQueue, 1000);
-    },
-    error: errorHandler = function (data) {
-      Elem.addClass("error");
-      Elem.html(HTML + ' - error in uploading file');
-      window.setTimeout(function () {
-        Elem.slideUp().remove();
-      }, 2000);
-      window.setTimeout(startUploadQueue, 1000);
-    },
-    // Form data
-    data: formData,
-    //Options to tell JQuery not to process data or worry about content-type
-    cache: false,
-    contentType: false,
-    processData: false
-  }, 'json');
+            }, 2000);
 
-}
+            return false;
+        }
+       var HTML = 'Uploading ' + file.name + ' (' + Math.floor(file.size / 1024) + ' KB)';
 
-function progressHandlingFunction(evt, Elem, HTML) {
-  var percentComplete = evt.loaded / evt.total * 100;
-  Elem.html(HTML + ' - ' + percentComplete.toFixed(0) + '% done');
-}
+        Elem.html(HTML);
 
-function AddToThumbnail(theData) {
-  var Thump = theData.url.replace(".jpg", ".t.png");
-  var theID = "x" + refID++;
-  var HTML = '  <li>\n' +
-  '<div class="delete-icon"><a href="#" class="delete"    data-documentid="' + theID + '"  data-file="' + theData.addFile[0].name + '"><span class="delete icon">&#xf057;</span></a></div>\n' +
-      '<div class="thumbnail">\n' +
-      '  <img id="' + theID + '" onclick="ShowImageDialog(this)" width="50px" height="50px" src="' + Thump + '" />\n' +
-      '</div>\n' +
+        var formData = new FormData();
+        var FileDate = file.lastModifiedDate.toUTCString();
+        FileDateUtc = file.lastModifiedDate;
+        formData.append("upload-file", file);
+        $.ajax({
+            url: UploadDroneURL + '&CreatedOn=' + encodeURI(FileDate),  //server script to process data
+            type: 'POST',
+            xhr: function () {  // custom xhr
+                myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) { // if upload property exists
+                    myXhr.upload.addEventListener('progress', function (evt) {
+                        progressHandlingFunction(evt, Elem, HTML);
+                    }, false); // progressbar
+                }
+                return myXhr;
+            },
+            //Ajax events
+            success: completeHandler = function (data) {
+                Elem.html("");
+                if (data.status == 'success') {
+                    AddToThumbnail(data);
+                    Elem.append(file.name + " - Upload Completed.<br>" + data.GPS.Info);
+                    Elem.addClass("success");
+                } else {
+                    Elem.addClass("error");
+                    Elem.html(HTML + ' - ' + data.message);
+                }
+                window.setTimeout(function () {
+                    Elem.slideUp("slow", function () { $(this).remove() });
+                }, 2000);
+                window.setTimeout(startUploadQueue, 1000);
+            },
+            error: errorHandler = function (data) {
+                Elem.addClass("error");
+                Elem.html(HTML + ' - error in uploading file');
+                window.setTimeout(function () {
+                    Elem.slideUp().remove();
+                }, 2000);
+                window.setTimeout(startUploadQueue, 1000);
+            },
+            // Form data
+            data: formData,
+            //Options to tell JQuery not to process data or worry about content-type
+            
+            cache: false,
+            contentType: false,
+            processData: false
+        }, 'json');
 
-    '</li>\n';
-  $('#GPS-Images').append(HTML);
+    }
 
-  var myDate = new Date(); // Set this to your date in whichever timezone.
-  var utcDate = myDate.toUTCString();
-  //GeoInfo = {
-  //    DocumentID: theID,
-  //    Thumbnail: Thump,
-  //    Latitude: theData.GPS.Latitude,
-  //    Longitude: theData.GPS.Longitude,
-  //    Altitude: theData.GPS.Altitude,
-  //    FlightID: theData.GPS.FlightID,
-  //    UpLoadedDate: theData.GPS.CreatedDate
-  //};
-  //setMarkerOne(GeoInfo);
-  //resetBounds();
-}
+    function progressHandlingFunction(evt, Elem, HTML) {
+        var percentComplete = evt.loaded / evt.total * 100;
+        Elem.html(HTML + ' - ' + percentComplete.toFixed(0) + '% done');
+    }
+
+    function AddToThumbnail(theData) {
+        var Thump = theData.url.replace(".jpg", ".t.png");
+        var theID = "x" + refID++;
+        var HTML = '  <li>\n' +
+        '<div class="delete-icon"><a href="#" class="delete"    data-documentid="' + theID + '"  data-file="' + theData.addFile[0].name + '"><span class="delete icon">&#xf057;</span></a></div>\n' +
+            '<div class="thumbnail">\n' +
+            '  <img id="' + theID + '" onclick="ShowImageDialog(this)" width="50px" height="50px" src="' + Thump + '" />\n' +
+            '</div>\n' +
+
+          '</li>\n';
+        $('#GPS-Images').append(HTML);
+
+        var myDate = new Date(); // Set this to your date in whichever timezone.
+        var utcDate = myDate.toUTCString();
+        //GeoInfo = {
+        //    DocumentID: theID,
+        //    Thumbnail: Thump,
+        //    Latitude: theData.GPS.Latitude,
+        //    Longitude: theData.GPS.Longitude,
+        //    Altitude: theData.GPS.Altitude,
+        //    FlightID: theData.GPS.FlightID,
+        //    UpLoadedDate: theData.GPS.CreatedDate
+        //};
+        //setMarkerOne(GeoInfo);
+        //resetBounds();
+    }

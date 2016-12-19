@@ -14,12 +14,15 @@
 
 
 function startUploadImage() {
+    var ext = FileName.substr(FileName.lastIndexOf('.') + 1);
   for (var i = 0; i < this.files.length; i++) {
     var file = this.files[i];
     if (file.name.length < 1) {
     } else if (file.size > 5 * 1024 * 1024) {
       alert("File is to big");
-    } else {
+    } else if (file.ext != "jpg" && file.ext != "png" && file.ext != "tif" && file.ext != "gif" && file.ext != "bmg")
+        { alert("Invalid Format")}
+    {
       setPreview(file);
       SubmitFileImage(file);
     }
