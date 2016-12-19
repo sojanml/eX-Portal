@@ -136,7 +136,7 @@
       $('#Drone_ManufactureId').on('change', function () {
         if ($('#othermanu').prop('checked'))
         {
-            $('#Drone_ManufactureId').prop('disabled', true);
+            
             $('#Name').val("");
             $('#divManuDetails').slideUp();
             
@@ -175,7 +175,7 @@
         else
         {
             $('#divManuDetails').slideUp();
-            $("#Drone_ManufactureId").prop('disabled', false);
+            $("#Drone_ManufactureId").show();
         }
     })
     
