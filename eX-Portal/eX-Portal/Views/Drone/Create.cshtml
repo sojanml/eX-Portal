@@ -21,23 +21,23 @@
       @Html.ValidationMessageFor(model => model.Drone.AccountID)
     </div>
     <div>
-        <div class="editor-label">
+        <div class="editor-label" >
             @Html.LabelFor(model => model.Drone.ManufactureId, "Manufacturer")<span style="color:red">*</span>
-           
+
         </div>
-        <div class="editor-field" id="ddlist" >
+        <div class="editor-field" id="ddlist">
+           
             @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList)
             @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
         </div>
         <div>
             <input id="othermanu" value="1" name="othermanu" type="checkbox" />
             <label for="othermanu">Other Manufacturer</label>
-        </div>
-    </div>
-
-    <div class="form-group" id="divManuDetails" style="display:none;">
+        </div>         
+</div>
+    <div class="editor-label" id="divManuDetails" style="display:none;">
         @*@Html.LabelFor(model => model.Name, "Other Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        <div class="col-md-10">
+        <div class="editor-field">
             @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @maxlength = "50" } })
             @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
         </div>
@@ -132,15 +132,15 @@
       $('#Table_SelectItemsForParts').on("click", "a.delete", function () {
         $(this).parent().parent().remove();
       })
-
+      
       $('#Drone_ManufactureId').on('change', function () {
         if ($('#othermanu').prop('checked'))
         {
+            $('#Drone_ManufactureId').prop('disabled', true);
             $('#Name').val("");
-           
             $('#divManuDetails').slideUp();
-            $('#ddlist').blur();
-          $('#othermanu').attr('checked', false);
+            
+            
         }
         
       });
@@ -168,13 +168,14 @@
 
     $('#othermanu').on("change", function (e) {
         if ($(this).prop('checked')) {
+          
             $('#divManuDetails').slideDown();
-            $("#ddlist").prop("disabled", true);
+            $("#Drone_ManufactureId").hide();
         }
         else
         {
             $('#divManuDetails').slideUp();
-            $("#ddlist").prop("disabled", false);
+            $("#Drone_ManufactureId").prop('disabled', false);
         }
     })
     
