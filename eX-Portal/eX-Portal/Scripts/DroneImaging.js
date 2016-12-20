@@ -266,11 +266,24 @@ function processDeleteFile(Obj) {
 }
 
 
+function checkfile(sender) {
+    var validExts = new Array(".png", ".tif",".gif",".jpg",".bmp");
+    var fileExt = sender.value;
+    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+    if (validExts.indexOf(fileExt) < 0) {
+        alert("Invalid file selected, valid files are of " +
+                 validExts.toString() + " types.");
+        return false;
+    }
+    else return SubmitFile;
+}
+
+
     function SubmitFile(file) {
         var Elem = $('#file_' + file.uploadKey);
-        var ext = FileName.substr(FileName.lastIndexOf('.') + 1);
-        if (file.ext != "jpg" && file.ext != "png" && file.ext != "tif" && file.ext != "gif" && file.ext != "bmg" && file.size > 1024 * 1024 * 2) {
-            var HTML = "Invalid file format...Please upload an image File with size 2 MB ot less.'";
+ 
+        if ( file.size > 1024 * 1024 * 2) {
+            var HTML = "IPlease upload an image File with size 2 MB ot less.'";
             Elem.addClass("error");
             Elem.html(HTML);
             setTimeout(function () {

@@ -1,6 +1,7 @@
 ﻿using eX_Portal.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -16,6 +17,7 @@ namespace eX_Portal.ViewModel {
     };
 
     public IEnumerable<SelectListItem> OwnerList { get; set; }
+    [AllowHtml]
     public MSTR_Drone Drone { get; set; }   
     public IEnumerable<SelectListItem> ManufactureList { get; set; }
     public IEnumerable<SelectListItem> UAVTypeList { get; set; }
@@ -23,7 +25,10 @@ namespace eX_Portal.ViewModel {
     public IEnumerable<SelectListItem> DronePartsList { get; set; }
     public IEnumerable<string> SelectItemsForParts { set; get; }
     public MSTR_Parts DroneParts { get; set; }
-    public string Name {get;set;}
+    [AllowHtml]
+        [MinLength(3,ErrorMessage ="Please enter minimum of 3 characters.")]
+        
+        public string Name {get;set;}
     public IEnumerable<SelectListItem> RegistrationAuthority {
       get {
         return SelectListItems;

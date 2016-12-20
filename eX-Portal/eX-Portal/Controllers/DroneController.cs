@@ -33,8 +33,9 @@ namespace eX_Portal.Controllers {
       return Json.ToString();
     }
 
-    // GET: Drone
-    public ActionResult Index() {
+        // GET: Drone
+        [ValidateInput(false)]
+        public ActionResult Index() {
       if(!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
 
@@ -126,7 +127,7 @@ namespace eX_Portal.Controllers {
       return View(Docs);
     }
 
-
+      [ValidateInput(false)]
     public ActionResult Manage([Bind(Prefix = "ID")] int DroneID = 0) {
       if(!exLogic.User.hasAccess("DRONE.MANAGE"))
         return RedirectToAction("NoAccess", "Home");
@@ -518,8 +519,9 @@ namespace eX_Portal.Controllers {
       return PartialView(Parts);
     }
 
-    // GET: Drone/Details/5
-    public String DroneDetail([Bind(Prefix = "ID")]  int DroneID) {
+        // GET: Drone/Details/5
+        [ValidateInput(false)]
+        public String DroneDetail([Bind(Prefix = "ID")]  int DroneID) {
       //string OwnerFormat;
       int OwnerId;
       if(!exLogic.User.hasAccess("DRONE"))
@@ -710,6 +712,7 @@ namespace eX_Portal.Controllers {
 
     // POST: Drone/Create
     [HttpPost]
+    [ValidateInput(false)]
     public ActionResult Create(ViewModel.DroneView DroneView) {
       if(!exLogic.User.hasAccess("DRONE.CREATE")) return RedirectToAction("NoAccess", "Home");      
       try {
@@ -719,16 +722,15 @@ namespace eX_Portal.Controllers {
         ModelState.Remove("Drone.RefName");
         ModelState.Remove("Drone.MakeID");
         ModelState.Remove("Drone.ModelID");
-        if (DroneView.Name==null||DroneView.Name=="") { 
-
-        if (DroneView.Drone.ManufactureId < 1 || DroneView.Drone.ManufactureId == null)
+        if (DroneView.Name==null||DroneView.Name=="") {
+                
+                    if (DroneView.Drone.ManufactureId < 1 || DroneView.Drone.ManufactureId == null)
             {
              ModelState.AddModelError("Drone.ManufactureId", "Please Select Manufacture.");
              }
            }
-               
-
-       if (DroneView.Drone.AccountID< 1 || DroneView.Drone.AccountID == null) {
+              
+                    if (DroneView.Drone.AccountID< 1 || DroneView.Drone.AccountID == null) {
           ModelState.AddModelError("Drone.AccountID", "Please Select Owner.");
         }
 
@@ -765,13 +767,7 @@ namespace eX_Portal.Controllers {
         //insert into LUP_Drone table -- to insert the manufacturer then to use it for inserting to the other table       
         if (DroneView.Name != null)
                 {
-                    if (DroneView.Name.Length > 100)
-                    {
-                        ModelState.AddModelError("DroneView.Name", "Maximum 100 characters are allowed.");
-
-                    }
-
-                        int typeid = Util.getDBInt("SELECT Max(TypeId) + 1 from [LUP_Drone] where [Type]='Manufacturer'");
+                    int typeid = Util.getDBInt("SELECT Max(TypeId) + 1 from [LUP_Drone] where [Type]='Manufacturer'");
                     string BinaryCode = Util.DecToBin(typeid);
                     string s = DroneView.Name.ToString();
                     string code = s.Substring(0, 3);
@@ -1064,6 +1060,7 @@ namespace eX_Portal.Controllers {
 
     // POST: Drone/Edit/5
     [HttpPost]
+    [ValidateInput(false)]
     public ActionResult Edit(ViewModel.DroneView DroneView) {
       if(!exLogic.User.hasAccess("DRONE.EDIT"))
         return RedirectToAction("NoAccess", "Home");
@@ -1301,7 +1298,7 @@ new { ID = DroneID, FlightID = "_Pkey" }));
 
         //uploading multiple images for the drone
 
-
+      
         public ActionResult DroneImaging([Bind(Prefix = "ID")] int DroneID = 0,string Actions="")
         {
             if (!exLogic.User.hasAccess("DRONE"))
