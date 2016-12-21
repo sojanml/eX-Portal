@@ -1101,16 +1101,6 @@
     <Content Include="Upload\Brand-Logo\dewa-logo.png" />
     <Content Include="Upload\Brand-Logo\DpWorld-logo.png" />
     <Content Include="Upload\Brand-Logo\exponent-logo.png" />
-    <Content Include="Upload\Drone\0\77870e4f-c2bd-4963-857f-21dc05a8432b~images.jpg" />
-    <Content Include="Upload\Drone\0\77870e4f-c2bd-4963-857f-21dc05a8432b~images.t.png" />
-    <Content Include="Upload\Drone\DCAA-ALG-FW-01082-0420\203\792d30cc-b42a-4deb-8eba-5e78486ccfdc~images.jpg" />
-    <Content Include="Upload\Drone\DCAA-ALG-FW-01082-0420\203\792d30cc-b42a-4deb-8eba-5e78486ccfdc~images.t.png" />
-    <Content Include="Upload\Drone\EXME-ALG-MFD-00999-0419\182\f4e8d19b-6857-48aa-b826-98938b2efe1b~images %284%29.jpg" />
-    <Content Include="Upload\Drone\EXME-ALG-MFD-00999-0419\182\f4e8d19b-6857-48aa-b826-98938b2efe1b~images %284%29.t.png" />
-    <Content Include="Upload\Drone\EXME-Manufacturer-FW-01082-041F\202\f0ddafcc-c36c-4077-98a7-e0717de714c7~images.jpg" />
-    <Content Include="Upload\Drone\EXME-Manufacturer-FW-01082-041F\202\f0ddafcc-c36c-4077-98a7-e0717de714c7~images.t.png" />
-    <Content Include="Upload\Drone\EXNA-abc-13-01082-0423\206\d0a8f30f-6b62-41da-bd8b-2808acad43cc~images.jpg" />
-    <Content Include="Upload\Drone\EXNA-abc-13-01082-0423\206\d0a8f30f-6b62-41da-bd8b-2808acad43cc~images.t.png" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
@@ -1468,9 +1458,6 @@
     <Content Include="Views\Shared\_ADSB.cshtml" />
     <Content Include="Views\Traffic\Live.cshtml" />
     <Content Include="temp\test.json" />
-    <Content Include="Upload\Drone\0\0112b2f1-e224-409a-8944-0fd2c72732fc~mir mubashir raza resume.pdf" />
-    <Content Include="Upload\Drone\0\fa8c7614-065a-4579-9405-027c984a5f05~mir mubashir raza resume.docx" />
-    <Content Include="Upload\Drone\0\fcca8f32-d98a-4ac0-a511-b2ce8d7e4319~mir mubashir raza resume.docx" />
     <Content Include="Upload\WeatherCache\AE\Dubai\2016-09-26-Z2.json" />
     <Content Include="Upload\WeatherCache\AE\Dubai\2016-09-26-Z3.json" />
     <Content Include="Upload\WeatherCache\AE\Dubai\2016-09-26-Z4.json" />
@@ -1499,6 +1486,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Upload\BlackBox\" />
+    <Folder Include="Upload\Drone\" />
     <Folder Include="Upload\temp\" />
     <Folder Include="Views\UserLogin\" />
     <Folder Include="Weather\" />

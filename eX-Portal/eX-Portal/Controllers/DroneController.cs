@@ -922,10 +922,6 @@ namespace eX_Portal.Controllers {
     }
 
 
-
-
-
-
     public ActionResult ReAssign(int id) {
       if(!exLogic.User.hasAccess("DRONE.MANAGE"))
         return RedirectToAction("NoAccess", "Home");
@@ -1422,7 +1418,7 @@ new { ID = DroneID, FlightID = "_Pkey" }));
             return JsonText.ToString();
         }//UploadDroneFile
 
-        private void MoveDroneUploadFileTo(int DroneID)
+      private void MoveDroneUploadFileTo(int DroneID)
         {
           
 
@@ -1461,13 +1457,14 @@ new { ID = DroneID, FlightID = "_Pkey" }));
                         System.IO.File.Move(OldFullPath, NewFullPath);
                         System.IO.File.Move(OldThumbFullPath, NewThumbFullPath);
                     }
-                    String SQL = "UPDATE DroneDocuments SET\n" +
-                    "  DroneID=" + DroneID + "\n" +                    
-                    "WHERE\n" +
-                    "  DocumentName='" + file.Name.ToString() + "'" +
-                    " and DocumentType='Drone Image'";
-                    Util.doSQL(SQL);
-                }//if(System.IO.File.Exists
+                
+                String SQL = "UPDATE DroneDocuments SET\n" +
+                "  DroneID=" + DroneID + "\n" +
+                "WHERE\n" +
+                "  DocumentName='" + file.Name.ToString() + "'" +
+                " and DocumentType='Drone Image'";
+                Util.doSQL(SQL);
+            }//if(System.IO.File.Exists
             }//foreach (String file in Files)
         }//MoveUploadFileT
 

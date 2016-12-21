@@ -54,15 +54,7 @@ $(document).ready(function () {
 
     $("#dialog").dialog('open');
   });
-  //$(document).on('click', '#GPS-Images', function (e) {
-  //    popup.slideUp();
-  //});
-
-
-  $(':file').change(AddToUploadQueue);
-
-
-  //initialize();
+   $(':file').change(AddToUploadQueue);
 
 });
 
@@ -144,32 +136,6 @@ function ShowImageDialog(img) {
 
 
 }
-// marker position
-//var factory = new google.maps.LatLng(25.9899106, 55.0034188;);
-//function initialize() {
-//    var initLat = 24.9899106;
-//    var initLng = 55.0034188;
-//    var center = "";
-
-//    var defaultZoom = 10;
-
-//    var mapOptions = {
-//        center: center,
-//        zoom: defaultZoom,
-//        mapTypeId: ""
-//    };
-
-//    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-//    GetGeoTagInfo();
-//}
-
-
-
-
-
-
-
 
 function resetBounds() {
   bounds = new google.maps.LatLngBounds();
@@ -188,21 +154,24 @@ function AddToUploadQueue() {
 
   for (var i = 0; i < this.files.length; i++) {
     QueID++;
-    if (QueID > 4) {
-      var HTML = "Maximum 5 images is allowed.'";
-      $('#FileUploadProgress').append(Elem);
-      return;
+    if (QueID > 5) {
+       
+        var HTML = "Maximum 5 images is allowed.";
+        $('#FileUploadProgress').append(Elem);
+        QueID = QueID - 1;
+        
+        return ;
     }
     var file = this.files[i];
     file.uploadKey = QueID;
     FilesInQueue.push(file);
-
+   
     //add information in que
     var FileName = file.name;
     var HTML = 'Waiting... ' + FileName + ' (' + Math.floor(file.size / 1024) + ' KB)';
     var Elem = $('<LI id="file_' + QueID + '">' + HTML + '</LI>');
     $('#FileUploadProgress').append(Elem);
-
+    
   }
   window.setTimeout(startUploadQueue, 100);
 }
@@ -234,13 +203,11 @@ function DeleteFile(Obj) {
 }
 
 function processDeleteFile(Obj) {
-  var FileName = Obj.attr("data-file");
+     var FileName = Obj.attr("data-file");
   var DocumentID = Obj.attr("data-documentid");
-  //var FlightId = Obj.attr("data-FlightID");
-
-  //DeleteURL = "/Drone/DeleteFile/" + FlightId + "?DocumentType=Geo%20Tag";
+  QueID = QueID - 1;
   var URL = DeleteDroneURL + '&file=' + FileName;
-
+  
   var LI = Obj.closest('LI');
   LI.fadeTo(200, 0.2);
   //return;
@@ -250,11 +217,14 @@ function processDeleteFile(Obj) {
     dataType: 'json',
     success: completeHandler = function (data) {
       if (data.status == "success") {
-        LI.fadeOut().remove();
+           
+          LI.fadeOut().remove();
+          
         if (Markers[DocumentID]) {
           Markers[DocumentID].setMap(null);
 
           resetBounds();
+          ;
         }
       }//if (data.status == "success")
     }, //success
@@ -266,24 +236,12 @@ function processDeleteFile(Obj) {
 }
 
 
-function checkfile(sender) {
-    var validExts = new Array(".png", ".tif",".gif",".jpg",".bmp");
-    var fileExt = sender.value;
-    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
-    if (validExts.indexOf(fileExt) < 0) {
-        alert("Invalid file selected, valid files are of " +
-                 validExts.toString() + " types.");
-        return false;
-    }
-    else return SubmitFile;
-}
 
 
     function SubmitFile(file) {
         var Elem = $('#file_' + file.uploadKey);
- 
         if ( file.size > 1024 * 1024 * 2) {
-            var HTML = "IPlease upload an image File with size 2 MB ot less.'";
+            var HTML = "Please upload an image File with size 2 MB ot less.'";
             Elem.addClass("error");
             Elem.html(HTML);
             setTimeout(function () {
@@ -293,17 +251,7 @@ function checkfile(sender) {
             return false;
         }
 
-        else if (file.size > 1024 * 1024 * 2) {
-            var HTML = "Please upload image files with size 2 Mb or  less.'";
-            Elem.addClass("error");
-            Elem.html(HTML);
-            setTimeout(function () {
-                Elem.slideUp().remove();
 
-            }, 2000);
-
-            return false;
-        }
        var HTML = 'Uploading ' + file.name + ' (' + Math.floor(file.size / 1024) + ' KB)';
 
         Elem.html(HTML);
