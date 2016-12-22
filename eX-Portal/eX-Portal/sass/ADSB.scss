@@ -123,13 +123,13 @@ div.label {
 
     div.detail_left,
     div.detail_right {
-      height:74px;
+      min-height:74px;
      font-size: $FontSize * 1;
     }
      div.detail, 
      div.detail_left,
     div.detail_right{
-          height:85px;
+          min-height:85px;
          }
 
      div.detail_left {
@@ -185,6 +185,8 @@ ul.simple-list {
       background-image: url('/images/adsb-check-off.png');
       background-repeat: no-repeat;
       background-position:left center;
+      height:16px;
+      display:block;
     }
     &:checked+label {
       background-image: url('/images/adsb-check-on.png');
@@ -490,6 +492,7 @@ table.info-tiles {
   div.dataTables_info {
     display:none !important;
   }
+  
   div.tile,
   div.detail {
     float: left;
@@ -520,12 +523,11 @@ table.info-tiles {
     div.breach-info {
       background-color: $TitleHeading;
       color:white;
-      padding:5px 0px 5px 10px;
+      padding:6px 0px 6px 10px;
       margin-top:1px;
-      span#breach-aircraft {
+      span.breach-aircraft {
         color: $BreachColor;
         padding-left:20px;
-        display: inline-block;
       }
     }
     div.tile {
@@ -586,31 +588,71 @@ table.info-tiles {
   td.safe  {
     background-color: #0189ff;
   }
+  td.breach {
+    background-color: $BreachColor;
+  }
 
-table.scroll-table {
-
-  th,td {
-    text-align: center;
-    border-right: 1px $BreachColor solid;
-
-  }
-  td {
-     padding:1px 0px 1px 0px;
-  }
-  th {
-    border-bottom: 1px $BreachColor solid;
-    font-size: 0.8em;
-    white-space: nowrap;
-    padding:5px 0px 5px 0px;
-  }
-  td {
-    color: $BreachColor;
-  }
-  & tr td:last-child,
-  & tr th:last-child {
-      border-right: 0px $BreachColor none;      
+div.scroll-table {
+ 
+  div.scroll-rows {
+    height:40px;
+   overflow: hidden;
+   position: relative;
+   div.scroll-down,
+   div.scroll-up {
+  -webkit-user-select: none;  
+  -moz-user-select: none;    
+  -ms-user-select: none;      
+  user-select: none;
+     position: absolute;
+    cursor:pointer;
+    font-size:14px;
+    color:gray;
+    &:hover {
+      color:$BreachColor;
     }
+   }
+   
+   div.scroll-up {
+     top:0px;
+     right:0px;
+   }
+   div.scroll-down {
+     bottom:0px;
+     right:0px;
+   }
+   div.scroll {
+     position: absolute;
+     top:0px;
+     left:0px;
+   }
+  }
   
+  div.row {
+    & > div {
+      display: inline-block;
+      text-align: center;
+      border-right: 1px $BreachColor solid;
+      padding: 2px 0px 2px 0px;
+      color: $BreachColor;
+      box-sizing:border-box;
+      white-space: nowrap;
+    }
+    & > div.col1 { width:135px; }
+    & > div.col2 { width:60px; }
+    & > div.col3 { width:65px; }
+    & > div.col4 { width:65px; }
+    & > div.col5 { width:45px; }
+    & > div.col6 { width:45px; border-right: 0px $BreachColor none;}
+
+    &.head {
+      border-bottom: 1px $BreachColor solid;
+      div {color: $TitleHeading;
+           font-size:9px;
+           font-weight:bold;
+      }
+    }
+  }
 }
 
 
@@ -641,23 +683,26 @@ div.adsb-point {
     display:block;
     font-size:1px;
   }
-  span.FlightIcon {
+  span.FlightIcon,
+  span.DroneIcon {
     position: absolute;
     left:50px;
     top:50px;
     font-size:18px;
-    width:16px;
-    height:16px;
+    width:25px;
+    height:25px;
     
-    margin-left:-8px;
-    margin-top:-8px;
+    margin-left:-13px;
+    margin-top:-13px;
     -webkit-transform-origin: 50% 50%;
     -moz-transform-origin: 50% 50%;
     -o-transform-origin: 50% 50%;
     transform-origin: 50% 50%;
 
   }
-
+  span.DroneIcon {
+    
+  }
   span.flight-title {
      position:absolute;
      top:60px;
@@ -698,6 +743,20 @@ div.adsb-point {
       background-color:#0189ff;
     }
   }
+  &.normal {
+    color: #ffcc01;
+    span.flight-title,
+    span.tail {
+      background-color:#ffcc01;
+    }
+  }
+  &.drone {
+    color: #018aff;
+    span.flight-title,
+    span.tail {
+      background-color:#018aff;
+    }
+  }
   &.breach,
   &.alert,
   &.safe {
@@ -718,6 +777,19 @@ div#safe-aircraft {
   
   padding-left:5px;
 }
+
+div#BarGraph {
+  width:100%;
+  height:100px;
+  span.hc-label {
+  background-color: $TitleHeading;
+  padding: 0px 5px;
+  color: yellow;
+  }
+}
+g.highcharts-axis-labels {
+  background-color: red;
+}
 @media screen and (min-width: 960px) {
   section {
     @include MultiResolution(920px,10px, 10px);
@@ -728,4 +800,10 @@ div#safe-aircraft {
   section {
     @include MultiResolution(1150px,15px, 11px);
   }
+}
+
+div#Alert-RPAS,
+div#Alert-Aircraft {
+  height:50px;
+  overflow-x:auto;
 }

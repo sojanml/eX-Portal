@@ -109,8 +109,8 @@ namespace eX_Portal.Controllers {
       // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       if (exLogic.User.hasAccess("FLIGHT.EDIT"))
         nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-      //if (exLogic.User.hasAccess("FLIGHT.VIEW"))
-      //  nView.addMenu("Detail", Url.Action("Detail", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("FLIGHT.VIEW"))
+        nView.addMenu("Flight Detail", Url.Action("Detail", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.MAP")) {
         nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
         nView.addMenu("Flight Data", Url.Action("FlightDataView", "Map", new { ID = "_PKey" }));
@@ -252,8 +252,8 @@ namespace eX_Portal.Controllers {
         GSCID=" + InitialData.GSCID + @",
         FlightDate='" + ((DateTime)InitialData.FlightDate).ToString("yyyy-MM-dd HH:mm:ss") + @"',
         DroneID=" + InitialData.DroneID + @",
-        Latitude=" + InitialData.Latitude + @",
-        Longitude=" + InitialData.Longitude + @"
+        Latitude=" + Util.toDouble(InitialData.Latitude) + @",
+        Longitude=" + Util.toDouble(InitialData.Longitude) + @"
       WHERE
         ID=" + InitialData.ID;
       Util.doSQL(SQL);

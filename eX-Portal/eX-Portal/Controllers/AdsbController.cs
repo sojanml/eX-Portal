@@ -7,11 +7,25 @@ using System.Web.Mvc;
 namespace eX_Portal.Controllers {
   public class AdsbController : Controller {
     // GET: Adsb
-    public JsonResult Index() {
+    public JsonResult Index(Exponent.ADSB.ADSBQuery QueryData) {
       String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ADSB_DB"].ToString();
       var ADSB = new Exponent.ADSB.Live();
-      var Data = ADSB.FlightStat(DSN);
+      var Data = ADSB.FlightStat(DSN, false, QueryData);
 
+      return Json(Data, JsonRequestBehavior.AllowGet);
+    }
+
+    public JsonResult Summary(int LastProcessedID = 0) {
+      String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ADSB_DB"].ToString();
+      var ADSB = new Exponent.ADSB.Live();
+      var Data = ADSB.GetSummary(DSN, LastProcessedID, 20);
+      return Json(Data, JsonRequestBehavior.AllowGet);
+    }
+
+    public JsonResult Distance(Exponent.ADSB.ADSBQuery QueryData) {
+      String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ADSB_DB"].ToString();
+      var ADSB = new Exponent.ADSB.Live();
+      var Data = ADSB.GetFlightStatus(DSN, QueryData);
       return Json(Data, JsonRequestBehavior.AllowGet);
     }
 
@@ -24,4 +38,6 @@ namespace eX_Portal.Controllers {
       return View();
     }
   }
+
+
 }

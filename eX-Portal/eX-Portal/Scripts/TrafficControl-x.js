@@ -7,7 +7,7 @@ var _ADSBLayer = null;
 var ChartData = getChartDataInit();
 
 
-var RunningTotal = new function () {
+var RunningTotal = new function() {
   this.count = 0;
   var ArrayMinSpeed = [];
   var ArrayMaxSpeed = [];
@@ -92,8 +92,8 @@ function getChartData(Column) {
 
 $(document).ready(function () {
   InitVideo();
-  InitChart();
-  initializeMap();
+  //InitChart();
+  //initializeMap();
 });
 
 function initializeMap() {
@@ -136,7 +136,7 @@ function ChartDataAdd(Position) {
   }
   var iPosition = Math.round(Position);
   var PosMod = iPosition % 15;
-  if (PosMod == 0 || iPosition == 1) getADSB();
+  if(PosMod == 0 || iPosition == 1) getADSB();
 
   var isRemovePoints = ChartIndex >= 15 ? true : false;
   for (; ChartIndex <= iPosition; ChartIndex++) {
@@ -179,14 +179,14 @@ function AddChartData(DataItem) {
   var TABLE = $('#traffic_data tbody');
   var Rows = TABLE.find('TR');
   if (Rows.length >= 6) TABLE.find('tr:last').remove();
-  var TR = $('<tr>' +
-    '<td>' + DataItem[0] + '</td>' +
-    '<td>DIC</td>' +
-    '<td>' + DataItem[1] + '</td>' +
-    '<td>' + DataItem[2] + '</td>' +
-    '<td>' + DataItem[3] + '</td>' +
-    '<td>' + DataItem[4] + '</td>' +
-    '<td>' + DataItem[5] + '</td>' +
+  var TR = $('<tr>' + 
+    '<td>' + DataItem[0] + '</td>'+
+    '<td>DIC</td>'+
+    '<td>' + DataItem[1] + '</td>'+
+    '<td>' + DataItem[2] + '</td>'+
+    '<td>' + DataItem[3] + '</td>'+
+    '<td>' + DataItem[4] + '</td>'+
+    '<td>' + DataItem[5] + '</td>'+
     '</tr>');
   TABLE.prepend(TR);
 
@@ -306,7 +306,7 @@ function InitChart() {
         color: 'red', // Color value
         value: 40, // Value of where the line will appear
         width: 1, // Width of the line   
-        zIndex: 1
+        zIndex:1
       }, {
         color: 'orange', // Color value
         value: 60, // Value of where the line will appear
@@ -493,7 +493,7 @@ ADSBOverlay.prototype.draw = function () {
 
 
   // Now append the entire fragment from memory onto the DOM  
-  if (NewPoints > 0) this.markerLayer.append(fragment);
+  if(NewPoints > 0) this.markerLayer.append(fragment);
 };
 
 

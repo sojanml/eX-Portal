@@ -18,45 +18,84 @@ namespace Exponent.ADSB {
     private SqlConnection CN;
     private const int NewFlightTime = 120;
     private bool isDemoMode = false;
-    public List<FlightPosition> FlightStat(String DSN, bool DemoMode = false)  {
+    public List<FlightPosition> FlightStat(String DSN, bool DemoMode = false, ADSBQuery QueryData = null)  {
       var Data = new List<FlightPosition>();
       isDemoMode = DemoMode;
-
+      if (QueryData == null) QueryData = new ADSBQuery();
       //connect to database for reading data
       using (CN = new SqlConnection(DSN)) {
         CN.Open();
         //setActiveFlights();
 
         //get active positions
-        Data = getLivePositions();
+        Data = getLivePositions(QueryData);
       }
 
 
       return Data;
     }
 
-    public List<FlightDistance> FlightDist(String DSN, Double hDistance = 5, Double vDistance = 2) {
-      var Dist = new List<FlightDistance>();
-      String SQL = @"Select 
-        ADSBDetail.FromFlightID,
-        ADSBDetail.ToFlightID,
-        ADSBDetail.VerticalDistance,
-        ADSBDetail.HorizontalDistance
-      FROM
-        ADSBDetail
-      Where
-        ADSBDetail.HorizontalDistance <= " + hDistance + @" AND
-        ADSBDetail.VerticalDistance <= " + vDistance;
+    public List<FlightSummary> GetSummary(String DSN, int LastProcessedID = 0, int MaxRecords = 20) {
+      var TheSummary = new List<FlightSummary>();
+      String SQL = @"  SELECT
+        *
+        FROM (
+          SELECT TOP " + MaxRecords + @" * FROM ADSBSummary";
+      if (LastProcessedID > 0) SQL = SQL + " WHERE ID > " + LastProcessedID;
+        SQL = SQL + @"
+        ORDER BY 
+          SummaryDate DESC
+        ) as InnerTable
+       ORDER BY
+         SummaryDate";
       using (CN = new SqlConnection(DSN)) {
         CN.Open();
         using (var Cmd = new SqlCommand(SQL, CN)) {
           var RS = Cmd.ExecuteReader();
           while (RS.Read()) {
-            Dist.Add(new FlightDistance {
+            TheSummary.Add(new FlightSummary {
+              SummaryDate = RS.GetDateTime(RS.GetOrdinal("SummaryDate")).ToString("HH:mm"),
+              Breach = RS.GetInt32(RS.GetOrdinal("BreachCount")),
+              Alert = RS.GetInt32(RS.GetOrdinal("AlertCount")),
+              ID = RS.GetInt32(RS.GetOrdinal("ID"))
+            });
+          }//while
+          RS.Close();
+        }//using (var Cmd)
+        CN.Close();
+      }//using (CN)
+      return TheSummary;
+    }
+    public List<FlightStatus> GetFlightStatus(String DSN, Exponent.ADSB.ADSBQuery QueryData) {
+      var Dist = new List<FlightStatus>();
+      String SQL = @"Select 
+        ADSBDetail.FromFlightID,
+        ADSBDetail.ToFlightID,
+        ADSBDetail.VerticalDistance,
+        ADSBDetail.HorizontalDistance,
+        CASE
+          WHEN HorizontalDistance <= " + QueryData.hBreach + " AND VerticalDistance <= " + QueryData.vBreach + @" Then 'Breach'
+          WHEN HorizontalDistance <= " + QueryData.hAlert + " AND VerticalDistance <= " + QueryData.vAlert + @" Then 'Alert'
+          Else 'Safe'
+        END as StatusModel
+      FROM
+        ADSBDetail
+      Where
+        ADSBDetail.HorizontalDistance <= " + QueryData.hSafe + @" AND
+        ADSBDetail.VerticalDistance <= " + QueryData.vSafe;
+
+
+      using (CN = new SqlConnection(DSN)) {
+        CN.Open();
+        using (var Cmd = new SqlCommand(SQL, CN)) {
+          var RS = Cmd.ExecuteReader();
+          while (RS.Read()) {
+            Dist.Add(new FlightStatus {
               FromFlightID = RS["FromFlightID"].ToString(),
               ToFlightID = RS["ToFlightID"].ToString(),
               vDistance = toDouble(RS["VerticalDistance"].ToString()),
-              hDistance = toDouble(RS["HorizontalDistance"].ToString())
+              hDistance = toDouble(RS["HorizontalDistance"].ToString()),
+              Status = RS["StatusModel"].ToString()
             });
           }//while
           RS.Close();
@@ -72,9 +111,12 @@ namespace Exponent.ADSB {
       return dNum;
     }
 
-    private List<FlightPosition> getLivePositions() {
+    private List<FlightPosition> getLivePositions(Exponent.ADSB.ADSBQuery QueryData = null) {
+      if (QueryData == null) QueryData = new ADSBQuery();
       var PositionDatas = new List<FlightPosition>();
-      String SQL = @"
+      StringBuilder Filter = new StringBuilder();
+      StringBuilder WHERE = new StringBuilder();
+      StringBuilder SQL = new StringBuilder(@"
       select
         [FlightId],
         [Heading],
@@ -87,9 +129,48 @@ namespace Exponent.ADSB {
         [Altitude],
         [AdsbDate]
       from
-        AdsbLive";
-      using(var Cmd = new SqlCommand(SQL, CN)) {
-        var RS = Cmd.ExecuteReader();
+        AdsbLive
+      ");
+
+      if(QueryData.adsb_omdb == 1 || QueryData.adsb_omdw == 1 || QueryData.adsb_omsj == 1) {
+
+        if(QueryData.adsb_omdb == 1) {
+          if (Filter.Length > 0) Filter.AppendLine(" OR");
+          Filter.Append("[OMDB] <= " + QueryData.ATCRadious);
+        }
+
+        if (QueryData.adsb_omdw == 1) {
+          if (Filter.Length > 0) Filter.AppendLine(" OR");
+          Filter.Append("[OMDW] <= " + QueryData.ATCRadious);
+        }
+
+        if (QueryData.adsb_omsj == 1) {
+          if (Filter.Length > 0) Filter.AppendLine(" OR");
+          Filter.Append("[OMSJ] <= " + QueryData.ATCRadious);
+        }
+
+        WHERE.Append("(");
+        WHERE.Append(Filter);
+        WHERE.Append(")");
+        Filter.Clear();
+      }
+
+      Filter.Append(QueryData.getTrackingFilter());
+      if (Filter.Length > 0) {
+        WHERE.AppendLine(" AND");
+        WHERE.Append(Filter);
+        Filter.Clear();
+      }
+
+
+      if (WHERE.Length > 0) { 
+        SQL.AppendLine(" WHERE");
+        SQL.Append(WHERE);
+      }
+
+
+      using (var Cmd = new SqlCommand(SQL.ToString(), CN)) {
+         var RS = Cmd.ExecuteReader();
         while(RS.Read()) {
           int fSpeed = RS.GetOrdinal("Speed");
           int fHeading = RS.GetOrdinal("Heading");

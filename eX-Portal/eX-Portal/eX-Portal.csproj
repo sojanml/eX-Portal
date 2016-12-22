@@ -588,6 +588,7 @@
     <Content Include="Content\ie.css" />
     <Content Include="Content\internal-dashboard.css" />
     <Content Include="Content\jqsimplemenu.css" />
+    <Content Include="Content\jquery.mCustomScrollbar.min.css" />
     <Content Include="Content\map.css" />
     <Content Include="Content\print.css" />
     <Content Include="Content\screen.css" />
@@ -730,6 +731,7 @@
     <Content Include="images\map\top-left.png" />
     <Content Include="images\map\top-right.png" />
     <Content Include="images\marker.png" />
+    <Content Include="images\mCSB_buttons.png" />
     <Content Include="images\rta-logo.png" />
     <Content Include="images\rta\AvgSpeed.png" />
     <Content Include="images\rta\Heading.png" />
@@ -805,6 +807,7 @@
     <Content Include="jquery-ui\jquery-ui.structure.min.css" />
     <Content Include="jquery-ui\jquery-ui.theme.css" />
     <Content Include="jquery-ui\jquery-ui.theme.min.css" />
+    <Content Include="jquery-ui\jquery.mCustomScrollbar.min.js" />
     <Content Include="jquery-ui\jquery.ui.timepicker.css" />
     <Content Include="jquery-ui\jquery.ui.timepicker.js" />
     <Content Include="jwplayer\jwplayer.flash.swf" />

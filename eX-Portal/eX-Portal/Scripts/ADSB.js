@@ -1,15 +1,144 @@
-﻿function getADSB(ADSBObj){
+﻿var StatusInfo = {
+  'Breach': {},
+  'Alert': {},
+  'Safe': {},
+  WatchingFlights: {},
+  Reset: function() {
+    this.Breach.Aircraft = {};
+    this.Breach.RPAS = {};
+    this.Alert.Aircraft = {};
+    this.Alert.RPAS = {};
+    this.Safe.Aircraft = {};
+    this.Safe.RPAS = {};
+  },
+  SetWatchingFlight: function (Data) {
+    WatchingFlights = Data;    
+  }
+}
+
+
+
+
+function getADSB(ADSBObj) {
+  var QueryData = $('input.spinner, input.query').serialize();
   $.ajax({
     type: "GET",
-    url: '/ADSB/',
+    url: '/ADSB?' + QueryData,
     contentType: "application/json",
     success: function(data) {
-      ADSBObj.setADSB(data);      
+      ADSBObj.setADSB(data);
     },
     error: function (data, text) {
       //alert('Failed to fetch flight: ' + data);
+    },
+    complete: function () {
+      Timers['getADSB'] = window.setTimeout(getADSB, UpdateDelay, ADSBObj);
     }
   });
+}
+
+
+function getStatus(ADSBObj) {
+  var QueryData = $('input.spinner, input.query').serialize();
+  //$("input.spinner").spinner("disable");
+
+  $.ajax({
+    type: "GET",
+    url: '/ADSB/Distance?' + QueryData,
+    contentType: "application/json",
+    success: function (data) {
+      //console.log(data);
+      setStatusSummary(data, ADSBObj);
+
+    },
+    error: function (data, text) {
+      //alert('Failed to fetch flight: ' + data);
+    },
+    complete: function () {
+      //$("input.spinner").spinner("enable");
+      Timers['getStatus'] = window.setTimeout(getStatus, UpdateDelay, ADSBObj);
+    }
+  });
+}
+
+
+function setStatusSummary(StatusData, ADSBObj) {
+  StatusInfo.Reset();
+  var BreachRef = {}
+  for (var i = 0; i < StatusData.length; i++) {
+    var Stat = StatusData[i];
+    var RpasID = Stat.FromFlightID;
+    var AircraftID = Stat.ToFlightID;
+    var StatKey = Stat.Status;
+    if (!(RpasID in StatusInfo[StatKey]['RPAS'])) StatusInfo[StatKey]['RPAS'][RpasID] = 1;
+    if (!(AircraftID in StatusInfo[StatKey]['Aircraft'])) StatusInfo[StatKey]['Aircraft'][AircraftID] = 1;
+
+    if (StatKey == 'Breach') {
+      if (BreachRef[RpasID] == undefined) BreachRef[RpasID] = [];
+      BreachRef[RpasID].push(AircraftID);
+    }
+  }//for
+
+  ['Safe', 'Breach', 'Alert'].forEach(function (Stat, index, array) {
+    var aRPAS = Object.keys(StatusInfo[Stat]['RPAS']);
+    var aAircraft = Object.keys(StatusInfo[Stat]['Aircraft']);
+    $('#' + Stat + '-Aircraft-Count').html(aAircraft.length);
+    $('#' + Stat + '-RPAS-Count').html(aRPAS.length);
+    $('#' + Stat + '-Aircraft').html(aAircraft.join(", "));
+    $('#' + Stat + '-RPAS').html(aRPAS.join(", "));
+  });
+
+  var Flights = StatusInfo['Breach']['RPAS'];
+  ADSBObj.SetWatchingFlight(Flights);
+  var TheDatas = ADSBObj.GetWatchingFlight()
+
+  setStatusWatching(TheDatas);
+  
+  //var AllFlights = ADSBObj.GetAllFlights();
+  ADSBObj.DrawLinesOf(BreachRef);
+
+}
+
+function setStatusWatching(WatchingFlights) {
+  var FlightIDs = Object.keys(WatchingFlights);
+  var HTML = '';
+  for (var i = 0; i < FlightIDs.length; i++) {
+    var Flight = WatchingFlights[FlightIDs[i]];
+    HTML += '<div class="row">\n' +
+      '<div class="col1">' + toDate(Flight.ADSBDate) + '</div>\n' +
+      '<div class="col2">' + Flight.FlightID + '</div>\n' +
+      '<div class="col3">' + Flight.Lat + '</div>\n' +
+      '<div class="col4">' + Flight.Lon + '</div>\n' +
+      '<div class="col5">' + Flight.Speed + '</div>\n' +
+      '<div class="col6">' + Flight.Heading + '</div>\n' +
+      '</div>\n';
+  }
+  $('#WatchingFlightsScroll')
+    .html(HTML)
+    .css({ top: 0 });
+}
+
+function toDate(JsonDate) {
+  var Month = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+  //var Dt = Date(JsonDate.replace(/[\/"]/g, ""));
+  var Dt = new Date(JsonDate.match(/\d+/)[0] * 1);
+  var dd = "0" + Dt.getDate();
+  var MM = Dt.getMonth();
+  var yyyy = Dt.getFullYear();
+  var HH = "0" + Dt.getHours();
+  var mm = "0" + Dt.getMinutes();
+  var ss = "0" + Dt.getSeconds();
+
+
+  var TheDate =  
+  dd.substring(dd.length - 2) + "-" +
+  Month[MM].substr(0,3) + "-" +
+  yyyy + "&nbsp;" +
+  HH.substring(HH.length - 2) + ":" +
+  mm.substring(mm.length - 2) + ":" +
+  ss.substring(ss.length - 2);
+
+  return TheDate;
 }
 
 function ADSBOverlay(options, ADSBData) {
@@ -18,11 +147,16 @@ function ADSBOverlay(options, ADSBData) {
   this.ADSBData = ADSBData;
   this.gADSBData = {};
   this.DrawCount = 0;
+  this.ADSBFlightRef = {};
+  this.WatchingFlightIDs = [];
   this.setADSB = function (ADSBData) {
     this.ADSBData = ADSBData;
     this.DrawCount++;
+    this.GetWatchingFlight();
     this.draw();
-  }
+  },
+  this.ADSBLines = {};
+  this.SavedLineReferece = null;
 
 
   this.getIconColor = function (Height) {
@@ -40,16 +174,109 @@ function ADSBOverlay(options, ADSBData) {
     }
   }
 
-  this.getIconClass = function (Height) {
-    if (Height < 1000) {
-      return 'breach';
-    } else if (Height < 2000) {
-      return 'alert';
-    } else {
-      return 'safe';
-    }
+  this.getIconClass = function (FlightID) {
+    var IsDrone = (FlightID.substr(0, 3) == 'A00');
+    return IsDrone ? 'drone' : 'normal';
   }
 
+
+  this.GetAllFlights = function() {
+    var FlightRef = {};
+    for (var i = 0; i < this.ADSBData.length; i++) {
+      var FlightID = this.ADSBData[i].FlightID.trim();
+      FlightRef[FlightID] = this.ADSBData[i];
+    }
+    return FlightRef;
+
+  };
+  
+  this.GetWatchingFlight = function () {
+    this.ADSBFlightRef = {};
+    var FlightIDs = this.WatchingFlightIDs;
+
+    for (var i = 0; i < this.ADSBData.length; i++) {
+      var FlightID = this.ADSBData[i].FlightID.trim();
+      if (FlightIDs.indexOf(FlightID) >= 0)
+        this.ADSBFlightRef[FlightID] = this.ADSBData[i];
+    }
+    return this.ADSBFlightRef;
+  }
+
+  this.SetWatchingFlight = function (oFlightIDs) {
+    this.WatchingFlightIDs = Object.keys(oFlightIDs);
+  };
+
+  this.getIconFor = function (FlightID, Angle) {
+    var IsDrone = (FlightID.substr(0, 3) == 'A00');
+    var ReturnHTML = '';
+    if(IsDrone) {
+      ReturnHTML = '<span class="icon DroneIcon" style=" transform: rotate(' + Angle + 'deg);"><img src="/images/Drone.png" width="25" height="25"/></span>'
+    } else {
+      ReturnHTML = '<span class="icon FlightIcon" style=" transform: rotate(' + Angle + 'deg);"><img src="/images/Airline.png" width="25" height="25"/></span>'
+    }
+    return ReturnHTML;
+  }
+
+  this.DrawLinesOf = function (LineReferece) {
+    if (this.map == null || this.map == undefined) return;
+    if (LineReferece == null) LineReferece = this.SavedLineReferece;
+    if (LineReferece == null) return;
+
+    var RefKeys = Object.keys(LineReferece);
+    var AllFlights = this.GetAllFlights();
+    var DrawingLineKeys = [];
+    var ADSBLines = this.ADSBLines;
+    RefKeys.forEach(function (RpasID, index, array) {
+      var FromFlight = AllFlights[RpasID];
+      if (FromFlight == undefined) {
+      } else {
+        var CenterPos = { lat: FromFlight.Lat, lng: FromFlight.Lon };
+        LineReferece[RpasID].forEach(function (AircraftID, index, array) {
+          var toFlight = AllFlights[AircraftID];
+          var newPos = { lat: toFlight.Lat, lng: toFlight.Lon };
+          var LineKey = RpasID + "_" + AircraftID;
+          var LinePath = [CenterPos, newPos];
+          DrawingLineKeys.push(LineKey);
+          if (ADSBLines[LineKey] == undefined) {
+            var flightPath = new google.maps.Polyline({
+              path: LinePath,
+              geodesic: true,
+              strokeColor: '#fe0000',
+              strokeOpacity: 1,
+              strokeWeight: 1
+            });
+            flightPath.setMap(this.map);
+            ADSBLines[LineKey] = flightPath;
+          } else {
+            ADSBLines[LineKey].setPath(LinePath);
+          }//if (ADSBLines[RpasID + "_" + AircraftID] == undefined) {
+
+        });//foreach
+      }//if (FromFlight == undefined) 
+    });//foreach
+
+    //option to delete the path if not drawing
+    var AllLines = Object.keys(ADSBLines);
+    AllLines.forEach(function (LineKey, index, array) {
+      if (DrawingLineKeys.indexOf(LineKey) < 0) {
+        ADSBLines[LineKey].setMap(null);
+        delete ADSBLines[LineKey];
+      }
+    })
+  }; //this.DrawLinesOf
+
+
+  this.DeleteLineOf = function (FlightID) {
+    //option to delete the path if not drawing
+    var ADSBLines = this.ADSBLines;
+    var AllLines = Object.keys(ADSBLines);
+    AllLines.forEach(function (LineKey, index, array) {
+      if (LineKey.indexOf(FlightID) < 0) {
+        ADSBLines[LineKey].setMap(null);
+        delete ADSBLines[LineKey];
+      }
+    });
+  };
 
 };
 
@@ -70,6 +297,7 @@ ADSBOverlay.prototype.draw = function () {
   if (!projection) return false;
   this.DrawCount++;
 
+
   for (var i = 0; i < this.ADSBData.length; i++) {
     var lat = this.ADSBData[i].Lat;
     var lng = this.ADSBData[i].Lon;
@@ -79,11 +307,14 @@ ADSBOverlay.prototype.draw = function () {
     heading = parseFloat(heading);
     if (isNaN(heading)) heading = 0;
 
+
+
+
     // Determine a random location from the bounds set previously  
     var IconGeoPos = new google.maps.LatLng(lat, lng)
     var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
     var DivID = 'adsb-' + title;
-    var IconClass = this.getIconClass(alt);
+    var IconClass = this.getIconClass(title);
     var $point = $('#' + DivID);
     var RotateAngle = 45;
 
@@ -92,9 +323,10 @@ ADSBOverlay.prototype.draw = function () {
     } else if (this.gADSBData[DivID]) {      
       $point.animate({ left: IconLocation.x, top: IconLocation.y });
       $point.attr('class', 'adsb-point ' + IconClass);
-      $point.find(".icon").css({ transform: 'rotate(' + (heading - RotateAngle) + 'deg)' });
+      $point.find(".icon").css({ transform: 'rotate(' + (heading) + 'deg)' });
       $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });
     } else {
+      var Icon = this.getIconFor(title, heading);
       var $NewPoint = $(
           '<div  class="adsb-point ' + IconClass + '" id="' + DivID + '" title="' + title + '" '
         + 'data-lat="' + lat + '" '
@@ -102,7 +334,7 @@ ADSBOverlay.prototype.draw = function () {
         + 'data-alt="' + alt + '" '
         + 'data-ident="' + title + '" '
         + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
-        + '<span class="icon FlightIcon" style=" transform: rotate(' + (heading - RotateAngle) + 'deg);">&#xf072;</span>'
+        + Icon 
         + '<span class="flight-title" style="">' + title + '</span>' +
         + '</div>'
       );
@@ -124,17 +356,20 @@ ADSBOverlay.prototype.draw = function () {
 
   //if the item does not exists in 20 request, then remove it from the screen
   var AllKeys = Object.keys(this.gADSBData);
-  for (i = 0; i <= AllKeys.length; i++) {
+  for (i = 0; i < AllKeys.length; i++) {
     var TheKey = AllKeys[i];
-    if (this.gADSBData[TheKey] != this.DrawCount ) {
+    if (this.gADSBData[TheKey] != this.DrawCount) {
+      var FlightID = TheKey.replace("adsb-", "");
       $('#' + TheKey).remove();
       $('div.' + DivID + '-history').remove();
       delete this.gADSBData[TheKey];
+      delete this.ADSBFlightRef[FlightID];
+      this.DeleteLineOf(FlightID);
     }//if (gADSBData[key] > 20) 
   }//for (var key in gADSBData)
 
 
-
+  this.DrawLinesOf(null);
 };
 
 
