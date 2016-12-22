@@ -572,8 +572,6 @@ namespace eX_Portal.Controllers {
       //+
     }
 
-
-
     public String ReassignDetail(int DroneID) {
       if(!exLogic.User.hasAccess("DRONE"))
         return "Access Denied";
@@ -1417,12 +1415,10 @@ new { ID = DroneID, FlightID = "_Pkey" }));
             }//catch
             return JsonText.ToString();
         }//UploadDroneFile
-
-      private void MoveDroneUploadFileTo(int DroneID)
+        
+        private void MoveDroneUploadFileTo(int DroneID)
         {
-          
-
-      //  String[] Files = Request["data-file"].Split(',');
+       
    ExponentPortalEntities db = new ExponentPortalEntities();
         var FileList = (
         from t1 in db.DroneDocuments
@@ -1431,9 +1427,7 @@ new { ID = DroneID, FlightID = "_Pkey" }));
         select new
         {
             Name=t1.DocumentName
-         
         }).ToList();
-
             String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
             String OldUploadDir = UploadPath + "0\\";
             String DroneName = DroneID == 0 ? "0" : Util.getDroneName(DroneID);
@@ -1446,7 +1440,6 @@ new { ID = DroneID, FlightID = "_Pkey" }));
                 String NewFullPath = NewUploadDir + file.Name.ToString();
                 String OldThumbFullPath = OldUploadDir + file.Name.Replace(".jpg", ".t.png");
                 String NewThumbFullPath = NewUploadDir + file.Name.Replace(".jpg", ".t.png");
-
                 if (System.IO.File.Exists(OldFullPath))
                 {
                     if (!Directory.Exists(NewFullPath))

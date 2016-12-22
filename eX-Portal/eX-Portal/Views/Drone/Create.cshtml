@@ -35,7 +35,7 @@
             <label for="othermanu">Other Manufacturer</label>
         </div>         
 </div>
-    <div class="editor-label" id="divManuDetails" style="display:none;"  pattern=".{3,}"   required title="3 characters minimum" >
+    <div class="editor-label" id="divManuDetails" style="display:none;" >
         @*@Html.LabelFor(model => model.Name, "Other Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })*@
         <div class="editor-field" >
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "editor-label", @maxlength="50"  } })
@@ -90,10 +90,10 @@
                 </thead>
             </table>
         </div>
-    }
-    
+      }
 
-    @Html.Action("DroneImaging", "Drone", new { ID = 0,Actions="Create" })
+    @Html.Action("DroneImaging", "Drone", new { ID = 0, Actions = "Create" })
+   
 
 
   <div class="form-toolbar">

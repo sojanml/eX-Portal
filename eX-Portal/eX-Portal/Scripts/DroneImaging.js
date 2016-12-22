@@ -24,7 +24,6 @@ $(document).ready(function () {
       width: 1000,
       height: 600,
       modal: true,
-
       buttons: {
         "DownLoad": function () {
 
@@ -58,34 +57,32 @@ $(document).ready(function () {
 
 });
 
-function showimg(img) {
-  var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
-  $('#dialog').html(
-    '<table cellpadding="0" border="0" cellspacing="0" width="100%" height="100%">' +
-    '<tr><td width="100%" height="100%" valign="center" align="center">'+
-    '<img id="abc"  style="max-height:580px; max-width:auto; width:auto; height:auto" src="' + ActualSrc + '" />' +
-    '</td></tr></table>'
 
-    ).append($(this).html());
-  $("#dialog").dialog({
-    autoOpen: false,
-    height: '600',
-    width: '90%',
-    modal: true,
-    open: function (event, ui) {
-      $(".ui-dialog-content").css("padding", 0);
-      $(".ui-dialog-content").dialog({ minHeight: '50' });
-      $('.ui-widget-overlay').bind('click', function () {
-        $('#dialog').dialog("close");
-        $('img#abc').remove();
+function showimg(img)
+{
+    var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
+      $('#dialog').append('<img id="abc" src="' + ActualSrc + '" />').append($(this).html());
+        $("#dialog").dialog({
+                autoOpen: false,
+               height:'auto',
+               width: 'auto',
+               modal: true,
+             
+               open: function (event, ui) {
+                       $(".ui-dialog-content").css("padding", 0);
+                        $(".ui-dialog-content").dialog({ minHeight:'50'});
+                          $(".ui-widget-overlay").bind('click', function () {
+                                $('#dialog').dialog("close");
+                                $('img#abc').remove();
+                                
+                            });
+                   }
+        });
 
-      });
-    }
-  });
-
-
-  $(".ui-dialog-titlebar").hide();
-  $("#dialog").dialog('open')
+   
+    $(".ui-dialog-titlebar").hide();   
+    $("#dialog").dialog('open')
+  
 
 }
 
@@ -93,49 +90,49 @@ function showimg(img) {
 
 
 
-function ShowImageDialog(img) {
+//function ShowImageDialog(img) {
 
-  var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
-  $('#dialog').append('<img id="abc" src="' + ActualSrc + '" height="400px" width="400px"/><br/>').append($(this).html());
-  $("#dialog").dialog({
-    autoOpen: false,
+//  var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
+//  $('#dialog').append('<img id="abc" src="' + ActualSrc + '" height="400px" width="400px"/><br/>').append($(this).html());
+//  $("#dialog").dialog({
+//    autoOpen: false,
 
-    maxWidth: 600,
-    maxHeight: 500,
-    width: 1000,
-    height: 600,
-    modal: true, buttons: {
-      "DownLoad": function () {
+//    maxWidth: 600,
+//    maxHeight: 500,
+//    width: 1000,
+//    height: 600,
+//    modal: true, buttons: {
+//      "DownLoad": function () {
 
-        var ActualUrl = img.getAttribute('src').replace(".t.png", ".jpg");
-        var Link = document.createElement('a');
-        Link.href = ActualUrl;  // use realtive url 
+//        var ActualUrl = img.getAttribute('src').replace(".t.png", ".jpg");
+//        var Link = document.createElement('a');
+//        Link.href = ActualUrl;  // use realtive url 
 
-        Link.download = ActualUrl.substring(ActualUrl.lastIndexOf("~") + 1)
+//        Link.download = ActualUrl.substring(ActualUrl.lastIndexOf("~") + 1)
 
-        document.body.appendChild(Link);
-        Link.click();
+//        document.body.appendChild(Link);
+//        Link.click();
 
-      },
-      Cancel: function () {
-        $(this).dialog("close");
-      }
-    },
-    close: function (event, ui) {
+//      },
+//      Cancel: function () {
+//        $(this).dialog("close");
+//      }
+//    },
+//    close: function (event, ui) {
 
-      $("img#abc").remove();
+//      $("img#abc").remove();
 
-    }
+//    }
 
-  });
-
-
-
-  $("#dialog").dialog('open');
+//  });
 
 
 
-}
+//  $("#dialog").dialog('open');
+
+
+
+//}
 
 function resetBounds() {
   bounds = new google.maps.LatLngBounds();
@@ -151,29 +148,39 @@ function resetBounds() {
 
 
 function AddToUploadQueue() {
+    var file = document.querySelector("#fileinput");
+    if (/\.(jpe?g|png|gif)$/i.test(file.files[0].name) === true) {
+        for (var i = 0; i < this.files.length; i++) {
+            QueID++;
+            if (QueID > 5) {
+                var HTML = "Maximum 5 images is allowed.";
+                $('#FileUploadProgress').append(Elem);
+                QueID = QueID - 1;
+                return;
+            }
+            var file = this.files[i];
+            file.uploadKey = QueID;
+            FilesInQueue.push(file);
 
-  for (var i = 0; i < this.files.length; i++) {
-    QueID++;
-    if (QueID > 5) {
-       
-        var HTML = "Maximum 5 images is allowed.";
+        }
+
+        //add information in que
+        var FileName = file.name;
+        var HTML = 'Waiting... ' + FileName + ' (' + Math.floor(file.size / 1024) + ' KB)';
+        var Elem = $('<LI id="file_' + QueID + '">' + HTML + '</LI>');
         $('#FileUploadProgress').append(Elem);
-        QueID = QueID - 1;
-        
-        return ;
     }
-    var file = this.files[i];
-    file.uploadKey = QueID;
-    FilesInQueue.push(file);
-   
-    //add information in que
-    var FileName = file.name;
-    var HTML = 'Waiting... ' + FileName + ' (' + Math.floor(file.size / 1024) + ' KB)';
-    var Elem = $('<LI id="file_' + QueID + '">' + HTML + '</LI>');
-    $('#FileUploadProgress').append(Elem);
-    
-  }
-  window.setTimeout(startUploadQueue, 100);
+    else {
+        var HTML = "Invalid File Format.Please upload an image file.";
+        var Elem = $('<LI id="file_' + QueID + '">' + HTML + '</LI>');
+        $('#FileUploadProgress').append(Elem);
+        setTimeout(function () {
+            Elem.slideUp().remove();
+
+        }, 1500);
+        
+    }
+ window.setTimeout(startUploadQueue, 100);
 }
 
 function startUploadQueue() {
