@@ -33,8 +33,9 @@ namespace eX_Portal.Controllers {
       return Json.ToString();
     }
 
-    // GET: Drone
-    public ActionResult Index() {
+        // GET: Drone
+        [ValidateInput(false)]
+        public ActionResult Index() {
       if(!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
 
@@ -126,7 +127,7 @@ namespace eX_Portal.Controllers {
       return View(Docs);
     }
 
-
+      [ValidateInput(false)]
     public ActionResult Manage([Bind(Prefix = "ID")] int DroneID = 0) {
       if(!exLogic.User.hasAccess("DRONE.MANAGE"))
         return RedirectToAction("NoAccess", "Home");
@@ -518,13 +519,15 @@ namespace eX_Portal.Controllers {
       return PartialView(Parts);
     }
 
-    // GET: Drone/Details/5
-    public String DroneDetail([Bind(Prefix = "ID")]  int DroneID) {
+        // GET: Drone/Details/5
+        [ValidateInput(false)]
+        public String DroneDetail([Bind(Prefix = "ID")]  int DroneID) {
       //string OwnerFormat;
       int OwnerId;
       if(!exLogic.User.hasAccess("DRONE"))
         return "Access Denied";
-      String SQL = "SELECT \n" +
+          
+            String SQL = "SELECT \n" +
           "  D.[DroneName] as RPAS,\n" +
           "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
           "  D.[DroneSerialNo] as [RPAS S.no],\n" +
@@ -568,8 +571,6 @@ namespace eX_Portal.Controllers {
         Util.getDroneRegistrationDocuments(DroneID);
       //+
     }
-
-
 
     public String ReassignDetail(int DroneID) {
       if(!exLogic.User.hasAccess("DRONE"))
@@ -709,6 +710,7 @@ namespace eX_Portal.Controllers {
 
     // POST: Drone/Create
     [HttpPost]
+    [ValidateInput(false)]
     public ActionResult Create(ViewModel.DroneView DroneView) {
       if(!exLogic.User.hasAccess("DRONE.CREATE")) return RedirectToAction("NoAccess", "Home");      
       try {
@@ -719,19 +721,20 @@ namespace eX_Portal.Controllers {
         ModelState.Remove("Drone.MakeID");
         ModelState.Remove("Drone.ModelID");
         if (DroneView.Name==null||DroneView.Name=="") {
-
-       
-
-        if (DroneView.Drone.ManufactureId < 1 || DroneView.Drone.ManufactureId == null) {
-          ModelState.AddModelError("Drone.ManufactureId", "Please Select Manufacture.");
-        }
-        }
-
-        if (DroneView.Drone.AccountID< 1 || DroneView.Drone.AccountID == null) {
+                
+                    if (DroneView.Drone.ManufactureId < 1 || DroneView.Drone.ManufactureId == null)
+            {
+             ModelState.AddModelError("Drone.ManufactureId", "Please Select Manufacture.");
+             }
+           }
+              
+                    if (DroneView.Drone.AccountID< 1 || DroneView.Drone.AccountID == null) {
           ModelState.AddModelError("Drone.AccountID", "Please Select Owner.");
         }
 
-        if (DroneView.Drone.CommissionDate == null) {
+       
+
+       if (DroneView.Drone.CommissionDate == null) {
           ModelState.AddModelError("Drone.CommissionDate", "Commission Date is Required.");
         }
 
@@ -740,9 +743,9 @@ namespace eX_Portal.Controllers {
             ModelState.AddModelError("Drone.ModelName", "Maximum 100 characters are allowed.");
           }
         }
-      
-        if (!ModelState.IsValid) {
-
+               
+                if (!ModelState.IsValid) {
+          
           String OwnerListSQL =
       "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account";
           if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
@@ -790,7 +793,8 @@ namespace eX_Portal.Controllers {
                     if (DroneSerialNo < 1001)
                         DroneSerialNo = 1001;
                     MSTR_Drone Drone = DroneView.Drone;
-                    if (Drone.CommissionDate == null) Drone.CommissionDate = DateTime.Now;
+                    
+                    if (Drone.CommissionDate == null) Drone.CommissionDate = DateTime.Now.Date;
                     if (Drone.ModelName == null) Drone.ModelName = "Other";
                     Drone.RegistrationDocument = String.IsNullOrEmpty(Request["FileName"]) ? "" : Request["FileName"];
                     String SQL = "INSERT INTO MSTR_DRONE(\n" +
@@ -808,7 +812,7 @@ namespace eX_Portal.Controllers {
                                  "  CreatedOn\n" +
                                  ") VALUES(\n" +
                                  "  '" + Drone.AccountID + "',\n" +
-                                 "  '" + manufacturerid + "',\n" +
+                                 "  '" + typeid + "',\n" +
                                  "  '" + Drone.UavTypeId + "',\n" +
                                  "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
                                  "  11,\n" +
@@ -839,7 +843,7 @@ namespace eX_Portal.Controllers {
                                     ");";
                             int ID = Util.doSQL(SQL);
                         }
-
+                      
                     }
 
                         if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
@@ -914,10 +918,6 @@ namespace eX_Portal.Controllers {
             return View("InternalError", ex);
         }
     }
-
-
-
-
 
 
     public ActionResult ReAssign(int id) {
@@ -1054,6 +1054,7 @@ namespace eX_Portal.Controllers {
 
     // POST: Drone/Edit/5
     [HttpPost]
+    [ValidateInput(false)]
     public ActionResult Edit(ViewModel.DroneView DroneView) {
       if(!exLogic.User.hasAccess("DRONE.EDIT"))
         return RedirectToAction("NoAccess", "Home");
@@ -1291,7 +1292,7 @@ new { ID = DroneID, FlightID = "_Pkey" }));
 
         //uploading multiple images for the drone
 
-
+      
         public ActionResult DroneImaging([Bind(Prefix = "ID")] int DroneID = 0,string Actions="")
         {
             if (!exLogic.User.hasAccess("DRONE"))
@@ -1414,12 +1415,10 @@ new { ID = DroneID, FlightID = "_Pkey" }));
             }//catch
             return JsonText.ToString();
         }//UploadDroneFile
-
+        
         private void MoveDroneUploadFileTo(int DroneID)
         {
-          
-
-      //  String[] Files = Request["data-file"].Split(',');
+       
    ExponentPortalEntities db = new ExponentPortalEntities();
         var FileList = (
         from t1 in db.DroneDocuments
@@ -1428,9 +1427,7 @@ new { ID = DroneID, FlightID = "_Pkey" }));
         select new
         {
             Name=t1.DocumentName
-         
         }).ToList();
-
             String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
             String OldUploadDir = UploadPath + "0\\";
             String DroneName = DroneID == 0 ? "0" : Util.getDroneName(DroneID);
@@ -1443,7 +1440,6 @@ new { ID = DroneID, FlightID = "_Pkey" }));
                 String NewFullPath = NewUploadDir + file.Name.ToString();
                 String OldThumbFullPath = OldUploadDir + file.Name.Replace(".jpg", ".t.png");
                 String NewThumbFullPath = NewUploadDir + file.Name.Replace(".jpg", ".t.png");
-
                 if (System.IO.File.Exists(OldFullPath))
                 {
                     if (!Directory.Exists(NewFullPath))
@@ -1454,13 +1450,14 @@ new { ID = DroneID, FlightID = "_Pkey" }));
                         System.IO.File.Move(OldFullPath, NewFullPath);
                         System.IO.File.Move(OldThumbFullPath, NewThumbFullPath);
                     }
-                    String SQL = "UPDATE DroneDocuments SET\n" +
-                    "  DroneID=" + DroneID + "\n" +                    
-                    "WHERE\n" +
-                    "  DocumentName='" + file.Name.ToString() + "'" +
-                    " and DocumentType='Drone Image'";
-                    Util.doSQL(SQL);
-                }//if(System.IO.File.Exists
+                
+                String SQL = "UPDATE DroneDocuments SET\n" +
+                "  DroneID=" + DroneID + "\n" +
+                "WHERE\n" +
+                "  DocumentName='" + file.Name.ToString() + "'" +
+                " and DocumentType='Drone Image'";
+                Util.doSQL(SQL);
+            }//if(System.IO.File.Exists
             }//foreach (String file in Files)
         }//MoveUploadFileT
 

@@ -24,7 +24,6 @@ $(document).ready(function () {
       width: 1000,
       height: 600,
       modal: true,
-
       buttons: {
         "DownLoad": function () {
 
@@ -54,46 +53,36 @@ $(document).ready(function () {
 
     $("#dialog").dialog('open');
   });
-  //$(document).on('click', '#GPS-Images', function (e) {
-  //    popup.slideUp();
-  //});
-
-
-  $(':file').change(AddToUploadQueue);
-
-
-  //initialize();
+   $(':file').change(AddToUploadQueue);
 
 });
 
-function showimg(img) {
-  var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
-  $('#dialog').html(
-    '<table cellpadding="0" border="0" cellspacing="0" width="100%" height="100%">' +
-    '<tr><td width="100%" height="100%" valign="center" align="center">'+
-    '<img id="abc"  style="max-height:580px; max-width:auto; width:auto; height:auto" src="' + ActualSrc + '" />' +
-    '</td></tr></table>'
 
-    ).append($(this).html());
-  $("#dialog").dialog({
-    autoOpen: false,
-    height: '600',
-    width: '90%',
-    modal: true,
-    open: function (event, ui) {
-      $(".ui-dialog-content").css("padding", 0);
-      $(".ui-dialog-content").dialog({ minHeight: '50' });
-      $('.ui-widget-overlay').bind('click', function () {
-        $('#dialog').dialog("close");
-        $('img#abc').remove();
+function showimg(img)
+{
+    var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
+      $('#dialog').append('<img id="abc" src="' + ActualSrc + '" />').append($(this).html());
+        $("#dialog").dialog({
+                autoOpen: false,
+               height:'auto',
+               width: 'auto',
+               modal: true,
+             
+               open: function (event, ui) {
+                       $(".ui-dialog-content").css("padding", 0);
+                        $(".ui-dialog-content").dialog({ minHeight:'50'});
+                          $(".ui-widget-overlay").bind('click', function () {
+                                $('#dialog').dialog("close");
+                                $('img#abc').remove();
+                                
+                            });
+                   }
+        });
 
-      });
-    }
-  });
-
-
-  $(".ui-dialog-titlebar").hide();
-  $("#dialog").dialog('open')
+   
+    $(".ui-dialog-titlebar").hide();   
+    $("#dialog").dialog('open')
+  
 
 }
 
@@ -101,75 +90,49 @@ function showimg(img) {
 
 
 
-function ShowImageDialog(img) {
+//function ShowImageDialog(img) {
 
-  var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
-  $('#dialog').append('<img id="abc" src="' + ActualSrc + '" height="400px" width="400px"/><br/>').append($(this).html());
-  $("#dialog").dialog({
-    autoOpen: false,
+//  var ActualSrc = img.getAttribute('src').replace(".t.png", ".jpg");
+//  $('#dialog').append('<img id="abc" src="' + ActualSrc + '" height="400px" width="400px"/><br/>').append($(this).html());
+//  $("#dialog").dialog({
+//    autoOpen: false,
 
-    maxWidth: 600,
-    maxHeight: 500,
-    width: 1000,
-    height: 600,
-    modal: true, buttons: {
-      "DownLoad": function () {
+//    maxWidth: 600,
+//    maxHeight: 500,
+//    width: 1000,
+//    height: 600,
+//    modal: true, buttons: {
+//      "DownLoad": function () {
 
-        var ActualUrl = img.getAttribute('src').replace(".t.png", ".jpg");
-        var Link = document.createElement('a');
-        Link.href = ActualUrl;  // use realtive url 
+//        var ActualUrl = img.getAttribute('src').replace(".t.png", ".jpg");
+//        var Link = document.createElement('a');
+//        Link.href = ActualUrl;  // use realtive url 
 
-        Link.download = ActualUrl.substring(ActualUrl.lastIndexOf("~") + 1)
+//        Link.download = ActualUrl.substring(ActualUrl.lastIndexOf("~") + 1)
 
-        document.body.appendChild(Link);
-        Link.click();
+//        document.body.appendChild(Link);
+//        Link.click();
 
-      },
-      Cancel: function () {
-        $(this).dialog("close");
-      }
-    },
-    close: function (event, ui) {
+//      },
+//      Cancel: function () {
+//        $(this).dialog("close");
+//      }
+//    },
+//    close: function (event, ui) {
 
-      $("img#abc").remove();
+//      $("img#abc").remove();
 
-    }
+//    }
 
-  });
-
-
-
-  $("#dialog").dialog('open');
+//  });
 
 
 
-}
-// marker position
-//var factory = new google.maps.LatLng(25.9899106, 55.0034188;);
-//function initialize() {
-//    var initLat = 24.9899106;
-//    var initLng = 55.0034188;
-//    var center = "";
+//  $("#dialog").dialog('open');
 
-//    var defaultZoom = 10;
 
-//    var mapOptions = {
-//        center: center,
-//        zoom: defaultZoom,
-//        mapTypeId: ""
-//    };
 
-//    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-//    GetGeoTagInfo();
 //}
-
-
-
-
-
-
-
 
 function resetBounds() {
   bounds = new google.maps.LatLngBounds();
@@ -185,26 +148,39 @@ function resetBounds() {
 
 
 function AddToUploadQueue() {
+    var file = document.querySelector("#fileinput");
+    if (/\.(jpe?g|png|gif)$/i.test(file.files[0].name) === true) {
+        for (var i = 0; i < this.files.length; i++) {
+            QueID++;
+            if (QueID > 5) {
+                var HTML = "Maximum 5 images is allowed.";
+                $('#FileUploadProgress').append(Elem);
+                QueID = QueID - 1;
+                return;
+            }
+            var file = this.files[i];
+            file.uploadKey = QueID;
+            FilesInQueue.push(file);
 
-  for (var i = 0; i < this.files.length; i++) {
-    QueID++;
-    if (QueID > 4) {
-      var HTML = "Maximum 5 images is allowed.'";
-      $('#FileUploadProgress').append(Elem);
-      return;
+        }
+
+        //add information in que
+        var FileName = file.name;
+        var HTML = 'Waiting... ' + FileName + ' (' + Math.floor(file.size / 1024) + ' KB)';
+        var Elem = $('<LI id="file_' + QueID + '">' + HTML + '</LI>');
+        $('#FileUploadProgress').append(Elem);
     }
-    var file = this.files[i];
-    file.uploadKey = QueID;
-    FilesInQueue.push(file);
+    else {
+        var HTML = "Invalid File Format.Please upload an image file.";
+        var Elem = $('<LI id="file_' + QueID + '">' + HTML + '</LI>');
+        $('#FileUploadProgress').append(Elem);
+        setTimeout(function () {
+            Elem.slideUp().remove();
 
-    //add information in que
-    var FileName = file.name;
-    var HTML = 'Waiting... ' + FileName + ' (' + Math.floor(file.size / 1024) + ' KB)';
-    var Elem = $('<LI id="file_' + QueID + '">' + HTML + '</LI>');
-    $('#FileUploadProgress').append(Elem);
-
-  }
-  window.setTimeout(startUploadQueue, 100);
+        }, 1500);
+        
+    }
+ window.setTimeout(startUploadQueue, 100);
 }
 
 function startUploadQueue() {
@@ -234,13 +210,11 @@ function DeleteFile(Obj) {
 }
 
 function processDeleteFile(Obj) {
-  var FileName = Obj.attr("data-file");
+     var FileName = Obj.attr("data-file");
   var DocumentID = Obj.attr("data-documentid");
-  //var FlightId = Obj.attr("data-FlightID");
-
-  //DeleteURL = "/Drone/DeleteFile/" + FlightId + "?DocumentType=Geo%20Tag";
+  QueID = QueID - 1;
   var URL = DeleteDroneURL + '&file=' + FileName;
-
+  
   var LI = Obj.closest('LI');
   LI.fadeTo(200, 0.2);
   //return;
@@ -250,11 +224,14 @@ function processDeleteFile(Obj) {
     dataType: 'json',
     success: completeHandler = function (data) {
       if (data.status == "success") {
-        LI.fadeOut().remove();
+           
+          LI.fadeOut().remove();
+          
         if (Markers[DocumentID]) {
           Markers[DocumentID].setMap(null);
 
           resetBounds();
+          ;
         }
       }//if (data.status == "success")
     }, //success
@@ -266,100 +243,105 @@ function processDeleteFile(Obj) {
 }
 
 
-function SubmitFile(file) {
-  var Elem = $('#file_' + file.uploadKey);
 
-  if (file.size > 1024 * 1024 * 2) {
-    var HTML = "Please upload image files with size 2 Mb or  less.'";
-    Elem.addClass("error");
-    Elem.html(HTML);
-    setTimeout(function () {
-      Elem.slideUp().remove();
 
-    }, 2000);
-    return false;
-  }
-  var HTML = 'Uploading ' + file.name + ' (' + Math.floor(file.size / 1024) + ' KB)';
+    function SubmitFile(file) {
+        var Elem = $('#file_' + file.uploadKey);
+        if ( file.size > 1024 * 1024 * 2) {
+            var HTML = "Please upload an image File with size 2 MB ot less.'";
+            Elem.addClass("error");
+            Elem.html(HTML);
+            setTimeout(function () {
+                Elem.slideUp().remove();
 
-  Elem.html(HTML);
-  var formData = new FormData();
-  var FileDate = file.lastModifiedDate.toUTCString();
-  FileDateUtc = file.lastModifiedDate;
-  formData.append("upload-file", file);
-  $.ajax({
-    url: UploadDroneURL + '&CreatedOn=' + encodeURI(FileDate),  //server script to process data
-    type: 'POST',
-    xhr: function () {  // custom xhr
-      myXhr = $.ajaxSettings.xhr();
-      if (myXhr.upload) { // if upload property exists
-        myXhr.upload.addEventListener('progress', function (evt) {
-          progressHandlingFunction(evt, Elem, HTML);
-        }, false); // progressbar
-      }
-      return myXhr;
-    },
-    //Ajax events
-    success: completeHandler = function (data) {
-      Elem.html("");
-      if (data.status == 'success') {
-        AddToThumbnail(data);
-        Elem.append(file.name + " - Upload Completed.<br>" + data.GPS.Info);
-        Elem.addClass("success");
-      } else {
-        Elem.addClass("error");
-        Elem.html(HTML + ' - ' + data.message);
-      }
-      window.setTimeout(function () {
-        Elem.slideUp("slow", function () { $(this).remove() });
-      }, 2000);
-      window.setTimeout(startUploadQueue, 1000);
-    },
-    error: errorHandler = function (data) {
-      Elem.addClass("error");
-      Elem.html(HTML + ' - error in uploading file');
-      window.setTimeout(function () {
-        Elem.slideUp().remove();
-      }, 2000);
-      window.setTimeout(startUploadQueue, 1000);
-    },
-    // Form data
-    data: formData,
-    //Options to tell JQuery not to process data or worry about content-type
-    cache: false,
-    contentType: false,
-    processData: false
-  }, 'json');
+            }, 2000);
+            return false;
+        }
 
-}
 
-function progressHandlingFunction(evt, Elem, HTML) {
-  var percentComplete = evt.loaded / evt.total * 100;
-  Elem.html(HTML + ' - ' + percentComplete.toFixed(0) + '% done');
-}
+       var HTML = 'Uploading ' + file.name + ' (' + Math.floor(file.size / 1024) + ' KB)';
 
-function AddToThumbnail(theData) {
-  var Thump = theData.url.replace(".jpg", ".t.png");
-  var theID = "x" + refID++;
-  var HTML = '  <li>\n' +
-  '<div class="delete-icon"><a href="#" class="delete"    data-documentid="' + theID + '"  data-file="' + theData.addFile[0].name + '"><span class="delete icon">&#xf057;</span></a></div>\n' +
-      '<div class="thumbnail">\n' +
-      '  <img id="' + theID + '" onclick="ShowImageDialog(this)" width="50px" height="50px" src="' + Thump + '" />\n' +
-      '</div>\n' +
+        Elem.html(HTML);
 
-    '</li>\n';
-  $('#GPS-Images').append(HTML);
+        var formData = new FormData();
+        var FileDate = file.lastModifiedDate.toUTCString();
+        FileDateUtc = file.lastModifiedDate;
+        formData.append("upload-file", file);
+        $.ajax({
+            url: UploadDroneURL + '&CreatedOn=' + encodeURI(FileDate),  //server script to process data
+            type: 'POST',
+            xhr: function () {  // custom xhr
+                myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) { // if upload property exists
+                    myXhr.upload.addEventListener('progress', function (evt) {
+                        progressHandlingFunction(evt, Elem, HTML);
+                    }, false); // progressbar
+                }
+                return myXhr;
+            },
+            //Ajax events
+            success: completeHandler = function (data) {
+                Elem.html("");
+                if (data.status == 'success') {
+                    AddToThumbnail(data);
+                    Elem.append(file.name + " - Upload Completed.<br>" + data.GPS.Info);
+                    Elem.addClass("success");
+                } else {
+                    Elem.addClass("error");
+                    Elem.html(HTML + ' - ' + data.message);
+                }
+                window.setTimeout(function () {
+                    Elem.slideUp("slow", function () { $(this).remove() });
+                }, 2000);
+                window.setTimeout(startUploadQueue, 1000);
+            },
+            error: errorHandler = function (data) {
+                Elem.addClass("error");
+                Elem.html(HTML + ' - error in uploading file');
+                window.setTimeout(function () {
+                    Elem.slideUp().remove();
+                }, 2000);
+                window.setTimeout(startUploadQueue, 1000);
+            },
+            // Form data
+            data: formData,
+            //Options to tell JQuery not to process data or worry about content-type
+            
+            cache: false,
+            contentType: false,
+            processData: false
+        }, 'json');
 
-  var myDate = new Date(); // Set this to your date in whichever timezone.
-  var utcDate = myDate.toUTCString();
-  //GeoInfo = {
-  //    DocumentID: theID,
-  //    Thumbnail: Thump,
-  //    Latitude: theData.GPS.Latitude,
-  //    Longitude: theData.GPS.Longitude,
-  //    Altitude: theData.GPS.Altitude,
-  //    FlightID: theData.GPS.FlightID,
-  //    UpLoadedDate: theData.GPS.CreatedDate
-  //};
-  //setMarkerOne(GeoInfo);
-  //resetBounds();
-}
+    }
+
+    function progressHandlingFunction(evt, Elem, HTML) {
+        var percentComplete = evt.loaded / evt.total * 100;
+        Elem.html(HTML + ' - ' + percentComplete.toFixed(0) + '% done');
+    }
+
+    function AddToThumbnail(theData) {
+        var Thump = theData.url.replace(".jpg", ".t.png");
+        var theID = "x" + refID++;
+        var HTML = '  <li>\n' +
+        '<div class="delete-icon"><a href="#" class="delete"    data-documentid="' + theID + '"  data-file="' + theData.addFile[0].name + '"><span class="delete icon">&#xf057;</span></a></div>\n' +
+            '<div class="thumbnail">\n' +
+            '  <img id="' + theID + '" onclick="ShowImageDialog(this)" width="50px" height="50px" src="' + Thump + '" />\n' +
+            '</div>\n' +
+
+          '</li>\n';
+        $('#GPS-Images').append(HTML);
+
+        var myDate = new Date(); // Set this to your date in whichever timezone.
+        var utcDate = myDate.toUTCString();
+        //GeoInfo = {
+        //    DocumentID: theID,
+        //    Thumbnail: Thump,
+        //    Latitude: theData.GPS.Latitude,
+        //    Longitude: theData.GPS.Longitude,
+        //    Altitude: theData.GPS.Altitude,
+        //    FlightID: theData.GPS.FlightID,
+        //    UpLoadedDate: theData.GPS.CreatedDate
+        //};
+        //setMarkerOne(GeoInfo);
+        //resetBounds();
+    }

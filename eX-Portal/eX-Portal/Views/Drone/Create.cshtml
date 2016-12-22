@@ -12,7 +12,8 @@
     @Html.HiddenFor(model => model.Drone.DroneId)
 
     <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.AccountID, "Authority")
+      @Html.LabelFor(model => model.Drone.AccountID, "Authority")<span style="color:red">*</span>
+       
     </div>
     <div class="editor-field">
 
@@ -20,33 +21,35 @@
       @Html.ValidationMessageFor(model => model.Drone.AccountID)
     </div>
     <div>
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Drone.ManufactureId, "Manufacturer")
+        <div class="editor-label" >
+            @Html.LabelFor(model => model.Drone.ManufactureId, "Manufacturer")<span style="color:red">*</span>
+
         </div>
-        <div class="editor-field" id="">
+        <div class="editor-field" id="ddlist" >
+           
             @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList)
             @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
         </div>
         <div>
-            <input id="othermanu" value="1" name="othermanu" type="checkbox" />
+            <input  id="othermanu" value="1" name="othermanu" type="checkbox" p />
             <label for="othermanu">Other Manufacturer</label>
-        </div>
-    </div>
-
-    <div class="form-group" id="divManuDetails" style="display:none;">
+        </div>         
+</div>
+    <div class="editor-label" id="divManuDetails" style="display:none;" >
         @*@Html.LabelFor(model => model.Name, "Other Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @maxlength = "100" } })
+        <div class="editor-field" >
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "editor-label", @maxlength="50"  } })
             @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.UavTypeId, "RPAS Type")
+      @Html.LabelFor(model => model.Drone.UavTypeId, "RPAS Type")<span style="color:red">*</span>
+       
     </div>
     <div class="editor-field">
-      @*Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)*@
-      @Html.Action("UAVTypeList", new { UavTypeId = Model.Drone.UavTypeId } )
+      @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)
+      @*Html.Action("UAVTypeList", new { UavTypeId = Model.Drone.UavTypeId } )*@
       @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
     </div>
 
@@ -60,7 +63,8 @@
         @Html.ValidationMessageFor(model => model.Drone.ModelName)
     </div>
     <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.CommissionDate, "Commission Date")
+      @Html.LabelFor(model => model.Drone.CommissionDate, "Commission Date")<span style="color:red">*</span>
+       
     </div>
     <div class="editor-field" >
     
@@ -86,30 +90,10 @@
                 </thead>
             </table>
         </div>
-    }
-    @*
-  <h2>Regulatory Approval </h2>
-  <div class="form-group">
-    <p>
-      You need to have Regulator Approval for this UAS. Please upload it here.<br />
-    </p>
-    <div class="col-md-10">
-      <ul id="FileUploadProgress"></ul>
-    </div>
-    <div>
-      <input type="file" multiple name="fileinput" id="fileinput" />
-    </div>
-  </div>
-  <div style="margin-top:20px;" class="editor-label">
-    @Html.LabelFor(model => model.Drone.RegistrationAuthority, "Regulator Authority")
-  </div>
-  <div class="editor-field">
-    @Html.DropDownListFor(model => model.Drone.RegistrationAuthority, Model.RegistrationAuthority )
-    @Html.ValidationMessageFor(model => model.Drone.RegistrationAuthority)
-  </div>
-    *@
+      }
 
-    @Html.Action("DroneImaging", "Drone", new { ID = 0,Actions="Create" })
+    @Html.Action("DroneImaging", "Drone", new { ID = 0, Actions = "Create" })
+   
 
 
   <div class="form-toolbar">
@@ -118,8 +102,6 @@
 
     
   }
-
- 
 
   </section>
 
@@ -150,20 +132,21 @@
       $('#Table_SelectItemsForParts').on("click", "a.delete", function () {
         $(this).parent().parent().remove();
       })
-
+      
       $('#Drone_ManufactureId').on('change', function () {
-        
         if ($('#othermanu').prop('checked'))
         {
-          
-          $('#Name').val("");
-          $('#divManuDetails').slideUp();
-          $('#othermanu').attr('checked', false);
+            
+            $('#Name').val("");
+             
+            $('#divManuDetails').slideUp();
+            
+            
         }
         
       });
 
-
+      
     });
 
     function AutoCompleteSelect(event, ui) {
@@ -186,11 +169,14 @@
 
     $('#othermanu').on("change", function (e) {
         if ($(this).prop('checked')) {
+          
             $('#divManuDetails').slideDown();
+            $("#Drone_ManufactureId").hide();
         }
         else
         {
             $('#divManuDetails').slideUp();
+            $("#Drone_ManufactureId").show();
         }
     })
     
