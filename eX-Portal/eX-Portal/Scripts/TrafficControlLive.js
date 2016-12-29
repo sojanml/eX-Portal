@@ -157,7 +157,7 @@ function ChartDataAdd(Position) {
   //add data to the chart 
   AddChartData(DataItem);
 
-  LastProcessedID = DataItem.ID;
+  LastProcessedID = DataItem.PTid;
   ChartIndex++;
 }
 
@@ -190,13 +190,19 @@ function AddChartData(DataItem) {
 
   var Avg = RunningTotal.Add(DataItem);
 
-  /*Time, MinSpeed,MedSpeed, AvgSpeed,MaxSpeed,VechileCount*/
-  $('#tile-min-speed').html(Avg.MinSpeed.toFixed(2))
-  $('#tile-max-speed').html(Avg.MaxSpeed.toFixed(2))
-  $('#tile-avg-speed').html(Avg.AvgSpeed.toFixed(2))
-  $('#tile-med-speed').html(Avg.MedSpeed.toFixed(2))
-  $('#tile-vechile-count').html(Avg.VechileCount.toFixed(2))
-
+    
+  ///*Time, MinSpeed,MedSpeed, AvgSpeed,MaxSpeed,VechileCount*/
+  //$('#tile-min-speed').html(Avg.MinSpeed.toFixed(2))
+  //$('#tile-max-speed').html(Avg.MaxSpeed.toFixed(2))
+  //$('#tile-avg-speed').html(Avg.AvgSpeed.toFixed(2))
+  //$('#tile-med-speed').html(Avg.MedSpeed.toFixed(2))
+  //$('#tile-vechile-count').html(Avg.VechileCount.toFixed(2))
+   
+  $('#tile-min-speed').html(DataItem.MinSpeed.toFixed(2))
+  $('#tile-max-speed').html(DataItem.MaxSpeed.toFixed(2))
+  $('#tile-avg-speed').html(DataItem.AvgSpeed.toFixed(2))
+  $('#tile-med-speed').html(DataItem.MedSpeed.toFixed(2))
+  $('#tile-vechile-count').html(DataItem.VechileCount.toFixed(2))
 }
 
 
@@ -230,12 +236,15 @@ function startReplayTimer() {
 }
 
 function InitVideo() {
+
+    var Value = document.getElementById('divRecordedVideoURL').innerText;
+    //https://exponent-s3.s3.amazonaws.com/traffic/v2.flv  al_sufouh_road_2016101452
   var PlayList = [
     {
       sources: [{
-        file: "https://exponent-s3.s3.amazonaws.com/traffic/v2.flv", type: "flv"
+          file: Value, type: "flv"
       }],
-      title: 'al_sufouh_road_2016101452',
+      title: '',
     }
   ];
 
@@ -561,7 +570,7 @@ function getChartDataInit() {
       ChartData = ChartData.concat(data);
       //Save the last ID for next fetch
       if (ChartData.length > 0) {
-        LastProcessedID = ChartData[ChartData.length - 1].ID;
+        LastProcessedID = ChartData[ChartData.length - 1].PTid;
       }//if
     }//succes
   });//$.ajax

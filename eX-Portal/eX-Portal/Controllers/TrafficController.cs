@@ -27,13 +27,33 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-    public ActionResult Live() {
-      return View();
-    }
+    public ActionResult Live([Bind(Prefix = "ID")] int FlightID = 0) {
+            if (!exLogic.User.hasAccess("TRAFFIC.LIVE")) return RedirectToAction("NoAccess", "Home");
+
+            var oList = from f in db.DroneFlights join d in db.MSTR_Drone 
+                        on f.DroneID equals d.DroneId into ps
+                        from p in ps.DefaultIfEmpty()
+                        where f.ID == FlightID 
+                        select f;
+
+            Models.DroneFlight dFlight = db.DroneFlights.Find(FlightID);
+
+
+            var oListDrone = from d in db.MSTR_Drone where d.DroneId == dFlight.DroneID
+                             select d;
+
+            
+            //var viewModel = new ViewModel.TrafficViewModel
+            //{
+            //    DroneFlight = db.DroneFlights.Find(FlightID),
+            //    MSTR_Drone = db.MSTR_Drone.Where(viewModel.MSTR_Drone.DroneId == dFlight.DroneID)
+            //};
+            return View(oList);
+        }
 
     public JsonResult LiveData(int LastProcessedID = 0) {
       String SQL = @"SELECT 
-        ID,
+        PTid,
         ProcessTime,
         MinSpeed,
         MedSpeed,
@@ -41,20 +61,21 @@ namespace eX_Portal.Controllers {
         MaxSpeed,
         VechileCount
       FROM (
-        SELECT TOP 20 
-          ID,
+        SELECT TOP 200 
+          PTid,
           CreatedDate,
           FORMAT(CreatedDate, 'hh:mm', 'en-US') AS ProcessTime,
-          40 AS MinSpeed,
-          50 AS MedSpeed,
-          50 AS AvgSpeed,
-          80 AS MaxSpeed,
-          CarCount AS VechileCount
-        FROM TrafficData";
+          40 as MinSpeed,
+          50 as MedSpeed,
+          --floor(((MinSpeed+MediumSpeed+MaxSpeed)/3)) as AvgSpeed,
+          45 as AvgSpeed,
+          60 as MaxSpeed,
+          NumberOfCar AS VechileCount
+        FROM dbo.PayloadTraffic ";
      if(LastProcessedID > 0) {
         SQL = SQL + @"
         WHERE
-          ID > " + LastProcessedID;
+          PTid > " + LastProcessedID;
       }
       SQL = SQL +
       @"   ORDER BY CreatedDate DESC
@@ -71,5 +92,7 @@ namespace eX_Portal.Controllers {
       var Row = Util.getDBRows(SQL);
       return Json(Row, JsonRequestBehavior.AllowGet);
     }
+
+    
   }
 }
