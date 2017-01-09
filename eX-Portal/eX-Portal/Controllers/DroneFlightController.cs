@@ -126,8 +126,10 @@ namespace eX_Portal.Controllers {
         nView.addMenu("Export-CSV", Url.Action("ExportExcel", new { ID = "_PKey" }));
       if (exLogic.User.hasAccess("FLIGHT.DELETE"))
         nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+      if (exLogic.User.hasAccess("TRAFFIC.LIVE"))
+                nView.addMenu("RTA Live", Url.Action("Live","Traffic", new { ID = "_PKey" }));
 
-      if (Request.IsAjaxRequest()) {
+            if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -137,7 +139,139 @@ namespace eX_Portal.Controllers {
     }//Index()
 
 
-    public ActionResult GeoTag([Bind(Prefix = "ID")] int FlightID = 0) {
+    public ActionResult RTAFlights([Bind(Prefix = "ID")] int DroneID = 0, string FlightType = "")
+        {
+            if (!exLogic.User.hasAccess("FLIGHT"))
+                return RedirectToAction("NoAccess", "Home");
+            ViewBag.Title = "RPAS Flights";
+            ViewBag.DroneID = DroneID;
+            String SQLVideo = @"CASE 
+      WHEN 
+          [MSTR_Drone].LastFlightID = DroneFlight.ID and
+          [MSTR_Drone].FlightTime > DATEADD(MINUTE, -1, GETDATE())
+        THEN '<span class=green_icon>&#xf04b;</span>'
+      WHEN (
+          SELECT Count(*)
+          FROM DroneFlightVideo
+          WHERE DroneFlightVideo.FlightID = DroneFlight.ID
+          ) = 0
+        THEN ''
+      ELSE '<span class=icon>&#xf03d;</span>'
+      END AS Video,";
+            //tblPilot.FirstName AS CreatedBy,
+            String SQLFilter = "";
+            String SQL = @"SELECT 
+        DroneFlight.ID,
+        MSTR_Drone.DroneName AS RPAS,
+        tblPilot.FirstName AS PilotName,
+        tblGSC.FirstName AS GCSName,
+        FlightDate AS 'FlightDate',
+        ApprovalName,
+        " + (exLogic.User.hasAccess("FLIGHT.VIDEOS") ? SQLVideo : "") + @"
+        Count(*) OVER () AS _TotalRecords,
+        DroneFlight.ID AS _PKey
+      FROM 
+        DroneFlight
+      LEFT JOIN GCA_Approval as g
+      ON g.ApprovalID = DroneFlight.ApprovalID
+      LEFT JOIN MSTR_Drone
+        ON MSTR_Drone.DroneId = DroneFlight.DroneID
+      LEFT JOIN MSTR_User AS tblPilot
+        ON tblPilot.UserID = DroneFlight.PilotID
+      LEFT JOIN MSTR_User AS tblGSC
+        ON tblGSC.UserID = DroneFlight.GSCID
+      LEFT JOIN MSTR_User AS tblCreated
+        ON tblCreated.UserID = DroneFlight.CreatedBy
+      ";
+            if (DroneID > 0)
+            {
+                if (SQLFilter != "")
+                    SQLFilter += " AND";
+                SQLFilter += "\n" +
+                "  DroneFlight.DroneID=" + DroneID;
+                ViewBag.Title += " [" + Util.getDroneName(DroneID) + "]";
+            }
+
+            if (exLogic.User.hasAccess("DRONE.VIEWALL") || exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
+            }
+            else
+            {
+                if (SQLFilter != "")
+                    SQLFilter += " AND";
+                SQLFilter += " \n" +
+                  "  MSTR_Drone.AccountID=" + Util.getAccountID();
+            }
+
+            //this is using when click link on the dashboard
+            if (FlightType == "LastFlight")
+            {
+                if (SQLFilter != "")
+                    SQLFilter += " AND";
+                SQLFilter += " \n" +
+                  "  DroneFlight.ID=" + Util.GetLastFlightFromDrone(DroneID);
+
+            }
+            else if (FlightType == "CurrentMonthFlight")
+            {
+                if (SQLFilter != "")
+                    SQLFilter += " AND";
+                SQLFilter += " \n" +
+                  "  DroneFlight.FlightDate >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)";
+
+            }
+            if (Util.getLoginUserID() == 202)
+            {
+                if (SQLFilter != "")
+                    SQLFilter += " AND";
+                SQLFilter += " \n" +
+                  "  (DroneFlight.FlightDate BETWEEN '2016-06-26' AND '2016-08-01') or (DroneFlight.FlightDate between  '2016-11-27' and '2016-12-02') ";
+
+
+            }
+            //this is using when click link on the dashboard
+            if (SQLFilter != "")
+            {
+                SQL += "\n WHERE\n" + SQLFilter;
+            }
+            qView nView = new qView(SQL);
+
+
+            // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
+            if (exLogic.User.hasAccess("FLIGHT.EDIT"))
+                nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("FLIGHT.VIEW"))
+                nView.addMenu("Flight Detail", Url.Action("Detail", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("FLIGHT.MAP"))
+            {
+                nView.addMenu("Flight Map", Url.Action("FlightData", "Map", new { ID = "_PKey" }));
+                nView.addMenu("Flight Data", Url.Action("FlightDataView", "Map", new { ID = "_PKey" }));
+            }
+            if (exLogic.User.hasAccess("FLIGHT.VIDEOS"))
+                nView.addMenu("Flight Videos", Url.Action("ListVdeos", "DroneFlight", new { ID = "_PKey" }));
+            //nView.addMenu("Flight Videos", Url.Action("List", "DroneFlight", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("FLIGHT.REPORT"))
+                nView.addMenu("Post Flight Report", Url.Action("PostFlightReport", "Report", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("FLIGHT.GEOTAG"))
+                nView.addMenu("Geo-Tagging", Url.Action("GeoTag", "DroneFlight", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("FLIGHT.EXPORTCSV"))
+                nView.addMenu("Export-CSV", Url.Action("ExportExcel", new { ID = "_PKey" }));
+            if (exLogic.User.hasAccess("FLIGHT.DELETE"))
+                nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+
+        }//Index()
+
+        public ActionResult GeoTag([Bind(Prefix = "ID")] int FlightID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.GEOTAG"))
         return RedirectToAction("NoAccess", "Home");
       ExponentPortalEntities Db = new ExponentPortalEntities();
