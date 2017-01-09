@@ -16,7 +16,7 @@ namespace Exponent.ADSB {
     private const String APIKey = "";
     private const String ApiID = "";
     private SqlConnection CN;
-    private const int NewFlightTime = 120;
+    private const int NewFlightTime = 10;
     private bool isDemoMode = false;
     public List<FlightPosition> FlightStat(String DSN, bool DemoMode = false, ADSBQuery QueryData = null)  {
       var Data = new List<FlightPosition>();
@@ -25,7 +25,7 @@ namespace Exponent.ADSB {
       //connect to database for reading data
       using (CN = new SqlConnection(DSN)) {
         CN.Open();
-        //setActiveFlights();
+        setActiveFlights();
 
         //get active positions
         Data = getLivePositions(QueryData);
@@ -113,6 +113,9 @@ namespace Exponent.ADSB {
 
     private List<FlightPosition> getLivePositions(Exponent.ADSB.ADSBQuery QueryData = null) {
       if (QueryData == null) QueryData = new ADSBQuery();
+      if (QueryData.tracking_adsb_commercial == 0 &
+        QueryData.tracking_adsb_rpas == 0 &&
+        QueryData.tracking_adsb_skycommander == 0) QueryData.tracking_adsb_commercial = 1;
       var PositionDatas = new List<FlightPosition>();
       StringBuilder Filter = new StringBuilder();
       StringBuilder WHERE = new StringBuilder();
@@ -157,7 +160,7 @@ namespace Exponent.ADSB {
 
       Filter.Append(QueryData.getTrackingFilter());
       if (Filter.Length > 0) {
-        WHERE.AppendLine(" AND");
+        if(WHERE.Length > 0) WHERE.AppendLine(" AND");
         WHERE.Append(Filter);
         Filter.Clear();
       }
@@ -234,7 +237,10 @@ namespace Exponent.ADSB {
         [AdsbDate],
         [FlightSource],
         [CreatedDate],
-        [HeadingHistory]
+        [HeadingHistory],
+        OMDB, 
+        OMDW, 
+        OMSJ
         ) VALUES (
           '" + Position.FlightID + @"',
           " + Position.Heading + @",
@@ -247,7 +253,10 @@ namespace Exponent.ADSB {
           '" + Position.ADSBDate.ToString("yyyy-MM-dd hh:mm:ss") + @"',
           '" + Position.FlightSource + @"',
           GETDATE(),
-          Position.Heading
+          '" + Position.Heading + @"',
+          abs([dbo].[fnCalcDistanceKM](" + Position.Lat + ", " + Airport.OMDB.lat + ", " + Position.Lon + ", " + Airport.OMDB.lng + @")),
+          abs([dbo].[fnCalcDistanceKM](" + Position.Lat + ", " + Airport.OMDW.lat + ", " + Position.Lon + ", " + Airport.OMDW.lng + @")),
+          abs([dbo].[fnCalcDistanceKM](" + Position.Lat + ", " + Airport.OMSJ.lat + ", " + Position.Lon + ", " + Airport.OMSJ.lng + @"))
         )";
         doSQL(SQL);
       }
@@ -260,8 +269,12 @@ namespace Exponent.ADSB {
     }
     private int getActiveFlights() {
       int Result = 0;
-      String SQL = "select count(*) from AdsbLive where CreatedDate > (DATEADD(SECOND, -" + NewFlightTime + ", GETDATE()))";
-      using(var RS = new SqlCommand(SQL, CN)) {
+      String SQL = @"select count(*) from 
+        AdsbLive 
+      where 
+         CreatedDate > (DATEADD(SECOND, -" + NewFlightTime + @", GETDATE())) AND
+         FlightSource NOT IN ('SkyCommander')";
+      using (var RS = new SqlCommand(SQL, CN)) {
         var ObjResult = RS.ExecuteScalar();
         Result = ObjResult == null ? 0 : (int)ObjResult;
       }

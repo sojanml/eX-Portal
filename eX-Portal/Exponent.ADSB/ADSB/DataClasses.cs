@@ -6,7 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Exponent.ADSB {
-  public class ADSBQuery {
+
+  public static class Airport {
+    public static Coordinate OMDB = new Coordinate { lat = 25.2532, lng = 55.3657 };
+    public static Coordinate OMDW = new Coordinate { lat = 24.8978, lng = 55.1431 };
+    public static Coordinate OMSJ = new Coordinate { lat = 25.3284, lng = 55.5123 };
+  }
+
+public class ADSBQuery {
     public Double ATCRadious { get; set; }
     public Double hSafe { get; set; }
     public Double vSafe { get; set; }
@@ -43,9 +50,9 @@ namespace Exponent.ADSB {
           (tracking_adsb_commercial == 1 && tracking_adsb_skycommander == 1)) {
         TheFilter = "  AdsbLive.FlightSource IN ('Exponent', 'SkyCommander','FlightAware')";
       } else if(tracking_adsb_commercial == 1 && tracking_adsb_rpas == 1) {
-        TheFilter = "  (AdsbLive.FlightSource = 'Exponent' OR AdsbLive.HexCode LIKE 'A000%')";
+        TheFilter = "  (AdsbLive.FlightSource IN ('Exponent', 'FlightAware') OR AdsbLive.HexCode LIKE 'A000%')";
       } else if (tracking_adsb_commercial == 1) {
-        TheFilter = "  AdsbLive.FlightSource = 'Exponent'";
+        TheFilter = "  AdsbLive.FlightSource IN ('Exponent', 'FlightAware')";
       } else if (tracking_adsb_rpas == 1) {
         TheFilter = "  AdsbLive.HexCode LIKE 'A000%'";
       } else if (tracking_adsb_skycommander == 1) {
@@ -119,9 +126,6 @@ namespace Exponent.ADSB {
     private String LatLonHistory { get; set; }
     private String HeadingHistory { get; set; }
 
-    private Coordinate OMDB = new Coordinate { lat = 25.2532, lng = 55.3657 };
-    private Coordinate OMDW = new Coordinate { lat = 24.8978, lng = 55.1431 };
-    private Coordinate OMSJ = new Coordinate { lat = 25.3284, lng = 55.5123 };
 
     public ADSBData() {
       ID = 0;
@@ -201,9 +205,9 @@ namespace Exponent.ADSB {
         "'" + hex + "'," +
         "'" + track + "'," +
         "0," +
-        "abs([dbo].[fnCalcDistanceKM](" + lat + ", " + OMDB.lat + ", " + lon + ", " + OMDB.lng + ")),\n" +
-        "abs([dbo].[fnCalcDistanceKM](" + lat + ", " + OMDW.lat + ", " + lon + ", " + OMDW.lng + ")),\n" +
-        "abs([dbo].[fnCalcDistanceKM](" + lat + ", " + OMSJ.lat + ", " + lon + ", " + OMSJ.lng + "))\n" +
+        "abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMDB.lat + ", " + lon + ", " + Airport.OMDB.lng + ")),\n" +
+        "abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMDW.lat + ", " + lon + ", " + Airport.OMDW.lng + ")),\n" +
+        "abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMSJ.lat + ", " + lon + ", " + Airport.OMSJ.lng + "))\n" +
         ")";
       using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
         cmd.ExecuteNonQuery();
@@ -231,9 +235,9 @@ namespace Exponent.ADSB {
         HeadingHistory = '" + SB.ToString() + @"', 
         IsCalculated = 0, 
         CreatedDate = GETDATE(),
-        OMDB = abs([dbo].[fnCalcDistanceKM](" + lat + ", " + OMDB.lat + ", " + lon + ", " + OMDB.lng + @")),
-        OMDW = abs([dbo].[fnCalcDistanceKM](" + lat + ", " + OMDW.lat + ", " + lon + ", " + OMDW.lng + @")),
-        OMSJ = abs([dbo].[fnCalcDistanceKM](" + lat + ", " + OMSJ.lat + ", " + lon + ", " + OMSJ.lng + @"))
+        OMDB = abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMDB.lat + ", " + lon + ", " + Airport.OMDB.lng + @")),
+        OMDW = abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMDW.lat + ", " + lon + ", " + Airport.OMDW.lng + @")),
+        OMSJ = abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMSJ.lat + ", " + lon + ", " + Airport.OMSJ.lng + @"))
       WHERE
         ID =" + ID;
       using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
