@@ -20,6 +20,11 @@ Add the Following reference to the projcet
 */
 
 namespace eX_Portal.exLogic {
+
+
+
+
+
   public class GPSInfo {
     public GPSInfo() {
       Latitude = 0;
@@ -66,17 +71,69 @@ namespace eX_Portal.exLogic {
       _OutputFileName = OutputFileName;
     }
 
-    public String setThumbnail(int Width = 120) {
+    public String setThumbnail(int Width = 120, String ExtPrefix="t") {
       Image image = Image.FromFile(_InputFileName);
       int X = image.Width;
       int Y = image.Height;
       int Height = (int)((Width * Y) / X);
-      String ThumbnailImage = Path.ChangeExtension(_OutputFileName, "t.png");
+      if (String.IsNullOrWhiteSpace(_OutputFileName)) _OutputFileName = _InputFileName;
+      String ThumbnailImage = Path.ChangeExtension(_OutputFileName, ExtPrefix + ".png");
 
       Image thumb = image.GetThumbnailImage(Width, Height, () => false, IntPtr.Zero);      
       thumb.Save(ThumbnailImage);
             image.Dispose();
       return ThumbnailImage;
+    }
+    public GPSInfo getGPS() {
+      var myGPS = new GPSInfo();
+      //_InputFileName = InputFileName;
+      Image image = Image.FromFile(_InputFileName);
+      myGPS.Latitude = GetLatitude(image);
+      myGPS.Longitude = GetLongitude(image);
+      image.Dispose();
+      return myGPS;
+    }
+
+    public float GetLatitude(Image targetImg) {
+      try {
+        //Property Item 0x0001 - PropertyTagGpsLatitudeRef
+        PropertyItem propItemRef = targetImg.GetPropertyItem(1);
+        //Property Item 0x0002 - PropertyTagGpsLatitude
+        PropertyItem propItemLat = targetImg.GetPropertyItem(2);
+        return ExifGpsToFloat(propItemRef, propItemLat);
+      } catch (ArgumentException) {
+        return 0;
+      }
+    }
+    public float GetLongitude(Image targetImg) {
+      try {
+        ///Property Item 0x0003 - PropertyTagGpsLongitudeRef
+        PropertyItem propItemRef = targetImg.GetPropertyItem(3);
+        //Property Item 0x0004 - PropertyTagGpsLongitude
+        PropertyItem propItemLong = targetImg.GetPropertyItem(4);
+        return ExifGpsToFloat(propItemRef, propItemLong);
+      } catch (ArgumentException) {
+        return 0;
+      }
+    }
+    private static float ExifGpsToFloat(PropertyItem propItemRef, PropertyItem propItem) {
+      uint degreesNumerator = BitConverter.ToUInt32(propItem.Value, 0);
+      uint degreesDenominator = BitConverter.ToUInt32(propItem.Value, 4);
+      float degrees = degreesNumerator / (float)degreesDenominator;
+
+      uint minutesNumerator = BitConverter.ToUInt32(propItem.Value, 8);
+      uint minutesDenominator = BitConverter.ToUInt32(propItem.Value, 12);
+      float minutes = minutesNumerator / (float)minutesDenominator;
+
+      uint secondsNumerator = BitConverter.ToUInt32(propItem.Value, 16);
+      uint secondsDenominator = BitConverter.ToUInt32(propItem.Value, 20);
+      float seconds = secondsNumerator / (float)secondsDenominator;
+
+      float coorditate = degrees + (minutes / 60f) + (seconds / 3600f);
+      string gpsRef = System.Text.Encoding.ASCII.GetString(new byte[1] { propItemRef.Value[0] }); //N, S, E, or W
+      if (gpsRef == "S" || gpsRef == "W")
+        coorditate = 0 - coorditate;
+      return coorditate;
     }
 
 
@@ -110,9 +167,9 @@ namespace eX_Portal.exLogic {
     }
      
 
-        // North or South Latitude 
-        // ASCII 2    // Latitude        
-        private const string GPSLatitudeRefQuery = "/app1/ifd/gps/subifd:{ulong=1}";
+    // North or South Latitude 
+    // ASCII 2    // Latitude        
+    private const string GPSLatitudeRefQuery = "/app1/ifd/gps/subifd:{ulong=1}";
     // RATIONAL 3  // East or West Longitude 
     private const string GPSLatitudeQuery = "/app1/ifd/gps/subifd:{ulong=2}";
     // ASCII 2 // Longitude 

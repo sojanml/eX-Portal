@@ -95,11 +95,11 @@ $(document).ready(function () {
   InitVideo();
   InitChart();
   initializeMap();
-  startReplayTimer();
+  //startReplayTimer();
 });
 
 function initializeMap() {
-  var MarkerPosition = { lat: 25.0955354, lng: 55.1527025 };
+  var MarkerPosition = FlightPosition;
 
   var mapOptions = {
     zoom: 14,
@@ -236,15 +236,15 @@ function startReplayTimer() {
 }
 
 function InitVideo() {
-
-    var Value = document.getElementById('divRecordedVideoURL').innerText;
-    //https://exponent-s3.s3.amazonaws.com/traffic/v2.flv  al_sufouh_road_2016101452
+  //var Value = 'https:' + '//exponent-s3.s3.amazonaws.com/traffic/' + FlightVideo;
+  var Value = 'https:' + '//exponent-s3.s3.amazonaws.com/VOD/' + FlightVideo;
+  //'https:' + '//exponent-s3.s3.amazonaws.com/traffic/v2.flv';
   var PlayList = [
     {
       sources: [{
           file: Value, type: "flv"
       }],
-      title: '',
+      title: 'Traffic Video',
     }
   ];
 
@@ -369,200 +369,9 @@ function InitChart() {
 *************************************************************************
 *************************************************************************/
 
-function getADSB() {
-  $.ajax({
-    type: "GET",
-    url: '/ADSB/',
-    contentType: "application/json",
-    success: function (result) {
-      _ADSBLayer.setADSB(result);
-    },
-    error: function (data, text) {
-      //alert('Failed to fetch flight: ' + data);
-    }
-  });
-}
-
-
-function ADSBOverlay(options, ADSBData) {
-  this.setValues(options);
-  this.markerLayer = $('<div />').addClass('overlay');
-  this.ADSBData = ADSBData;
-  this.ResetDraw = false;
-  this.DrawCount = 0;
-  this.MovePointsToSecond = 0;
-  this.gADSBData = new Object();
-  this.setADSB = function (ADSBData) {
-    this.ADSBData = ADSBData;
-    this.draw();
-    this.DrawCount++;
-  }
-
-
-  this.getIconColor = function (Height) {
-
-    var Colors = [
-    '#FF0000', //Red
-    '#FF9600', //Yellow
-    '#00ff10' //Green
-    ];
-
-
-    if (Height < 1000) {
-      return Colors[0];
-    } else if (Height < 2000) {
-      return Colors[1];
-    } else {
-      return Colors[2];
-    }
-
-
-  }
-};
-
-ADSBOverlay.prototype = new google.maps.OverlayView;
-
-ADSBOverlay.prototype.onAdd = function () {
-  var $pane = $(this.getPanes().overlayImage); // Pane 3  
-  $pane.append(this.markerLayer);
-};
-
-ADSBOverlay.prototype.onRemove = function () {
-  this.markerLayer.remove();
-};
-
-ADSBOverlay.prototype.draw = function () {
-  var projection = this.getProjection();
-  var zoom = this.getMap().getZoom();
-  var fragment = document.createDocumentFragment();
-  var NewPoints = 0;
-
-
-  for (var i = 0; i < this.ADSBData.length; i++) {
-    var lat = this.ADSBData[i].Lat;
-    var lng = this.ADSBData[i].Lon;
-    var alt = this.ADSBData[i].Altitude * 100;
-    var title = this.ADSBData[i].FlightID.trim();
-    var heading = this.ADSBData[i].Heading;
-    heading = parseFloat(heading);
-    if (isNaN(heading)) heading = 0;
-
-    // Determine a random location from the bounds set previously  
-    var IconGeoPos = new google.maps.LatLng(lat, lng)
-    var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
-    var DivID = 'adsb-' + title;
-    var IconColor = this.getIconColor(alt);
-
-    if (heading == 0) {
-      //Landed flight - Ignore movement
-    } else if (this.gADSBData[DivID]) {
-      var $point = $('#' + DivID);
-      $point.animate({ left: IconLocation.x, top: IconLocation.y });
-      $point.find(".icon").css({ transform: 'rotate(' + (heading - 45) + 'deg)', color: IconColor });
-      $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });
-    } else {
-      var $point = $(
-          '<div  class="adsb-point" id="' + DivID + '" title="' + title + '" '
-        + 'data-lat="' + lat + '" '
-        + 'data-lng="' + lng + '" '
-        + 'data-alt="' + alt + '" '
-        + 'data-ident="' + title + '" '
-        + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
-        + '<span class="icon FlightIcon" style=" transform: rotate(' + (heading - 45) + 'deg); color: ' + IconColor + '">&#xf072;</span>'
-        + '<span class="flight-title" style="">' + title + '</span>' +
-        + '</div>'
-      );
-      // Append the HTML to the fragment in memory  
-      fragment.appendChild($point.get(0));
-      NewPoints++;
-    }
-
-    this.gADSBData[DivID] = this.DrawCount;
-
-    if (ADSBLine.FlightID == title) {
-      ADSBLine.setABSPos(lat, lng, alt);
-      ADSBLine.Show();
-      $('#' + DivID).trigger("click");
-    }
-
-  }//for (var i = 0)
-
-  //if the item does not exists in 20 request, then remove it from the screen
-  var AllKeys = Object.keys(this.gADSBData);
-  for (i = 0; i <= AllKeys.length; i++) {
-    var TheKey = AllKeys[i];
-    if (this.gADSBData[TheKey] != this.DrawCount) {
-      $('#' + TheKey).fadeOut();
-      delete this.gADSBData[TheKey];
-    }//if (gADSBData[key] > 20) 
-  }//for (var key in gADSBData)
-
-
-  // Now append the entire fragment from memory onto the DOM  
-  if(NewPoints > 0) this.markerLayer.append(fragment);
-};
-
-
-
-var ADSBLine = {
-  FlightID: "",
-  EndPos: null,
-  StartPos: null,
-  AltABS: 0,
-  AltEnd: 0,
-
-  PolyLine: new google.maps.Polyline({
-    path: [],
-    geodesic: true,
-    strokeColor: '#0000FF',
-    strokeOpacity: 1.0,
-    strokeWeight: 2
-  }),
-
-  setABSPos: function (lat, lng, alt) {
-    this.EndPos = new google.maps.LatLng(lat, lng);
-    alt = parseFloat(alt + '');
-    this.AltABS = alt * 0.3048;
-  },
-  setStart: function (lat, lng, alt) {
-    this.StartPos = new google.maps.LatLng(lat, lng);
-    alt = parseFloat(alt + '');
-    this.AltEnd = alt;
-  },
-  Show: function () {
-    if (this.EndPos == null) return;
-    if (this.StartPos == null) return;
-    this.PolyLine.setPath([this.EndPos, this.StartPos]);
-    if (FlightID == "") return;
-    this.PolyLine.setMap(map);
-  },
-
-  Hide: function () {
-    this.PolyLine.setMap(null);
-    this.FlightID = ""
-  },
-
-  getDistance: function () {
-    var distance = getDistanceFromLatLonInKm(
-      this.StartPos.lat(),
-      this.StartPos.lng(),
-      this.EndPos.lat(),
-      this.EndPos.lng()
-    );
-    return distance.toFixed(2);
-  },
-
-  getAltDiff: function () {
-    var alt = (this.AltABS - this.AltEnd) / 0.3048;
-    return alt.toFixed(0);
-  }
-
-};
-
-
 function getChartDataInit() {
   //download data from the server
-  var URL = '/traffic/livedata?LastProcessedID=' + LastProcessedID;
+  var URL = '/traffic/livedata?FlightID=' + FlightID + '&LastProcessedID=' + LastProcessedID;
   var AJAX = $.ajax({
     url: URL,
     type: 'GET',

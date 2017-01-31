@@ -12,6 +12,7 @@
   <title>@ViewBag.Title - Exponent</title>
   @Scripts.Render("~/bundles/jquery")
   @Styles.Render("~/bundles/ADSB")
+  @Styles.Render("~/bundles/dataTableCss")
   @RenderSection("header", required: false)  
   <title>_eXPortalWidget</title>
 </head>
@@ -19,7 +20,13 @@
   <section>
     <header>
       <div class="left-section">
-        <div class="logo"><img src="~/images/adsb-logo.png" /></div>
+        <div class="logo">
+          @if (String.IsNullOrWhiteSpace(ViewBag.Logo)) {
+        <img src="~/images/adsb-logo.png" />
+          } else {
+            <img src="~/images/@ViewBag.Logo" />
+          }
+        </div>
       </div>
       <div class="right-section">
 
@@ -43,6 +50,9 @@
           </nav>
 
         <nav class="main-menu">
+          <div class="navigation-logo">
+            <img src="~/images/logo-small.png" />
+          </div>
           @Html.Action("SystemMenu", "Design")
         </nav>
 
@@ -61,7 +71,8 @@
 
   
   @RenderBody()
-  
+  @Scripts.Render("~/bundles/dataTableScript")
   @RenderSection("scripts", required: false)
+ 
 </body>
 </html>

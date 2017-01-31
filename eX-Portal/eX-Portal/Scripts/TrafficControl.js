@@ -236,7 +236,7 @@ function InitVideo() {
   var PlayList = [
     {
       sources: [{
-        file: "/upload/video/v2.flv", type: "flv"
+        file: "https://exponent-s3.s3.amazonaws.com/traffic/v2.flv", type: "flv"
       }],
       title: 'al_sufouh_road_2016101452',
     }

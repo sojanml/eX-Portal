@@ -5,7 +5,8 @@ using Microsoft.Owin.Security;
 
 namespace eX_Portal.Models
 {
-    public class IndexViewModel
+
+  public class IndexViewModel
     {
         public bool HasPassword { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }

@@ -1,0 +1,475 @@
+$MainTitleBackground: #474747;
+$MainTitleColor: #ffb400;
+$HiliteTextColor: #2b821a;
+
+@mixin clearfix() {
+  &:after {
+    clear: both;
+    display: block;
+    content: "";
+  }
+}
+
+input.date-picker {
+  background-image: url('../images/cal-icon.png');
+  background-position: calc(100% - 5px) 1px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+div.title-bar {
+  background-color: $MainTitleBackground;
+  color: $MainTitleColor;
+  font-size: 10pt;
+  padding: 5px 10px 5px 10px;
+  width: 100%;
+  box-sizing: border-box;
+
+  span.button {
+    display: block;
+    float: right;
+    font-size: 7pt;
+    padding: 1px 5px 1px 5px;
+    border: 1px $MainTitleColor solid;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left:10px;
+    a {
+      text-decoration:none;
+      color: $MainTitleColor;
+    }
+
+    &:hover {
+      background-color: $MainTitleColor;
+      color: white;
+      a {
+        color: white;
+      }
+    }
+  }
+}
+
+table#SearchTable {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  margin-bottom: 10px;
+
+  tr {
+    td {
+      padding: 5px 5px 0px 0px;
+      font-size: 7pt;
+      white-space: nowrap;
+
+      table tr td {
+        padding: 0px 5px 0px 0px;
+      }
+
+      input[type="text"],
+      select {
+        width: 100%;
+        padding: 2px 5px 2px 5px;
+        box-sizing: border-box;
+        margin: 0px;
+        border-radius: 5px;
+        border: 1px silver solid;
+        color: $HiliteTextColor;
+        font-family: OpenSans;
+      }
+
+      &:last-child {
+        padding: 5px 0px 0px 0px;
+      }
+
+      &.button {
+        text-align: right;
+
+        input {
+          padding: 5px 10px 5px 10px;
+          background-color: $MainTitleBackground;
+          color: $MainTitleColor;
+          border: 1px black solid;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+}
+
+table.report {
+  thead, tbody {
+    tr {
+      td {
+        background-color: white;
+        -webkit-user-select: none; /* Chrome all / Safari all */
+        -moz-user-select: none; /* Firefox all */
+        -ms-user-select: none; /* IE 10+ */
+        user-select: none;
+        cursor: pointer;
+      }
+
+      &:hover td {
+        background-color: #bde3b6;
+      }
+    }
+
+    td, th {
+      text-align: left;
+      padding: 2px 5px 2px 0px;
+    }
+
+    th {
+      border-bottom: 2px $MainTitleColor solid;
+    }
+
+    td {
+      border-bottom: 1px #bde3b6 solid;
+    }
+  }
+}
+
+
+$MapPointWH: 12px;
+$MapPointBorder: 5px;
+$MapPointPadding: 2px;
+$MapPointMargin: -1 * ($MapPointWH + (2 * $MapPointBorder) + (2 * $MapPointPadding))/2;
+
+div.map-point {
+  position: absolute;
+  width: $MapPointWH;
+  height: $MapPointWH;
+  display: block;
+  border: $MapPointBorder #ffb400 solid;
+  background-color: #2b821a;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  padding: $MapPointPadding;
+  font-family: Arial;
+  font-size: 10px;
+  cursor: pointer;
+  margin: $MapPointMargin 0px 0px $MapPointMargin;
+}
+
+div.row {
+  padding-bottom: 5px;
+  min-width: 200px;
+
+  span.label {
+    color: $MainTitleColor;
+  }
+
+  span.value {
+    color: $HiliteTextColor;
+  }
+
+  span.button {
+    color: $HiliteTextColor;
+    border: 1px $HiliteTextColor solid;
+    padding: 3px 10px 3px 10px;
+    border-radius: 3px;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 7pt;
+
+    &:hover {
+      background-color: $HiliteTextColor;
+      color: white;
+    }
+  }
+}
+
+#qViewDataDetails {
+  margin-top: 10px;
+
+  div#DataImagesSection,
+  div#DataSection {
+    float: left;
+    min-height: 270px;
+  }
+
+  div#DataImagesSection {
+    margin-right: 20px;
+    width: 270px;
+
+    div#DataImage {
+      display: block;
+      box-sizing: border-box;
+      width: 270px;
+      height: 170px;
+      overflow: hidden;
+      line-height: 170px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-color: #bde3b6;
+      border: 2px $MainTitleColor solid;
+    }
+
+    ul#DataImageThumbnail li:nth-child(4n) {
+      margin-right:0px;
+    }
+  }
+
+  div#DataSection {
+    width: 275px;
+  }
+
+}
+
+table.general-table {
+  td {
+    padding: 0px 5px 4px 0px;
+
+    &:last-child {
+      padding: 0px 0px 3px 0px;
+    }
+  }
+}
+
+
+ul#DataImageThumbnail {
+  list-style: none;
+  margin: 20px 0px 0px 0px;
+  padding: 0px;
+
+  li {
+    position: relative;
+    float: left;
+    border: 2px $MainTitleColor solid;
+    width: ((270px - 30px) / 4);
+    margin-right: 10px;
+    margin-bottom: 10px;
+    height: 50px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #bde3b6;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    span.delete {
+      position: absolute;
+      bottom:3px;
+      right:3px;
+      background-color: $MainTitleBackground;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      color:white;
+      text-align: center;
+      line-height: 12px;
+      font-weight: bold;
+      display:none;
+      font-size:6px;
+      &:hover {
+        background-color: $MainTitleColor;
+      }
+    }
+
+    span.label {
+      background-color: $MainTitleColor;
+      position: absolute;
+      top:5px;
+      left:5px;
+      color:white;
+      width:12px;
+      height:12px;
+      line-height:12px;
+      border-radius:50%;
+      font-size:8px;
+      color:black;
+      text-align: center;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+
+    }
+
+    span.title {
+      min-width: 56px;
+      background-color: $MainTitleBackground;
+      position: absolute;
+      top:0px;
+      left:0px;
+      color:white;
+      text-align: left;
+      padding:1px 2px 1px 2px;
+      font-size:8px;
+      box-sizing: border-box;
+      display:none;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+    }
+    &:last-child {
+      margin-right: 0px;
+    }
+
+    &.active,
+    &:hover {
+      border-color: $HiliteTextColor;
+      span.delete {
+        display:block;
+      }
+      span.label {
+        display:none;
+      }
+      span.title {
+        display:block;
+      }
+    }
+
+
+  }
+
+
+
+  @include clearfix;
+}
+
+div.form-group {
+  $Left: 25%;
+  width: 100%;
+  padding: 5px 0px 2px 0px;
+  input[type="submit"] {
+    padding:5px 15px 5px 15px;
+    background-color: $MainTitleBackground;
+    color: $MainTitleColor;
+    border:0px white none;
+    border-radius: 5px;
+    margin-right:25px;
+    &:hover {
+    color: $MainTitleBackground;
+    background-color: $MainTitleColor;
+    }
+  }
+  label.control-label {
+    width: $Left;
+    float: left;
+    padding-top: 5px;
+  }
+
+  div.col-md-10 {
+    float: right;
+    width: (100% - $Left);
+  }
+
+  div.col-md-5 {
+    float: left;
+    width: ((100% - $Left - 3%)/2 );
+
+    &:last-child {
+      margin-left: 3%;
+    }
+  }
+
+  div.col-md-10,
+  div.col-md-5 {
+    input[type="text"],
+    input[type="datetime"],
+    input[type="number"],
+    textarea,
+    select {
+      box-sizing: border-box;
+      margin: 0px;
+      padding: 3px; 
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      color: $MainTitleBackground;
+      border:1px silver solid;
+    }
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+    }
+    input[type="datetime"],
+    input[type="number"] {
+      width: 48%;
+    }
+  }
+
+  span.text-danger {
+    color: $MainTitleColor;
+    display: block;
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+
+
+div.form-group-row {
+  $Left: 25%;
+  width: 100%;
+  padding: 3px 0px 3px 0px;
+  border-bottom: 1px silver solid;
+  label.control-label {
+    width: $Left;
+    float: left;
+  }
+
+  div.col-md-10 {
+    float: right;
+    width: (100% - $Left);
+  }
+
+  input[type="submit"] {
+    padding:5px 15px 5px 15px;
+    background-color: $MainTitleBackground;
+    color: $MainTitleColor;
+    border:0px white none;
+    border-radius: 5px;
+    &:hover {
+    color: $MainTitleBackground;
+    background-color: $MainTitleColor;
+    }
+  }
+
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+div.internal-scroll {
+  overflow: auto;
+  height:430px;
+  width:100%;
+  padding-right:10px;
+  box-sizing: border-box
+}
+
+
+#AgricultureMap {
+  min-height: 460px;
+}
+
+ul#ValidationError {
+  margin:0px;
+  padding:0px;
+  LI {
+    color: $MainTitleColor;
+    margin:0px;
+    padding:0px 0px 10px 0px;
+  }
+}
+
+ul#FileUploaded {
+  margin:0px;
+  padding:0px;
+
+}
+ul#FileQueue {
+  margin:0px;
+  padding:0px;
+  list-style:none;
+  li {
+    list-style:none;
+    padding:5px 0px 5px 0px;
+    border-bottom:1px silver solid;
+    > div > span {
+      color: red;
+    }
+  }
+}

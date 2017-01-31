@@ -90,6 +90,10 @@ namespace eX_Portal.Models
         public virtual DbSet<DroneGPSLog> DroneGPSLogs { get; set; }
         public virtual DbSet<MSTR_NoFlyZone> MSTR_NoFlyZone { get; set; }
         public virtual DbSet<ip2location> ip2location { get; set; }
+        public virtual DbSet<TrafficData> TrafficDatas { get; set; }
+        public virtual DbSet<PayloadTraffic> PayloadTraffics { get; set; }
+        public virtual DbSet<AgriTraxImage> AgriTraxImages { get; set; }
+        public virtual DbSet<AgriTraxManagement> AgriTraxManagements { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

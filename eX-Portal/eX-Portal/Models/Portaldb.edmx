@@ -18,6 +18,42 @@
           <Property Name="FlightID" Type="int" />
           <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="AgriTraxImages">
+          <Key>
+            <PropertyRef Name="AgriTraxImageID" />
+          </Key>
+          <Property Name="AgriTraxImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AgriTraxID" Type="int" />
+          <Property Name="ImageFile" Type="varchar" MaxLength="60" />
+          <Property Name="Thumbnail" Type="varchar" MaxLength="60" />
+          <Property Name="Lat" Type="numeric" Precision="12" Scale="8" />
+          <Property Name="Lng" Type="numeric" Precision="12" Scale="8" />
+          <Property Name="ImageDateTime" Type="datetime" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="AgriTraxManagement">
+          <Key>
+            <PropertyRef Name="AgriTraxID" />
+          </Key>
+          <Property Name="AgriTraxID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerReference" Type="varchar" MaxLength="50" />
+          <Property Name="AccountNumber" Type="varchar" MaxLength="50" />
+          <Property Name="DisburementDate" Type="datetime" />
+          <Property Name="Tenor" Type="int" />
+          <Property Name="FacilityType" Type="varchar" MaxLength="50" />
+          <Property Name="PrincipalAmount" Type="numeric" Precision="15" Scale="2" />
+          <Property Name="BranchID" Type="varchar" MaxLength="50" />
+          <Property Name="LoanOfficer" Type="varchar" MaxLength="50" />
+          <Property Name="Lat" Type="numeric" Precision="12" Scale="5" />
+          <Property Name="Lng" Type="numeric" Precision="12" Scale="5" />
+          <Property Name="LandAddress" Type="varchar" MaxLength="50" />
+          <Property Name="LandSize" Type="numeric" Precision="12" Scale="5" />
+          <Property Name="SiteVisitDate" Type="datetime" />
+          <Property Name="NextSiteVisitDate" Type="datetime" />
+          <Property Name="InspectionOfficer" Type="varchar" MaxLength="50" />
+          <Property Name="InspectionNote" Type="varchar" MaxLength="500" />
+          <Property Name="Images" Type="varchar" MaxLength="120" />
+        </EntityType>
         <EntityType Name="ApproalDetail">
           <Key>
             <PropertyRef Name="ID" />
@@ -69,7 +105,7 @@
           <Property Name="RentDays" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'RPASPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BlackBoxData">
           <Key>
             <PropertyRef Name="BlackBoxDataID" />
@@ -458,7 +494,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.BlackBoxData' does not have a p
           <Property Name="RpasApprovalRefNum" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'RPASPortal.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ip2location">
           <Key>
             <PropertyRef Name="ip_from" />
@@ -635,6 +671,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.ip2location' does not have a pr
           <Property Name="BrandLogo" Type="varchar" MaxLength="50" />
           <Property Name="PilotProfileID" Type="int" />
           <Property Name="ChartColor" Type="nvarchar" MaxLength="50" />
+          <Property Name="ColorName" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="MSTR_BlackBox">
           <Key>
@@ -825,17 +862,17 @@ warning 6002: The table/view 'ExponentPortal.dbo.ip2location' does not have a pr
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DroneId" Type="int" />
-          <Property Name="Date" Type="date" />
+          <Property Name="Date" Type="datetime" />
           <Property Name="RouteFrom" Type="nvarchar" MaxLength="50" />
           <Property Name="RouteTo" Type="nvarchar" MaxLength="50" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
-          <Property Name="SimulatedInstrument" Type="int" />
-          <Property Name="AsflightInstructor" Type="int" />
-          <Property Name="DualRecieved" Type="int" />
-          <Property Name="FloatingCommand" Type="int" />
+          <Property Name="SimulatedInstrument" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AsflightInstructor" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DualRecieved" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="FloatingCommand" Type="decimal" Precision="18" Scale="2" />
           <Property Name="PilotId" Type="int" />
-          <Property Name="FixedWing" Type="int" />
-          <Property Name="MultiDashRotor" Type="int" />
+          <Property Name="FixedWing" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="MultiDashRotor" Type="decimal" Precision="18" Scale="2" />
           <Property Name="FlightID" Type="int" />
         </EntityType>
         <EntityType Name="MSTR_Product">
@@ -993,7 +1030,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.ip2location' does not have a pr
           <Property Name="Col" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'RPASPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadData">
           <Key>
             <PropertyRef Name="PayLoadDataID" />
@@ -1021,7 +1058,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadData' does not have a pr
           <Property Name="CellID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'RPASPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadFlight">
           <Key>
             <PropertyRef Name="PayLoadFlightID" />
@@ -1039,7 +1076,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadFlight' does not have a 
           <Property Name="PayLoadDroneID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'RPASPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadImageData">
           <Key>
             <PropertyRef Name="PayLoadImageDataID" />
@@ -1058,7 +1095,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadImageData' does not have
           <Property Name="LogFilePath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'RPASPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadMapData">
           <Key>
             <PropertyRef Name="PayLoadDataMapID" />
@@ -1105,6 +1142,23 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <Property Name="GridLat" Type="numeric" Precision="18" Scale="6" />
           <Property Name="GridLng" Type="numeric" Precision="18" Scale="6" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'RPASPortal.dbo.PayloadTraffic' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PayloadTraffic">
+          <Key>
+            <PropertyRef Name="PTid" />
+          </Key>
+          <Property Name="FlightID" Type="int" />
+          <Property Name="ProcessTime" Type="datetime" />
+          <Property Name="MaxSpeed" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="MinSpeed" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="MediumSpeed" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="NumberOfCar" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="FlightVideoID" Type="int" />
+          <Property Name="PTid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VideoTime" Type="int" />
+        </EntityType>
         <EntityType Name="PayLoadYard">
           <Key>
             <PropertyRef Name="YardID" />
@@ -1127,7 +1181,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadMapData' does not have a
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'RPASPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadYardGrid">
           <Key>
             <PropertyRef Name="CellID" />
@@ -1151,7 +1205,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.PayLoadYardGrid' does not have 
           <Property Name="Polygon" Type="geography" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'RPASPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PortalAlert">
           <Key>
             <PropertyRef Name="AlertID" />
@@ -1173,12 +1227,6 @@ warning 6002: The table/view 'ExponentPortal.dbo.PortalAlert' does not have a pr
           <Property Name="DroneID" Type="int" />
           <Property Name="PilotID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PortalAlert_User">
-          <Property Name="AlertID" Type="int" />
-          <Property Name="UserID" Type="int" />
-        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -1271,7 +1319,7 @@ warning 6013: The table/view 'ExponentPortal.dbo.PortalAlert_User' does not have
           <Property Name="CellReference" Type="varchar" MaxLength="120" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'RPASPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="sysdiagrams">
           <Key>
             
@@ -1283,6 +1331,14 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
           <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="TrafficData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CarCount" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="UserLog">
           <Key>
@@ -1366,6 +1422,8 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
         </Function>
         <EntityContainer Name="ExponentPortalModelStoreContainer">
           <EntitySet Name="ADSBData" EntityType="Self.ADSBData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AgriTraxImages" EntityType="Self.AgriTraxImages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AgriTraxManagement" EntityType="Self.AgriTraxManagement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApproalDetail" EntityType="Self.ApproalDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxCost" EntityType="Self.BlackBoxCost" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxLog" EntityType="Self.BlackBoxLog" Schema="dbo" store:Type="Tables" />
@@ -1418,6 +1476,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
           <EntitySet Name="ProductHistory" EntityType="Self.ProductHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SMSTable" EntityType="Self.SMSTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TrafficData" EntityType="Self.TrafficData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserLog" EntityType="Self.UserLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxData" EntityType="Self.BlackBoxData" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1556,6 +1615,20 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
     [PayLoadMapData].[GridLat] AS [GridLat], 
     [PayLoadMapData].[GridLng] AS [GridLng]
     FROM [dbo].[PayLoadMapData] AS [PayLoadMapData]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PayloadTraffic" EntityType="Self.PayloadTraffic" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PayloadTraffic].[FlightID] AS [FlightID], 
+    [PayloadTraffic].[ProcessTime] AS [ProcessTime], 
+    [PayloadTraffic].[MaxSpeed] AS [MaxSpeed], 
+    [PayloadTraffic].[MinSpeed] AS [MinSpeed], 
+    [PayloadTraffic].[MediumSpeed] AS [MediumSpeed], 
+    [PayloadTraffic].[NumberOfCar] AS [NumberOfCar], 
+    [PayloadTraffic].[CreatedDate] AS [CreatedDate], 
+    [PayloadTraffic].[FlightVideoID] AS [FlightVideoID], 
+    [PayloadTraffic].[PTid] AS [PTid], 
+    [PayloadTraffic].[VideoTime] AS [VideoTime]
+    FROM [dbo].[PayloadTraffic] AS [PayloadTraffic]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadYardGrid" EntityType="Self.PayLoadYardGrid" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1992,6 +2065,10 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
           <EntitySet Name="DroneGPSLogs" EntityType="ExponentPortalModel.DroneGPSLog" />
           <EntitySet Name="MSTR_NoFlyZone" EntityType="ExponentPortalModel.MSTR_NoFlyZone" />
           <EntitySet Name="ip2location" EntityType="ExponentPortalModel.ip2location" />
+          <EntitySet Name="TrafficDatas" EntityType="ExponentPortalModel.TrafficData" />
+          <EntitySet Name="PayloadTraffics" EntityType="ExponentPortalModel.PayloadTraffic" />
+          <EntitySet Name="AgriTraxImages" EntityType="ExponentPortalModel.AgriTraxImage" />
+          <EntitySet Name="AgriTraxManagements" EntityType="ExponentPortalModel.AgriTraxManagement" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2229,7 +2306,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DroneId" Type="Int32" />
-          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="RouteFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RouteTo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -2327,6 +2404,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
           <Property Name="ContactTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PilotProfileID" Type="Int32" />
           <Property Name="ChartColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ColorName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_User">
           <Key>
@@ -3076,6 +3154,65 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
           <Property Name="country_code" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="true" />
           <Property Name="country_name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="TrafficData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CarCount" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PayloadTraffic">
+          <Key>
+            <PropertyRef Name="PTid" />
+          </Key>
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="ProcessTime" Type="DateTime" Precision="3" />
+          <Property Name="MaxSpeed" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="MinSpeed" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="MediumSpeed" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NumberOfCar" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="FlightVideoID" Type="Int32" />
+          <Property Name="PTid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VideoTime" Type="Int32" />
+        </EntityType>
+        <EntityType Name="AgriTraxImage">
+          <Key>
+            <PropertyRef Name="AgriTraxImageID" />
+          </Key>
+          <Property Name="AgriTraxImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AgriTraxID" Type="Int32" />
+          <Property Name="ImageFile" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="Thumbnail" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="Lat" Type="Decimal" Precision="12" Scale="8" />
+          <Property Name="Lng" Type="Decimal" Precision="12" Scale="8" />
+          <Property Name="ImageDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="AgriTraxManagement">
+          <Key>
+            <PropertyRef Name="AgriTraxID" />
+          </Key>
+          <Property Name="AgriTraxID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerReference" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AccountNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DisburementDate" Type="DateTime" Precision="3" />
+          <Property Name="Tenor" Type="Int32" />
+          <Property Name="FacilityType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PrincipalAmount" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="BranchID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LoanOfficer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Lat" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="Lng" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="LandAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LandSize" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="SiteVisitDate" Type="DateTime" Precision="3" />
+          <Property Name="NextSiteVisitDate" Type="DateTime" Precision="3" />
+          <Property Name="InspectionOfficer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="InspectionNote" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Images" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3662,6 +3799,7 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
           <EntitySetMapping Name="MSTR_Account">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Account">
               <MappingFragment StoreEntitySet="MSTR_Account">
+                <ScalarProperty Name="ColorName" ColumnName="ColorName" />
                 <ScalarProperty Name="ChartColor" ColumnName="ChartColor" />
                 <ScalarProperty Name="PilotProfileID" ColumnName="PilotProfileID" />
                 <ScalarProperty Name="ContactTitle" ColumnName="ContactTitle" />
@@ -4460,6 +4598,69 @@ warning 6002: The table/view 'ExponentPortal.dbo.sysdiagrams' does not have a pr
                 <ScalarProperty Name="country_code" ColumnName="country_code" />
                 <ScalarProperty Name="ip_to" ColumnName="ip_to" />
                 <ScalarProperty Name="ip_from" ColumnName="ip_from" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrafficDatas">
+            <EntityTypeMapping TypeName="ExponentPortalModel.TrafficData">
+              <MappingFragment StoreEntitySet="TrafficData">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CarCount" ColumnName="CarCount" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayloadTraffics">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PayloadTraffic">
+              <MappingFragment StoreEntitySet="PayloadTraffic">
+                <ScalarProperty Name="VideoTime" ColumnName="VideoTime" />
+                <ScalarProperty Name="PTid" ColumnName="PTid" />
+                <ScalarProperty Name="FlightVideoID" ColumnName="FlightVideoID" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="NumberOfCar" ColumnName="NumberOfCar" />
+                <ScalarProperty Name="MediumSpeed" ColumnName="MediumSpeed" />
+                <ScalarProperty Name="MinSpeed" ColumnName="MinSpeed" />
+                <ScalarProperty Name="MaxSpeed" ColumnName="MaxSpeed" />
+                <ScalarProperty Name="ProcessTime" ColumnName="ProcessTime" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AgriTraxImages">
+            <EntityTypeMapping TypeName="ExponentPortalModel.AgriTraxImage">
+              <MappingFragment StoreEntitySet="AgriTraxImages">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ImageDateTime" ColumnName="ImageDateTime" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Thumbnail" ColumnName="Thumbnail" />
+                <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
+                <ScalarProperty Name="AgriTraxID" ColumnName="AgriTraxID" />
+                <ScalarProperty Name="AgriTraxImageID" ColumnName="AgriTraxImageID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AgriTraxManagements">
+            <EntityTypeMapping TypeName="ExponentPortalModel.AgriTraxManagement">
+              <MappingFragment StoreEntitySet="AgriTraxManagement">
+                <ScalarProperty Name="Images" ColumnName="Images" />
+                <ScalarProperty Name="InspectionNote" ColumnName="InspectionNote" />
+                <ScalarProperty Name="InspectionOfficer" ColumnName="InspectionOfficer" />
+                <ScalarProperty Name="NextSiteVisitDate" ColumnName="NextSiteVisitDate" />
+                <ScalarProperty Name="SiteVisitDate" ColumnName="SiteVisitDate" />
+                <ScalarProperty Name="LandSize" ColumnName="LandSize" />
+                <ScalarProperty Name="LandAddress" ColumnName="LandAddress" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="LoanOfficer" ColumnName="LoanOfficer" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="PrincipalAmount" ColumnName="PrincipalAmount" />
+                <ScalarProperty Name="FacilityType" ColumnName="FacilityType" />
+                <ScalarProperty Name="Tenor" ColumnName="Tenor" />
+                <ScalarProperty Name="DisburementDate" ColumnName="DisburementDate" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="CustomerReference" ColumnName="CustomerReference" />
+                <ScalarProperty Name="AgriTraxID" ColumnName="AgriTraxID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

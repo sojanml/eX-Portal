@@ -294,8 +294,8 @@ header {
   }
 
   div.logo img {
-    width: 400px;
-    height: auto;
+    width: auto;
+    height: 72px;
   }
 
   @include clearfix;
@@ -323,7 +323,7 @@ nav.breadcrumbs {
 
       ul {
         position: absolute;
-        top: 18px;
+        top: 14px;
         left: 0px;
         display: none;
         z-index: 10;
@@ -331,6 +331,8 @@ nav.breadcrumbs {
         li {
           padding-right: $MenuPadding;
           padding-left: $MenuPadding;
+          padding-top:5px;
+          padding-bottom:5px;
           box-sizing: border-box;
         }
       }
@@ -426,6 +428,17 @@ nav.main-menu {
       }
     }
   }
+
+  div.navigation-logo {
+    float:left;
+    margin-right:10px;
+    background-color: $MenuColor;
+    img {
+      height:16px;
+      width:auto;
+      padding: 5px 10px 4px 10px
+    }
+  }
 }
 
 nav.breadcrumbs {
@@ -450,6 +463,8 @@ nav.breadcrumbs {
       }
     }
   }
+
+
 }
 
 
@@ -807,3 +822,15 @@ div#Alert-Aircraft {
   height:50px;
   overflow-x:auto;
 }
+
+
+.gmnoprint a, .gmnoprint span {
+    display:none;
+}
+.gmnoprint div {
+    background:none !important;
+}
+
+a[href^="http://maps.google.com/maps"]{display:none !important}
+a[href^="https://maps.google.com/maps"]{display:none !important}
+a[href^="https://www.google.com/maps"]{display:none !important}

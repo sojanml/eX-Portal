@@ -1046,7 +1046,7 @@ li.profile_menu_row {
   }
 
   li.profile_menu_row span.on {
-    q color:green;
+    color:green;
   }
 
   li.profile_menu_row span.off {

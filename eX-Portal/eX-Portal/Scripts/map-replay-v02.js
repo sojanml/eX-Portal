@@ -342,7 +342,7 @@ function ShowHideRPAS(isShowRPAS) {
   var MapObj = isShowRPAS ? map : null;
   LatestLine.setMap(MapObj);
   OldLine.setMap(MapObj);
-  DronePositionIcon.setMap(MapObj);
+  //DronePositionIcon.setMap(MapObj);
   for (var i = 0; i < _AllMarkers.length; i++) {
     _AllMarkers[i].setMap(MapObj);
   }

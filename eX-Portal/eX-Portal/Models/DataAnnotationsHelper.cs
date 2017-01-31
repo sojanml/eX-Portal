@@ -672,5 +672,50 @@ namespace eX_Portal.Models {
   }
 
 
+  [MetadataType(typeof(AgriTraxManagementHelper))]
+  public partial class AgriTraxManagement { }
+
+  public class AgriTraxManagementHelper {
+    [Required]
+    [Display(Name = "Customer Reference #")]
+    public string CustomerReference { get; set; }
+    [Required]
+    [Display(Name = "Account Number")]
+    public string AccountNumber { get; set; }
+    [Required]
+    [Display(Name = "Disburemen tDate")]
+    public Nullable<System.DateTime> DisburementDate { get; set; }
+    [Required]
+    [Display(Name = "Tenor (Months)")]
+    public Nullable<int> Tenor { get; set; }
+    [Required]
+    [Display(Name = "Principal Amount")]
+    public Nullable<decimal> PrincipalAmount { get; set; }
+    [Display(Name = "Branch")]
+    public string BranchID { get; set; }
+
+    [Display(Name = "Loan Officer")]
+    public string LoanOfficer { get; set; }
+
+    [Display(Name = "Address")]
+    public string LandAddress { get; set; }
+
+    [Required]
+    [Display(Name = "Land Size (M²)")]
+    [Range(1, float.MaxValue, ErrorMessage = "Please enter valid Land Size")]
+    public Nullable<decimal> LandSize { get; set; }
+
+    [Display(Name = "Site Visit Date")]
+    public Nullable<System.DateTime> SiteVisitDate { get; set; }
+    [Display(Name = "Next Visit Date")]
+    public Nullable<System.DateTime> NextSiteVisitDate { get; set; }
+
+    [Display(Name = "Inspection Officer")]
+    public string InspectionOfficer { get; set; }
+    [Display(Name = "Note")]
+    [DataType(DataType.MultilineText)]
+    public string InspectionNote { get; set; }
+    
+  }
 
 }

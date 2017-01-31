@@ -28,31 +28,29 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult Live([Bind(Prefix = "ID")] int FlightID = 0) {
-            if (!exLogic.User.hasAccess("TRAFFIC.LIVE")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("TRAFFIC.LIVE")) return RedirectToAction("NoAccess", "Home");
 
-            var oList = from f in db.DroneFlights join d in db.MSTR_Drone 
-                        on f.DroneID equals d.DroneId into ps
-                        from p in ps.DefaultIfEmpty()
-                        where f.ID == FlightID 
-                        select f;
+      ViewModel.TrafficDashboard DashBoardInfo = null; 
 
-            Models.DroneFlight dFlight = db.DroneFlights.Find(FlightID);
+      var FlightInfo = db.DroneFlights.Where(f => f.ID == FlightID).FirstOrDefault();
+      if(FlightInfo != null) {
+        DashBoardInfo = new ViewModel.TrafficDashboard() {
+          FlightID = FlightInfo.ID,
+          FlightDate = ((DateTime)(FlightInfo.FlightDate)).ToString("dd-MMM-yyyy HH:MM GST"),
+          Drone = db.MSTR_Drone.Where(d => d.DroneId == FlightInfo.DroneID).Select(s => s.DroneName).FirstOrDefault(),
+          Lat = (Double)FlightInfo.Latitude,
+          Lng = (Double)FlightInfo.Longitude,
+          Pilot = db.MSTR_User.Where(w => w.UserId == FlightInfo.PilotID).Select(s => s.FirstName + " " + s.LastName).FirstOrDefault(),
+          GSC = db.MSTR_User.Where(w => w.UserId == FlightInfo.GSCID).Select(s => s.FirstName + " " + s.LastName).FirstOrDefault(),
+          FlightVideo = db.DroneFlightVideos.Where(w=>w.FlightID == FlightInfo.ID).Select(s => s.VideoURL).FirstOrDefault()
+        };
+      }
+      
+      return View(DashBoardInfo);
+    }
 
-
-            var oListDrone = from d in db.MSTR_Drone where d.DroneId == dFlight.DroneID
-                             select d;
-
-            
-            //var viewModel = new ViewModel.TrafficViewModel
-            //{
-            //    DroneFlight = db.DroneFlights.Find(FlightID),
-            //    MSTR_Drone = db.MSTR_Drone.Where(viewModel.MSTR_Drone.DroneId == dFlight.DroneID)
-            //};
-            return View(oList);
-        }
-
-    public JsonResult LiveData(int LastProcessedID = 0) {
-      String SQL = @"SELECT 
+    public JsonResult LiveData(int FlightID = 0, int LastProcessedID = 0) {
+      String SQL = $@"SELECT 
         PTid,
         ProcessTime,
         MinSpeed,
@@ -71,14 +69,12 @@ namespace eX_Portal.Controllers {
           45 as AvgSpeed,
           60 as MaxSpeed,
           NumberOfCar AS VechileCount
-        FROM dbo.PayloadTraffic ";
-     if(LastProcessedID > 0) {
-        SQL = SQL + @"
+        FROM 
+          PayloadTraffic 
         WHERE
-          PTid > " + LastProcessedID;
-      }
-      SQL = SQL +
-      @"   ORDER BY CreatedDate DESC
+          PayloadTraffic.FlightID='{FlightID}'
+          {((LastProcessedID > 0) ? " AND PTid > " + LastProcessedID : "") }
+      ORDER BY CreatedDate DESC
         ) AS InnerSelect
       ORDER BY InnerSelect.CreatedDate ASC
       ";
@@ -93,6 +89,6 @@ namespace eX_Portal.Controllers {
       return Json(Row, JsonRequestBehavior.AllowGet);
     }
 
-    
+
   }
 }
