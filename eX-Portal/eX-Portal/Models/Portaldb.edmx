@@ -24,12 +24,14 @@
           </Key>
           <Property Name="AgriTraxImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AgriTraxID" Type="int" />
+          <Property Name="AgriTraxGroupID" Type="int" />
           <Property Name="ImageFile" Type="varchar" MaxLength="60" />
           <Property Name="Thumbnail" Type="varchar" MaxLength="60" />
           <Property Name="Lat" Type="numeric" Precision="12" Scale="8" />
           <Property Name="Lng" Type="numeric" Precision="12" Scale="8" />
           <Property Name="ImageDateTime" Type="datetime" />
           <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
         </EntityType>
         <EntityType Name="AgriTraxManagement">
           <Key>
@@ -3189,6 +3191,8 @@ warning 6002: The table/view 'RPASPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="Lng" Type="Decimal" Precision="12" Scale="8" />
           <Property Name="ImageDateTime" Type="DateTime" Precision="3" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="AgriTraxGroupID" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
         </EntityType>
         <EntityType Name="AgriTraxManagement">
           <Key>
@@ -4629,6 +4633,8 @@ warning 6002: The table/view 'RPASPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="AgriTraxImages">
             <EntityTypeMapping TypeName="ExponentPortalModel.AgriTraxImage">
               <MappingFragment StoreEntitySet="AgriTraxImages">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="AgriTraxGroupID" ColumnName="AgriTraxGroupID" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="ImageDateTime" ColumnName="ImageDateTime" />
                 <ScalarProperty Name="Lng" ColumnName="Lng" />

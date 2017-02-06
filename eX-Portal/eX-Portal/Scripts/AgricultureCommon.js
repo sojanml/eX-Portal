@@ -1,4 +1,46 @@
-﻿function getMapStyle() {
+﻿function dtConvFromJSON(sNetDate, isAddTime) {
+  var sDate = '';
+
+  var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  if (sNetDate === null) return "N/A";
+  var r = /\/Date\(([0-9]+)\)\//i
+  var matches = sNetDate.match(r);
+  if (matches.length === 2) {
+    var tDate = new Date(parseInt(matches[1]));
+    sDate = (tDate.getDay() + 1) + '-' + Months[tDate.getMonth()] + '-' + tDate.getFullYear();
+
+    if (isAddTime) {
+      sDate = sDate + ' ' + pad(tDate.getHours()) + ":" + pad(tDate.getMinutes()) + ':' + pad(tDate.getSeconds());
+    }
+
+  } else {
+    sDate =  "N/A";
+  }
+
+
+
+  return sDate;
+
+}
+
+
+function nFormat(n, dp) {
+  var w = n.toFixed(dp), k = w | 0, b = n < 0 ? 1 : 0,
+      u = Math.abs(w - k), d = ('' + u.toFixed(dp)).substr(2, dp),
+      s = '' + k, i = s.length, r = '';
+  while ((i -= 3) > b) { r = ',' + s.substr(i, 3) + r; }
+  return s.substr(0, i + 3) + r + (d ? '.' + d : '');
+};
+
+
+
+function pad(Num) {
+  if (Num >= 10) return Num;
+  return '0' + Num;
+
+}
+
+function getMapStyle() {
   return [{
     "elementType": "all",
     "featureType": "all",

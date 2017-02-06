@@ -22,5 +22,7 @@ namespace eX_Portal.Models
         public Nullable<decimal> Lng { get; set; }
         public Nullable<System.DateTime> ImageDateTime { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
+        public Nullable<int> AgriTraxGroupID { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
     }
 }

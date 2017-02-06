@@ -84,6 +84,11 @@ namespace eX_Portal.Controllers {
     }
 
 
+    [HttpGet]
+    public ActionResult BulkUpload() {
+      return View();
+    }
+
     [HttpPost]
     public JsonResult UploadImage(int ID = 0) {
       try {
@@ -111,7 +116,8 @@ namespace eX_Portal.Controllers {
         Stat.CreatedOn = DateTime.Now;
         Stat.ImageDateTime = CreatedDate;
         Stat.AgriTraxID = ID;
-
+        Stat.CreatedBy = exLogic.Util.getLoginUserID();
+        Stat.AgriTraxGroupID = 0;
         db.AgriTraxImages.Add(Stat);
         db.SaveChanges();
 
@@ -123,8 +129,114 @@ namespace eX_Portal.Controllers {
         return Json(ErrorMsg, JsonRequestBehavior.AllowGet);
       }
 
-      return MapLocation(ID, true);
+      if(ID > 0) { 
+        return MapLocation(ID, true);
+      } else {
+        return MapBulkUpload(true);
+      }
     }
+
+
+    public JsonResult MapBulkUpload(bool IsSetGroup = false) {
+      int CreatedBy = exLogic.Util.getLoginUserID();
+      int AgriTraxGroupID = 0;
+      //1. Find all images uploaded by the user order by date
+      var QueryImages = from i in db.AgriTraxImages
+                        where i.CreatedBy == CreatedBy && i.AgriTraxID == 0
+                        orderby i.ImageDateTime
+                        select i;
+      IList<AgriTraxImage> Images = QueryImages.ToList();
+
+
+      //2. For each record, setup the Group ID if the time is more than 5 min   
+      if(IsSetGroup) { 
+        DateTime ImageCheckDate = DateTime.MinValue;         
+        foreach (var Image in Images) {
+          if (ImageCheckDate == DateTime.MinValue) { 
+            ImageCheckDate = (DateTime)Image.ImageDateTime;
+            AgriTraxGroupID++;
+          } else { 
+            var DateDiff = (DateTime)Image.ImageDateTime - ImageCheckDate;
+            if(DateDiff.TotalMinutes > 5) AgriTraxGroupID++;
+            ImageCheckDate = (DateTime)Image.ImageDateTime;
+          }
+          //update Group Index
+          Image.AgriTraxGroupID = AgriTraxGroupID;
+          db.Entry(Image).State = EntityState.Modified;
+          
+        }
+        //3. Save changes to database together
+        db.SaveChanges();
+      }
+
+      //4. Return the Images to the browser
+      var SuccessMsg = new {
+        Status = "ok",
+        Message = "Success Reading",
+        Location = new {Lat = 0, Lng = 0 },
+        Images = Images
+      };
+      return Json(SuccessMsg, JsonRequestBehavior.AllowGet);
+    }
+
+
+    public JsonResult AssignCustomer(int AgriTraxID = 0, int AgriTraxGroupID = 0) {
+      int CreatedBy = exLogic.Util.getLoginUserID();
+      String SourcePath = Server.MapPath("/Upload/Agriculture/0");
+      String DestPath = Server.MapPath($"/Upload/Agriculture/{AgriTraxID}");
+      //1. Find all images uploaded by the user order by date
+      var QueryImages = 
+        from i in db.AgriTraxImages
+        where 
+          i.CreatedBy == CreatedBy && 
+          i.AgriTraxID == 0 &&
+          i.AgriTraxGroupID == AgriTraxGroupID
+        orderby i.ImageDateTime
+        select i;
+      IList<AgriTraxImage> Images = QueryImages.ToList();
+
+      //2. Find the Maximum of GroupID for the customer
+      int? NextAgriTraxGroupID = db.AgriTraxImages
+        .Where(i => i.CreatedBy == CreatedBy && i.AgriTraxID == AgriTraxID)
+        .Max(i => i.AgriTraxGroupID);
+      if (NextAgriTraxGroupID == null) NextAgriTraxGroupID = 0;
+      NextAgriTraxGroupID++;
+
+      //3. Move the images to new AgriTraxID Folder and
+      //   update the database
+      foreach (var Image in Images) {
+        String[] SouceImages = {
+          Image.ImageFile,
+          Image.Thumbnail,
+          Image.Thumbnail.Replace(".t.png", ".m.png")
+        };
+
+        if (!System.IO.Directory.Exists(DestPath))
+          System.IO.Directory.CreateDirectory(DestPath);
+
+        foreach (var ImageName in SouceImages) {
+          String sPath = System.IO.Path.Combine(SourcePath, ImageName);
+          String dPath = System.IO.Path.Combine(DestPath, ImageName);
+          try { 
+            System.IO.File.Move(sPath, dPath);
+          } catch {
+            //skip the error
+          }
+        }
+        //update Group Index
+        Image.AgriTraxGroupID = NextAgriTraxGroupID;
+        Image.AgriTraxID = AgriTraxID;
+        db.Entry(Image).State = EntityState.Modified;
+      }
+      db.SaveChanges();
+
+      var SuccessMsg = new {
+        Status = "ok",
+        Message = "Moved successfully"
+      };
+      return Json(SuccessMsg, JsonRequestBehavior.AllowGet);
+    }
+
 
     public JsonResult MapImage(int ID = 0, int ImageID = 0,
       String Process = "", Double Lat = 0, Double Lng = 0) {
@@ -147,7 +259,11 @@ namespace eX_Portal.Controllers {
       }
 
 
-      return MapLocation(ID, true);
+      if (ID > 0) {
+        return MapLocation(ID, true);
+      } else {
+        return MapBulkUpload(true);
+      }
     }
 
     public JsonResult MapLocation(int ID = 0, bool isUpdateCenter = false) {

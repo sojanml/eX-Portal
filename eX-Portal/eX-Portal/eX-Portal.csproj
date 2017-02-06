@@ -862,6 +862,7 @@
     <Content Include="Scripts\ADSB.js" />
     <Content Include="Scripts\ADSBDashboard.js" />
     <Content Include="Scripts\Agriculture.js" />
+    <Content Include="Scripts\AgricultureBulkUpload.js" />
     <Content Include="Scripts\AgricultureCommon.js" />
     <Content Include="Scripts\AgricultureCreate.js" />
     <Content Include="Scripts\AgricultureImages.js" />
@@ -1401,6 +1402,7 @@
     <Content Include="Views\Shared\_eXPortalWidget.cshtml" />
     <Content Include="Views\Agriculture\Create.cshtml" />
     <Content Include="Views\Agriculture\Images.cshtml" />
+    <Content Include="Views\Agriculture\BulkUpload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

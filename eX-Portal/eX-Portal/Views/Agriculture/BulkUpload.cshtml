@@ -1,0 +1,145 @@
+﻿@{
+  ViewBag.Title = $"Bulk Upload of Images";
+  Layout = "~/Views/Shared/_ADSB.cshtml";
+}
+
+
+<section class="top-space">
+  <div id="FirstSection" style="min-height:500px;" class="column column-half">
+    <div id="BulkUploadImages">
+    <div class="title-bar">
+      Bulk Upload
+    </div>
+
+    <ul id="BulkImages"></ul>
+
+    <div class="form-group-row">
+      <form method="post" id="frmImages" name="frmImages">
+        <input name="AgriImage" id="AgriImage" type="file" multiple />
+        <input style="float:right" name="btnImage" id="btnImage" type="submit" value="upload" />
+      </form>
+    </div>
+
+    <ul id="FileQueue"></ul>
+
+    </div>
+
+
+    <div id="BulkUploadSearch">
+      <div class="title-bar">
+        Search for Customer
+        <span id="btnCancel" class="button" style="display:inline-block;">Cancel</span>
+
+      </div>
+
+      <form method="post" name="SearchForm" id="SearchForm">
+        <table id="SearchTable">
+          <tr>
+            <td>Customer Reference</td>
+            <td style="min-width:150px"><input name="CustomerReference" type="text" /></td>
+            <td>&nbsp;</td>
+            <td>Facility TYPE</td>
+            <td>
+              <select name="FacilityType">
+                <option value="Agriculture">Agriculture</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Account Number</td>
+            <td><input name="AccountNumber" type="text" /></td>
+            <td>&nbsp;</td>
+            <td>Principal Amount</td>
+            <td>
+              <table style="width:100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>From:</td>
+                  <td><input name="PrincipalAmountFrom" type="text" /></td>
+                  <td>To:</td>
+                  <td><input name="PrincipalAmountTo" type="text" /></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>Disbursement Date From:</td>
+            <td><input class="date-picker" name="DisbursementDateFrom" type="text" /></td>
+            <td>&nbsp;</td>
+            <td>Branch ID</td>
+            <td><input name="BranchID" type="text" /></td>
+          </tr>
+          <tr>
+            <td style="text-align:right">To:</td>
+            <td><input class="date-picker" name="DisbursementDateTo" type="text" /></td>
+            <td>&nbsp;</td>
+            <td>Loan Officer</td>
+            <td>
+              <select name="LoanOfficer">
+                <option value="-">Any</option>
+                <option value="Benjamin Bailey">Benjamin Bailey</option>
+                <option value="Eric Gonzales">Eric Gonzales</option>
+                <option value="Jeffrey Daniels">Jeffrey Daniels</option>
+                <option value="Joshua Jordan">Joshua Jordan</option>
+                <option value="Nicole Gonzales">Nicole Gonzales</option>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Tenor (years/months)</td>
+            <td>
+              <select name="Tenor" id="Tenor">
+                <option value="0">Any</option>
+                <option value="6">6 Months</option>
+                <option value="12">1 Year</option>
+                <option value="24">2 Years</option>
+                <option value="60">5 Years</option>
+                <option value="120">10 Years</option>
+                <option value="240">20 Years</option>
+              </select>
+            </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td class="button"><input id="btnSearch" name="btnSearch" type="button" value="search" /></td>
+          </tr>
+
+        </table>
+      </form>
+
+      <div id="qViewDataTable">
+        <table id="qViewTable" class="report">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Reference</th>
+              <th>Disburement</th>
+              <th>Principal</th>
+              <th>Address</th>
+              <th>Size</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="column column-half shaded">
+    <div class="title-bar">Land Location</div>
+    <div id="AgricultureMap" class="column-half"></div>
+  </div>
+</section>
+
+
+
+@section scripts {
+  <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyDY6IHXH4-fUAzYq6HBR_ndu_lnyyopcTs"></script>
+  <script type="text/javascript" src="~/Scripts/AgricultureCommon.js"></script>
+  <script type="text/javascript" src="~/Scripts/AgricultureBulkUpload.js"></script>
+}
+
+@section header {
+  <link href="~/Content/Agriculture.css" rel="stylesheet" />
+  @Scripts.Render("~/bundles/jqueryval")
+}

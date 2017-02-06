@@ -2,6 +2,9 @@
 var _MapPointsLayer = null;
 var _InfoWindow = null;
 var AgriTraxID = 0;
+var AgriTraxGroupPoints = {};
+var ActiveAgriTraxGroupID = -1;
+
 
 var LocationPolygon = new google.maps.Polygon({
   strokeColor: '#00FF00',
@@ -24,7 +27,7 @@ $(document).ready(function () {
   $('#btnShowList').on("click", function () {
     ToggleInfo(false);
   });
-  $('#DataImageThumbnail').on('click', 'li', function () {
+  $('#DataImageThumbnail').on('click', 'li.image', function () {
     var LI = $(this);
     if (LI.hasClass('active')) return;
     $('#DataImageThumbnail LI').removeClass('active');
@@ -53,6 +56,8 @@ $(document).ready(function () {
   $('#btnSetImages').on("click", function () {
     top.location.href = '/Agriculture/Images/' + AgriTraxID;
   });
+
+  $(document).on("click", "li.AgriHistorySelect", fnAgriHistorySelect);
 
 });
 
@@ -168,11 +173,112 @@ function ShowInfoSection(ID) {
   $.ajax({
     url: '/Agriculture/MapLocation/' + Row['AgriTraxID'],  //server script to process data
     type: 'GET',
-    success: ShowAgriTraxImages,
+    success: LoadAgriTraxImages,
     cache: false
   }, 'json');
 
   ToggleInfo(true);
+}
+
+
+function LoadAgriTraxImages(data) {
+  var Images = data.Images;
+  var AgriTraxGroupID = -1;
+  var GroupCount = 0;
+  AgriTraxGroupPoints = {};
+  ActiveAgriTraxGroupID = -1;
+
+  $('#AgriTraxGroup').empty();
+  $('#DataImageThumbnail').empty();
+
+  for (var i = 0; i < Images.length; i++) {
+    var Image = Images[i];
+    var IndexAt = Images[i].ImageFile.lastIndexOf('.');
+    var ImageName = Images[i].ImageFile.substr(0, IndexAt) + ".m.png";
+    var ImageUrl= 'url("/Upload/Agriculture/' + Images[i].AgriTraxID + '/' + ImageName + '")';
+    var LI = $('<LI class="image"></LI>').css({ 'background-image': ImageUrl });
+    var AgriTraxSection = $('#AgriTraxThumbnails' + AgriTraxGroupID);
+
+    if (AgriTraxGroupID != Image.AgriTraxGroupID) {
+      GroupCount++;
+
+      //OK. new group is started
+      AgriTraxGroupID = Image.AgriTraxGroupID;
+      AgriTraxGroupPoints[AgriTraxGroupID] = [];
+      if (ActiveAgriTraxGroupID < 0) ActiveAgriTraxGroupID = AgriTraxGroupID;
+
+      var HistorySelect = $('<LI class="AgriHistorySelect"></LI>').html('<span>' + dtConvFromJSON(Image.ImageDateTime, true) + '</span>');
+      HistorySelect.attr('data-id', AgriTraxGroupID);
+      if (GroupCount == 1) HistorySelect.addClass('active');
+
+      $('#AgriTraxGroup').append(HistorySelect);
+      var AgriTraxSubItem = $('<li class="trax_section" id="AgriTraxSection' + AgriTraxGroupID + '"></li>');
+      if (GroupCount > 1) AgriTraxSubItem.css('display', 'none');
+      
+      AgriTraxSection = $('<ul id="AgriTraxThumbnails' + AgriTraxGroupID + '"></ul>');
+      AgriTraxSubItem.append(AgriTraxSection);
+      $('#DataImageThumbnail').append(AgriTraxSubItem);
+    }//if (AgriTraxGroupID != Image.AgriTraxGroupID)
+
+    //save the locations in global variable
+    var Point = { lat: Image.Lat, lng: Image.Lng };
+    AgriTraxGroupPoints[AgriTraxGroupID].push(Point);
+
+
+    if (i === 0) {
+      LI.addClass('active');
+      $('#DataImage').css({ 'background-image': ImageUrl });
+    }
+    AgriTraxSection.append(LI);
+
+  }//for
+
+  if (GroupCount <= 1) {
+    $('#AgriTraxGroup').hide();
+  } else {
+    $('#AgriTraxGroup').show();
+  }
+  //ok. set the First Agritrax Group to Active;
+  SetAtriTraxImages(ActiveAgriTraxGroupID);
+
+}
+
+function SetAtriTraxImages(AgriTraxGroupID) {
+  var LocationBoundBox = new google.maps.LatLngBounds();
+
+  var Points = AgriTraxGroupPoints[AgriTraxGroupID];
+  for (var i = 0; i < Points.length; i++) {
+    LocationBoundBox.extend(Points[i]);
+  }
+
+  //now show the box in map
+  map.fitBounds(LocationBoundBox);
+  LocationPolygon.setPath(Points);
+  LocationPolygon.setMap(map);
+  _MapPointsLayer.hide();
+  $('#btnShowPoints').css({ 'visibility': 'visible' });
+  $('#btnSetImages').css({ 'visibility': 'visible' });
+
+  ActiveAgriTraxGroupID = AgriTraxGroupID;
+}
+
+
+function fnAgriHistorySelect() {
+  var LI = $(this);
+  var AtriTraxGroupID = parseInt(LI.attr('data-id'));
+  if (isNaN(AtriTraxGroupID)) return;
+  if (AtriTraxGroupID == ActiveAgriTraxGroupID) return;
+
+
+  $('#AgriTraxSection' + ActiveAgriTraxGroupID).slideUp();
+  $('#AgriTraxSection' + AtriTraxGroupID).slideDown();
+  $('#AgriTraxThumbnails' + AtriTraxGroupID + ' li:first-child').trigger("click");
+
+
+  $('#AgriTraxGroup li').removeClass('active');
+  LI.addClass('active');
+
+  SetAtriTraxImages(AtriTraxGroupID);
 }
 
 function ShowAgriTraxImages(data) {
@@ -241,26 +347,7 @@ function getDataTableAjax(data, callback, settings) {
 
 }
 
-function dtConvFromJSON(sNetDate) {
-  var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  if (sNetDate === null) return "N/A";
-  var r = /\/Date\(([0-9]+)\)\//i
-  var matches = sNetDate.match(r);
-  if (matches.length === 2) {
-    var tDate = new Date(parseInt(matches[1]));
-    return (tDate.getDay() + 1) + '-' + Months[tDate.getMonth()] + '-' + tDate.getFullYear()
-  } else {
-    return "N/A";
-  }
-}
 
-function nFormat(n, dp) {
-  var w = n.toFixed(dp), k = w | 0, b = n < 0 ? 1 : 0,
-      u = Math.abs(w - k), d = ('' + u.toFixed(dp)).substr(2, dp),
-      s = '' + k, i = s.length, r = '';
-  while ((i -= 3) > b) { r = ',' + s.substr(i, 3) + r; }
-  return s.substr(0, i + 3) + r + (d ? '.' + d : '');
-};
 
 
 
