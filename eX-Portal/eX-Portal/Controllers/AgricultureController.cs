@@ -77,8 +77,9 @@ namespace eX_Portal.Controllers {
 
 
     [HttpGet]
-    public ActionResult Images(int ID = 0) {
-      var Customer = db.AgriTraxManagements.Where(e => e.AgriTraxID == ID).FirstOrDefault();
+    public ActionResult Images(int ID = 0, int AgriTraxGroupID = 0) {
+      var Customer = db.AgriTraxManagements
+        .Where(e => e.AgriTraxID == ID).FirstOrDefault();
       if (Customer == null) return new HttpNotFoundResult();
       return View(Customer);
     }
@@ -90,7 +91,7 @@ namespace eX_Portal.Controllers {
     }
 
     [HttpPost]
-    public JsonResult UploadImage(int ID = 0) {
+    public JsonResult UploadImage(int ID = 0, int AgriTraxGroupID = 0) {
       try {
         var Stat = new AgriTraxImage();
 
@@ -117,7 +118,7 @@ namespace eX_Portal.Controllers {
         Stat.ImageDateTime = CreatedDate;
         Stat.AgriTraxID = ID;
         Stat.CreatedBy = exLogic.Util.getLoginUserID();
-        Stat.AgriTraxGroupID = 0;
+        Stat.AgriTraxGroupID = AgriTraxGroupID;
         db.AgriTraxImages.Add(Stat);
         db.SaveChanges();
 
@@ -130,7 +131,7 @@ namespace eX_Portal.Controllers {
       }
 
       if(ID > 0) { 
-        return MapLocation(ID, true);
+        return MapLocation(ID, AgriTraxGroupID, true);
       } else {
         return MapBulkUpload(true);
       }
@@ -239,7 +240,8 @@ namespace eX_Portal.Controllers {
 
 
     public JsonResult MapImage(int ID = 0, int ImageID = 0,
-      String Process = "", Double Lat = 0, Double Lng = 0) {
+      String Process = "", Double Lat = 0, Double Lng = 0,
+      int AgriTraxGroupID = 0) {
       var Row = db.AgriTraxImages
                       .Where(e => e.AgriTraxID == ID && e.AgriTraxImageID == ImageID);
       var ThisRec = Row.FirstOrDefault();
@@ -260,14 +262,16 @@ namespace eX_Portal.Controllers {
 
 
       if (ID > 0) {
-        return MapLocation(ID, true);
+        return MapLocation(ID, AgriTraxGroupID, true);
       } else {
         return MapBulkUpload(true);
       }
     }
 
-    public JsonResult MapLocation(int ID = 0, bool isUpdateCenter = false) {
+    public JsonResult MapLocation(int ID = 0, int AgriTraxGroupID = 0, bool isUpdateCenter = false) {
       var AllImages = db.AgriTraxImages.Where(e => e.AgriTraxID == ID);
+      if (AgriTraxGroupID > 0) AllImages = AllImages.Where(e => e.AgriTraxGroupID == AgriTraxGroupID);
+
       var AgriTrax = db.AgriTraxManagements.Where(e => e.AgriTraxID == ID).FirstOrDefault();
 
       if(isUpdateCenter) { 
@@ -289,7 +293,7 @@ namespace eX_Portal.Controllers {
         Status = "ok",
         Message = "Success Reading",
         Location = AgriTrax,
-        Images = AllImages.OrderBy(e => e.ImageDateTime).ToList()
+        Images = AllImages.OrderBy(e=> e.AgriTraxGroupID).ThenBy(e => e.ImageDateTime).ToList()
       };
       return Json(SuccessMsg, JsonRequestBehavior.AllowGet);
     }

@@ -3,6 +3,8 @@
 @{
   ViewBag.Title = $"Land Images - {Model.AccountNumber}" ;
   Layout = "~/Views/Shared/_ADSB.cshtml";
+  int AgriTraxGroupID = 0;
+  int.TryParse(Request["AgriTraxGroupID"], out AgriTraxGroupID);
 }
 
 <section class="top-space">
@@ -96,7 +98,7 @@
 
     <ul id="FileQueue">
     </ul>
-    <ul id="DataImageThumbnail"></ul>
+    <ul id="DataImageThumbnailGroup"></ul>
 
     </div>
   <div class="column column-half shaded">
@@ -109,6 +111,7 @@
 @section scripts {
   <script type="text/javascript">
     var AgriTraxID = @Model.AgriTraxID;
+    var AgriTraxGroupID = @AgriTraxGroupID;
   </script>
   <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyDY6IHXH4-fUAzYq6HBR_ndu_lnyyopcTs"></script>
   <script type="text/javascript" src="~/Scripts/AgricultureCommon.js"></script>

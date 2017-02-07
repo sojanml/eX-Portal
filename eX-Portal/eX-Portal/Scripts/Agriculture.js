@@ -54,7 +54,7 @@ $(document).ready(function () {
   });
 
   $('#btnSetImages').on("click", function () {
-    top.location.href = '/Agriculture/Images/' + AgriTraxID;
+    top.location.href = '/Agriculture/Images/' + AgriTraxID + "?AgriTraxGroupID=" + ActiveAgriTraxGroupID;
   });
 
   $(document).on("click", "li.AgriHistorySelect", fnAgriHistorySelect);
@@ -199,7 +199,7 @@ function LoadAgriTraxImages(data) {
     var LI = $('<LI class="image"></LI>').css({ 'background-image': ImageUrl });
     var AgriTraxSection = $('#AgriTraxThumbnails' + AgriTraxGroupID);
 
-    if (AgriTraxGroupID != Image.AgriTraxGroupID) {
+    if (AgriTraxGroupID !== Image.AgriTraxGroupID) {
       GroupCount++;
 
       //OK. new group is started
@@ -209,7 +209,7 @@ function LoadAgriTraxImages(data) {
 
       var HistorySelect = $('<LI class="AgriHistorySelect"></LI>').html('<span>' + dtConvFromJSON(Image.ImageDateTime, true) + '</span>');
       HistorySelect.attr('data-id', AgriTraxGroupID);
-      if (GroupCount == 1) HistorySelect.addClass('active');
+      if (GroupCount === 1) HistorySelect.addClass('active');
 
       $('#AgriTraxGroup').append(HistorySelect);
       var AgriTraxSubItem = $('<li class="trax_section" id="AgriTraxSection' + AgriTraxGroupID + '"></li>');
@@ -267,7 +267,7 @@ function fnAgriHistorySelect() {
   var LI = $(this);
   var AtriTraxGroupID = parseInt(LI.attr('data-id'));
   if (isNaN(AtriTraxGroupID)) return;
-  if (AtriTraxGroupID == ActiveAgriTraxGroupID) return;
+  if (AtriTraxGroupID === ActiveAgriTraxGroupID) return;
 
 
   $('#AgriTraxSection' + ActiveAgriTraxGroupID).slideUp();

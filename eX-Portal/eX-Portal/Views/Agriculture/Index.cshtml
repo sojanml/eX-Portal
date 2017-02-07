@@ -8,6 +8,9 @@
   <div class="column column-half">
     <div class="title-bar">Search Options:
       <span id="btnAddCustomer" class="button" style="display:inline-block;">New Customer</span>
+      <span id="btnAddCustomer" class="button" style="display:inline-block;">
+        <a href="@Url.Action("BulkUpload")">Bulk Upload</a>
+      </span>
     </div>
     <form method="post" name="SearchForm" id="SearchForm">
       <table id="SearchTable">
@@ -137,7 +140,6 @@
     <div class="title-bar">MAP VIEW:
       <span id="btnShowPoints" class="button" style="visibility:hidden; display:inline-block;">Show Locations</span>
       <span id="btnSetImages" class="button" style="visibility:hidden; display:inline-block;">Edit Location</span>
-
     </div>
     <div id="adsb_map" class="column-half"></div>
 

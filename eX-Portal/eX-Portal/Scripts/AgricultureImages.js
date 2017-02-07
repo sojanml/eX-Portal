@@ -43,7 +43,7 @@ function initializeMap() {
 
 function LoadMapLocation() {
   $.ajax({
-    url: '/Agriculture/MapLocation/' + AgriTraxID,  //server script to process data
+    url: '/Agriculture/MapLocation/' + AgriTraxID + '?AgriTraxGroupID=' + AgriTraxGroupID,  //server script to process data
     type: 'GET',
     success: function (data) {
       completeHandler(data, 0)
@@ -55,7 +55,8 @@ function LoadMapLocation() {
 function DeleteImage(Span) {
   var URL = '/Agriculture/MapImage/' + AgriTraxID +
     '?ImageID=' + Span.attr('data-id') +
-    '&Process=delete';
+    '&Process=delete' +
+    '&AgriTraxGroupID=' + AgriTraxGroupID;
   $.ajax({
     url: URL,  //server script to process data
     type: 'GET',
@@ -81,9 +82,10 @@ function UploadSingleFile(file) {
   type = file.type;
 
   if (file.name.length < 1) {
+    //nothing to do
   } else if (file.size > 50 * 1000 * 1000) {
     alert("The file is too big");
-  } else if (file.type != 'image/png' && file.type != 'image/jpg' && file.type != 'image/gif' && file.type != 'image/jpeg') {
+  } else if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/jpeg') {
     alert("The file does not match png, jpg or gif");
   } else {
     gFileCounter++;
@@ -98,7 +100,7 @@ function UploadSingleFile(file) {
     formData.append("file", file);
 
     $.ajax({
-      url: '/Agriculture/UploadImage/' + AgriTraxID,  //server script to process data
+      url: '/Agriculture/UploadImage/' + AgriTraxID + '?AgriTraxGroupID=' + AgriTraxGroupID,  //server script to process data
       type: 'POST',
       xhr: function () { return getNewXhr(ID)},
       // Ajax events
@@ -146,20 +148,20 @@ function completeHandler(data) {
     LocationMarkers[i].setMap(null);
   }
   LandLocationMarker = null;
-  $('#DataImageThumbnail').empty();
+  $('#DataImageThumbnailGroup').empty();
   LocationMarkers = [];
   LocationBoundBox = new google.maps.LatLngBounds();
   LocationPolygon.setMap(null);
 
-  for (var i = 0; i < data.Images.length; i++) {
-    var Image = data.Images[i];
+  for (var j = 0; j < data.Images.length; j++) {
+    var Image = data.Images[j];
     var ImageURL = 'url("/Upload/Agriculture/' + Image.AgriTraxID + '/' + Image.Thumbnail + '")'
     var LI = $('<LI></LI>').css({ 'background-image': ImageURL });
     LI.append('<span data-id="' + Image.AgriTraxImageID + '" class="delete">x</span>')
-    LI.append('<span class="label">' + (i + 1) + '</span>')
+    LI.append('<span class="label">' + (j + 1) + '</span>')
     LI.append('<span class="title">' + Image.Thumbnail.replace('.t.png','') + '</span>')
-    $('#DataImageThumbnail').append(LI);
-    AddMarker(Image.Lat, Image.Lng, Image.AgriTraxImageID, true, i+1);
+    $('#DataImageThumbnailGroup').append(LI);
+    AddMarker(Image.Lat, Image.Lng, Image.AgriTraxImageID, true, j+1);
     LocationBoundBox.extend({ lat: Image.Lat, lng: Image.Lng });
     PolygonPath.push({ lat: Image.Lat, lng: Image.Lng });
   }
@@ -205,7 +207,8 @@ function LocationMarkerMoved(ID, event) {
     '?ImageID=' + ID +
     '&Process=location' +
     '&Lat=' + event.latLng.lat() +
-    '&Lng=' + event.latLng.lng();
+    '&Lng=' + event.latLng.lng() +
+    '&AgriTraxGroupID=' + AgriTraxGroupID;
 
   $.ajax({
     url: URL,  //server script to process data
@@ -214,7 +217,7 @@ function LocationMarkerMoved(ID, event) {
       PolygonPath = [];
       for (var i = 0; i < LocationMarkers.length; i++) {
         var Marker = LocationMarkers[i];
-        if (Marker.id != "0") PolygonPath.push(Marker.getPosition());
+        if (parseInt(Marker.id) !== 0) PolygonPath.push(Marker.getPosition());
       }
       LocationPolygon.setPath(PolygonPath);
       LandLocationMarker.setPosition({ lat: data.Location.Lat, lng: data.Location.Lng });

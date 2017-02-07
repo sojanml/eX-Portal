@@ -272,13 +272,15 @@ ul#DataImageThumbnail li {
 }
 
 /* line 275, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup,
 ul#BulkImages li ul,
 ul#DataImageThumbnail li ul {
   list-style: none;
   margin: 20px 0px 0px 0px;
   padding: 0px;
 }
-/* line 281, ../sass/Agriculture.scss */
+/* line 282, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup li,
 ul#BulkImages li ul li,
 ul#DataImageThumbnail li ul li {
   position: relative;
@@ -294,7 +296,8 @@ ul#DataImageThumbnail li ul li {
   box-sizing: border-box;
   cursor: pointer;
 }
-/* line 295, ../sass/Agriculture.scss */
+/* line 296, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup li span.delete,
 ul#BulkImages li ul li span.delete,
 ul#DataImageThumbnail li ul li span.delete {
   position: absolute;
@@ -311,12 +314,14 @@ ul#DataImageThumbnail li ul li span.delete {
   display: none;
   font-size: 6px;
 }
-/* line 309, ../sass/Agriculture.scss */
+/* line 310, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup li span.delete:hover,
 ul#BulkImages li ul li span.delete:hover,
 ul#DataImageThumbnail li ul li span.delete:hover {
   background-color: #ffb400;
 }
-/* line 314, ../sass/Agriculture.scss */
+/* line 315, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup li span.label,
 ul#BulkImages li ul li span.label,
 ul#DataImageThumbnail li ul li span.label {
   background-color: #ffb400;
@@ -333,7 +338,8 @@ ul#DataImageThumbnail li ul li span.label {
   text-align: center;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
-/* line 331, ../sass/Agriculture.scss */
+/* line 332, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup li span.title,
 ul#BulkImages li ul li span.title,
 ul#DataImageThumbnail li ul li span.title {
   min-width: 56px;
@@ -349,36 +355,46 @@ ul#DataImageThumbnail li ul li span.title {
   display: none;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
-/* line 345, ../sass/Agriculture.scss */
+/* line 346, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup li:last-child,
 ul#BulkImages li ul li:last-child,
 ul#DataImageThumbnail li ul li:last-child {
   margin-right: 0px;
 }
-/* line 349, ../sass/Agriculture.scss */
-ul#BulkImages li ul li.active, ul#BulkImages li ul li:hover,
+/* line 350, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup li.active, ul#DataImageThumbnailGroup li:hover,
+ul#BulkImages li ul li.active,
+ul#BulkImages li ul li:hover,
 ul#DataImageThumbnail li ul li.active,
 ul#DataImageThumbnail li ul li:hover {
   border-color: #2b821a;
 }
-/* line 352, ../sass/Agriculture.scss */
-ul#BulkImages li ul li.active span.delete, ul#BulkImages li ul li:hover span.delete,
+/* line 353, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup li.active span.delete, ul#DataImageThumbnailGroup li:hover span.delete,
+ul#BulkImages li ul li.active span.delete,
+ul#BulkImages li ul li:hover span.delete,
 ul#DataImageThumbnail li ul li.active span.delete,
 ul#DataImageThumbnail li ul li:hover span.delete {
   display: block;
 }
-/* line 355, ../sass/Agriculture.scss */
-ul#BulkImages li ul li.active span.label, ul#BulkImages li ul li:hover span.label,
+/* line 356, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup li.active span.label, ul#DataImageThumbnailGroup li:hover span.label,
+ul#BulkImages li ul li.active span.label,
+ul#BulkImages li ul li:hover span.label,
 ul#DataImageThumbnail li ul li.active span.label,
 ul#DataImageThumbnail li ul li:hover span.label {
   display: none;
 }
-/* line 358, ../sass/Agriculture.scss */
-ul#BulkImages li ul li.active span.title, ul#BulkImages li ul li:hover span.title,
+/* line 359, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup li.active span.title, ul#DataImageThumbnailGroup li:hover span.title,
+ul#BulkImages li ul li.active span.title,
+ul#BulkImages li ul li:hover span.title,
 ul#DataImageThumbnail li ul li.active span.title,
 ul#DataImageThumbnail li ul li:hover span.title {
   display: block;
 }
 /* line 6, ../sass/Agriculture.scss */
+ul#DataImageThumbnailGroup:after,
 ul#BulkImages li ul:after,
 ul#DataImageThumbnail li ul:after {
   clear: both;
@@ -386,12 +402,12 @@ ul#DataImageThumbnail li ul:after {
   content: "";
 }
 
-/* line 371, ../sass/Agriculture.scss */
+/* line 372, ../sass/Agriculture.scss */
 div.form-group {
   width: 100%;
   padding: 5px 0px 2px 0px;
 }
-/* line 375, ../sass/Agriculture.scss */
+/* line 376, ../sass/Agriculture.scss */
 div.form-group input[type="submit"] {
   padding: 5px 15px 5px 15px;
   background-color: #474747;
@@ -400,32 +416,32 @@ div.form-group input[type="submit"] {
   border-radius: 5px;
   margin-right: 25px;
 }
-/* line 382, ../sass/Agriculture.scss */
+/* line 383, ../sass/Agriculture.scss */
 div.form-group input[type="submit"]:hover {
   color: #474747;
   background-color: #ffb400;
 }
-/* line 387, ../sass/Agriculture.scss */
+/* line 388, ../sass/Agriculture.scss */
 div.form-group label.control-label {
   width: 25%;
   float: left;
   padding-top: 5px;
 }
-/* line 393, ../sass/Agriculture.scss */
+/* line 394, ../sass/Agriculture.scss */
 div.form-group div.col-md-10 {
   float: right;
   width: 75%;
 }
-/* line 398, ../sass/Agriculture.scss */
+/* line 399, ../sass/Agriculture.scss */
 div.form-group div.col-md-5 {
   float: left;
   width: 36%;
 }
-/* line 402, ../sass/Agriculture.scss */
+/* line 403, ../sass/Agriculture.scss */
 div.form-group div.col-md-5:last-child {
   margin-left: 3%;
 }
-/* line 409, ../sass/Agriculture.scss */
+/* line 410, ../sass/Agriculture.scss */
 div.form-group div.col-md-10 input[type="text"],
 div.form-group div.col-md-10 input[type="datetime"],
 div.form-group div.col-md-10 input[type="number"],
@@ -443,7 +459,7 @@ div.form-group div.col-md-5 select {
   color: #474747;
   border: 1px silver solid;
 }
-/* line 421, ../sass/Agriculture.scss */
+/* line 422, ../sass/Agriculture.scss */
 div.form-group div.col-md-10 input[type="text"],
 div.form-group div.col-md-10 textarea,
 div.form-group div.col-md-10 select,
@@ -452,42 +468,42 @@ div.form-group div.col-md-5 textarea,
 div.form-group div.col-md-5 select {
   width: 100%;
 }
-/* line 426, ../sass/Agriculture.scss */
+/* line 427, ../sass/Agriculture.scss */
 div.form-group div.col-md-10 input[type="datetime"],
 div.form-group div.col-md-10 input[type="number"],
 div.form-group div.col-md-5 input[type="datetime"],
 div.form-group div.col-md-5 input[type="number"] {
   width: 48%;
 }
-/* line 432, ../sass/Agriculture.scss */
+/* line 433, ../sass/Agriculture.scss */
 div.form-group span.text-danger {
   color: #ffb400;
   display: block;
 }
-/* line 437, ../sass/Agriculture.scss */
+/* line 438, ../sass/Agriculture.scss */
 div.form-group:after {
   content: "";
   display: block;
   clear: both;
 }
 
-/* line 446, ../sass/Agriculture.scss */
+/* line 447, ../sass/Agriculture.scss */
 div.form-group-row {
   width: 100%;
   padding: 3px 0px 3px 0px;
   border-bottom: 1px silver solid;
 }
-/* line 451, ../sass/Agriculture.scss */
+/* line 452, ../sass/Agriculture.scss */
 div.form-group-row label.control-label {
   width: 25%;
   float: left;
 }
-/* line 456, ../sass/Agriculture.scss */
+/* line 457, ../sass/Agriculture.scss */
 div.form-group-row div.col-md-10 {
   float: right;
   width: 75%;
 }
-/* line 461, ../sass/Agriculture.scss */
+/* line 462, ../sass/Agriculture.scss */
 div.form-group-row input[type="submit"] {
   padding: 5px 15px 5px 15px;
   background-color: #474747;
@@ -495,19 +511,19 @@ div.form-group-row input[type="submit"] {
   border: 0px white none;
   border-radius: 5px;
 }
-/* line 467, ../sass/Agriculture.scss */
+/* line 468, ../sass/Agriculture.scss */
 div.form-group-row input[type="submit"]:hover {
   color: #474747;
   background-color: #ffb400;
 }
-/* line 474, ../sass/Agriculture.scss */
+/* line 475, ../sass/Agriculture.scss */
 div.form-group-row:after {
   content: "";
   display: block;
   clear: both;
 }
 
-/* line 481, ../sass/Agriculture.scss */
+/* line 482, ../sass/Agriculture.scss */
 div.internal-scroll {
   overflow: auto;
   height: 430px;
@@ -516,52 +532,52 @@ div.internal-scroll {
   box-sizing: border-box;
 }
 
-/* line 490, ../sass/Agriculture.scss */
+/* line 491, ../sass/Agriculture.scss */
 #AgricultureMap {
   min-height: 460px;
 }
 
-/* line 494, ../sass/Agriculture.scss */
+/* line 495, ../sass/Agriculture.scss */
 ul#ValidationError {
   margin: 0px;
   padding: 0px;
 }
-/* line 497, ../sass/Agriculture.scss */
+/* line 498, ../sass/Agriculture.scss */
 ul#ValidationError LI {
   color: #ffb400;
   margin: 0px;
   padding: 0px 0px 10px 0px;
 }
 
-/* line 505, ../sass/Agriculture.scss */
+/* line 506, ../sass/Agriculture.scss */
 ul#FileUploaded {
   margin: 0px;
   padding: 0px;
 }
 
-/* line 510, ../sass/Agriculture.scss */
+/* line 511, ../sass/Agriculture.scss */
 ul#FileQueue {
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
-/* line 514, ../sass/Agriculture.scss */
+/* line 515, ../sass/Agriculture.scss */
 ul#FileQueue li {
   list-style: none;
   padding: 5px 0px 5px 0px;
   border-bottom: 1px silver solid;
 }
-/* line 518, ../sass/Agriculture.scss */
+/* line 519, ../sass/Agriculture.scss */
 ul#FileQueue li > div > span {
   color: red;
 }
 
-/* line 524, ../sass/Agriculture.scss */
+/* line 525, ../sass/Agriculture.scss */
 #FirstSection {
   position: relative;
 }
 
-/* line 528, ../sass/Agriculture.scss */
+/* line 529, ../sass/Agriculture.scss */
 #BulkUploadSearch {
   position: absolute;
   width: 100%;
@@ -571,7 +587,7 @@ ul#FileQueue li > div > span {
   left: 0px;
 }
 
-/* line 537, ../sass/Agriculture.scss */
+/* line 538, ../sass/Agriculture.scss */
 div#Overlay {
   position: absolute;
   left: 0px;
@@ -581,7 +597,7 @@ div#Overlay {
   background-color: rgba(85, 49, 5, 0.53);
   display: none;
 }
-/* line 545, ../sass/Agriculture.scss */
+/* line 546, ../sass/Agriculture.scss */
 div#Overlay img {
   position: relative;
   width: 256px;
@@ -595,13 +611,13 @@ div#Overlay img {
   animation: spin 3s linear infinite;
 }
 
-/* line 561, ../sass/Agriculture.scss */
+/* line 562, ../sass/Agriculture.scss */
 ul#AgriTraxGroup {
   margin: 10px 0px 0px 0px;
   padding: 0px;
   list-style: none;
 }
-/* line 565, ../sass/Agriculture.scss */
+/* line 566, ../sass/Agriculture.scss */
 ul#AgriTraxGroup li {
   font-size: 10px;
   font-family: Arial;
@@ -615,7 +631,7 @@ ul#AgriTraxGroup li {
   text-align: center;
   cursor: pointer;
 }
-/* line 577, ../sass/Agriculture.scss */
+/* line 578, ../sass/Agriculture.scss */
 ul#AgriTraxGroup li:hover, ul#AgriTraxGroup li.active {
   background-color: #2b821a;
   color: white;
