@@ -92,6 +92,7 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public JsonResult UploadImage(int ID = 0, int AgriTraxGroupID = 0) {
+      int CreatedBy = exLogic.Util.getLoginUserID();
       try {
         var Stat = new AgriTraxImage();
 
@@ -102,22 +103,24 @@ namespace eX_Portal.Controllers {
           .ToLocalTime();
 
         var ImageFile = Request.Files[0];
-        Stat.ImageFile = ImageFile.FileName;
+        Stat.ImageFile = $"{CreatedBy}-{ImageFile.FileName}";
         var ImagePath = Server.MapPath($"/Upload/Agriculture/{ID}");
-        var ImageFilePath = System.IO.Path.Combine(ImagePath, ImageFile.FileName);
+        var ImageFilePath = System.IO.Path.Combine(ImagePath, Stat.ImageFile);
         if (!System.IO.Directory.Exists(ImagePath)) System.IO.Directory.CreateDirectory(ImagePath);
+        if (System.IO.File.Exists(ImageFilePath)) System.IO.File.Delete(ImageFilePath);
         ImageFile.SaveAs(ImageFilePath);
 
         var MyLib = new exLogic.ExifLib(ImageFilePath);
         var GPS = MyLib.getGPS();
-        Stat.Thumbnail = System.IO.Path.GetFileName(MyLib.setThumbnail(80, "t"));
         MyLib.setThumbnail(400, "m");
+        Stat.Thumbnail = System.IO.Path.GetFileName(MyLib.setThumbnail(80, "t"));
+        
         Stat.Lat = (decimal)GPS.Latitude;
         Stat.Lng = (decimal)GPS.Longitude;
         Stat.CreatedOn = DateTime.Now;
-        Stat.ImageDateTime = CreatedDate;
+        Stat.ImageDateTime = (GPS.ImageTakenOn == DateTime.MinValue ? CreatedDate : GPS.ImageTakenOn);
         Stat.AgriTraxID = ID;
-        Stat.CreatedBy = exLogic.Util.getLoginUserID();
+        Stat.CreatedBy = CreatedBy;
         Stat.AgriTraxGroupID = AgriTraxGroupID;
         db.AgriTraxImages.Add(Stat);
         db.SaveChanges();
@@ -218,7 +221,8 @@ namespace eX_Portal.Controllers {
         foreach (var ImageName in SouceImages) {
           String sPath = System.IO.Path.Combine(SourcePath, ImageName);
           String dPath = System.IO.Path.Combine(DestPath, ImageName);
-          try { 
+          try {
+            if (System.IO.File.Exists(dPath)) System.IO.File.Delete(dPath);
             System.IO.File.Move(sPath, dPath);
           } catch {
             //skip the error

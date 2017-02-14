@@ -224,7 +224,12 @@ div.row {
       background-repeat: no-repeat;
       background-color: #bde3b6;
       border: 2px $MainTitleColor solid;
-    }
+
+      transition: background-image 0.2s linear;
+      -moz-transition: background-image 0.2s linear;
+      -webkit-transition: background-image 0.2s linear;
+      -ms-transition: background-image 0.2s linear;
+    } 
 
     ul#DataImageThumbnail li:nth-child(4n) {
       margin-right:0px;
@@ -580,5 +585,25 @@ ul#AgriTraxGroup {
       background-color: $HiliteTextColor;
       color:white;
     }
+  }
+}
+
+#PreviewImageLayer {
+  position:absolute;
+  top:0px;
+  left:0px;
+  bottom:0px;
+  right:0px; 
+  background-color:rgba(0, 0, 0, 0.8);
+  background-repeat:no-repeat;
+  background-position:center center;
+  display:none;
+  div.HiliteBar {
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    width:100%;
+    background-color:$HiliteTextColor;
+    text-align:center;
   }
 }

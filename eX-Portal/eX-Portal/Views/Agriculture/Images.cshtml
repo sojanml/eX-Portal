@@ -2,6 +2,8 @@
 
 @{
   ViewBag.Title = $"Land Images - {Model.AccountNumber}" ;
+  ViewBag.Logo = "logo-trax.png";
+
   Layout = "~/Views/Shared/_ADSB.cshtml";
   int AgriTraxGroupID = 0;
   int.TryParse(Request["AgriTraxGroupID"], out AgriTraxGroupID);

@@ -59,6 +59,10 @@ $(document).ready(function () {
 
   $(document).on("click", "li.AgriHistorySelect", fnAgriHistorySelect);
 
+  $('#DataImage').on("click", fnDataImage);
+  $('#PreviewImageLayer').on("click", function () {
+    $(this).fadeOut();
+  });
 });
 
 
@@ -314,6 +318,17 @@ function ShowAgriTraxImages(data) {
   $('#btnShowPoints').css({ 'visibility': 'visible' });
   $('#btnSetImages').css({ 'visibility': 'visible' });
 }
+
+function fnDataImage() {
+  var TheLayer = $(this);
+  var ImageURL = TheLayer.css('background-image');
+  $('#PreviewImageLayer')
+    .height($(document).height())
+    .css('background-image', ImageURL)
+    .fadeIn();
+
+}
+
 
 function ShowInfoWindow(ID) {
   var Row = qViewDataTable.row(ID).data();

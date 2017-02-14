@@ -7,7 +7,7 @@
   var matches = sNetDate.match(r);
   if (matches.length === 2) {
     var tDate = new Date(parseInt(matches[1]));
-    sDate = (tDate.getDay() + 1) + '-' + Months[tDate.getMonth()] + '-' + tDate.getFullYear();
+    sDate = (tDate.getDate()) + '-' + Months[tDate.getMonth()] + '-' + tDate.getFullYear();
 
     if (isAddTime) {
       sDate = sDate + ' ' + pad(tDate.getHours()) + ":" + pad(tDate.getMinutes()) + ':' + pad(tDate.getSeconds());

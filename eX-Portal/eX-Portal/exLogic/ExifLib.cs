@@ -12,6 +12,7 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Text.RegularExpressions;
 
 /*
 Add the Following reference to the projcet
@@ -30,10 +31,12 @@ namespace eX_Portal.exLogic {
       Latitude = 0;
       Longitude = 0;
       Altitude = 0;
+      ImageTakenOn = DateTime.MinValue;
     }
     public Double Latitude { get; set; }
     public Double Longitude { get; set; }
     public Double Altitude { get; set; }
+    public DateTime ImageTakenOn { get; set; }
 
 
     public string getInfo () {
@@ -75,13 +78,30 @@ namespace eX_Portal.exLogic {
       Image image = Image.FromFile(_InputFileName);
       int X = image.Width;
       int Y = image.Height;
+
       int Height = (int)((Width * Y) / X);
+      if(Height < Width) {
+        Height = Width;
+        Width = (int)((Width * X) / Y);
+      }
       if (String.IsNullOrWhiteSpace(_OutputFileName)) _OutputFileName = _InputFileName;
       String ThumbnailImage = Path.ChangeExtension(_OutputFileName, ExtPrefix + ".png");
+      if (System.IO.File.Exists(ThumbnailImage)) System.IO.File.Delete(ThumbnailImage);
 
-      Image thumb = image.GetThumbnailImage(Width, Height, () => false, IntPtr.Zero);      
-      thumb.Save(ThumbnailImage);
-            image.Dispose();
+      Bitmap newImage = new Bitmap(Width, Height);
+      using (Graphics gr = Graphics.FromImage(newImage)) {
+        gr.SmoothingMode = SmoothingMode.HighQuality;
+        gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
+        gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
+        gr.DrawImage(image, new Rectangle(0, 0, Width, Height));
+        
+      }
+      
+
+      Image thumb = image.GetThumbnailImage(Width, Height, () => false, IntPtr.Zero);
+      newImage.Save(ThumbnailImage);
+      newImage.Dispose();
+      image.Dispose();
       return ThumbnailImage;
     }
     public GPSInfo getGPS() {
@@ -90,8 +110,16 @@ namespace eX_Portal.exLogic {
       Image image = Image.FromFile(_InputFileName);
       myGPS.Latitude = GetLatitude(image);
       myGPS.Longitude = GetLongitude(image);
+      myGPS.ImageTakenOn = GetPhotoTakenOn(image);
       image.Dispose();
       return myGPS;
+    }
+
+    public DateTime GetPhotoTakenOn(Image myImage) {
+      Regex r = new Regex(":");
+      PropertyItem propItem = myImage.GetPropertyItem(36867);
+      string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
+      return DateTime.Parse(dateTaken);
     }
 
     public float GetLatitude(Image targetImg) {
