@@ -1,44 +1,38 @@
 @font-face {
   font-family: "FontAwesome";
-  src: url('/fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('/fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('/fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('/fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('/fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('/fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
+  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
 }
 @font-face {
   font-family: "OpenSans";
-  src: url('/fonts/../fonts/OpenSans.ttf?1478508894') format('truetype'), url('/fonts/../fonts/OpenSans.eot?1478508894') format('embedded-opentype'), url('/fonts/../fonts/OpenSans.svg?1478508894') format('svg'), url('/fonts/../fonts/OpenSans.woff?1478508894') format('woff'), url('/fonts/../fonts/OpenSans.woff2?1478508894') format('woff2');
+  src: url('../fonts/../fonts/OpenSans.ttf?1478508894') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1478508894') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1478508894') format('svg'), url('../fonts/../fonts/OpenSans.woff?1478508894') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1478508894') format('woff2');
 }
 @font-face {
   font-family: "Gobold_Light";
-  src: url('/fonts/../fonts/GoboldThinLight.ttf?1478593771') format('truetype'), url('/fonts/../fonts/GoboldThinLight.eot?1478593771') format('embedded-opentype'), url('/fonts/../fonts/GoboldThinLight.svg?1478593771') format('svg'), url('/fonts/../fonts/GoboldThinLight.woff?1478593771') format('woff'), url('/fonts/../fonts/GoboldThinLight.woff2?1478593771') format('woff2');
+  src: url('../fonts/../fonts/GoboldThinLight.ttf?1478593771') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1478593771') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1478593771') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1478593771') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1478593771') format('woff2');
 }
-/* line 38, ../sass/eXPortalWidget.scss */
 .default-list, nav.main-menu, nav.user-management, nav.breadcrumbs {
   font-family: OpenSans, Arial;
   font-size: 9pt;
   color: darkgray;
 }
-/* line 43, ../sass/eXPortalWidget.scss */
 .default-list ul, nav.main-menu ul, nav.user-management ul, nav.breadcrumbs ul {
   list-style: none;
   margin: 0px;
   padding: 0px;
 }
-/* line 48, ../sass/eXPortalWidget.scss */
 .default-list ul li, nav.main-menu ul li, nav.user-management ul li, nav.breadcrumbs ul li {
   float: left;
   margin-right: 10px;
   padding-right: 10px;
   position: relative;
 }
-/* line 54, ../sass/eXPortalWidget.scss */
 .default-list ul li a, nav.main-menu ul li a, nav.user-management ul li a, nav.breadcrumbs ul li a {
   text-decoration: none;
   color: black;
 }
-/* line 58, ../sass/eXPortalWidget.scss */
 .default-list ul li a:hover, nav.main-menu ul li a:hover, nav.user-management ul li a:hover, nav.breadcrumbs ul li a:hover {
   color: red;
 }
-/* line 63, ../sass/eXPortalWidget.scss */
 .default-list ul li ul, nav.main-menu ul li ul, nav.user-management ul li ul, nav.breadcrumbs ul li ul {
   display: none;
   position: absolute;
@@ -46,7 +40,6 @@
   top: 14px;
   padding: 10px;
 }
-/* line 70, ../sass/eXPortalWidget.scss */
 .default-list ul li ul li, nav.main-menu ul li ul li, nav.user-management ul li ul li, nav.breadcrumbs ul li ul li {
   float: none;
   margin-right: 0px;
@@ -55,31 +48,25 @@
   position: unset;
   white-space: nowrap;
 }
-/* line 78, ../sass/eXPortalWidget.scss */
 .default-list ul li ul li:last-child, nav.main-menu ul li ul li:last-child, nav.user-management ul li ul li:last-child, nav.breadcrumbs ul li ul li:last-child {
   padding-bottom: 0px;
 }
-/* line 85, ../sass/eXPortalWidget.scss */
 .default-list ul li:hover > a, nav.main-menu ul li:hover > a, nav.user-management ul li:hover > a, nav.breadcrumbs ul li:hover > a {
   color: red;
 }
-/* line 89, ../sass/eXPortalWidget.scss */
 .default-list ul li:hover ul, nav.main-menu ul li:hover ul, nav.user-management ul li:hover ul, nav.breadcrumbs ul li:hover ul {
   display: block;
 }
-/* line 94, ../sass/eXPortalWidget.scss */
 .default-list ul li:last-child, nav.main-menu ul li:last-child, nav.user-management ul li:last-child, nav.breadcrumbs ul li:last-child {
   margin-right: 0px;
   padding-right: 0px;
   border-right: 0px silver none;
 }
 
-/* line 103, ../sass/eXPortalWidget.scss */
 .icon {
   font-family: 'FontAwesome';
 }
 
-/* line 107, ../sass/eXPortalWidget.scss */
 body, html {
   width: 100%;
   height: 100%;
@@ -90,114 +77,92 @@ body, html {
   font-size: 9pt;
 }
 
-/* line 117, ../sass/eXPortalWidget.scss */
 section {
   width: 950px;
   margin: 0px auto 5px auto;
 }
 
-/* line 122, ../sass/eXPortalWidget.scss */
 header {
   margin-top: 20px;
 }
 
-/* line 127, ../sass/eXPortalWidget.scss */
 div.newsection {
   margin-top: 10px;
 }
-/* line 131, ../sass/eXPortalWidget.scss */
 div.clearfix:after {
   clear: both;
   display: block;
   content: "";
 }
 
-/* line 139, ../sass/eXPortalWidget.scss */
 div div.logo {
   width: 300px;
   height: 60px;
   float: left;
 }
-/* line 144, ../sass/eXPortalWidget.scss */
 div div.logo img {
   width: 100%;
   height: auto !important;
 }
 
-/* line 150, ../sass/eXPortalWidget.scss */
 nav.main-menu {
   float: right;
 }
 
-/* line 155, ../sass/eXPortalWidget.scss */
 nav.user-management {
   float: right;
 }
-/* line 159, ../sass/eXPortalWidget.scss */
 nav.user-management b {
   color: black;
 }
-/* line 163, ../sass/eXPortalWidget.scss */
 nav.user-management > ul > li {
   margin-right: 0px;
   padding-right: 5px;
 }
-/* line 167, ../sass/eXPortalWidget.scss */
 nav.user-management > ul > li::after {
   margin-left: 5px;
   content: "|";
 }
-/* line 172, ../sass/eXPortalWidget.scss */
 nav.user-management > ul > li:last-child::after {
   content: "";
   display: none;
 }
 
-/* line 181, ../sass/eXPortalWidget.scss */
 nav.main-menu > ul {
   margin-top: 30px;
 }
-/* line 184, ../sass/eXPortalWidget.scss */
 nav.main-menu > ul > li {
   text-transform: uppercase;
 }
-/* line 187, ../sass/eXPortalWidget.scss */
 nav.main-menu > ul > li > ul {
   background-color: rgba(250, 250, 250, 0.8);
   z-index: 10;
 }
-/* line 191, ../sass/eXPortalWidget.scss */
 nav.main-menu > ul > li > ul > li {
   text-transform: none;
 }
 
-/* line 198, ../sass/eXPortalWidget.scss */
 nav.breadcrumbs {
   float: left;
 }
-/* line 202, ../sass/eXPortalWidget.scss */
 nav.breadcrumbs ul li {
   font-size: 8pt;
   margin-right: 0px;
   padding-right: 5px;
 }
-/* line 207, ../sass/eXPortalWidget.scss */
 nav.breadcrumbs ul li::after {
   margin-left: 5px;
   content: ">";
 }
-/* line 212, ../sass/eXPortalWidget.scss */
 nav.breadcrumbs ul li:last-child::after {
   content: "";
 }
-/* line 218, ../sass/eXPortalWidget.scss */
 nav.breadcrumbs::after {
   clear: both;
   display: block;
   content: "";
 }
 
-/* line 225, ../sass/eXPortalWidget.scss */
 h1.page-title {
   margin: 0px;
   padding: 0px;
@@ -205,7 +170,6 @@ h1.page-title {
   color: red;
   font-size: 12pt;
 }
-/* line 232, ../sass/eXPortalWidget.scss */
 h1.page-title::before {
   clear: both;
   display: block;
@@ -213,35 +177,28 @@ h1.page-title::before {
   height: 5px;
 }
 
-/* line 241, ../sass/eXPortalWidget.scss */
 div.grid-section {
   width: 950px;
   margin-bottom: 10px;
 }
-/* line 244, ../sass/eXPortalWidget.scss */
 div.grid-section > div {
   float: left;
   background-clip: padding-box;
   border-right: 10px solid transparent;
   min-height: 30px;
 }
-/* line 249, ../sass/eXPortalWidget.scss */
 div.grid-section > div:last-child {
   border-right: 0px none;
 }
-/* line 255, ../sass/eXPortalWidget.scss */
 div.grid-section > div.grid-2of8 {
   width: 230px;
 }
-/* line 259, ../sass/eXPortalWidget.scss */
 div.grid-section > div.grid-3of8 {
   width: 350px;
 }
-/* line 263, ../sass/eXPortalWidget.scss */
 div.grid-section > div.grid-4of8 {
   width: 470px;
 }
-/* line 267, ../sass/eXPortalWidget.scss */
 div.grid-section:after {
   clear: both;
   display: block;
@@ -249,108 +206,87 @@ div.grid-section:after {
   height: 0px;
 }
 
-/* line 275, ../sass/eXPortalWidget.scss */
 div.grid-section.flight-info > div {
   background-color: #ededed;
   text-transform: uppercase;
 }
-/* line 279, ../sass/eXPortalWidget.scss */
 div.grid-section.flight-info > div * {
   font-size: 8pt;
 }
-/* line 283, ../sass/eXPortalWidget.scss */
 div.grid-section.flight-info > div > table {
   height: 70px;
   padding: 10px 10px 10px 10px;
 }
-/* line 286, ../sass/eXPortalWidget.scss */
 div.grid-section.flight-info > div > table th {
   margin: 0px;
   padding: 0px;
 }
-/* line 290, ../sass/eXPortalWidget.scss */
 div.grid-section.flight-info > div > table td {
   margin: 0px;
   padding: 0px 0px 0px 15px;
 }
-/* line 296, ../sass/eXPortalWidget.scss */
 div.grid-section.flight-info > div th {
   text-align: left;
 }
 
-/* line 304, ../sass/eXPortalWidget.scss */
 table.warning tr td, table.warning tr th {
   padding: 3px;
 }
-/* line 308, ../sass/eXPortalWidget.scss */
 table.warning tr th span.icon {
   font-size: 15pt;
 }
-/* line 314, ../sass/eXPortalWidget.scss */
 table.warning tr.yellow td, table.warning tr.yellow th {
   color: #fe8400;
 }
-/* line 320, ../sass/eXPortalWidget.scss */
 table.warning tr.red td, table.warning tr.red th {
   color: #ed1c22;
 }
 
-/* line 327, ../sass/eXPortalWidget.scss */
 div#traffic_map {
   width: 100%;
   height: 260px;
 }
 
-/* line 331, ../sass/eXPortalWidget.scss */
 div#traffic_chart {
   width: 100%;
   height: 125px;
 }
 
-/* line 336, ../sass/eXPortalWidget.scss */
 div.traffic_data {
   height: 125px;
   background-color: #ededed;
 }
 
-/* line 340, ../sass/eXPortalWidget.scss */
 table#traffic_data {
   width: 100%;
 }
-/* line 342, ../sass/eXPortalWidget.scss */
 table#traffic_data thead {
   background-color: black;
   color: red;
 }
-/* line 345, ../sass/eXPortalWidget.scss */
 table#traffic_data thead th {
   padding: 6px 2px 6px 2px;
   font-size: 6pt;
   text-align: left;
 }
-/* line 350, ../sass/eXPortalWidget.scss */
 table#traffic_data thead th:first-child {
   padding-left: 12px;
 }
-/* line 356, ../sass/eXPortalWidget.scss */
 table#traffic_data tbody td {
   padding: 1px 2px 1px 2px;
   border-bottom: 1px #dedede solid;
   font-size: 7pt;
   color: black;
 }
-/* line 362, ../sass/eXPortalWidget.scss */
 table#traffic_data tbody td:first-child {
   padding-left: 12px;
 }
 
-/* line 368, ../sass/eXPortalWidget.scss */
 ul.tiles {
   list-style: none;
   margin: 0px;
   padding: 0px;
 }
-/* line 372, ../sass/eXPortalWidget.scss */
 ul.tiles li {
   width: 110px;
   float: left;
@@ -358,23 +294,19 @@ ul.tiles li {
   height: 125px;
   background-color: #e62a38;
 }
-/* line 378, ../sass/eXPortalWidget.scss */
 ul.tiles li:last-child {
   margin-right: 0px;
 }
-/* line 381, ../sass/eXPortalWidget.scss */
 ul.tiles li div.tile-icon {
   border-bottom: 1px white solid;
   width: 100%;
   text-align: center;
 }
-/* line 385, ../sass/eXPortalWidget.scss */
 ul.tiles li div.tile-icon img {
   width: 40px;
   height: auto;
   padding: 0px 0px 3px 0px;
 }
-/* line 391, ../sass/eXPortalWidget.scss */
 ul.tiles li div.tile-title {
   width: 100%;
   color: white;
@@ -383,7 +315,6 @@ ul.tiles li div.tile-title {
   padding: 8px 0px 8px 0px;
   font-size: 8pt;
 }
-/* line 400, ../sass/eXPortalWidget.scss */
 ul.tiles li div.tile-detail {
   font-family: Gobold_Light;
   width: 100%;
@@ -394,22 +325,18 @@ ul.tiles li div.tile-detail {
   font-size: 26pt;
 }
 
-/* line 414, ../sass/eXPortalWidget.scss */
 a[href^="http://maps.google.com/maps"] {
   display: none !important;
 }
 
-/* line 415, ../sass/eXPortalWidget.scss */
 a[href^="https://maps.google.com/maps"] {
   display: none !important;
 }
 
-/* line 417, ../sass/eXPortalWidget.scss */
 .gmnoprint a, .gmnoprint span, .gm-style-cc {
   display: none;
 }
 
-/* line 424, ../sass/eXPortalWidget.scss */
 .adsb-point,
 .map-point {
   position: absolute;
@@ -422,7 +349,6 @@ a[href^="https://maps.google.com/maps"] {
   margin-left: -11px;
 }
 
-/* line 436, ../sass/eXPortalWidget.scss */
 .adsb-point span,
 .map-point span {
   display: block;
@@ -431,28 +357,24 @@ a[href^="https://maps.google.com/maps"] {
   text-shadow: 1px 1px 1px black;
 }
 
-/* line 444, ../sass/eXPortalWidget.scss */
 .adsb-point:hover span,
 .map-point:hover span,
 .adsb-point:hover span.flight-title {
   display: block;
 }
 
-/* line 450, ../sass/eXPortalWidget.scss */
 .map-point span.GeoTagIcon {
   font-size: 16px;
   left: 3px;
   top: 0px;
 }
 
-/* line 456, ../sass/eXPortalWidget.scss */
 .map-point span.GeoTagPoint {
   font-size: 16px;
   top: 10px;
   left: 8px;
 }
 
-/* line 462, ../sass/eXPortalWidget.scss */
 .adsb-point span.FlightIcon {
   font-size: 35px;
   left: 3px;
@@ -464,7 +386,6 @@ a[href^="https://maps.google.com/maps"] {
   -webkit-text-stroke-color: black;
 }
 
-/* line 474, ../sass/eXPortalWidget.scss */
 .adsb-point span.flight-title {
   color: #5f0702;
   left: 0px;

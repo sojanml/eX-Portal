@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "compass": "latest",
+    "gulp": "latest",
+    "gulp-coffee": "latest",
+    "gulp-compass": "^2.1.0",
+    "gulp-concat": "latest",
+    "gulp-connect": "latest",
+    "gulp-print": "latest",
+    "gulp-sass": "latest",
+    "gulp-uglify": "latest",
+    "gulp-util": "latest",
+    "gulp-plumber": "latest"
+  }
+}

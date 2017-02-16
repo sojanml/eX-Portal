@@ -5,7 +5,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using Microsoft.SqlServer.Types;
+using System.Data.SqlTypes;
 
 namespace eX_Portal.Controllers {
 
@@ -103,7 +104,7 @@ namespace eX_Portal.Controllers {
           .ToLocalTime();
 
         var ImageFile = Request.Files[0];
-        Stat.ImageFile = $"{CreatedBy}-{ImageFile.FileName}";
+        Stat.ImageFile = $"{CreatedBy}-{DateTime.Now.Ticks}-{ImageFile.FileName}";
         var ImagePath = Server.MapPath($"/Upload/Agriculture/{ID}");
         var ImageFilePath = System.IO.Path.Combine(ImagePath, Stat.ImageFile);
         if (!System.IO.Directory.Exists(ImagePath)) System.IO.Directory.CreateDirectory(ImagePath);
@@ -223,7 +224,7 @@ namespace eX_Portal.Controllers {
           String dPath = System.IO.Path.Combine(DestPath, ImageName);
           try {
             if (System.IO.File.Exists(dPath)) System.IO.File.Delete(dPath);
-            System.IO.File.Move(sPath, dPath);
+            if (System.IO.File.Exists(sPath)) System.IO.File.Move(sPath, dPath);
           } catch {
             //skip the error
           }
@@ -233,6 +234,16 @@ namespace eX_Portal.Controllers {
         Image.AgriTraxID = AgriTraxID;
         db.Entry(Image).State = EntityState.Modified;
       }
+
+      //Find the AgriTrax Customer and update Area and position
+      var AgriTraxObj = db.AgriTraxManagements.Where(e => e.AgriTraxID == AgriTraxID).FirstOrDefault();
+      if(AgriTraxObj != null) {
+        AgriTraxObj.LandSize = (Decimal)GetArea(Images);
+        AgriTraxObj.Lat = Images.Average(e => e.Lat);
+        AgriTraxObj.Lng = Images.Average(e => e.Lng);
+        db.Entry(AgriTraxObj).State = EntityState.Modified;
+      }
+
       db.SaveChanges();
 
       var SuccessMsg = new {
@@ -242,6 +253,19 @@ namespace eX_Portal.Controllers {
       return Json(SuccessMsg, JsonRequestBehavior.AllowGet);
     }
 
+    private Double GetArea(IList<AgriTraxImage> Images) {
+      String polygon =
+        "POLYGON((" +
+        String.Join(",", Images.Select(e => e.Lat + " " + e.Lng).ToArray()) +
+        $", {Images[0].Lat} {Images[0].Lng}))";
+      SqlGeography geom = new SqlGeography();
+      SqlChars geometryString = new SqlChars(new SqlString(polygon));
+      geom = SqlGeography.STPolyFromText(geometryString, 4326).MakeValid();
+
+      var TotalArea = geom.STArea().Value;
+      if (TotalArea > 100000) TotalArea = geom.ReorientObject().STArea().Value;
+      return TotalArea;
+    }
 
     public JsonResult MapImage(int ID = 0, int ImageID = 0,
       String Process = "", Double Lat = 0, Double Lng = 0,
@@ -306,9 +330,7 @@ namespace eX_Portal.Controllers {
 
 
     public JsonResult Data(ViewModel.AgricultureFilter Filter) {
-
       var List = Filter.SetFilter(db);
-
       return Json(List.ToList(), JsonRequestBehavior.AllowGet);
     }
   }

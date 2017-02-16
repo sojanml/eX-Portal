@@ -1,4 +1,11 @@
-﻿function dtConvFromJSON(sNetDate, isAddTime) {
+﻿function getFileTitle(FileName) {
+  FileName = FileName.replace('.t.png', '');
+  var LastHypon = FileName.lastIndexOf("-");
+  if (LastHypon > 0) return FileName.substr(LastHypon + 1);
+  return FileName;
+}
+
+function dtConvFromJSON(sNetDate, isAddTime) {
   var sDate = '';
 
   var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

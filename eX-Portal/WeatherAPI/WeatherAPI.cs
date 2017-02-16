@@ -53,7 +53,7 @@ namespace  Exponent  {
       }
       return ThisWeather;
     }
-
+    
     public WeatherForcast GetByIP(String IPAddress) {
       WeatherForcast ThisWeather = new WeatherForcast();
       try { 
@@ -167,9 +167,12 @@ namespace  Exponent  {
       String WeatherStation = getWeatherJson(URL);
       dynamic WeatherStationJson = JObject.Parse("{\"data\":" + WeatherStation + "}");
 
-      var Data = WeatherStationJson.data[0];      
-      Today.Visibility = Data.last.visibility.distance / 1000;
-
+      var Data = WeatherStationJson.data[0];
+      if (Data.last.visibility != null) {
+        Today.Visibility = Data.last.visibility.distance / 1000;
+      } else {
+        Today.Visibility = 0;
+      }
 
       //get current weather data
       URL = APIUrl + "weather?APIKey=" + APIKey + "&units=metric&lat=" + Lat + "&lon=" + Lng + "&cnt=4";

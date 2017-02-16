@@ -1,14 +1,14 @@
 @font-face {
   font-family: "FontAwesome";
-  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
+  src: url('/fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('/fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('/fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('/fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('/fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('/fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
 }
 @font-face {
   font-family: "OpenSans";
-  src: url('../fonts/../fonts/OpenSans.ttf?1478508894') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1478508894') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1478508894') format('svg'), url('../fonts/../fonts/OpenSans.woff?1478508894') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1478508894') format('woff2');
+  src: url('/fonts/../fonts/OpenSans.ttf?1478508894') format('truetype'), url('/fonts/../fonts/OpenSans.eot?1478508894') format('embedded-opentype'), url('/fonts/../fonts/OpenSans.svg?1478508894') format('svg'), url('/fonts/../fonts/OpenSans.woff?1478508894') format('woff'), url('/fonts/../fonts/OpenSans.woff2?1478508894') format('woff2');
 }
 @font-face {
   font-family: "Gobold_Light";
-  src: url('../fonts/../fonts/GoboldThinLight.ttf?1478593771') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1478593771') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1478593771') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1478593771') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1478593771') format('woff2');
+  src: url('/fonts/../fonts/GoboldThinLight.ttf?1478593771') format('truetype'), url('/fonts/../fonts/GoboldThinLight.eot?1478593771') format('embedded-opentype'), url('/fonts/../fonts/GoboldThinLight.svg?1478593771') format('svg'), url('/fonts/../fonts/GoboldThinLight.woff?1478593771') format('woff'), url('/fonts/../fonts/GoboldThinLight.woff2?1478593771') format('woff2');
 }
 @-moz-keyframes spin {
   100% {
@@ -26,14 +26,17 @@
     transform: rotate(360deg);
   }
 }
+/* line 42, ../sass/ADSB.scss */
 span.icon {
   font-family: FontAwesome;
 }
 
+/* line 46, ../sass/ADSB.scss */
 #adsb_map {
   min-height: 460px;
 }
 
+/* line 50, ../sass/ADSB.scss */
 div.label {
   display: inline-block;
   padding: 0px 5px 0px 5px;
@@ -42,6 +45,7 @@ div.label {
   width: 30px;
 }
 
+/* line 158, ../sass/ADSB.scss */
 input:focus,
 select:focus,
 textarea:focus,
@@ -49,25 +53,30 @@ button:focus {
   outline: none;
 }
 
+/* line 165, ../sass/ADSB.scss */
 input.spinner {
   width: 30px;
 }
 
+/* line 169, ../sass/ADSB.scss */
 ul.simple-list {
   list-style: none;
   margin: 0px 0px 0px 5px;
   padding: 0px;
 }
+/* line 173, ../sass/ADSB.scss */
 ul.simple-list li {
   margin: 0px;
   margin: 5px 0px 5px 0px;
 }
+/* line 178, ../sass/ADSB.scss */
 ul.simple-list input[type="checkbox"] {
   display: none;
   width: 16px;
   height: 16px;
   vertical-align: text-bottom;
 }
+/* line 183, ../sass/ADSB.scss */
 ul.simple-list input[type="checkbox"] + label {
   padding-left: 20px;
   background-image: url("/images/adsb-check-off.png");
@@ -76,56 +85,70 @@ ul.simple-list input[type="checkbox"] + label {
   height: 16px;
   display: block;
 }
+/* line 191, ../sass/ADSB.scss */
 ul.simple-list input[type="checkbox"]:checked + label {
   background-image: url("/images/adsb-check-on.png");
 }
 
+/* line 197, ../sass/ADSB.scss */
 ul.multi-select {
   margin: 10px 0px 5px 5px;
   padding: 0px;
 }
+/* line 201, ../sass/ADSB.scss */
 ul.multi-select li {
   display: inline-block;
 }
+/* line 205, ../sass/ADSB.scss */
 ul.multi-select input[type="checkbox"] {
   display: none;
 }
+/* line 207, ../sass/ADSB.scss */
 ul.multi-select input[type="checkbox"] + label {
   margin: 0px 6px 3px 0px;
   padding: 0px 5px 0px 5px;
   border-radius: 6px;
   background-color: white;
 }
+/* line 215, ../sass/ADSB.scss */
 ul.multi-select input[type="checkbox"]:checked + label {
   background-color: #53a100;
   color: white;
 }
+/* line 220, ../sass/ADSB.scss */
 ul.multi-select input[type="checkbox"] + label:hover {
   background-color: #87d534;
 }
 
+/* line 227, ../sass/ADSB.scss */
 table.traffic_status {
   width: 100%;
   padding-bottom: 10px;
 }
+/* line 230, ../sass/ADSB.scss */
 table.traffic_status td {
   padding: 1px 0px 0px 5px;
 }
+/* line 234, ../sass/ADSB.scss */
 table.traffic_status div.traffic_stat {
   width: 15px;
   height: 40px;
   border-radius: 10px;
 }
+/* line 240, ../sass/ADSB.scss */
 table.traffic_status div.breach {
   background-color: #fe0000;
 }
+/* line 244, ../sass/ADSB.scss */
 table.traffic_status div.alert {
   background-color: #ff4e00;
 }
+/* line 249, ../sass/ADSB.scss */
 table.traffic_status div.safe {
   background-color: #0189ff;
 }
 
+/* line 263, ../sass/ADSB.scss */
 body, html {
   width: 100%;
   height: 100%;
@@ -136,41 +159,50 @@ body, html {
   text-transform: uppercase;
 }
 
+/* line 273, ../sass/ADSB.scss */
 body {
   padding: 10px 30px 10px 30px;
   box-sizing: border-box;
 }
 
+/* line 256, ../sass/ADSB.scss */
 div.clearfix:after {
   clear: both;
   display: block;
   content: "";
 }
 
+/* line 283, ../sass/ADSB.scss */
 .shaded {
   background-color: #ededed;
 }
 
+/* line 288, ../sass/ADSB.scss */
 header div.left-section {
   float: left;
 }
+/* line 292, ../sass/ADSB.scss */
 header div.right-section {
   float: right;
 }
+/* line 296, ../sass/ADSB.scss */
 header div.logo img {
   width: auto;
   height: 72px;
 }
+/* line 256, ../sass/ADSB.scss */
 header:after {
   clear: both;
   display: block;
   content: "";
 }
 
+/* line 304, ../sass/ADSB.scss */
 .ui-spinner-input {
   margin: 0px 16px 0px 3px;
 }
 
+/* line 311, ../sass/ADSB.scss */
 nav.user-management ul,
 nav.main-menu ul,
 nav.breadcrumbs ul {
@@ -179,6 +211,7 @@ nav.breadcrumbs ul {
   padding: 0px;
   list-style: none;
 }
+/* line 317, ../sass/ADSB.scss */
 nav.user-management ul li,
 nav.main-menu ul li,
 nav.breadcrumbs ul li {
@@ -187,6 +220,7 @@ nav.breadcrumbs ul li {
   padding-left: 5px;
   position: relative;
 }
+/* line 324, ../sass/ADSB.scss */
 nav.user-management ul li ul,
 nav.main-menu ul li ul,
 nav.breadcrumbs ul li ul {
@@ -196,6 +230,7 @@ nav.breadcrumbs ul li ul {
   display: none;
   z-index: 10;
 }
+/* line 331, ../sass/ADSB.scss */
 nav.user-management ul li ul li,
 nav.main-menu ul li ul li,
 nav.breadcrumbs ul li ul li {
@@ -205,17 +240,20 @@ nav.breadcrumbs ul li ul li {
   padding-bottom: 5px;
   box-sizing: border-box;
 }
+/* line 341, ../sass/ADSB.scss */
 nav.user-management ul li:hover ul,
 nav.main-menu ul li:hover ul,
 nav.breadcrumbs ul li:hover ul {
   display: block;
 }
+/* line 346, ../sass/ADSB.scss */
 nav.user-management ul li a,
 nav.main-menu ul li a,
 nav.breadcrumbs ul li a {
   text-decoration: none;
   color: #292929;
 }
+/* line 256, ../sass/ADSB.scss */
 nav.user-management:after,
 nav.main-menu:after,
 nav.breadcrumbs:after {
@@ -224,54 +262,68 @@ nav.breadcrumbs:after {
   content: "";
 }
 
+/* line 357, ../sass/ADSB.scss */
 nav.user-management ul {
   margin-right: 12px;
 }
+/* line 360, ../sass/ADSB.scss */
 nav.user-management ul li {
   border-right: 1px black solid;
 }
+/* line 363, ../sass/ADSB.scss */
 nav.user-management ul li:last-child {
   border-right: 0px white none;
 }
+/* line 367, ../sass/ADSB.scss */
 nav.user-management ul li span.icon {
   display: inline-block;
 }
+/* line 371, ../sass/ADSB.scss */
 nav.user-management ul li:hover span.icon {
   -webkit-animation: spin 3s linear infinite;
   -moz-animation: spin 3s linear infinite;
   animation: spin 3s linear infinite;
 }
+/* line 377, ../sass/ADSB.scss */
 nav.user-management ul li#user-menu:hover {
   background-color: #cacaca;
 }
+/* line 381, ../sass/ADSB.scss */
 nav.user-management ul li ul {
   background-color: #e5e5e5;
   min-width: 100%;
 }
+/* line 385, ../sass/ADSB.scss */
 nav.user-management ul li ul li {
   border-right: 0px white none;
   min-width: 100%;
 }
+/* line 388, ../sass/ADSB.scss */
 nav.user-management ul li ul li:hover {
   background-color: #cacaca;
 }
 
+/* line 397, ../sass/ADSB.scss */
 nav.main-menu {
   margin-top: 5px;
 }
+/* line 400, ../sass/ADSB.scss */
 nav.main-menu ul li {
   padding: 5px 12px 5px 12px;
   background-color: #e5e5e5;
 }
+/* line 403, ../sass/ADSB.scss */
 nav.main-menu ul li a {
   display: block;
   width: 100%;
 }
+/* line 407, ../sass/ADSB.scss */
 nav.main-menu ul li ul {
   top: 25px;
   background-color: #cacaca;
   width: auto;
 }
+/* line 411, ../sass/ADSB.scss */
 nav.main-menu ul li ul li {
   min-width: 100%;
   white-space: nowrap;
@@ -279,47 +331,58 @@ nav.main-menu ul li ul li {
   padding: 5px 12px 5px 12px;
   background-color: #cacaca;
 }
+/* line 417, ../sass/ADSB.scss */
 nav.main-menu ul li ul li:hover {
   background-color: #e5e5e5;
 }
+/* line 422, ../sass/ADSB.scss */
 nav.main-menu ul li:last-child {
   padding-right: 17px;
 }
+/* line 426, ../sass/ADSB.scss */
 nav.main-menu ul li:hover {
   background-color: #cacaca;
 }
+/* line 432, ../sass/ADSB.scss */
 nav.main-menu div.navigation-logo {
   float: left;
   margin-right: 10px;
   background-color: #e5e5e5;
 }
+/* line 436, ../sass/ADSB.scss */
 nav.main-menu div.navigation-logo img {
   height: 16px;
   width: auto;
   padding: 5px 10px 4px 10px;
 }
 
+/* line 444, ../sass/ADSB.scss */
 nav.breadcrumbs {
   margin-top: 5px;
 }
+/* line 447, ../sass/ADSB.scss */
 nav.breadcrumbs ul li {
   padding: 0px 3px 0px 0px;
 }
+/* line 449, ../sass/ADSB.scss */
 nav.breadcrumbs ul li:after {
   display: inline-block;
   padding-left: 3px;
   content: ">";
 }
+/* line 455, ../sass/ADSB.scss */
 nav.breadcrumbs ul li:last-child {
   color: red;
   padding-right: 12px;
 }
+/* line 458, ../sass/ADSB.scss */
 nav.breadcrumbs ul li:last-child:after {
   display: none;
   padding: 0px;
   content: "";
 }
 
+/* line 256, ../sass/ADSB.scss */
 div.column-group:after,
 table.info-tiles:after {
   clear: both;
@@ -327,37 +390,46 @@ table.info-tiles:after {
   content: "";
 }
 
+/* line 477, ../sass/ADSB.scss */
 section {
   margin: 0px auto 0px auto;
 }
+/* line 256, ../sass/ADSB.scss */
 section:after {
   clear: both;
   display: block;
   content: "";
 }
+/* line 481, ../sass/ADSB.scss */
 section div.column {
   box-sizing: border-box;
   float: left;
 }
+/* line 485, ../sass/ADSB.scss */
 section div.column:last-child {
   border-right: 0px red none;
   margin-right: 0;
 }
 
+/* line 503, ../sass/ADSB.scss */
 .alert-text {
   color: #ff4e00;
 }
 
+/* line 507, ../sass/ADSB.scss */
 table.info-tiles div.dataTables_info {
   display: none !important;
 }
+/* line 511, ../sass/ADSB.scss */
 table.info-tiles div.tile,
 table.info-tiles div.detail {
   float: left;
 }
+/* line 515, ../sass/ADSB.scss */
 table.info-tiles div.detail {
   background-color: #ededed;
 }
+/* line 519, ../sass/ADSB.scss */
 table.info-tiles div.detail_left,
 table.info-tiles div.detail_right {
   display: block;
@@ -367,32 +439,40 @@ table.info-tiles div.detail_right {
   padding: 10px;
   box-sizing: border-box;
 }
+/* line 530, ../sass/ADSB.scss */
 table.info-tiles div.detail_right {
   background-color: #222222;
   color: white;
 }
+/* line 534, ../sass/ADSB.scss */
 table.info-tiles div.detail_left {
   text-align: center;
 }
+/* line 538, ../sass/ADSB.scss */
 table.info-tiles.breach div.breach-info {
   background-color: #222222;
   color: white;
   padding: 6px 0px 6px 10px;
   margin-top: 1px;
 }
+/* line 543, ../sass/ADSB.scss */
 table.info-tiles.breach div.breach-info span.breach-aircraft {
   color: #fe0000;
   padding-left: 20px;
 }
+/* line 548, ../sass/ADSB.scss */
 table.info-tiles.breach div.tile {
   background-color: #fe0000;
 }
+/* line 553, ../sass/ADSB.scss */
 table.info-tiles.alert div.tile {
   background-color: #ff4e00;
 }
+/* line 558, ../sass/ADSB.scss */
 table.info-tiles.safe div.tile {
   background-color: #0189ff;
 }
+/* line 562, ../sass/ADSB.scss */
 table.info-tiles div.tile-title {
   width: 100%;
   text-align: center;
@@ -402,20 +482,25 @@ table.info-tiles div.tile-title {
   padding: 2px 0px 2px 0px;
   text-transform: uppercase;
 }
+/* line 572, ../sass/ADSB.scss */
 table.info-tiles div.tile-detail {
   padding-bottom: 5px;
   padding-top: 5px;
 }
+/* line 575, ../sass/ADSB.scss */
 table.info-tiles div.tile-detail > table {
   width: 100%;
 }
+/* line 578, ../sass/ADSB.scss */
 table.info-tiles div.tile-detail > table td {
   width: 50%;
   text-align: center;
 }
+/* line 581, ../sass/ADSB.scss */
 table.info-tiles div.tile-detail > table td:first-child {
   border-right: 3px white solid;
 }
+/* line 587, ../sass/ADSB.scss */
 table.info-tiles div.tile-number {
   color: white;
   font-size: 3em;
@@ -423,6 +508,7 @@ table.info-tiles div.tile-number {
   text-align: center;
   margin: -4px 0px -5px 0px;
 }
+/* line 594, ../sass/ADSB.scss */
 table.info-tiles div.tile-caption {
   color: white;
   width: 100%;
@@ -431,19 +517,23 @@ table.info-tiles div.tile-caption {
   text-transform: uppercase;
 }
 
+/* line 603, ../sass/ADSB.scss */
 td.safe {
   background-color: #0189ff;
 }
 
+/* line 606, ../sass/ADSB.scss */
 td.breach {
   background-color: #fe0000;
 }
 
+/* line 612, ../sass/ADSB.scss */
 div.scroll-table div.scroll-rows {
   height: 40px;
   overflow: hidden;
   position: relative;
 }
+/* line 616, ../sass/ADSB.scss */
 div.scroll-table div.scroll-rows div.scroll-down,
 div.scroll-table div.scroll-rows div.scroll-up {
   -webkit-user-select: none;
@@ -455,23 +545,28 @@ div.scroll-table div.scroll-rows div.scroll-up {
   font-size: 14px;
   color: gray;
 }
+/* line 626, ../sass/ADSB.scss */
 div.scroll-table div.scroll-rows div.scroll-down:hover,
 div.scroll-table div.scroll-rows div.scroll-up:hover {
   color: #fe0000;
 }
+/* line 631, ../sass/ADSB.scss */
 div.scroll-table div.scroll-rows div.scroll-up {
   top: 0px;
   right: 0px;
 }
+/* line 635, ../sass/ADSB.scss */
 div.scroll-table div.scroll-rows div.scroll-down {
   bottom: 0px;
   right: 0px;
 }
+/* line 639, ../sass/ADSB.scss */
 div.scroll-table div.scroll-rows div.scroll {
   position: absolute;
   top: 0px;
   left: 0px;
 }
+/* line 647, ../sass/ADSB.scss */
 div.scroll-table div.row > div {
   display: inline-block;
   text-align: center;
@@ -481,42 +576,53 @@ div.scroll-table div.row > div {
   box-sizing: border-box;
   white-space: nowrap;
 }
+/* line 656, ../sass/ADSB.scss */
 div.scroll-table div.row > div.col1 {
   width: 135px;
 }
+/* line 657, ../sass/ADSB.scss */
 div.scroll-table div.row > div.col2 {
   width: 60px;
 }
+/* line 658, ../sass/ADSB.scss */
 div.scroll-table div.row > div.col3 {
   width: 65px;
 }
+/* line 659, ../sass/ADSB.scss */
 div.scroll-table div.row > div.col4 {
   width: 65px;
 }
+/* line 660, ../sass/ADSB.scss */
 div.scroll-table div.row > div.col5 {
   width: 45px;
 }
+/* line 661, ../sass/ADSB.scss */
 div.scroll-table div.row > div.col6 {
   width: 45px;
   border-right: 0px #fe0000 none;
 }
+/* line 663, ../sass/ADSB.scss */
 div.scroll-table div.row.head {
   border-bottom: 1px #fe0000 solid;
 }
+/* line 665, ../sass/ADSB.scss */
 div.scroll-table div.row.head div {
   color: #222222;
   font-size: 9px;
   font-weight: bold;
 }
 
+/* line 674, ../sass/ADSB.scss */
 table.safe-status {
   padding-left: 5px;
 }
+/* line 676, ../sass/ADSB.scss */
 table.safe-status td {
   padding: 0px 5px 3px 0px;
   white-space: nowrap;
 }
 
+/* line 682, ../sass/ADSB.scss */
 div.adsb-point {
   position: absolute;
   cursor: pointer;
@@ -525,6 +631,7 @@ div.adsb-point {
   margin-left: -50px;
   margin-top: -50px;
 }
+/* line 690, ../sass/ADSB.scss */
 div.adsb-point span.tail {
   position: absolute;
   background-color: aquamarine;
@@ -536,6 +643,7 @@ div.adsb-point span.tail {
   display: block;
   font-size: 1px;
 }
+/* line 701, ../sass/ADSB.scss */
 div.adsb-point span.FlightIcon,
 div.adsb-point span.DroneIcon {
   position: absolute;
@@ -551,6 +659,7 @@ div.adsb-point span.DroneIcon {
   -o-transform-origin: 50% 50%;
   transform-origin: 50% 50%;
 }
+/* line 721, ../sass/ADSB.scss */
 div.adsb-point span.flight-title {
   position: absolute;
   top: 60px;
@@ -561,237 +670,299 @@ div.adsb-point span.flight-title {
   padding: 0px 2px 0px 2px;
   font-size: 9px;
 }
+/* line 735, ../sass/ADSB.scss */
 div.adsb-point:hover span.flight-title {
   display: block;
 }
+/* line 740, ../sass/ADSB.scss */
 div.adsb-point.breach {
   color: #fe0000;
 }
+/* line 742, ../sass/ADSB.scss */
 div.adsb-point.breach span.flight-title,
 div.adsb-point.breach span.tail {
   background-color: #fe0000;
 }
+/* line 747, ../sass/ADSB.scss */
 div.adsb-point.alert {
   color: #ff4e00;
 }
+/* line 749, ../sass/ADSB.scss */
 div.adsb-point.alert span.flight-title,
 div.adsb-point.alert span.tail {
   background-color: #ff4e00;
 }
+/* line 754, ../sass/ADSB.scss */
 div.adsb-point.safe {
   color: #0189ff;
 }
+/* line 756, ../sass/ADSB.scss */
 div.adsb-point.safe span.flight-title,
 div.adsb-point.safe span.tail {
   background-color: #0189ff;
 }
+/* line 761, ../sass/ADSB.scss */
 div.adsb-point.normal {
   color: #ffcc01;
 }
+/* line 763, ../sass/ADSB.scss */
 div.adsb-point.normal span.flight-title,
 div.adsb-point.normal span.tail {
   background-color: #ffcc01;
 }
+/* line 768, ../sass/ADSB.scss */
 div.adsb-point.drone {
   color: #018aff;
 }
+/* line 770, ../sass/ADSB.scss */
 div.adsb-point.drone span.flight-title,
 div.adsb-point.drone span.tail {
   background-color: #018aff;
 }
 
+/* line 785, ../sass/ADSB.scss */
 div.adsb-history {
   color: white;
   position: absolute;
   font-size: 3px;
 }
 
+/* line 791, ../sass/ADSB.scss */
 div#safe-aircraft {
   padding-left: 5px;
 }
 
+/* line 796, ../sass/ADSB.scss */
 div#BarGraph {
   width: 100%;
   height: 100px;
 }
+/* line 799, ../sass/ADSB.scss */
 div#BarGraph span.hc-label {
   background-color: #222222;
   padding: 0px 5px;
   color: yellow;
 }
 
+/* line 805, ../sass/ADSB.scss */
 g.highcharts-axis-labels {
   background-color: red;
 }
 
 @media screen and (min-width: 960px) {
+  /* line 809, ../sass/ADSB.scss */
   section {
     width: 920px;
     font-size: 10px;
   }
+  /* line 61, ../sass/ADSB.scss */
   section td.spacer {
     width: 10px;
   }
+  /* line 65, ../sass/ADSB.scss */
   section div.column {
     margin-right: 10px;
   }
+  /* line 69, ../sass/ADSB.scss */
   section div.column-half {
     width: 455px;
   }
+  /* line 73, ../sass/ADSB.scss */
   section div.column-half div.column-2-of-6 {
     width: 178px;
   }
+  /* line 77, ../sass/ADSB.scss */
   section div.column-half div.column-4-of-6 {
     width: 267px;
   }
+  /* line 84, ../sass/ADSB.scss */
   section div.column-2-of-6 {
     width: 300px;
   }
+  /* line 88, ../sass/ADSB.scss */
   section div.column-4-of-6 {
     width: 610px;
   }
+  /* line 92, ../sass/ADSB.scss */
   section div.title {
     padding: 3px 0px 3px 5px;
     border-bottom: 2px white solid;
     margin-bottom: 5px;
     vertical-align: text-bottom;
   }
+  /* line 100, ../sass/ADSB.scss */
   section div.hr {
     width: 100%;
     height: 2px;
     background-color: white;
     margin-bottom: 2px;
   }
+  /* line 107, ../sass/ADSB.scss */
   section table.info-tiles {
     width: 455px;
   }
+  /* line 110, ../sass/ADSB.scss */
   section table.info-tiles tr td:first-child {
     width: 91px;
   }
+  /* line 114, ../sass/ADSB.scss */
   section table.info-tiles div.tile {
     width: 100%;
   }
+  /* line 120, ../sass/ADSB.scss */
   section table.info-tiles div.detail {
     width: 364px;
   }
+  /* line 124, ../sass/ADSB.scss */
   section table.info-tiles div.detail_left,
   section table.info-tiles div.detail_right {
     min-height: 74px;
     font-size: 10px;
   }
+  /* line 129, ../sass/ADSB.scss */
   section table.info-tiles div.detail,
   section table.info-tiles div.detail_left,
   section table.info-tiles div.detail_right {
     min-height: 85px;
   }
+  /* line 135, ../sass/ADSB.scss */
   section table.info-tiles div.detail_left {
     width: 91px;
   }
+  /* line 138, ../sass/ADSB.scss */
   section table.info-tiles div.detail_right {
     width: 273px;
   }
+  /* line 144, ../sass/ADSB.scss */
   section div.fixed-height-1 {
     height: 165px;
   }
+  /* line 148, ../sass/ADSB.scss */
   section .top-space, section.top-space {
     margin-top: 10px;
   }
 }
 @media screen and (min-width: 1200px) {
+  /* line 815, ../sass/ADSB.scss */
   section {
     width: 1150px;
     font-size: 11px;
   }
+  /* line 61, ../sass/ADSB.scss */
   section td.spacer {
     width: 15px;
   }
+  /* line 65, ../sass/ADSB.scss */
   section div.column {
     margin-right: 15px;
   }
+  /* line 69, ../sass/ADSB.scss */
   section div.column-half {
     width: 567.5px;
   }
+  /* line 73, ../sass/ADSB.scss */
   section div.column-half div.column-2-of-6 {
     width: 221px;
   }
+  /* line 77, ../sass/ADSB.scss */
   section div.column-half div.column-4-of-6 {
     width: 331.5px;
   }
+  /* line 84, ../sass/ADSB.scss */
   section div.column-2-of-6 {
     width: 373.33333px;
   }
+  /* line 88, ../sass/ADSB.scss */
   section div.column-4-of-6 {
     width: 761.66667px;
   }
+  /* line 92, ../sass/ADSB.scss */
   section div.title {
     padding: 3px 0px 3px 5px;
     border-bottom: 2px white solid;
     margin-bottom: 5px;
     vertical-align: text-bottom;
   }
+  /* line 100, ../sass/ADSB.scss */
   section div.hr {
     width: 100%;
     height: 2px;
     background-color: white;
     margin-bottom: 2px;
   }
+  /* line 107, ../sass/ADSB.scss */
   section table.info-tiles {
     width: 567.5px;
   }
+  /* line 110, ../sass/ADSB.scss */
   section table.info-tiles tr td:first-child {
     width: 113.5px;
   }
+  /* line 114, ../sass/ADSB.scss */
   section table.info-tiles div.tile {
     width: 100%;
   }
+  /* line 120, ../sass/ADSB.scss */
   section table.info-tiles div.detail {
     width: 454px;
   }
+  /* line 124, ../sass/ADSB.scss */
   section table.info-tiles div.detail_left,
   section table.info-tiles div.detail_right {
     min-height: 74px;
     font-size: 11px;
   }
+  /* line 129, ../sass/ADSB.scss */
   section table.info-tiles div.detail,
   section table.info-tiles div.detail_left,
   section table.info-tiles div.detail_right {
     min-height: 85px;
   }
+  /* line 135, ../sass/ADSB.scss */
   section table.info-tiles div.detail_left {
     width: 113.5px;
   }
+  /* line 138, ../sass/ADSB.scss */
   section table.info-tiles div.detail_right {
     width: 340.5px;
   }
+  /* line 144, ../sass/ADSB.scss */
   section div.fixed-height-1 {
     height: 165px;
   }
+  /* line 148, ../sass/ADSB.scss */
   section .top-space, section.top-space {
     margin-top: 15px;
   }
 }
+/* line 820, ../sass/ADSB.scss */
 div#Alert-RPAS,
 div#Alert-Aircraft {
   height: 50px;
   overflow-x: auto;
 }
 
+/* line 827, ../sass/ADSB.scss */
 .gmnoprint a, .gmnoprint span {
   display: none;
 }
 
+/* line 830, ../sass/ADSB.scss */
 .gmnoprint div {
   background: none !important;
 }
 
+/* line 834, ../sass/ADSB.scss */
 a[href^="http://maps.google.com/maps"] {
   display: none !important;
 }
 
+/* line 835, ../sass/ADSB.scss */
 a[href^="https://maps.google.com/maps"] {
   display: none !important;
 }
 
+/* line 836, ../sass/ADSB.scss */
 a[href^="https://www.google.com/maps"] {
   display: none !important;
 }

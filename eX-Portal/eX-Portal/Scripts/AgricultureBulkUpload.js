@@ -18,7 +18,7 @@ var _InfoWindow = null;
 var isInitDataTable = false;
 
 $(document).ready(function () {
-  initializeMap();  
+  initializeMap();
   LoadMapLocation();
 
   $('#frmImages').on("submit", function (e) {
@@ -40,7 +40,9 @@ $(document).ready(function () {
     $('#BulkUploadSearch').hide("slide", { direction: "right" }, 200);
   });
 
-  
+  $(document).on("click", 'span.btnSelectRow', fnSelectCustomer);
+
+
   $('#btnSearch').on('click', function () {
     if (!isInitDataTable) InitDataTable();
     qViewDataTable.clear();
@@ -53,8 +55,6 @@ $(document).ready(function () {
   });
 
 });
-
-
 
 
 function InitDataTable() {
@@ -81,9 +81,16 @@ function InitDataTable() {
       { "mData": "PrincipalAmount", "mRender": function (data, type, full) { return nFormat(data / 1000, 0) + 'K'; } },
       { "mData": "LandAddress" },
       { "mData": "LandSize", "mRender": function (data, type, full) { return nFormat(data, 0); } },
-      { "mData": "AgriTraxID", "mRender": function (data, type, full) { return '<span class="btnAssignCustomer" data-id="' + data + '">Assign</span>' } }
+      { "mData": "AgriTraxID", "mRender": fnGetButtons }
     ]
   });
+}
+
+function fnGetButtons(data, type, full) {
+  var Data =
+  '<span class="btnAssignCustomer" data-id="' + data + '">Assign</span>' +
+  '<span class="btnSelectRow" data-id="' + data + '">Select</span>';
+  return Data;
 }
 
 function getDataTableAjax(data, callback, settings) {
@@ -107,7 +114,7 @@ function ShowInfoWindow(Polygon) {
   // Iterate over the vertices.
   var Center = { lat: 0, lng: 0 };
   var PointsCount = vertices.getLength();
-  for (var i = 0; i < PointsCount ; i++) {
+  for (var i = 0; i < PointsCount; i++) {
     var xy = vertices.getAt(i);
     Center.lat += xy.lat();
     Center.lng += xy.lng();
@@ -130,7 +137,7 @@ function AssignPlot(Span) {
   id = parseInt(id);
   if (isNaN(id)) return false;
   AgriTraxGroupID = id;
-  
+
   $('#BulkUploadImages').hide("slide", { direction: "left" }, 200);
   $('#BulkUploadSearch').show("slide", { direction: "right" }, 200);
 
@@ -149,14 +156,19 @@ function fnAssignCustomer() {
       LoadMapLocation();
     }//succes
   });//$.ajax
+}
 
+function fnSelectCustomer() {
+  var Span = $(this);
+  var TR = Span.closest("TR");
+  $('table.report TR.selected').removeClass('selected');
+  TR.addClass('selected');
 
-  
 }
 
 function OverlayStart() {
   $('#Overlay')
-    .css({ 'height': ($(window).height()) + 'px' })
+    .css({ 'height': $(window).height() + 'px' })
     .fadeIn();
 }
 
@@ -175,7 +187,7 @@ function initializeMap() {
 
 function LoadMapLocation() {
   $.ajax({
-    url: '/Agriculture/MapBulkUpload/' ,  //server script to process data
+    url: '/Agriculture/MapBulkUpload/',  //server script to process data
     type: 'GET',
     success: function (data) {
       completeHandler(data);
@@ -195,7 +207,7 @@ function DeleteImage(Span) {
     url: URL,  //server script to process data
     type: 'GET',
     success: function (data) {
-      completeHandler(data, 0)
+      completeHandler(data, 0);
     }
   });
 }
@@ -216,15 +228,16 @@ function UploadSingleFile(file) {
   type = file.type;
 
   if (file.name.length < 1) {
+    //NOTHING
   } else if (file.size > 50 * 1000 * 1000) {
     alert("The file is too big");
-  } else if (file.type != 'image/png' && file.type != 'image/jpg' && file.type != 'image/gif' && file.type != 'image/jpeg') {
+  } else if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/jpeg') {
     alert("The file does not match png, jpg or gif");
   } else {
     gFileCounter++;
     var ID = gFileCounter;
 
-    var Elem = $('<li id="file_row_' + ID + '">Uploading ' + name + " ..." + 
+    var Elem = $('<li id="file_row_' + ID + '">Uploading ' + name + " ..." +
       '<div id="file_upload_' + ID + '" style="float:right"><span id="file_uploaded_' + ID + '">0</span>% Uploaded' +
       '</LI>');
     $('UL#FileQueue').prepend(Elem);
@@ -235,11 +248,11 @@ function UploadSingleFile(file) {
     $.ajax({
       url: '/Agriculture/UploadImage/' + AgriTraxID,  //server script to process data
       type: 'POST',
-      xhr: function () { return getNewXhr(ID)},
+      xhr: function () { return getNewXhr(ID); },
       // Ajax events
       success: function (data) {
         $('#file_row_' + ID).remove();
-        completeHandler(data)
+        completeHandler(data);
       },
       error: errorHandler,
       // Form data
@@ -267,7 +280,7 @@ function getNewXhr(ID) {  // custom xhr
 function updateProgress(evt, ID) {
   if (evt.lengthComputable) {
     // evt.loaded and evt.total are ProgressEvent properties
-    var loaded = (evt.loaded / evt.total) * 100;
+    var loaded = evt.loaded / evt.total * 100;
     //console.log("ID: " + ID + " at " + loaded.toFixed(0) + "%");
     $('#file_uploaded_' + ID).html(loaded.toFixed(1));
   }
@@ -283,7 +296,7 @@ function completeHandler(data) {
     var ImageURL = 'url("/Upload/Agriculture/' + Image.AgriTraxID + '/' + Image.Thumbnail + '")'
     var LI = $('<LI></LI>').css({ 'background-image': ImageURL });
     LI.append('<span class="label">' + (i + 1) + '</span>')
-    LI.append('<span class="title">' + Image.Thumbnail.replace('.t.png', '') + '</span>')
+    LI.append('<span class="title">' + getFileTitle(Image.Thumbnail) + '</span>')
     LI.append('<span data-id="' + Image.AgriTraxImageID + '" class="delete">x</span>')
 
     var ImageGroupID = '#AgriTraxGroup' + Image.AgriTraxGroupID;
@@ -312,8 +325,8 @@ function MakePolygon(PolygonPaths) {
   var Seq = 0;
 
   //Clear all polygon
-  for (var i = 0; i < LocationPoly.length; i++) {
-    LocationPoly[i].setMap(null);
+  for (var X = 0; X < LocationPoly.length; X++) {
+    LocationPoly[X].setMap(null);
   }
   for (var i = 0; i < LocationMarker.length; i++) {
     LocationMarker[i].setMap(null);
@@ -334,9 +347,9 @@ function MakePolygon(PolygonPaths) {
       map: map,
       id: AgriTraxGroupID
     });
-    for (var i = 0; i < Path.length; i++) {
-      Seq ++;
-      var position = Path[i];
+    for (var J = 0; J < Path.length; J++) {
+      Seq++;
+      var position = Path[J];
       //Add a marker in the form
       var TheMarker = new google.maps.Marker({
         position: position,
@@ -351,7 +364,7 @@ function MakePolygon(PolygonPaths) {
       ShowInfoWindow(this);
     });
     LocationPoly.push(LocationPolygon);
-    
+
   }
 
   map.fitBounds(LocationBoundBox);

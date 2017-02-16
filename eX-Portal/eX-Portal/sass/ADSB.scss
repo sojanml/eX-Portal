@@ -11,7 +11,7 @@ $MenuPadding: 5px;
 $MenuSpaceFromRight: 12px;
 $SelectedItemColor: #53a100;
 $BreachColor: #fe0000;
-$TitleHeading:#222222 ;
+$TitleHeading: #222222;
 
 
 @include font-face("FontAwesome", font-files( "../fonts/fontawesome-webfont.ttf", "../fonts/FontAwesome.otf", "../fonts/fontawesome-webfont.svg", "../fonts/fontawesome-webfont.eot", "../fonts/fontawesome-webfont.woff", "../fonts/fontawesome-webfont.woff2" ));
@@ -49,11 +49,12 @@ span.icon {
 
 div.label {
   display: inline-block;
-  padding:0px 5px 0px 5px;
+  padding: 0px 5px 0px 5px;
   background-color: white;
-  border-radius:10px;
-  width:30px;
+  border-radius: 10px;
+  width: 30px;
 }
+
 @mixin MultiResolution($TotalWidth, $Gap, $FontSize: 1em) {
   width: $TotalWidth;
   font-size: $FontSize;
@@ -77,8 +78,6 @@ div.label {
     div.column-4-of-6 {
       width: ($CalulatedWidth - $Gap) * 0.6;
     }
-
-
   }
 
   div.column-2-of-6 {
@@ -90,55 +89,57 @@ div.label {
   }
 
   div.title {
-
-    padding:3px 0px 3px 5px;
+    padding: 3px 0px 3px 5px;
     border-bottom: 2px white solid;
     margin-bottom: 5px;
     vertical-align: text-bottom
   }
 
   div.hr {
-    width:100%;
-    height:2px;
+    width: 100%;
+    height: 2px;
     background-color: white;
     margin-bottom: 2px;
-
   }
+
   table.info-tiles {
     $CalulatedWidth: (($TotalWidth - $Gap) / 2);
     width: $CalulatedWidth;
+
     tr td:first-child {
-      width: $CalulatedWidth  * 0.2;
+      width: $CalulatedWidth * 0.2;
     }
-    
+
     div.tile {
-      width:100%;
+      width: 100%;
     }
 
     $BoxWidth: $CalulatedWidth * 0.8;
     $LeftBox: 0.25;
+
     div.detail {
       width: $BoxWidth;
     }
 
     div.detail_left,
     div.detail_right {
-      min-height:74px;
-     font-size: $FontSize * 1;
+      min-height: 74px;
+      font-size: $FontSize * 1;
     }
-     div.detail, 
-     div.detail_left,
-    div.detail_right{
-          min-height:85px;
-         }
 
-     div.detail_left {
-       width: $BoxWidth * $LeftBox;
-     }
-     div.detail_right {
-       width: $BoxWidth * (1 - $LeftBox);
-     }
+    div.detail,
+    div.detail_left,
+    div.detail_right {
+      min-height: 85px;
+    }
 
+    div.detail_left {
+      width: $BoxWidth * $LeftBox;
+    }
+
+    div.detail_right {
+      width: $BoxWidth * (1 - $LeftBox);
+    }
   }
 
   div.fixed-height-1 {
@@ -149,7 +150,6 @@ div.label {
   &.top-space {
     margin-top: $Gap;
   }
-
 }
 
 
@@ -159,36 +159,39 @@ input:focus,
 select:focus,
 textarea:focus,
 button:focus {
-    outline: none;
+  outline: none;
 }
 
-input.spinner{
-  width:30px;
+input.spinner {
+  width: 30px;
 }
 
 ul.simple-list {
-  list-style:none;
-  margin:0px 0px 0px 5px;
-  padding:0px;
+  list-style: none;
+  margin: 0px 0px 0px 5px;
+  padding: 0px;
+
   li {
-    margin:0px;
-    margin:5px 0px 5px 0px;
+    margin: 0px;
+    margin: 5px 0px 5px 0px;
   }
 
   input[type="checkbox"] {
-    display:none;
-    width:16px;
-    height:16px;
-    vertical-align:text-bottom;
-    &+label {
-      padding-left:20px;
+    display: none;
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+
+    & + label {
+      padding-left: 20px;
       background-image: url('/images/adsb-check-off.png');
       background-repeat: no-repeat;
-      background-position:left center;
-      height:16px;
-      display:block;
+      background-position: left center;
+      height: 16px;
+      display: block;
     }
-    &:checked+label {
+
+    &:checked + label {
       background-image: url('/images/adsb-check-on.png');
     }
   }
@@ -203,38 +206,38 @@ ul.multi-select {
   }
 
   input[type="checkbox"] {
-    display:none;
-    &+label {
+    display: none;
+
+    & + label {
       margin: 0px 6px 3px 0px;
       padding: 0px 5px 0px 5px;
       border-radius: 6px;
       background-color: white;
-
     }
 
-    &:checked+label {
+    &:checked + label {
       background-color: scale-saturation($SelectedItemColor,20);
       color: white;
     }
 
-   &+label:hover {
-        background-color: #87d534;
-      }
+    & + label:hover {
+      background-color: #87d534;
+    }
   }
-
 }
 
 table.traffic_status {
-  width:100%;
-  padding-bottom:10px;
+  width: 100%;
+  padding-bottom: 10px;
+
   td {
-    padding:1px 0px 0px 5px;
+    padding: 1px 0px 0px 5px;
   }
 
   div.traffic_stat {
-    width:15px;
-    height: 40px;  
-  border-radius:10px;
+    width: 15px;
+    height: 40px;
+    border-radius: 10px;
   }
 
   div.breach {
@@ -246,10 +249,9 @@ table.traffic_status {
   }
 
 
-  div.safe  {
+  div.safe {
     background-color: #0189ff;
   }
-
 }
 
 @mixin clearfix() {
@@ -280,7 +282,7 @@ div.clearfix {
   @include clearfix;
 }
 
-.shaded  {
+.shaded {
   background-color: $ShadedColur;
 }
 
@@ -302,7 +304,7 @@ header {
 }
 
 .ui-spinner-input {
-  margin: 0px 16px 0px 3px ;
+  margin: 0px 16px 0px 3px;
 }
 
 nav.user-management,
@@ -331,8 +333,8 @@ nav.breadcrumbs {
         li {
           padding-right: $MenuPadding;
           padding-left: $MenuPadding;
-          padding-top:5px;
-          padding-bottom:5px;
+          padding-top: 5px;
+          padding-bottom: 5px;
           box-sizing: border-box;
         }
       }
@@ -345,7 +347,7 @@ nav.breadcrumbs {
 
       a {
         text-decoration: none;
-        color:#292929;
+        color: #292929;
       }
     }
   }
@@ -385,7 +387,8 @@ nav.user-management {
         li {
           border-right: 0px white none;
           min-width: 100%;
-                &:hover {
+
+          &:hover {
             background-color: $MenuHiliteColor;
           }
         }
@@ -395,30 +398,36 @@ nav.user-management {
 }
 
 nav.main-menu {
-  margin-top:5px;
+  margin-top: 5px;
+
   ul {
     li {
-      padding:5px $MenuSpaceFromRight 5px $MenuSpaceFromRight;
+      padding: 5px $MenuSpaceFromRight 5px $MenuSpaceFromRight;
       background-color: $MenuColor;
+
       a {
-        display:block;
-        width:100%;
+        display: block;
+        width: 100%;
       }
+
       ul {
-        top:25px;
+        top: 25px;
         background-color: $MenuHiliteColor;
         width: auto;
+
         li {
           min-width: 100%;
           white-space: nowrap;
           box-sizing: border-box;
-          padding:5px $MenuSpaceFromRight 5px $MenuSpaceFromRight;
+          padding: 5px $MenuSpaceFromRight 5px $MenuSpaceFromRight;
           background-color: $MenuHiliteColor;
+
           &:hover {
             background-color: $MenuColor;
           }
         }
       }
+
       &:last-child {
         padding-right: ($MenuSpaceFromRight + $MenuPadding);
       }
@@ -430,41 +439,43 @@ nav.main-menu {
   }
 
   div.navigation-logo {
-    float:left;
-    margin-right:10px;
+    float: left;
+    margin-right: 10px;
     background-color: $MenuColor;
+
     img {
-      height:16px;
-      width:auto;
+      height: 16px;
+      width: auto;
       padding: 5px 10px 4px 10px
     }
   }
 }
 
 nav.breadcrumbs {
-  margin-top:5px;
+  margin-top: 5px;
+
   ul {
     li {
-      padding:0px 3px 0px 0px;
+      padding: 0px 3px 0px 0px;
+
       &:after {
         display: inline-block;
-        padding-left:3px;
+        padding-left: 3px;
         content: ">";
       }
 
       &:last-child {
         color: red;
         padding-right: ($MenuSpaceFromRight);
-      &:after {
-        display: none;
-        padding:0px;
-        content: "";
-      }
+
+        &:after {
+          display: none;
+          padding: 0px;
+          content: "";
+        }
       }
     }
   }
-
-
 }
 
 
@@ -495,7 +506,6 @@ section {
   }
 
   div.column-4-of-6 {
-
   }
 }
 
@@ -503,48 +513,53 @@ section {
 .alert-text {
   color: #ff4e00;
 }
+
 table.info-tiles {
   div.dataTables_info {
-    display:none !important;
+    display: none !important;
   }
-  
+
   div.tile,
   div.detail {
     float: left;
   }
+
   div.detail {
     background-color: $ShadedColur;
   }
 
-    div.detail_left,
-    div.detail_right {
-      display:block;
-      float:left;
-      height:100%;
-      background-color: $ShadedColur;
-      padding:10px;
-      box-sizing: border-box;
+  div.detail_left,
+  div.detail_right {
+    display: block;
+    float: left;
+    height: 100%;
+    background-color: $ShadedColur;
+    padding: 10px;
+    box-sizing: border-box;
+  }
 
+  div.detail_right {
+    background-color: $TitleHeading;
+    color: white;
+  }
 
-    }
-    div.detail_right {
-      background-color: $TitleHeading;
-      color: white;
-    }
-    div.detail_left {
-      text-align: center;
-    }
+  div.detail_left {
+    text-align: center;
+  }
+
   &.breach {
     div.breach-info {
       background-color: $TitleHeading;
-      color:white;
-      padding:6px 0px 6px 10px;
-      margin-top:1px;
+      color: white;
+      padding: 6px 0px 6px 10px;
+      margin-top: 1px;
+
       span.breach-aircraft {
         color: $BreachColor;
-        padding-left:20px;
+        padding-left: 20px;
       }
     }
+
     div.tile {
       background-color: $BreachColor;
     }
@@ -570,79 +585,88 @@ table.info-tiles {
   }
 
   div.tile-detail {
-    padding-bottom:5px;
-    padding-top:5px;
-    & > table {
-    width: 100%;
+    padding-bottom: 5px;
+    padding-top: 5px;
 
-    td {
-      width: 50%;
-      text-align: center;
-      &:first-child {
-        border-right: 3px white solid;
+    & > table {
+      width: 100%;
+
+      td {
+        width: 50%;
+        text-align: center;
+
+        &:first-child {
+          border-right: 3px white solid;
+        }
       }
     }
-  }}
+  }
 
   div.tile-number {
     color: white;
     font-size: 3em;
     width: 100%;
     text-align: center;
-    margin:-4px 0px -5px 0px;
+    margin: -4px 0px -5px 0px;
   }
+
   div.tile-caption {
     color: white;
     width: 100%;
     font-size: 0.8em;
     text-align: center;
-    text-transform:uppercase;
+    text-transform: uppercase;
   }
 }
 
-  td.safe  {
-    background-color: #0189ff;
-  }
-  td.breach {
-    background-color: $BreachColor;
-  }
+td.safe {
+  background-color: #0189ff;
+}
+
+td.breach {
+  background-color: $BreachColor;
+}
 
 div.scroll-table {
- 
+
   div.scroll-rows {
-    height:40px;
-   overflow: hidden;
-   position: relative;
-   div.scroll-down,
-   div.scroll-up {
-  -webkit-user-select: none;  
-  -moz-user-select: none;    
-  -ms-user-select: none;      
-  user-select: none;
-     position: absolute;
-    cursor:pointer;
-    font-size:14px;
-    color:gray;
-    &:hover {
-      color:$BreachColor;
+    height: 40px;
+    overflow: hidden;
+    position: relative;
+
+    div.scroll-down,
+    div.scroll-up {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      position: absolute;
+      cursor: pointer;
+      font-size: 14px;
+      color: gray;
+
+      &:hover {
+        color: $BreachColor;
+      }
     }
-   }
-   
-   div.scroll-up {
-     top:0px;
-     right:0px;
-   }
-   div.scroll-down {
-     bottom:0px;
-     right:0px;
-   }
-   div.scroll {
-     position: absolute;
-     top:0px;
-     left:0px;
-   }
+
+    div.scroll-up {
+      top: 0px;
+      right: 0px;
+    }
+
+    div.scroll-down {
+      bottom: 0px;
+      right: 0px;
+    }
+
+    div.scroll {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
   }
-  
+
   div.row {
     & > div {
       display: inline-block;
@@ -650,21 +674,42 @@ div.scroll-table {
       border-right: 1px $BreachColor solid;
       padding: 2px 0px 2px 0px;
       color: $BreachColor;
-      box-sizing:border-box;
+      box-sizing: border-box;
       white-space: nowrap;
     }
-    & > div.col1 { width:135px; }
-    & > div.col2 { width:60px; }
-    & > div.col3 { width:65px; }
-    & > div.col4 { width:65px; }
-    & > div.col5 { width:45px; }
-    & > div.col6 { width:45px; border-right: 0px $BreachColor none;}
+
+    & > div.col1 {
+      width: 135px;
+    }
+
+    & > div.col2 {
+      width: 60px;
+    }
+
+    & > div.col3 {
+      width: 65px;
+    }
+
+    & > div.col4 {
+      width: 65px;
+    }
+
+    & > div.col5 {
+      width: 45px;
+    }
+
+    & > div.col6 {
+      width: 45px;
+      border-right: 0px $BreachColor none;
+    }
 
     &.head {
       border-bottom: 1px $BreachColor solid;
-      div {color: $TitleHeading;
-           font-size:9px;
-           font-weight:bold;
+
+      div {
+        color: $TitleHeading;
+        font-size: 9px;
+        font-weight: bold;
       }
     }
   }
@@ -672,139 +717,147 @@ div.scroll-table {
 
 
 table.safe-status {
-  padding-left:5px;
+  padding-left: 5px;
+
   td {
-    padding:0px 5px 3px 0px;
+    padding: 0px 5px 3px 0px;
     white-space: nowrap;
   }
 }
 
 div.adsb-point {
-  position:absolute;
+  position: absolute;
   cursor: pointer;
-  width:100px;
-  height:100px;
-  margin-left:-50px;
-  margin-top:-50px;
+  width: 100px;
+  height: 100px;
+  margin-left: -50px;
+  margin-top: -50px;
 
   span.tail {
-    position:absolute;
-    background-color:aquamarine;
+    position: absolute;
+    background-color: aquamarine;
     width: 2px;
-    height:2px;
-    margin-left:-1px;
-    margin-top:-1px;
-    border-radius:50%;
-    display:block;
-    font-size:1px;
+    height: 2px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border-radius: 50%;
+    display: block;
+    font-size: 1px;
   }
+
   span.FlightIcon,
   span.DroneIcon {
     position: absolute;
-    left:50px;
-    top:50px;
-    font-size:18px;
-    width:25px;
-    height:25px;
-    
-    margin-left:-13px;
-    margin-top:-13px;
+    left: 50px;
+    top: 50px;
+    font-size: 18px;
+    width: 25px;
+    height: 25px;
+    margin-left: -13px;
+    margin-top: -13px;
     -webkit-transform-origin: 50% 50%;
     -moz-transform-origin: 50% 50%;
     -o-transform-origin: 50% 50%;
     transform-origin: 50% 50%;
-
   }
+
   span.DroneIcon {
-    
   }
-  span.flight-title {
-     position:absolute;
-     top:60px;
-     left:40px;
-      z-index:10;
-      color: white;
-      display: none;
 
-      padding:0px 2px 0px 2px;
-      font-size:9px;
-   }
+  span.flight-title {
+    position: absolute;
+    top: 60px;
+    left: 40px;
+    z-index: 10;
+    color: white;
+    display: none;
+    padding: 0px 2px 0px 2px;
+    font-size: 9px;
+  }
 
 
   &:hover {
     span.flight-title {
-      display:block;
+      display: block;
     }
   }
 
   &.breach {
-    color:$BreachColor;
+    color: $BreachColor;
+
     span.flight-title,
     span.tail {
-      background-color:$BreachColor;
+      background-color: $BreachColor;
     }
   }
+
   &.alert {
-    color:#ff4e00;
+    color: #ff4e00;
+
     span.flight-title,
     span.tail {
-      background-color:#ff4e00;
+      background-color: #ff4e00;
     }
   }
+
   &.safe {
     color: #0189ff;
+
     span.flight-title,
     span.tail {
-      background-color:#0189ff;
+      background-color: #0189ff;
     }
   }
+
   &.normal {
     color: #ffcc01;
+
     span.flight-title,
     span.tail {
-      background-color:#ffcc01;
+      background-color: #ffcc01;
     }
   }
+
   &.drone {
     color: #018aff;
+
     span.flight-title,
     span.tail {
-      background-color:#018aff;
+      background-color: #018aff;
     }
   }
+
   &.breach,
   &.alert,
   &.safe {
-
-
   }
-
-   
 }
 
 div.adsb-history {
-  color:white;
-  position:absolute;
-  font-size:3px;
+  color: white;
+  position: absolute;
+  font-size: 3px;
 }
 
 div#safe-aircraft {
-  
-  padding-left:5px;
+  padding-left: 5px;
 }
 
 div#BarGraph {
-  width:100%;
-  height:100px;
+  width: 100%;
+  height: 100px;
+
   span.hc-label {
-  background-color: $TitleHeading;
-  padding: 0px 5px;
-  color: yellow;
+    background-color: $TitleHeading;
+    padding: 0px 5px;
+    color: yellow;
   }
 }
+
 g.highcharts-axis-labels {
   background-color: red;
 }
+
 @media screen and (min-width: 960px) {
   section {
     @include MultiResolution(920px,10px, 10px);
@@ -819,18 +872,27 @@ g.highcharts-axis-labels {
 
 div#Alert-RPAS,
 div#Alert-Aircraft {
-  height:50px;
-  overflow-x:auto;
+  height: 50px;
+  overflow-x: auto;
 }
 
 
 .gmnoprint a, .gmnoprint span {
-    display:none;
-}
-.gmnoprint div {
-    background:none !important;
+  display: none;
 }
 
-a[href^="http://maps.google.com/maps"]{display:none !important}
-a[href^="https://maps.google.com/maps"]{display:none !important}
-a[href^="https://www.google.com/maps"]{display:none !important}
+.gmnoprint div {
+  background: none !important;
+}
+
+a[href^="http://maps.google.com/maps"] {
+  display: none !important
+}
+
+a[href^="https://maps.google.com/maps"] {
+  display: none !important
+}
+
+a[href^="https://www.google.com/maps"] {
+  display: none !important
+}
