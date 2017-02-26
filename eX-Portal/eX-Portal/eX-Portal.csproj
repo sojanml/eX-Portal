@@ -603,6 +603,7 @@
     <Content Include="Content\drone-live.css" />
     <Content Include="Content\eXPortalWidget.css" />
     <Content Include="Content\flight-data.css" />
+    <Content Include="Content\font\vjs.svg" />
     <Content Include="Content\ie.css" />
     <Content Include="Content\internal-dashboard.css" />
     <Content Include="Content\jqsimplemenu.css" />
@@ -613,6 +614,7 @@
     <Content Include="Content\Scss1.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\temp.css" />
+    <Content Include="Content\Traffic-Dmat.css" />
     <Content Include="Content\video-js.css" />
     <Content Include="Content\video-js.min.css" />
     <Content Include="Content\video-js.swf" />
@@ -982,6 +984,7 @@
     <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
+    <Content Include="Scripts\traffic-dmat.js" />
     <Content Include="Scripts\TrafficControl-x.js" />
     <Content Include="Scripts\TrafficControl.js" />
     <Content Include="Scripts\TrafficControlLive.js" />
@@ -1001,6 +1004,9 @@
     <Content Include="fonts\GoboldThinLight.woff" />
     <Content Include="fonts\GoboldThinLight.woff2" />
     <Content Include="GeoLiteCity\GeoLite2-City.mmdb" />
+    <Content Include="Content\font\vjs.eot" />
+    <Content Include="Content\font\vjs.ttf" />
+    <Content Include="Content\font\vjs.woff" />
     <None Include="Properties\PublishProfiles\exportal.pubxml" />
     <Content Include="sass\dashboard.scss" />
     <Content Include="sass\internal-dashboard.scss" />
@@ -1012,7 +1018,7 @@
       <CompileStyle>Nested</CompileStyle>
       <DebugInfo>False</DebugInfo>
     </Content>
-    <Content Include="sass\Agriculture.scss" />
+    <Content Include="sass\Traffic-Dmat.scss" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\video.dev.js" />
     <Content Include="Scripts\video.js" />
@@ -1391,7 +1397,6 @@
     <Content Include="Views\Test\Test.cshtml" />
     <Content Include="Views\Traffic\Index.cshtml" />
     <Content Include="Views\Traffic\Detail.cshtml" />
-    <Content Include="Views\Traffic\RTA.cshtml" />
     <Content Include="sass\ADSB.scss" />
     <Content Include="Views\Adsb\Dashboard.cshtml" />
     <Content Include="Views\Shared\_ADSB.cshtml" />
@@ -1402,6 +1407,7 @@
     <Content Include="Views\Agriculture\Create.cshtml" />
     <Content Include="Views\Agriculture\Images.cshtml" />
     <Content Include="Views\Agriculture\BulkUpload.cshtml" />
+    <Content Include="Views\Traffic\DMAT.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

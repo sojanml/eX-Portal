@@ -14,11 +14,26 @@ $BreachColor: #fe0000;
 $TitleHeading: #222222;
 
 
-@include font-face("FontAwesome", font-files( "../fonts/fontawesome-webfont.ttf", "../fonts/FontAwesome.otf", "../fonts/fontawesome-webfont.svg", "../fonts/fontawesome-webfont.eot", "../fonts/fontawesome-webfont.woff", "../fonts/fontawesome-webfont.woff2" ));
+@include font-face("FontAwesome", font-files( 
+  "../fonts/fontawesome-webfont.ttf", 
+  "../fonts/FontAwesome.otf", 
+  "../fonts/fontawesome-webfont.svg", 
+  "../fonts/fontawesome-webfont.eot", 
+  "../fonts/fontawesome-webfont.woff", 
+  "../fonts/fontawesome-webfont.woff2" ));
 
-@include font-face("OpenSans", font-files( "../fonts/OpenSans.ttf", "../fonts/OpenSans.eot", "../fonts/OpenSans.svg", "../fonts/OpenSans.woff", "../fonts/OpenSans.woff2" ));
-@include font-face("Gobold_Light", font-files( "../fonts/GoboldThinLight.ttf", "../fonts/GoboldThinLight.eot", "../fonts/GoboldThinLight.svg", "../fonts/GoboldThinLight.woff", "../fonts/GoboldThinLight.woff2" ));
-
+@include font-face("OpenSans", font-files( 
+  "../fonts/OpenSans.ttf", 
+  "../fonts/OpenSans.eot",
+  "../fonts/OpenSans.svg",
+  "../fonts/OpenSans.woff",
+  "../fonts/OpenSans.woff2" ));
+@include font-face("Gobold_Light", font-files( 
+  "../fonts/GoboldThinLight.ttf", 
+  "../fonts/GoboldThinLight.eot", 
+  "../fonts/GoboldThinLight.svg", 
+  "../fonts/GoboldThinLight.woff", 
+  "../fonts/GoboldThinLight.woff2" ));
 
 @-moz-keyframes spin {
   100% {
@@ -151,8 +166,6 @@ div.label {
     margin-top: $Gap;
   }
 }
-
-
 
 
 input:focus,
@@ -895,4 +908,29 @@ a[href^="https://maps.google.com/maps"] {
 
 a[href^="https://www.google.com/maps"] {
   display: none !important
+}
+
+
+div#Overlay {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(85, 49, 5, 0.53);
+  display: none;
+
+  img {
+    position: relative;
+    $Dimension: 256px;
+    width: $Dimension;
+    height: $Dimension;
+    margin-left: -1 * ($Dimension/2);
+    margin-top: -1 * ($Dimension/2);
+    left: 50%;
+    top: 50%;
+    -webkit-animation: spin 3s linear infinite;
+    -moz-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite;
+  }
 }

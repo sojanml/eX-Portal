@@ -5,31 +5,29 @@
   return FileName;
 }
 
-function dtConvFromJSON(sNetDate, isAddTime) {
+function dtConvFromJSON(sNetDate, isAddTime = false) {
   var sDate = '';
-
-  var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   if (sNetDate === null) return "N/A";
   var r = /\/Date\(([0-9]+)\)\//i
   var matches = sNetDate.match(r);
   if (matches.length === 2) {
     var tDate = new Date(parseInt(matches[1]));
-    sDate = (tDate.getDate()) + '-' + Months[tDate.getMonth()] + '-' + tDate.getFullYear();
-
-    if (isAddTime) {
-      sDate = sDate + ' ' + pad(tDate.getHours()) + ":" + pad(tDate.getMinutes()) + ':' + pad(tDate.getSeconds());
-    }
-
+    sDate = dFormat(tDate, isAddTime )
   } else {
     sDate =  "N/A";
   }
-
-
-
   return sDate;
-
 }
 
+
+function dFormat(tDate, isAddTime) {
+  var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  sDate = (tDate.getDate()) + '-' + Months[tDate.getMonth()] + '-' + tDate.getFullYear();
+  if (isAddTime) {
+    sDate = sDate + ' ' + pad(tDate.getHours()) + ":" + pad(tDate.getMinutes()) + ':' + pad(tDate.getSeconds());
+  }
+  return sDate;
+}
 
 function nFormat(n, dp) {
   var w = n.toFixed(dp), k = w | 0, b = n < 0 ? 1 : 0,

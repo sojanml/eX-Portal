@@ -1,0 +1,155 @@
+$MainTitleBackground: #474747;
+$MainTitleColor: #fc2830;
+$HiliteTextColor: #2b821a;
+
+
+@mixin clearfix() {
+  &:after {
+    clear: both;
+    display: block;
+    content: "";
+  }
+}
+
+
+div.title-bar {
+  background-color: $MainTitleBackground;
+  color: $MainTitleColor;
+  font-size: 10pt;
+  padding: 5px 10px 5px 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+#DmatMap {
+  min-height: 460px;
+}
+
+$InBoxWidth:180px;
+$InBoxHeight:20px;
+$LayerWidth: 567.5px;
+$LayerHeight:460px;
+
+div#dmat-layout {
+  background-image: url('../images/dmat-traffic-layout.png');
+  width: 100%;
+  height: $LayerHeight;
+  position: relative;
+
+  #dmat-pos-u, #dmat-pos-r, #dmat-pos-d, #dmat-pos-l {
+    position: absolute;
+    padding:5px 0px 5px 5px;
+    width: $InBoxWidth;
+    height: $InBoxHeight;
+    background-color:rgba(0, 0, 0, 0.50);
+    color:white;
+  }
+
+  #dmat-pos-u {
+    top: 5px;
+    left: ($LayerWidth - $InBoxWidth )/2;
+  }
+
+  #dmat-pos-r {
+    right: 5px;
+    top: ($LayerHeight - $InBoxHeight )/2;
+  }
+
+  #dmat-pos-d {
+    bottom: 5px;
+    left: ($LayerWidth - $InBoxWidth )/2;
+  }
+
+  #dmat-pos-l {
+    left: 5px;
+    top: ($LayerHeight - $InBoxHeight )/2;
+  }
+}
+
+ul.traffic-data {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+
+  li {
+    margin: 0px;
+    padding: 0px;
+    float: left;
+    width: 90px;
+    font-size: 8px;
+
+    label {
+      width: auto;
+      display: inline-block;
+
+      i {
+        font-style: normal;
+        color: aqua
+      }
+    }
+
+    & > div {
+      width: 30px;
+      color: #9acd32;
+      height: 9px;
+
+      & > span {
+        width: 30px;
+        top: 0px;
+      }
+    }
+  }
+}
+
+div#dmat-info {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 160px;
+  background-color: rgba(252, 40, 48, 0.59);
+  padding: 5px;
+
+  ul.traffic-data-info {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+
+    li {
+      margin: 0px;
+      padding: 0px;
+      list-style: none;
+      color: wheat;
+
+      & > div {
+        color: yellow;
+        height: 15px;
+        width: auto;
+        min-width: 60px;
+
+        & > span {
+          width: 120px;
+          top: 3px;
+        }
+      }
+    }
+  }
+}
+
+div#dmat-info ul.traffic-data-info li,
+ul.traffic-data li {
+  label {
+    display: inline-block;
+  }
+  & > div {
+    position: relative;
+    display: inline-block;
+
+    & > span {
+      position: absolute;
+      left: 0px;
+
+      height: 15px;
+    }
+  }
+}

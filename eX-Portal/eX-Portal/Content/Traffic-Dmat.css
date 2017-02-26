@@ -1,0 +1,119 @@
+div.title-bar {
+  background-color: #474747;
+  color: #fc2830;
+  font-size: 10pt;
+  padding: 5px 10px 5px 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#DmatMap {
+  min-height: 460px;
+}
+
+div#dmat-layout {
+  background-image: url("../images/dmat-traffic-layout.png");
+  width: 100%;
+  height: 460px;
+  position: relative;
+}
+div#dmat-layout #dmat-pos-u, div#dmat-layout #dmat-pos-r, div#dmat-layout #dmat-pos-d, div#dmat-layout #dmat-pos-l {
+  position: absolute;
+  padding: 5px 0px 5px 5px;
+  width: 180px;
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+div#dmat-layout #dmat-pos-u {
+  top: 5px;
+  left: 193.75px;
+}
+div#dmat-layout #dmat-pos-r {
+  right: 5px;
+  top: 220px;
+}
+div#dmat-layout #dmat-pos-d {
+  bottom: 5px;
+  left: 193.75px;
+}
+div#dmat-layout #dmat-pos-l {
+  left: 5px;
+  top: 220px;
+}
+
+ul.traffic-data {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+ul.traffic-data li {
+  margin: 0px;
+  padding: 0px;
+  float: left;
+  width: 90px;
+  font-size: 8px;
+}
+ul.traffic-data li label {
+  width: auto;
+  display: inline-block;
+}
+ul.traffic-data li label i {
+  font-style: normal;
+  color: aqua;
+}
+ul.traffic-data li > div {
+  width: 30px;
+  color: #9acd32;
+  height: 9px;
+}
+ul.traffic-data li > div > span {
+  width: 30px;
+  top: 0px;
+}
+
+div#dmat-info {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 160px;
+  background-color: rgba(252, 40, 48, 0.59);
+  padding: 5px;
+}
+div#dmat-info ul.traffic-data-info {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+div#dmat-info ul.traffic-data-info li {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  color: wheat;
+}
+div#dmat-info ul.traffic-data-info li > div {
+  color: yellow;
+  height: 15px;
+  width: auto;
+  min-width: 60px;
+}
+div#dmat-info ul.traffic-data-info li > div > span {
+  width: 120px;
+  top: 3px;
+}
+
+div#dmat-info ul.traffic-data-info li label,
+ul.traffic-data li label {
+  display: inline-block;
+}
+div#dmat-info ul.traffic-data-info li > div,
+ul.traffic-data li > div {
+  position: relative;
+  display: inline-block;
+}
+div#dmat-info ul.traffic-data-info li > div > span,
+ul.traffic-data li > div > span {
+  position: absolute;
+  left: 0px;
+  height: 15px;
+}

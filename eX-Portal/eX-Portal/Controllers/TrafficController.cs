@@ -22,6 +22,12 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
+    public ActionResult DMAT([Bind(Prefix="id")] int DroneID = 0) {
+      //if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
+      ViewBag["DroneID"] = DroneID;
+      return View();
+    }
+
     public ActionResult RTA() {
       if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       return View();

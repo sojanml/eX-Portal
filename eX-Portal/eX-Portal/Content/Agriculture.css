@@ -525,28 +525,6 @@ ul#FileQueue li > div > span {
   left: 0px;
 }
 
-div#Overlay {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  background-color: rgba(85, 49, 5, 0.53);
-  display: none;
-}
-div#Overlay img {
-  position: relative;
-  width: 256px;
-  height: 256px;
-  margin-left: -128px;
-  margin-top: -128px;
-  left: 50%;
-  top: 50%;
-  -webkit-animation: spin 3s linear infinite;
-  -moz-animation: spin 3s linear infinite;
-  animation: spin 3s linear infinite;
-}
-
 ul#AgriTraxGroup {
   margin: 10px 0px 0px 0px;
   padding: 0px;
