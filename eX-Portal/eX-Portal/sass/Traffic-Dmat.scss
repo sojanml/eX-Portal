@@ -19,17 +19,39 @@ div.title-bar {
   padding: 5px 10px 5px 10px;
   width: 100%;
   box-sizing: border-box;
+
+  span.button {
+    display: block;
+    float: right;
+    font-size: 7pt;
+    margin-left: 10px;
+
+    a {
+      padding: 1px 5px 1px 5px;
+      border: 1px $MainTitleColor solid;
+      cursor: pointer;
+      text-decoration: none;
+      color: $MainTitleColor;
+      border-radius: 5px;
+      display: block;
+
+      &:hover {
+        background-color: $MainTitleColor;
+        color: white;
+        border-radius: 5px;
+      }
+    }
+  }
 }
 
-
-#DmatMap {
+#map-video {
   min-height: 460px;
 }
 
-$InBoxWidth:180px;
-$InBoxHeight:20px;
+$InBoxWidth: 100px;
+$InBoxHeight: 66px;
 $LayerWidth: 567.5px;
-$LayerHeight:460px;
+$LayerHeight: 460px;
 
 div#dmat-layout {
   background-image: url('../images/dmat-traffic-layout.png');
@@ -37,38 +59,41 @@ div#dmat-layout {
   height: $LayerHeight;
   position: relative;
 
+  div.zone {
+    color: yellow;
+    padding-left:3px;
+  }
   #dmat-pos-u, #dmat-pos-r, #dmat-pos-d, #dmat-pos-l {
     position: absolute;
-    padding:5px 0px 5px 5px;
     width: $InBoxWidth;
     height: $InBoxHeight;
-    background-color:rgba(0, 0, 0, 0.50);
-    color:white;
+    background-color: rgba(0, 0, 0, 0.50);
+    color: white;
   }
 
   #dmat-pos-u {
-    top: 5px;
-    left: ($LayerWidth - $InBoxWidth )/2;
-  }
-
-  #dmat-pos-r {
-    right: 5px;
-    top: ($LayerHeight - $InBoxHeight )/2;
-  }
-
-  #dmat-pos-d {
     bottom: 5px;
     left: ($LayerWidth - $InBoxWidth )/2;
   }
 
-  #dmat-pos-l {
+  #dmat-pos-r {
     left: 5px;
+    top: ($LayerHeight - $InBoxHeight )/2;
+  }
+
+  #dmat-pos-d {
+    top: 5px;
+    left: ($LayerWidth - $InBoxWidth )/2;
+  }
+
+  #dmat-pos-l {
+    right: 5px;
     top: ($LayerHeight - $InBoxHeight )/2;
   }
 }
 
 ul.traffic-data {
-  margin: 0px;
+  margin: 1px 0px 0px 3px;
   padding: 0px;
   list-style: none;
 
@@ -82,10 +107,16 @@ ul.traffic-data {
     label {
       width: auto;
       display: inline-block;
+      color: #bfb4b4;
 
       i {
         font-style: normal;
-        color: aqua
+        color: aqua;
+        display: none;
+      }
+
+      &:hover i {
+        display: inline-block;
       }
     }
 
@@ -107,7 +138,6 @@ div#dmat-info {
   top: 0px;
   left: 0px;
   width: 160px;
-  background-color: rgba(252, 40, 48, 0.59);
   padding: 5px;
 
   ul.traffic-data-info {
@@ -141,6 +171,7 @@ ul.traffic-data li {
   label {
     display: inline-block;
   }
+
   & > div {
     position: relative;
     display: inline-block;
@@ -148,7 +179,6 @@ ul.traffic-data li {
     & > span {
       position: absolute;
       left: 0px;
-
       height: 15px;
     }
   }

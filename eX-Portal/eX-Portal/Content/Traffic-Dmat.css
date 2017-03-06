@@ -6,8 +6,28 @@ div.title-bar {
   width: 100%;
   box-sizing: border-box;
 }
+div.title-bar span.button {
+  display: block;
+  float: right;
+  font-size: 7pt;
+  margin-left: 10px;
+}
+div.title-bar span.button a {
+  padding: 1px 5px 1px 5px;
+  border: 1px #fc2830 solid;
+  cursor: pointer;
+  text-decoration: none;
+  color: #fc2830;
+  border-radius: 5px;
+  display: block;
+}
+div.title-bar span.button a:hover {
+  background-color: #fc2830;
+  color: white;
+  border-radius: 5px;
+}
 
-#DmatMap {
+#map-video {
   min-height: 460px;
 }
 
@@ -17,33 +37,36 @@ div#dmat-layout {
   height: 460px;
   position: relative;
 }
+div#dmat-layout div.zone {
+  color: yellow;
+  padding-left: 3px;
+}
 div#dmat-layout #dmat-pos-u, div#dmat-layout #dmat-pos-r, div#dmat-layout #dmat-pos-d, div#dmat-layout #dmat-pos-l {
   position: absolute;
-  padding: 5px 0px 5px 5px;
-  width: 180px;
-  height: 20px;
+  width: 100px;
+  height: 66px;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
 }
 div#dmat-layout #dmat-pos-u {
-  top: 5px;
-  left: 193.75px;
+  bottom: 5px;
+  left: 233.75px;
 }
 div#dmat-layout #dmat-pos-r {
-  right: 5px;
-  top: 220px;
+  left: 5px;
+  top: 197px;
 }
 div#dmat-layout #dmat-pos-d {
-  bottom: 5px;
-  left: 193.75px;
+  top: 5px;
+  left: 233.75px;
 }
 div#dmat-layout #dmat-pos-l {
-  left: 5px;
-  top: 220px;
+  right: 5px;
+  top: 197px;
 }
 
 ul.traffic-data {
-  margin: 0px;
+  margin: 1px 0px 0px 3px;
   padding: 0px;
   list-style: none;
 }
@@ -57,10 +80,15 @@ ul.traffic-data li {
 ul.traffic-data li label {
   width: auto;
   display: inline-block;
+  color: #bfb4b4;
 }
 ul.traffic-data li label i {
   font-style: normal;
   color: aqua;
+  display: none;
+}
+ul.traffic-data li label:hover i {
+  display: inline-block;
 }
 ul.traffic-data li > div {
   width: 30px;
@@ -77,7 +105,6 @@ div#dmat-info {
   top: 0px;
   left: 0px;
   width: 160px;
-  background-color: rgba(252, 40, 48, 0.59);
   padding: 5px;
 }
 div#dmat-info ul.traffic-data-info {

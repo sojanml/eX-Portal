@@ -202,7 +202,7 @@ namespace eX_Portal.Controllers {
 
       //2. Find the Maximum of GroupID for the customer
       int? NextAgriTraxGroupID = db.AgriTraxImages
-        .Where(i => i.CreatedBy == CreatedBy && i.AgriTraxID == AgriTraxID)
+        .Where(i => i.AgriTraxID == AgriTraxID)
         .Max(i => i.AgriTraxGroupID);
       if (NextAgriTraxGroupID == null) NextAgriTraxGroupID = 0;
       NextAgriTraxGroupID++;

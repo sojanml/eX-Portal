@@ -272,6 +272,7 @@
     <Compile Include="exLogic\S3Download.cs" />
     <Compile Include="exLogic\SimpleParser.cs" />
     <Compile Include="exLogic\Sojan.Util.cs" />
+    <Compile Include="exLogic\TrafficMonitor.cs" />
     <Compile Include="exLogic\User.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -498,6 +499,9 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TrafficData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TrafficMonitor.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserLog.cs">
@@ -1003,7 +1007,6 @@
     <Content Include="fonts\GoboldThinLight.ttf" />
     <Content Include="fonts\GoboldThinLight.woff" />
     <Content Include="fonts\GoboldThinLight.woff2" />
-    <Content Include="GeoLiteCity\GeoLite2-City.mmdb" />
     <Content Include="Content\font\vjs.eot" />
     <Content Include="Content\font\vjs.ttf" />
     <Content Include="Content\font\vjs.woff" />

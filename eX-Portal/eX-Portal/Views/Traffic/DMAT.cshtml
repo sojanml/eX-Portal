@@ -1,4 +1,5 @@
-﻿@{
+﻿@model eX_Portal.exLogic.TrafficMamager
+@{
   ViewBag.Title = "Dashboard";
   ViewBag.Logo = "dmat-logo.png";
   Layout = "~/Views/Shared/_ADSB.cshtml";
@@ -8,40 +9,45 @@
   <div class="column column-half">
     <div class="title-bar">
       Traffic Information
+      <span class="button"><a href="@Url.Action("Export", new {DroneID = Model.DroneID, FlightID = Model.FlightID, Interval = 5})">Export</a></span>
     </div>
     <div id="dmat-layout">
       <div id="dmat-pos-u">
+        <div class="zone">Zone 3</div>
         <ul class="traffic-data">
+          <li><label>Straight <i>UU</i>:</label> <div id="data-uu">-</div></li>
+          <li><label>U-Turn <i>UD</i>:</label> <div id="data-ud">-</div></li>
           <li><label>Left <i>UL</i>:</label> <div id="data-ul">-</div></li>
           <li><label>Right <i>UR</i>:</label> <div id="data-ur">-</div></li>
-          <li><label>Straight <i>UD</i>:</label> <div id="data-ud">-</div></li>
-          <li><label>U-Turn <i>UU</i>:</label> <div id="data-uu">-</div></li>
         </ul>
       </div>
       <div id="dmat-pos-r">
+        <div class="zone">Zone 4</div>
         <ul class="traffic-data">
+          <li><label>Straight <i>RR</i>:</label> <div id="data-rr">-</div></li>
+          <li><label>U-Turn <i>RL</i>:</label> <div id="data-rl">-</div></li>
           <li><label>Left <i>RU</i>:</label> <div id="data-ru">-</div></li>
           <li><label>Right <i>RD</i>:</label> <div id="data-rd">-</div></li>
-          <li><label>Straight <i>RL</i>:</label> <div id="data-rl">-</div></li>
-          <li><label>U-Turn <i>RR</i>:</label> <div id="data-rr">-</div></li>
         </ul>
 
       </div>
       <div id="dmat-pos-d">
+        <div class="zone">Zone 1</div>
         <ul class="traffic-data">
-          <li><label>Left <i>DL</i>:</label> <div id="data-dl">-</div></li>
-          <li><label>Right <i>DR</i>:</label> <div id="data-dr">-</div></li>
-          <li><label>Straight <i>DU</i>:</label> <div id="data-du">-</div></li>
-          <li><label>U-Turn <i>DD</i>:</label> <div id="data-dd">-</div></li>
+          <li><label>Straight <i>DD</i>:</label> <div id="data-dd">-</div></li>
+          <li><label>U-Turn <i>DU</i>:</label> <div id="data-du">-</div></li>
+          <li><label>Left <i>DR</i>:</label> <div id="data-dr">-</div></li>
+          <li><label>Right <i>DL</i>:</label> <div id="data-dl">-</div></li>
         </ul>
 
       </div>
       <div id="dmat-pos-l">
+        <div class="zone">Zone 2</div>
         <ul class="traffic-data">
-          <li><label>Left <i>LU</i>: </label> <div id="data-lu">-</div></li>
-          <li><label>Right <i>LD</i>:</label> <div id="data-ld">-</div></li>
-          <li><label>Straight <i>LR</i>:</label> <div id="data-lr">-</div></li>
-          <li><label>U-Turn <i>LL</i>:</label> <div id="data-ll">-</div></li>
+          <li><label>Straight <i>LL</i>:</label> <div id="data-ll">-</div></li>
+          <li><label>U-Turn <i>LR</i>:</label> <div id="data-lr">-</div></li>
+          <li><label>Left <i>LD</i>: </label> <div id="data-ld">-</div></li>
+          <li><label>Right <i>LU</i>:</label> <div id="data-lu">-</div></li>          
         </ul>
 
       </div>
@@ -50,30 +56,37 @@
         <ul class="traffic-data-info">
           <li><label>Frame Number:</label> <div id="data-framenumber">-</div></li>
           <li><label>Time:</label> <div id="data-frametime">-</div></li>
-          <li><label>On:</label> <div id="data-createdon">0000-00-00 00:00:00</div></li>
           <li><label>Now:</label> <div id="data-date">0000-00-00 00:00:00</div></li>
+          <li><div id="data-location">@Model.GetLocation()</div></li>
         </ul>
+        
       </div>
     </div>
   </div>
   <div class="column column-half shaded">
 
     <div class="title-bar">
-      MAP VIEW:
+      MAP Video:
     </div>
-    <div id="DmatMap" class="column-half"></div>
 
+    <div id="map-video"  class="column-half">
+      <div id="myElement">Loading the player...</div>
+    </div>
   </div>
+
+
 </section>
 
 
 <p>&nbsp;</p>
 @section scripts {
-  <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyDY6IHXH4-fUAzYq6HBR_ndu_lnyyopcTs"></script>
+  <script src="~/jwplayer/jwplayer.js"></script> 
   <script type="text/javascript" src="~/Scripts/AgricultureCommon.js"></script>
   <script type="text/javascript" src="~/Scripts/traffic-dmat.js"></script>
   <script type="text/javascript">
-    var DroneID = @ViewBag["DroneID"];
+    var DroneID = @Model.DroneID
+    var FlightID = @Model.FlightID;
+    var VideoFiles = @Html.Raw(Model.GetTrafficVideos());
   </script>
 }
 

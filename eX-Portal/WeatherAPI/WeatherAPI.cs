@@ -262,7 +262,7 @@ namespace  Exponent  {
       if (String.IsNullOrEmpty(ThisCity.Country))
         ThisCity.Country = "United Arab Emirates";
       if (String.IsNullOrEmpty(ThisCity.City))
-        ThisCity.City = "Dubai";
+        ThisCity.City = ThisCity.Country;
 
       return ThisCity;
     }

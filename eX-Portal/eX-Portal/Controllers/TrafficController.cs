@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using eX_Portal.exLogic;
 using eX_Portal.Models;
 using System.IO;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace eX_Portal.Controllers {
 
@@ -22,10 +24,19 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-    public ActionResult DMAT([Bind(Prefix="id")] int DroneID = 0) {
+    public ActionResult DMAT([Bind(Prefix="id")] int DroneID = 0, int FlightID = 0) {
       //if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
-      ViewBag["DroneID"] = DroneID;
-      return View();
+      var Monitor = new TrafficMamager(DroneID, FlightID);
+      return View(Monitor);
+    }
+
+    [System.Web.Mvc.HttpGet]
+    public ActionResult Export([Bind(Prefix = "id")] int DroneID = 0, int FlightID = 0, int Interval = 5) {
+      var Monitor = new TrafficMamager(DroneID, FlightID);
+      StringBuilder CSV = Monitor.Export(Interval);
+      byte[] dest = Encoding.ASCII.GetBytes(CSV.ToString());
+      String FileName = $"Export-{FlightID}-{DateTime.Now.ToString("yymmddHHMMss")}.csv";
+      return File(dest, "application/vnd.ms-excel", FileName);
     }
 
     public ActionResult RTA() {

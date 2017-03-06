@@ -1342,6 +1342,35 @@ warning 6002: The table/view 'RPASPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CarCount" Type="int" />
           <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="TrafficMonitor">
+          <Key>
+            <PropertyRef Name="TrafficMonitorID" />
+          </Key>
+          <Property Name="TrafficMonitorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DroneID" Type="int" Nullable="false" />
+          <Property Name="FrameNumber" Type="int" Nullable="false" />
+          <Property Name="FrameTime" Type="numeric" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="FrameVehicle" Type="int" Nullable="false" />
+          <Property Name="DD" Type="int" Nullable="false" />
+          <Property Name="DR" Type="int" Nullable="false" />
+          <Property Name="DU" Type="int" Nullable="false" />
+          <Property Name="DL" Type="int" Nullable="false" />
+          <Property Name="RD" Type="int" Nullable="false" />
+          <Property Name="RR" Type="int" Nullable="false" />
+          <Property Name="RU" Type="int" Nullable="false" />
+          <Property Name="RL" Type="int" Nullable="false" />
+          <Property Name="UD" Type="int" Nullable="false" />
+          <Property Name="UR" Type="int" Nullable="false" />
+          <Property Name="UU" Type="int" Nullable="false" />
+          <Property Name="UL" Type="int" Nullable="false" />
+          <Property Name="LD" Type="int" Nullable="false" />
+          <Property Name="LR" Type="int" Nullable="false" />
+          <Property Name="LU" Type="int" Nullable="false" />
+          <Property Name="LL" Type="int" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="FlightID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="UserLog">
           <Key>
             <PropertyRef Name="ID" />
@@ -1479,6 +1508,7 @@ warning 6002: The table/view 'RPASPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="ProductTransactions" EntityType="Self.ProductTransactions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SMSTable" EntityType="Self.SMSTable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrafficData" EntityType="Self.TrafficData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TrafficMonitor" EntityType="Self.TrafficMonitor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserLog" EntityType="Self.UserLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxData" EntityType="Self.BlackBoxData" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -2071,6 +2101,7 @@ warning 6002: The table/view 'RPASPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="PayloadTraffics" EntityType="ExponentPortalModel.PayloadTraffic" />
           <EntitySet Name="AgriTraxImages" EntityType="ExponentPortalModel.AgriTraxImage" />
           <EntitySet Name="AgriTraxManagements" EntityType="ExponentPortalModel.AgriTraxManagement" />
+          <EntitySet Name="TrafficMonitors" EntityType="ExponentPortalModel.TrafficMonitor" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -3216,6 +3247,35 @@ warning 6002: The table/view 'RPASPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="InspectionOfficer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="InspectionNote" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="Images" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="TrafficMonitor">
+          <Key>
+            <PropertyRef Name="TrafficMonitorID" />
+          </Key>
+          <Property Name="TrafficMonitorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DroneID" Type="Int32" Nullable="false" />
+          <Property Name="FrameNumber" Type="Int32" Nullable="false" />
+          <Property Name="FrameTime" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="FrameVehicle" Type="Int32" Nullable="false" />
+          <Property Name="DD" Type="Int32" Nullable="false" />
+          <Property Name="DR" Type="Int32" Nullable="false" />
+          <Property Name="DU" Type="Int32" Nullable="false" />
+          <Property Name="DL" Type="Int32" Nullable="false" />
+          <Property Name="RD" Type="Int32" Nullable="false" />
+          <Property Name="RR" Type="Int32" Nullable="false" />
+          <Property Name="RU" Type="Int32" Nullable="false" />
+          <Property Name="RL" Type="Int32" Nullable="false" />
+          <Property Name="UD" Type="Int32" Nullable="false" />
+          <Property Name="UR" Type="Int32" Nullable="false" />
+          <Property Name="UU" Type="Int32" Nullable="false" />
+          <Property Name="UL" Type="Int32" Nullable="false" />
+          <Property Name="LD" Type="Int32" Nullable="false" />
+          <Property Name="LR" Type="Int32" Nullable="false" />
+          <Property Name="LU" Type="Int32" Nullable="false" />
+          <Property Name="LL" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="FlightID" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4667,6 +4727,36 @@ warning 6002: The table/view 'RPASPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
                 <ScalarProperty Name="CustomerReference" ColumnName="CustomerReference" />
                 <ScalarProperty Name="AgriTraxID" ColumnName="AgriTraxID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrafficMonitors">
+            <EntityTypeMapping TypeName="ExponentPortalModel.TrafficMonitor">
+              <MappingFragment StoreEntitySet="TrafficMonitor">
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="LL" ColumnName="LL" />
+                <ScalarProperty Name="LU" ColumnName="LU" />
+                <ScalarProperty Name="LR" ColumnName="LR" />
+                <ScalarProperty Name="LD" ColumnName="LD" />
+                <ScalarProperty Name="UL" ColumnName="UL" />
+                <ScalarProperty Name="UU" ColumnName="UU" />
+                <ScalarProperty Name="UR" ColumnName="UR" />
+                <ScalarProperty Name="UD" ColumnName="UD" />
+                <ScalarProperty Name="RL" ColumnName="RL" />
+                <ScalarProperty Name="RU" ColumnName="RU" />
+                <ScalarProperty Name="RR" ColumnName="RR" />
+                <ScalarProperty Name="RD" ColumnName="RD" />
+                <ScalarProperty Name="DL" ColumnName="DL" />
+                <ScalarProperty Name="DU" ColumnName="DU" />
+                <ScalarProperty Name="DR" ColumnName="DR" />
+                <ScalarProperty Name="DD" ColumnName="DD" />
+                <ScalarProperty Name="FrameVehicle" ColumnName="FrameVehicle" />
+                <ScalarProperty Name="FrameTime" ColumnName="FrameTime" />
+                <ScalarProperty Name="FrameNumber" ColumnName="FrameNumber" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="TrafficMonitorID" ColumnName="TrafficMonitorID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
