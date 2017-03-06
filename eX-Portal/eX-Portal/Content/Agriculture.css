@@ -141,13 +141,12 @@ table.report thead td, table.report tbody td {
   border-bottom: 1px #bde3b6 solid;
 }
 
-div.map-point {
+div.map-point,
+div.map-location-point {
   position: absolute;
   width: 12px;
   height: 12px;
   display: block;
-  border: 5px #ffb400 solid;
-  background-color: #2b821a;
   border-radius: 50%;
   color: white;
   text-align: center;
@@ -156,6 +155,32 @@ div.map-point {
   font-size: 10px;
   cursor: pointer;
   margin: -13px 0px 0px -13px;
+}
+
+div.map-location-point {
+  border: 5px rgba(0, 0, 0, 0.62) solid;
+  background-color: #ffb400;
+}
+div.map-location-point div.image {
+  position: absolute;
+  width: 80px;
+  height: 60px;
+  left: -74px;
+  top: -54px;
+  border: 1px rgba(0, 0, 0, 0.62) solid;
+  display: none;
+  background-size: contain;
+  background-position: center center;
+  background-color: black;
+  z-index: 99;
+}
+div.map-location-point:hover div.image {
+  display: block;
+}
+
+div.map-point {
+  border: 5px #ffb400 solid;
+  background-color: #2b821a;
 }
 
 div.row {

@@ -1,5 +1,6 @@
 ﻿var qViewDataTable;
 var _MapPointsLayer = null;
+var _LocationPolygonLayer = null;
 var _InfoWindow = null;
 var AgriTraxID = 0;
 var AgriTraxGroupPoints = {};
@@ -24,6 +25,11 @@ $(document).ready(function () {
     ShowInfoSection(ID);
     _InfoWindow.close();
   });
+  $(document).on("click", "div.map-location-point", function (event) {
+    var id = $(this).attr('data-id');
+    $('#image-id-' + id).trigger("click");
+  });
+
   $('#btnShowList').on("click", function () {
     ToggleInfo(false);
   });
@@ -47,6 +53,7 @@ $(document).ready(function () {
   });
 
   $('#btnShowPoints').on("click", function () {
+    _LocationPolygonLayer.hide();
     LocationPolygon.setMap(null);
     _MapPointsLayer.show();
     $('#btnShowPoints').css({ 'visibility': 'hidden' });
@@ -75,12 +82,14 @@ function initializeMap() {
     mapTypeControl: false,
     streetViewControl: false,
     center: MarkerPosition,
-    styles: getMapStyle()
+    mapTypeId: 'satellite'
   };
 
   map = new google.maps.Map(document.getElementById('adsb_map'), mapOptions);
-  _MapPointsLayer = new MapPointsLayer({ map: map }, []);
+  map.setTilt(45);
 
+  _MapPointsLayer = new MapPointsLayer({ map: map }, []);
+  _LocationPolygonLayer = new LocationPolygonLayer({ map: map }, []);
   _InfoWindow = new google.maps.InfoWindow({
     content: '<div id="InfoWindowContent">...</div>'
   });
@@ -144,6 +153,7 @@ function ToggleInfo(IsDisplayDetails) {
     $('div#qViewDataDetails').slideUp();
     $('#btnShowList').hide();
     LocationPolygon.setMap(null);
+    _LocationPolygonLayer.hide();
     _MapPointsLayer.show();
     $('#btnShowPoints').css({ 'visibility': 'hidden' });
     $('#btnSetImages').css({ 'visibility': 'hidden' });
@@ -200,7 +210,7 @@ function LoadAgriTraxImages(data) {
     var IndexAt = Images[i].ImageFile.lastIndexOf('.');
     var ImageName = Images[i].ImageFile.substr(0, IndexAt) + ".m.png";
     var ImageUrl= 'url("/Upload/Agriculture/' + Images[i].AgriTraxID + '/' + ImageName + '")';
-    var LI = $('<LI class="image"></LI>').css({ 'background-image': ImageUrl });
+    var LI = $('<LI id="image-id-' + i + '" class="image"></LI>').css({ 'background-image': ImageUrl });
     var AgriTraxSection = $('#AgriTraxThumbnails' + AgriTraxGroupID);
 
     if (AgriTraxGroupID !== Image.AgriTraxGroupID) {
@@ -225,7 +235,7 @@ function LoadAgriTraxImages(data) {
     }//if (AgriTraxGroupID != Image.AgriTraxGroupID)
 
     //save the locations in global variable
-    var Point = { lat: Image.Lat, lng: Image.Lng };
+    var Point = { lat: Image.Lat, lng: Image.Lng, image: ImageUrl };
     AgriTraxGroupPoints[AgriTraxGroupID].push(Point);
 
 
@@ -255,6 +265,7 @@ function SetAtriTraxImages(AgriTraxGroupID) {
     LocationBoundBox.extend(Points[i]);
   }
 
+  _LocationPolygonLayer.setData(Points);
   //now show the box in map
   map.fitBounds(LocationBoundBox);
   LocationPolygon.setPath(Points);
@@ -394,7 +405,6 @@ function MapPointsLayer(options, Data) {
   };
 
 };
-
 MapPointsLayer.prototype = new google.maps.OverlayView;
 
 
@@ -453,3 +463,64 @@ MapPointsLayer.prototype.draw = function () {
   }
 };
 
+
+
+
+function LocationPolygonLayer(options, Data) {
+  this.setValues(options);
+  this.markerLayer = $('<div />').addClass('overlay');
+  this.MapData = Data;
+
+  this.setData = function (Data) {
+    this.MapData = Data;
+    this.draw();
+    if (this.MapData.length > 0) this.show();
+
+  };
+
+  this.hide = function () {
+    if (this.markerLayer) this.markerLayer.css({ 'visibility': 'hidden' });
+  };
+
+  this.show = function () {
+    if (this.markerLayer) this.markerLayer.css({ 'visibility': 'visible' });
+  };
+
+};
+LocationPolygonLayer.prototype = new google.maps.OverlayView;
+
+LocationPolygonLayer.prototype.onAdd = function () {
+  var $pane = $(this.getPanes().overlayImage); // Pane 3  
+  $pane.append(this.markerLayer);
+};
+
+LocationPolygonLayer.prototype.onRemove = function () {
+  this.markerLayer.remove();
+};
+
+
+LocationPolygonLayer.prototype.draw = function () {
+  var projection = this.getProjection();
+  if (!projection) return false;
+
+  this.markerLayer.empty();
+
+  for (var i = 0; i < this.MapData.length; i++) {
+    var lat = this.MapData[i].lat;
+    var lng = this.MapData[i].lng;
+    var DivID = "location_" + i;
+    var title = DivID;
+    // Determine a random location from the bounds set previously  
+    var IconGeoPos = new google.maps.LatLng(lat, lng)
+    var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
+    var $NewPoint = $(
+      '<div data-id="' + i + '" class="map-location-point" style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
+      + (i + 1)
+      + '<div class="image" style="background-image:' + this.MapData[i].image.replace(/\"/g, "'") + '");></div>'
+      + '</div>'
+    );
+    // Append the HTML to the fragment in memory  
+    this.markerLayer.append($NewPoint.get(0));
+  }//for (var i = 0)
+  
+};

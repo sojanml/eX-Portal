@@ -180,13 +180,12 @@ table.report {
   }
 }
 
-div.map-point {
+div.map-point,
+div.map-location-point {
   position: absolute;
   width: $MapPointWH;
   height: $MapPointWH;
   display: block;
-  border: $MapPointBorder #ffb400 solid;
-  background-color: #2b821a;
   border-radius: 50%;
   color: white;
   text-align: center;
@@ -195,6 +194,34 @@ div.map-point {
   font-size: 10px;
   cursor: pointer;
   margin: $MapPointMargin 0px 0px $MapPointMargin;
+}
+
+div.map-location-point {
+  border: $MapPointBorder rgba(0, 0, 0, 0.62) solid;
+  background-color: #ffb400;
+
+  div.image {
+    position: absolute;
+    width: 80px;
+    height: 60px;
+    left: -80px + ($MapPointWH/2);
+    top: -60px + ($MapPointWH/2);
+    border: 1px rgba(0, 0, 0, 0.62) solid;
+    display: none;
+    background-size: contain;
+    background-position: center center;
+    background-color: black;
+    z-index:99;
+  }
+
+  &:hover div.image {
+    display: block;
+  }
+}
+
+div.map-point {
+  border: $MapPointBorder #ffb400 solid;
+  background-color: #2b821a;
 }
 
 div.row {
