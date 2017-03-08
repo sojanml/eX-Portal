@@ -199,6 +199,7 @@ function LoadAgriTraxImages(data) {
   var Images = data.Images;
   var AgriTraxGroupID = -1;
   var GroupCount = 0;
+  var ImageGroupCount = 0;
   AgriTraxGroupPoints = {};
   ActiveAgriTraxGroupID = -1;
 
@@ -210,12 +211,11 @@ function LoadAgriTraxImages(data) {
     var IndexAt = Images[i].ImageFile.lastIndexOf('.');
     var ImageName = Images[i].ImageFile.substr(0, IndexAt) + ".m.png";
     var ImageUrl= 'url("/Upload/Agriculture/' + Images[i].AgriTraxID + '/' + ImageName + '")';
-    var LI = $('<LI id="image-id-' + i + '" class="image"></LI>').css({ 'background-image': ImageUrl });
-    var AgriTraxSection = $('#AgriTraxThumbnails' + AgriTraxGroupID);
+    var AgriTraxSection = $('#AgriTraxThumbnails' + Image.AgriTraxGroupID);
 
     if (AgriTraxGroupID !== Image.AgriTraxGroupID) {
       GroupCount++;
-
+      ImageGroupCount = 0;
       //OK. new group is started
       AgriTraxGroupID = Image.AgriTraxGroupID;
       AgriTraxGroupPoints[AgriTraxGroupID] = [];
@@ -238,12 +238,15 @@ function LoadAgriTraxImages(data) {
     var Point = { lat: Image.Lat, lng: Image.Lng, image: ImageUrl };
     AgriTraxGroupPoints[AgriTraxGroupID].push(Point);
 
+    var LI_id = 'image-id-' + Image.AgriTraxGroupID + '-' + ImageGroupCount;
+    var LI = $('<LI id="' + LI_id + '" class="image"></LI>').css({ 'background-image': ImageUrl });
 
     if (i === 0) {
       LI.addClass('active');
       $('#DataImage').css({ 'background-image': ImageUrl });
     }
     AgriTraxSection.append(LI);
+    ImageGroupCount++;
 
   }//for
 
@@ -265,7 +268,7 @@ function SetAtriTraxImages(AgriTraxGroupID) {
     LocationBoundBox.extend(Points[i]);
   }
 
-  _LocationPolygonLayer.setData(Points);
+  _LocationPolygonLayer.setData(AgriTraxGroupID, Points);
   //now show the box in map
   map.fitBounds(LocationBoundBox);
   LocationPolygon.setPath(Points);
@@ -470,9 +473,11 @@ function LocationPolygonLayer(options, Data) {
   this.setValues(options);
   this.markerLayer = $('<div />').addClass('overlay');
   this.MapData = Data;
+  this.AgriTradGroupID = 0;
 
-  this.setData = function (Data) {
+  this.setData = function (AgriTradGroupID, Data) {
     this.MapData = Data;
+    this.AgriTradGroupID = AgriTradGroupID;
     this.draw();
     if (this.MapData.length > 0) this.show();
 
@@ -508,13 +513,13 @@ LocationPolygonLayer.prototype.draw = function () {
   for (var i = 0; i < this.MapData.length; i++) {
     var lat = this.MapData[i].lat;
     var lng = this.MapData[i].lng;
-    var DivID = "location_" + i;
+    var DivID = "location_" +  i;
     var title = DivID;
     // Determine a random location from the bounds set previously  
     var IconGeoPos = new google.maps.LatLng(lat, lng)
     var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
     var $NewPoint = $(
-      '<div data-id="' + i + '" class="map-location-point" style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
+      '<div data-id="' + this.AgriTradGroupID + '-' + i + '" class="map-location-point" style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
       + (i + 1)
       + '<div class="image" style="background-image:' + this.MapData[i].image.replace(/\"/g, "'") + '");></div>'
       + '</div>'

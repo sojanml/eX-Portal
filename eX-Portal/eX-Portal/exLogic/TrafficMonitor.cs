@@ -4,7 +4,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+namespace eX_Portal.Models {
+  public partial class TrafficMonitor {
+    public TrafficMonitor Copy() {
+      TrafficMonitor Result = new TrafficMonitor();
+      Result.UD = this.UD;
+      Result.UL = this.UL;
+      Result.UR = this.UR;
+      Result.UU = this.UU;
+      Result.RD = this.RD;
+      Result.RL = this.RL;
+      Result.RR = this.RR;
+      Result.RU = this.RU;
+      Result.DD = this.DD;
+      Result.DL = this.DL;
+      Result.DR = this.DR;
+      Result.DU = this.DU;
+      Result.LD = this.LD;
+      Result.LL = this.LL;
+      Result.LR = this.LR;
+      Result.LU = this.LU;
 
+      return Result;
+    }
+    // Overload - operator to add two TrafficMonitor objects.
+    public static TrafficMonitor operator- (TrafficMonitor FromNode, TrafficMonitor ToNode) {
+      TrafficMonitor Result = new TrafficMonitor();
+      Result.UD = FromNode.UD - ToNode.UD;
+      Result.UL = FromNode.UL - ToNode.UL;
+      Result.UR = FromNode.UR - ToNode.UR;
+      Result.UU = FromNode.UU - ToNode.UU;
+                              
+      Result.RD = FromNode.RD - ToNode.RD;
+      Result.RL = FromNode.RL - ToNode.RL;
+      Result.RR = FromNode.RR - ToNode.RR;
+      Result.RU = FromNode.RU - ToNode.RU;
+                                      
+      Result.DD = FromNode.DD - ToNode.DD;
+      Result.DL = FromNode.DL - ToNode.DL;
+      Result.DR = FromNode.DR - ToNode.DR;
+      Result.DU = FromNode.DU - ToNode.DU;
+                                       
+      Result.LD = FromNode.LD - ToNode.LD;
+      Result.LL = FromNode.LL - ToNode.LL;
+      Result.LR = FromNode.LR - ToNode.LR;
+      Result.LU = FromNode.LU - ToNode.LU;
+
+      return Result;
+    }
+  }
+}
 namespace eX_Portal.exLogic {
   public class TrafficMonitorVideo {
     public String VideoURL { get; set; }
@@ -29,6 +78,7 @@ namespace eX_Portal.exLogic {
         (Lng > 0 ? "N" : "S");
     }
   }
+
 
   public class TrafficMamager {
     private ExponentPortalEntities db = new ExponentPortalEntities();
@@ -76,8 +126,28 @@ namespace eX_Portal.exLogic {
       StringBuilder SB = new StringBuilder();
       List<TrafficMonitor> ExportData = new List<TrafficMonitor>();
       int RowCount = 0;
+      DateTime FlightDate = DateTime.MinValue;
+      //find the time of flight starting
+      int LastFlightID = FlightID;
+      if(DroneID > 0) {
+        var Query = from d in db.MSTR_Drone
+                    where d.DroneId == DroneID
+                    select d.LastFlightID;
+        var FoundFlightID = Query.FirstOrDefault();
+        if(FoundFlightID != null && FoundFlightID != 0) {
+          LastFlightID = (int)FoundFlightID;
+        }        
+      }
 
-      while(true) {
+      var FlightDateQuery = from d in db.FlightMapDatas
+                            where d.FlightID == LastFlightID
+                            orderby d.CreatedTime descending
+                            select d.CreatedTime;
+      var FoundFlightDate = FlightDateQuery.FirstOrDefault();
+      if (FoundFlightDate != null) FlightDate = (DateTime)FoundFlightDate;
+
+      while (true) {
+        RowCount++;
         Decimal FrameTime = RowCount * Interval * 60 * 1000;
         TrafficMonitor ThisData =
           (from d in db.TrafficMonitors
@@ -86,7 +156,6 @@ namespace eX_Portal.exLogic {
         if (ThisData == null)
           break;
         ExportData.Add(ThisData);
-        RowCount++;
       }
 
       //get the last data
@@ -99,20 +168,25 @@ namespace eX_Portal.exLogic {
       ExportData.Add(LastData);
 
       SB.AppendLine("Time,Location," +
-        "Zone1Straight,Zone1UTurn,Zone1Left,Zone1Right," +
-        "Zone2Straight,Zone2UTurn,Zone2Left,Zone2Right," +
-        "Zone3Straight,Zone3UTurn,Zone3Left,Zone3Right," +
-        "Zone4Straight,Zone4UTurn,Zone4Left,Zone4Right" );
+        "Leg1Straight,Leg1UTurn,Leg1Left,Leg1Right," +
+        "Leg2Straight,Leg2UTurn,Leg2Left,Leg2Right," +
+        "Leg3Straight,Leg3UTurn,Leg3Left,Leg3Right," +
+        "Leg4Straight,Leg4UTurn,Leg4Left,Leg4Right" );
 
+      TrafficMonitor LastExportRow = null;
       foreach (var Data in ExportData) {
-        TimeSpan ts = TimeSpan.FromMilliseconds((Double)Data.FrameTime);
-        SB.AppendLine(ts.ToString(@"hh\:mm\:ss") + "," +
+        var ProcessedRow = Data;
+        if(LastExportRow != null) ProcessedRow = Data - LastExportRow;
+        DateTime ExportDate = FlightDate.AddMilliseconds((Double)Data.FrameTime);
+
+        SB.AppendLine(ExportDate.ToString(@"yyyy-MM-dd hh\:mm\:ss") + "," +
           (Location == null ? "N/A" : Location.GetLocation(false)) + "," +
-          $"{Data.DD},{Data.DU},{Data.DR},{Data.DL}," +
-          $"{Data.LL},{Data.LR},{Data.LD},{Data.LU}," +
-          $"{Data.UU},{Data.UD},{Data.UL},{Data.UR}," +
-          $"{Data.RR},{Data.RL},{Data.RU},{Data.RD}" 
+          $"{ProcessedRow.DD},{ProcessedRow.DU},{ProcessedRow.DR},{ProcessedRow.DL}," +
+          $"{ProcessedRow.LL},{ProcessedRow.LR},{ProcessedRow.LD},{ProcessedRow.LU}," +
+          $"{ProcessedRow.UU},{ProcessedRow.UD},{ProcessedRow.UL},{ProcessedRow.UR}," +
+          $"{ProcessedRow.RR},{ProcessedRow.RL},{ProcessedRow.RU},{ProcessedRow.RD}" 
         );
+        LastExportRow = Data.Copy();
       }
 
       return SB;
