@@ -54,6 +54,7 @@ namespace eX_Portal.Models {
     }
   }
 }
+
 namespace eX_Portal.exLogic {
   public class TrafficMonitorVideo {
     public String VideoURL { get; set; }
