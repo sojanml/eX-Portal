@@ -213,11 +213,9 @@ namespace Exponent.ADSB {
 
       var FlightCount = getActiveFlights();
       if (FlightCount > 0) return;
-      var NewPositions =  getFlightAware();
 
-      //remove any old records from LIVE tabe
-      //SQL = "DELETE FROM AdsbLive WHERE  CreatedDate < (DATEADD(SECOND, -120, GETDATE()))";
-      //doSQL(SQL);
+      //Change for today - 12-Mar-2017 (Do not get data from FlightAware)
+      var NewPositions =  getFlightAware();
 
       //go through each postion and add to database
       foreach (var Position in NewPositions) {
@@ -283,6 +281,8 @@ namespace Exponent.ADSB {
 
 
     private List<FlightPosition> getFlightAware() {
+
+
       var FlightPositions = new List<FlightPosition>();
       String Query = 
         "{> alt 5} " +
