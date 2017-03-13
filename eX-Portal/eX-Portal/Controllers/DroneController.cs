@@ -277,7 +277,7 @@ namespace eX_Portal.Controllers {
 
           GPS = GeoTag.getGPS(FlightID, FileCreatedOn);
           GeoTag.setGPS(GPS);
-          GeoTag.setThumbnail(100);
+          GeoTag.SetThumbnail(100);
           //System.IO.File.Delete(FullName);
           FullName = GPSFixName;
           FileURL = "GPS-" + FileName;
@@ -1354,7 +1354,7 @@ new { ID = DroneID, FlightID = "_Pkey" }));
                 ExifLib GeoTag = new ExifLib(FullName, FullName);
                // GPS = GeoTag.getGPS(FlightID, FileCreatedOn);
                // GeoTag.setGPS(GPS);
-                GeoTag.setThumbnail(100);
+                GeoTag.SetThumbnail(100);
 
                
 

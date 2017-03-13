@@ -207,6 +207,10 @@ div.row span.button:hover {
   color: white;
 }
 
+#qViewDataTable div.dataTables_wrapper {
+  padding-bottom: 0px;
+}
+
 #qViewDataDetails {
   margin-top: 10px;
 }
@@ -274,13 +278,15 @@ ul#DataImageThumbnail li {
   list-style: none;
 }
 
+ul#OtherDocuments,
 ul#DataImageThumbnailGroup,
 ul#BulkImages li ul,
 ul#DataImageThumbnail li ul {
   list-style: none;
-  margin: 20px 0px 0px 0px;
+  margin: 10px 0px 0px 0px;
   padding: 0px;
 }
+ul#OtherDocuments li,
 ul#DataImageThumbnailGroup li,
 ul#BulkImages li ul li,
 ul#DataImageThumbnail li ul li {
@@ -297,6 +303,7 @@ ul#DataImageThumbnail li ul li {
   box-sizing: border-box;
   cursor: pointer;
 }
+ul#OtherDocuments li span.delete,
 ul#DataImageThumbnailGroup li span.delete,
 ul#BulkImages li ul li span.delete,
 ul#DataImageThumbnail li ul li span.delete {
@@ -314,11 +321,13 @@ ul#DataImageThumbnail li ul li span.delete {
   display: none;
   font-size: 6px;
 }
+ul#OtherDocuments li span.delete:hover,
 ul#DataImageThumbnailGroup li span.delete:hover,
 ul#BulkImages li ul li span.delete:hover,
 ul#DataImageThumbnail li ul li span.delete:hover {
   background-color: #ffb400;
 }
+ul#OtherDocuments li span.label,
 ul#DataImageThumbnailGroup li span.label,
 ul#BulkImages li ul li span.label,
 ul#DataImageThumbnail li ul li span.label {
@@ -336,6 +345,7 @@ ul#DataImageThumbnail li ul li span.label {
   text-align: center;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
+ul#OtherDocuments li span.title,
 ul#DataImageThumbnailGroup li span.title,
 ul#BulkImages li ul li span.title,
 ul#DataImageThumbnail li ul li span.title {
@@ -352,39 +362,49 @@ ul#DataImageThumbnail li ul li span.title {
   display: none;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
+ul#OtherDocuments li:last-child,
 ul#DataImageThumbnailGroup li:last-child,
 ul#BulkImages li ul li:last-child,
 ul#DataImageThumbnail li ul li:last-child {
   margin-right: 0px;
 }
-ul#DataImageThumbnailGroup li.active, ul#DataImageThumbnailGroup li:hover,
+ul#OtherDocuments li.active, ul#OtherDocuments li:hover,
+ul#DataImageThumbnailGroup li.active,
+ul#DataImageThumbnailGroup li:hover,
 ul#BulkImages li ul li.active,
 ul#BulkImages li ul li:hover,
 ul#DataImageThumbnail li ul li.active,
 ul#DataImageThumbnail li ul li:hover {
   border-color: #2b821a;
 }
-ul#DataImageThumbnailGroup li.active span.delete, ul#DataImageThumbnailGroup li:hover span.delete,
+ul#OtherDocuments li.active span.delete, ul#OtherDocuments li:hover span.delete,
+ul#DataImageThumbnailGroup li.active span.delete,
+ul#DataImageThumbnailGroup li:hover span.delete,
 ul#BulkImages li ul li.active span.delete,
 ul#BulkImages li ul li:hover span.delete,
 ul#DataImageThumbnail li ul li.active span.delete,
 ul#DataImageThumbnail li ul li:hover span.delete {
   display: block;
 }
-ul#DataImageThumbnailGroup li.active span.label, ul#DataImageThumbnailGroup li:hover span.label,
+ul#OtherDocuments li.active span.label, ul#OtherDocuments li:hover span.label,
+ul#DataImageThumbnailGroup li.active span.label,
+ul#DataImageThumbnailGroup li:hover span.label,
 ul#BulkImages li ul li.active span.label,
 ul#BulkImages li ul li:hover span.label,
 ul#DataImageThumbnail li ul li.active span.label,
 ul#DataImageThumbnail li ul li:hover span.label {
   display: none;
 }
-ul#DataImageThumbnailGroup li.active span.title, ul#DataImageThumbnailGroup li:hover span.title,
+ul#OtherDocuments li.active span.title, ul#OtherDocuments li:hover span.title,
+ul#DataImageThumbnailGroup li.active span.title,
+ul#DataImageThumbnailGroup li:hover span.title,
 ul#BulkImages li ul li.active span.title,
 ul#BulkImages li ul li:hover span.title,
 ul#DataImageThumbnail li ul li.active span.title,
 ul#DataImageThumbnail li ul li:hover span.title {
   display: block;
 }
+ul#OtherDocuments:after,
 ul#DataImageThumbnailGroup:after,
 ul#BulkImages li ul:after,
 ul#DataImageThumbnail li ul:after {

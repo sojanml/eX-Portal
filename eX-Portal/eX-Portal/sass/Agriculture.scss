@@ -252,6 +252,12 @@ div.row {
   }
 }
 
+#qViewDataTable {
+  div.dataTables_wrapper {
+    padding-bottom: 0px;
+  }
+}
+
 #qViewDataDetails {
   margin-top: 10px;
 
@@ -290,6 +296,7 @@ div.row {
   div#DataSection {
     width: 275px;
   }
+
 }
 
 table.general-table {
@@ -330,11 +337,12 @@ ul#DataImageThumbnail li {
   list-style: none;
 }
 
+ul#OtherDocuments,
 ul#DataImageThumbnailGroup,
 ul#BulkImages li ul,
 ul#DataImageThumbnail li ul {
   list-style: none;
-  margin: 20px 0px 0px 0px;
+  margin: 10px 0px 0px 0px;
   padding: 0px;
 
   li {

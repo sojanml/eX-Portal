@@ -67,10 +67,10 @@ function RequestFilterData() {
 }
 
 function initializeMap() {
-  var MarkerPosition = { lat: 25.0955354, lng: 55.1527025 };
-
+  var MarkerPosition = { lat: 25.2532, lng: 55.3657 };
+  
   var mapOptions = {
-    zoom: 14,
+    zoom: 10,
     mapTypeControl: false,
     streetViewControl: false,
     center: MarkerPosition,
@@ -127,8 +127,6 @@ function getChartData() {
     }    
   });//$.ajax
 }
-
-
 
 
 function InitChart() {

@@ -85,8 +85,8 @@ function UploadSingleFile(file) {
     //nothing to do
   } else if (file.size > 50 * 1000 * 1000) {
     alert("The file is too big");
-  } else if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/jpeg') {
-    alert("The file does not match png, jpg or gif");
+  //} else if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/jpeg') {
+  //  alert("The file does not match png, jpg or gif");
   } else {
     gFileCounter++;
     var ID = gFileCounter;
@@ -149,6 +149,8 @@ function completeHandler(data) {
   }
   LandLocationMarker = null;
   $('#DataImageThumbnailGroup').empty();
+  $('#OtherDocuments').empty();
+
   LocationMarkers = [];
   LocationBoundBox = new google.maps.LatLngBounds();
   LocationPolygon.setMap(null);
@@ -159,11 +161,16 @@ function completeHandler(data) {
     var LI = $('<LI></LI>').css({ 'background-image': ImageURL });
     LI.append('<span data-id="' + Image.AgriTraxImageID + '" class="delete">x</span>')
     LI.append('<span class="label">' + (j + 1) + '</span>')
-    LI.append('<span class="title">' + Image.Thumbnail.replace('.t.png','') + '</span>')
-    $('#DataImageThumbnailGroup').append(LI);
-    AddMarker(Image.Lat, Image.Lng, Image.AgriTraxImageID, true, j+1);
-    LocationBoundBox.extend({ lat: Image.Lat, lng: Image.Lng });
-    PolygonPath.push({ lat: Image.Lat, lng: Image.Lng });
+    LI.append('<span class="title">' + GetNameOnly(Image.Thumbnail) + '</span>')
+
+    if (Image.Lat > 0 && Image.Lng > 0) {
+      $('#DataImageThumbnailGroup').append(LI);
+      AddMarker(Image.Lat, Image.Lng, Image.AgriTraxImageID, true, j+1);
+      LocationBoundBox.extend({ lat: Image.Lat, lng: Image.Lng });
+      PolygonPath.push({ lat: Image.Lat, lng: Image.Lng });
+    } else {
+      $('#OtherDocuments').append(LI);
+    }
   }
 
   LandLocationMarker = AddMarker(data.Location.Lat, data.Location.Lng, "0", false);
@@ -173,6 +180,12 @@ function completeHandler(data) {
   LocationPolygon.setMap(map);
 }
 
+function GetNameOnly(FileName) {
+  FileName = FileName.replace('.t.png', '');
+  var LastHyphon = FileName.lastIndexOf('-');
+  if (LastHyphon > 0) FileName = FileName.substr(LastHyphon+1);
+  return FileName;
+}
 
 function AddMarker(Lat, Lng, ID, isSpecial, Seq) {
 

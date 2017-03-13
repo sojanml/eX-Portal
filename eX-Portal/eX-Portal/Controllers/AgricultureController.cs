@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.SqlServer.Types;
 using System.Data.SqlTypes;
+using System.Data.Entity.Validation;
 
 namespace eX_Portal.Controllers {
 
@@ -104,7 +105,9 @@ namespace eX_Portal.Controllers {
           .ToLocalTime();
 
         var ImageFile = Request.Files[0];
-        Stat.ImageFile = $"{CreatedBy}-{DateTime.Now.Ticks}-{ImageFile.FileName}";
+        String ImageFileName = ImageFile.FileName.Replace(" ", "-");
+        if (ImageFileName.Length > 35) ImageFileName = ImageFileName.Substring(ImageFileName.Length - 35);
+        Stat.ImageFile = $"{CreatedBy}-{DateTime.Now.Ticks}-{ImageFileName}";
         var ImagePath = Server.MapPath($"/Upload/Agriculture/{ID}");
         var ImageFilePath = System.IO.Path.Combine(ImagePath, Stat.ImageFile);
         if (!System.IO.Directory.Exists(ImagePath)) System.IO.Directory.CreateDirectory(ImagePath);
@@ -113,8 +116,8 @@ namespace eX_Portal.Controllers {
 
         var MyLib = new exLogic.ExifLib(ImageFilePath);
         var GPS = MyLib.getGPS();
-        MyLib.setThumbnail(400, "m");
-        Stat.Thumbnail = System.IO.Path.GetFileName(MyLib.setThumbnail(80, "t"));
+        MyLib.SetThumbnail(400, "m");
+        Stat.Thumbnail = System.IO.Path.GetFileName(MyLib.SetThumbnail(80, "t"));
         
         Stat.Lat = (decimal)GPS.Latitude;
         Stat.Lng = (decimal)GPS.Longitude;
@@ -126,7 +129,21 @@ namespace eX_Portal.Controllers {
         db.AgriTraxImages.Add(Stat);
         db.SaveChanges();
 
-      } catch(Exception e) {
+      } catch (DbEntityValidationException e) {
+        foreach (var eve in e.EntityValidationErrors) {
+          Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+              eve.Entry.Entity.GetType().Name, eve.Entry.State);
+          foreach (var ve in eve.ValidationErrors) {
+            Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                ve.PropertyName, ve.ErrorMessage);
+          }
+        }
+        var ErrorMsg = new {
+          Status = "error",
+          Message = e.Message
+        };
+        return Json(ErrorMsg, JsonRequestBehavior.AllowGet);
+      } catch (Exception e) {
         var ErrorMsg = new {
           Status = "error",
           Message = e.Message
@@ -276,6 +293,7 @@ namespace eX_Portal.Controllers {
       if(ThisRec != null) { 
         switch(Process) {
         case "delete":
+          MapImageDelete(ThisRec);
           db.AgriTraxImages.Remove(ThisRec);
           db.SaveChanges();
           break;
@@ -296,6 +314,21 @@ namespace eX_Portal.Controllers {
       }
     }
 
+    public void MapImageDelete(AgriTraxImage Row) {
+      String SourcePath = Server.MapPath($"/Upload/Agriculture/{Row.AgriTraxID}");
+      String[] AllImages = {
+        Row.ImageFile,
+        Row.Thumbnail,
+        Row.Thumbnail.Replace(".t.png", ".m.png")
+      };
+
+      foreach(String ImageFile in AllImages) {
+        String FullImagePath = System.IO.Path.Combine(SourcePath, ImageFile);
+        if (System.IO.File.Exists(FullImagePath)) System.IO.File.Delete(FullImagePath);
+      }
+
+    }
+
     public JsonResult MapLocation(int ID = 0, int AgriTraxGroupID = 0, bool isUpdateCenter = false) {
       var AllImages = db.AgriTraxImages.Where(e => e.AgriTraxID == ID);
       if (AgriTraxGroupID > 0) AllImages = AllImages.Where(e => e.AgriTraxGroupID == AgriTraxGroupID);
@@ -305,7 +338,8 @@ namespace eX_Portal.Controllers {
       if(isUpdateCenter) { 
         //get Lat and Lng
         var UpdateLatLng = AllImages
-          .GroupBy(g => g.AgriTraxID)
+          .Where(w => w.Lat > 0 && w.Lng > 0)
+          .GroupBy(g => g.AgriTraxID)          
           .Select(s => new {
             Lat = s.Average(e => e.Lat),
             Lng = s.Average(e => e.Lng)

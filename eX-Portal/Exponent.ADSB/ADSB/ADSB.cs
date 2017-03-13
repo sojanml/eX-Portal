@@ -16,7 +16,7 @@ namespace Exponent.ADSB {
     private const String APIKey = "";
     private const String ApiID = "";
     private SqlConnection CN;
-    private const int NewFlightTime = 10;
+    private const int NewFlightTime = 5;
     private bool isDemoMode = false;
     public List<FlightPosition> FlightStat(String DSN, bool DemoMode = false, ADSBQuery QueryData = null)  {
       var Data = new List<FlightPosition>();
@@ -281,9 +281,15 @@ namespace Exponent.ADSB {
 
 
     private List<FlightPosition> getFlightAware() {
-
-
+      //Timeframe check. available from 6AM to 6 PM Dubai Time
+      //2:00 to 14:00 GMT (24 Hour Clock)
+      DateTime Now = DateTime.UtcNow;
       var FlightPositions = new List<FlightPosition>();
+
+      if (Now.Hour < 2 || Now.Hour > 14) {
+        return FlightPositions;
+      }
+
       String Query = 
         "{> alt 5} " +
         "{> speed 200} " +

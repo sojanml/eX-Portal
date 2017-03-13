@@ -717,7 +717,7 @@ namespace eX_Portal.Controllers {
           ExifLib GeoTag = new ExifLib(FullName, GPSFixName);
           GPS = GeoTag.getGPS(FlightID, FileCreatedOn);
           GeoTag.setGPS(GPS);
-          GeoTag.setThumbnail(100);
+          GeoTag.SetThumbnail(100);
           //System.IO.File.Delete(FullName);
           FullName = GPSFixName;
           FileURL = "GPS-" + FileName;

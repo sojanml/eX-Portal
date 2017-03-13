@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
+using Microsoft.WindowsAPICodePack.Shell;
 
 /*
 Add the Following reference to the projcet
@@ -66,7 +67,7 @@ namespace eX_Portal.exLogic {
 
   class ExifLib {
 
-
+    private bool IsImage = true;
     private String _InputFileName = "";
     private String _OutputFileName = "";
     public ExifLib(String InputFileName, String OutputFileName = "") {
@@ -74,52 +75,69 @@ namespace eX_Portal.exLogic {
       _OutputFileName = OutputFileName;
     }
 
-    public String setThumbnail(int Width = 120, String ExtPrefix="t") {
-      Image image = Image.FromFile(_InputFileName);
+    public Bitmap GetThumbnailOfDoc() {
+      ShellFile shellFile = ShellFile.FromFilePath(_InputFileName);
+      return shellFile.Thumbnail.ExtraLargeBitmap;
+    }
+
+    public String SetThumbnail(int Width = 120, String ExtPrefix = "t") {
+
+      if (String.IsNullOrWhiteSpace(_OutputFileName))
+        _OutputFileName = _InputFileName;
+      String ThumbnailImage = Path.ChangeExtension(_OutputFileName, ExtPrefix + ".png");
+      if (System.IO.File.Exists(ThumbnailImage))
+        System.IO.File.Delete(ThumbnailImage);
+
+      Image image = IsImage ? Image.FromFile(_InputFileName) : GetThumbnailOfDoc();
+
       int X = image.Width;
       int Y = image.Height;
-
       int Height = (int)((Width * Y) / X);
-      if(Height < Width) {
+      if (Height < Width) {
         Height = Width;
         Width = (int)((Width * X) / Y);
       }
-      if (String.IsNullOrWhiteSpace(_OutputFileName)) _OutputFileName = _InputFileName;
-      String ThumbnailImage = Path.ChangeExtension(_OutputFileName, ExtPrefix + ".png");
-      if (System.IO.File.Exists(ThumbnailImage)) System.IO.File.Delete(ThumbnailImage);
-
       Bitmap newImage = new Bitmap(Width, Height);
       using (Graphics gr = Graphics.FromImage(newImage)) {
         gr.SmoothingMode = SmoothingMode.HighQuality;
         gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
         gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
         gr.DrawImage(image, new Rectangle(0, 0, Width, Height));
-        
       }
-      
-
-      Image thumb = image.GetThumbnailImage(Width, Height, () => false, IntPtr.Zero);
+      image.Dispose();
       newImage.Save(ThumbnailImage);
       newImage.Dispose();
-      image.Dispose();
+
       return ThumbnailImage;
     }
+
     public GPSInfo getGPS() {
       var myGPS = new GPSInfo();
-      //_InputFileName = InputFileName;
-      Image image = Image.FromFile(_InputFileName);
-      myGPS.Latitude = GetLatitude(image);
-      myGPS.Longitude = GetLongitude(image);
-      myGPS.ImageTakenOn = GetPhotoTakenOn(image);
-      image.Dispose();
+      try {
+        //_InputFileName = InputFileName;
+        Image image = Image.FromFile(_InputFileName);
+        myGPS.Latitude = GetLatitude(image);
+        myGPS.Longitude = GetLongitude(image);
+        myGPS.ImageTakenOn = GetPhotoTakenOn(image);
+        image.Dispose();
+        IsImage = true;
+      } catch {
+        //not an image;
+        IsImage = false;
+      }
       return myGPS;
     }
 
     public DateTime GetPhotoTakenOn(Image myImage) {
       Regex r = new Regex(":");
-      PropertyItem propItem = myImage.GetPropertyItem(36867);
-      string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
-      return DateTime.Parse(dateTaken);
+      int DateTakenID = 36867;
+      DateTime DateTaken = DateTime.Now;
+      if (myImage.PropertyIdList.Any(p => p == DateTakenID)) {
+        PropertyItem propItem = myImage.GetPropertyItem(36867);
+        string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
+        DateTaken = DateTime.Parse(dateTaken);
+      } 
+      return DateTaken;
     }
 
     public float GetLatitude(Image targetImg) {

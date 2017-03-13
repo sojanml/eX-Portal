@@ -82,6 +82,10 @@ div.label {
     margin-right: $Gap;
   }
 
+  div.column-full {
+    width: $TotalWidth;
+  }
+
   div.column-half {
     $CalulatedWidth: (($TotalWidth - $Gap) / 2);
     width: $CalulatedWidth;
@@ -251,7 +255,25 @@ table.traffic_status {
     width: 15px;
     height: 40px;
     border-radius: 10px;
+
+    div.vertical {
+      display: block;
+      -ms-transform: rotate(270deg); /* IE 9 */
+      -webkit-transform: rotate(270deg); /* Chrome, Safari, Opera */
+      transform: rotate(270deg);
+      color: white;
+      transform-origin: 20px 18px;
+      white-space: nowrap;
+      width: 40px;
+      height: 15px;
+      font-size: 10px;
+      font-family: Arial, sans-serif;
+      text-transform: capitalize;
+      text-align: center;
+      box-sizing: border-box;
+    }
   }
+
 
   div.breach {
     background-color: $BreachColor;
