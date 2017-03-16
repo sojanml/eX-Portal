@@ -82,6 +82,13 @@ function initializeMap() {
   
 }
 
+function setLiveSummary(ChartData) {
+  if (ChartData.length < 1) return;
+  var Data = ChartData[ChartData.length - 1];
+  $('#Summary-Breach24H').html(Data.Breach24H);
+  $('#Summary-TotalRPAS').html(Data.TotalRPAS);
+  $('#Summary-Area').html(Data.Area.toFixed(1));
+}
 
 function setChartData(ChartData) {
   //console.log("Position : " + Position + ", ChartIndex:" + ChartIndex);
@@ -121,6 +128,7 @@ function getChartData() {
     type: 'GET',
     success: function (data) {
       setChartData(data);
+      setLiveSummary(data);
     }, //succes
     complete: function () {
       Timers['getChartData'] = window.setTimeout(getChartData, 30 * 1000);

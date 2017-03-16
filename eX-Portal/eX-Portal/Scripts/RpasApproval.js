@@ -123,12 +123,12 @@ $(document).ready(function () {
     });// $('#GcaApproval_ApprovalID').on("change")
 
 
-    $('#GcaApproval_Coordinates').on("change", function (e) {
+    $('#Coordinates').on("change", function (e) {
         e.preventDefault();
         updateCordinates();
     })
 
-    $('#GcaApproval_IsUseCamara').on("change", function () {
+    $('#IsUseCamara').on("change", function () {
         if ($(this).val() == '1') {
             $('#cameraopt').slideDown();           
         } else {
@@ -281,10 +281,10 @@ function updateCordinates() {
 }
 
 function getCoordinates() {
-    var Cordinates = $('#GcaApproval_Coordinates').val();
+    var Cordinates = $('#Coordinates').val();
     if (Cordinates == "") {
         Cordinates = getDefaultCoordinates();
-        $('#GcaApproval_Coordinates').val(Cordinates);
+        $('#Coordinates').val(Cordinates);
     }
     return Cordinates;
 }
@@ -300,7 +300,7 @@ function getDefaultCoordinates() {
 }
 
 function setCoordinates1(Cord) {
-    $('#GcaApproval_Coordinates').val(Cord);
+    $('#Coordinates').val(Cord);
 }
 
 function setBoundary(Cordinates) {

@@ -1,4 +1,4 @@
-﻿@model eX_Portal.ViewModel.FlightSetupViewModel
+﻿@model eX_Portal.Models.GCA_Approval
 
 @using eX_Portal.exLogic
 @{
@@ -8,54 +8,54 @@
 
 
 <h2>Requested By</h2>
-@Html.Action("UserDetailView", "User", new { ID = Model.GcaApproval.PilotUserId })
+@Html.Action("UserDetailView", "User", new { ID = Model.PilotUserId })
 
 <h2>RPAS Details</h2>
-@Html.Action("DroneDetail", "Drone", new { ID = Model.GcaApproval.DroneID })
-@using (Html.BeginForm(null, null, FormMethod.Get, new { name = "frmDroneSetup", id = "frmDroneSetup" })) {
+@Html.Action("DroneDetail", "Drone", new { ID = Model.DroneID })
+@using (Html.BeginForm(null, null, FormMethod.Post, new { name = "frmDroneSetup", id = "frmDroneSetup" })) {
 
   @Html.AntiForgeryToken()
 
-  @Html.HiddenFor(model => model.GcaApproval.ApprovalID)
+  @Html.HiddenFor(model => Model.ApprovalID)
   <div id="frm" class="form-horizontal">
     <div class="error" id="error-message" style="display:none;margin-bottom:20px;"></div>
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div id="ElementHide" style="display:none">
-    <div class="form-group">
-      @Html.LabelFor(model => model.GcaApproval.DroneID, "RPAS Name")
-      <div class="col-md-10">
-        @Html.DropDownListFor(model => model.GcaApproval.DroneID, DroneFlightSetup.GetDdListDrone(Convert.ToInt32(Session["AccountID"].ToString())),
+      <div class="form-group">
+        @Html.LabelFor(model => Model.DroneID, "RPAS Name")
+        <div class="col-md-10">
+          @Html.DropDownListFor(model => Model.DroneID, DroneFlightSetup.GetDdListDrone(Convert.ToInt32(Session["AccountID"].ToString())),
         "--Select Drone--",
         new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.GcaApproval.DroneID, "", new { @class = "text-danger" })
+          @Html.ValidationMessageFor(model => Model.DroneID, "", new { @class = "text-danger" })
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      @Html.LabelFor(model => model.GcaApproval.PilotUserId, "Pilot")
-      <div class="col-md-10">
-        @Html.DropDownListFor(model => model.GcaApproval.PilotUserId, DroneFlightSetup.getAllUsers(Session["AccountID"]),
+      <div class="form-group">
+        @Html.LabelFor(model => Model.PilotUserId, "Pilot")
+        <div class="col-md-10">
+          @Html.DropDownListFor(model => Model.PilotUserId, DroneFlightSetup.getAllUsers(Session["AccountID"]),
          "--Select Pilot--",
           new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.GcaApproval.PilotUserId, "", new { @class = "text-danger" })
+          @Html.ValidationMessageFor(model => Model.PilotUserId, "", new { @class = "text-danger" })
+        </div>
+        <div>
+          <input id="ispilot" value="1" name="ispilot" type="checkbox" />
+          <label for="ispilot">I am the pilot</label>
+        </div>
       </div>
-      <div>
-        <input id="ispilot" value="1" name="ispilot" type="checkbox" />
-        <label for="ispilot">I am the pilot</label>
-      </div>
+
     </div>
 
-     </div>
-
     <div class="form-group">
-      @Html.LabelFor(model => model.GcaApproval.GroundStaffUserId, "Ground Staff")
+      @Html.LabelFor(model => Model.GroundStaffUserId, "Ground Staff")
       <div class="col-md-10">
-        @Html.DropDownListFor(model => model.GcaApproval.GroundStaffUserId,
+        @Html.DropDownListFor(model => Model.GroundStaffUserId,
           DroneFlightSetup.getAllUsers(Session["AccountID"]),
           "--Select Ground Staff--",
           new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.GcaApproval.GroundStaffUserId, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(model => Model.GroundStaffUserId, "", new { @class = "text-danger" })
       </div>
       <div>
         <input id="isgroundstaff" name="isgroundstaff" type="checkbox" />
@@ -65,94 +65,90 @@
 
     <h2>Flight Details</h2>
     <div class="form-group">
-      @Html.LabelFor(model => model.GcaApproval.NotificationEmails, "Post-Flight Report recipient addresses [separated by a comma (,)]")
+      @Html.LabelFor(model => Model.NotificationEmails, "Post-Flight Report recipient addresses [separated by a comma (,)]")
       <div class="col-md-10">
-        @Html.EditorFor(model => model.GcaApproval.NotificationEmails, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.GcaApproval.NotificationEmails, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => Model.NotificationEmails, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => Model.NotificationEmails, "", new { @class = "text-danger" })
       </div>
     </div>
 
     <h2>Zone Approval</h2>
 
     @*<div class="form-group">
-          @Html.LabelFor(model => model.GcaApproval.ApprovalID, "Regulatory Approvals")
+          @Html.LabelFor(model => Model.ApprovalID, "Regulatory Approvals")
           <div class="col-md-10">
-              @Html.DropDownListFor(model => model.GcaApproval.ApprovalID, new SelectList(Enumerable.Empty<SelectListItem>(), "ApprovalID", "ApprovalName"), "--Select Regulator Approval--", new { @class = "form-control" })
-              @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalID, "", new { @class = "text-danger" })
+              @Html.DropDownListFor(model => Model.ApprovalID, new SelectList(Enumerable.Empty<SelectListItem>(), "ApprovalID", "ApprovalName"), "--Select Regulator Approval--", new { @class = "form-control" })
+              @Html.ValidationMessageFor(model => Model.ApprovalID, "", new { @class = "text-danger" })
           </div>
       </div>*@
 
     <div id="newgcaapproval" class="form-group" style="visibility:visible;">
-      @Html.LabelFor(model => model.GcaApproval.ApprovalName, "New Regulator Approval Name")
+      @Html.LabelFor(model => Model.ApprovalName, "New Regulator Approval Name")
       <div class="editor-field">
-        @Html.EditorFor(model => model.GcaApproval.ApprovalName)
-        @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalName)
+        @Html.EditorFor(model => Model.ApprovalName)
+        @Html.ValidationMessageFor(model => Model.ApprovalName)
       </div>
     </div>
 
     <div class="two-column-form-group">
       <div class="form-group">
-        @Html.LabelFor(model => model.GcaApproval.StartDate)
+        @Html.LabelFor(model => Model.StartDate)
         <div class="col-md-10">
-
-
-          @Html.EditorFor(model => model.GcaApproval.StartDate, "{0:dd-MM-yyyy}", new { htmlAttributes = new { @class = "form-control date-picker" } })
-
-
-
-          @Html.ValidationMessageFor(model => model.GcaApproval.StartDate, "", new { @class = "text-danger" })
+          @Html.TextBoxFor(m => m.StartDate, new { @Value = ((DateTime)Model.StartDate).ToString("dd-MMM-yyyy"), @class = "form-control date-picker" })
+          @Html.ValidationMessageFor(model => Model.StartDate, "", new { @class = "text-danger" })
         </div>
       </div>
       <div class="form-group">
-        @Html.LabelFor(model => model.GcaApproval.EndDate)
+        @Html.LabelFor(model => Model.EndDate)
         <div class="col-md-10">
-          @Html.EditorFor(model => model.GcaApproval.EndDate, "{0:dd-MM-yyyy}", new { htmlAttributes = new { @class = "form-control date-picker" } })
-          @Html.ValidationMessageFor(model => model.GcaApproval.EndDate, "", new { @class = "text-danger" })
+          @Html.TextBoxFor(m => m.EndDate, new { @Value = ((DateTime)Model.EndDate).ToString("dd-MMM-yyyy"), @class = "form-control date-picker" })
+          @Html.ValidationMessageFor(model => Model.EndDate, "", new { @class = "text-danger" })
         </div>
       </div>
     </div>
     <div class="two-column-form-group">
       <div class="form-group">
-        @Html.LabelFor(model => model.GcaApproval.StartTime)
+        @Html.LabelFor(model => Model.StartTime)
         <div class="col-md-10">
-          @Html.EditorFor(model => model.GcaApproval.StartTime, new { htmlAttributes = new { @class = "form-control time-picker" } })
-          @Html.ValidationMessageFor(model => model.GcaApproval.StartTime, "", new { @class = "text-danger" })
+          @Html.EditorFor(model => Model.StartTime, new { htmlAttributes = new { @class = "form-control time-picker" } })
+          @Html.ValidationMessageFor(model => Model.StartTime, "", new { @class = "text-danger" })
         </div>
       </div>
 
       <div class="form-group">
-        @Html.LabelFor(model => model.GcaApproval.EndTime)
+        @Html.LabelFor(model => Model.EndTime)
         <div class="col-md-10">
-          @Html.EditorFor(model => model.GcaApproval.EndTime, new { htmlAttributes = new { @class = "form-control time-picker" } })
-          @Html.ValidationMessageFor(model => model.GcaApproval.EndTime, "", new { @class = "text-danger" })
+          @Html.EditorFor(model => Model.EndTime, new { htmlAttributes = new { @class = "form-control time-picker" } })
+          @Html.ValidationMessageFor(model => Model.EndTime, "", new { @class = "text-danger" })
         </div>
       </div>
     </div>
     <div class="two-column-form-group">
       <div class="form-group">
-        @Html.LabelFor(model => model.GcaApproval.MinAltitude)
+        @Html.LabelFor(model => Model.MinAltitude)
         <div class="col-md-10">
-          @Html.EditorFor(model => model.GcaApproval.MinAltitude, new { htmlAttributes = new { @class = "form-control" } })
-          @Html.ValidationMessageFor(model => model.GcaApproval.MinAltitude, "", new { @class = "text-danger" })
+          @Html.EditorFor(model => Model.MinAltitude, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => Model.MinAltitude, "", new { @class = "text-danger" })
         </div>
       </div>
 
       <div class="form-group">
-        @Html.LabelFor(model => model.GcaApproval.MaxAltitude)
+        @Html.LabelFor(model => Model.MaxAltitude)
         <div class="col-md-10">
-          @Html.EditorFor(model => model.GcaApproval.MaxAltitude, new { htmlAttributes = new { @class = "form-control" } })
-          @Html.ValidationMessageFor(model => model.GcaApproval.MaxAltitude, "", new { @class = "text-danger" })
+          @Html.EditorFor(model => Model.MaxAltitude, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => Model.MaxAltitude, "", new { @class = "text-danger" })
         </div>
       </div>
     </div>
 
     <div class="two-column-form-group">
+
       <div class="form-group">
-        @Html.LabelFor(model => model.GcaApproval.IsUseCamara, "Camera being used")
+        @Html.LabelFor(model => Model.IsUseCamara, "Camera being used")
 
         <div class="col-md-10">
-          @Html.DropDownListFor(model => model.GcaApproval.IsUseCamara, Util.GetBoolList(true))
-          @Html.ValidationMessageFor(model => model.GcaApproval.IsUseCamara)
+          @Html.DropDownListFor(model => Model.IsUseCamara, Util.GetYeNoList())
+          @Html.ValidationMessageFor(model => Model.IsUseCamara)
         </div>
       </div>
 
@@ -166,68 +162,73 @@
 
     <div id="cameraopt" style="display:none;padding:0px;">
       <div class="form-group">
-        @Html.LabelFor(model => model.GcaApproval.CameraId, "Select Camera")
+        @Html.LabelFor(model => Model.CameraId, "Select Camera")
         <div class="col-md-10">
-          @Html.DropDownListFor(model => model.GcaApproval.CameraId, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"), "--Select Camera--", new { @class = "form-control" })
-          @Html.ValidationMessageFor(model => model.GcaApproval.CameraId, "", new { @class = "text-danger" })
+          @Html.DropDownListFor(model => Model.CameraId, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"), "--Select Camera--", new { @class = "form-control" })
+          @Html.ValidationMessageFor(model => Model.CameraId, "", new { @class = "text-danger" })
         </div>
       </div>
     </div>
-    <div id="othercamera" style="display:none">
-      <div class="form-group">
-        @Html.LabelFor(model => model.camera, "Other Camera")
-        <div class="col-md-10">
-          @Html.EditorFor(model => model.camera, new { htmlAttributes = new { @class = "form-control" } })
-          @Html.ValidationMessageFor(model => model.camera, "", new { @class = "text-danger" })
+    @*
+      <div id="othercamera" style="display:none">
+        <div class="form-group">
+          @Html.LabelFor(model => model.camera, "Other Camera")
+          <div class="col-md-10">
+            @Html.EditorFor(model => model.camera, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.camera, "", new { @class = "text-danger" })
+          </div>
         </div>
       </div>
-    </div>
-
+    *@
 
     <div id="gcacoordinates" class="form-group" style="visibility:visible;">
-      @Html.LabelFor(model => model.GcaApproval.Coordinates, "Coordinates")
+      @Html.LabelFor(model => Model.Coordinates, "Coordinates")
       <div class="editor-field">
-        @Html.EditorFor(model => model.GcaApproval.Coordinates)
-        @Html.ValidationMessageFor(model => model.GcaApproval.Coordinates)
+        @Html.EditorFor(model => Model.Coordinates)
+        @Html.ValidationMessageFor(model => Model.Coordinates)
       </div>
     </div>
-
-
 
     <div id="polygonmap" class="form-group" style="visibility:visible;height:500px;width:600px;">
       <div id="map_canvas" style="width: 100%; height: 100%;border:1px solid black;"></div>
     </div>
 
-
     <h2>Approve/Reject</h2>
-    <section class="general-form" id="loginForm">
-
-
-      <div class="editor-label">
-        @Html.LabelFor(model => model.GcaApproval.ApprovalStatus, "Approve/Reject")
-      </div>
-      <div class="editor-field">
-        @Html.DropDownListFor(model => model.GcaApproval.ApprovalStatus, Util.GetApporveRejectList())
-        @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalStatus)
-      </div>
-      <div class="editor-label">
-        @Html.LabelFor(model => model.GcaApproval.ApprovalRemarks, "Remarks")
-      </div>
-      <div class="editor-field">
-        @Html.EditorFor(model => model.GcaApproval.ApprovalRemarks)
-        @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalRemarks)
-      </div>
-
-    </section>
-
-
     <div class="form-group">
-      <div class="col-md-offset-2 col-md-10">
-        <input id="submitButton" type="submit" value="Save" class="btn btn-default" style="width:60px;" />
+      <div class="editor-label">
+        @Html.LabelFor(model => Model.ApprovalStatus, "Approve/Reject")
+      </div>
+      <div class="editor-field">
+        @Html.DropDownListFor(model => Model.ApprovalStatus, Util.GetApporveRejectList())
+        @Html.ValidationMessageFor(model => Model.ApprovalStatus)
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="editor-label">
+        @Html.LabelFor(model => Model.BlackBoxID)
+      </div>
+      <div class="editor-field">
+        @Html.DropDownListFor(model => Model.BlackBoxID, Model.GetBlackBoxList())
+        @Html.ValidationMessageFor(model => Model.BlackBoxID)
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="editor-label">
+        @Html.LabelFor(model => Model.ApprovalRemarks, "Remarks")
+      </div>
+      <div class="editor-field">
+        @Html.EditorFor(model => Model.ApprovalRemarks)
+        @Html.ValidationMessageFor(model => Model.ApprovalRemarks)
       </div>
     </div>
 
-  </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+          <input id="submitButton" type="submit" value="Save" class="btn btn-default" style="width:60px;" />
+        </div>
+      </div>
+
+    </div>
 }
 
 <script type="text/javascript">
@@ -241,6 +242,7 @@
 }
 
 @section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
   <script src="~/jquery-ui/jquery-ui.js"></script>
   <script src="~/jquery-ui/jquery.ui.timepicker.js"></script>
   <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>

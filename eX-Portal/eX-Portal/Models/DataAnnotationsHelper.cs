@@ -8,7 +8,6 @@ using System.Net;
 using System.Text;
 using System.Web;
 
-
 namespace eX_Portal.Models {
   /*
     Reference
@@ -482,7 +481,26 @@ namespace eX_Portal.Models {
   public partial class GCA_Approval {
     public string S3Url { get; set; }
 
+    public int BlackBoxID { get; set; }
+
+    public IEnumerable<System.Web.Mvc.SelectListItem> GetBlackBoxList() {
+      var db = new ExponentPortalEntities();
+      var BlackBoxList = 
+        from b in db.MSTR_BlackBox
+        orderby b.BlackBoxName
+        select new System.Web.Mvc.SelectListItem {
+          Text = b.BlackBoxName,
+          Value = b.BlackBoxID.ToString()
+        };
+      var theList = BlackBoxList.ToList();
+      theList.Insert(0,  new System.Web.Mvc.SelectListItem {
+        Text = "Please Select...",
+        Value = ""
+      });
+      return theList;
+    }
   }
+  
 
   public class GCA_Approval_Helper {
     [Required(ErrorMessage = "Please select a drone")]
@@ -503,12 +521,12 @@ namespace eX_Portal.Models {
     [Required(ErrorMessage = "Please Enter Start Date")]
     [Display(Name = "Start Date")]
     [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
-    public string StartDate { get; set; }
+    public DateTime StartDate { get; set; }
 
     [Required(ErrorMessage = "Please Enter End Date")]
     [Display(Name = "End Date")]
     [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}")]
-    public string EndDate { get; set; }
+    public DateTime EndDate { get; set; }
 
     [Required(ErrorMessage = "Please Enter Start Time")]
     [Display(Name = "Start Time")]
@@ -523,7 +541,9 @@ namespace eX_Portal.Models {
     [Display(Name = "Approval Remarks")]
     public string ApprovalRemarks { get; set; }
 
-
+    [Required(ErrorMessage = "Please select a Black Box to Assign")]
+    [Display(Name = "Assign Black Box")]
+    public int BlackBoxID { get; set; }
   }
 
   [MetadataType(typeof(MSTR_RPAS_User_Helper))]

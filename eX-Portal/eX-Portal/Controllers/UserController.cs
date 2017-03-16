@@ -120,6 +120,11 @@ namespace eX_Portal.Controllers {
             Session["BrandColor"] = thisUser.BrandColor;
             Session["AccountID"] = thisUser.AccountID;
             Session["userIpAddress"] = Request.ServerVariables["REMOTE_ADDR"];
+            if(thisUser.UserID == 152) {
+              Session["BrandLogo"] = "gcaa-logo.png";
+              Session["BrandColor"] = "#009247";
+            }
+
             var browser = Request.Browser.Browser;
             var assembly = Assembly.GetExecutingAssembly();
             var attribute = (GuidAttribute)assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0];

@@ -14,13 +14,15 @@ namespace Exponent.ADSB {
   }
 
 public class ADSBQuery {
+    private Double FeetToKiloMeter = 0.0003048;
+    private Double _vSafe = 0;
+    private Double _vAlert = 0;
+    private Double _vBreach = 0;
+
     public Double ATCRadious { get; set; }
     public Double hSafe { get; set; }
-    public Double vSafe { get; set; }
     public Double hAlert { get; set; }
-    public Double vAlert { get; set; }
     public Double hBreach { get; set; }
-    public Double vBreach { get; set; }
     public int tracking_adsb_commercial { get; set; }
     public int tracking_adsb_rpas { get; set; }
     public int tracking_adsb_skycommander { get; set; }
@@ -28,14 +30,27 @@ public class ADSBQuery {
     public int adsb_omdw { get; set; }
     public int adsb_omsj { get; set; }
 
+    public Double vSafe {
+      get {return _vSafe;}
+      set { _vSafe = value * FeetToKiloMeter; }
+    }
+    public Double vAlert {
+      get { return _vAlert; }
+      set { _vAlert = value * FeetToKiloMeter; }
+    }
+    public Double vBreach {
+      get { return _vBreach; }
+      set { _vBreach = value * FeetToKiloMeter; }
+    }
+
     public ADSBQuery() {
       ATCRadious = 150;
       hSafe = 10;
-      vSafe = 4;
-      hAlert = 4;
-      vAlert = 3;
-      hBreach = 2;
-      vBreach = 2;
+      vSafe = 1000;
+      hAlert = 8;
+      vAlert = 1000;
+      hBreach = 8;
+      vBreach = 500;
       tracking_adsb_commercial = 0;
       tracking_adsb_rpas = 0;
       tracking_adsb_skycommander = 0;
@@ -96,6 +111,58 @@ public class ADSBQuery {
     public int Breach { get; set; }
     public int Alert { get; set; }
     public int ID { get; set; }
+
+    public int TotalRPAS { get; set; }
+    public Double Area { get; set; }
+    public int Breach24H { get; set; }
+
+    public  void SetSummary(SqlConnection CN) {
+      String SQL1 = "select Count(DISTINCT FromFlightID) from ADSBDetailHistory WHERE VerticalDistance <= 0.15 and HorizontalDistance <= 8 and CreatedDate >= DATEDIFF(HOUR, 24, GETDATE());";
+      Breach24H =  GetDBInt(CN, SQL1);
+      TotalRPAS =  GetDBInt(CN, "select Count(*) from AdsbLive WHERE FlightSource='SkyCommander'");
+      Area =  GetArea(CN);
+    }
+
+    private int GetDBInt(SqlConnection CN, String SQL) {
+      int Result = 0;
+      using(SqlCommand cmd = new SqlCommand(SQL, CN)) {
+        var oResult =  cmd.ExecuteScalar();
+        int.TryParse(oResult.ToString(), out Result);
+      }
+      return Result;
+    }
+
+    private Double GetArea(SqlConnection CN) {
+      String SQL = "select Min(Lat) as MinLat, Min(Lon) as MinLon, Max(Lat) as MaxLat, Max(Lon) as MaxLon from AdsbLive";
+      Double Area = 0;
+      Double MinLat = 0, MinLon= 0, MaxLat = 0, MaxLon = 0;
+      using(SqlCommand cmd = new SqlCommand(SQL, CN)) {
+         using (SqlDataReader RS = cmd.ExecuteReader()) {
+          while (RS.Read()) { 
+            MinLat = (Double)RS.GetDecimal(0);
+            MinLon = (Double)RS.GetDecimal(1);
+            MaxLat = (Double)RS.GetDecimal(2);
+            MaxLon = (Double)RS.GetDecimal(3);
+          }
+        }
+      }
+
+      String AreaSQL = $@"SELECT geography::STGeomFromText(
+      'POLYGON((' +
+      '{MinLat} {MinLon},' +
+      '{MaxLat} {MinLon},' +
+      '{MaxLat} {MaxLon},' +
+      '{MinLat} {MaxLon},' +
+      '{MinLat} {MinLon} ' +
+      '))', 4326).STArea() as Area";
+
+      using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
+        var oResult = cmd.ExecuteScalar();
+        Double.TryParse(oResult.ToString(), out Area);
+      }
+
+      return Area;
+    }
   }
 
 

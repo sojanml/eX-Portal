@@ -62,8 +62,20 @@ namespace Exponent.ADSB {
           }//while
           RS.Close();
         }//using (var Cmd)
+
+        if(TheSummary.Any()) {
+          TheSummary.Last().SetSummary(CN);
+        }
+
         CN.Close();
       }//using (CN)
+
+
+
+
+
+
+
       return TheSummary;
     }
     public List<FlightStatus> GetFlightStatus(String DSN, Exponent.ADSB.ADSBQuery QueryData) {
@@ -196,6 +208,8 @@ namespace Exponent.ADSB {
 
       return PositionDatas;
     }
+
+
 
     private List<Double> getHistory(String HeadingHistory) {
       List<Double> History = new List<Double>();

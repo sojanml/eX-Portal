@@ -39,30 +39,30 @@
             </tr>
             <tr>
               <td>Define Vertical Separation</td>
-              <td><input id="vSafe" class="spinner" value="0.3048" name="vSafe" type="text" /></td>
-              <td>KM</td>
+              <td><input id="vSafe" class="spinner" value="1000" name="vSafe" type="text" /></td>
+              <td>Feet</td>
             </tr>
             <tr>
-              <td rowspan="2"><div class="alert traffic_stat"><div  class="vertical">Alert</div></div></td>
+              <td rowspan="2"><div class="alert traffic_stat"><div class="vertical">Alert</div></div></td>
               <td>Define Horizontal Separation</td>
               <td><input id="hAlert" class="spinner" value="8" name="hAlert" type="text" /></td>
               <td>KM</td>
             </tr>
             <tr>
               <td>Define Vertical Separation</td>
-              <td><input id="vAlert" class="spinner" value="0.3048" name="vAlert" type="text" /></td>
-              <td>KM</td>
+              <td><input id="vAlert" class="spinner" value="1000" name="vAlert" type="text" /></td>
+              <td>Feet</td>
             </tr>
             <tr>
-              <td rowspan="2"><div class="breach traffic_stat"><div  class="vertical">Breach</div></div></td>
+              <td rowspan="2"><div class="breach traffic_stat"><div class="vertical">Breach</div></div></td>
               <td>Define Horizontal Separation</td>
               <td><input id="hBreach" class="spinner" value="8" name="hBreach" type="text" /></td>
               <td>KM</td>
             </tr>
             <tr>
               <td>Define Vertical Separation</td>
-              <td><input id="vBreach" class="spinner" value="0.1524" name="vBreach" type="text" /></td>
-              <td>KM</td>
+              <td><input id="vBreach" class="spinner" value="500" name="vBreach" type="text" /></td>
+              <td>Feet</td>
             </tr>
           </table>
         </td>
@@ -185,15 +185,15 @@
           <table class="safe-status" cellpadding="0" cellspacing="0">
             <tr>
               <td>Broadcasting RPAS</td>
-              <td><div class="label">19</div></td>
+              <td><div id="Summary-TotalRPAS" class="label">-</div></td>
             </tr>
             <tr>
               <td>Geographical Range</td>
-              <td><div class="label">585</div> SQ. KM&nbsp;</td>
+              <td><div id="Summary-Area" class="label">-</div> SQ. KM&nbsp;</td>
             </tr>
             <tr>
               <td>Breach Alerts (24 H)</td>
-              <td><div class="label">2</div></td>
+              <td><div id="Summary-Breach24H" class="label">-</div></td>
             </tr>
 
           </table>
@@ -208,7 +208,6 @@
   </div>
   <div id="adsb_map" class="column column-half shaded"></div>
 </section>
-
 
 <section class="top-space">
   <div id="BarGraph"></div>
