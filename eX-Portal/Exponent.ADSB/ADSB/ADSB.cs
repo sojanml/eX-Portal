@@ -300,13 +300,21 @@ namespace Exponent.ADSB {
       DateTime Now = DateTime.UtcNow;
       var FlightPositions = new List<FlightPosition>();
 
-      if (Now.Hour < 2 || Now.Hour > 14) {
+      if (Now.Hour < 2 || Now.Hour >= 14) {
         return FlightPositions;
       }
 
-      String Query = 
+      /*
         "{> alt 5} " +
         "{> speed 200} " +
+        "{true inAir} " +
+        "{range lat 23.85438 26.39335} " +
+        "{range lon 52.99612 59.31375}";
+       
+       * */
+      String Query = 
+        "{> alt 5} " +
+        "{> speed 20} " +
         "{true inAir} " +
         "{range lat 23.85438 26.39335} " +
         "{range lon 52.99612 59.31375}";

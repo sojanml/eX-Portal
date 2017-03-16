@@ -139,10 +139,10 @@ public class ADSBQuery {
       using(SqlCommand cmd = new SqlCommand(SQL, CN)) {
          using (SqlDataReader RS = cmd.ExecuteReader()) {
           while (RS.Read()) { 
-            MinLat = (Double)RS.GetDecimal(0);
-            MinLon = (Double)RS.GetDecimal(1);
-            MaxLat = (Double)RS.GetDecimal(2);
-            MaxLon = (Double)RS.GetDecimal(3);
+            MinLat = RS.IsDBNull(0) ? 0 : (Double)RS.GetDecimal(0);
+            MinLon = RS.IsDBNull(1) ? 0 : (Double)RS.GetDecimal(1);
+            MaxLat = RS.IsDBNull(2) ? 0 : (Double)RS.GetDecimal(2);
+            MaxLon = RS.IsDBNull(3) ? 0 : (Double)RS.GetDecimal(3);
           }
         }
       }

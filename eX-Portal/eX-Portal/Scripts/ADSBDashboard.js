@@ -17,7 +17,9 @@ $(document).ready(function () {
   var spinner = $("input.spinner").spinner({
     change: function (event, ui) {
       if (Timers['getStatus']) window.clearTimeout(Timers['getStatus']);
-    Timers['getStatus'] = window.setTimeout(RequestFilterData, 1 * 1000);
+      Timers['getStatus'] = window.setTimeout(RequestFilterData, 1 * 1000);
+
+      AutoUpdateZone($(this));
     //console.log("Setting Timer ID : " + RefreshTimer);
   }
   });
@@ -34,7 +36,36 @@ $(document).ready(function () {
   Timers['getStatus'] = window.setTimeout(getStatus, UpdateDelay, _ADSBLayer);
   //Timers['getChartData'] = window.setTimeout(getChartData, UpdateDelay);
 
+
 });
+
+function AutoUpdateZone(Elem) {
+  if (Elem.length < 1) return;
+  var Value = parseFloat(Elem.val());
+  if (isNaN(Value)) Value = 0;
+  var AlertPercentage = 80;
+  var BreachPercentage = 80;
+  switch (Elem[0].id) {
+    case 'hSafe':
+      if (Value == 0) Value = 10;
+      $('#hAlert').val((Value * AlertPercentage / 100).toFixed(1));
+      $('#hBreach').val((Value * BreachPercentage / 100).toFixed(1));
+      break;
+    case 'hAlert':
+      if (Value == 0) Value = 8;
+      var Safe = Value * (1 / AlertPercentage) * 100;
+      var Breach = Safe * BreachPercentage / 100;
+      $('#hSafe').val(Safe.toFixed(1));
+      $('#hBreach').val(Breach.toFixed(1));
+    case 'hBreach':
+      if (Value == 0) Value = 5;
+      var Safe = Value * (1 / BreachPercentage) * 100;
+      var Alert = Safe * AlertPercentage / 100;
+      $('#hSafe').val(Safe.toFixed(1));
+      $('#hAlert').val(Alert.toFixed(1));
+
+  }
+}
 
 function InitScroll() {
   var DisplayArea = 40;
