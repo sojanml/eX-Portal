@@ -130,10 +130,13 @@ namespace eX_Portal.exLogic {
 
 
     private StringBuilder toScriptArray(String Coordinates) {
+      StringBuilder thisCord = new StringBuilder();
+      if (String.IsNullOrEmpty(Coordinates))
+        return thisCord;
+
       Coordinates = Coordinates.Replace("POLYGON ((", "");
       Coordinates = Coordinates.Replace("))", "");
 
-      StringBuilder thisCord = new StringBuilder();
       foreach (String LatLng in Coordinates.Split(',')) {
         var tLatLng = LatLng.Trim();
         String[] temp = tLatLng.Split(' ');

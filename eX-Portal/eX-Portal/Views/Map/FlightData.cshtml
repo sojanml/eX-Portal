@@ -10,6 +10,7 @@
   }
   int FlightID = ViewBag.FlightID;
 }
+
 @Html.Action("DroneFlightDetail", "DroneFlight", new { ID = ViewBag.FlightID })
 
 <div id="drone-map-info">

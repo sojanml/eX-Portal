@@ -43,7 +43,7 @@ namespace eX_Portal.Controllers {
         tblPilot.FirstName AS PilotName,
         tblGSC.FirstName AS GCSName,
         FlightDate AS 'FlightDate',
-        ApprovalName,
+        ISNULL(g.ApprovalName,'NO NOC') as ApprovalName,
         " + (exLogic.User.hasAccess("FLIGHT.VIDEOS") ? SQLVideo : "") + @"
         Count(*) OVER () AS _TotalRecords,
         DroneFlight.ID AS _PKey
@@ -510,7 +510,7 @@ namespace eX_Portal.Controllers {
       PilotFormat = "<a href='/Pilot/PilotDetail/" + UserId + "'>" + Util.GetPilotFromFlight(ID) + "</a>";//url
       theView.FormatCols.Add("RPAS", UASFormat); //Adding the Column required for formatting  
       theView.FormatCols.Add("PilotName", PilotFormat); // //Adding the Column required for formatting  
-
+      /*
       SQL = @"
       SELECT 
         Count([DroneCheckList].[ID]) as FlightCheckList
@@ -550,6 +550,7 @@ namespace eX_Portal.Controllers {
         "Your Regulatory Authorization: " + getUploadedDocs(ID) +
         "</div>";
       }
+      */
       return UploadedDocs + CheckListMessage + theView.getTable();
 
 
