@@ -14,33 +14,23 @@ namespace Exponent.ADSB {
   }
 
 public class ADSBQuery {
-    private Double _vSafe = 0;
-    private Double _vAlert = 0;
-    private Double _vBreach = 0;
+
 
     public Double ATCRadious { get; set; }
     public Double hSafe { get; set; }
     public Double hAlert { get; set; }
     public Double hBreach { get; set; }
+    public Double vSafe { get; set; }
+    public Double vAlert { get; set; }
+    public Double vBreach { get; set; }
     public int tracking_adsb_commercial { get; set; }
     public int tracking_adsb_rpas { get; set; }
     public int tracking_adsb_skycommander { get; set; }
     public int adsb_omdb { get; set; }
     public int adsb_omdw { get; set; }
     public int adsb_omsj { get; set; }
+    public int IsQueryChanged { get; set; }
 
-    public Double vSafe {
-      get {return _vSafe;}
-      set { _vSafe = value;  }
-    }
-    public Double vAlert {
-      get { return _vAlert; }
-      set { _vAlert = value;  }
-    }
-    public Double vBreach {
-      get { return _vBreach; }
-      set { _vBreach = value; }
-    }
 
     public ADSBQuery() {
       ATCRadious = 150;
@@ -56,6 +46,85 @@ public class ADSBQuery {
       adsb_omdb = 0;
       adsb_omdw = 0;
       adsb_omsj = 0;
+      IsQueryChanged = 0;
+    }
+
+    public bool GetDefaults(SqlConnection CN) {
+      String SQL = "SELECT SettingKey, SettingValue FROM ADSBSettings";
+      using(SqlCommand cmd = new SqlCommand(SQL, CN)) {
+        using(SqlDataReader RS = cmd.ExecuteReader()) {
+          while(RS.Read()) {
+            String SettingKey = RS["SettingKey"].ToString();
+            Double.TryParse(RS["SettingValue"].ToString(), out Double Value);
+            switch (SettingKey.ToLower()) {
+            case "atcradious":
+              if (Value > 0) this.ATCRadious = Value;
+              break;
+            case "hsafe":
+              if (Value > 0) this.hSafe = Value;
+              break;
+            case "vsafe":
+              if (Value > 0) this.vSafe = Value;
+              break;
+            case "halert":
+              if (Value > 0) this.hAlert = Value;
+              break;
+            case "valert":
+              if (Value > 0) this.vAlert = Value;
+              break;
+            case "hbreach":
+              if (Value > 0) this.hBreach = Value;
+              break;
+            case "vbreach":
+              if (Value > 0) this.vBreach = Value;
+              break;
+            case "tracking_adsb_commercial":
+              if (Value > 0) this.tracking_adsb_commercial = (int)Value;
+              break;
+            case "tracking_adsb_rpas":
+              if (Value > 0) this.tracking_adsb_rpas = (int)Value;
+              break;
+            case "tracking_adsb_skycommander":
+              if (Value > 0) this.tracking_adsb_skycommander = (int)Value;
+              break;
+            case "adsb_omdb":
+              if (Value > 0) this.adsb_omdb = (int)Value;
+              break;
+            case "adsb_omdw":
+              if (Value > 0) this.adsb_omdw = (int)Value;
+              break;
+            case "adsb_omsj":
+              if (Value > 0) this.adsb_omsj = (int)Value;
+              break;
+            }//switch
+          }//while(RS.Read)
+        }//using(SqlDataReader RS)
+      }//using(SqlCommand cmd)
+      return true;
+    }
+
+    public bool SetDefaults(SqlConnection CN) {
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={hSafe} WHERE SettingKey='hSafe'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={vSafe} WHERE SettingKey='vSafe'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={hAlert} WHERE SettingKey='hAlert'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={vAlert} WHERE SettingKey='vAlert'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={hBreach} WHERE SettingKey='hBreach'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={vBreach} WHERE SettingKey='vBreach'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={tracking_adsb_commercial} WHERE SettingKey='tracking_adsb_commercial'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={tracking_adsb_rpas} WHERE SettingKey='tracking_adsb_rpas'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={tracking_adsb_skycommander} WHERE SettingKey='tracking_adsb_skycommander'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={adsb_omdb} WHERE SettingKey='adsb_omdb'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={adsb_omdw} WHERE SettingKey='adsb_omdw'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={adsb_omsj} WHERE SettingKey='adsb_omsj'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={ATCRadious} WHERE SettingKey='atcradious'");
+      return true;
+    }
+
+    private bool SetDefaults(SqlConnection CN, String SQL) {
+      using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
+        cmd.ExecuteNonQuery();
+      }
+    return true;
     }
 
     public String getTrackingFilter() {
@@ -75,6 +144,7 @@ public class ADSBQuery {
       return TheFilter;
     }
   }
+
   public class FlightPosition {
     public String FlightID { get; set; }
     public Double Heading { get; set; }

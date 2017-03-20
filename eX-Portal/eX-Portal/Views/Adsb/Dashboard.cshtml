@@ -1,4 +1,4 @@
-﻿
+﻿@model Exponent.ADSB.ADSBQuery
 @{
   ViewBag.Title = "Dashboard";
   Layout = "~/Views/Shared/_ADSB.cshtml";
@@ -12,18 +12,18 @@
         <td valign="top" class="shaded">
           <div class="title"><b>Tracking</b> (Select Receving Options)</div>
           <ul class="simple-list">
-            <li><input class="query" checked value="1" type="checkbox" name="tracking_adsb_commercial" id="tracking_adsb_commercial" /><label for="tracking_adsb_commercial">ADSB Commercial</label> </li>
-            <li><input class="query" checked value="1" type="checkbox" name="tracking_adsb_rpas" id="tracking_adsb_rpas" /><label for="tracking_adsb_rpas">ADSB RPAS</label></li>
-            <li><input class="query" value="1" type="checkbox" name="tracking_adsb_skycommander" id="tracking_adsb_skycommander" /><label for="tracking_adsb_skycommander">Skycommander RPAS</label></li>
+            <li><input class="query" @(Model.tracking_adsb_commercial == 1 ? "checked" : "") value ="1" type="checkbox" name="tracking_adsb_commercial" id="tracking_adsb_commercial" /><label for="tracking_adsb_commercial">ADSB Commercial</label> </li>
+            <li><input class="query" @(Model.tracking_adsb_rpas == 1 ? "checked" : "") value="1" type="checkbox" name="tracking_adsb_rpas" id="tracking_adsb_rpas" /><label for="tracking_adsb_rpas">ADSB RPAS</label></li>
+            <li><input class="query" @(Model.tracking_adsb_skycommander == 1 ? "checked" : "") value="1" type="checkbox" name="tracking_adsb_skycommander" id="tracking_adsb_skycommander" /><label for="tracking_adsb_skycommander">Skycommander RPAS</label></li>
           </ul>
           <div class="hr"></div>
           <div class="title">
-            <b>ATC Radius</b> <input class="spinner" type="text" id="ATCRadious" value="150" name="ATCRadious" /> KM
+            <b>ATC Radius</b> <input class="spinner" type="text" id="ATCRadious" value="@Model.ATCRadious" name="ATCRadious" /> KM
           </div>
           <ul class="multi-select">
-            <li><input class="query" value="1" checked type="checkbox" name="adsb_omdb" id="adsb_omdb" /><label title="Dubai International Airport – Dubai" for="adsb_omdb">OMDB</label> </li>
-            <li><input class="query" value="1" checked type="checkbox" name="adsb_omdw" id="adsb_omdw" /><label title="Al Maktoum International Airport – Dubai" for="adsb_omdw">OMDW</label></li>
-            <li><input class="query" value="1" type="checkbox" name="adsb_omsj" id="adsb_omsj" /><label title="Sharjah International Airport – Sharjah" for="adsb_omsj">OMSJ</label></li>
+            <li><input class="query" value="1" @(Model.adsb_omdb == 1 ? "checked" : "") type="checkbox" name="adsb_omdb" id="adsb_omdb" /><label title="Dubai International Airport – Dubai" for="adsb_omdb">OMDB</label> </li>
+            <li><input class="query" value="1" @(Model.adsb_omdw == 1 ? "checked" : "") type="checkbox" name="adsb_omdw" id="adsb_omdw" /><label title="Al Maktoum International Airport – Dubai" for="adsb_omdw">OMDW</label></li>
+            <li><input class="query" value="1" @(Model.adsb_omsj == 1 ? "checked" : "") type="checkbox" name="adsb_omsj" id="adsb_omsj" /><label title="Sharjah International Airport – Sharjah" for="adsb_omsj">OMSJ</label></li>
           </ul>
         </td>
         <td class="spacer"></td>
@@ -34,34 +34,34 @@
             <tr>
               <td rowspan="2"><div class="safe traffic_stat"><div class="vertical">Safe</div></div> </td>
               <td>Define Horizontal Separation</td>
-              <td><input id="hSafe" class="spinner" value="10" name="hSafe" type="text" /></td>
+              <td><input id="hSafe" class="spinner" value="@Model.hSafe" name="hSafe" type="text" /></td>
               <td>KM</td>
             </tr>
             <tr>
               <td>Define Vertical Separation</td>
-              <td><input id="vSafe" class="spinner" value="1000" name="vSafe" type="text" /></td>
+              <td><input id="vSafe" class="spinner" value="@Model.vSafe" name="vSafe" type="text" /></td>
               <td>Feet</td>
             </tr>
             <tr>
               <td rowspan="2"><div class="alert traffic_stat"><div class="vertical">Alert</div></div></td>
               <td>Define Horizontal Separation</td>
-              <td><input id="hAlert" class="spinner" value="8" name="hAlert" type="text" /></td>
+              <td><input id="hAlert" class="spinner" value="@Model.hAlert" name="hAlert" type="text" /></td>
               <td>KM</td>
             </tr>
             <tr>
               <td>Define Vertical Separation</td>
-              <td><input id="vAlert" class="spinner" value="1000" name="vAlert" type="text" /></td>
+              <td><input id="vAlert" class="spinner" value="@Model.vAlert" name="vAlert" type="text" /></td>
               <td>Feet</td>
             </tr>
             <tr>
               <td rowspan="2"><div class="breach traffic_stat"><div class="vertical">Breach</div></div></td>
               <td>Define Horizontal Separation</td>
-              <td><input id="hBreach" class="spinner" value="8" name="hBreach" type="text" /></td>
+              <td><input id="hBreach" class="spinner" value="@Model.hBreach" name="hBreach" type="text" /></td>
               <td>KM</td>
             </tr>
             <tr>
               <td>Define Vertical Separation</td>
-              <td><input id="vBreach" class="spinner" value="500" name="vBreach" type="text" /></td>
+              <td><input id="vBreach" class="spinner" value="@Model.vBreach" name="vBreach" type="text" /></td>
               <td>Feet</td>
             </tr>
           </table>

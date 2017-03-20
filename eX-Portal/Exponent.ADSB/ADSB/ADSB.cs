@@ -132,6 +132,10 @@ namespace Exponent.ADSB {
           RS.Close();
         }//using (var Cmd)
 
+        //Save changes to query data if updated.
+        if (QueryData.IsQueryChanged == 1) {
+          QueryData.SetDefaults(CN);
+        }
 
         CN.Close();
       }//using (CN)

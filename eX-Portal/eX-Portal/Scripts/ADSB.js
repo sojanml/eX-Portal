@@ -39,7 +39,11 @@ function getADSB(ADSBObj) {
 
 
 function getStatus(ADSBObj) {
-  var QueryData = $('input.spinner, input.query').serialize();
+  var QueryData =
+    $('input.spinner, input.query').serialize() +
+    '&IsQueryChanged=' + IsQueryChanged;
+  IsQueryChanged = 0;
+
   //$("input.spinner").spinner("disable");
 
   $.ajax({
@@ -49,7 +53,6 @@ function getStatus(ADSBObj) {
     success: function (data) {
       //console.log(data);
       setStatusSummary(data, ADSBObj);
-
     },
     error: function (data, text) {
       //alert('Failed to fetch flight: ' + data);

@@ -3,6 +3,8 @@ var RefreshTimer = null;
 var LastProcessedID = null;
 var ChartIndex = 0;
 var UpdateDelay = 5 * 1000;
+var IsQueryChanged = 0;
+
 var Timers = {
   getADSB: null,
   getStatus: null,
@@ -20,6 +22,7 @@ $(document).ready(function () {
       Timers['getStatus'] = window.setTimeout(RequestFilterData, 1 * 1000);
 
       AutoUpdateZone($(this));
+      IsQueryChanged = 1;
     //console.log("Setting Timer ID : " + RefreshTimer);
   }
   });
@@ -27,6 +30,7 @@ $(document).ready(function () {
   var CheckBox = $('input.query').on("change", function () {
     if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
     Timers['getADSB'] = window.setTimeout(getADSB, 1 * 1000, _ADSBLayer);
+    IsQueryChanged = 1;
   });
 
 
@@ -43,8 +47,8 @@ function AutoUpdateZone(Elem) {
   if (Elem.length < 1) return;
   var Value = parseFloat(Elem.val());
   if (isNaN(Value)) Value = 0;
-  var AlertPercentage = 80;
-  var BreachPercentage = 80;
+  var AlertPercentage = 75;
+  var BreachPercentage = 50;
   switch (Elem[0].id) {
     case 'hSafe':
       if (Value == 0) Value = 10;
