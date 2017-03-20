@@ -51,11 +51,12 @@ public class ADSBQuery {
 
     public bool GetDefaults(SqlConnection CN) {
       String SQL = "SELECT SettingKey, SettingValue FROM ADSBSettings";
-      using(SqlCommand cmd = new SqlCommand(SQL, CN)) {
+      Double Value = 0;
+      using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
         using(SqlDataReader RS = cmd.ExecuteReader()) {
           while(RS.Read()) {
             String SettingKey = RS["SettingKey"].ToString();
-            Double.TryParse(RS["SettingValue"].ToString(), out Double Value);
+            Double.TryParse(RS["SettingValue"].ToString(), out Value);
             switch (SettingKey.ToLower()) {
             case "atcradious":
               if (Value > 0) this.ATCRadious = Value;
