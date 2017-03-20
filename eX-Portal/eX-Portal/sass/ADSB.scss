@@ -859,6 +859,20 @@ div.adsb-point {
     span.flight-title,
     span.tail {
       background-color: #018aff;
+    } 
+     
+    &.breach {
+      span.flight-title,
+      span.tail {
+        background-color: red;
+      }
+    }
+
+    &.alert {
+      span.flight-title,
+      span.tail {
+        background-color: #ff4e00;
+      }
     }
   }
 

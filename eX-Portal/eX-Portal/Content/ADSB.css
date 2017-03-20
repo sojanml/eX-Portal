@@ -617,6 +617,14 @@ div.adsb-point.drone span.flight-title,
 div.adsb-point.drone span.tail {
   background-color: #018aff;
 }
+div.adsb-point.drone.breach span.flight-title,
+div.adsb-point.drone.breach span.tail {
+  background-color: red;
+}
+div.adsb-point.drone.alert span.flight-title,
+div.adsb-point.drone.alert span.tail {
+  background-color: #ff4e00;
+}
 
 div.adsb-history {
   color: white;

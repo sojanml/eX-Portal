@@ -889,12 +889,14 @@ namespace eX_Portal.Controllers {
           return "You do not have accesss to this page";
         if (flightsetupvm.DroneID == null || flightsetupvm.DroneID < 1)
           return "You must select a Drone.";
+        /*
         if (flightsetupvm.PilotUserId < 1 || flightsetupvm.PilotUserId == null)
-          return "You must select a pilot.";
+          return "You must select a GroundStaffUserId.";
+
         if (flightsetupvm.GroundStaffUserId < 1 || flightsetupvm.GroundStaffUserId == null)
           //   return RedirectToAction("NoAccess", "Home");
           return "A Ground staff should be selected.";
-
+        */
         string Email = "";
         if (flightsetupvm.NotificationEmails == null) {
           Email = "";
@@ -921,17 +923,26 @@ namespace eX_Portal.Controllers {
         if (flightsetupvm.MaxAltitude == null || flightsetupvm.MaxAltitude < 1) {
           return "Please enter Max Altitude.";
         }
-        if (flightsetupvm.IsUseCamara < 0)
+        if (flightsetupvm.IsUseCamara == null || flightsetupvm.IsUseCamara < 0)
           return "Please select camera being Used.";
-        if (flightsetupvm.IsUseCamara == 1 && (flightsetupvm.CameraId < 1 || flightsetupvm.CameraId == null)) {
-          return "Please select camera.";
-        }
+
         if (flightsetupvm.Coordinates == null) {
           return "Please select coordinates";
         }
-        if(flightsetupvm.BlackBoxID < 1) {
-          return "Please select a blackbox to assing";
+        if(flightsetupvm.ApprovalStatus == "Approved" && flightsetupvm.BlackBoxID < 1) {
+          return "Please select a Sky Commander from dropdown";
         }
+
+        var Approval = db.GCA_Approval.Where(e => e.ApprovalID == flightsetupvm.ApprovalID).FirstOrDefault();
+        if (Approval == null) {
+          return "System Error. Approval not found on the system....";
+        }
+        if (flightsetupvm.GroundStaffUserId == null)
+          flightsetupvm.GroundStaffUserId = Approval.GroundStaffUserId;
+        if (flightsetupvm.GroundStaffUserId == null)
+          flightsetupvm.GroundStaffUserId = 0;
+        if (String.IsNullOrEmpty(flightsetupvm.NotificationEmails))
+          flightsetupvm.NotificationEmails = String.Empty;
 
         String SQL = String.Empty;
         var StartDate = (flightsetupvm.StartDate == null ? DateTime.Now.AddDays(-1) : (DateTime)flightsetupvm.StartDate);
@@ -959,14 +970,15 @@ namespace eX_Portal.Controllers {
           MinAltitude = " + MinAltitude + @",
           MaxAltitude = " + MaxAltidute + @",
           IsUseCamara= " + flightsetupvm.IsUseCamara + @",
-          PilotUserId=" + flightsetupvm.PilotUserId + @",
           GroundStaffUserId=" + flightsetupvm.GroundStaffUserId + @",
-          NotificationEmails='" + flightsetupvm.NotificationEmails + @"',
-          CameraId='" + flightsetupvm.CameraId + @"',
+          NotificationEmails='" + (flightsetupvm.NotificationEmails == null ? "" : flightsetupvm.NotificationEmails) + @"',
           ApprovalStatus = '" + flightsetupvm.ApprovalStatus + @"', 
           ApprovalRemarks = '" + flightsetupvm.ApprovalRemarks + @"'
         where 
           ApprovalID=" + flightsetupvm.ApprovalID;
+        Util.doSQL(SQL);
+
+
 
         int DroneID = Util.toInt(flightsetupvm.DroneID);
         int BlackBoxID = flightsetupvm.BlackBoxID;
@@ -990,7 +1002,7 @@ namespace eX_Portal.Controllers {
         SQL = @"update 
           MSTR_Drone_Setup 
         set 
-          PilotUserId=" + flightsetupvm.PilotUserId + @",
+          PilotUserId=" + Approval.PilotUserId + @",
           GroundStaffUserId=" + flightsetupvm.GroundStaffUserId + @",        
           [ModifiedBy]=" + Util.getLoginUserID() + @",
           [ModifiedOn]=GETDATE(),
@@ -999,34 +1011,31 @@ namespace eX_Portal.Controllers {
           [DroneId]=" + DroneID;
         Util.doSQL(SQL);
 
-        SQL = $@"insert into blackboxtransaction(
-          DroneID,BBstatus,Note,createdby,Blackboxid,amount,rentamount,RentStartDate,RentEndDate
-          ) values( {DroneID},'OUT','',{Util.getLoginUserID()},{BlackBoxID},0,0,'{sStartDate}','{sEndDate}')";        
-        int bbtransctionid = Util.InsertSQL(SQL);
+        if(flightsetupvm.ApprovalStatus == "Approved") { 
+          SQL = $@"insert into blackboxtransaction(
+            DroneID,BBstatus,Note,createdby,Blackboxid,amount,rentamount,RentStartDate,RentEndDate
+            ) values( {DroneID},'OUT','',{Util.getLoginUserID()},{BlackBoxID},0,0,'{sStartDate}','{sEndDate}')";        
+          int bbtransctionid = Util.InsertSQL(SQL);
 
-        SQL = $@"update MSTR_BlackBox  set 
-          [LastRentalId]= {bbtransctionid}, 
-          CurrentStatus='OUT',
-          CurrentUserID = {Util.getLoginUserID()},
-          CurrentDroneID={DroneID}
-        where 
-          BlackBoxID = {BlackBoxID}";
-        int Val = Util.doSQL(SQL);
+          SQL = $@"update MSTR_BlackBox  set 
+            [LastRentalId]= {bbtransctionid}, 
+            CurrentStatus='OUT',
+            CurrentUserID = {Util.getLoginUserID()},
+            CurrentDroneID={DroneID}
+          where 
+            BlackBoxID = {BlackBoxID}";
+          int Val = Util.doSQL(SQL);
 
-        SQL = $"update MSTR_Drone set BlackBoxID={BlackBoxID} where DroneId = {DroneID}";
-        Val = Util.doSQL(SQL);
+          SQL = $"update MSTR_Drone set BlackBoxID={BlackBoxID} where DroneId = {DroneID}";
+          Val = Util.doSQL(SQL);
+        }//if(flightsetupvm.ApprovalStatus == "Approved")
 
-        return "OK|/rpas/appovals";
+        return "OK|/Rpas/Applications/";
       } catch (Exception ex) {
         return ex.Message;
       }
-    }
-
-
-    //*****END **************************
-
-
-
+    }//public string FlightApproval
+    
 
     public ActionResult FlightRegister([Bind(Prefix = "ID")]int ID = 0) {
       //to create gcaapproval

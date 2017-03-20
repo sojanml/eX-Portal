@@ -541,8 +541,8 @@ namespace eX_Portal.Models {
     [Display(Name = "Approval Remarks")]
     public string ApprovalRemarks { get; set; }
 
-    [Required(ErrorMessage = "Please select a Black Box to Assign")]
-    [Display(Name = "Assign Black Box")]
+    [Required(ErrorMessage = "Please select a Sky Commander to Assign")]
+    [Display(Name = "Assign Sky Commander")]
     public int BlackBoxID { get; set; }
   }
 

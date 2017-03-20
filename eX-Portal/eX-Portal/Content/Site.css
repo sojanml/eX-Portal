@@ -1214,6 +1214,7 @@ div.two-column-form-group div.form-group {
 div.two-column-form-group:after {
   content: "";
   clear: both;
+  display:block;
 }
 
 select.ui-datepicker-month,

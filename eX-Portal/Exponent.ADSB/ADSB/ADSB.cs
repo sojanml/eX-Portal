@@ -12,11 +12,12 @@ using System.Reflection;
 
 namespace Exponent.ADSB {
   public class Live {
+    private Double FeetToKiloMeter = 0.0003048;
 
     private const String APIKey = "";
     private const String ApiID = "";
     private SqlConnection CN;
-    private const int NewFlightTime = 5;
+    private const int NewFlightTime = 8;
     private bool isDemoMode = false;
     public List<FlightPosition> FlightStat(String DSN, bool DemoMode = false, ADSBQuery QueryData = null)  {
       var Data = new List<FlightPosition>();
@@ -71,31 +72,24 @@ namespace Exponent.ADSB {
       }//using (CN)
 
 
-
-
-
-
-
       return TheSummary;
     }
     public List<FlightStatus> GetFlightStatus(String DSN, Exponent.ADSB.ADSBQuery QueryData) {
       var Dist = new List<FlightStatus>();
-      String SQL = @"Select 
+      String SQL = $@"Select 
         ADSBDetail.FromFlightID,
         ADSBDetail.ToFlightID,
         ADSBDetail.VerticalDistance,
         ADSBDetail.HorizontalDistance,
         CASE
-          WHEN HorizontalDistance <= " + QueryData.hBreach + " AND VerticalDistance <= " + QueryData.vBreach + @" Then 'Breach'
-          WHEN HorizontalDistance <= " + QueryData.hAlert + " AND VerticalDistance <= " + QueryData.vAlert + @" Then 'Alert'
+          WHEN HorizontalDistance <= {QueryData.hBreach} AND VerticalDistance <= {QueryData.vBreach * FeetToKiloMeter} Then 'Breach'
+          WHEN HorizontalDistance <= {QueryData.hAlert} AND VerticalDistance <= {QueryData.vAlert * FeetToKiloMeter} Then 'Alert'
           Else 'Safe'
         END as StatusModel
       FROM
         ADSBDetail
-      Where
-        ADSBDetail.HorizontalDistance <= " + QueryData.hSafe + @" AND
-        ADSBDetail.VerticalDistance <= " + QueryData.vSafe;
-
+      WHERE
+        HorizontalDistance <= {QueryData.hAlert} AND VerticalDistance <= {QueryData.vAlert * FeetToKiloMeter}";
 
       using (CN = new SqlConnection(DSN)) {
         CN.Open();
@@ -112,6 +106,33 @@ namespace Exponent.ADSB {
           }//while
           RS.Close();
         }//using (var Cmd)
+
+        //Find the safe operating RPS - not in above condition
+        var FromFlightIDs = Dist.Select(e => $"'{e.FromFlightID}'").ToArray();
+        var AllIDs = String.Join(",", FromFlightIDs);
+
+        SQL = $@"Select DISTINCT ADSBDetail.FromFlightID
+          FROM
+            ADSBDetail
+          WHERE
+            HorizontalDistance <= {QueryData.hSafe} AND VerticalDistance <= {QueryData.vSafe * FeetToKiloMeter}";
+        if(!String.IsNullOrWhiteSpace(AllIDs)) SQL = SQL + $"AND ADSBDetail.FromFlightID NOT IN ({AllIDs})";
+
+        using (var Cmd = new SqlCommand(SQL, CN)) {
+          var RS = Cmd.ExecuteReader();
+          while (RS.Read()) {
+            Dist.Add(new FlightStatus {
+              FromFlightID = RS["FromFlightID"].ToString(),
+              ToFlightID = "",
+              vDistance = 0,
+              hDistance = 0,
+              Status = "Safe"
+            });
+          }//while
+          RS.Close();
+        }//using (var Cmd)
+
+
         CN.Close();
       }//using (CN)
       return Dist;
@@ -303,6 +324,8 @@ namespace Exponent.ADSB {
       if (Now.Hour < 2 || Now.Hour >= 14) {
         return FlightPositions;
       }
+
+      //return FlightPositions;
 
       /*
         "{> alt 5} " +

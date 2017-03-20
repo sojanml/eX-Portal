@@ -158,7 +158,6 @@ function ADSBOverlay(options, ADSBData) {
   this.ADSBLines = {};
   this.SavedLineReferece = null;
 
-
   this.getIconColor = function (Height) {
     var Colors = [
     '#FF0000', //Red
@@ -176,9 +175,19 @@ function ADSBOverlay(options, ADSBData) {
 
   this.getIconClass = function (FlightID) {
     var IsDrone = (FlightID.substr(0, 3) == 'A00');
-    return IsDrone ? 'drone' : 'normal';
-  }
+    var ClassName = 'normal';
+    //return IsDrone ? 'drone' : 'normal';
 
+    if ((FlightID.substr(0, 3) === 'A00')) {
+      ClassName = 'drone';
+      if (StatusInfo['Breach']['RPAS'] && FlightID in StatusInfo['Breach']['RPAS']) {
+        ClassName = 'drone breach';
+      } else if (StatusInfo['Alert']['RPAS'] && FlightID in StatusInfo['Alert']['RPAS']) {
+        ClassName = 'drone alert';
+      }      
+    }
+    return ClassName;
+  }
 
   this.GetAllFlights = function() {
     var FlightRef = {};
@@ -208,13 +217,28 @@ function ADSBOverlay(options, ADSBData) {
 
   this.getIconFor = function (FlightID, Angle) {
     var IsDrone = (FlightID.substr(0, 3) == 'A00');
+   
     var ReturnHTML = '';
-    if(IsDrone) {
-      ReturnHTML = '<span class="icon DroneIcon" style=" transform: rotate(' + Angle + 'deg);"><img src="/images/Drone.png" width="25" height="25"/></span>'
+    var Icon = this.getIconImage(FlightID);
+    if (IsDrone) {
+      ReturnHTML = '<span class="icon DroneIcon" style=" transform: rotate(' + Angle + 'deg);"><img src="' + Icon + '" width="25" height="25"/></span>'
     } else {
-      ReturnHTML = '<span class="icon FlightIcon" style=" transform: rotate(' + Angle + 'deg);"><img src="/images/Airline.png" width="25" height="25"/></span>'
+      ReturnHTML = '<span class="icon FlightIcon" style=" transform: rotate(' + Angle + 'deg);"><img src="' + Icon + '" width="25" height="25"/></span>'
     }
     return ReturnHTML;
+  }
+
+  this.getIconImage = function(FlightID) {
+    var Icon = '/images/Airline.png';
+    if ((FlightID.substr(0, 3) === 'A00')) {
+      Icon = '/images/Drone.png';
+      if (StatusInfo['Breach']['RPAS'] && FlightID in StatusInfo['Breach']['RPAS']) {
+        Icon = '/images/Drone-breach.png';
+      } else if (StatusInfo['Alert']['RPAS'] && FlightID in StatusInfo['Alert']['RPAS']) {
+        Icon = '/images/Drone-alert.png';
+      }
+    }
+    return Icon;
   }
 
   this.DrawLinesOf = function (LineReferece) {
@@ -233,24 +257,27 @@ function ADSBOverlay(options, ADSBData) {
         var CenterPos = { lat: FromFlight.Lat, lng: FromFlight.Lon };
         LineReferece[RpasID].forEach(function (AircraftID, index, array) {
           var toFlight = AllFlights[AircraftID];
-          var newPos = { lat: toFlight.Lat, lng: toFlight.Lon };
-          var LineKey = RpasID + "_" + AircraftID;
-          var LinePath = [CenterPos, newPos];
-          DrawingLineKeys.push(LineKey);
-          if (ADSBLines[LineKey] == undefined) {
-            var flightPath = new google.maps.Polyline({
-              path: LinePath,
-              geodesic: true,
-              strokeColor: '#fe0000',
-              strokeOpacity: 1,
-              strokeWeight: 1
-            });
-            flightPath.setMap(this.map);
-            ADSBLines[LineKey] = flightPath;
+          if (toFlight == undefined) {
+            //nothing
           } else {
-            ADSBLines[LineKey].setPath(LinePath);
-          }//if (ADSBLines[RpasID + "_" + AircraftID] == undefined) {
-
+            var newPos = { lat: toFlight.Lat, lng: toFlight.Lon };
+            var LineKey = RpasID + "_" + AircraftID;
+            var LinePath = [CenterPos, newPos];
+            DrawingLineKeys.push(LineKey);
+            if (ADSBLines[LineKey] == undefined) {
+              var flightPath = new google.maps.Polyline({
+                path: LinePath,
+                geodesic: true,
+                strokeColor: '#fe0000',
+                strokeOpacity: 1,
+                strokeWeight: 1
+              });
+              flightPath.setMap(this.map);
+              ADSBLines[LineKey] = flightPath;
+            } else {
+              ADSBLines[LineKey].setPath(LinePath);
+            }//if (ADSBLines[RpasID + "_" + AircraftID] == undefined) {
+          }
         });//foreach
       }//if (FromFlight == undefined) 
     });//foreach
@@ -297,7 +324,6 @@ ADSBOverlay.prototype.draw = function () {
   if (!projection) return false;
   this.DrawCount++;
 
-
   for (var i = 0; i < this.ADSBData.length; i++) {
     var lat = this.ADSBData[i].Lat;
     var lng = this.ADSBData[i].Lon;
@@ -306,9 +332,6 @@ ADSBOverlay.prototype.draw = function () {
     var heading = this.ADSBData[i].Heading;
     heading = parseFloat(heading);
     if (isNaN(heading)) heading = 0;
-
-
-
 
     // Determine a random location from the bounds set previously  
     var IconGeoPos = new google.maps.LatLng(lat, lng)
@@ -325,6 +348,7 @@ ADSBOverlay.prototype.draw = function () {
       $point.attr('class', 'adsb-point ' + IconClass);
       $point.find(".icon").css({ transform: 'rotate(' + (heading) + 'deg)' });
       $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });
+      $point.find('img').attr('src', this.getIconImage(title));
     } else {
       var Icon = this.getIconFor(title, heading);
       var $NewPoint = $(
@@ -354,7 +378,7 @@ ADSBOverlay.prototype.draw = function () {
 
   }//for (var i = 0)
 
-  //if the item does not exists in 20 request, then remove it from the screen
+  //if the item does not exists, then remove it from the screen
   var AllKeys = Object.keys(this.gADSBData);
   for (i = 0; i < AllKeys.length; i++) {
     var TheKey = AllKeys[i];

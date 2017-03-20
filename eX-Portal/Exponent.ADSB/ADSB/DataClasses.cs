@@ -14,7 +14,6 @@ namespace Exponent.ADSB {
   }
 
 public class ADSBQuery {
-    private Double FeetToKiloMeter = 0.0003048;
     private Double _vSafe = 0;
     private Double _vAlert = 0;
     private Double _vBreach = 0;
@@ -32,15 +31,15 @@ public class ADSBQuery {
 
     public Double vSafe {
       get {return _vSafe;}
-      set { _vSafe = value * FeetToKiloMeter; }
+      set { _vSafe = value;  }
     }
     public Double vAlert {
       get { return _vAlert; }
-      set { _vAlert = value * FeetToKiloMeter; }
+      set { _vAlert = value;  }
     }
     public Double vBreach {
       get { return _vBreach; }
-      set { _vBreach = value * FeetToKiloMeter; }
+      set { _vBreach = value; }
     }
 
     public ADSBQuery() {

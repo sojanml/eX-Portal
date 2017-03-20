@@ -13,7 +13,7 @@
 <h2>RPAS Details</h2>
 @Html.Action("DroneDetail", "Drone", new { ID = Model.DroneID })
 @using (Html.BeginForm(null, null, FormMethod.Post, new { name = "frmDroneSetup", id = "frmDroneSetup" })) {
-
+  
   @Html.AntiForgeryToken()
 
   @Html.HiddenFor(model => Model.ApprovalID)
@@ -152,23 +152,10 @@
         </div>
       </div>
 
-
       <div class="form-group">
-        <div class="col-md-10">
-          <p><font color="white">p</font></p>
-        </div>
       </div>
     </div>
 
-    <div id="cameraopt" style="display:none;padding:0px;">
-      <div class="form-group">
-        @Html.LabelFor(model => Model.CameraId, "Select Camera")
-        <div class="col-md-10">
-          @Html.DropDownListFor(model => Model.CameraId, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"), "--Select Camera--", new { @class = "form-control" })
-          @Html.ValidationMessageFor(model => Model.CameraId, "", new { @class = "text-danger" })
-        </div>
-      </div>
-    </div>
     @*
       <div id="othercamera" style="display:none">
         <div class="form-group">
@@ -248,8 +235,5 @@
   <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>
   <script src="~/Scripts/RpasApproval.js"></script>
 }
-
-
-
 
 
