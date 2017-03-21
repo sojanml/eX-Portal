@@ -330,11 +330,11 @@ namespace Exponent.ADSB {
       //2:00 to 14:00 GMT (24 Hour Clock)
       DateTime Now = DateTime.UtcNow;
       var FlightPositions = new List<FlightPosition>();
-      /*
+
       if (Now.Hour < 2 || Now.Hour >= 14) {
         return FlightPositions;
       }
-      */
+
       //return FlightPositions;
 
       /*
