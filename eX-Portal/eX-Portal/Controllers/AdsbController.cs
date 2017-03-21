@@ -16,9 +16,9 @@ namespace eX_Portal.Controllers {
       return Json(Data, JsonRequestBehavior.AllowGet);
     }
 
-    public JsonResult Summary(int LastProcessedID = 0) {
+    public JsonResult Summary(int LastProcessedID = 0, Double TimezoneOffset = 0) {
       var ADSB = new Exponent.ADSB.Live();
-      var Data = ADSB.GetSummary(DSN, LastProcessedID, 20);
+      var Data = ADSB.GetSummary(DSN, LastProcessedID, 20, TimezoneOffset);
       return Json(Data, JsonRequestBehavior.AllowGet);
     }
 

@@ -83,12 +83,16 @@ function setStatusSummary(StatusData, ADSBObj) {
   }//for
 
   ['Safe', 'Breach', 'Alert'].forEach(function (Stat, index, array) {
+    var RPASList = [];
     var aRPAS = Object.keys(StatusInfo[Stat]['RPAS']);
+    aRPAS.forEach(function (elem) {
+      RPASList.push(elem.replace('A00', 'SC0'));
+    })
     var aAircraft = Object.keys(StatusInfo[Stat]['Aircraft']);
     $('#' + Stat + '-Aircraft-Count').html(aAircraft.length);
     $('#' + Stat + '-RPAS-Count').html(aRPAS.length);
     $('#' + Stat + '-Aircraft').html(aAircraft.join(", "));
-    $('#' + Stat + '-RPAS').html(aRPAS.join(", "));
+    $('#' + Stat + '-RPAS').html(RPASList.join(", "));
   });
 
   var Flights = StatusInfo['Breach']['RPAS'];
@@ -109,7 +113,7 @@ function setStatusWatching(WatchingFlights) {
     var Flight = WatchingFlights[FlightIDs[i]];
     HTML += '<div class="row">\n' +
       '<div class="col1">' + toDate(Flight.ADSBDate) + '</div>\n' +
-      '<div class="col2">' + Flight.FlightID + '</div>\n' +
+      '<div class="col2">' + Flight.FlightID.replace('A00','SC0') + '</div>\n' +
       '<div class="col3">' + Flight.Lat + '</div>\n' +
       '<div class="col4">' + Flight.Lon + '</div>\n' +
       '<div class="col5">' + Flight.Speed + '</div>\n' +
@@ -361,8 +365,8 @@ ADSBOverlay.prototype.draw = function () {
         + 'data-alt="' + alt + '" '
         + 'data-ident="' + title + '" '
         + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
-        + Icon 
-        + '<span class="flight-title" style="">' + title + '</span>' +
+        + Icon
+        + '<span class="flight-title" style="">' + title.replace('A00','SC0') + '</span>' +
         + '</div>'
       );
       // Append the HTML to the fragment in memory  

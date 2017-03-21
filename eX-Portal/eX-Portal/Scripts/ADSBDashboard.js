@@ -142,14 +142,14 @@ function setChartData(ChartData) {
 
     var BarColor = 'red';
     var theData = {
-      y: DataItem.Alert,
+      y: DataItem.Breach,
       categories
     }; //{ y: , x: ], color: 'yellow' };
 
     LastProcessedID = DataItem.ID;
     //theChartSeries[0].xAxis.categories = categories;
     theChartSeries[1].addPoint(theData, false, isRemovePoints, false);
-    theChartSeries[0].addPoint([categories, DataItem.Breach], true, isRemovePoints, true);
+    theChartSeries[0].addPoint([categories, DataItem.Alert], true, isRemovePoints, true);
   }
 
 }
@@ -157,7 +157,8 @@ function setChartData(ChartData) {
 
 function getChartData() {
   //download data from the server
-  var URL = '/Adsb/Summary?LastProcessedID=' + LastProcessedID;
+  var d = new Date();
+  var URL = '/Adsb/Summary?LastProcessedID=' + LastProcessedID + '&TimezoneOffset=' + (-1 * d.getTimezoneOffset());
   var AJAX = $.ajax({
     url: URL,
     type: 'GET',

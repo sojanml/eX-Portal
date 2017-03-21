@@ -36,13 +36,19 @@ namespace Exponent.ADSB {
       return Data;
     }
 
-    public List<FlightSummary> GetSummary(String DSN, int LastProcessedID = 0, int MaxRecords = 20) {
+    public List<FlightSummary> GetSummary(String DSN, int LastProcessedID = 0, int MaxRecords = 20, Double TimezoneOffset = 0) {
       var TheSummary = new List<FlightSummary>();
-      String SQL = @"  SELECT
-        *
+      String SQL = $@"  SELECT
+       *
         FROM (
-          SELECT TOP " + MaxRecords + @" * FROM ADSBSummary";
-      if (LastProcessedID > 0) SQL = SQL + " WHERE ID > " + LastProcessedID;
+          SELECT TOP {MaxRecords} 
+            ID, 
+            DATEADD(MINUTE,{TimezoneOffset},SummaryDate) as SummaryDate,
+            BreachCount,
+            AlertCount
+          FROM 
+            ADSBSummary ";
+      if (LastProcessedID > 0) SQL = SQL + $" WHERE ID > {LastProcessedID}";
         SQL = SQL + @"
         ORDER BY 
           SummaryDate DESC
