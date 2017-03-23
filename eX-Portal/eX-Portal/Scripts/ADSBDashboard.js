@@ -55,21 +55,42 @@ function AutoUpdateZone(Elem) {
       $('#hAlert').val((Value * AlertPercentage / 100).toFixed(1));
       $('#hBreach').val((Value * BreachPercentage / 100).toFixed(1));
       break;
-    case 'hAlert':
-      if (Value == 0) Value = 8;
-      var Safe = Value * (1 / AlertPercentage) * 100;
-      var Breach = Safe * BreachPercentage / 100;
-      $('#hSafe').val(Safe.toFixed(1));
-      $('#hBreach').val(Breach.toFixed(1));
-    case 'hBreach':
-      if (Value == 0) Value = 5;
-      var Safe = Value * (1 / BreachPercentage) * 100;
-      var Alert = Safe * AlertPercentage / 100;
-      $('#hSafe').val(Safe.toFixed(1));
-      $('#hAlert').val(Alert.toFixed(1));
-
+      case 'hAlert':
+          if (Value == 0) Value = 8;
+          var Safe = Value * (1 / AlertPercentage) * 100;
+          var Breach = Safe * BreachPercentage / 100;
+          $('#hSafe').val(Safe.toFixed(1));
+          $('#hBreach').val(Breach.toFixed(1));
+          break;
+      case 'hBreach':
+          if (Value == 0) Value = 5;
+          var Safe = Value * (1 / BreachPercentage) * 100;
+          var Alert = Safe * AlertPercentage / 100;
+          $('#hSafe').val(Safe.toFixed(1));
+          $('#hAlert').val(Alert.toFixed(1));
+          break;
+      case 'vSafe':
+          if (Value == 0) Value = 10;
+          $('#vAlert').val((Value * AlertPercentage / 100).toFixed(1));
+          $('#vBreach').val((Value * BreachPercentage / 100).toFixed(1));
+          break;
+      case 'vAlert':
+          if (Value == 0) Value = 8;
+          var Safe = Value * (1 / AlertPercentage) * 100;
+          var Breach = Safe * BreachPercentage / 100;
+          $('#vSafe').val(Safe.toFixed(1));
+          $('#vBreach').val(Breach.toFixed(1));
+      case 'vBreach':
+          if (Value == 0) Value = 5;
+          var Safe = Value * (1 / BreachPercentage) * 100;
+          var Alert = Safe * AlertPercentage / 100;
+          $('#vSafe').val(Safe.toFixed(1));
+          $('#vAlert').val(Alert.toFixed(1));
   }
 }
+
+
+
 
 function InitScroll() {
   var DisplayArea = 40;
@@ -263,18 +284,18 @@ function InitChart() {
 
     series: [ {
       name: 'Alerts',
-      type: 'area',
+      type: 'areaspline',
       data: [],
-      color: '#E7E129',
+      color: '#ff4e00',
       lineWidth: 1,
-      fillOpacity: 0.5
+     // fillOpacity: 0.5
     }, {
       name: 'Breaches',
-      type: 'area',
+      type: 'areaspline',
       data: [],
       color: '#fe0000',
       lineWidth: 1,
-      fillOpacity: 0.5
+    //  fillOpacity: 0.5
 
     }]
   });
