@@ -1,9 +1,21 @@
-﻿var StatusInfo = {
+﻿var _InfoWindow = new google.maps.InfoWindow({
+  content: '<div id="InfoWindowContent">...</div>'
+});
+
+$(document).ready(function () {
+
+  $(document).on("click", "div.adsb-point img", function () {
+    var t = $(this).closest('div');
+    ShowInfoWindow(t);
+  });
+
+});
+var StatusInfo = {
   'Breach': {},
   'Alert': {},
   'Safe': {},
   WatchingFlights: {},
-  Reset: function() {
+  Reset: function () {
     this.Breach.Aircraft = {};
     this.Breach.RPAS = {};
     this.Alert.Aircraft = {};
@@ -12,7 +24,7 @@
     this.Safe.RPAS = {};
   },
   SetWatchingFlight: function (Data) {
-    WatchingFlights = Data;    
+    WatchingFlights = Data;
   }
 }
 
@@ -25,7 +37,7 @@ function getADSB(ADSBObj) {
     type: "GET",
     url: '/ADSB?' + QueryData,
     contentType: "application/json",
-    success: function(data) {
+    success: function (data) {
       ADSBObj.setADSB(data);
     },
     error: function (data, text) {
@@ -100,7 +112,7 @@ function setStatusSummary(StatusData, ADSBObj) {
   var TheDatas = ADSBObj.GetWatchingFlight()
 
   setStatusWatching(TheDatas);
-  
+
   //var AllFlights = ADSBObj.GetAllFlights();
   ADSBObj.DrawLinesOf(BreachRef);
 
@@ -113,7 +125,7 @@ function setStatusWatching(WatchingFlights) {
     var Flight = WatchingFlights[FlightIDs[i]];
     HTML += '<div class="row">\n' +
       '<div class="col1">' + toDate(Flight.ADSBDate) + '</div>\n' +
-      '<div class="col2">' + Flight.FlightID.replace('A00','SC0') + '</div>\n' +
+      '<div class="col2">' + Flight.FlightID.replace('A00', 'SC0') + '</div>\n' +
       '<div class="col3">' + Flight.Lat + '</div>\n' +
       '<div class="col4">' + Flight.Lon + '</div>\n' +
       '<div class="col5">' + Flight.Speed + '</div>\n' +
@@ -137,13 +149,13 @@ function toDate(JsonDate) {
   var ss = "0" + Dt.getSeconds();
 
 
-  var TheDate =  
-  dd.substring(dd.length - 2) + "-" +
-  Month[MM].substr(0,3) + "-" +
-  yyyy + "&nbsp;" +
-  HH.substring(HH.length - 2) + ":" +
-  mm.substring(mm.length - 2) + ":" +
-  ss.substring(ss.length - 2);
+  var TheDate =
+    dd.substring(dd.length - 2) + "-" +
+    Month[MM].substr(0, 3) + "-" +
+    yyyy + "&nbsp;" +
+    HH.substring(HH.length - 2) + ":" +
+    mm.substring(mm.length - 2) + ":" +
+    ss.substring(ss.length - 2);
 
   return TheDate;
 }
@@ -162,14 +174,14 @@ function ADSBOverlay(options, ADSBData) {
     this.GetWatchingFlight();
     this.draw();
   },
-  this.ADSBLines = {};
+    this.ADSBLines = {};
   this.SavedLineReferece = null;
 
   this.getIconColor = function (Height) {
     var Colors = [
-    '#FF0000', //Red
-    '#FF9600', //Yellow
-    '#00ff10' //Green
+      '#FF0000', //Red
+      '#FF9600', //Yellow
+      '#00ff10' //Green
     ];
     if (Height < 1000) {
       return Colors[0];
@@ -191,12 +203,12 @@ function ADSBOverlay(options, ADSBData) {
         ClassName = 'drone breach';
       } else if (StatusInfo['Alert']['RPAS'] && FlightID in StatusInfo['Alert']['RPAS']) {
         ClassName = 'drone alert';
-      }      
+      }
     }
     return ClassName;
   }
 
-  this.GetAllFlights = function() {
+  this.GetAllFlights = function () {
     var FlightRef = {};
     for (var i = 0; i < this.ADSBData.length; i++) {
       var FlightID = this.ADSBData[i].FlightID.trim();
@@ -205,7 +217,7 @@ function ADSBOverlay(options, ADSBData) {
     return FlightRef;
 
   };
-  
+
   this.GetWatchingFlight = function () {
     this.ADSBFlightRef = {};
     var FlightIDs = this.WatchingFlightIDs;
@@ -224,7 +236,7 @@ function ADSBOverlay(options, ADSBData) {
 
   this.getIconFor = function (FlightID, Angle) {
     var IsDrone = (FlightID.substr(0, 3) == 'A00');
-   
+
     var ReturnHTML = '';
     var Icon = this.getIconImage(FlightID);
     if (IsDrone) {
@@ -235,7 +247,7 @@ function ADSBOverlay(options, ADSBData) {
     return ReturnHTML;
   }
 
-  this.getIconImage = function(FlightID) {
+  this.getIconImage = function (FlightID) {
     var Icon = '/images/Airline.png';
     if ((FlightID.substr(0, 3) === 'A00')) {
       Icon = '/images/Drone.png';
@@ -350,7 +362,7 @@ ADSBOverlay.prototype.draw = function () {
 
     if (heading == 0) {
       //Landed flight - Ignore movement
-    } else if (this.gADSBData[DivID]) {      
+    } else if (this.gADSBData[DivID]) {
       $point.animate({ left: IconLocation.x, top: IconLocation.y });
       $point.attr('class', 'adsb-point ' + IconClass);
       $point.find(".icon").css({ transform: 'rotate(' + (heading) + 'deg)' });
@@ -359,14 +371,14 @@ ADSBOverlay.prototype.draw = function () {
     } else {
       var Icon = this.getIconFor(title, heading);
       var $NewPoint = $(
-          '<div  class="adsb-point ' + IconClass + '" id="' + DivID + '" title="' + title + '" '
+        '<div  class="adsb-point ' + IconClass + '" id="' + DivID + '" title="' + title + '" '
         + 'data-lat="' + lat + '" '
         + 'data-lng="' + lng + '" '
         + 'data-alt="' + alt + '" '
         + 'data-ident="' + title + '" '
         + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
         + Icon
-        + '<span class="flight-title" style="">' + title.replace('A00','SC0') + '</span>' +
+        + '<span class="flight-title" style="">' + title.replace('A00', 'SC0') + '</span>' +
         + '</div>'
       );
       // Append the HTML to the fragment in memory  
@@ -377,7 +389,7 @@ ADSBOverlay.prototype.draw = function () {
     var TailHTML = getTail(this.ADSBData[i]);
     $point.find('.tail').remove();
     $point.append(TailHTML);
-    
+
     this.gADSBData[DivID] = this.DrawCount;
 
 
@@ -438,8 +450,27 @@ function lineToAngle(x1, y1, length, angle) {
   angle *= Math.PI / 180;
 
   var x2 = x1 + length * Math.cos(angle),
-      y2 = y1 + length * Math.sin(angle);
+    y2 = y1 + length * Math.sin(angle);
 
 
   return { x: x2, y: y2 };
+}
+
+
+function ShowInfoWindow(t) {
+  var alt = t.attr('data-alt');
+  var lt = t.attr('data-lat').toString();
+  var lg = t.attr('data-lng').toString();
+  //   var Position = { lat: lt, lng: lg };
+  var Content =
+    '<div class="InfoWindow">' +
+    '<div><b>' + t.attr('data-ident') + '</b></div>' +
+    '<div >Latitude:' + lt + ' N</div>\n' +
+    '<div >Longitude: ' + lg + ' E</div>\n' +
+    '<div>Altitude: ' + alt + ' Feet</div>\n' +
+    '</div>';
+  var myLatlng = new google.maps.LatLng(lt, lg);
+  _InfoWindow.setPosition(myLatlng);
+  _InfoWindow.setContent(Content);
+  _InfoWindow.open(map);
 }

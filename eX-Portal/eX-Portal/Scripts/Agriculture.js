@@ -340,7 +340,6 @@ function fnDataImage() {
     .height($(document).height())
     .css('background-image', ImageURL)
     .fadeIn();
-
 }
 
 
