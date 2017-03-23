@@ -368,6 +368,7 @@ ADSBOverlay.prototype.draw = function () {
       $point.find(".icon").css({ transform: 'rotate(' + (heading) + 'deg)' });
       $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });
       $point.find('img').attr('src', this.getIconImage(title));
+
     } else {
       var Icon = this.getIconFor(title, heading);
       var $NewPoint = $(
@@ -384,6 +385,7 @@ ADSBOverlay.prototype.draw = function () {
       // Append the HTML to the fragment in memory  
       this.markerLayer.append($NewPoint.get(0));
       $point = $('#' + DivID);
+     
     }
 
     var TailHTML = getTail(this.ADSBData[i]);
@@ -458,19 +460,35 @@ function lineToAngle(x1, y1, length, angle) {
 
 
 function ShowInfoWindow(t) {
+
+    var title = t.attr('data-ident');
+    var DroneFlightID = parseInt(title.substr(title.length-4)); //
+    var IsDrone = (title.substr(0, 3) == 'A00');
+    var FlightLink = '\n';
+    if (IsDrone)
+    {
+       
+        FlightLink = '<a href="/Map/FlightData/' + DroneFlightID + '">View Flight</a>\n';
+    } else
+    {
+        FlightLink = '';
+    }
   var alt = t.attr('data-alt');
   var lt = t.attr('data-lat').toString();
   var lg = t.attr('data-lng').toString();
-  //   var Position = { lat: lt, lng: lg };
+    //   var Position = { lat: lt, lng: lg };
+
   var Content =
     '<div class="InfoWindow">' +
     '<div><b>' + t.attr('data-ident') + '</b></div>' +
     '<div >Latitude:' + lt + ' N</div>\n' +
     '<div >Longitude: ' + lg + ' E</div>\n' +
     '<div>Altitude: ' + alt + ' Feet</div>\n' +
+   FlightLink+
     '</div>';
   var myLatlng = new google.maps.LatLng(lt, lg);
   _InfoWindow.setPosition(myLatlng);
   _InfoWindow.setContent(Content);
   _InfoWindow.open(map);
+
 }

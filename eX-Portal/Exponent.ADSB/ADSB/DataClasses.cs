@@ -15,8 +15,8 @@ namespace Exponent.ADSB {
 
 public class ADSBQuery {
 
-
-    public Double ATCRadious { get; set; }
+        public Double FeetToKiloMeter = 0.0003048;
+        public Double ATCRadious { get; set; }
     public Double hSafe { get; set; }
     public Double hAlert { get; set; }
     public Double hBreach { get; set; }
@@ -187,7 +187,9 @@ public class ADSBQuery {
     public int Breach24H { get; set; }
 
     public  void SetSummary(SqlConnection CN) {
-      String SQL1 = "select Count(DISTINCT FromFlightID) from ADSBDetailHistory WHERE VerticalDistance <= 0.15 and HorizontalDistance <= 8 and CreatedDate >= DATEDIFF(HOUR, 24, GETDATE());";
+            ADSBQuery adsb = new ADSBQuery();
+            adsb.GetDefaults(CN);
+      String SQL1 = $"select Count(DISTINCT FromFlightID) from ADSBDetailHistory WHERE VerticalDistance <= {adsb.vBreach*adsb.FeetToKiloMeter}  and HorizontalDistance <= {adsb.hBreach}  and CreatedDate >=DATEADD(day, -1, GETDATE());";
       Breach24H =  GetDBInt(CN, SQL1);
       TotalRPAS =  GetDBInt(CN, "select Count(*) from AdsbLive WHERE FlightSource='SkyCommander'");
       Area =  GetArea(CN);
@@ -217,17 +219,17 @@ public class ADSBQuery {
         }
       }
 
-      String AreaSQL = $@"SELECT geography::STGeomFromText(
+      String AreaSQL = $@"SELECT ROUND((SELECT geography::STGeomFromText(
       'POLYGON((' +
       '{MinLat} {MinLon},' +
       '{MaxLat} {MinLon},' +
       '{MaxLat} {MaxLon},' +
       '{MinLat} {MaxLon},' +
       '{MinLat} {MinLon} ' +
-      '))', 4326).STArea() as Area";
+      '))', 4326).STArea() as Area)/1000000,0)";
 
-      using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
-        var oResult = cmd.ExecuteScalar();
+      using (SqlCommand cmd = new SqlCommand(AreaSQL, CN)) {
+        var oResult = cmd.ExecuteScalar();   
         Double.TryParse(oResult.ToString(), out Area);
       }
 

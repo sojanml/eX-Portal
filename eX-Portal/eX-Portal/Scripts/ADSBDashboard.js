@@ -4,6 +4,7 @@ var LastProcessedID = null;
 var ChartIndex = 0;
 var UpdateDelay = 5 * 1000;
 var IsQueryChanged = 0;
+var timeZoneOffset = (new Date()).getTimezoneOffset();
 
 var Timers = {
   getADSB: null,
@@ -31,6 +32,22 @@ $(document).ready(function () {
     if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
     Timers['getADSB'] = window.setTimeout(getADSB, 1 * 1000, _ADSBLayer);
     IsQueryChanged = 1;
+    var offset = $('#graph_utc').is(':checked');
+    var d = new Date();
+    if(offset)
+    {
+        LastProcessedID = 0;
+        timeZoneOffset = 0;
+        getChartData();
+    }else
+    {
+       
+        LastProcessedID = 0;
+        timeZoneOffset = d.getTimezoneOffset();
+        getChartData();
+    }
+    
+      //d.getTimezoneOffset()
   });
 
 
@@ -127,7 +144,7 @@ function initializeMap() {
   
   var mapOptions = {
     zoom: 10,
-    mapTypeControl: false,
+    mapTypeControl: true,
     streetViewControl: false,
     center: MarkerPosition,
     styles: getMapStyle()
@@ -143,7 +160,7 @@ function setLiveSummary(ChartData) {
   var Data = ChartData[ChartData.length - 1];
   $('#Summary-Breach24H').html(Data.Breach24H);
   $('#Summary-TotalRPAS').html(Data.TotalRPAS);
-  $('#Summary-Area').html(Data.Area.toFixed(1));
+  $('#Summary-Area').html(Data.Area.toFixed(0));
 }
 
 function setChartData(ChartData) {
@@ -179,7 +196,7 @@ function setChartData(ChartData) {
 function getChartData() {
   //download data from the server
   var d = new Date();
-  var URL = '/Adsb/Summary?LastProcessedID=' + LastProcessedID + '&TimezoneOffset=' + (-1 * d.getTimezoneOffset());
+  var URL = '/Adsb/Summary?LastProcessedID=' + LastProcessedID + '&TimezoneOffset=' + (-1 * timeZoneOffset);
   var AJAX = $.ajax({
     url: URL,
     type: 'GET',
@@ -192,6 +209,7 @@ function getChartData() {
     }    
   });//$.ajax
 }
+
 
 
 function InitChart() {
