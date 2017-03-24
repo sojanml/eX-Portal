@@ -4,7 +4,7 @@ var LastProcessedID = null;
 var ChartIndex = 0;
 var UpdateDelay = 5 * 1000;
 var IsQueryChanged = 0;
-var timeZoneOffset = (new Date()).getTimezoneOffset();
+var timeZoneOffset = 0; //(new Date()).getTimezoneOffset();
 
 var Timers = {
   getADSB: null,
@@ -24,38 +24,30 @@ $(document).ready(function () {
 
       AutoUpdateZone($(this));
       IsQueryChanged = 1;
-    //console.log("Setting Timer ID : " + RefreshTimer);
-  }
+      //console.log("Setting Timer ID : " + RefreshTimer);
+    }
   });
 
   var CheckBox = $('input.query').on("change", function () {
     if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
     Timers['getADSB'] = window.setTimeout(getADSB, 1 * 1000, _ADSBLayer);
     IsQueryChanged = 1;
-    var offset = $('#graph_utc').is(':checked');
+    //d.getTimezoneOffset()
+  });
+
+  $('input.RadioTimeZoneSelect').on("change", function () {
+    var offset = $('#graph_utc_1').is(':checked');
     var d = new Date();
-    if(offset)
-    {
-        LastProcessedID = 0;
-        timeZoneOffset = 0;
-        getChartData();
-    }else
-    {
-       
-        LastProcessedID = 0;
-        timeZoneOffset = d.getTimezoneOffset();
-        getChartData();
-    }
-    
-      //d.getTimezoneOffset()
+    LastProcessedID = 0;
+    timeZoneOffset = (offset ? 0 : d.getTimezoneOffset());
+    if (Timers['getChartData']) window.clearTimeout(Timers['getChartData']);
+    Timers['getChartData'] = window.setTimeout(getChartData, 100);    
   });
 
 
-  getChartData();
-
   Timers['getADSB'] = window.setTimeout(getADSB, UpdateDelay, _ADSBLayer);
   Timers['getStatus'] = window.setTimeout(getStatus, UpdateDelay, _ADSBLayer);
-  //Timers['getChartData'] = window.setTimeout(getChartData, UpdateDelay);
+  Timers['getChartData'] = window.setTimeout(getChartData, 100);
 
 
 });

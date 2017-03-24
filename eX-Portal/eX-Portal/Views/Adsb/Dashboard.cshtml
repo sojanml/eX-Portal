@@ -210,7 +210,13 @@
 </section>
 
 <section class="top-space">
-    <ul class="simple-list">  <input class="query" value="1" type="checkbox" name="tracking_adsb_commercial" id="graph_utc" /><label for="graph_utc">UTC</label> </ul>
+  <div class="shaded" id="TimeZoneSelect">
+    <div class="title"><b>Time Zone</b></div>
+    <ul class="simple-list">
+      <li><input checked class="RadioTimeZoneSelect" value="0" type="radio" name="graph_utc" id="graph_utc_1" /><label for="graph_utc_1">UTC</label> </li>
+      <li><input class="RadioTimeZoneSelect" value="1" type="radio" name="graph_utc" id="graph_utc_2" /><label for="graph_utc_2">Local</label> </li>
+    </ul>
+  </div>
   <div id="BarGraph"></div>
 </section>
 <p>&nbsp;</p>

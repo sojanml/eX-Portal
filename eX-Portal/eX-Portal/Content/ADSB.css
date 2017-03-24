@@ -637,13 +637,20 @@ div#safe-aircraft {
 }
 
 div#BarGraph {
-  width: 100%;
+  width: 1030px;
   height: 100px;
+  float: left;
 }
 div#BarGraph span.hc-label {
   background-color: #222222;
   padding: 0px 5px;
   color: yellow;
+}
+
+div#TimeZoneSelect {
+  width: 100px;
+  height: 100px;
+  float: right;
 }
 
 g.highcharts-axis-labels {

@@ -229,8 +229,12 @@ public class ADSBQuery {
       '))', 4326).STArea() as Area)/1000000,0)";
 
       using (SqlCommand cmd = new SqlCommand(AreaSQL, CN)) {
-        var oResult = cmd.ExecuteScalar();   
-        Double.TryParse(oResult.ToString(), out Area);
+        try { 
+          var oResult = cmd.ExecuteScalar();
+          Double.TryParse(oResult.ToString(), out Area);
+        } catch {
+          //nothing
+        }        
       }
 
       return Area;
