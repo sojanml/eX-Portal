@@ -1,4 +1,6 @@
-﻿var _InfoWindow = new google.maps.InfoWindow({
+﻿
+var AlertRef = {}
+var _InfoWindow = new google.maps.InfoWindow({
   content: '<div id="InfoWindowContent">...</div>'
 });
 
@@ -7,6 +9,13 @@ $(document).ready(function () {
   $(document).on("click", "div.adsb-point img", function () {
     var t = $(this).closest('div');
     ShowInfoWindow(t);
+  });
+
+  var CheckBox = $('input.query#breach_line').on("change", function () {
+      //ADSBObj.setADSB(data);
+      
+    //  this.ADSBObj.DrawLinesOf(AlertRef);
+     
   });
 
 });
@@ -80,6 +89,7 @@ function getStatus(ADSBObj) {
 function setStatusSummary(StatusData, ADSBObj) {
   StatusInfo.Reset();
   var BreachRef = {}
+  AlertRef = {};
   for (var i = 0; i < StatusData.length; i++) {
     var Stat = StatusData[i];
     var RpasID = Stat.FromFlightID;
@@ -91,7 +101,14 @@ function setStatusSummary(StatusData, ADSBObj) {
     if (StatKey == 'Breach') {
       if (BreachRef[RpasID] == undefined) BreachRef[RpasID] = [];
       BreachRef[RpasID].push(AircraftID);
+      
     }
+    if (StatKey == 'Alert') {
+        if (AlertRef[RpasID] == undefined) AlertRef[RpasID] = [];
+        AlertRef[RpasID].push(AircraftID);
+
+    }
+
   }//for
 
   ['Safe', 'Breach', 'Alert'].forEach(function (Stat, index, array) {
@@ -113,9 +130,23 @@ function setStatusSummary(StatusData, ADSBObj) {
 
   setStatusWatching(TheDatas);
 
-  //var AllFlights = ADSBObj.GetAllFlights();
-  ADSBObj.DrawLinesOf(BreachRef);
-
+    //var AllFlights = ADSBObj.GetAllFlights();
+  if ($('input.query#breach_line').is(':checked'))
+  {
+   //   ADSBObj.DrawLinesOf(null);
+      ADSBObj.DrawLinesOf(BreachRef);
+  } else
+  {
+      ADSBObj.DrawLinesOf(null);
+  }
+  if ($('input.query#alert_line').is(':checked'))
+  {
+   //   ADSBObj.DrawLinesOf(null);
+      ADSBObj.DrawLinesOfAlert(AlertRef);
+  }
+  else {
+      ADSBObj.DrawLinesOf(null);
+  }
 }
 
 function setStatusWatching(WatchingFlights) {
@@ -174,8 +205,10 @@ function ADSBOverlay(options, ADSBData) {
     this.GetWatchingFlight();
     this.draw();
   },
-    this.ADSBLines = {};
+      this.ADSBLines = {};
+  this.ADSBAlertLines = {};
   this.SavedLineReferece = null;
+  this.SavedAlertLineReference = null;
 
   this.getIconColor = function (Height) {
     var Colors = [
@@ -310,6 +343,56 @@ function ADSBOverlay(options, ADSBData) {
       }
     })
   }; //this.DrawLinesOf
+  this.DrawLinesOfAlert = function (LineReferece) {
+      if (this.map == null || this.map == undefined) return;
+      if (LineReferece == null) LineReferece = this.SavedAlertLineReference;
+      if (LineReferece == null) return;
+
+      var RefKeys = Object.keys(LineReferece);
+      var AllFlights = this.GetAllFlights();
+      var DrawingLineKeys = [];
+      var ADSBAlertLines = this.ADSBAlertLines;
+      RefKeys.forEach(function (RpasID, index, array) {
+          var FromFlight = AllFlights[RpasID];
+          if (FromFlight == undefined) {
+          } else {
+              var CenterPos = { lat: FromFlight.Lat, lng: FromFlight.Lon };
+              LineReferece[RpasID].forEach(function (AircraftID, index, array) {
+                  var toFlight = AllFlights[AircraftID];
+                  if (toFlight == undefined) {
+                      //nothing
+                  } else {
+                      var newPos = { lat: toFlight.Lat, lng: toFlight.Lon };
+                      var LineKey = RpasID + "_" + AircraftID;
+                      var LinePath = [CenterPos, newPos];
+                      DrawingLineKeys.push(LineKey);
+                      if (ADSBAlertLines[LineKey] == undefined) {
+                          var flightPath = new google.maps.Polyline({
+                              path: LinePath,
+                              geodesic: true,
+                              strokeColor: '#ff4e00',
+                              strokeOpacity: 1,
+                              strokeWeight: 1
+                          });
+                          flightPath.setMap(this.map);
+                          ADSBAlertLines[LineKey] = flightPath;
+                      } else {
+                          ADSBAlertLines[LineKey].setPath(LinePath);
+                      }//if (ADSBLines[RpasID + "_" + AircraftID] == undefined) {
+                  }
+              });//foreach
+          }//if (FromFlight == undefined) 
+      });//foreach
+
+      //option to delete the path if not drawing
+      var AllLines = Object.keys(ADSBAlertLines);
+      AllLines.forEach(function (LineKey, index, array) {
+          if (DrawingLineKeys.indexOf(LineKey) < 0) {
+              ADSBAlertLines[LineKey].setMap(null);
+              delete ADSBAlertLines[LineKey];
+          }
+      })
+  }; //this.DrawLinesOfAlert
 
 
   this.DeleteLineOf = function (FlightID) {
