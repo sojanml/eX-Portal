@@ -765,6 +765,7 @@
     <Content Include="images\map\top-right.png" />
     <Content Include="images\marker.png" />
     <Content Include="images\mCSB_buttons.png" />
+    <Content Include="images\menu-drop-down.png" />
     <Content Include="images\rta-logo.png" />
     <Content Include="images\rta\AvgSpeed.png" />
     <Content Include="images\rta\Heading.png" />
@@ -954,6 +955,7 @@
     <Content Include="Scripts\drone-live.js" />
     <Content Include="Scripts\drone.js" />
     <Content Include="Scripts\DroneImaging.js" />
+    <Content Include="Scripts\exPortal.js" />
     <Content Include="Scripts\Flight-Authority.js" />
     <Content Include="Scripts\flight-gps-tag.js" />
     <Content Include="Scripts\FlightChart.js" />
@@ -995,7 +997,6 @@
     <Content Include="Scripts\RpasGCAAflight.js" />
     <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
-    <Content Include="Scripts\site.js" />
     <Content Include="Scripts\traffic-dmat.js" />
     <Content Include="Scripts\TrafficControl-x.js" />
     <Content Include="Scripts\TrafficControl.js" />
@@ -1030,6 +1031,7 @@
       <DebugInfo>False</DebugInfo>
     </Content>
     <Content Include="sass\Traffic-Dmat.scss" />
+    <Content Include="sass\exPortal.scss" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\video.dev.js" />
     <Content Include="Scripts\video.js" />
@@ -1408,9 +1410,7 @@
     <Content Include="Views\Test\Test.cshtml" />
     <Content Include="Views\Traffic\Index.cshtml" />
     <Content Include="Views\Traffic\Detail.cshtml" />
-    <Content Include="sass\ADSB.scss" />
     <Content Include="Views\Adsb\Dashboard.cshtml" />
-    <Content Include="Views\Shared\_ADSB.cshtml" />
     <Content Include="Views\Traffic\Live.cshtml" />
     <Content Include="temp\test.json" />
     <Content Include="Views\Agriculture\Index.cshtml" />
@@ -1419,6 +1419,7 @@
     <Content Include="Views\Agriculture\Images.cshtml" />
     <Content Include="Views\Agriculture\BulkUpload.cshtml" />
     <Content Include="Views\Traffic\DMAT.cshtml" />
+    <Content Include="Views\Shared\_exPortal_V2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

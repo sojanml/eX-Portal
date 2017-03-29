@@ -396,6 +396,8 @@ namespace eX_Portal.exLogic {
       Scripts.AppendLine("    \"iDisplayLength\": 50, ");
       Scripts.AppendLine("    \"fnFooterCallback\": _fnFooterCallback, ");
       Scripts.AppendLine("    \"fnDrawCallback\": _fnDrawCallback, ");
+      Scripts.AppendLine("    \"dom\": '<\"dataTables_wrapper\"<\"dataTables_head\"lf>t<\"dataTables_footer\"p>>',");
+      
       Scripts.AppendLine("    \"order\": [[" + _SortColumn.ToString() + ",\"" + _SortOrder + "\"]], ");
       Scripts.AppendLine("    \"ajax\": \"" + HttpContext.Current.Request.RequestContext.HttpContext.Request.Url + "\",");
       Scripts.Append(ScriptColumns);

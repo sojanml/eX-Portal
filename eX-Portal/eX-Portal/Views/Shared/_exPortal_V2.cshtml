@@ -1,0 +1,84 @@
+﻿
+@{
+  Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@ViewBag.Title - Exponent</title>
+  @Styles.Render("~/bundles/exPortalCss")
+  @RenderSection("header", required: false)
+</head>
+<body>
+  <section>
+    <header>
+      <div class="left-section">
+        <div class="logo">
+          @if (String.IsNullOrWhiteSpace(ViewBag.Logo)) {
+            if (eX_Portal.exLogic.Util.getLoginUserID() == 152) {
+            <img src="~/images/adsb-gcaa-logo.png" />
+            } else {
+            <img src="~/images/adsb-logo.png" />
+            }
+          } else {
+            <img src="~/images/@ViewBag.Logo" />
+          }
+        </div>
+      </div>
+      <div class="right-section">
+        <nav class="user-management">
+          <ul>
+            @if (Session["UserID"] == null) {
+              <li>@Html.ActionLink("Log in", "Index", "User")</li>
+            } else {
+              <li>
+                Welcome
+                <b>@Session["FirstName"]</b>
+              </li>
+              <li id="user-menu">
+                <a href="#" id="user-menu-link">Account Settings <span class="icon spinner">&#xf013;</span></a>
+                <ul id="user-menu-items">
+                  <li>@Html.ActionLink("Log Out", "Logout", "User")</li>
+                  <li>@Html.ActionLink("Change Password", "ResetPassword", "User")</li>
+                </ul>
+              </li>
+            }
+          </ul>
+        </nav>
+        <nav class="main-menu">
+          <div class="navigation-logo">
+            <img src="~/images/logo-small.png" />
+          </div>
+          @Html.Action("SystemMenu", "Design")
+        </nav>
+        <nav class="breadcrumbs">
+          @Html.Partial("_BreadCrumbs")
+        </nav>
+      </div>
+    </header>
+  </section>
+  <section class="body-content">
+    <div class="body-title">@ViewBag.Title</div>
+    @RenderBody()
+  </section>
+
+  <footer>
+    &copy; Exponent Technology all rights reserved
+    </footer>
+
+
+    <div id="Overlay">
+      <img src="~/images/loading.png" />
+    </div>
+
+
+  @Scripts.Render("~/bundles/exPortalScript")
+  @RenderSection("scripts", required: false)
+
+  
+</body>
+</html>

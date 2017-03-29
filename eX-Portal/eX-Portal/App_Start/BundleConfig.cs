@@ -41,7 +41,20 @@ namespace eX_Portal {
           "~/jquery-ui/jquery-ui.min.css",
           "~/Content/ADSB.css"
           ));
-      
+
+
+      bundles.Add(new ScriptBundle("~/bundles/exPortalScript").Include(
+                  "~/Scripts/jquery-1.11.3.js",
+                  "~/Scripts/jquery.validate*",
+                  "~/jquery-ui/jquery-ui.min.js",
+                "~/dataTable/js/jquery.dataTables.js",
+                "~/Scripts/exPortal.js"
+                ));
+      bundles.Add(new StyleBundle("~/bundles/exPortalCss").Include(
+                "~/dataTable/css/jquery.dataTables.custom.css",
+                "~/jquery-ui/jquery-ui.min.css",
+                 "~/Content/exPortal.css"
+                ));
 
 
     }

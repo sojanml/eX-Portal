@@ -2,11 +2,9 @@
 
 @{
     ViewBag.Title = "RPAS Registration";
-    Layout = "~/Views/Shared/_exPortal.cshtml";
 }
 
-<section class="general-form" id="loginForm">
-  <script src="~/Scripts/bootstrap.js"></script>
+<div class="form-horizontal" id="loginForm">
   @using(Html.BeginForm()) {
 
     @Html.HiddenFor(model => model.Drone.DroneId)
@@ -103,7 +101,7 @@
     
   }
 
-  </section>
+  </div>
 
 @section header{
   <link href="~/Content/black-box.css" rel="stylesheet" />
