@@ -15,8 +15,8 @@ namespace Exponent.ADSB {
 
 public class ADSBQuery {
 
-        public Double FeetToKiloMeter = 0.0003048;
-        public Double ATCRadious { get; set; }
+    public Double FeetToKiloMeter = 0.0003048;
+    public Double ATCRadious { get; set; }
     public Double hSafe { get; set; }
     public Double hAlert { get; set; }
     public Double hBreach { get; set; }

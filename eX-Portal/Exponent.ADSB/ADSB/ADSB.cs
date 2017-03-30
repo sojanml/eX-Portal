@@ -208,7 +208,6 @@ namespace Exponent.ADSB {
         Filter.Clear();
       }
 
-
       if (WHERE.Length > 0) { 
         SQL.AppendLine(" WHERE");
         SQL.Append(WHERE);
@@ -390,7 +389,6 @@ namespace Exponent.ADSB {
             FlightSource = "flightaware"
           };
           FlightPositions.Add(thePos);
-
 
         }//for
       }//using

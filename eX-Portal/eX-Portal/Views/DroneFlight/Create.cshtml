@@ -1,7 +1,9 @@
 ﻿@model eX_Portal.Models.DroneFlight
 @using eX_Portal.exLogic
 
+
 <div class="form-horizontal">
+  
   @using (Html.BeginForm()) {
   @Html.AntiForgeryToken()
 
@@ -77,7 +79,6 @@
 
 </div>
 
-@Scripts.Render("~/bundles/jqueryval")
 @section header{
   <link href="~/Content/black-box.css" rel="stylesheet" />
 }

@@ -1,0 +1,822 @@
+@import "compass";
+
+$MenuColor: #e5e5e5;
+$ShadedColur: #ededed;
+$MenuHiliteColor: #cacaca;
+$MenuPadding: 5px;
+$MenuSpaceFromRight: 12px;
+$SelectedItemColor: #53a100;
+
+$ReportHeadBackground: #474747;
+$ReportBackgroundTranDuration: 100ms;
+$TitleTextColor: #ff9b9b ;
+$MaxResolution: 1150px;
+$VerticalGap: 12px;
+
+@include font-face("FontAwesome", font-files( "../fonts/fontawesome-webfont.ttf", "../fonts/FontAwesome.otf", "../fonts/fontawesome-webfont.svg", "../fonts/fontawesome-webfont.eot", "../fonts/fontawesome-webfont.woff", "../fonts/fontawesome-webfont.woff2" ));
+
+@include font-face("OpenSans", font-files( "../fonts/OpenSans.ttf", "../fonts/OpenSans.eot", "../fonts/OpenSans.svg", "../fonts/OpenSans.woff", "../fonts/OpenSans.woff2" ));
+@include font-face("Gobold_Light", font-files( "../fonts/GoboldThinLight.ttf", "../fonts/GoboldThinLight.eot", "../fonts/GoboldThinLight.svg", "../fonts/GoboldThinLight.woff", "../fonts/GoboldThinLight.woff2" ));
+
+@mixin MultiResolution($TotalWidth, $Gap, $FontSize: 1em) {
+  width: $TotalWidth;
+  font-size: $FontSize;
+
+  td.spacer {
+    width: $Gap;
+  }
+
+  div.column {
+    margin-right: $Gap;
+  }
+
+  div.column-full {
+    width: $TotalWidth;
+  }
+
+  div.column-half {
+    $CalulatedWidth: (($TotalWidth - $Gap) / 2);
+    width: $CalulatedWidth;
+
+    div.column-2-of-6 {
+      width: ($CalulatedWidth - $Gap) * 0.4;
+    }
+
+    div.column-4-of-6 {
+      width: ($CalulatedWidth - $Gap) * 0.6;
+    }
+  }
+
+  div.column-2-of-6 {
+    width: ($TotalWidth - $Gap *5)/6 * 2 + ($Gap * 1);
+  }
+
+  div.column-4-of-6 {
+    width: ($TotalWidth - $Gap*5)/6 * 4 + ($Gap * 3);
+  }
+
+  div.title {
+    padding: 3px 0px 3px 5px;
+    border-bottom: 2px white solid;
+    margin-bottom: 5px;
+    vertical-align: text-bottom
+  }
+
+  div.hr {
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    margin-bottom: 2px;
+  }
+
+  table.info-tiles {
+    $CalulatedWidth: (($TotalWidth - $Gap) / 2);
+    width: $CalulatedWidth;
+
+    tr td:first-child {
+      width: $CalulatedWidth * 0.2;
+    }
+
+    div.tile {
+      width: 100%;
+    }
+
+    $BoxWidth: $CalulatedWidth * 0.8;
+    $LeftBox: 0.25;
+
+    div.detail {
+      width: $BoxWidth;
+    }
+
+    div.detail_left,
+    div.detail_right {
+      min-height: 74px;
+      font-size: $FontSize * 1;
+    }
+
+    div.detail,
+    div.detail_left,
+    div.detail_right {
+      min-height: 85px;
+    }
+
+    div.detail_left {
+      width: $BoxWidth * $LeftBox;
+    }
+
+    div.detail_right {
+      width: $BoxWidth * (1 - $LeftBox);
+    }
+  }
+
+  div.fixed-height-1 {
+    height: 165px;
+  }
+
+  .top-space,
+  &.top-space {
+    margin-top: $Gap;
+  }
+}
+
+
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+span.refresh, span.icon {
+  font-family: FontAwesome;
+  font-size: 12px;
+  display: inline-block;
+}
+
+span.refresh {
+  margin-left: $MenuPadding;
+  cursor: pointer;
+
+
+  &:hover {
+    -webkit-animation: spin 3s linear infinite;
+    -moz-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite;
+  }
+}
+
+#adsb_map {
+  min-height: 460px;
+}
+
+input,
+select,
+textarea,
+button,
+file {
+  box-sizing: border-box;
+  border: 1px silver solid;
+  font-family: OpenSans;
+  color: $ReportHeadBackground;
+  margin: 0px;
+}
+
+input,
+select,
+textarea,
+button {
+  padding: 2px 4px 2px 4px;
+}
+
+select {
+  padding: 1px 4px 1px 4px;
+}
+
+div.label {
+  display: inline-block;
+  padding: 0px 5px 0px 5px;
+  background-color: white;
+  border-radius: 10px;
+  width: 30px;
+}
+
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+input.spinner {
+  width: 30px;
+}
+
+ul.simple-list {
+  list-style: none;
+  margin: 0px 0px 0px 5px;
+  padding: 0px;
+
+  li {
+    margin: 0px;
+    margin: 5px 0px 5px 0px;
+  }
+
+  input[type="checkbox"] {
+    display: none;
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+
+    & + label {
+      padding-left: 20px;
+      background-image: url('/images/adsb-check-off.png');
+      background-repeat: no-repeat;
+      background-position: left center;
+      height: 16px;
+      display: block;
+    }
+
+    &:checked + label {
+      background-image: url('/images/adsb-check-on.png');
+    }
+  }
+}
+
+ul.multi-select {
+  margin: 10px 0px 5px 5px;
+  padding: 0px;
+
+  li {
+    display: inline-block;
+  }
+
+  input[type="checkbox"] {
+    display: none;
+
+    & + label {
+      margin: 0px 6px 3px 0px;
+      padding: 0px 5px 0px 5px;
+      border-radius: 6px;
+      background-color: white;
+    }
+
+    &:checked + label {
+      background-color: scale-saturation($SelectedItemColor,20);
+      color: white;
+    }
+
+    & + label:hover {
+      background-color: #87d534;
+    }
+  }
+}
+
+
+@mixin clearfix() {
+  &:after {
+    clear: both;
+    display: block;
+    content: "";
+  }
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  font-family: OpenSans;
+  color: #292929;
+}
+
+body {
+  padding: 10px 30px 60px 30px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+footer {
+  border-top: 1px red solid;
+  font-size:8pt;
+  padding:3px 0px 10px 0px;
+}
+
+div.clearfix {
+  @include clearfix;
+}
+
+.shaded {
+  background-color: $ShadedColur;
+}
+
+header {
+  div.left-section {
+    float: left;
+  }
+
+  div.right-section {
+    float: right;
+  }
+
+  div.logo img {
+    width: auto;
+    height: 72px;
+  }
+
+  @include clearfix;
+}
+
+.ui-spinner-input {
+  margin: 0px 16px 0px 3px;
+}
+
+nav {
+  text-transform: uppercase;
+}
+
+nav.user-management,
+nav.main-menu,
+nav.breadcrumbs {
+  ul {
+    float: right;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+
+    li {
+      float: left;
+      padding-right: $MenuPadding;
+      padding-left: $MenuPadding;
+      position: relative;
+
+      &:last-child ul {
+        left: auto !important;
+        right: 0px !important;
+      }
+
+
+      ul {
+        position: absolute;
+        top: 14px;
+        left: 0px;
+        display: none;
+        z-index: 10;
+
+        li {
+          padding-right: $MenuPadding;
+          padding-left: $MenuPadding;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          box-sizing: border-box;
+        }
+      }
+
+
+
+      &:hover {
+        ul {
+          display: block;
+        }
+      }
+
+      a {
+        text-decoration: none;
+        color: #292929;
+      }
+    }
+  }
+
+  @include clearfix;
+}
+
+nav.user-management {
+  ul {
+    margin-right: $MenuSpaceFromRight;
+
+    li {
+      border-right: 1px black solid;
+
+      &:last-child {
+        border-right: 0px white none;
+      }
+
+      span.icon {
+        display: inline-block;
+      }
+
+      &:hover span.icon {
+        -webkit-animation: spin 3s linear infinite;
+        -moz-animation: spin 3s linear infinite;
+        animation: spin 3s linear infinite;
+      }
+
+      &#user-menu:hover {
+        background-color: $MenuHiliteColor;
+      }
+
+      ul {
+        background-color: $MenuColor;
+        min-width: 100%;
+        margin-right: 0px;
+
+        li {
+          border-right: 0px white none;
+          min-width: 100%;
+
+          &:hover {
+            background-color: $MenuHiliteColor;
+          }
+        }
+      }
+    }
+  }
+}
+
+nav.main-menu {
+  margin-top: 5px;
+
+  ul {
+    li {
+      padding: 7px $MenuSpaceFromRight 6px $MenuSpaceFromRight;
+      background-color: $MenuColor;
+
+      a {
+        display: block;
+        width: 100%;
+      }
+
+      ul {
+        top: 25px;
+        background-color: $MenuHiliteColor;
+        width: auto;
+
+        li {
+          min-width: 100%;
+          white-space: nowrap;
+          box-sizing: border-box;
+          padding: 5px $MenuSpaceFromRight 5px $MenuSpaceFromRight;
+          background-color: $MenuHiliteColor;
+
+          &:hover {
+            background-color: $MenuColor;
+          }
+        }
+      }
+
+      &:last-child {
+        padding-right: ($MenuSpaceFromRight + $MenuPadding);
+      }
+
+      &:hover {
+        background-color: $MenuHiliteColor;
+      }
+    }
+  }
+
+  div.navigation-logo {
+    float: left;
+    margin-right: 10px;
+    background-color: $MenuColor;
+
+    img {
+      height: 16px;
+      width: auto;
+      padding: 5px 10px 4px 10px
+    }
+  }
+}
+
+nav.breadcrumbs {
+  margin-top: 5px;
+
+  ul {
+    li {
+      padding: 0px 3px 0px 0px;
+
+      &:after {
+        display: inline-block;
+        padding-left: 3px;
+        content: ">";
+      }
+
+      &:last-child {
+        color: red;
+        padding-right: ($MenuSpaceFromRight);
+
+        &:after {
+          display: none;
+          padding: 0px;
+          content: "";
+        }
+      }
+    }
+  }
+}
+
+
+
+div.column-group,
+table.info-tiles {
+  @include clearfix;
+}
+
+section {
+  margin: 0px auto 0px auto;
+  @include clearfix;
+
+  &.body-content {
+    font-size: 11pt;
+  }
+
+  div.body-title {
+    padding: 5px 0px 5px 5px;
+    background-color: $ReportHeadBackground;
+    color: white;
+    margin: $VerticalGap 0px 0px 0px;
+    font-family: Gobold_Light;
+    font-size: 18px;
+    color: $TitleTextColor;
+  }
+
+  div.column {
+    box-sizing: border-box;
+    float: left;
+
+    &:last-child {
+      border-right: 0px red none;
+      margin-right: 0;
+    }
+  }
+
+  div.column-half {
+  }
+
+  div.column-2-of-6 {
+  }
+
+  div.column-4-of-6 {
+  }
+}
+
+
+
+@media screen and (min-width: 960px) {
+  section {
+    @include MultiResolution(920px,10px, 10px);
+  }
+
+  footer {
+    width: 920px;
+    margin: auto;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  section {
+    @include MultiResolution(1150px,15px, 11px);
+  }
+
+  footer {
+    width: 1150px;
+    margin: auto;
+  }
+}
+
+
+div#Overlay {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(85, 49, 5, 0.53);
+  display: none;
+
+  img {
+    position: relative;
+    $Dimension: 256px;
+    width: $Dimension;
+    height: $Dimension;
+    margin-left: -1 * ($Dimension/2);
+    margin-top: -1 * ($Dimension/2);
+    left: 50%;
+    top: 50%;
+    -webkit-animation: spin 3s linear infinite;
+    -moz-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite;
+  }
+}
+
+div.dataTables_wrapper {
+  margin-top: $VerticalGap;
+}
+
+div.dataTables_head {
+  @include clearfix;
+  background-color: $ReportHeadBackground;
+  padding: 5px;
+
+  label {
+    color: white;
+  }
+
+  span.refresh {
+    color: white;
+  }
+
+  input {
+    font-size: 8pt;
+  }
+}
+
+table.report {
+  thead {
+    tr {
+      th {
+        padding: 4px 2px 4px 4px;
+        font-weight: normal;
+        text-align: left;
+        border-left: 1px silver solid;
+        border-bottom: 2px solid red;
+
+        &:last-child {
+          border-left: 0px silver none;
+          border-right: 1px silver solid;
+        }
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      td {
+        border-left: 1px silver solid;
+        padding: 4px 2px 4px 4px;
+        -webkit-transition: background-color $ReportBackgroundTranDuration linear;
+        -ms-transition: background-color $ReportBackgroundTranDuration linear;
+        transition: background-color $ReportBackgroundTranDuration linear;
+
+        &:last-child {
+          border-right: 1px silver solid;
+          border-left: 0px silver none;
+        }
+
+        &.menu {
+          position: relative;
+          width: 16px;
+
+          img {
+            display: none;
+            visibility: hidden;
+          }
+        }
+      }
+
+      &.even {
+        td {
+          background-color: #f1f1f1;
+        }
+      }
+    }
+
+    tr:hover {
+      td {
+        -webkit-transition: background-color $ReportBackgroundTranDuration linear;
+        -ms-transition: background-color $ReportBackgroundTranDuration linear;
+        transition: background-color $ReportBackgroundTranDuration linear;
+        background-color: $MenuColor;
+      }
+    }
+
+    tr.active {
+      td {
+        -webkit-transition: background-color $ReportBackgroundTranDuration linear;
+        -ms-transition: background-color $ReportBackgroundTranDuration linear;
+        transition: background-color $ReportBackgroundTranDuration linear;
+        background-color: $MenuHiliteColor;
+      }
+    }
+
+    tr:hover, tr.active {
+      td.menu {
+        background-image: url('../images/menu-drop-down.png');
+        background-repeat: no-repeat;
+        background-position: right center;
+      }
+    }
+  }
+
+  tfoot {
+    tr {
+      th {
+        color: silver;
+        padding: 4px 2px 4px 4px;
+        font-weight: normal;
+        text-align: left;
+        border-left: 1px silver solid;
+        border-bottom: 1px $ReportHeadBackground solid;
+        border-top: 1px $ReportHeadBackground solid;
+
+        &:last-child {
+          border-left: 0px silver none;
+          border-right: 1px silver solid;
+        }
+      }
+    }
+  }
+}
+//table.report
+
+table.dataTable thead .sorting {
+  background-image: none;
+}
+
+UL.qViewMenu {
+  position: absolute;
+  right: 0px;
+  top: 23px;
+  background-color: $MenuHiliteColor;
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  z-index: 10;
+  display: block;
+
+  li:hover {
+    background-color: $MenuColor;
+  }
+
+  li a {
+    color: black;
+    text-decoration: none;
+    display: block;
+    min-width: 120px;
+    padding: 5px 10px 5px 10px;
+  }
+}
+
+
+div.form-horizontal {
+  border: 1px $ReportHeadBackground solid;
+  margin: 0px auto 40px auto;
+  @include border-bottom-left-radius(10px);
+  @include border-bottom-right-radius(10px);
+  padding: 30px;
+
+  span.field-validation-error {
+    display: block;
+    color: red;
+  }
+
+  div.two-column-form-group {
+    div.form-group {
+      width: 48%;
+      float: left;
+      @include clearfix();
+
+      &:last-child {
+        margin-left: 4%;
+      }
+    }
+  }
+
+  div.editor-label {
+    padding-bottom: 3px;
+  }
+
+  div.form-toolbar {
+    padding: 20px 0px 0px 0px;
+  }
+
+
+  div.editor-field,
+  div.form-group {
+    width: 100%;
+    margin-bottom: $VerticalGap;
+
+    div.col-md-10 {
+      width: 100%;
+    }
+  }
+
+  select,
+  input[type=text],
+  input[type=file],
+  textarea {
+    width: 100%;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 11pt;
+  }
+
+  textarea {
+    min-height: 150px;
+  }
+  
+  input[type=submit] {
+    padding: 3px 15px 3px 15px;
+    color: $TitleTextColor;
+    font-family: Gobold_Light;
+    font-size: 12pt;
+    text-transform: uppercase;
+    background-color: $ReportHeadBackground;
+    border: 1px silver outset;
+  }
+}
