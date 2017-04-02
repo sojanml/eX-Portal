@@ -1,0 +1,14 @@
+﻿@model eX_Portal.exLogic.qView
+
+@if (ViewBag.DroneID > 0) {
+  @Html.Action("DroneDetail", "Drone", new { ID = ViewBag.DroneID })
+}
+
+@Html.Raw(Model.getDataTable())
+
+@section scripts {
+  <script type="text/javascript">
+@Html.Raw(Model.getScripts())
+  </script>
+}
+
