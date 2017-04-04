@@ -121,7 +121,7 @@ namespace Exponent.ADSB {
           FROM
             ADSBDetail
           WHERE
-            HorizontalDistance <= {QueryData.hSafe} AND VerticalDistance <= {QueryData.vSafe * FeetToKiloMeter}";
+            HorizontalDistance > {QueryData.hAlert} AND VerticalDistance > {QueryData.vAlert * FeetToKiloMeter}";
         if(!String.IsNullOrWhiteSpace(AllIDs)) SQL = SQL + $"AND ADSBDetail.FromFlightID NOT IN ({AllIDs})";
 
         using (var Cmd = new SqlCommand(SQL, CN)) {
@@ -208,7 +208,23 @@ namespace Exponent.ADSB {
         Filter.Clear();
       }
 
-      if (WHERE.Length > 0) { 
+    Filter.Append(QueryData.getaltitudeFilter());
+    if (Filter.Length > 0)
+    {
+        if (WHERE.Length > 0) WHERE.AppendLine(" AND");
+        WHERE.Append(Filter);
+        Filter.Clear();
+    }
+
+    Filter.Append(QueryData.getspeedFilter());
+    if(Filter.Length>0)
+    {
+        if (WHERE.Length > 0) WHERE.AppendLine(" AND");
+        WHERE.Append(Filter);
+        Filter.Clear();
+    }
+
+            if (WHERE.Length > 0) { 
         SQL.AppendLine(" WHERE");
         SQL.Append(WHERE);
       }
@@ -330,13 +346,13 @@ namespace Exponent.ADSB {
       DateTime Now = DateTime.UtcNow;
       var FlightPositions = new List<FlightPosition>();
 
-      if (Now.DayOfWeek == DayOfWeek.Friday || Now.DayOfWeek == DayOfWeek.Saturday) {
-        return FlightPositions;
-      }
+      //if (Now.DayOfWeek == DayOfWeek.Friday || Now.DayOfWeek == DayOfWeek.Saturday) {
+      //  return FlightPositions;
+      //}
 
-      if (Now.Hour < 2 || Now.Hour >= 14) {
-        return FlightPositions;
-      }
+      //if (Now.Hour < 2 || Now.Hour >= 14) {
+      //  return FlightPositions;
+      //}
 
       //return FlightPositions;
 
@@ -397,7 +413,7 @@ namespace Exponent.ADSB {
     }
 
     private String getSampleData() {
-      return @"C:\SourceCode\Exponent.ADSB\ADSB\SampleData.json";
+      return @"C:\GitHub\eX-Portal\eX-Portal\Exponent.ADSB\ADSB\SampleData.json";
     }
 
 

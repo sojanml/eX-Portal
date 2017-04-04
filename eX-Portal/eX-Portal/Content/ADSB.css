@@ -1,14 +1,14 @@
 @font-face {
   font-family: "FontAwesome";
-  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
+  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1470292567') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1470292567') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1470292567') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1470292567') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1470292567') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1470292567') format('woff2');
 }
 @font-face {
   font-family: "OpenSans";
-  src: url('../fonts/../fonts/OpenSans.ttf?1478508894') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1478508894') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1478508894') format('svg'), url('../fonts/../fonts/OpenSans.woff?1478508894') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1478508894') format('woff2');
+  src: url('../fonts/../fonts/OpenSans.ttf?1479187204') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1479187204') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1479187204') format('svg'), url('../fonts/../fonts/OpenSans.woff?1479187204') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1479187204') format('woff2');
 }
 @font-face {
   font-family: "Gobold_Light";
-  src: url('../fonts/../fonts/GoboldThinLight.ttf?1478593771') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1478593771') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1478593771') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1478593771') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1478593771') format('woff2');
+  src: url('../fonts/../fonts/GoboldThinLight.ttf?1479187204') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1479187204') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1479187204') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1479187204') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1479187204') format('woff2');
 }
 @-moz-keyframes spin {
   100% {
@@ -40,6 +40,14 @@ div.label {
   background-color: white;
   border-radius: 10px;
   width: 30px;
+}
+
+div.label-auto {
+  display: inline-block;
+  padding: 0px 5px 0px 5px;
+  background-color: white;
+  border-radius: 10px;
+  width: auto;
 }
 
 input:focus,
@@ -141,7 +149,7 @@ table.traffic_status div.alert {
   background-color: #ff4e00;
 }
 table.traffic_status div.safe {
-  background-color: #0189ff;
+  background-color: #02e245;
 }
 
 body, html {
@@ -409,7 +417,7 @@ table.info-tiles.alert div.tile {
   background-color: #ff4e00;
 }
 table.info-tiles.safe div.tile {
-  background-color: #0189ff;
+  background-color: #02e245;
 }
 table.info-tiles div.tile-title {
   width: 100%;
@@ -450,7 +458,7 @@ table.info-tiles div.tile-caption {
 }
 
 td.safe {
-  background-color: #0189ff;
+  background-color: #02e245;
 }
 
 td.breach {
@@ -601,7 +609,7 @@ div.adsb-point.safe {
 }
 div.adsb-point.safe span.flight-title,
 div.adsb-point.safe span.tail {
-  background-color: #0189ff;
+  background-color: #02e245;
 }
 div.adsb-point.normal {
   color: #ffcc01;
@@ -855,4 +863,26 @@ div#Overlay img {
   -webkit-animation: spin 3s linear infinite;
   -moz-animation: spin 3s linear infinite;
   animation: spin 3s linear infinite;
+}
+
+div.simple-nonlist {
+  margin: 0px 0px 0px 5px;
+  padding: 0px;
+}
+div.simple-nonlist input[type="checkbox"] {
+  display: none;
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
+}
+div.simple-nonlist input[type="checkbox"] + label {
+  padding-left: 20px;
+  background-image: url("/images/adsb-check-off.png");
+  background-repeat: no-repeat;
+  background-position: left center;
+  height: 16px;
+  display: block;
+}
+div.simple-nonlist input[type="checkbox"]:checked + label {
+  background-image: url("/images/adsb-check-on.png");
 }

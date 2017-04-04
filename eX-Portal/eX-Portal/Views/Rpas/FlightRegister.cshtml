@@ -2,7 +2,7 @@
 
 @using eX_Portal.exLogic
 @{
-    ViewBag.Title = "Flight Registration";
+  //  ViewBag.Title = "Flight Registration";
    
 }
 
@@ -12,7 +12,7 @@
     @Html.AntiForgeryToken()
 
     @Html.HiddenFor(model => model.GcaApproval.ApprovalID)
-    <div id="frm" class="form-horizontal">
+    <div id="frm" class="column column-half form-group">
         <div class="error" id="error-message" style="display:none;margin-bottom:20px;"></div>
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -204,9 +204,7 @@
 
            
 
-            <div id="polygonmap" class="form-group" style="visibility:visible;height:500px;width:600px;">
-                <div id="map_canvas" style="width: 100%; height: 100%;border:1px solid black;"></div>
-            </div>
+           
 
 
 
@@ -216,6 +214,12 @@
                 <div class="col-md-offset-2 col-md-10">
                     <input id="submitButton" type="submit" value="Save" class="btn btn-default" style="width:60px;" />
                 </div>
+            </div>
+
+        </div>
+        <div id="frm2" class="column column-half">
+            <div id="polygonmap" class="form-group" style="visibility:visible;height:500px;width:600px;">
+                <div id="map_canvas" style="width: 100%; height: 100%;border:1px solid black;"></div>
             </div>
 
         </div>

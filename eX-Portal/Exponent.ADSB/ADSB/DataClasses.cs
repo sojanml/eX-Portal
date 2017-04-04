@@ -30,9 +30,13 @@ public class ADSBQuery {
     public int adsb_omdw { get; set; }
     public int adsb_omsj { get; set; }
     public int IsQueryChanged { get; set; }
+        public Double maxAltitude { get; set; }
+        public Double minAltitude { get; set; }
+        public Double maxSpeed { get; set; }
+        public Double minSpeed { get; set; }
 
 
-    public ADSBQuery() {
+        public ADSBQuery() {
       ATCRadious = 150;
       hSafe = 10;
       vSafe = 1000;
@@ -47,6 +51,10 @@ public class ADSBQuery {
       adsb_omdw = 0;
       adsb_omsj = 0;
       IsQueryChanged = 0;
+            maxAltitude = 300000;
+            minAltitude = 0;
+            minSpeed = 0;
+            maxSpeed = 1000;
     }
 
     public bool GetDefaults(SqlConnection CN) {
@@ -144,7 +152,23 @@ public class ADSBQuery {
       }
       return TheFilter;
     }
-  }
+        public String getaltitudeFilter()
+        {
+            String TheFilter = String.Empty;
+            TheFilter = $" AdsbLive.Altitude between {minAltitude} AND {maxAltitude}";
+
+            return TheFilter;
+        }
+
+        public String getspeedFilter()
+        {
+            String TheFilter = String.Empty;
+            TheFilter = $"AdsbLive.Speed between {minSpeed} AND {maxSpeed}";
+
+            return TheFilter;
+        }
+
+    }
 
   public class FlightPosition {
     public String FlightID { get; set; }

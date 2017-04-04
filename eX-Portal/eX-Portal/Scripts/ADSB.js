@@ -17,6 +17,11 @@ $(document).ready(function () {
     //  this.ADSBObj.DrawLinesOf(AlertRef);
      
   });
+  //$("#slider").slider(({
+  //    range: true,
+  //    min: 0,
+  //    max: 50000
+  //}));
 
 });
 var StatusInfo = {
@@ -110,18 +115,23 @@ function setStatusSummary(StatusData, ADSBObj) {
     }
 
   }//for
-
+ 
+  
   ['Safe', 'Breach', 'Alert'].forEach(function (Stat, index, array) {
-    var RPASList = [];
+      var RPASList = [];
+      var RPASLabels = '';
     var aRPAS = Object.keys(StatusInfo[Stat]['RPAS']);
     aRPAS.forEach(function (elem) {
-      RPASList.push(elem.replace('A00', 'SC0'));
+        RPASList.push(elem.replace('A00', 'SC0'));
+        RPASLabels = '<div class="label-auto">' + elem.replace('A00', 'SC0') + '</div>' + RPASLabels;
     })
     var aAircraft = Object.keys(StatusInfo[Stat]['Aircraft']);
     $('#' + Stat + '-Aircraft-Count').html(aAircraft.length);
     $('#' + Stat + '-RPAS-Count').html(aRPAS.length);
     $('#' + Stat + '-Aircraft').html(aAircraft.join(", "));
-    $('#' + Stat + '-RPAS').html(RPASList.join(", "));
+    $('#' + Stat + '-RPAS').html(RPASLabels);
+   
+
   });
 
   var Flights = StatusInfo['Breach']['RPAS'];

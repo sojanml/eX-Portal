@@ -335,6 +335,17 @@ namespace eX_Portal.Controllers {
       }
     }
 
+        public ActionResult UserDashboard()
+        {
+            return View();
+        }
+
+        public JsonResult getUserDashboard()
+        {
+
+            return Json("");
+
+        }
 
   }
 }

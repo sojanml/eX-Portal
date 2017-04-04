@@ -44,6 +44,43 @@ $(document).ready(function () {
     Timers['getChartData'] = window.setTimeout(getChartData, 100);    
   });
 
+  
+
+  $("#slider").slider(
+      {
+          range: true,
+          value: 100,
+          min: 0,
+          max: 50000,
+          step: 10,
+          slide: function (event, ui) {
+              $(".min-sqrft1").html(ui.values[0]);
+              $(".max-sqrft1").html(ui.values[1]);
+              $("#minAltitude").val(ui.values[0]);
+              $("#maxAltitude").val(ui.values[1]);
+              if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
+              Timers['getADSB'] = window.setTimeout(getADSB, 1 * 1000, _ADSBLayer);
+              IsQueryChanged = 1;
+          }
+      }
+  );
+  $("#Speedslider").slider(
+      {
+          range: true,
+          value: 100,
+          min: 0,
+          max: 50000,
+          step: 10,
+          slide: function (event, ui) {
+              $("#minSpeed").val(ui.values[0]);
+              $("#maxSpeed").val(ui.values[1]);
+              if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
+              Timers['getADSB'] = window.setTimeout(getADSB, 1 * 1000, _ADSBLayer);
+              IsQueryChanged = 1;
+          }
+      }
+  );
+ 
 
   Timers['getADSB'] = window.setTimeout(getADSB, UpdateDelay, _ADSBLayer);
   Timers['getStatus'] = window.setTimeout(getStatus, UpdateDelay, _ADSBLayer);
@@ -269,13 +306,15 @@ function InitChart() {
       gridLineColor: '#6c8393',
       lineColor: '#222222',
       lineWidth: 2
-    }, { // Secondary yAxis
+    },
+    { // Secondary yAxis
       lineColor: '#222222',
       lineWidth: 2,
 
       title: {
         text: '',
       },
+
       labels: {
         format: '{value}',
         style: GeneralStyle
@@ -283,7 +322,8 @@ function InitChart() {
       opposite: true,
       gridLineColor: '#6c8393',
       gridLineWidth: 0
-    }],
+        }    ],
+
     tooltip: {
       shared: true
     },
