@@ -256,5 +256,67 @@ namespace eX_Portal.exLogic {
             else
                 return false;
     }
+
+        public UserDashboardModel GetUserDetails(int UserID)
+        {
+            Models.MSTR_User User = db.MSTR_User.Find(UserID);
+            UserDashboardModel UserDashboard = new UserDashboardModel();
+            UserDashboardModel.PilotDetail PDetail = new UserDashboardModel.PilotDetail();
+            IQueryable<Models.MSTR_Drone> Drone = db.MSTR_Drone.Where(x => x.AccountID == User.AccountId.Value);
+            string PilotSQL = "SELECT a.[UserName]\n" +
+                         " ,a.[FirstName] \n " +
+                         ",a.[MiddleName]\n " +
+                         ",a.[LastName]\n  " +
+                         //",a.[Remarks]\n   " +
+                         ",a.[MobileNo]\n  " +
+                         ",a.[OfficeNo]\n  " +
+                         ",a.[HomeNo]\n" +
+                         " ,a.[EmailId]\n  as [Email ID] " +
+                         ",b.[PassportNo]" +
+                         " ,CONVERT(NVARCHAR, b.[DateOfExpiry], 106) AS DateOfExpiry\n   " +
+                         ",b.[Department]\n  " +
+                         " ,b.[EmiratesId]  as [Emirates ID]\n   " +
+                         ",b.[Title] as JobTitle\n   " +
+                         ",a.[RPASPermitNo] as [RPAS Permit No.]\n  " +
+                         ",a.[PermitCategory] as [Permit Category]\n  " +
+                         //",c.[Name] as OrganizationName\n   " +
+                         //",d.[ProfileName]\n   " +
+                         " FROM[MSTR_User] a\n   " +
+                         " left join mstr_user_pilot b\n  " +
+                         "on a.UserId=b.UserId\n   " +
+                         "left join MSTR_Account c\n  " +
+                         "on a.AccountId=c.AccountId\n  " +
+                         "left join MSTR_Profile d " +
+                         "on a.UserProfileId=d.ProfileId" +
+                         " where a.userid=" + UserID;
+            using (var ctx = new ExponentPortalEntities())
+            using (var cmd = ctx.Database.Connection.CreateCommand())
+            {
+                ctx.Database.Connection.Open();
+                cmd.CommandText = PilotSQL;
+                using (var reader = cmd.ExecuteReader())
+                {
+                    PDetail.UserName = reader[0].ToString();
+                    PDetail.FirstName = reader[1].ToString();
+                    PDetail.MiddleName = reader[2].ToString();
+                    PDetail.LastName = reader[3].ToString();
+                    PDetail.MobileNo = reader[4].ToString();
+
+                    PDetail.OfficeNo = reader[5].ToString();
+                    PDetail.HomeNo = reader[6].ToString();
+                    PDetail.EmailId = reader[7].ToString();
+                    PDetail.PassportNo = reader[8].ToString();
+                    PDetail.DateOfExpiry =Util.toDate(reader[9].ToString());
+                    PDetail.EmiratesID = reader[10].ToString();
+                    PDetail.Title = reader[11].ToString();
+                    PDetail.RPASPermitNo = reader[12].ToString();
+                    PDetail.PermitCategory = reader[13].ToString();
+
+                }
+            }
+            return UserDashboard;
+        }
+       
+        //return Json(PDetail, JsonRequestBehavior.AllowGet); 
   }
 }

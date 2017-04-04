@@ -31,17 +31,46 @@
           <div class="title"><b>Traffic STATS &amp; Analysis Dashoard</b>  (Input Parameters)</div>
 
           <table class="traffic_status" cellpadding="0" cellspacing="0">
-            <tr>
+            <tr style="display:none">
               <td rowspan="2"><div class="safe traffic_stat"><div class="vertical">Safe</div></div> </td>
               <td>Define Horizontal Separation</td>
               <td><input id="hSafe" class="spinner" value="@Model.hSafe" name="hSafe" type="text" /></td>
               <td>KM</td>
             </tr>
-            <tr>
+            <tr style="display:none">
               <td>Define Vertical Separation</td>
               <td><input id="vSafe" class="spinner" value="@Model.vSafe" name="vSafe" type="text" /></td>
               <td>Feet</td>
             </tr>
+              <tr>
+                  <td colspan="2">Altitude 
+                  <div id="slider" class="ui-slider-range"></div>
+                      <span class="min-sqrft1"></span>
+                      <span class="max-sqrft1"></span>
+                      <input class="query" id="minAltitude" name="minAltitude" value="@Model.minAltitude" type="hidden"/>                     
+                      <input class="query" id="maxAltitude" name="maxAltitude" value="@Model.maxAltitude" type="hidden" />
+                  </td>
+                  <td colspan="2">
+                      <div class="simple-nonlist">
+                      <input class="query" value="1" type="checkbox"  name="breach_line" id="breach_line" />
+                      <label for="breach_line">Breach</label> 
+                    </div>
+                  </td>
+              </tr>
+              <tr>
+                  <td colspan="2">
+                      <div id="Speedslider" class="ui-slider-range"></div>
+                     
+                      <input class="query" id="minSpeed" name="minSpeed" value="@Model.minSpeed" type="hidden" />
+                      <input class="query" id="maxSpeed" name="maxSpeed" value="@Model.maxSpeed" type="hidden" />
+                  </td>
+                  <td colspan="2">
+                      <div class="simple-nonlist">
+                          <input class="query" value="0" type="checkbox" name="alert_line" id="alert_line" />
+                          <label for="alert_line">Alert</label>
+                          </div>
+                    </td>
+              </tr>
             <tr>
               <td rowspan="2"><div class="alert traffic_stat"><div class="vertical">Alert</div></div></td>
               <td>Define Horizontal Separation</td>
@@ -77,8 +106,7 @@
           <div class="tile">
             <div class="tile-title">Breach
                
-                    <input class="query" value="1" type="checkbox" name="breach_line" id="breach_line" />
-                    <label for="breach_line"></label> 
+                   
                
               </div>
             <div class="tile-detail">
@@ -136,8 +164,7 @@
 
           <div class="tile">
             <div class="tile-title">Alert
-                <input class="query" value="0" type="checkbox" name="alert_line" id="alert_line" />
-                <label for="alert_line"></label> 
+                
               </div>
             <div class="tile-detail">
               <table cellpadding="0" cellspacing="0">
