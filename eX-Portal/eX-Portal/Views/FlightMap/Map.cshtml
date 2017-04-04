@@ -1,23 +1,26 @@
 ﻿@model eX_Portal.exLogic.FlightMap
 <section class="top-space">
   <div class="column column-half">
-    <div class="title">Information</div>
+    <div class="title">Flight Information
+      <div class="info" >(Ref#: <span>@Model.FlightID</span>)</div>
+      <div class="info" style="float:right"><span id="FlightInfo_FlightDate">@Model.FlightDate</span>(UTC)</div>
+    </div>
     <div id="FlightInformation">
-      <div id="FlightVideo">
-      </div>
-      <div id="FlightSummary">
+      @if (Model.IsLive || Model.Videos.Count() > 0) {
+      <div id="FlightVideo"></div>
+      }
+      <div id="FlightSummary" class="@(Model.IsLive || Model.Videos.Count() > 0 ? "" : "NoVideo")" >
         <div class="column-content" id="RpasInformation">
           <div id="GeneralInformation">
             <table class="infoTable" cellpadding="0" cellspacing="0">
               <tr>
                 <td style="width:50px"><div class="FlightSummaryImage" style="background-image:url('@Model.PilotImage')"></div></td>
                 <td>
-                  <div>@Model.PilotName</div>
-                <div>Ref#: <span>@Model.FlightID</span></div>
+                  <div>@Model.PilotName</div>                
                 </td>
                 <td style="width:50px"><div class="FlightSummaryImage" style="background-image:url('/images/rpas.png')"></div></td>
                 <td><div>@Model.RPAS</div>
-                <div><span id="FlightInfo_FlightDate">@Model.FlightDate</span>(UTC)</div>
+
 
                 </td>
               </tr>
@@ -32,11 +35,15 @@
         <div class="column-content" id="FlightInformation">
           <table class="infoTable" cellpadding="0" cellspacing="0">
             <tr>
+              <td><span class="dash-image img_duration"></span></td>
               <td>Flight Duration: <span id="FlightInfo_FlightDuration">0:00</span> Hours</td>
-              <td>Altitude: <span id="FlightInfo_Altitude">0.0</span> Feet</td>
+              <td><span class="dash-image img_altitude"></span></td>
+              <td>Altitude: <span id="FlightInfo_Altitude">0.0</span> Meter</td>
             </tr>
             <tr>
+              <td><span class="dash-image img_speed"></span></td>
               <td>Speed: <span id="FlightInfo_Speed">0.0</span> KM/Hour</td>
+              <td><span class="dash-image img_distance"></span></td>
               <td>Distance: <span id="FlightInfo_Distance">0.0</span> Meter</td>
             </tr>
           </table>
@@ -52,35 +59,20 @@
         <li>
           <ul class="FlightDataRow">
             <li class="col1">Time</li>
-            <li class="col2">Mins</li>
-            <li class="col3">Alt</li>
-            <li class="col4">Speed</li>
-            <li class="col5">Distance</li>
+            <li class="col2">Lat</li>
+            <li class="col2">Lng</li>
+            <li class="col3">Duration</li>
+            <li class="col4">Altitude</li>
+            <li class="col5">Speed</li>
+            <li class="col6">Distance</li>
+            <li class="col7">Satalites</li>
+            <li class="col8">Pich</li>
+            <li class="col9">Roll</li>
           </ul>
         </li>
       </ul>
 
       <ul id="FlightDataScroll">
-        <li>
-          <ul class="FlightDataRow">
-            <li class="col1">Time</li>
-            <li class="col2">Mins</li>
-            <li class="col3">Alt</li>
-            <li class="col4">Speed</li>
-            <li class="col5">Distance</li>
-          </ul>
-        </li>
-        <li>
-          <ul class="FlightDataRow">
-            <li class="col1">Time</li>
-            <li class="col2">Mins</li>
-            <li class="col3">Alt</li>
-            <li class="col4">Speed</li>
-            <li class="col5">Distance</li>
-          </ul>
-        </li>
-
-
       </ul>
 
     </div>
@@ -89,7 +81,11 @@
 
 
     <div class="column column-half shaded">
-      <div class="title">Flight Map</div>
+      <div class="title">Flight Map
+        @if (!Model.IsLive) {
+          <div id="FlightReplay" class="button">Replay</div>
+        }      
+      </div>
       <div id="flightmap"></div>
     </div>
   </section>
@@ -102,12 +98,17 @@
   @section scripts {
     <script type="text/javascript">
       var FlightID = @Model.FlightID;
+      var DroneID = @Model.DroneID;
+      var IsLive = @(Model.IsLive ? "true" : "false");
+      var _FlightVideos = @Html.Raw(Json.Encode(Model.Videos));
     </script>
     <script src="//code.highcharts.com/stock/highstock.js"></script>
     <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyDY6IHXH4-fUAzYq6HBR_ndu_lnyyopcTs"></script>
+    <script type="text/javascript" src="~/jwplayer/jwplayer.js"></script>
     <script type="text/javascript" src="~/Scripts/AgricultureCommon.js"></script>
     <script type="text/javascript" src="~/Scripts/FlightMap-Chart.js"></script>
     <script type="text/javascript" src="~/Scripts/FlightMap-Map.js"></script>
     
+
   }
 

@@ -768,6 +768,8 @@
     <Content Include="images\marker.png" />
     <Content Include="images\mCSB_buttons.png" />
     <Content Include="images\menu-drop-down.png" />
+    <Content Include="images\PilotImage.png" />
+    <Content Include="images\rpas.png" />
     <Content Include="images\rta-logo.png" />
     <Content Include="images\rta\AvgSpeed.png" />
     <Content Include="images\rta\Heading.png" />

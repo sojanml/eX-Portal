@@ -5,6 +5,11 @@ using System.Linq;
 using System.Web;
 
 namespace eX_Portal.exLogic {
+  public class FlightVideo {
+    public String VideoName { get; set; }
+    public DateTime? VideoDate { get; set; }
+  }
+
   public class FlightMap {
     public String PilotName { get; private set; }
     public String PilotImage { get; private set; }
@@ -16,7 +21,8 @@ namespace eX_Portal.exLogic {
     public int FlightID { get; private set; }
     public int ApprovalID { get; private set; }
     public int PilotID { get; private set; }
-
+    public List<FlightVideo> Videos { get; set; }
+    public bool IsLive { get; private set; }
 
     public void GetInformation(int FlightID) {
       String SQL = @"SELECT 
@@ -61,6 +67,23 @@ namespace eX_Portal.exLogic {
             PilotID = GetInt(RS, "PilotID");
           }
         }//using (var cmd 
+
+        var vQuery = from v in ctx.DroneFlightVideos
+                     where v.FlightID == FlightID
+                     orderby v.VideoDateTime
+                     select new FlightVideo {
+                       VideoName = v.VideoURL,
+                       VideoDate = v.VideoDateTime
+                     };
+        this.Videos = vQuery.ToList();
+        DateTime CheckDate = DateTime.UtcNow.AddMinutes(-2);
+
+        var LiveQuery = from f in ctx.FlightMapDatas
+                        where f.FlightID == FlightID &&
+                        f.ReadTime >= CheckDate
+                        select f.FlightMapDataID;
+        this.IsLive = LiveQuery.Any();
+
       }//using(var ctx)
 
       if (String.IsNullOrEmpty(PilotImage)) {
@@ -72,23 +95,31 @@ namespace eX_Portal.exLogic {
       }
     }
 
-
     public Object MapData(int FlightID, int FlightMapDataID = 0) {
       using(var ctx = new ExponentPortalEntities()) {
-        var Query = ctx.FlightMapDatas.Where(e => e.FlightID == FlightID);
+        var Query = ctx.FlightMapDatas.Where(e => 
+          e.FlightID == FlightID &&
+          e.Altitude >= 1
+          );
         if(FlightMapDataID > 0) {
           Query = Query.Where(e => e.FlightMapDataID > FlightMapDataID);
         }
-        var Data = Query.Select(e => new {
-          Lat = e.Latitude,
-          Lng = e.Longitude,
-          FlightTime = e.ReadTime,
-          Altitude = e.Altitude,
-          Speed = e.Speed,
-          FlightDuration = e.TotalFlightTime,
-          Distance = e.Distance,
-          FlightMapDataID = e.FlightMapDataID
-        });
+        var Data = Query
+          .OrderBy(o => o.ReadTime)
+          .Select(e => new {
+            Lat = e.Latitude,
+            Lng = e.Longitude,
+            FlightTime = e.ReadTime,
+            Altitude = e.Altitude,
+            Speed = e.Speed,
+            FlightDuration = e.TotalFlightTime,
+            Distance = e.Distance,
+            Satellites = e.Satellites,
+            Pich = e.Pitch,
+            Roll = e.Roll,
+            FlightMapDataID = e.FlightMapDataID
+          })
+          .Take(1000);
 
         return new {
           Status = "Ok",
