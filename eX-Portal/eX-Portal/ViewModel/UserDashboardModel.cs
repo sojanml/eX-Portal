@@ -13,7 +13,7 @@ namespace eX_Portal.ViewModel
             public string UserName { get; set; }
             public string Password { get; set; }
             public Nullable<bool> RememberMe { get; set; }
-            public string PhotoUrl { get; set; }
+            public string PilotImage { get; set; }
             public string FirstName { get; set; }
             public string MiddleName { get; set; }
             public string LastName { get; set; }
@@ -99,9 +99,11 @@ namespace eX_Portal.ViewModel
             public string ManufactureName { get; set; }
             public string UavTypeName { get; set; }
             public string PartsGroupName { get; set; }
+
         }
             public ApproalDetail ApprovalDetails { get; set; }
-            public GCA_Approval GcaApproval { get; set; }
+            public List<GCA_Approval> ApprovalList { get; set; }
             public List<RPASDetail> RPASList { get; set; }
+            public PilotDetail Pilot { get; set; }
    }
 }

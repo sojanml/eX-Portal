@@ -1,0 +1,59 @@
+﻿@using eX_Portal.ViewModel
+
+@{
+    ViewBag.Title = "UserDashboard";
+    Layout = null ;
+}
+
+<table class="column-full">
+    <tr>
+        <td style="width :33%;">
+            <div >
+                <div class="FlightSummaryImage" style="background-image:url('@Model.Pilot.PilotImage')"></div>
+
+                @Model.Pilot.FirstName
+                @Model.Pilot.MiddleName
+                @Model.Pilot.LastName
+                @Model.Pilot.RPASPermitNo
+                @Model.Pilot.PermitCategory
+
+            </div>
+        </td>
+        <td style="width :33%;">            
+                @foreach (var Item in @Model.RPASList)
+                    {
+                        <div>
+                            @Item.DroneName
+                            @Item.ManufactureName
+
+                        </div>
+                     }
+        </td>
+        <td style="width :33%;">
+            <div>
+                @foreach (var Item in @Model.ApprovalList)
+                 {
+                    <div>
+                        @Item.ApprovalName
+                        @Item.ApprovalStatus
+
+                    </div>
+                }
+            </div>
+                
+        </td>
+    </tr>
+</table>
+
+
+
+
+<script type="text/javascript">
+  var HomeMapURL = '@Url.Action("UserDashboard", "Dashboard")';
+   
+ 
+
+    
+</script>
+
+

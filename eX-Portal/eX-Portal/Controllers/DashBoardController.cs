@@ -337,13 +337,19 @@ namespace eX_Portal.Controllers {
 
         public ActionResult UserDashboard()
         {
-            return View();
+            int userid = Util.getLoginUserID();
+            Util ut = new Util();
+            UserDashboardModel UserDashboard = ut.GetUserDetails(userid);
+            return View(UserDashboard);
         }
 
         public JsonResult getUserDashboard()
         {
 
-            return Json("");
+            int userid = Util.getLoginUserID();
+            Util ut = new Util();
+            UserDashboardModel UserDashboard = ut.GetUserDetails(userid);
+            return Json(UserDashboard);
 
         }
 
