@@ -1,5 +1,6 @@
 @import "compass";
 
+$MaxResolution: 1150px;
 $MenuColor: #e5e5e5;
 $ShadedColur: #ededed;
 $MenuHiliteColor: #cacaca;
@@ -9,12 +10,11 @@ $SelectedItemColor: #53a100;
 
 $ReportHeadBackground: #474747;
 $ReportBackgroundTranDuration: 100ms;
-$TitleTextColor: #ff9b9b ;
+$TitleTextColor: #ff9b9b;
 $MaxResolution: 1150px;
 $VerticalGap: 12px;
 
 @include font-face("FontAwesome", font-files( "../fonts/fontawesome-webfont.ttf", "../fonts/FontAwesome.otf", "../fonts/fontawesome-webfont.svg", "../fonts/fontawesome-webfont.eot", "../fonts/fontawesome-webfont.woff", "../fonts/fontawesome-webfont.woff2" ));
-
 @include font-face("OpenSans", font-files( "../fonts/OpenSans.ttf", "../fonts/OpenSans.eot", "../fonts/OpenSans.svg", "../fonts/OpenSans.woff", "../fonts/OpenSans.woff2" ));
 @include font-face("Gobold_Light", font-files( "../fonts/GoboldThinLight.ttf", "../fonts/GoboldThinLight.eot", "../fonts/GoboldThinLight.svg", "../fonts/GoboldThinLight.woff", "../fonts/GoboldThinLight.woff2" ));
 
@@ -22,12 +22,55 @@ $VerticalGap: 12px;
   width: $TotalWidth;
   font-size: $FontSize;
 
-  td.spacer {
-    width: $Gap;
-  }
-
   div.column {
     margin-right: $Gap;
+
+    div.column-content {
+      width: 100%;
+      padding: 0px 0px 0px 5px;
+      box-sizing: border-box;
+    }
+
+    div.title {
+      padding: 5px 0px 5px 5px;
+      background-color: $ReportHeadBackground;
+      margin: 0px;
+      font-family: Gobold_Light;
+      font-size: 12px;
+      color: $TitleTextColor;
+
+      div.button {
+        float: right;
+        display: inline-block;
+        padding: 0px 8px 2px 8px;
+        background-color: $MenuColor;
+        color: black;
+        margin-right: 10px;
+        font-family: OpenSans;
+        font-size: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $TitleTextColor
+        }
+      }
+
+      div.info {
+        display: inline-block;
+        margin: 0px 10px 0px 10px;
+        color: white;
+      }
+    }
+
+    div.sub-title {
+      padding: 5px 0px 5px 5px;
+      background-color: $ShadedColur;
+      border-bottom: 2px white solid;
+      margin: 0px 0px 5px 0px;
+      font-family: Gobold_Light;
+      font-size: 10px;
+    }
   }
 
   div.column-full {
@@ -45,6 +88,25 @@ $VerticalGap: 12px;
     div.column-4-of-6 {
       width: ($CalulatedWidth - $Gap) * 0.6;
     }
+
+
+    div#FlightVideo {
+      width: 240px;
+      height: 140px;
+      float: left;
+      background-color: black;
+    }
+
+    div#FlightSummary {
+      width: $CalulatedWidth - 240px;
+      float: right;
+
+      &.NoVideo {
+        width: 100%;
+        float: none;
+        padding-top: 10px;
+      }
+    }
   }
 
   div.column-2-of-6 {
@@ -55,58 +117,12 @@ $VerticalGap: 12px;
     width: ($TotalWidth - $Gap*5)/6 * 4 + ($Gap * 3);
   }
 
-  div.title {
-    padding: 3px 0px 3px 5px;
-    border-bottom: 2px white solid;
-    margin-bottom: 5px;
-    vertical-align: text-bottom
-  }
 
   div.hr {
     width: 100%;
     height: 2px;
     background-color: white;
     margin-bottom: 2px;
-  }
-
-  table.info-tiles {
-    $CalulatedWidth: (($TotalWidth - $Gap) / 2);
-    width: $CalulatedWidth;
-
-    tr td:first-child {
-      width: $CalulatedWidth * 0.2;
-    }
-
-    div.tile {
-      width: 100%;
-    }
-
-    $BoxWidth: $CalulatedWidth * 0.8;
-    $LeftBox: 0.25;
-
-    div.detail {
-      width: $BoxWidth;
-    }
-
-    div.detail_left,
-    div.detail_right {
-      min-height: 74px;
-      font-size: $FontSize * 1;
-    }
-
-    div.detail,
-    div.detail_left,
-    div.detail_right {
-      min-height: 85px;
-    }
-
-    div.detail_left {
-      width: $BoxWidth * $LeftBox;
-    }
-
-    div.detail_right {
-      width: $BoxWidth * (1 - $LeftBox);
-    }
   }
 
   div.fixed-height-1 {
@@ -139,6 +155,9 @@ $VerticalGap: 12px;
   }
 }
 
+table  {
+  box-sizing:border-box;
+}
 span.refresh, span.icon {
   font-family: FontAwesome;
   font-size: 12px;
@@ -157,7 +176,7 @@ span.refresh {
   }
 }
 
-#adsb_map {
+#flightmap {
   min-height: 460px;
 }
 
@@ -290,8 +309,8 @@ body {
 
 footer {
   border-top: 1px red solid;
-  font-size:8pt;
-  padding:3px 0px 10px 0px;
+  font-size: 8pt;
+  padding: 3px 0px 10px 0px;
 }
 
 div.clearfix {
@@ -809,7 +828,7 @@ div.form-horizontal {
   textarea {
     min-height: 150px;
   }
-  
+
   input[type=submit] {
     padding: 3px 15px 3px 15px;
     color: $TitleTextColor;
@@ -818,5 +837,129 @@ div.form-horizontal {
     text-transform: uppercase;
     background-color: $ReportHeadBackground;
     border: 1px silver outset;
+  }
+}
+
+
+table.infoTable {
+  width:100%;
+  tr {
+    td {
+      padding:0px 5px 5px 0px;
+      span {
+        display:inline-block;
+        padding-left:0px;
+        color:red;
+      }
+    }
+  }
+}
+
+div#FlightInfoNOC {
+  background-color: $MenuColor;
+  padding:2px 0px 2px 5px;
+  margin-bottom:3px;
+  span {
+    display: inline-block;
+    padding-left: 0px;
+    color: red;
+  }
+}
+
+#FlightInformation  {
+  background-color: $MenuColor;
+}
+#FlightInformation,
+#FlightSummary {
+  @include clearfix();
+}
+#FlightSummary  {
+margin-top:5px;
+
+}
+
+#FlightGraph {
+  width: 100%;
+  height: 140px;
+  background-color: white;
+  margin-top:10px;
+}
+
+#FlightData {
+  margin-top: 10px;
+
+  ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  ul.FlightDataRow {
+    li {
+      width: 46px;
+      float: left;
+      margin-right: 5px;
+      padding: 2px 2px 2px 2px;
+    }
+
+    @include clearfix();
+  }
+
+  ul#FlightDataHeader {
+    & > li {
+      border-bottom: 2px red solid;
+      background-color: $MenuColor;
+    }
+  }
+
+  ul#FlightDataScroll {
+    height: 140px;
+    width: 100%;
+    overflow-y: auto;
+    border-bottom: 1px red solid;
+
+    & > li {
+      border-bottom: 1px $MenuColor solid;
+    }
+  }
+}
+
+div.FlightSummaryImage {
+  border-radius: 50%;
+  width:50px;
+  height:50px;
+  background-size:cover;
+  background-color: white;
+}
+
+.dash-image {
+  width: 20px;
+  height: 20px;
+  background-color: #565555;
+  -webkit-mask-size: 20px 20px;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+
+  &.img_duration {
+    -webkit-mask-image: url('/images/image5.png');
+    mask-image: url('/images/image5.png');
+  }
+
+  &.img_altitude {
+    background-color: rgb(219, 211, 1);
+    -webkit-mask-image: url(/images/image7.png);
+    mask-image: url(/images/image7.png);
+  }
+
+  &.img_speed {
+    background-color: rgb(11, 144, 118);
+    -webkit-mask-image: url(/images/image6.png);
+    mask-image: url(/images/image6.png);
+  }
+
+  &.img_distance {
+    -webkit-mask-image: url('/images/image12.png');
+    mask-image: url('/images/image12.png');
   }
 }

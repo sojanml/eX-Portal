@@ -242,6 +242,7 @@
     <Compile Include="Controllers\DroneFlightController.cs" />
     <Compile Include="Controllers\DroneServiceController.cs" />
     <Compile Include="Controllers\EmailController.cs" />
+    <Compile Include="Controllers\FlightMapController.cs" />
     <Compile Include="Controllers\GpsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ListController.cs" />
@@ -267,6 +268,7 @@
     <Compile Include="exLogic\DroneCheckListForm.cs" />
     <Compile Include="exLogic\DroneFlightSetup.cs" />
     <Compile Include="exLogic\ExifLib.cs" />
+    <Compile Include="exLogic\FlightMap.cs" />
     <Compile Include="exLogic\GeoGrid.cs" />
     <Compile Include="exLogic\HtmlHelperExtensions.cs" />
     <Compile Include="exLogic\Listing.cs" />
@@ -766,6 +768,8 @@
     <Content Include="images\marker.png" />
     <Content Include="images\mCSB_buttons.png" />
     <Content Include="images\menu-drop-down.png" />
+    <Content Include="images\PilotImage.png" />
+    <Content Include="images\rpas.png" />
     <Content Include="images\rta-logo.png" />
     <Content Include="images\rta\AvgSpeed.png" />
     <Content Include="images\rta\Heading.png" />
@@ -961,6 +965,8 @@
     <Content Include="Scripts\FlightChart.js" />
     <Content Include="Scripts\flightCreation.js" />
     <Content Include="Scripts\FlightHoursByAccount.js" />
+    <Content Include="Scripts\FlightMap-Chart.js" />
+    <Content Include="Scripts\FlightMap-Map.js" />
     <Content Include="Scripts\FlightSetup.js" />
     <Content Include="Scripts\Flight_Gps_Map.js" />
     <Content Include="Scripts\geotag.js" />
@@ -1420,6 +1426,8 @@
     <Content Include="Views\Agriculture\BulkUpload.cshtml" />
     <Content Include="Views\Traffic\DMAT.cshtml" />
     <Content Include="Views\Shared\_exPortal_V2.cshtml" />
+    <Content Include="Views\FlightMap\Index.cshtml" />
+    <Content Include="Views\FlightMap\Map.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

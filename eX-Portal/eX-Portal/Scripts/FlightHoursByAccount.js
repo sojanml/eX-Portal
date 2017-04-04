@@ -107,8 +107,8 @@ function initChartsMonthly() {
               align: 'left',
 
               style: {
-                "fontFamily": 'Conv_DINNextLTPro-Light',
-                "fontSize": "15px",
+                "fontFamily": 'OpenSans',
+                "fontSize": "12pt",
                 color: '#ff6666',
                 "fontWeight": "bold"
               }

@@ -26,6 +26,10 @@
     transform: rotate(360deg);
   }
 }
+table {
+  box-sizing: border-box;
+}
+
 span.refresh, span.icon {
   font-family: FontAwesome;
   font-size: 12px;
@@ -42,7 +46,7 @@ span.refresh:hover {
   animation: spin 3s linear infinite;
 }
 
-#adsb_map {
+#flightmap {
   min-height: 460px;
 }
 
@@ -391,11 +395,49 @@ section div.column:last-child {
     width: 920px;
     font-size: 10px;
   }
-  section td.spacer {
-    width: 10px;
-  }
   section div.column {
     margin-right: 10px;
+  }
+  section div.column div.column-content {
+    width: 100%;
+    padding: 0px 0px 0px 5px;
+    box-sizing: border-box;
+  }
+  section div.column div.title {
+    padding: 5px 0px 5px 5px;
+    background-color: #474747;
+    margin: 0px;
+    font-family: Gobold_Light;
+    font-size: 12px;
+    color: #ff9b9b;
+  }
+  section div.column div.title div.button {
+    float: right;
+    display: inline-block;
+    padding: 0px 8px 2px 8px;
+    background-color: #e5e5e5;
+    color: black;
+    margin-right: 10px;
+    font-family: OpenSans;
+    font-size: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  section div.column div.title div.button:hover {
+    background-color: #ff9b9b;
+  }
+  section div.column div.title div.info {
+    display: inline-block;
+    margin: 0px 10px 0px 10px;
+    color: white;
+  }
+  section div.column div.sub-title {
+    padding: 5px 0px 5px 5px;
+    background-color: #ededed;
+    border-bottom: 2px white solid;
+    margin: 0px 0px 5px 0px;
+    font-family: Gobold_Light;
+    font-size: 10px;
   }
   section div.column-full {
     width: 920px;
@@ -409,51 +451,32 @@ section div.column:last-child {
   section div.column-half div.column-4-of-6 {
     width: 267px;
   }
+  section div.column-half div#FlightVideo {
+    width: 240px;
+    height: 140px;
+    float: left;
+    background-color: black;
+  }
+  section div.column-half div#FlightSummary {
+    width: 215px;
+    float: right;
+  }
+  section div.column-half div#FlightSummary.NoVideo {
+    width: 100%;
+    float: none;
+    padding-top: 10px;
+  }
   section div.column-2-of-6 {
     width: 300px;
   }
   section div.column-4-of-6 {
     width: 610px;
   }
-  section div.title {
-    padding: 3px 0px 3px 5px;
-    border-bottom: 2px white solid;
-    margin-bottom: 5px;
-    vertical-align: text-bottom;
-  }
   section div.hr {
     width: 100%;
     height: 2px;
     background-color: white;
     margin-bottom: 2px;
-  }
-  section table.info-tiles {
-    width: 455px;
-  }
-  section table.info-tiles tr td:first-child {
-    width: 91px;
-  }
-  section table.info-tiles div.tile {
-    width: 100%;
-  }
-  section table.info-tiles div.detail {
-    width: 364px;
-  }
-  section table.info-tiles div.detail_left,
-  section table.info-tiles div.detail_right {
-    min-height: 74px;
-    font-size: 10px;
-  }
-  section table.info-tiles div.detail,
-  section table.info-tiles div.detail_left,
-  section table.info-tiles div.detail_right {
-    min-height: 85px;
-  }
-  section table.info-tiles div.detail_left {
-    width: 91px;
-  }
-  section table.info-tiles div.detail_right {
-    width: 273px;
   }
   section div.fixed-height-1 {
     height: 165px;
@@ -472,11 +495,49 @@ section div.column:last-child {
     width: 1150px;
     font-size: 11px;
   }
-  section td.spacer {
-    width: 15px;
-  }
   section div.column {
     margin-right: 15px;
+  }
+  section div.column div.column-content {
+    width: 100%;
+    padding: 0px 0px 0px 5px;
+    box-sizing: border-box;
+  }
+  section div.column div.title {
+    padding: 5px 0px 5px 5px;
+    background-color: #474747;
+    margin: 0px;
+    font-family: Gobold_Light;
+    font-size: 12px;
+    color: #ff9b9b;
+  }
+  section div.column div.title div.button {
+    float: right;
+    display: inline-block;
+    padding: 0px 8px 2px 8px;
+    background-color: #e5e5e5;
+    color: black;
+    margin-right: 10px;
+    font-family: OpenSans;
+    font-size: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  section div.column div.title div.button:hover {
+    background-color: #ff9b9b;
+  }
+  section div.column div.title div.info {
+    display: inline-block;
+    margin: 0px 10px 0px 10px;
+    color: white;
+  }
+  section div.column div.sub-title {
+    padding: 5px 0px 5px 5px;
+    background-color: #ededed;
+    border-bottom: 2px white solid;
+    margin: 0px 0px 5px 0px;
+    font-family: Gobold_Light;
+    font-size: 10px;
   }
   section div.column-full {
     width: 1150px;
@@ -490,51 +551,32 @@ section div.column:last-child {
   section div.column-half div.column-4-of-6 {
     width: 331.5px;
   }
+  section div.column-half div#FlightVideo {
+    width: 240px;
+    height: 140px;
+    float: left;
+    background-color: black;
+  }
+  section div.column-half div#FlightSummary {
+    width: 327.5px;
+    float: right;
+  }
+  section div.column-half div#FlightSummary.NoVideo {
+    width: 100%;
+    float: none;
+    padding-top: 10px;
+  }
   section div.column-2-of-6 {
     width: 373.33333px;
   }
   section div.column-4-of-6 {
     width: 761.66667px;
   }
-  section div.title {
-    padding: 3px 0px 3px 5px;
-    border-bottom: 2px white solid;
-    margin-bottom: 5px;
-    vertical-align: text-bottom;
-  }
   section div.hr {
     width: 100%;
     height: 2px;
     background-color: white;
     margin-bottom: 2px;
-  }
-  section table.info-tiles {
-    width: 567.5px;
-  }
-  section table.info-tiles tr td:first-child {
-    width: 113.5px;
-  }
-  section table.info-tiles div.tile {
-    width: 100%;
-  }
-  section table.info-tiles div.detail {
-    width: 454px;
-  }
-  section table.info-tiles div.detail_left,
-  section table.info-tiles div.detail_right {
-    min-height: 74px;
-    font-size: 11px;
-  }
-  section table.info-tiles div.detail,
-  section table.info-tiles div.detail_left,
-  section table.info-tiles div.detail_right {
-    min-height: 85px;
-  }
-  section table.info-tiles div.detail_left {
-    width: 113.5px;
-  }
-  section table.info-tiles div.detail_right {
-    width: 340.5px;
   }
   section div.fixed-height-1 {
     height: 165px;
@@ -748,4 +790,118 @@ div.form-horizontal input[type=submit] {
   text-transform: uppercase;
   background-color: #474747;
   border: 1px silver outset;
+}
+
+table.infoTable {
+  width: 100%;
+}
+table.infoTable tr td {
+  padding: 0px 5px 5px 0px;
+}
+table.infoTable tr td span {
+  display: inline-block;
+  padding-left: 0px;
+  color: red;
+}
+
+div#FlightInfoNOC {
+  background-color: #e5e5e5;
+  padding: 2px 0px 2px 5px;
+  margin-bottom: 3px;
+}
+div#FlightInfoNOC span {
+  display: inline-block;
+  padding-left: 0px;
+  color: red;
+}
+
+#FlightInformation {
+  background-color: #e5e5e5;
+}
+
+#FlightInformation:after,
+#FlightSummary:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+#FlightSummary {
+  margin-top: 5px;
+}
+
+#FlightGraph {
+  width: 100%;
+  height: 140px;
+  background-color: white;
+  margin-top: 10px;
+}
+
+#FlightData {
+  margin-top: 10px;
+}
+#FlightData ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+#FlightData ul.FlightDataRow li {
+  width: 46px;
+  float: left;
+  margin-right: 5px;
+  padding: 2px 2px 2px 2px;
+}
+#FlightData ul.FlightDataRow:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+#FlightData ul#FlightDataHeader > li {
+  border-bottom: 2px red solid;
+  background-color: #e5e5e5;
+}
+#FlightData ul#FlightDataScroll {
+  height: 140px;
+  width: 100%;
+  overflow-y: auto;
+  border-bottom: 1px red solid;
+}
+#FlightData ul#FlightDataScroll > li {
+  border-bottom: 1px #e5e5e5 solid;
+}
+
+div.FlightSummaryImage {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background-size: cover;
+  background-color: white;
+}
+
+.dash-image {
+  width: 20px;
+  height: 20px;
+  background-color: #565555;
+  -webkit-mask-size: 20px 20px;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+}
+.dash-image.img_duration {
+  -webkit-mask-image: url("/images/image5.png");
+  mask-image: url("/images/image5.png");
+}
+.dash-image.img_altitude {
+  background-color: #dbd301;
+  -webkit-mask-image: url(/images/image7.png);
+  mask-image: url(/images/image7.png);
+}
+.dash-image.img_speed {
+  background-color: #0b9076;
+  -webkit-mask-image: url(/images/image6.png);
+  mask-image: url(/images/image6.png);
+}
+.dash-image.img_distance {
+  -webkit-mask-image: url("/images/image12.png");
+  mask-image: url("/images/image12.png");
 }

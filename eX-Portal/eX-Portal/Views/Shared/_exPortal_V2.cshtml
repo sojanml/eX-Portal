@@ -62,7 +62,9 @@
     </header>
   </section>
   <section class="body-content">
+    @if(!String.IsNullOrEmpty(ViewBag.Title)) { 
     <div class="body-title">@ViewBag.Title</div>
+    }
     @RenderBody()
   </section>
 

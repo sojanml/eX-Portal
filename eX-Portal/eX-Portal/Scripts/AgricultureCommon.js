@@ -19,6 +19,16 @@ function dtConvFromJSON(sNetDate, isAddTime = false) {
   return sDate;
 }
 
+function dtFromJSON(sNetDate) {
+  if (sNetDate === null) return new Date();
+  var r = /\/Date\(([0-9]+)\)\//i
+  var matches = sNetDate.match(r);
+  if (matches.length === 2) {
+    return new Date(parseInt(matches[1]));
+  } 
+  return new Date();
+}
+
 
 function dFormat(tDate, isAddTime) {
   var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
