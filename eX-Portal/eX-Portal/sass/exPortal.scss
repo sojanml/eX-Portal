@@ -257,6 +257,13 @@ div.label {
   width: 30px;
 }
 
+h2 {
+  font-family: Gobold_Light;
+  color: $ReportHeadBackground;
+  padding: 5px 0px 5px 0px;
+  margin: 10px 0px 10px 0px;
+  border-bottom: 1px $ReportHeadBackground solid;
+}
 
 input:focus,
 select:focus,
@@ -1081,5 +1088,32 @@ div.dashboard-column {
   input[type=text],
   input[type=password] {
     width:60%;
+  }
+}
+
+table.qDetailView {
+  width:100%;
+  tr {
+    td {
+      padding: 3px 15px 3px 0px;
+      border-bottom:1px $MenuColor solid;
+      span.value {
+        padding-left:15px;
+        color:red;
+      }
+    }
+  }
+}
+
+
+div.photo-upload {
+  float:right;
+  width:160px;
+  height:160px;
+  div.user-photo {
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    background-size: cover;
   }
 }

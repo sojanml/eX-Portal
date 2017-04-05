@@ -83,6 +83,14 @@ div.label {
   width: 30px;
 }
 
+h2 {
+  font-family: Gobold_Light;
+  color: #474747;
+  padding: 5px 0px 5px 0px;
+  margin: 10px 0px 10px 0px;
+  border-bottom: 1px #474747 solid;
+}
+
 input:focus,
 select:focus,
 textarea:focus,
@@ -1030,4 +1038,28 @@ div.dashboard-column div.toolbar div.button:hover {
 #loginForm input[type=text],
 #loginForm input[type=password] {
   width: 60%;
+}
+
+table.qDetailView {
+  width: 100%;
+}
+table.qDetailView tr td {
+  padding: 3px 15px 3px 0px;
+  border-bottom: 1px #e5e5e5 solid;
+}
+table.qDetailView tr td span.value {
+  padding-left: 15px;
+  color: red;
+}
+
+div.photo-upload {
+  float: right;
+  width: 160px;
+  height: 160px;
+}
+div.photo-upload div.user-photo {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background-size: cover;
 }

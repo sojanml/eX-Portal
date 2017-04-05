@@ -3,9 +3,7 @@
 }
 <div>
 <div class="photo-upload">
-  <div class="user-photo">
-    <img id="img-user-photo" src="@ViewBag.ProfileImage" />
-  </div>
+  <div class="user-photo" style="background-image: url('@ViewBag.ProfileImage')"></div>
 </div>
 <div style="margin-right:200px">
   @Html.Raw(ViewBag.Message)
