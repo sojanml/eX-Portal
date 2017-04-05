@@ -141,7 +141,7 @@ function setStatusSummary(StatusData, ADSBObj) {
   setStatusWatching(TheDatas);
 
     //var AllFlights = ADSBObj.GetAllFlights();
-  if ($('input.query#breach_line').is(':checked'))
+  if ($('input.query#BreachLine').is(':checked'))
   {
    //   ADSBObj.DrawLinesOf(null);
       ADSBObj.DrawLinesOf(BreachRef);
@@ -149,7 +149,7 @@ function setStatusSummary(StatusData, ADSBObj) {
   {
       ADSBObj.DrawLinesOf(null);
   }
-  if ($('input.query#alert_line').is(':checked'))
+  if ($('input.query#AlertLine').is(':checked'))
   {
    //   ADSBObj.DrawLinesOf(null);
       ADSBObj.DrawLinesOfAlert(AlertRef);

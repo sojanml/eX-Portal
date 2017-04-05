@@ -42,35 +42,7 @@
               <td><input id="vSafe" class="spinner" value="@Model.vSafe" name="vSafe" type="text" /></td>
               <td>Feet</td>
             </tr>
-              <tr>
-                  <td colspan="2">Altitude 
-                  <div id="slider" class="ui-slider-range"></div>
-                      <span class="min-sqrft1"></span>
-                      <span class="max-sqrft1"></span>
-                      <input class="query" id="minAltitude" name="minAltitude" value="@Model.minAltitude" type="hidden"/>                     
-                      <input class="query" id="maxAltitude" name="maxAltitude" value="@Model.maxAltitude" type="hidden" />
-                  </td>
-                  <td colspan="2">
-                      <div class="simple-nonlist">
-                      <input class="query" value="1" type="checkbox"  name="breach_line" id="breach_line" />
-                      <label for="breach_line">Breach</label> 
-                    </div>
-                  </td>
-              </tr>
-              <tr>
-                  <td colspan="2">
-                      <div id="Speedslider" class="ui-slider-range"></div>
-                     
-                      <input class="query" id="minSpeed" name="minSpeed" value="@Model.minSpeed" type="hidden" />
-                      <input class="query" id="maxSpeed" name="maxSpeed" value="@Model.maxSpeed" type="hidden" />
-                  </td>
-                  <td colspan="2">
-                      <div class="simple-nonlist">
-                          <input class="query" value="0" type="checkbox" name="alert_line" id="alert_line" />
-                          <label for="alert_line">Alert</label>
-                          </div>
-                    </td>
-              </tr>
+
             <tr>
               <td rowspan="2"><div class="alert traffic_stat"><div class="vertical">Alert</div></div></td>
               <td>Define Horizontal Separation</td>
@@ -94,9 +66,46 @@
               <td>Feet</td>
             </tr>
           </table>
+
+          <input class="query" id="minAltitude" name="minAltitude" value="@Model.minAltitude" type="hidden" />
+          <input class="query" id="maxAltitude" name="maxAltitude" value="@Model.maxAltitude" type="hidden" />
+          <input class="query" id="minSpeed" name="minSpeed" value="@Model.minSpeed" type="hidden" />
+          <input class="query" id="maxSpeed" name="maxSpeed" value="@Model.maxSpeed" type="hidden" />
+
+          <table class="Sliders" cellpadding="0" cellspacing="0">
+            <tr>
+              <td rowspan="2"><div class="filter traffic_stat"><div class="vertical">Filter</div></div> </td>
+              <td>Altitude</td>
+              <td class="SliderColumn"><div id="SliderAltitude" class="ui-slider-range"></div></td>   
+              <td class="ValueColumn">
+                <div>
+                  <span id="span_minAltitude" class="SliverValue">@Model.minAltitude</span>
+                  to
+                  <span id="span_maxAltitude" class="SliverValue">@Model.maxAltitude</span>
+                  Feet
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>Speed</td>
+              <td class="SliderColumn"> <div id="SliderSpeed" class="ui-slider-range"></div></td>
+              <td class="ValueColumn">
+                <div>
+                  <span id="span_minSpeed" class="SliverValue">@Model.minSpeed.ToString("#.0")</span>
+                  to
+                  <span id="span_maxSpeed" class="SliverValue">@Model.maxSpeed.ToString("#.0")</span>
+                  Meter/Hour
+                </div>
+              </td>
+            </tr>
+          </table>
+
+
         </td>
       </tr>
     </table>
+
 
 
 
@@ -104,11 +113,7 @@
       <tr>
         <td class="breach" valign="top">
           <div class="tile">
-            <div class="tile-title">Breach
-               
-                   
-               
-              </div>
+            <div class="tile-title">Breach</div>
             <div class="tile-detail">
               <table cellpadding="0" cellspacing="0">
                 <tr>
@@ -246,17 +251,48 @@
 </section>
 
 <section class="top-space">
-  <div class="shaded" id="TimeZoneSelect">
-    <div class="title"><b>Time Zone</b></div>
-    <ul class="simple-list">
-      <li><input checked class="RadioTimeZoneSelect" value="0" type="radio" name="graph_utc" id="graph_utc_1" /><label for="graph_utc_1">UTC</label> </li>
-      <li><input class="RadioTimeZoneSelect" value="1" type="radio" name="graph_utc" id="graph_utc_2" /><label for="graph_utc_2">Local</label> </li>
-    </ul>
-  </div>
-  <div id="BarGraph"></div>
+  <table  cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="filter">
+        <div class="tile">
+          <div class="tile-title">User Interface</div>
+          <div class="tile-detail">
+
+            <div class="ui-box">
+              <input @(Model.BreachLine == 1 ? "checked" : "") class="query" value="1" type="checkbox" name="BreachLine" id="BreachLine" />
+              <label for="BreachLine"><span></span>Breach Lines</label>
+            </div>
+
+            <div class="ui-box">
+              <input  @(Model.AlertLine == 1 ? "checked" : "") class="query" value="1" type="checkbox" name="AlertLine" id="AlertLine" />
+              <label for="AlertLine"><span></span>Alert Lines</label>
+            </div>
+
+            <div class="ui-box">
+              <lablel for="TimeZone">Time:</lablel>
+              <select name="TimeZone" id="TimeZone">
+                <option value="local">Local</option>
+                <option selected value="utc">UTC</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+      </td>
+      <td><div id="BarGraph"></div></td>
+    </tr>
+
+  </table>
+
+
+
+
 </section>
 <p>&nbsp;</p>
 @section scripts {
+  <script type="text/javascript">
+    var InitQuery = @Html.Raw(Json.Encode(Model));
+  </script>
   <script src="http://code.highcharts.com/stock/highstock.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
   <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyDY6IHXH4-fUAzYq6HBR_ndu_lnyyopcTs"></script>

@@ -16,6 +16,7 @@ $(document).ready(function () {
   initializeMap();
   InitChart();
   InitScroll();
+  InitSliders();
 
   var spinner = $("input.spinner").spinner({
     change: function (event, ui) {
@@ -35,52 +36,14 @@ $(document).ready(function () {
     //d.getTimezoneOffset()
   });
 
-  $('input.RadioTimeZoneSelect').on("change", function () {
-    var offset = $('#graph_utc_1').is(':checked');
+  $('#TimeZone').on("change", function () {
     var d = new Date();
     LastProcessedID = 0;
-    timeZoneOffset = (offset ? 0 : d.getTimezoneOffset());
+    timeZoneOffset = ($(this).val() == "utc" ? 0 : d.getTimezoneOffset());
     if (Timers['getChartData']) window.clearTimeout(Timers['getChartData']);
     Timers['getChartData'] = window.setTimeout(getChartData, 100);    
   });
-
   
-
-  $("#slider").slider(
-      {
-          range: true,
-          value: 100,
-          min: 0,
-          max: 50000,
-          step: 10,
-          slide: function (event, ui) {
-              $(".min-sqrft1").html(ui.values[0]);
-              $(".max-sqrft1").html(ui.values[1]);
-              $("#minAltitude").val(ui.values[0]);
-              $("#maxAltitude").val(ui.values[1]);
-              if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
-              Timers['getADSB'] = window.setTimeout(getADSB, 1 * 1000, _ADSBLayer);
-              IsQueryChanged = 1;
-          }
-      }
-  );
-  $("#Speedslider").slider(
-      {
-          range: true,
-          value: 100,
-          min: 0,
-          max: 50000,
-          step: 10,
-          slide: function (event, ui) {
-              $("#minSpeed").val(ui.values[0]);
-              $("#maxSpeed").val(ui.values[1]);
-              if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
-              Timers['getADSB'] = window.setTimeout(getADSB, 1 * 1000, _ADSBLayer);
-              IsQueryChanged = 1;
-          }
-      }
-  );
- 
 
   Timers['getADSB'] = window.setTimeout(getADSB, UpdateDelay, _ADSBLayer);
   Timers['getStatus'] = window.setTimeout(getStatus, UpdateDelay, _ADSBLayer);
@@ -88,6 +51,49 @@ $(document).ready(function () {
 
 
 });
+
+function InitSliders() {
+
+  $("#SliderAltitude").slider(
+    {
+      range: true,
+      values: [InitQuery.minAltitude, InitQuery.maxAltitude],
+      min: 0,
+      max: 1000,
+      step:1,
+      slide: function (event, ui) {
+        $('#span_minAltitude').html(ui.values[0]);
+        $('#span_maxAltitude').html(ui.values[1]);
+        $('#minAltitude').val(ui.values[0]);
+        $('#maxAltitude').val(ui.values[1]);
+        ReGetAdsb();
+      }
+    }
+  );
+
+  $("#SliderSpeed").slider({
+    range: true,
+    values: [InitQuery.minSpeed, InitQuery.maxSpeed],
+    min: 0,
+    max: 50,
+    step: 0.5,
+    slide: function (event, ui) {
+      $('#span_minSpeed').html(ui.values[0].toFixed(1));
+      $('#span_maxSpeed').html(ui.values[1].toFixed(1));
+      $('#minSpeed').val(ui.values[0]);
+      $('#maxSpeed').val(ui.values[1]);     
+      ReGetAdsb();
+    }
+  });
+
+
+}
+
+function ReGetAdsb() {
+  IsQueryChanged = 1;
+  if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
+  Timers['getADSB'] = window.setTimeout(getADSB, 1 * 1000, _ADSBLayer);
+}
 
 function AutoUpdateZone(Elem) {
   if (Elem.length < 1) return;

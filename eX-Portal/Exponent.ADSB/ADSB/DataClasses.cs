@@ -13,7 +13,7 @@ namespace Exponent.ADSB {
     public static Coordinate OMSJ = new Coordinate { lat = 25.3284, lng = 55.5123 };
   }
 
-public class ADSBQuery {
+  public class ADSBQuery {
 
     public Double FeetToKiloMeter = 0.0003048;
     public Double ATCRadious { get; set; }
@@ -30,13 +30,15 @@ public class ADSBQuery {
     public int adsb_omdw { get; set; }
     public int adsb_omsj { get; set; }
     public int IsQueryChanged { get; set; }
-        public Double maxAltitude { get; set; }
-        public Double minAltitude { get; set; }
-        public Double maxSpeed { get; set; }
-        public Double minSpeed { get; set; }
+    public Double maxAltitude { get; set; }
+    public Double minAltitude { get; set; }
+    public Double maxSpeed { get; set; }
+    public Double minSpeed { get; set; }
+    public int BreachLine { get; set; }
+    public int AlertLine { get; set; }
 
 
-        public ADSBQuery() {
+    public ADSBQuery() {
       ATCRadious = 150;
       hSafe = 10;
       vSafe = 1000;
@@ -50,60 +52,93 @@ public class ADSBQuery {
       adsb_omdb = 0;
       adsb_omdw = 0;
       adsb_omsj = 0;
+      maxAltitude = 300000;
+      minAltitude = 0;
+      minSpeed = 0;
+      maxSpeed = 1000;
+      BreachLine = 1;
+      AlertLine = 0;
       IsQueryChanged = 0;
-            maxAltitude = 300000;
-            minAltitude = 0;
-            minSpeed = 0;
-            maxSpeed = 1000;
     }
 
     public bool GetDefaults(SqlConnection CN) {
       String SQL = "SELECT SettingKey, SettingValue FROM ADSBSettings";
       Double Value = 0;
       using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
-        using(SqlDataReader RS = cmd.ExecuteReader()) {
-          while(RS.Read()) {
+        using (SqlDataReader RS = cmd.ExecuteReader()) {
+          while (RS.Read()) {
             String SettingKey = RS["SettingKey"].ToString();
             Double.TryParse(RS["SettingValue"].ToString(), out Value);
             switch (SettingKey.ToLower()) {
             case "atcradious":
-              if (Value > 0) this.ATCRadious = Value;
+              if (Value > 0)
+                this.ATCRadious = Value;
               break;
             case "hsafe":
-              if (Value > 0) this.hSafe = Value;
+              if (Value > 0)
+                this.hSafe = Value;
               break;
             case "vsafe":
-              if (Value > 0) this.vSafe = Value;
+              if (Value > 0)
+                this.vSafe = Value;
               break;
             case "halert":
-              if (Value > 0) this.hAlert = Value;
+              if (Value > 0)
+                this.hAlert = Value;
               break;
             case "valert":
-              if (Value > 0) this.vAlert = Value;
+              if (Value > 0)
+                this.vAlert = Value;
               break;
             case "hbreach":
-              if (Value > 0) this.hBreach = Value;
+              if (Value > 0)
+                this.hBreach = Value;
               break;
             case "vbreach":
-              if (Value > 0) this.vBreach = Value;
+              if (Value > 0)
+                this.vBreach = Value;
               break;
             case "tracking_adsb_commercial":
-              if (Value > 0) this.tracking_adsb_commercial = (int)Value;
+              if (Value > 0)
+                this.tracking_adsb_commercial = (int)Value;
               break;
             case "tracking_adsb_rpas":
-              if (Value > 0) this.tracking_adsb_rpas = (int)Value;
+              if (Value > 0)
+                this.tracking_adsb_rpas = (int)Value;
               break;
             case "tracking_adsb_skycommander":
-              if (Value > 0) this.tracking_adsb_skycommander = (int)Value;
+              if (Value > 0)
+                this.tracking_adsb_skycommander = (int)Value;
               break;
             case "adsb_omdb":
-              if (Value > 0) this.adsb_omdb = (int)Value;
+              if (Value > 0)
+                this.adsb_omdb = (int)Value;
               break;
             case "adsb_omdw":
-              if (Value > 0) this.adsb_omdw = (int)Value;
+              if (Value > 0)
+                this.adsb_omdw = (int)Value;
               break;
             case "adsb_omsj":
-              if (Value > 0) this.adsb_omsj = (int)Value;
+              if (Value > 0)
+                this.adsb_omsj = (int)Value;
+              break;
+            case "minaltitude":
+              this.minAltitude = Value;
+              break;
+            case "maxaltitude":
+              this.maxAltitude = Value;
+              break;
+            case "minspeed":
+              this.minSpeed = Value;
+              break;
+            case "maxspeed":
+              this.maxSpeed = Value;
+              break;
+            case "breach_line":
+              this.BreachLine = (int)Value;
+              break;
+            case "alert_line":
+              this.AlertLine = (int)Value;
               break;
             }//switch
           }//while(RS.Read)
@@ -126,6 +161,13 @@ public class ADSBQuery {
       SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={adsb_omdw} WHERE SettingKey='adsb_omdw'");
       SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={adsb_omsj} WHERE SettingKey='adsb_omsj'");
       SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={ATCRadious} WHERE SettingKey='atcradious'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={minAltitude} WHERE SettingKey='minaltitude'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={maxAltitude} WHERE SettingKey='maxaltitude'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={minSpeed} WHERE SettingKey='minspeed'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={maxSpeed} WHERE SettingKey='maxspeed'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={BreachLine} WHERE SettingKey='breach_line'");
+      SetDefaults(CN, $"UPDATE ADSBSettings SET SettingValue ={AlertLine} WHERE SettingKey='alert_line'");
+
       return true;
     }
 
@@ -133,15 +175,15 @@ public class ADSBQuery {
       using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
         cmd.ExecuteNonQuery();
       }
-    return true;
+      return true;
     }
 
     public String getTrackingFilter() {
       String TheFilter = String.Empty;
-      if((tracking_adsb_commercial == 1 && tracking_adsb_skycommander == 1 && tracking_adsb_rpas == 1) ||
+      if ((tracking_adsb_commercial == 1 && tracking_adsb_skycommander == 1 && tracking_adsb_rpas == 1) ||
           (tracking_adsb_commercial == 1 && tracking_adsb_skycommander == 1)) {
         TheFilter = "  AdsbLive.FlightSource IN ('Exponent', 'SkyCommander','FlightAware')";
-      } else if(tracking_adsb_commercial == 1 && tracking_adsb_rpas == 1) {
+      } else if (tracking_adsb_commercial == 1 && tracking_adsb_rpas == 1) {
         TheFilter = "  (AdsbLive.FlightSource IN ('Exponent', 'FlightAware') OR AdsbLive.HexCode LIKE 'A000%')";
       } else if (tracking_adsb_commercial == 1) {
         TheFilter = "  AdsbLive.FlightSource IN ('Exponent', 'FlightAware')";
@@ -152,23 +194,21 @@ public class ADSBQuery {
       }
       return TheFilter;
     }
-        public String getaltitudeFilter()
-        {
-            String TheFilter = String.Empty;
-            TheFilter = $" AdsbLive.Altitude between {minAltitude} AND {maxAltitude}";
+    public String getaltitudeFilter() {
+      String TheFilter = String.Empty;
+      TheFilter = $" AdsbLive.Altitude between {minAltitude} AND {maxAltitude}";
 
-            return TheFilter;
-        }
-
-        public String getspeedFilter()
-        {
-            String TheFilter = String.Empty;
-            TheFilter = $"AdsbLive.Speed between {minSpeed} AND {maxSpeed}";
-
-            return TheFilter;
-        }
-
+      return TheFilter;
     }
+
+    public String getspeedFilter() {
+      String TheFilter = String.Empty;
+      TheFilter = $"AdsbLive.Speed between {minSpeed} AND {maxSpeed}";
+
+      return TheFilter;
+    }
+
+  }
 
   public class FlightPosition {
     public String FlightID { get; set; }
@@ -210,19 +250,19 @@ public class ADSBQuery {
     public Double Area { get; set; }
     public int Breach24H { get; set; }
 
-    public  void SetSummary(SqlConnection CN) {
-            ADSBQuery adsb = new ADSBQuery();
-            adsb.GetDefaults(CN);
-      String SQL1 = $"select Count(DISTINCT FromFlightID) from ADSBDetailHistory WHERE VerticalDistance <= {adsb.vBreach*adsb.FeetToKiloMeter}  and HorizontalDistance <= {adsb.hBreach}  and CreatedDate >=DATEADD(day, -1, GETDATE());";
-      Breach24H =  GetDBInt(CN, SQL1);
-      TotalRPAS =  GetDBInt(CN, "select Count(*) from AdsbLive WHERE FlightSource='SkyCommander'");
-      Area =  GetArea(CN);
+    public void SetSummary(SqlConnection CN) {
+      ADSBQuery adsb = new ADSBQuery();
+      adsb.GetDefaults(CN);
+      String SQL1 = $"select Count(DISTINCT FromFlightID) from ADSBDetailHistory WHERE VerticalDistance <= {adsb.vBreach * adsb.FeetToKiloMeter}  and HorizontalDistance <= {adsb.hBreach}  and CreatedDate >=DATEADD(day, -1, GETDATE());";
+      Breach24H = GetDBInt(CN, SQL1);
+      TotalRPAS = GetDBInt(CN, "select Count(*) from AdsbLive WHERE FlightSource='SkyCommander'");
+      Area = GetArea(CN);
     }
 
     private int GetDBInt(SqlConnection CN, String SQL) {
       int Result = 0;
-      using(SqlCommand cmd = new SqlCommand(SQL, CN)) {
-        var oResult =  cmd.ExecuteScalar();
+      using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
+        var oResult = cmd.ExecuteScalar();
         int.TryParse(oResult.ToString(), out Result);
       }
       return Result;
@@ -231,10 +271,10 @@ public class ADSBQuery {
     private Double GetArea(SqlConnection CN) {
       String SQL = "select Min(Lat) as MinLat, Min(Lon) as MinLon, Max(Lat) as MaxLat, Max(Lon) as MaxLon from AdsbLive";
       Double Area = 0;
-      Double MinLat = 0, MinLon= 0, MaxLat = 0, MaxLon = 0;
-      using(SqlCommand cmd = new SqlCommand(SQL, CN)) {
-         using (SqlDataReader RS = cmd.ExecuteReader()) {
-          while (RS.Read()) { 
+      Double MinLat = 0, MinLon = 0, MaxLat = 0, MaxLon = 0;
+      using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
+        using (SqlDataReader RS = cmd.ExecuteReader()) {
+          while (RS.Read()) {
             MinLat = RS.IsDBNull(0) ? 0 : (Double)RS.GetDecimal(0);
             MinLon = RS.IsDBNull(1) ? 0 : (Double)RS.GetDecimal(1);
             MaxLat = RS.IsDBNull(2) ? 0 : (Double)RS.GetDecimal(2);
@@ -253,12 +293,12 @@ public class ADSBQuery {
       '))', 4326).STArea() as Area)/1000000,0)";
 
       using (SqlCommand cmd = new SqlCommand(AreaSQL, CN)) {
-        try { 
+        try {
           var oResult = cmd.ExecuteScalar();
           Double.TryParse(oResult.ToString(), out Area);
         } catch {
           //nothing
-        }        
+        }
       }
 
       return Area;
@@ -315,11 +355,15 @@ public class ADSBQuery {
     }
 
     public bool InsertADSBSingle(SqlConnection sqlCon) {
-      if (!String.IsNullOrEmpty(hex)) hex = hex.Trim();
-      if (String.IsNullOrEmpty(flight)) flight = hex;
-      if (!String.IsNullOrEmpty(flight)) flight = flight.Trim();
+      if (!String.IsNullOrEmpty(hex))
+        hex = hex.Trim();
+      if (String.IsNullOrEmpty(flight))
+        flight = hex;
+      if (!String.IsNullOrEmpty(flight))
+        flight = flight.Trim();
       bool result = true;
-      if (lat == 0 && lon == 0.0) return false;
+      if (lat == 0 && lon == 0.0)
+        return false;
       setDataFromDb(sqlCon);
 
       if (ID == 0) {
@@ -387,8 +431,10 @@ public class ADSBQuery {
         //keep the history. do not change
       } else {
         int HistoryCount = HeadingHistory.Count(c => c == ',');
-        if (HistoryCount >= 5) SB.Remove(0, HeadingHistory.IndexOf(',') + 1);
-        if (SB.Length > 0) SB.Append(',');
+        if (HistoryCount >= 5)
+          SB.Remove(0, HeadingHistory.IndexOf(',') + 1);
+        if (SB.Length > 0)
+          SB.Append(',');
         SB.Append(track);
       }
 

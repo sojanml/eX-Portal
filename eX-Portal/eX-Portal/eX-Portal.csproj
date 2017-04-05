@@ -578,6 +578,7 @@
     <Compile Include="ViewModel\S3Upload.cs" />
     <Compile Include="ViewModel\Summary.cs" />
     <Compile Include="ViewModel\TrafficViewModel.cs" />
+    <Compile Include="ViewModel\UserDashboardModel.cs" />
     <Compile Include="ViewModel\UserLogin.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="ViewModel\WeatherViewModel.cs" />
