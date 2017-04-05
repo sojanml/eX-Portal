@@ -110,25 +110,28 @@ function InitVideos() {
     return;
   }
 
-  jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";
-
-  _FlightVideoPlayer = jwplayer("FlightVideo");
-  _FlightVideoPlayer.setup({
+  var VideoSetup = {
     width: 240,
     height: 140,
     description: 'Click on play to start video.',
-    mediaid: 'b669e4e759db46e996db1432cdff433c',
-    playlist: GetVideoPlaylist()
-  });
+    mediaid: 'b669e4e759db46e996db1432cdff433c'
+  };
+
+  if (IsLive) {
+    VideoSetup.file = "rtmp:" + "//52.29.242.123/live/drone" + DroneID;
+  } else {
+    VideoSetup.playlist = GetVideoPlaylist()
+  }
+
+  jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";
+  _FlightVideoPlayer = jwplayer("FlightVideo");
+  _FlightVideoPlayer.setup(VideoSetup);
+
   //playerInstance.on("play", fn_on_play);
   //playerInstance.on("pause", fn_on_pause);
 }
 
 function GetVideoPlaylist() {
-  if (IsLive) {
-    //return "http:" + "//52.29.242.123/live/drone" + DroneID + "/index.m3u8";
-    return "rtmp:" + "//52.29.242.123/live/drone" + DroneID;
-  }
   var PlaySources = [];
   for (var i = 0; i < _FlightVideos.length; i++) {
     var VideoURL = "http://exponent-s3.s3.amazonaws.com/MP4/" + _FlightVideos[i].VideoName.replace(".flv", ".mp4");
