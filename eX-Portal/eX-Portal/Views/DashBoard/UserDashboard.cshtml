@@ -2,58 +2,61 @@
 
 @{
     ViewBag.Title = "UserDashboard";
-    Layout = null ;
+    Layout = null;
 }
 
-<table class="column-full">
-    <tr>
-        <td style="width :33%;">
-            <div >
-                <div class="FlightSummaryImage" style="background-image:url('@Model.Pilot.PilotImage')"></div>
+<div class="column column-3">
+    <div id="FlightInformation">
+        <div id="FlightSummary">
+            <div class="FlightSummaryImage" style="background-image:url('@Model.Pilot.PilotImage')"></div>
 
-                @Model.Pilot.FirstName
-                @Model.Pilot.MiddleName
-                @Model.Pilot.LastName
-                @Model.Pilot.RPASPermitNo
-                @Model.Pilot.PermitCategory
+            @Model.Pilot.FirstName
+            @Model.Pilot.MiddleName
+            @Model.Pilot.LastName
+            @Model.Pilot.RPASPermitNo
+            @Model.Pilot.PermitCategory
 
-            </div>
-        </td>
-        <td style="width :33%;">            
-                @foreach (var Item in @Model.RPASList)
-                    {
-                        <div>
-                            @Item.DroneName
-                            @Item.ManufactureName
+        </div>
+    </div>
+</div>
+<div class="column column-3">
+    <div id="FlightInformation">
+        <div id="FlightSummary">
+            @foreach (var Item in @Model.RPASList)
+            {
+               
+                    @Item.DroneName
+                    @Item.ManufactureName
 
-                        </div>
-                     }
-        </td>
-        <td style="width :33%;">
-            <div>
-                @foreach (var Item in @Model.ApprovalList)
-                 {
-                    <div>
-                        @Item.ApprovalName
-                        @Item.ApprovalStatus
-
-                    </div>
-                }
-            </div>
-                
-        </td>
-    </tr>
-</table>
+               
+            }
+        </div>
+    </div>
+</div>
 
 
+<div class="column column-3">
+    <div id="FlightInformation">
+        <div id="FlightSummary">
+            @foreach (var Item in @Model.ApprovalList)
+            {
+                    @Item.ApprovalName
+                    @Item.ApprovalStatus
+
+            }
+      </div>
+        </div>
+    </div>
 
 
-<script type="text/javascript">
+
+
+        <script type="text/javascript">
   var HomeMapURL = '@Url.Action("UserDashboard", "Dashboard")';
-   
- 
 
-    
-</script>
+
+
+
+        </script>
 
 

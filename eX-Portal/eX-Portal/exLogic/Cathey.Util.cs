@@ -352,7 +352,7 @@ namespace eX_Portal.exLogic {
             using (var cmd = ctx.Database.Connection.CreateCommand())
             {
                 ctx.Database.Connection.Open();
-                cmd.CommandText = PilotSQL;
+                cmd.CommandText = ApprovalSQL;
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
