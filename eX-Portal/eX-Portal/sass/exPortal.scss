@@ -1074,3 +1074,10 @@ div.dashboard-column {
     }
   }
 }
+
+#loginForm {
+  input[type=text],
+  input[type=password] {
+    width:60%;
+  }
+}

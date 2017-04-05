@@ -1024,3 +1024,8 @@ div.dashboard-column div.toolbar div.button:hover {
   background-color: #474747;
   color: white;
 }
+
+#loginForm input[type=text],
+#loginForm input[type=password] {
+  width: 60%;
+}
