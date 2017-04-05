@@ -335,23 +335,22 @@ namespace eX_Portal.Controllers {
       }
     }
 
-        public ActionResult UserDashboard()
-        {
-            int userid = Util.getLoginUserID();
-            Util ut = new Util();
-            UserDashboardModel UserDashboard = ut.GetUserDetails(userid);
-            return View(UserDashboard);
-        }
+    public ActionResult UserDashboard() {
+      int userid = Util.getLoginUserID();
+      ViewBag.Title = String.Empty;
+      Util ut = new Util();
+      UserDashboardModel UserDashboard = ut.GetUserDetails(userid);
+      return View(UserDashboard);
+    }
 
-        public JsonResult getUserDashboard()
-        {
+    public JsonResult getUserDashboard() {
 
-            int userid = Util.getLoginUserID();
-            Util ut = new Util();
-            UserDashboardModel UserDashboard = ut.GetUserDetails(userid);
-            return Json(UserDashboard);
+      int userid = Util.getLoginUserID();
+      Util ut = new Util();
+      UserDashboardModel UserDashboard = ut.GetUserDetails(userid);
+      return Json(UserDashboard);
 
-        }
+    }
 
   }
 }

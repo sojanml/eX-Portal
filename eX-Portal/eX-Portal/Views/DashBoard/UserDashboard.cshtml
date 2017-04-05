@@ -1,62 +1,72 @@
 ﻿@using eX_Portal.ViewModel
 
 @{
-    ViewBag.Title = "UserDashboard";
-    Layout = null;
+  ViewBag.Title = String.Empty;
+  Layout = null;
 }
 
-<div class="column column-3">
-    <div id="FlightInformation">
-        <div id="FlightSummary">
-            <div class="FlightSummaryImage" style="background-image:url('@Model.Pilot.PilotImage')"></div>
-
-            @Model.Pilot.FirstName
-            @Model.Pilot.MiddleName
-            @Model.Pilot.LastName
-            @Model.Pilot.RPASPermitNo
-            @Model.Pilot.PermitCategory
-
-        </div>
-    </div>
-</div>
-<div class="column column-3">
-    <div id="FlightInformation">
-        <div id="FlightSummary">
-            @foreach (var Item in @Model.RPASList)
-            {
-               
-                    @Item.DroneName
-                    @Item.ManufactureName
-
-               
-            }
-        </div>
-    </div>
-</div>
-
-
-<div class="column column-3">
-    <div id="FlightInformation">
-        <div id="FlightSummary">
-            @foreach (var Item in @Model.ApprovalList)
-            {
-                    @Item.ApprovalName
-                    @Item.ApprovalStatus
-
-            }
+<section class="top-space">
+  <div class="column column-1-of-3 dashboard-column">
+    <div class="title">Profile Details</div>
+    <div class="fixed-height">
+      <div class="SummaryImage" style="background-image:url('@Model.Pilot.PilotImage')"></div>
+      <div class="SummaryCaption">
+        @Model.Pilot.FirstName @Model.Pilot.MiddleName @Model.Pilot.LastName
       </div>
-        </div>
+      <ul>
+        <li>
+          <div class="caption">RPAS Permit No</div>
+          <div class="detail">@Model.Pilot.RPASPermitNo</div>
+        </li>
+        <li>
+          <div class="caption">Permit Category</div>
+          <div class="detail">@Model.Pilot.PermitCategory</div>
+        </li>
+      </ul>
+    </div>
+    <div class="toolbar">
+      <div class="button">Edit Profile</div>
     </div>
 
+  </div>
 
 
+  <div class="column column-1-of-3 dashboard-column">
+    <div class="title">RPAS Registrations</div>
+    <div class="fixed-height">
+      
+      <ul>
+        @foreach (var Item in @Model.RPASList) {
+          <li>
+            <div class="caption">@Item.DroneName</div>
+            <div class="detail">Manufacture: <span>@Item.ManufactureName</span></div>
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="toolbar">
+      <div class="button">Create RPAS</div>
+    </div>
 
-        <script type="text/javascript">
-  var HomeMapURL = '@Url.Action("UserDashboard", "Dashboard")';
+  </div>
 
+  <div class="column column-1-of-3 dashboard-column">
+    <div class="title">NOC Status</div>
+    <div class="fixed-height">
+      
+      <ul>
+        @foreach (var Item in @Model.ApprovalList) {
+          <li>
+            <div class="caption">@Item.ApprovalName</div>
+            <div class="detail">Status: <span>@Item.ApprovalStatus</span></div>
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="toolbar">
+      <div class="button">Apply for NOC</div>
+    </div>
 
+  </div>
 
-
-        </script>
-
-
+</section>

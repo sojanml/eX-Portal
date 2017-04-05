@@ -118,7 +118,7 @@ $VerticalGap: 12px;
     }
 
     div.column-1-of-3 {
-        width: ($TotalWidth - $Gap *5)/3 * 1 + ($Gap * 1);
+        width: ($TotalWidth - $Gap * 2)/3;
     }
 
     div.column-3 {
@@ -1001,5 +1001,69 @@ div.FlightSummaryImage {
   &.img_distance {
     -webkit-mask-image: url('/images/image12.png');
     mask-image: url('/images/image12.png');
+  }
+}
+
+div.dashboard-column {
+  background-color: $MenuColor;
+  margin-bottom: 20px;
+
+  div.fixed-height {
+    height: 300px;
+    padding: 10px;
+    overflow: auto;
+
+    div.SummaryImage {
+      width: 100px;
+      height: 100px;
+      border-radius: 100%;
+      background-color: white;
+      background-size: cover;
+      margin: auto;
+    }
+
+    div.SummaryCaption {
+      font-weight: bold;
+      font-size: 12pt;
+      text-align: center;
+      margin: 5px 0px 10px 0px;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0px;
+      padding: 0px;
+
+      li {
+        margin: 0px 0px 10px 0px;
+        padding: 0px 0px 10px 0px;
+        border-bottom: 1px $MenuHiliteColor solid;
+
+        div.caption {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  div.toolbar {
+    height: 20px;
+    padding: 0px 0px 10px 0px;
+
+    div.button {
+      float: right;
+      margin: 0px 10px 0px 0px;
+      border: 1px $MenuHiliteColor solid;
+      background-color: white;
+      border-radius: 5px;
+      padding: 2px 15px 2px 15px;
+      cursor: pointer;
+      color: black;
+
+      &:hover {
+        background-color: $ReportHeadBackground;
+        color: white;
+      }
+    }
   }
 }

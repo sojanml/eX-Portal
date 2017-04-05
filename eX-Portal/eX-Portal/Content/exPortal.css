@@ -1,14 +1,14 @@
 @font-face {
   font-family: "FontAwesome";
-  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1470292567') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1470292567') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1470292567') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1470292567') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1470292567') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1470292567') format('woff2');
+  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
 }
 @font-face {
   font-family: "OpenSans";
-  src: url('../fonts/../fonts/OpenSans.ttf?1479187204') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1479187204') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1479187204') format('svg'), url('../fonts/../fonts/OpenSans.woff?1479187204') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1479187204') format('woff2');
+  src: url('../fonts/../fonts/OpenSans.ttf?1478508894') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1478508894') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1478508894') format('svg'), url('../fonts/../fonts/OpenSans.woff?1478508894') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1478508894') format('woff2');
 }
 @font-face {
   font-family: "Gobold_Light";
-  src: url('../fonts/../fonts/GoboldThinLight.ttf?1479187204') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1479187204') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1479187204') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1479187204') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1479187204') format('woff2');
+  src: url('../fonts/../fonts/GoboldThinLight.ttf?1478593771') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1478593771') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1478593771') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1478593771') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1478593771') format('woff2');
 }
 @-moz-keyframes spin {
   100% {
@@ -960,4 +960,59 @@ div.FlightSummaryImage {
 .dash-image.img_distance {
   -webkit-mask-image: url("/images/image12.png");
   mask-image: url("/images/image12.png");
+}
+
+div.dashboard-column {
+  background-color: #e5e5e5;
+  margin-bottom: 20px;
+}
+div.dashboard-column div.fixed-height {
+  height: 300px;
+  padding: 10px;
+  overflow: auto;
+}
+div.dashboard-column div.fixed-height div.SummaryImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  background-color: white;
+  background-size: cover;
+  margin: auto;
+}
+div.dashboard-column div.fixed-height div.SummaryCaption {
+  font-weight: bold;
+  font-size: 12pt;
+  text-align: center;
+  margin: 5px 0px 10px 0px;
+}
+div.dashboard-column div.fixed-height ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+div.dashboard-column div.fixed-height ul li {
+  margin: 0px 0px 10px 0px;
+  padding: 0px 0px 10px 0px;
+  border-bottom: 1px #cacaca solid;
+}
+div.dashboard-column div.fixed-height ul li div.caption {
+  font-weight: bold;
+}
+div.dashboard-column div.toolbar {
+  height: 20px;
+  padding: 0px 0px 10px 0px;
+}
+div.dashboard-column div.toolbar div.button {
+  float: right;
+  margin: 0px 10px 0px 0px;
+  border: 1px #cacaca solid;
+  background-color: white;
+  border-radius: 5px;
+  padding: 2px 15px 2px 15px;
+  cursor: pointer;
+  color: black;
+}
+div.dashboard-column div.toolbar div.button:hover {
+  background-color: #474747;
+  color: white;
 }
