@@ -466,6 +466,10 @@ section div.column:last-child {
     float: none;
     padding-top: 10px;
   }
+  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td {
+    font-size: 12pt;
+    font-weight: bold;
+  }
   section div.column-2-of-6 {
     width: 300px;
   }
@@ -593,6 +597,10 @@ section div.column:last-child {
     width: 100%;
     float: none;
     padding-top: 10px;
+  }
+  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td {
+    font-size: 12pt;
+    font-weight: bold;
   }
   section div.column-2-of-6 {
     width: 373.33333px;

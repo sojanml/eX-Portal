@@ -101,6 +101,7 @@ function RpasReplayTimer() {
 function RpasReplayCompleted() {
   //finishing touches.
   _FlightPath.setOptions({ 'strokeOpacity': 1 });
+  _FlightReplayPath.setMap(null);
 }
 
 function InitVideos() {
@@ -152,7 +153,7 @@ function initializeMap() {
     mapTypeControl: false,
     streetViewControl: false,
     center: MarkerPosition,
-    styles: getMapStyle()
+    styles: getADSBMapStyle()
   };
 
   map = new google.maps.Map(document.getElementById('flightmap'), mapOptions);
@@ -225,9 +226,9 @@ function InitilizeMapData() {
       lng: _FlightData[0].Lng,
     },
     icon: {
-      url :'/images/RpasStartEnd.png',
-      size: new google.maps.Size(24, 24),
-      anchor: new google.maps.Point(4, 22)
+      url :'/images/flag-RpasStart.png',
+      size: new google.maps.Size(25, 25),
+      anchor: new google.maps.Point(4, 25)
     },
     map: map
   });
@@ -239,9 +240,9 @@ function InitilizeMapData() {
       lng: _FlightData[LastItem].Lng,
     },
     icon: {
-      url: '/images/RpasStartEnd.png',
-      size: new google.maps.Size(24, 24),
-      anchor: new google.maps.Point(4, 22)
+      url: '/images/flag-RpasEnd.png',
+      size: new google.maps.Size(25, 25),
+      anchor: new google.maps.Point(4, 25)
     },
     map: map
   });
