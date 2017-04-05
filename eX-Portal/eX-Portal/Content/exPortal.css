@@ -1,14 +1,14 @@
 @font-face {
   font-family: "FontAwesome";
-  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
+  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1470292567') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1470292567') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1470292567') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1470292567') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1470292567') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1470292567') format('woff2');
 }
 @font-face {
   font-family: "OpenSans";
-  src: url('../fonts/../fonts/OpenSans.ttf?1478508894') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1478508894') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1478508894') format('svg'), url('../fonts/../fonts/OpenSans.woff?1478508894') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1478508894') format('woff2');
+  src: url('../fonts/../fonts/OpenSans.ttf?1479187204') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1479187204') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1479187204') format('svg'), url('../fonts/../fonts/OpenSans.woff?1479187204') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1479187204') format('woff2');
 }
 @font-face {
   font-family: "Gobold_Light";
-  src: url('../fonts/../fonts/GoboldThinLight.ttf?1478593771') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1478593771') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1478593771') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1478593771') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1478593771') format('woff2');
+  src: url('../fonts/../fonts/GoboldThinLight.ttf?1479187204') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1479187204') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1479187204') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1479187204') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1479187204') format('woff2');
 }
 @-moz-keyframes spin {
   100% {
@@ -472,6 +472,34 @@ section div.column:last-child {
   section div.column-4-of-6 {
     width: 610px;
   }
+  section div.column-1-of-3 {
+    width: 300px;
+  }
+  section div.column-3 {
+    width: 303.33333px;
+  }
+  section div.column-3 div.column-2-of-6 {
+    width: 117.33333px;
+  }
+  section div.column-3 div.column-4-of-6 {
+    width: 176px;
+  }
+  section div.column-3 div#FlightVideo {
+    width: 240px;
+    height: 140px;
+    float: left;
+    background-color: black;
+  }
+  section div.column-3 div#FlightSummary {
+    width: 100%;
+    align-items: center;
+    float: right;
+  }
+  section div.column-3 div#FlightSummary.NoVideo {
+    width: 100%;
+    float: none;
+    padding-top: 10px;
+  }
   section div.hr {
     width: 100%;
     height: 2px;
@@ -571,6 +599,34 @@ section div.column:last-child {
   }
   section div.column-4-of-6 {
     width: 761.66667px;
+  }
+  section div.column-1-of-3 {
+    width: 373.33333px;
+  }
+  section div.column-3 {
+    width: 378.33333px;
+  }
+  section div.column-3 div.column-2-of-6 {
+    width: 145.33333px;
+  }
+  section div.column-3 div.column-4-of-6 {
+    width: 218px;
+  }
+  section div.column-3 div#FlightVideo {
+    width: 240px;
+    height: 140px;
+    float: left;
+    background-color: black;
+  }
+  section div.column-3 div#FlightSummary {
+    width: 100%;
+    align-items: center;
+    float: right;
+  }
+  section div.column-3 div#FlightSummary.NoVideo {
+    width: 100%;
+    float: none;
+    padding-top: 10px;
   }
   section div.hr {
     width: 100%;

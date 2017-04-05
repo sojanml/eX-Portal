@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static eX_Portal.ViewModel.UserDashboardModel;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
@@ -262,33 +263,32 @@ namespace eX_Portal.exLogic {
             Models.MSTR_User User = db.MSTR_User.Find(UserID);
             UserDashboardModel UserDashboard = new UserDashboardModel();
             UserDashboardModel.PilotDetail PDetail = new UserDashboardModel.PilotDetail();
-            IQueryable<Models.MSTR_Drone> Drone = db.MSTR_Drone.Where(x => x.AccountID == User.AccountId.Value);
-            string PilotSQL = "SELECT a.[UserName]\n" +
-                         " ,a.[FirstName] \n " +
-                         ",a.[MiddleName]\n " +
-                         ",a.[LastName]\n  " +
-                         //",a.[Remarks]\n   " +
-                         ",a.[MobileNo]\n  " +
-                         ",a.[OfficeNo]\n  " +
-                         ",a.[HomeNo]\n" +
-                         " ,a.[EmailId]\n  as [Email ID] " +
-                         ",b.[PassportNo]" +
-                         " ,CONVERT(NVARCHAR, b.[DateOfExpiry], 106) AS DateOfExpiry\n   " +
-                         ",b.[Department]\n  " +
-                         " ,b.[EmiratesId]  as [Emirates ID]\n   " +
-                         ",b.[Title] as JobTitle\n   " +
-                         ",a.[RPASPermitNo] as [RPAS Permit No.]\n  " +
-                         ",a.[PermitCategory] as [Permit Category]\n  " +
-                         //",c.[Name] as OrganizationName\n   " +
-                         //",d.[ProfileName]\n   " +
-                         " FROM[MSTR_User] a\n   " +
-                         " left join mstr_user_pilot b\n  " +
-                         "on a.UserId=b.UserId\n   " +
-                         "left join MSTR_Account c\n  " +
-                         "on a.AccountId=c.AccountId\n  " +
-                         "left join MSTR_Profile d " +
-                         "on a.UserProfileId=d.ProfileId" +
-                         " where a.userid=" + UserID;
+            List<UserDashboardModel.RPASDetail> RPASDet = new List<UserDashboardModel.RPASDetail>();
+            List<GCA_Approval> AppList = new List<GCA_Approval>();
+            string PilotSQL = $@"SELECT a.[UserName]
+                          ,a.[FirstName] 
+                         ,a.[MiddleName]  
+                         ,a.[LastName]   
+                         ,a.[MobileNo]   
+                         ,a.[OfficeNo]  
+                         ,a.[HomeNo] 
+                          ,a.[EmailId]  as [Email ID] 
+                         ,b.[PassportNo] 
+                          ,CONVERT(NVARCHAR, b.[DateOfExpiry], 106) AS DateOfExpiry  
+                         ,b.[Department]
+                          ,b.[EmiratesId]  as [Emirates ID]
+                       ,b.[Title] as JobTitle
+                         ,a.[RPASPermitNo] as [RPAS Permit No.] 
+                         ,a.[PermitCategory] as [Permit Category] 
+                         ,ISNULL(a.PhotoURL, '') as PilotImage
+                          FROM [MSTR_User] a
+                          left join mstr_user_pilot b
+                         on a.UserId=b.UserId
+                         left join MSTR_Account c  
+                         on a.AccountId=c.AccountId  
+                         left join MSTR_Profile d 
+                         on a.UserProfileId=d.ProfileId
+                         where a.userid={ UserID}";
             using (var ctx = new ExponentPortalEntities())
             using (var cmd = ctx.Database.Connection.CreateCommand())
             {
@@ -296,24 +296,118 @@ namespace eX_Portal.exLogic {
                 cmd.CommandText = PilotSQL;
                 using (var reader = cmd.ExecuteReader())
                 {
-                    PDetail.UserName = reader[0].ToString();
-                    PDetail.FirstName = reader[1].ToString();
-                    PDetail.MiddleName = reader[2].ToString();
-                    PDetail.LastName = reader[3].ToString();
-                    PDetail.MobileNo = reader[4].ToString();
+                    while (reader.Read())
+                    {
+                        PDetail.UserName = reader.GetValue(0).ToString();
+                        PDetail.FirstName = reader.GetValue(1).ToString();
+                        PDetail.MiddleName = reader.GetValue(2).ToString();
+                        PDetail.LastName = reader.GetValue(3).ToString();
+                        PDetail.MobileNo = reader.GetValue(4).ToString();
 
-                    PDetail.OfficeNo = reader[5].ToString();
-                    PDetail.HomeNo = reader[6].ToString();
-                    PDetail.EmailId = reader[7].ToString();
-                    PDetail.PassportNo = reader[8].ToString();
-                    PDetail.DateOfExpiry =Util.toDate(reader[9].ToString());
-                    PDetail.EmiratesID = reader[10].ToString();
-                    PDetail.Title = reader[11].ToString();
-                    PDetail.RPASPermitNo = reader[12].ToString();
-                    PDetail.PermitCategory = reader[13].ToString();
+                        PDetail.OfficeNo = reader.GetValue(5).ToString();
+                        PDetail.HomeNo = reader.GetValue(6).ToString();
+                        PDetail.EmailId = reader.GetValue(7).ToString();
+                        PDetail.PassportNo = reader.GetValue(8).ToString();
+                        PDetail.DateOfExpiry = Util.toDate(reader.GetValue(8).ToString());
+                        PDetail.EmiratesID = reader.GetValue(9).ToString();
+                        PDetail.Title = reader.GetValue(10).ToString();
+                        PDetail.RPASPermitNo = reader.GetValue(11).ToString();
+                        PDetail.PermitCategory = reader.GetValue(12).ToString();
+                        PDetail.PilotImage = reader.GetValue(13).ToString();
+                    }
 
                 }
             }
+            if (String.IsNullOrEmpty(PDetail.PilotImage))
+            {
+                PDetail.PilotImage = "/images/PilotImage.png";
+            }
+            else
+            {
+                PDetail.PilotImage = $"/Upload/User/{UserID}/{PDetail.PilotImage}";
+                if (!System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath(PDetail.PilotImage)))
+                    PDetail.PilotImage = "/images/PilotImage.png";
+            }
+
+            string ApprovalSQL = $@"Select
+                ApprovalID,
+                ApprovalName,
+                StartDate,
+                EndDate,
+                StartTime,
+                EndTime,
+                MaxAltitude,
+                MinAltitude,        
+                case IsUseCamara when 1 then 'Yes' else 'No' end as Camara,       
+                ApprovalStatus as Status,
+                Count(*) Over() as _TotalRecords,
+                ApprovalID as _PKey
+              FROM
+                GCA_Approval
+              LEFT JOIN MSTR_User ON
+                MSTR_User.UserID = GCA_Approval.CreatedBy
+               LEFT JOIN MSTR_Drone  on GCA_Approval.DroneId= MSTR_Drone.DroneId  
+                where MSTR_Drone.AccountID={User.AccountId}";
+            using (var ctx = new ExponentPortalEntities())
+            using (var cmd = ctx.Database.Connection.CreateCommand())
+            {
+                ctx.Database.Connection.Open();
+                cmd.CommandText = ApprovalSQL;
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        GCA_Approval GCADet = new GCA_Approval();
+                        GCADet.ApprovalID = Util.toInt(reader[0]);
+                        GCADet.ApprovalName = reader[1].ToString();
+                        GCADet.ApprovalStatus = reader[9].ToString();
+                        AppList.Add(GCADet);
+                    }
+                }
+            }
+
+            string RPASSql = $@"SELECT 
+                          D.[DroneName] as RPAS,
+                          D.[ModelName] as Description,
+                          D.[CommissionDate],
+                          O.Name as Authority,
+                          M.Name as Manufacture,
+                          U.Name as RPASType,
+                          Count(*) Over() as _TotalRecords,
+                          D.[DroneId] as _PKey
+                        FROM
+                          [MSTR_Drone] D
+                        Left join MSTR_Account  O on
+                          D.AccountID = O.AccountID Left join LUP_Drone M on
+                          ManufactureID = M.TypeID and
+                          M.Type='Manufacturer' Left join LUP_Drone U on
+                          UAVTypeID = U.TypeID and
+                          U.Type= 'UAVType'
+                        WHERE
+                          D.AccountID={User.AccountId}";
+            
+            using (var ctx = new ExponentPortalEntities())
+            using (var cmd = ctx.Database.Connection.CreateCommand())
+            {
+                ctx.Database.Connection.Open();
+                cmd.CommandText = RPASSql;
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        RPASDetail RPAS = new RPASDetail();
+                        RPAS.DroneName = reader.GetValue(0).ToString();
+                        RPAS.CommissionDate = Util.toDate(reader.GetValue(2).ToString());
+                        RPAS.DroneId = Util.toInt( reader.GetValue(7));
+                        RPAS.ManufactureName = reader.GetValue(4).ToString();
+                        RPAS.UavTypeName = reader.GetValue(5).ToString();
+                        RPASDet.Add(RPAS);
+                    }
+                }
+            }
+            UserDashboard.Pilot = PDetail;
+            UserDashboard.ApprovalList = AppList;
+            UserDashboard.RPASList = RPASDet;
             return UserDashboard;
         }
        
