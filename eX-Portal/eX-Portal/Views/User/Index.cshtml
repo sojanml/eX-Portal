@@ -1,54 +1,47 @@
 ﻿@model eX_Portal.ViewModel.UserLogin
-@{
-  Layout = "~/Views/Shared/_eXPortalBeforeLogin.cshtml";
-}
 
-<section class="general-form" id="loginForm">
+<div class="general-form form-horizontal" id="loginForm">
   @using (Html.BeginForm("Index", "User", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
     @Html.AntiForgeryToken()
-    if(ViewBag.Message == 0) {
+    if (ViewBag.Message == 0) {
       <p><span class="info">Invalid username or password. Please try again</span></p>
-      }
-      if (ViewBag.Message == 2)
-      {
-        <p><span class="info">Please Activate your Account to Login!</span></p>
-      }
-      if (ViewBag.Message == 3)
-      {
-        <p><span class="info">Sessions reached the limit.!</span></p>
-      }
-      @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    }
+    if (ViewBag.Message == 2) {
+      <p><span class="info">Please Activate your Account to Login!</span></p>
+    }
+    if (ViewBag.Message == 3) {
+      <p><span class="info">Sessions reached the limit.!</span></p>
+    }
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="editor-label">
-      @Html.LabelFor(m => m.UserName,"Username", new { @class = "col-md-2 control-label" })
-      </div>
+      @Html.LabelFor(m => m.UserName, "Username", new { @class = "col-md-2 control-label" })
+    </div>
 
-      <div class="editor-field">
-        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
-      </div>
+    <div class="editor-field">
+      @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+      @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+    </div>
 
-      <div class="editor-label">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-      </div>
-      <div class="editor-field">
-        @Html.PasswordFor(m => m.Password, new { @class = "form-control" ,oncopy = "return false", onpaste = "return false" })
-        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-      </div>
+    <div class="editor-label">
+      @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+    </div>
+    <div class="editor-field">
+      @Html.PasswordFor(m => m.Password, new { @class = "form-control", oncopy = "return false", onpaste = "return false" })
+      @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+    </div>
 
-      <div class="form-toolbar">
-        <input type="submit" value="Login" />
-      </div>
+    <div class="form-toolbar">
+      <input type="submit" value="Login" />
+    </div>
 
-      <div class="editor-field">
-        Forgot password? If you can not remember your
-        password, <a href="~/User/ForgotPassword/">please click here.</a>
-
-      </div>
-
+    <div class="editor-field">
+      Forgot password? If you can not remember your
+      password, <a href="~/User/ForgotPassword/">please click here.</a>
+    </div>
   }
-    <script type="text/javascript">
-   function preventBack(){window.history.forward();}
+  <script type="text/javascript">
+    function preventBack() { window.history.forward(); }
     setTimeout("preventBack()", 0);
-    window.onunload=function(){null};
-    </script>
-</section>
+    window.onunload = function () { null };
+  </script>
+</div>
