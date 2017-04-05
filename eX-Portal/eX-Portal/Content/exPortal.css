@@ -30,7 +30,9 @@ table {
   box-sizing: border-box;
 }
 
-span.refresh, span.icon {
+span.refresh,
+span.icon,
+span.green_icon {
   font-family: FontAwesome;
   font-size: 12px;
   display: inline-block;
@@ -770,7 +772,7 @@ table.dataTable thead .sorting {
 UL.qViewMenu {
   position: absolute;
   right: 0px;
-  top: 23px;
+  top: 28px;
   background-color: #cacaca;
   list-style: none;
   margin: 0px;

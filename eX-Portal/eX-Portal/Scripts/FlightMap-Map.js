@@ -214,7 +214,7 @@ function IsDataLoadCompleted() {
   var Now = new Date();
   //set to 2 mins before
   //convert to UTC time
-  Now.setMinutes(Now.getMinutes() - 3 + Now.getTimezoneOffset);
+  Now.setMinutes(Now.getMinutes() - 3 + Now.getTimezoneOffset());
   if (DateOfLastItem >= Now) return true;
   return false;
 }
@@ -310,6 +310,16 @@ function AddDataToMap(TheData) {
   }
 
   var LastDataItem = TheData[TheData.length - 1];
+  //When live, sometime distance is shown as null
+  if (LastDataItem.Distance == null) {
+    for (var i = _FlightData.length - 1; i > 0; i--) {
+      if (_FlightData[i].Distance != null) {
+        LastDataItem.Distance = _FlightData[i].Distance;
+        break;
+      }
+    }
+  }
+
   var LastPosition = { lat: LastDataItem.Lat, lng: LastDataItem.Lng };
   _FlightDataID = LastDataItem.FlightMapDataID;
   _FlightPath.setPath(_FlightCoordinates);
@@ -317,7 +327,7 @@ function AddDataToMap(TheData) {
 
   map.fitBounds(_FlightBoundBox);
   ShowFlightInformation(LastDataItem);
-
+  _RPASIcon.setPosition(LastPosition);
   
 }
 
