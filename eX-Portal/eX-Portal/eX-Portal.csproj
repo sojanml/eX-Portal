@@ -747,6 +747,7 @@
     <Content Include="images\dcaa_logo.png" />
     <Content Include="images\dcca-logo.png" />
     <Content Include="images\drop-down.png" />
+    <Content Include="images\filter-check.png" />
     <Content Include="images\fonts\DINNextLTPro-Light.svg" />
     <Content Include="images\fonts\DINNextLTPro-LightCondensed.svg" />
     <Content Include="images\fonts\glyphicons-halflings-regular.svg" />

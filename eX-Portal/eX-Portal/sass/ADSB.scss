@@ -12,8 +12,8 @@ $MenuSpaceFromRight: 12px;
 $SelectedItemColor: #53a100;
 $BreachColor: #fe0000;
 $TitleHeading: #222222;
-$SafeColor:#02e245;
-$AlertColor: #ff4e00;
+$SafeColor: #53a100;
+$AlertColor: #f2a003;
 $FilterColor:#018aff;
 
 
@@ -244,12 +244,12 @@ ul.multi-select {
     }
 
     &:checked + label {
-      background-color: scale-saturation($SelectedItemColor,20);
+      background-color: $FilterColor;
       color: white;
     }
 
     & + label:hover {
-      background-color: #87d534;
+      background-color: #88b8e2;
     }
   }
 }

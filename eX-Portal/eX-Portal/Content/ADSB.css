@@ -105,11 +105,11 @@ ul.multi-select input[type="checkbox"] + label {
   background-color: white;
 }
 ul.multi-select input[type="checkbox"]:checked + label {
-  background-color: #53a100;
+  background-color: #018aff;
   color: white;
 }
 ul.multi-select input[type="checkbox"] + label:hover {
-  background-color: #87d534;
+  background-color: #88b8e2;
 }
 
 table.traffic_status {
@@ -125,10 +125,10 @@ table.traffic_status div.breach {
   background-color: #fe0000;
 }
 table.traffic_status div.alert {
-  background-color: #ff4e00;
+  background-color: #f2a003;
 }
 table.traffic_status div.safe {
-  background-color: #02e245;
+  background-color: #53a100;
 }
 
 div.filter,
@@ -449,10 +449,10 @@ table.info-tiles.breach div.tile {
   background-color: #fe0000;
 }
 table.info-tiles.alert div.tile {
-  background-color: #ff4e00;
+  background-color: #f2a003;
 }
 table.info-tiles.safe div.tile {
-  background-color: #02e245;
+  background-color: #53a100;
 }
 table.info-tiles div.tile-title {
   width: 100%;
@@ -493,7 +493,7 @@ table.info-tiles div.tile-caption {
 }
 
 td.safe {
-  background-color: #02e245;
+  background-color: #53a100;
 }
 
 td.breach {
@@ -637,14 +637,14 @@ div.adsb-point.alert {
 }
 div.adsb-point.alert span.flight-title,
 div.adsb-point.alert span.tail {
-  background-color: #ff4e00;
+  background-color: #f2a003;
 }
 div.adsb-point.safe {
   color: #0189ff;
 }
 div.adsb-point.safe span.flight-title,
 div.adsb-point.safe span.tail {
-  background-color: #02e245;
+  background-color: #53a100;
 }
 div.adsb-point.normal {
   color: #ffcc01;
