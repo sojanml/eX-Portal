@@ -25,7 +25,7 @@
       </ul>
     </div>
     <div class="toolbar">
-      <div class="button">Edit Profile</div>
+        <a href="@Url.Action("Edit", "Pilot", new  { ID = @Model.Pilot.UserId })"> <div class="button">Edit Profile</div></a>
     </div>
 
   </div>
@@ -45,7 +45,7 @@
       </ul>
     </div>
     <div class="toolbar">
-      <div class="button">Create RPAS</div>
+        <a href="@Url.Action("Create", "Drone")"><div class="button">Create RPAS</div></a>
     </div>
 
   </div>
@@ -64,8 +64,8 @@
       </ul>
     </div>
     <div class="toolbar">
-      <div class="button">Apply for NOC</div>
-    </div>
+        <a href="@Url.Action("FlightRegister", "Rpas")"><div class="button">Apply for NOC</div></a>
+</div>
 
   </div>
 

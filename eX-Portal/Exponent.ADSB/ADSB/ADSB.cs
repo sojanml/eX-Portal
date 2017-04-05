@@ -173,7 +173,8 @@ namespace Exponent.ADSB {
         [Speed],
         HeadingHistory,
         [Altitude],
-        [AdsbDate]
+        [AdsbDate],
+        FlightSource
       from
         AdsbLive
       ");
@@ -208,21 +209,21 @@ namespace Exponent.ADSB {
         Filter.Clear();
       }
 
-    Filter.Append(QueryData.getaltitudeFilter());
-    if (Filter.Length > 0)
-    {
-        if (WHERE.Length > 0) WHERE.AppendLine(" AND");
-        WHERE.Append(Filter);
-        Filter.Clear();
-    }
+    //Filter.Append(QueryData.getaltitudeFilter());
+    //if (Filter.Length > 0)
+    //{
+    //    if (WHERE.Length > 0) WHERE.AppendLine(" AND");
+    //    WHERE.Append(Filter);
+    //    Filter.Clear();
+    //}
 
-    Filter.Append(QueryData.getspeedFilter());
-    if(Filter.Length>0)
-    {
-        if (WHERE.Length > 0) WHERE.AppendLine(" AND");
-        WHERE.Append(Filter);
-        Filter.Clear();
-    }
+    //Filter.Append(QueryData.getspeedFilter());
+    //if(Filter.Length>0)
+    //{
+    //    if (WHERE.Length > 0) WHERE.AppendLine(" AND");
+    //    WHERE.Append(Filter);
+    //    Filter.Clear();
+    //}
 
             if (WHERE.Length > 0) { 
         SQL.AppendLine(" WHERE");
@@ -235,7 +236,7 @@ namespace Exponent.ADSB {
         while(RS.Read()) {
           int fSpeed = RS.GetOrdinal("Speed");
           int fHeading = RS.GetOrdinal("Heading");
-
+          string FlightSource = RS["FlightSource"].ToString();
           var Position = new FlightPosition {
             FlightID = RS["FlightId"].ToString(),
             Heading = RS.IsDBNull(fHeading) ? 0 : (Double)RS.GetDecimal(fHeading),
@@ -248,7 +249,17 @@ namespace Exponent.ADSB {
             ADSBDate = RS.GetDateTime(RS.GetOrdinal("AdsbDate")),
             History = getHistory(RS["HeadingHistory"].ToString())
           };
-          PositionDatas.Add(Position);
+          if(FlightSource== "SkyCommander")
+            { 
+                  if (Position.Altitude>QueryData.minAltitude  && Position.Altitude<QueryData.maxAltitude)
+                     PositionDatas.Add(Position);
+                  if(Position.Speed > QueryData.minSpeed && Position.Speed < QueryData.maxSpeed)
+                      PositionDatas.Add(Position);
+            }
+            else
+            {
+                PositionDatas.Add(Position);
+            }
         }//while
       }//using
 

@@ -196,7 +196,7 @@ namespace Exponent.ADSB {
     }
     public String getaltitudeFilter() {
       String TheFilter = String.Empty;
-      TheFilter = $" AdsbLive.Altitude between {minAltitude} AND {maxAltitude}";
+      TheFilter = $" AdsbLive.Altitude between {minAltitude*FeetToKiloMeter} AND {maxAltitude * FeetToKiloMeter}";
 
       return TheFilter;
     }

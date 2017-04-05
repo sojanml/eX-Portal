@@ -1,5 +1,6 @@
 ﻿
 var AlertRef = {}
+var BreachRef = {}
 var _InfoWindow = new google.maps.InfoWindow({
   content: '<div id="InfoWindowContent">...</div>'
 });
@@ -11,11 +12,23 @@ $(document).ready(function () {
     ShowInfoWindow(t);
   });
 
-  var CheckBox = $('input.query#breach_line').on("change", function () {
-      //ADSBObj.setADSB(data);
-      
-    //  this.ADSBObj.DrawLinesOf(AlertRef);
+  var CheckBox = $('input.query#BreachLine').on("change", function () {
+      if ($('input.query#BreachLine').is(':checked')) {
+
+          _ADSBLayer.DrawLinesOf(BreachRef);
+      } else {
+          _ADSBLayer.DeleteLinesOf(_ADSBLayer.ADSBLines);
+      }
      
+  });
+  var CheckBox = $('input.query#AlertLine').on("change", function () {
+      if ($('input.query#AlertLine').is(':checked')) {
+
+          _ADSBLayer.DrawLinesOfAlert(AlertRef);
+      } else {
+          _ADSBLayer.DeleteLinesOf(_ADSBLayer.ADSBAlertLines);
+      }
+
   });
   //$("#slider").slider(({
   //    range: true,
@@ -93,7 +106,7 @@ function getStatus(ADSBObj) {
 
 function setStatusSummary(StatusData, ADSBObj) {
   StatusInfo.Reset();
-  var BreachRef = {}
+  BreachRef = {};
   AlertRef = {};
   for (var i = 0; i < StatusData.length; i++) {
     var Stat = StatusData[i];
@@ -139,23 +152,19 @@ function setStatusSummary(StatusData, ADSBObj) {
   var TheDatas = ADSBObj.GetWatchingFlight()
 
   setStatusWatching(TheDatas);
-
+ 
     //var AllFlights = ADSBObj.GetAllFlights();
   if ($('input.query#BreachLine').is(':checked'))
   {
    //   ADSBObj.DrawLinesOf(null);
       ADSBObj.DrawLinesOf(BreachRef);
-  } else
-  {
-      ADSBObj.DrawLinesOf(null);
-  }
+      
+
+  } 
   if ($('input.query#AlertLine').is(':checked'))
   {
    //   ADSBObj.DrawLinesOf(null);
       ADSBObj.DrawLinesOfAlert(AlertRef);
-  }
-  else {
-      ADSBObj.DrawLinesOf(null);
   }
 }
 
@@ -202,222 +211,231 @@ function toDate(JsonDate) {
 }
 
 function ADSBOverlay(options, ADSBData) {
-  this.setValues(options);
-  this.markerLayer = $('<div />').addClass('overlay');
-  this.ADSBData = ADSBData;
-  this.gADSBData = {};
-  this.DrawCount = 0;
-  this.ADSBFlightRef = {};
-  this.WatchingFlightIDs = [];
-  this.setADSB = function (ADSBData) {
+    this.setValues(options);
+    this.markerLayer = $('<div />').addClass('overlay');
     this.ADSBData = ADSBData;
-    this.DrawCount++;
-    this.GetWatchingFlight();
-    this.draw();
-  },
-      this.ADSBLines = {};
-  this.ADSBAlertLines = {};
-  this.SavedLineReferece = null;
-  this.SavedAlertLineReference = null;
-
-  this.getIconColor = function (Height) {
-    var Colors = [
-      '#FF0000', //Red
-      '#FF9600', //Yellow
-      '#00ff10' //Green
-    ];
-    if (Height < 1000) {
-      return Colors[0];
-    } else if (Height < 2000) {
-      return Colors[1];
-    } else {
-      return Colors[2];
-    }
-  }
-
-  this.getIconClass = function (FlightID) {
-    var IsDrone = (FlightID.substr(0, 3) == 'A00');
-    var ClassName = 'normal';
-    //return IsDrone ? 'drone' : 'normal';
-
-    if ((FlightID.substr(0, 3) === 'A00')) {
-      ClassName = 'drone';
-      if (StatusInfo['Breach']['RPAS'] && FlightID in StatusInfo['Breach']['RPAS']) {
-        ClassName = 'drone breach';
-      } else if (StatusInfo['Alert']['RPAS'] && FlightID in StatusInfo['Alert']['RPAS']) {
-        ClassName = 'drone alert';
-      }
-    }
-    return ClassName;
-  }
-
-  this.GetAllFlights = function () {
-    var FlightRef = {};
-    for (var i = 0; i < this.ADSBData.length; i++) {
-      var FlightID = this.ADSBData[i].FlightID.trim();
-      FlightRef[FlightID] = this.ADSBData[i];
-    }
-    return FlightRef;
-
-  };
-
-  this.GetWatchingFlight = function () {
+    this.gADSBData = {};
+    this.DrawCount = 0;
     this.ADSBFlightRef = {};
-    var FlightIDs = this.WatchingFlightIDs;
+    this.WatchingFlightIDs = [];
+    this.setADSB = function (ADSBData) {
+        this.ADSBData = ADSBData;
+        this.DrawCount++;
+        this.GetWatchingFlight();
+        this.draw();
+    },
+        this.ADSBLines = {};
+    this.ADSBAlertLines = {};
+    this.SavedLineReferece = null;
+    this.SavedAlertLineReference = null;
 
-    for (var i = 0; i < this.ADSBData.length; i++) {
-      var FlightID = this.ADSBData[i].FlightID.trim();
-      if (FlightIDs.indexOf(FlightID) >= 0)
-        this.ADSBFlightRef[FlightID] = this.ADSBData[i];
+    this.getIconColor = function (Height) {
+        var Colors = [
+          '#FF0000', //Red
+          '#FF9600', //Yellow
+          '#00ff10' //Green
+        ];
+        if (Height < 1000) {
+            return Colors[0];
+        } else if (Height < 2000) {
+            return Colors[1];
+        } else {
+            return Colors[2];
+        }
     }
-    return this.ADSBFlightRef;
-  }
 
-  this.SetWatchingFlight = function (oFlightIDs) {
-    this.WatchingFlightIDs = Object.keys(oFlightIDs);
-  };
+    this.getIconClass = function (FlightID) {
+        var IsDrone = (FlightID.substr(0, 3) == 'A00');
+        var ClassName = 'normal';
+        //return IsDrone ? 'drone' : 'normal';
 
-  this.getIconFor = function (FlightID, Angle) {
-    var IsDrone = (FlightID.substr(0, 3) == 'A00');
-
-    var ReturnHTML = '';
-    var Icon = this.getIconImage(FlightID);
-    if (IsDrone) {
-      ReturnHTML = '<span class="icon DroneIcon" style=" transform: rotate(' + Angle + 'deg);"><img src="' + Icon + '" width="25" height="25"/></span>'
-    } else {
-      ReturnHTML = '<span class="icon FlightIcon" style=" transform: rotate(' + Angle + 'deg);"><img src="' + Icon + '" width="25" height="25"/></span>'
+        if ((FlightID.substr(0, 3) === 'A00')) {
+            ClassName = 'drone';
+            if (StatusInfo['Breach']['RPAS'] && FlightID in StatusInfo['Breach']['RPAS']) {
+                ClassName = 'drone breach';
+            } else if (StatusInfo['Alert']['RPAS'] && FlightID in StatusInfo['Alert']['RPAS']) {
+                ClassName = 'drone alert';
+            }
+        }
+        return ClassName;
     }
-    return ReturnHTML;
-  }
 
-  this.getIconImage = function (FlightID) {
-    var Icon = '/images/Airline.png';
-    if ((FlightID.substr(0, 3) === 'A00')) {
-      Icon = '/images/Drone.png';
-      if (StatusInfo['Breach']['RPAS'] && FlightID in StatusInfo['Breach']['RPAS']) {
-        Icon = '/images/Drone-breach.png';
-      } else if (StatusInfo['Alert']['RPAS'] && FlightID in StatusInfo['Alert']['RPAS']) {
-        Icon = '/images/Drone-alert.png';
-      }
+    this.GetAllFlights = function () {
+        var FlightRef = {};
+        for (var i = 0; i < this.ADSBData.length; i++) {
+            var FlightID = this.ADSBData[i].FlightID.trim();
+            FlightRef[FlightID] = this.ADSBData[i];
+        }
+        return FlightRef;
+
+    };
+
+    this.GetWatchingFlight = function () {
+        this.ADSBFlightRef = {};
+        var FlightIDs = this.WatchingFlightIDs;
+
+        for (var i = 0; i < this.ADSBData.length; i++) {
+            var FlightID = this.ADSBData[i].FlightID.trim();
+            if (FlightIDs.indexOf(FlightID) >= 0)
+                this.ADSBFlightRef[FlightID] = this.ADSBData[i];
+        }
+        return this.ADSBFlightRef;
     }
-    return Icon;
-  }
 
-  this.DrawLinesOf = function (LineReferece) {
-    if (this.map == null || this.map == undefined) return;
-    if (LineReferece == null) LineReferece = this.SavedLineReferece;
-    if (LineReferece == null) return;
+    this.SetWatchingFlight = function (oFlightIDs) {
+        this.WatchingFlightIDs = Object.keys(oFlightIDs);
+    };
 
-    var RefKeys = Object.keys(LineReferece);
-    var AllFlights = this.GetAllFlights();
-    var DrawingLineKeys = [];
-    var ADSBLines = this.ADSBLines;
-    RefKeys.forEach(function (RpasID, index, array) {
-      var FromFlight = AllFlights[RpasID];
-      if (FromFlight == undefined) {
-      } else {
-        var CenterPos = { lat: FromFlight.Lat, lng: FromFlight.Lon };
-        LineReferece[RpasID].forEach(function (AircraftID, index, array) {
-          var toFlight = AllFlights[AircraftID];
-          if (toFlight == undefined) {
-            //nothing
-          } else {
-            var newPos = { lat: toFlight.Lat, lng: toFlight.Lon };
-            var LineKey = RpasID + "_" + AircraftID;
-            var LinePath = [CenterPos, newPos];
-            DrawingLineKeys.push(LineKey);
-            if (ADSBLines[LineKey] == undefined) {
-              var flightPath = new google.maps.Polyline({
-                path: LinePath,
-                geodesic: true,
-                strokeColor: '#fe0000',
-                strokeOpacity: 1,
-                strokeWeight: 1
-              });
-              flightPath.setMap(this.map);
-              ADSBLines[LineKey] = flightPath;
+    this.getIconFor = function (FlightID, Angle) {
+        var IsDrone = (FlightID.substr(0, 3) == 'A00');
+
+        var ReturnHTML = '';
+        var Icon = this.getIconImage(FlightID);
+        if (IsDrone) {
+            ReturnHTML = '<span class="icon DroneIcon" style=" transform: rotate(' + Angle + 'deg);"><img src="' + Icon + '" width="25" height="25"/></span>'
+        } else {
+            ReturnHTML = '<span class="icon FlightIcon" style=" transform: rotate(' + Angle + 'deg);"><img src="' + Icon + '" width="25" height="25"/></span>'
+        }
+        return ReturnHTML;
+    }
+
+    this.getIconImage = function (FlightID) {
+        var Icon = '/images/Airline.png';
+        if ((FlightID.substr(0, 3) === 'A00')) {
+            Icon = '/images/Drone.png';
+            if (StatusInfo['Breach']['RPAS'] && FlightID in StatusInfo['Breach']['RPAS']) {
+                Icon = '/images/Drone-breach.png';
+            } else if (StatusInfo['Alert']['RPAS'] && FlightID in StatusInfo['Alert']['RPAS']) {
+                Icon = '/images/Drone-alert.png';
+            }
+        }
+        return Icon;
+    }
+
+    this.DrawLinesOf = function (LineReferece) {
+        if (this.map == null || this.map == undefined) return;
+        if (LineReferece == null) LineReferece = this.SavedLineReferece;
+        if (LineReferece == null) return;
+
+        var RefKeys = Object.keys(LineReferece);
+        var AllFlights = this.GetAllFlights();
+        var DrawingLineKeys = [];
+        var ADSBLines = this.ADSBLines;
+        RefKeys.forEach(function (RpasID, index, array) {
+            var FromFlight = AllFlights[RpasID];
+            if (FromFlight == undefined) {
             } else {
-              ADSBLines[LineKey].setPath(LinePath);
-            }//if (ADSBLines[RpasID + "_" + AircraftID] == undefined) {
-          }
+                var CenterPos = { lat: FromFlight.Lat, lng: FromFlight.Lon };
+                LineReferece[RpasID].forEach(function (AircraftID, index, array) {
+                    var toFlight = AllFlights[AircraftID];
+                    if (toFlight == undefined) {
+                        //nothing
+                    } else {
+                        var newPos = { lat: toFlight.Lat, lng: toFlight.Lon };
+                        var LineKey = RpasID + "_" + AircraftID;
+                        var LinePath = [CenterPos, newPos];
+                        DrawingLineKeys.push(LineKey);
+                        if (ADSBLines[LineKey] == undefined) {
+                            var flightPath = new google.maps.Polyline({
+                                path: LinePath,
+                                geodesic: true,
+                                strokeColor: '#fe0000',
+                                strokeOpacity: 1,
+                                strokeWeight: 1
+                            });
+                            flightPath.setMap(this.map);
+                            ADSBLines[LineKey] = flightPath;
+                        } else {
+                            ADSBLines[LineKey].setPath(LinePath);
+                        }//if (ADSBLines[RpasID + "_" + AircraftID] == undefined) {
+                    }
+                });//foreach
+            }//if (FromFlight == undefined) 
         });//foreach
-      }//if (FromFlight == undefined) 
-    });//foreach
 
-    //option to delete the path if not drawing
-    var AllLines = Object.keys(ADSBLines);
-    AllLines.forEach(function (LineKey, index, array) {
-      if (DrawingLineKeys.indexOf(LineKey) < 0) {
-        ADSBLines[LineKey].setMap(null);
-        delete ADSBLines[LineKey];
-      }
-    })
-  }; //this.DrawLinesOf
-  this.DrawLinesOfAlert = function (LineReferece) {
-      if (this.map == null || this.map == undefined) return;
-      if (LineReferece == null) LineReferece = this.SavedAlertLineReference;
-      if (LineReferece == null) return;
+        //option to delete the path if not drawing
+        var AllLines = Object.keys(ADSBLines);
+        AllLines.forEach(function (LineKey, index, array) {
+            if (DrawingLineKeys.indexOf(LineKey) < 0) {
+                ADSBLines[LineKey].setMap(null);
+                delete ADSBLines[LineKey];
+            }
+        })
+    }; //this.DrawLinesOf
+    this.DrawLinesOfAlert = function (LineReferece) {
+        if (this.map == null || this.map == undefined) return;
+        if (LineReferece == null) LineReferece = this.SavedAlertLineReference;
+        if (LineReferece == null) return;
 
-      var RefKeys = Object.keys(LineReferece);
-      var AllFlights = this.GetAllFlights();
-      var DrawingLineKeys = [];
-      var ADSBAlertLines = this.ADSBAlertLines;
-      RefKeys.forEach(function (RpasID, index, array) {
-          var FromFlight = AllFlights[RpasID];
-          if (FromFlight == undefined) {
-          } else {
-              var CenterPos = { lat: FromFlight.Lat, lng: FromFlight.Lon };
-              LineReferece[RpasID].forEach(function (AircraftID, index, array) {
-                  var toFlight = AllFlights[AircraftID];
-                  if (toFlight == undefined) {
-                      //nothing
-                  } else {
-                      var newPos = { lat: toFlight.Lat, lng: toFlight.Lon };
-                      var LineKey = RpasID + "_" + AircraftID;
-                      var LinePath = [CenterPos, newPos];
-                      DrawingLineKeys.push(LineKey);
-                      if (ADSBAlertLines[LineKey] == undefined) {
-                          var flightPath = new google.maps.Polyline({
-                              path: LinePath,
-                              geodesic: true,
-                              strokeColor: '#ff4e00',
-                              strokeOpacity: 1,
-                              strokeWeight: 1
-                          });
-                          flightPath.setMap(this.map);
-                          ADSBAlertLines[LineKey] = flightPath;
-                      } else {
-                          ADSBAlertLines[LineKey].setPath(LinePath);
-                      }//if (ADSBLines[RpasID + "_" + AircraftID] == undefined) {
-                  }
-              });//foreach
-          }//if (FromFlight == undefined) 
-      });//foreach
+        var RefKeys = Object.keys(LineReferece);
+        var AllFlights = this.GetAllFlights();
+        var DrawingLineKeys = [];
+        var ADSBAlertLines = this.ADSBAlertLines;
+        RefKeys.forEach(function (RpasID, index, array) {
+            var FromFlight = AllFlights[RpasID];
+            if (FromFlight == undefined) {
+            } else {
+                var CenterPos = { lat: FromFlight.Lat, lng: FromFlight.Lon };
+                LineReferece[RpasID].forEach(function (AircraftID, index, array) {
+                    var toFlight = AllFlights[AircraftID];
+                    if (toFlight == undefined) {
+                        //nothing
+                    } else {
+                        var newPos = { lat: toFlight.Lat, lng: toFlight.Lon };
+                        var LineKey = RpasID + "_" + AircraftID;
+                        var LinePath = [CenterPos, newPos];
+                        DrawingLineKeys.push(LineKey);
+                        if (ADSBAlertLines[LineKey] == undefined) {
+                            var flightPath = new google.maps.Polyline({
+                                path: LinePath,
+                                geodesic: true,
+                                strokeColor: '#f2a003',
+                                strokeOpacity: 1,
+                                strokeWeight: 1
+                            });
+                            flightPath.setMap(this.map);
+                            ADSBAlertLines[LineKey] = flightPath;
+                        } else {
+                            ADSBAlertLines[LineKey].setPath(LinePath);
+                        }//if (ADSBLines[RpasID + "_" + AircraftID] == undefined) {
+                    }
+                });//foreach
+            }//if (FromFlight == undefined) 
+        });//foreach
 
-      //option to delete the path if not drawing
-      var AllLines = Object.keys(ADSBAlertLines);
-      AllLines.forEach(function (LineKey, index, array) {
-          if (DrawingLineKeys.indexOf(LineKey) < 0) {
-              ADSBAlertLines[LineKey].setMap(null);
-              delete ADSBAlertLines[LineKey];
-          }
-      })
-  }; //this.DrawLinesOfAlert
+        //option to delete the path if not drawing
+        var AllLines = Object.keys(ADSBAlertLines);
+        AllLines.forEach(function (LineKey, index, array) {
+            if (DrawingLineKeys.indexOf(LineKey) < 0) {
+                ADSBAlertLines[LineKey].setMap(null);
+                delete ADSBAlertLines[LineKey];
+            }
+        })
+    }; //this.DrawLinesOfAlert
 
 
-  this.DeleteLineOf = function (FlightID) {
-    //option to delete the path if not drawing
-    var ADSBLines = this.ADSBLines;
-    var AllLines = Object.keys(ADSBLines);
-    AllLines.forEach(function (LineKey, index, array) {
-      if (LineKey.indexOf(FlightID) < 0) {
-        ADSBLines[LineKey].setMap(null);
-        delete ADSBLines[LineKey];
-      }
-    });
-  };
-
-};
+    this.DeleteLineOf = function (FlightID) {
+        //option to delete the path if not drawing
+        var ADSBLines = this.ADSBLines;
+        var AllLines = Object.keys(ADSBLines);
+        AllLines.forEach(function (LineKey, index, array) {
+            if (LineKey.indexOf(FlightID) < 0) {
+                ADSBLines[LineKey].setMap(null);
+                delete ADSBLines[LineKey];
+            }
+        });
+    };
+    this.DeleteLinesOf = function (Lines) {
+        var ADSBLines = Lines;
+        var AllLines = Object.keys(ADSBLines);
+        AllLines.forEach(function (LineKey, index, array) {
+           
+                ADSBLines[LineKey].setMap(null);
+                delete ADSBLines[LineKey];
+          
+        });
+    };
+}
 
 ADSBOverlay.prototype = new google.maps.OverlayView;
 
