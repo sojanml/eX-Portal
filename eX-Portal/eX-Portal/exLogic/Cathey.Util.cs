@@ -314,6 +314,7 @@ namespace eX_Portal.exLogic {
                         PDetail.RPASPermitNo = reader.GetValue(11).ToString();
                         PDetail.PermitCategory = reader.GetValue(12).ToString();
                         PDetail.PilotImage = reader.GetValue(13).ToString();
+                        PDetail.UserId = UserID;
                     }
 
                 }
