@@ -22,7 +22,7 @@ namespace eX_Portal.exLogic {
                         <width>1</width> 
                 </LineStyle>
         <PolyStyle>
-          <color>880000ff</color>
+          <color>440000ff</color>
           <colorMode>normal</colorMode>
           <fill>1</fill>
           <outline>1</outline>
@@ -35,7 +35,7 @@ namespace eX_Portal.exLogic {
                 </LineStyle>
         <PolyStyle>
           <colorMode>normal</colorMode>
-          <color>8800ff00</color>
+          <color>4400ff00</color>
           <fill>1</fill>
           <outline>1</outline>
         </PolyStyle>

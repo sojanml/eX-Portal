@@ -101,6 +101,10 @@
       var DroneID = @Model.DroneID;
       var IsLive = @(Model.IsLive ? "true" : "false");
       var _FlightVideos = @Html.Raw(Json.Encode(Model.Videos));
+      var Boundaries = [
+        '@Model.InnerPolygon',
+        '@Model.OuterPolygon',
+      ];
     </script>
     <script src="//code.highcharts.com/stock/highstock.js"></script>
     <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyDY6IHXH4-fUAzYq6HBR_ndu_lnyyopcTs"></script>
