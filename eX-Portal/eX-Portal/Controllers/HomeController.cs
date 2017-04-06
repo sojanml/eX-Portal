@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using eX_Portal.Models;
+using Exponent.ADSB;
 
 namespace eX_Portal.Controllers {
   public class HomeController :Controller {
@@ -13,8 +14,10 @@ namespace eX_Portal.Controllers {
     public ActionResult Index() {
       //if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home")
       ViewBag.DashBoard = Util.getDashboard();
-
-      return View();
+            if (Util.getLoginUserID() == 2)
+                return RedirectToAction("Dashboard", "ADSB");
+            else
+                return View();
     }
 
     public ActionResult About() {

@@ -579,7 +579,7 @@ function ShowInfoWindow(t) {
     if (IsDrone)
     {
        
-        FlightLink = '<a href="/Map/FlightData/' + DroneFlightID + '">View Flight</a>\n';
+        FlightLink = '<a href="/FlightMap/Map/' + DroneFlightID + '">View Flight</a>\n';
     } else
     {
         FlightLink = '';

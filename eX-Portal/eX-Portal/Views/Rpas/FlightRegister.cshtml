@@ -12,7 +12,11 @@
     @Html.AntiForgeryToken()
 
     @Html.HiddenFor(model => model.GcaApproval.ApprovalID)
+    <section class="top-space">
     <div id="frm" class="column column-half form-group">
+        <div class="title">
+            Flight Registration
+        </div>
         <div class="error" id="error-message" style="display:none;margin-bottom:20px;"></div>
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -34,15 +38,16 @@
           new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.GcaApproval.PilotUserId, "", new { @class = "text-danger" })
             </div>
-         @if (Util.CheckUserIsPilot(Int32.Parse(Session["UserID"].ToString()))) {
+            @if (Util.CheckUserIsPilot(Int32.Parse(Session["UserID"].ToString())))
+            {
 
-          <div>
-            <input id="ispilot" value="1" name="ispilot" type="checkbox" />
-            <label for="ispilot">I am the pilot</label>
-          </div>
+                <div>
+                    <input id="ispilot" value="1" name="ispilot" type="checkbox" />
+                    <label for="ispilot">I am the pilot</label>
+                </div>
 
-         }
-           
+            }
+
         </div>
 
         <div class="form-group">
@@ -55,11 +60,12 @@
                 @Html.ValidationMessageFor(model => model.GcaApproval.GroundStaffUserId, "", new { @class = "text-danger" })
             </div>
 
-            @if (Util.CheckUserIsPilot(Int32.Parse(Session["UserID"].ToString()))) {
-            <div>
-                <input id="isgroundstaff" name="isgroundstaff" type="checkbox" />
-                <label for="isgroundstaff">I am the ground staff</label>
-            </div>
+            @if (Util.CheckUserIsPilot(Int32.Parse(Session["UserID"].ToString())))
+            {
+                <div>
+                    <input id="isgroundstaff" name="isgroundstaff" type="checkbox" />
+                    <label for="isgroundstaff">I am the ground staff</label>
+                </div>
             }
         </div>
 
@@ -75,12 +81,12 @@
         <h2>Zone Approval</h2>
 
         @*<div class="form-group">
-            @Html.LabelFor(model => model.GcaApproval.ApprovalID, "Regulatory Approvals")
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.GcaApproval.ApprovalID, new SelectList(Enumerable.Empty<SelectListItem>(), "ApprovalID", "ApprovalName"), "--Select Regulator Approval--", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalID, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
+                @Html.LabelFor(model => model.GcaApproval.ApprovalID, "Regulatory Approvals")
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.GcaApproval.ApprovalID, new SelectList(Enumerable.Empty<SelectListItem>(), "ApprovalID", "ApprovalName"), "--Select Regulator Approval--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.GcaApproval.ApprovalID, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
         <div id="newgcaapproval" class="form-group" style="visibility:visible;">
             @Html.LabelFor(model => model.GcaApproval.ApprovalName, "New Regulator Approval Name")
@@ -93,24 +99,24 @@
         <div class="two-column-form-group">
             <div class="form-group">
                 @Html.LabelFor(model => model.GcaApproval.StartDate)
-                <div class="col-md-10">    
-                    <input class="form-control date-picker text-box single-line " 
-                           data-val="true" data-val-date="The field Start Date must be a date." 
-                           data-val-required="Please Enter Start Date" id="GcaApproval_StartDate" 
-                           name="GcaApproval.StartDate" type="datetime" 
+                <div class="col-md-10">
+                    <input class="form-control date-picker text-box single-line "
+                           data-val="true" data-val-date="The field Start Date must be a date."
+                           data-val-required="Please Enter Start Date" id="GcaApproval_StartDate"
+                           name="GcaApproval.StartDate" type="datetime"
                            value="@(
         Model.GcaApproval.StartDate == null ? "" :
         ((DateTime)(Model.GcaApproval.StartDate)).ToString("dd-MMM-yyyy"))">
-                    
+
                     @Html.ValidationMessageFor(model => model.GcaApproval.StartDate, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(model => model.GcaApproval.EndDate)
                 <div class="col-md-10">
-                    <input class="form-control date-picker text-box single-line" 
-                           data-val="true" data-val-date="The field End Date must be a date." 
-                           data-val-required="Please Enter End Date" id="GcaApproval_EndDate" 
+                    <input class="form-control date-picker text-box single-line"
+                           data-val="true" data-val-date="The field End Date must be a date."
+                           data-val-required="Please Enter End Date" id="GcaApproval_EndDate"
                            name="GcaApproval.EndDate" type="datetime" value="@(
         Model.GcaApproval.EndDate == null ? "" :
         ((DateTime)(Model.GcaApproval.EndDate)).ToString("dd-MMM-yyyy"))">
@@ -162,18 +168,15 @@
                     @Html.ValidationMessageFor(model => model.GcaApproval.IsUseCamara)
                 </div>
             </div>
-            <div class="form-group">               
-                <div class="col-md-10">
-                   <p><font color="white">p</font></p>
-                </div>
-            </div>
-       </div>
-       
-        <div id="cameraopt" style="text-align:left;display:none;padding:0px;" >
+            
+        </div>
+
+        <div id="cameraopt" style="text-align:left;display:none;padding:0px;">
             <div class="form-group">
                 @*@Html.LabelFor(model => model.GcaApproval.CameraId, "Select Camera")*@
-                <div class="col-md-10">Other Camera
-                    @Html.DropDownListFor(model => model.GcaApproval.CameraId, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"),  new { @class = "form-control" })
+                <div class="col-md-10">
+                    Other Camera
+                    @Html.DropDownListFor(model => model.GcaApproval.CameraId, Util.GetDropDowntList("Camera", "Name", "Code", "usp_Portal_GetDroneDropDown"), new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.GcaApproval.CameraId, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -188,54 +191,49 @@
             </div>
         </div>
 
-      
 
 
-            <div id="gcacoordinates"  style="visibility:visible;">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.GcaApproval.Coordinates, "Coordinates")
-                    <div class="editor-field">
-                        @Html.EditorFor(model => model.GcaApproval.Coordinates)
-                        @Html.ValidationMessageFor(model => model.GcaApproval.Coordinates)
-                    </div>
-                </div>
-               
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="submitButton" type="submit" value="Save" class="btn btn-default" style="width:60px;" />
             </div>
+        </div>
 
-           
-
-           
-
-
-
-
-
+    </div>
+    <div id="frm2" class="column column-half form-group">
+        <div class="title">
+            Coordinates
+        </div>
+        <div id="gcacoordinates" style="visibility:visible;width:100%;">
             <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input id="submitButton" type="submit" value="Save" class="btn btn-default" style="width:60px;" />
+                @Html.LabelFor(model => model.GcaApproval.Coordinates, "Coordinates")
+                <div class="editor-field" style="width:100%;">
+                    @Html.EditorFor(model => model.GcaApproval.Coordinates)
+                    @Html.ValidationMessageFor(model => model.GcaApproval.Coordinates)
                 </div>
             </div>
 
         </div>
-        <div id="frm2" class="column column-half">
-            <div id="polygonmap" class="form-group" style="visibility:visible;height:500px;width:600px;">
-                <div id="map_canvas" style="width: 100%; height: 100%;border:1px solid black;"></div>
-            </div>
 
+        <div id="polygonmap" class="form-group" style="visibility:visible;height:500px;width:auto;">
+            <div id="map_canvas" style="width: 100%; height: 100%;border:1px solid black;"></div>
         </div>
-}
+
+    </div>
+    </section>
+    }
 
 
-@section header{
-    <link href="~/Content/black-box.css" rel="stylesheet" />
-    <link href="~/jquery-ui/jquery-ui.css" rel="stylesheet" />
-    <link href="~/jquery-ui/jquery.ui.timepicker.css" rel="stylesheet" />
-}
+    @section header{
+        <link href="~/Content/black-box.css" rel="stylesheet" />
+        <link href="~/jquery-ui/jquery-ui.css" rel="stylesheet" />
+        <link href="~/jquery-ui/jquery.ui.timepicker.css" rel="stylesheet" />
+    }
 
-@section Scripts {
-    <script src="~/jquery-ui/jquery-ui.js"></script>
-    <script src="~/jquery-ui/jquery.ui.timepicker.js"></script>
-    <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>
-    <script src="~/Scripts/RpasFlightSetup.js"></script>
-}
+    @section Scripts {
+        <script src="~/jquery-ui/jquery-ui.js"></script>
+        <script src="~/jquery-ui/jquery.ui.timepicker.js"></script>
+        <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>
+        <script src="~/Scripts/RpasFlightSetup.js"></script>
+    }
 
