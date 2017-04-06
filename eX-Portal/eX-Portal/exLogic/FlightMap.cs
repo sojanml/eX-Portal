@@ -23,6 +23,8 @@ namespace eX_Portal.exLogic {
     public int PilotID { get; private set; }
     public List<FlightVideo> Videos { get; set; }
     public bool IsLive { get; private set; }
+    public String InnerPolygon { get; private set; }
+    public String OuterPolygon { get; private set; }
 
     public void GetInformation(int FlightID) {
       String SQL = @"SELECT 
@@ -35,7 +37,9 @@ namespace eX_Portal.exLogic {
         tblGSC.FirstName AS GroundStaff,
         CONVERT(VARCHAR, FlightDate,120) AS 'FlightDate',
         ISNULL(g.ApprovalName,'NO NOC') as ApprovalName,
-        ISNULL(g.ApprovalID,0) as ApprovalID
+        ISNULL(g.ApprovalID,0) as ApprovalID,
+        g.Coordinates as InnerPolygon,
+        g.InnerBoundaryCoord as OuterPolygon        
       FROM 
         DroneFlight
       LEFT JOIN GCA_Approval as g
@@ -65,6 +69,8 @@ namespace eX_Portal.exLogic {
             this.FlightID = GetInt(RS, "FlightID");
             ApprovalID = GetInt(RS, "ApprovalID");
             PilotID = GetInt(RS, "PilotID");
+            InnerPolygon = GetString(RS, "InnerPolygon");
+            OuterPolygon = GetString(RS, "OuterPolygon");
           }
         }//using (var cmd 
 

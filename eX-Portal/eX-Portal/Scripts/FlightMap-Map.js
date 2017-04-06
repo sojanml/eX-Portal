@@ -22,6 +22,7 @@ var _IsGetNextDataSet = true;
 
 $(document).ready(function () {
   initializeMap();
+  LoadPolygons();
   InitChart();
   LoadMapData();
   InitVideos();
@@ -30,6 +31,53 @@ $(document).ready(function () {
 
 });
 
+function LoadPolygons() {
+  var InnerPolyPath = ToPath(Boundaries[0]);
+  var OuterPath = ToPath(Boundaries[1]);
+  if (InnerPolyPath.length < 1) return;
+  if (OuterPath.length < 1) return;
+
+  //Generate Holo Poly
+  var HoloPath = InnerPolyPath;
+  //Close the polygon
+  HoloPath.push(InnerPolyPath[0]);
+  HoloPath = HoloPath.concat(OuterPath.reverse());
+
+  // Construct the polygon.
+  var InnerPoly = new google.maps.Polygon({
+    paths: InnerPolyPath,
+    strokeWeight: 0,
+    fillColor: 'rgb(101, 186, 25)',
+    fillOpacity: 0.2,
+    map: map
+  });
+  var OuterBorder =  new google.maps.Polyline({
+    path: OuterPath,
+    geodesic: true,
+    strokeColor: 'red',
+    strokeOpacity: 0.3,
+    strokeWeight: 3,
+    map: map
+  });
+  var OuterPoly = new google.maps.Polygon({
+    paths: HoloPath,
+    strokeWeight: 0,
+    fillColor: '#fd2525',
+    fillOpacity: 0.2,
+    map: map
+  });
+}
+
+function ToPath(Coordinates) {
+  var Path = [];
+  if (Coordinates == '' || Coordinates == 'null') return Path;
+  var aLatLng = Coordinates.split(',');
+  for (var i = 0; i < aLatLng.length; i++) {
+    var Points = aLatLng[i].split(' ');
+    Path.push({ lat: parseFloat(Points[0]), lng: parseFloat(Points[1])});
+  }
+  return Path;
+}
 
 function StartFlightReplay() {
   //clear chart
@@ -42,8 +90,7 @@ function StartFlightReplay() {
   _FlightPath.setOptions({ 'strokeOpacity': 0.1 });
 
   var Path = _FlightReplayPath.getPath();
-  Path.clear();
-  
+  Path.clear();  
 }
 
 function RpasReplayTimer() {
