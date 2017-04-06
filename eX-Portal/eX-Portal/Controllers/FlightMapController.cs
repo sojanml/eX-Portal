@@ -2,6 +2,7 @@
 using eX_Portal.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,9 +10,10 @@ using System.Web.Mvc;
 namespace eX_Portal.Controllers {
   public class FlightMapController : Controller {
     public ExponentPortalEntities ctx = new ExponentPortalEntities();
-
-    // GET: FlightMap
-    public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0, string FlightType = "") {
+        // GET: Adsb
+        private String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ADSB_DB"].ToString();
+        // GET: FlightMap
+        public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0, string FlightType = "") {
       if (!exLogic.User.hasAccess("FLIGHT"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "RPAS Flights";
@@ -141,5 +143,20 @@ namespace eX_Portal.Controllers {
       return Json(TheMap.MapData(FlightID, FlightMapDataID), JsonRequestBehavior.AllowGet);
     }
 
-  }
+        [HttpGet]
+        public JsonResult ADSBData()
+        {
+            Exponent.ADSB.ADSBQuery QueryData = new Exponent.ADSB.ADSBQuery();
+            using (SqlConnection CN = new SqlConnection(DSN))
+            {
+                CN.Open();
+                QueryData.GetDefaults(CN);
+                CN.Close();
+            }
+            var ADSB = new Exponent.ADSB.Live();
+            var Data = ADSB.FlightStat(DSN, false, QueryData);
+            //  var Data = "";
+            return Json(Data, JsonRequestBehavior.AllowGet);
+        }
+    }
 }
