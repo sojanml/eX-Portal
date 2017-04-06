@@ -224,6 +224,14 @@ function initializeMap() {
     strokeWeight: 2,
     map: map
   });
+
+  var KmlUrl = 'http://test.exponent-ts.com/Map/NoFlyzone';
+  var kmlOptions = {
+    preserveViewport: true,
+    map: map
+  };
+  NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
+
 }
 
 function LoadMapData() {
