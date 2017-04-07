@@ -62,6 +62,8 @@ $(document).ready(function () {
     $('#GcaApproval_Coordinates').on("change", function (e) {
         e.preventDefault();
         updateCordinates();
+       
+        LoadPolygons();
     })
 
    
@@ -220,6 +222,7 @@ function getDefaultCoordinates() {
 
 function setCoordinates1(Cord) {
     $('#GcaApproval_Coordinates').val(Cord);
+    LoadPolygons();
 }
 
 function setBoundary(Cordinates) {
@@ -250,8 +253,39 @@ function getBoundary() {
 }
 
 function LoadPolygons() {
-    var InnerPolyPath = ToPath(Boundaries[0]);
-    var OuterPath = ToPath(Boundaries[1]);
+    var Cordinates = getCoordinates();
+    var OuterPolygon = '';
+    $.ajax({
+        type: 'GET',
+        url: '/Rpas/GetOuterPolygon?InnerPolygon=' + Cordinates,
+        dataType: "json",
+        async: true,
+        success: function (data) {
+            LoadOutPoly(Cordinates,data)
+        },
+        error: function () {
+            alert('error')
+        }
+    });
+    
+   
+
+}
+function ToPath(Coordinates) {
+    var Path = [];
+    if (Coordinates == '' || Coordinates == 'null') return Path;
+    var aLatLng = Coordinates.split(',');
+    for (var i = 0; i < aLatLng.length; i++) {
+        var Points = aLatLng[i].split(' ');
+        Path.push({ lat: parseFloat(Points[0]), lng: parseFloat(Points[1]) });
+    }
+    return Path;
+}
+
+function LoadOutPoly(inner,outer)
+{
+    var InnerPolyPath = ToPath(inner);
+    var OuterPath = ToPath(outer);
     if (InnerPolyPath.length < 1) return;
     if (OuterPath.length < 1) return;
 
@@ -285,3 +319,5 @@ function LoadPolygons() {
         map: map
     });
 }
+
+

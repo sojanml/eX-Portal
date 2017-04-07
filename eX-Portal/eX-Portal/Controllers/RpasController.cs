@@ -2489,10 +2489,12 @@ namespace eX_Portal.Controllers {
             }
         }//public string FlightApproval
 
+        [HttpGet]
         public JsonResult GetOuterPolygon(string InnerPolygon)
         {
-
-            return Json("");
+            Util utility= new Util();
+            string outerPoly = utility.getOuterPolygon(InnerPolygon,50);
+            return Json(outerPoly, JsonRequestBehavior.AllowGet);
         }
     }
 }

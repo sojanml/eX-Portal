@@ -412,9 +412,18 @@ namespace eX_Portal.exLogic {
             return UserDashboard;
         }
        
-        public string getOuterPolygon(String coordinates)
+        public string getOuterPolygon(String coordinates,int BoundaryInMeters)
         {
             string innerpoly = "";
+            string sql = $@"select 
+                        case 
+                        when geography::STGeomFromText('POLYGON((' + dbo.ToogleGeo('{coordinates}') + '))', 4326).STArea() > 999999999999
+                        then
+                        dbo.ToogleGeo(geography::STGeomFromText('POLYGON((' + dbo.ToogleGeo('{coordinates}') + '))', 4326).ReorientObject().MakeValid().STBuffer({BoundaryInMeters}).ToString())
+                        else
+                        dbo.ToogleGeo(geography::STGeomFromText('POLYGON((' + dbo.ToogleGeo('{coordinates}') + '))', 4326).STBuffer({BoundaryInMeters}).ToString())
+                        end";
+            innerpoly = Util.getDBVal(sql);
 
             return innerpoly;
         }
