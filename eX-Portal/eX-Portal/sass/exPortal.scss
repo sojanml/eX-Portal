@@ -37,7 +37,7 @@ $VerticalGap: 12px;
       margin: 0px;
       font-family: Gobold_Light;
       font-size: 12px;
-      color: $TitleTextColor;
+      color: $MenuHiliteColor;
 
       div.button {
         float: right;
@@ -104,12 +104,22 @@ $VerticalGap: 12px;
       &.NoVideo {
         width: 100%;
         float: none;
-        padding-top: 10px;
+        padding-top: 5px;
 
         div#GeneralInformation {
           table.infoTable td {
-            font-size: 12pt;
-            font-weight: bold;
+            width: 50%;
+
+            & > div {
+              line-height: 30px;
+              float: left;
+            }
+
+            div.FlightSummaryImage {
+              width: 30px !important;
+              height: 30px !important;
+              margin-right: 10px;
+            }
           }
         }
       }
@@ -199,9 +209,10 @@ $VerticalGap: 12px;
   }
 }
 
-table  {
-  box-sizing:border-box;
+table {
+  box-sizing: border-box;
 }
+
 span.refresh,
 span.icon,
 span.green_icon {
@@ -586,44 +597,41 @@ table.info-tiles {
 }
 
 section {
-    margin: 0px auto 0px auto;
-    @include clearfix;
+  margin: 0px auto 0px auto;
+  @include clearfix;
 
-    &.body-content {
-        font-size: 11pt;
+  &.body-content {
+    font-size: 11pt;
+  }
+
+  div.body-title {
+    padding: 5px 0px 5px 5px;
+    background-color: $ReportHeadBackground;
+    color: white;
+    margin: $VerticalGap 0px 0px 0px;
+    font-family: Gobold_Light;
+    font-size: 18px;
+    color: $TitleTextColor;
+  }
+
+  div.column {
+    box-sizing: border-box;
+    float: left;
+
+    &:last-child {
+      border-right: 0px red none;
+      margin-right: 0;
     }
+  }
 
-    div.body-title {
-        padding: 5px 0px 5px 5px;
-        background-color: $ReportHeadBackground;
-        color: white;
-        margin: $VerticalGap 0px 0px 0px;
-        font-family: Gobold_Light;
-        font-size: 18px;
-        color: $TitleTextColor;
-    }
+  div.column-half {
+  }
 
-    div.column {
-        box-sizing: border-box;
-        float: left;
+  div.column-2-of-6 {
+  }
 
-        &:last-child {
-            border-right: 0px red none;
-            margin-right: 0;
-        }
-    }
-
-    div.column-half {
-    }
-
-    div.column-2-of-6 {
-    }
-
-    div.column-4-of-6 {
-       
-    }
-
-   
+  div.column-4-of-6 {
+  }
 }
 
 
@@ -898,23 +906,26 @@ div.form-horizontal {
 
 
 table.infoTable {
-  width:100%;
+  width: 100%;
+
   tr {
     td {
-      padding:0px 5px 5px 0px;
+      padding: 0px 5px 5px 0px;
+
       span {
-        display:inline-block;
-        padding-left:0px;
-        color:red;
+        display: inline-block;
+        padding-left: 0px;
+        color: red;
       }
     }
   }
 }
 
 div#FlightInfoNOC {
-  background-color: $MenuColor;
-  padding:2px 0px 2px 5px;
-  margin-bottom:3px;
+  background-color: $MenuHiliteColor;
+  padding: 4px 0px 4px 5px;
+  margin-bottom: 5px;
+
   span {
     display: inline-block;
     padding-left: 0px;
@@ -922,23 +933,40 @@ div#FlightInfoNOC {
   }
 }
 
-#FlightInformation  {
+#FlightInformation {
   background-color: $MenuColor;
 }
+
 #FlightInformation,
 #FlightSummary {
   @include clearfix();
 }
-#FlightSummary  {
-margin-top:5px;
 
+#FlightInformation {
+  table.FlightLastInformation {
+    width: 100%;
+
+    tr td {
+      width: 50%;
+      line-height: 30px;
+      padding-bottom: 4px;
+      text-transform: uppercase;
+
+      span {
+        font-size: 10pt;
+        font-weight: bold;
+        color: red;
+      }
+    }
+  }
 }
 
-#FlightGraph {
+#FlightGraph,
+#SecondGraph {
   width: 100%;
   height: 140px;
   background-color: white;
-  margin-top:10px;
+  margin-top: 10px;
 }
 
 #FlightData {
@@ -982,20 +1010,21 @@ margin-top:5px;
 
 div.FlightSummaryImage {
   border-radius: 50%;
-  width:50px;
-  height:50px;
-  background-size:cover;
+  width: 50px;
+  height: 50px;
+  background-size: cover;
   background-color: white;
 }
 
 .dash-image {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   background-color: #565555;
-  -webkit-mask-size: 20px 20px;
+  -webkit-mask-size: 30px 30px;
   display: block;
-  margin: 0px;
+  margin: 0px 10px 0px 0px;
   padding: 0px;
+  float: left;
 
   &.img_duration {
     -webkit-mask-image: url('/images/image5.png');
@@ -1087,19 +1116,21 @@ div.dashboard-column {
 #loginForm {
   input[type=text],
   input[type=password] {
-    width:60%;
+    width: 60%;
   }
 }
 
 table.qDetailView {
-  width:100%;
+  width: 100%;
+
   tr {
     td {
       padding: 3px 15px 3px 0px;
-      border-bottom:1px $MenuColor solid;
+      border-bottom: 1px $MenuColor solid;
+
       span.value {
-        padding-left:15px;
-        color:red;
+        padding-left: 15px;
+        color: red;
       }
     }
   }
@@ -1107,13 +1138,42 @@ table.qDetailView {
 
 
 div.photo-upload {
-  float:right;
-  width:160px;
-  height:160px;
+  float: right;
+  width: 160px;
+  height: 160px;
+
   div.user-photo {
-    width:160px;
-    height:160px;
-    border-radius:50%;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
     background-size: cover;
+  }
+}
+
+div.GraphSection {
+  $Seperation: 7px;
+  $TableWidth: (($MaxResolution - 10px) / 2);
+
+  table {
+    width: $TableWidth;
+    height: 140px;
+
+    tr {
+      td.Graph {
+        width: ($TableWidth - $Seperation)/2;
+      }
+
+      td.GraphDivider {
+        width: $Seperation;
+
+        & > div {
+          margin: 0px ($Seperation - 1px)/2 0px ($Seperation - 1px)/2;
+          width: 1px;
+          background-color: $MenuHiliteColor;
+          height: 140px;
+          display:block;
+        }
+      }
+    }
   }
 }
