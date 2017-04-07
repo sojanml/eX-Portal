@@ -59,7 +59,7 @@ function InitSliders() {
       range: true,
       values: [InitQuery.minAltitude, InitQuery.maxAltitude],
       min: 0,
-      max: 1000,
+      max: 6000,
       step:1,
       slide: function (event, ui) {
         $('#span_minAltitude').html(ui.values[0]);

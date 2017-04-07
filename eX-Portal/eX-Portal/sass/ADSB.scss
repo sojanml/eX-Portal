@@ -10,10 +10,12 @@ $MenuHiliteColor: #cacaca;
 $MenuPadding: 5px;
 $MenuSpaceFromRight: 12px;
 $SelectedItemColor: #53a100;
-$BreachColor: #fe0000;
 $TitleHeading: #222222;
-$SafeColor: #53a100;
+
+$BreachColor: #fe0000;
 $AlertColor: #f2a003;
+$SafeColor: #53a100;
+
 $FilterColor:#018aff;
 
 
@@ -281,12 +283,13 @@ table.traffic_status {
     }
 }
 
-div.filter,
-td.filter {
+div.filter{
   background-color: $FilterColor;
 }
 
+
 td.filter {
+  background-color: $MenuColor;
   width: 113px;
   vertical-align: top;
 
@@ -303,7 +306,6 @@ td.filter {
   div.sub-tile-title {
     width: 100%;
     text-align: center;
-    color: white;
     font-size: 8pt;
     padding: 2px 0px 2px 0px;
     border-bottom: 1px #222222 solid;
@@ -313,7 +315,7 @@ td.filter {
   div.tile-detail {
     padding-bottom: 5px;
     padding-top: 5px;
-    color: white;
+    color: #222222
   }
 }
 
