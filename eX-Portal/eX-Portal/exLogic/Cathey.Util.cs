@@ -412,6 +412,12 @@ namespace eX_Portal.exLogic {
             return UserDashboard;
         }
        
+        public string getOuterPolygon(String coordinates)
+        {
+            string innerpoly = "";
+
+            return innerpoly;
+        }
         //return Json(PDetail, JsonRequestBehavior.AllowGet); 
   }
 }

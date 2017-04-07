@@ -177,6 +177,17 @@ $VerticalGap: 12px;
   &.top-space {
     margin-top: $Gap;
   }
+  div.two-column-form-group {
+    div.form-group {
+      width: 48%;
+      float: left;
+      @include clearfix();
+
+      &:last-child {
+        margin-left: 4%;
+      }
+    }
+  }
 }
 
 
