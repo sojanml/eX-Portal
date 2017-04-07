@@ -884,6 +884,7 @@
     <Content Include="Scripts\ADSB-Map.js" />
     <Content Include="Scripts\ADSB.js" />
     <Content Include="Scripts\ADSBDashboard.js" />
+    <Content Include="Scripts\ADSBFlightMap.js" />
     <Content Include="Scripts\Agriculture.js" />
     <Content Include="Scripts\AgricultureBulkUpload.js" />
     <Content Include="Scripts\AgricultureCommon.js" />

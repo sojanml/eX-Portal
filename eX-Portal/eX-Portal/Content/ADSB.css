@@ -131,12 +131,12 @@ table.traffic_status div.safe {
   background-color: #53a100;
 }
 
-div.filter,
-td.filter {
+div.filter {
   background-color: #018aff;
 }
 
 td.filter {
+  background-color: #e5e5e5;
   width: 113px;
   vertical-align: top;
 }
@@ -152,7 +152,6 @@ td.filter div.tile-title {
 td.filter div.sub-tile-title {
   width: 100%;
   text-align: center;
-  color: white;
   font-size: 8pt;
   padding: 2px 0px 2px 0px;
   border-bottom: 1px #222222 solid;
@@ -160,7 +159,7 @@ td.filter div.sub-tile-title {
 td.filter div.tile-detail {
   padding-bottom: 5px;
   padding-top: 5px;
-  color: white;
+  color: #222222;
 }
 
 div.traffic_stat {

@@ -419,7 +419,7 @@ section div.column:last-child {
     margin: 0px;
     font-family: Gobold_Light;
     font-size: 12px;
-    color: #ff9b9b;
+    color: #cacaca;
   }
   section div.column div.title div.button {
     float: right;
@@ -474,11 +474,19 @@ section div.column:last-child {
   section div.column-half div#FlightSummary.NoVideo {
     width: 100%;
     float: none;
-    padding-top: 10px;
+    padding-top: 5px;
   }
   section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td {
-    font-size: 12pt;
-    font-weight: bold;
+    width: 50%;
+  }
+  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td > div {
+    line-height: 30px;
+    float: left;
+  }
+  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td div.FlightSummaryImage {
+    width: 30px !important;
+    height: 30px !important;
+    margin-right: 10px;
   }
   section div.column-2-of-6 {
     width: 300px;
@@ -563,7 +571,7 @@ section div.column:last-child {
     margin: 0px;
     font-family: Gobold_Light;
     font-size: 12px;
-    color: #ff9b9b;
+    color: #cacaca;
   }
   section div.column div.title div.button {
     float: right;
@@ -618,11 +626,19 @@ section div.column:last-child {
   section div.column-half div#FlightSummary.NoVideo {
     width: 100%;
     float: none;
-    padding-top: 10px;
+    padding-top: 5px;
   }
   section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td {
-    font-size: 12pt;
-    font-weight: bold;
+    width: 50%;
+  }
+  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td > div {
+    line-height: 30px;
+    float: left;
+  }
+  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td div.FlightSummaryImage {
+    width: 30px !important;
+    height: 30px !important;
+    margin-right: 10px;
   }
   section div.column-2-of-6 {
     width: 373.33333px;
@@ -903,9 +919,9 @@ table.infoTable tr td span {
 }
 
 div#FlightInfoNOC {
-  background-color: #e5e5e5;
-  padding: 2px 0px 2px 5px;
-  margin-bottom: 3px;
+  background-color: #cacaca;
+  padding: 4px 0px 4px 5px;
+  margin-bottom: 5px;
 }
 div#FlightInfoNOC span {
   display: inline-block;
@@ -924,11 +940,23 @@ div#FlightInfoNOC span {
   content: "";
 }
 
-#FlightSummary {
-  margin-top: 5px;
+#FlightInformation table.FlightLastInformation {
+  width: 100%;
+}
+#FlightInformation table.FlightLastInformation tr td {
+  width: 50%;
+  line-height: 30px;
+  padding-bottom: 4px;
+  text-transform: uppercase;
+}
+#FlightInformation table.FlightLastInformation tr td span {
+  font-size: 10pt;
+  font-weight: bold;
+  color: red;
 }
 
-#FlightGraph {
+#FlightGraph,
+#SecondGraph {
   width: 100%;
   height: 140px;
   background-color: white;
@@ -977,13 +1005,14 @@ div.FlightSummaryImage {
 }
 
 .dash-image {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   background-color: #565555;
-  -webkit-mask-size: 20px 20px;
+  -webkit-mask-size: 30px 30px;
   display: block;
-  margin: 0px;
+  margin: 0px 10px 0px 0px;
   padding: 0px;
+  float: left;
 }
 .dash-image.img_duration {
   -webkit-mask-image: url("/images/image5.png");
@@ -1086,4 +1115,113 @@ div.photo-upload div.user-photo {
   height: 160px;
   border-radius: 50%;
   background-size: cover;
+}
+
+div.GraphSection table {
+  width: 570px;
+  height: 140px;
+}
+div.GraphSection table tr td.Graph {
+  width: 281.5px;
+}
+div.GraphSection table tr td.GraphDivider {
+  width: 7px;
+}
+div.GraphSection table tr td.GraphDivider > div {
+  margin: 0px 3px 0px 3px;
+  width: 1px;
+  background-color: #cacaca;
+  height: 140px;
+  display: block;
+}
+
+div.adsb-point {
+  position: absolute;
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+  margin-left: -50px;
+  margin-top: -50px;
+}
+div.adsb-point span.tail {
+  position: absolute;
+  background-color: aquamarine;
+  width: 2px;
+  height: 2px;
+  margin-left: -1px;
+  margin-top: -1px;
+  border-radius: 50%;
+  display: block;
+  font-size: 1px;
+}
+div.adsb-point span.FlightIcon,
+div.adsb-point span.DroneIcon {
+  position: absolute;
+  left: 50px;
+  top: 50px;
+  font-size: 18px;
+  width: 25px;
+  height: 25px;
+  margin-left: -13px;
+  margin-top: -13px;
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+}
+div.adsb-point span.flight-title {
+  position: absolute;
+  top: 60px;
+  left: 40px;
+  z-index: 10;
+  color: white;
+  display: none;
+  padding: 0px 2px 0px 2px;
+  font-size: 9px;
+}
+div.adsb-point:hover span.flight-title {
+  display: block;
+}
+div.adsb-point.breach {
+  color: #fe0000;
+}
+div.adsb-point.breach span.flight-title,
+div.adsb-point.breach span.tail {
+  background-color: #fe0000;
+}
+div.adsb-point.alert {
+  color: #ff4e00;
+}
+div.adsb-point.alert span.flight-title,
+div.adsb-point.alert span.tail {
+  background-color: #f2a003;
+}
+div.adsb-point.safe {
+  color: #0189ff;
+}
+div.adsb-point.safe span.flight-title,
+div.adsb-point.safe span.tail {
+  background-color: #53a100;
+}
+div.adsb-point.normal {
+  color: #ffcc01;
+}
+div.adsb-point.normal span.flight-title,
+div.adsb-point.normal span.tail {
+  background-color: #ffcc01;
+}
+div.adsb-point.drone {
+  color: #018aff;
+}
+div.adsb-point.drone span.flight-title,
+div.adsb-point.drone span.tail {
+  background-color: #018aff;
+}
+div.adsb-point.drone.breach span.flight-title,
+div.adsb-point.drone.breach span.tail {
+  background-color: red;
+}
+div.adsb-point.drone.alert span.flight-title,
+div.adsb-point.drone.alert span.tail {
+  background-color: #ff4e00;
 }

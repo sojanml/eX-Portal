@@ -32,7 +32,9 @@ namespace eX_Portal.exLogic {
         MSTR_Drone.DroneID,
         MSTR_Drone.DroneName AS RPAS,
         tblPilot.UserID AS PilotID,
-        ISNULL(tblPilot.FirstName,'') AS PilotName,
+        ISNULL(tblPilot.FirstName,'') + ' ' +  
+          ISNULL(tblPilot.MiddleName,'') + ' ' +  
+          ISNULL(tblPilot.LastName,'')AS PilotName,
         ISNULL(tblPilot.PhotoURL,'') as PilotImage,
         tblGSC.FirstName AS GroundStaff,
         CONVERT(VARCHAR, FlightDate,120) AS 'FlightDate',
