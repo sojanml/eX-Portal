@@ -380,8 +380,14 @@ function AddDataToMap(TheData) {
   _FlightPath.setPath(_FlightCoordinates);
   _FlightEndMarker.setPosition(LastPosition);
 
-  map.fitBounds(_FlightBoundBox);
+  if (IsLive) {
+    
+  } else {
+    map.fitBounds(_FlightBoundBox);
+  }
+
   ShowFlightInformation(LastDataItem);
+  map.setCenter(LastPosition);
   _RPASIcon.setPosition(LastPosition);
   
 }

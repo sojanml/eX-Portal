@@ -907,6 +907,7 @@ div.adsb-point {
 
   &.drone {
     color: #018aff;
+    display: none !important;
 
     span.flight-title,
     span.tail {

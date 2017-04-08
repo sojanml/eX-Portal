@@ -1044,6 +1044,10 @@
     </Content>
     <Content Include="sass\Traffic-Dmat.scss" />
     <Content Include="sass\exPortal.scss" />
+    <Content Include="sass\ADSB.scss" />
+    <Content Include="sass\Agriculture.scss" />
+    <Content Include="sass\_colors.scss" />
+    <Content Include="sass\_mixin.scss" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\video.dev.js" />
     <Content Include="Scripts\video.js" />
