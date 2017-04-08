@@ -1,0 +1,193 @@
+﻿@model eX_Portal.ViewModel.FlightSetupViewModel
+@using eX_Portal.exLogic
+@{
+    ViewBag.Title = "RPAS Flight Approval";
+
+}
+
+
+<h2>Requested By</h2>
+@Html.Action("UserDetailView", "User", new { ID = Model.GcaApproval.PilotUserId })
+
+<h2>RPAS Details</h2>
+@Html.Action("DroneDetail", "Drone", new { ID = Model.GcaApproval.DroneID })
+@using (Html.BeginForm(null, null, FormMethod.Post, new { name = "frmDroneSetup", id = "frmDroneSetup" }))
+{
+
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => Model.GcaApproval.ApprovalID)
+    <div id="frm" class="form-horizontal">
+        <div class="error" id="error-message" style="display:none;margin-bottom:20px;"></div>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+      
+        
+       
+
+        <h2>Zone Approval</h2>
+
+     <table class="infoTable">
+         <tbody>
+             <tr>
+                 <td>
+                     @Html.LabelFor(model => Model.FlightType, "Flight Type")
+                 </td>
+                 <td>
+                    @Html.DisplayTextFor(model => Model.FlightType)
+                 </td>
+                 <td>
+                     @Html.LabelFor(model => Model.GcaApproval.ClientName)
+                 </td>
+                 <td>
+                     @Html.DisplayTextFor(model => Model.GcaApproval.ClientName)
+                 </td>
+             </tr>
+             <tr>
+                 <td>
+                     @Html.LabelFor(model => Model.GcaApproval.StartDate)
+                 </td>
+                 <td>
+                    @if (Model.GcaApproval.StartDate.HasValue)
+                    {
+                        @Model.GcaApproval.StartDate.Value.ToString("yyyy-MM-dd")
+                    }
+                 </td>
+                 <td>
+                     @Html.LabelFor(model => Model.GcaApproval.EndDate)
+                 </td>
+                 <td>
+                     @if (Model.GcaApproval.EndDate.HasValue)
+                     {
+                         @Model.GcaApproval.EndDate.Value.ToString("yyyy-MM-dd")
+                     } 
+                 </td>
+             </tr>
+             <tr>
+                 <td>
+                     @Html.LabelFor(model => Model.GcaApproval.StartTime)
+                 </td>
+                 <td>
+                     @Html.DisplayTextFor(model => Model.GcaApproval.StartTime)
+                 </td>
+                 <td>
+                     @Html.LabelFor(model => Model.GcaApproval.EndTime)
+                 </td>
+                 <td>
+                     @Html.DisplayTextFor(m => m.GcaApproval.EndTime)
+                 </td>
+             </tr>
+         </tbody>
+     </table>
+
+        
+
+      
+        <div class="two-column-form-group">
+            <div class="form-group">
+                @Html.LabelFor(model => Model.GcaApproval.MinAltitude)
+                <div class="col-md-10">
+                    @Html.EditorFor(model => Model.GcaApproval.MinAltitude, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.GcaApproval.MinAltitude, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => Model.GcaApproval.MaxAltitude)
+                <div class="col-md-10">
+                    @Html.EditorFor(model => Model.GcaApproval.MaxAltitude, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.GcaApproval.MaxAltitude, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+      
+        <div class="two-column-form-group">
+
+            <div class="form-group">
+                @Html.LabelFor(model => Model.GcaApproval.NotificationEmails, "Notification Email")
+
+                <div class="col-md-10">
+                    @Html.DisplayTextFor(model => Model.GcaApproval.NotificationEmails)
+                </div>
+            </div>
+
+            <div class="form-group">
+
+            
+
+            </div>
+        </div>
+
+        
+        <div id="Coordinates" class="form-group" style="visibility:visible;">
+            @Html.LabelFor(model => Model.GcaApproval.Coordinates, "Coordinates")
+            <div class="editor-field">
+                @Html.EditorFor(model => Model.GcaApproval.Coordinates)
+                @Html.ValidationMessageFor(model => Model.GcaApproval.Coordinates)
+            </div>
+        </div>
+           
+         
+
+        <div id="polygonmap" class="form-group" style="visibility:visible;height:500px;width:600px;">
+            <div id="map_canvas" style="width: 100%; height: 100%;border:1px solid black;"></div>
+        </div>
+
+        <h2>Approve/Reject</h2>
+        <div class="form-group">
+            <div class="editor-label">
+                @Html.LabelFor(model => Model.GcaApproval.ApprovalStatus, "Approve/Reject")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model => Model.GcaApproval.ApprovalStatus, Util.GetApporveRejectList())
+                @Html.ValidationMessageFor(model => Model.GcaApproval.ApprovalStatus)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="editor-label">
+                @Html.LabelFor(model => Model.GcaApproval.BlackBoxID)
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model => Model.GcaApproval.BlackBoxID, Model.GcaApproval.GetBlackBoxList())
+                @Html.ValidationMessageFor(model => Model.GcaApproval.BlackBoxID)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="editor-label">
+                @Html.LabelFor(model => Model.GcaApproval.ApprovalRemarks, "Remarks")
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => Model.GcaApproval.ApprovalRemarks)
+                @Html.ValidationMessageFor(model => Model.GcaApproval.ApprovalRemarks)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="submitButton" type="submit" value="Save" class="btn btn-default" style="width:60px;" />
+            </div>
+        </div>
+
+    </div>
+}
+
+<script type="text/javascript">
+
+</script>
+
+@section header{
+    <link href="~/Content/black-box.css" rel="stylesheet" />
+    <link href="~/jquery-ui/jquery-ui.css" rel="stylesheet" />
+    <link href="~/jquery-ui/jquery.ui.timepicker.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/jquery-ui/jquery-ui.js"></script>
+    <script src="~/jquery-ui/jquery.ui.timepicker.js"></script>
+    <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>
+    <script src="~/Scripts/NOCApproval.js"></script>
+}
+
+

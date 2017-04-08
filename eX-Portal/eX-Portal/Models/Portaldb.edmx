@@ -107,7 +107,7 @@
           <Property Name="RentDays" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'RPASPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BlackBoxData">
           <Key>
             <PropertyRef Name="BlackBoxDataID" />
@@ -494,9 +494,11 @@ warning 6002: The table/view 'RPASPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="NotificationEmails" Type="nvarchar" MaxLength="300" />
           <Property Name="CameraId" Type="int" />
           <Property Name="RpasApprovalRefNum" Type="int" Nullable="false" />
+          <Property Name="FlightTypeID" Type="int" />
+          <Property Name="ClientName" Type="varchar" MaxLength="100" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'RPASPortal.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ip2location">
           <Key>
             <PropertyRef Name="ip_from" />
@@ -1032,7 +1034,7 @@ warning 6002: The table/view 'RPASPortal.dbo.ip2location' does not have a primar
           <Property Name="Col" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'RPASPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadData">
           <Key>
             <PropertyRef Name="PayLoadDataID" />
@@ -1060,7 +1062,7 @@ warning 6002: The table/view 'RPASPortal.dbo.PayLoadData' does not have a primar
           <Property Name="CellID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'RPASPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadFlight">
           <Key>
             <PropertyRef Name="PayLoadFlightID" />
@@ -1078,7 +1080,7 @@ warning 6002: The table/view 'RPASPortal.dbo.PayLoadFlight' does not have a prim
           <Property Name="PayLoadDroneID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'RPASPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadImageData">
           <Key>
             <PropertyRef Name="PayLoadImageDataID" />
@@ -1097,7 +1099,7 @@ warning 6002: The table/view 'RPASPortal.dbo.PayLoadImageData' does not have a p
           <Property Name="LogFilePath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'RPASPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadMapData">
           <Key>
             <PropertyRef Name="PayLoadDataMapID" />
@@ -1145,7 +1147,7 @@ warning 6002: The table/view 'RPASPortal.dbo.PayLoadMapData' does not have a pri
           <Property Name="GridLng" Type="numeric" Precision="18" Scale="6" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'RPASPortal.dbo.PayloadTraffic' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PayloadTraffic' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayloadTraffic">
           <Key>
             <PropertyRef Name="PTid" />
@@ -1183,7 +1185,7 @@ warning 6002: The table/view 'RPASPortal.dbo.PayloadTraffic' does not have a pri
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'RPASPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadYardGrid">
           <Key>
             <PropertyRef Name="CellID" />
@@ -1207,7 +1209,7 @@ warning 6002: The table/view 'RPASPortal.dbo.PayLoadYardGrid' does not have a pr
           <Property Name="Polygon" Type="geography" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'RPASPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PortalAlert">
           <Key>
             <PropertyRef Name="AlertID" />
@@ -1321,7 +1323,7 @@ warning 6002: The table/view 'RPASPortal.dbo.PortalAlert' does not have a primar
           <Property Name="CellReference" Type="varchar" MaxLength="120" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'RPASPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="sysdiagrams">
           <Key>
             
@@ -3031,6 +3033,8 @@ warning 6002: The table/view 'RPASPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="NotificationEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="CameraId" Type="Int32" />
           <Property Name="RpasApprovalRefNum" Type="Int32" Nullable="false" />
+          <Property Name="FlightTypeID" Type="Int32" />
+          <Property Name="ClientName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="LUP_Drone">
           <Key>
@@ -4472,6 +4476,8 @@ warning 6002: The table/view 'RPASPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="GCA_Approval">
             <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
               <MappingFragment StoreEntitySet="GCA_Approval">
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="FlightTypeID" ColumnName="FlightTypeID" />
                 <ScalarProperty Name="RpasApprovalRefNum" ColumnName="RpasApprovalRefNum" />
                 <ScalarProperty Name="CameraId" ColumnName="CameraId" />
                 <ScalarProperty Name="NotificationEmails" ColumnName="NotificationEmails" />

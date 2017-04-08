@@ -43,5 +43,7 @@ namespace eX_Portal.Models
         public string NotificationEmails { get; set; }
         public Nullable<int> CameraId { get; set; }
         public int RpasApprovalRefNum { get; set; }
+        public Nullable<int> FlightTypeID { get; set; }
+        public string ClientName { get; set; }
     }
 }

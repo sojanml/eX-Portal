@@ -12,5 +12,6 @@ namespace eX_Portal.ViewModel
         public MSTR_Drone_Setup DroneSetup { get; set; }
         public GCA_Approval GcaApproval { get; set; }
         public string camera { get; set; }
+        public string FlightType { get; set; }
     }
 }
