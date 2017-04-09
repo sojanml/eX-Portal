@@ -1312,6 +1312,8 @@ div.upload-btn a {
   text-decoration: none;
   padding: 3px 0px 0px 0px;
   cursor: pointer;
+  line-height: 30px;
+  font-size: 11pt;
 }
 div.upload-btn input[type=file] {
   position: absolute;
