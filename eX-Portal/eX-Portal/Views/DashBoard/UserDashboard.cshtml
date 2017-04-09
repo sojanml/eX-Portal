@@ -13,26 +13,26 @@
       <div class="SummaryCaption">
         @Model.Pilot.FirstName @Model.Pilot.MiddleName @Model.Pilot.LastName
       </div>
-      <ul>
+      <ul class="single-line">
         <li>
-          <div class="caption">RPAS Permit No</div>
+          <div class="caption">Permit No:</div>
           <div class="detail">@Model.Pilot.RPASPermitNo</div>
         </li>
         <li>
-            <div class="caption">Nationality</div>
+            <div class="caption">Nationality:</div>
             <div class="detail">@Model.Pilot.Nationality</div>
         </li>
           <li>
-              <div class="caption">Date Of Issue</div>
+              <div class="caption">Date Of Issue:</div>
               <div class="detail">@Model.Pilot.DOI_RPASPermit.ToShortDateString()</div>
           </li>
           <li>
-              <div class="caption">Date Of Expiry</div>
+              <div class="caption">Date Of Expiry:</div>
               <div class="detail">@Model.Pilot.DOE_RPASPermit.ToShortDateString()</div>
           </li>
           
         <li>
-          <div class="caption">Permit Category</div>
+          <div class="caption">Category:</div>
           <div class="detail">@Model.Pilot.PermitCategory</div>
         </li>
       </ul>
@@ -51,14 +51,17 @@
       <ul>
         @foreach (var Item in @Model.RPASList) {
           <li>
+            <div class="icon"><img src="~/images/FlightType-@(Item.UavTypeName).png" /></div>
             <div class="caption">@Item.DroneName</div>
-            <div class="detail">Manufacture: <span>@Item.ManufactureName</span></div>
+            <div class="detail"><span>@Item.ManufactureName</span></div>
           </li>
         }
       </ul>
     </div>
     <div class="toolbar">
-        <a href="@Url.Action("Create", "Drone")"><div class="button">Create RPAS</div></a>
+        <a href="@Url.Action("Create", "Drone")"><div class="button">
+                                                   <span class="icon">&#xf067;</span>
+          Create RPAS</div></a>
     </div>
 
   </div>
@@ -70,14 +73,17 @@
       <ul>
         @foreach (var Item in @Model.ApprovalList) {
           <li>
-            <div class="caption">@Item.ApprovalName</div>
-            <div class="detail">Status: <span>@Item.ApprovalStatus</span></div>
+            <div class="floating @Item.ApprovalStatus">@Item.ApprovalStatus</div>
+            <div class="caption">#@Item.ApprovalID - @Item.ApprovalName</div>
+            <div class="detail">@(((DateTime)Item.StartDate).ToString("dd-MMM-yyyy")) @@ @Item.StartTime</div>
           </li>
         }
       </ul>
     </div>
     <div class="toolbar">
-        <a href="@Url.Action("NOCRegister", "Rpas")"><div class="button">Apply for NOC</div></a>
+        <a href="@Url.Action("NOCRegister", "Rpas")"><div class="button">
+          <span class="icon">&#xf067;</span>
+          Apply for NOC</div></a>
 </div>
 
   </div>
