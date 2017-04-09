@@ -674,7 +674,7 @@ section {
 
 @media screen and (min-width: 1200px) {
   section {
-    @include MultiResolution(1150px,15px, 11px);
+    @include MultiResolution(1150px,15px, 11pt);
   }
 
   footer {
@@ -1431,4 +1431,7 @@ div.upload-btn {
     z-index: 12;
     cursor: pointer;
   }
+}
+div.error {
+  color:red;
 }

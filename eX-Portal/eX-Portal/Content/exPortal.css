@@ -569,7 +569,7 @@ section div.column:last-child {
 @media screen and (min-width: 1200px) {
   section {
     width: 1150px;
-    font-size: 11px;
+    font-size: 11pt;
   }
   section div.column {
     margin-right: 15px;
@@ -1324,4 +1324,8 @@ div.upload-btn input[type=file] {
   opacity: 0;
   z-index: 12;
   cursor: pointer;
+}
+
+div.error {
+  color: red;
 }

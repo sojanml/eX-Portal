@@ -42,7 +42,7 @@
     <td colspan="3"><span class="caption">Coordinates:</span>
     <span class="value" id="Show_Coordinates">@Model.GcaApproval.Coordinates</span>
       <div style="display:none">
-        @Html.EditorFor(model => Model.GcaApproval.Coordinates)
+       
       </div>
     </td>
   </tr>
@@ -58,7 +58,7 @@
     @Html.AntiForgeryToken()
 
     @Html.HiddenFor(model => Model.GcaApproval.ApprovalID)
-
+  @Html.HiddenFor(model => Model.GcaApproval.Coordinates)
     <div class="error" id="error-message" style="display:none;margin-bottom:20px;"></div>
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
