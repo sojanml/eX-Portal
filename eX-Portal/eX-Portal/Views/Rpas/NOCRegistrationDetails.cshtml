@@ -1,16 +1,15 @@
-﻿@model eX_Portal.ViewModel.FlightSetupViewModel
+﻿
+@model eX_Portal.ViewModel.FlightSetupViewModel
 @using eX_Portal.exLogic;
 @{
-    ViewBag.Title = "No access  Already  "+ Model.GcaApproval.ApprovalStatus + "!";
+    ViewBag.Title = "NOC Registration Details";
 }
-
-
 
 
 <h2>Requested By</h2>
 @Html.Action("UserDetailView", "User", new { ID = Model.GcaApproval.PilotUserId })
 
-<h2>UAS Details</h2>
+<h2>RPAS Details</h2>
 @Html.Action("DroneDetail", "Drone", new { ID = Model.GcaApproval.DroneID })
 
 
@@ -18,13 +17,13 @@
 <table class="qDetailView">
     <tr>
         <td>@Html.DisplayNameFor(model => model.GcaApproval.ApprovalName): <span class="value">@Html.DisplayFor(model => model.GcaApproval.ApprovalName)</span></td>
-        <td>Start Date: <span class="value">@Html.DisplayFor(model => model.GcaApproval.StartDate, "ShortDateTime")</span></td>
+        <td>Start Date: <span class="value">@Html.DisplayFor(model => model.GcaApproval.StartDate, "{dd-MMM-yy}")</span></td>
         <td>Start Time: <span class="value">@Html.DisplayFor(model => model.GcaApproval.StartTime)</span></td>
     </tr>
     <tr>
         <td>Flight Type : <span class="value">@Html.DisplayFor(model => model.FlightType)</span></td>
-        <td>End Date: <span class="value">@Html.DisplayFor(model => model.GcaApproval.EndDate, "ShortDateTime")</span></td>
-        <td>End Time: <span class="value">@Html.DisplayFor(model => model.GcaApproval.EndTime)</span></td>
+        <td>End Date    : <span class="value">@Html.DisplayFor(model => model.GcaApproval.EndDate, "ShortDateTime")</span></td>
+        <td>End Time    : <span class="value">@Html.DisplayFor(model => model.GcaApproval.EndTime)</span></td>
     </tr>
     <tr>
         <td>Client Name : <span class="value">@Html.DisplayFor(model => model.GcaApproval.ClientName)</span></td>
@@ -33,18 +32,21 @@
     </tr>
     <tr>
         <td colspan="4">Notification Emails : <span class="value">@Html.DisplayFor(model => model.GcaApproval.NotificationEmails)</span></td>
+        
+        </tr>
 
-    </tr>
 </table>
 <div id="map_canvas" style="width: 100%; height: 450px"></div>
 
 <br />
 
 
-@Scripts.Render("~/bundles/jqueryval")
+
+
+
 @section scripts {
-    <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyDY6IHXH4-fUAzYq6HBR_ndu_lnyyopcTs&sensor=false"></script>
-        <script src="~/Scripts/ADSB-Map.js"></script>
+    <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>
+    <script src="~/Scripts/ADSB-Map.js"></script>
     <script type="text/javascript">
         var map = null;
         var OuterBorder = null;
@@ -78,6 +80,7 @@
                         editable: false,
                         draggable: false
                     });
+                    BoundaryBox.setMap(map);
                     OuterBorder = new google.maps.Polyline({
                         path: [],
                         geodesic: true,
@@ -93,7 +96,6 @@
                         fillOpacity: 0.4,
                         map: map
                     });
-                    BoundaryBox.setMap(map);
                     LoadOutPoly("@Model.GcaApproval.Coordinates","@Model.GcaApproval.InnerBoundaryCoord");
                     map.fitBounds(MapBounds);
                 };

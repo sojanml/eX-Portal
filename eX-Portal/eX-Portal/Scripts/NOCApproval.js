@@ -2,6 +2,8 @@
 var map = null;
 var Form = document.forms['frmDroneSetup'];
 var showMsgTimer = null;
+var OuterBorder = null;
+var OuterPoly = null;
 
 function showMsg(Message) {
     if (showMsgTimer) {
@@ -152,7 +154,8 @@ function initialize() {
     var mapDiv = document.getElementById('map_canvas');
     map = new google.maps.Map(mapDiv, {
         center: myLatLng,
-        zoom: 10
+        zoom: 10,
+        styles: getADSBMapStyle()
     });
 
     var BoxCord = setBoundary(getCoordinates());
@@ -163,16 +166,33 @@ function initialize() {
         strokeColor: '#FF0000',
         strokeOpacity: 0.7,
         strokeWeight: 1,
-        fillColor: '#FF0000',
+        fillColor: '#00FF00',
         fillOpacity: 0.1,
         editable: true,
         draggable: true
     });
-    BoundaryBox.setMap(map);
-    updateCordinates();
 
+    BoundaryBox.setMap(map);
+     OuterBorder = new google.maps.Polyline({
+         path: [],
+        geodesic: true,
+        strokeColor: 'red',
+        strokeOpacity: 0.3,
+        strokeWeight: 3,
+        map: map
+    });
+     OuterPoly = new google.maps.Polygon({
+        paths: [],
+        strokeWeight: 0,
+        fillColor: '#fd2525',
+        fillOpacity: 0.4,
+        map: map
+    });
+    updateCordinates();
+    LoadPolygons();
     google.maps.event.addListener(BoundaryBox.getPath(), 'set_at', setCoordinates);
     google.maps.event.addListener(BoundaryBox.getPath(), 'insert_at', setCoordinates);
+    map.styles = getADSBMapStyle();
 };
 
 function getBounds(Polygon) {
@@ -294,30 +314,10 @@ function LoadOutPoly(inner,outer)
     //Close the polygon
     HoloPath.push(InnerPolyPath[0]);
     HoloPath = HoloPath.concat(OuterPath.reverse());
-
-    // Construct the polygon.
-    var InnerPoly = new google.maps.Polygon({
-        paths: InnerPolyPath,
-        strokeWeight: 0,
-        fillColor: 'rgb(101, 186, 25)',
-        fillOpacity: 0.2,
-        map: map
-    });
-    var OuterBorder = new google.maps.Polyline({
-        path: OuterPath,
-        geodesic: true,
-        strokeColor: 'red',
-        strokeOpacity: 0.3,
-        strokeWeight: 3,
-        map: map
-    });
-    var OuterPoly = new google.maps.Polygon({
-        paths: HoloPath,
-        strokeWeight: 0,
-        fillColor: '#fd2525',
-        fillOpacity: 0.2,
-        map: map
-    });
+    OuterPoly.setPath(HoloPath);
+    OuterBorder.setPath(OuterPath);
+   
+    
 }
 
 

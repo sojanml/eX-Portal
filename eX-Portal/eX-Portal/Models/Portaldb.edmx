@@ -980,6 +980,8 @@ warning 6002: The table/view 'TestPortal.dbo.ip2location' does not have a primar
           <Property Name="CompanyEmail" Type="nvarchar" MaxLength="50" />
           <Property Name="TradeLicenceCopyUrl" Type="nvarchar" MaxLength="150" />
           <Property Name="EmiratesID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DOI_RPASPermit" Type="datetime" />
+          <Property Name="DOE_RPASPermit" Type="datetime" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -2483,6 +2485,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CompanyEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TradeLicenceCopyUrl" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="EmiratesID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DOI_RPASPermit" Type="DateTime" Precision="3" />
+          <Property Name="DOE_RPASPermit" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="PayLoadData">
           <Key>
@@ -3900,6 +3904,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="MSTR_User">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
               <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="DOE_RPASPermit" ColumnName="DOE_RPASPermit" />
+                <ScalarProperty Name="DOI_RPASPermit" ColumnName="DOI_RPASPermit" />
                 <ScalarProperty Name="EmiratesID" ColumnName="EmiratesID" />
                 <ScalarProperty Name="TradeLicenceCopyUrl" ColumnName="TradeLicenceCopyUrl" />
                 <ScalarProperty Name="CompanyEmail" ColumnName="CompanyEmail" />

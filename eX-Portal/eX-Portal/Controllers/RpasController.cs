@@ -81,16 +81,16 @@ namespace eX_Portal.Controllers {
       }
       qView nView = new qView(SQLFilter);
       if (exLogic.User.hasAccess("FLIGHTREG.DETAIL"))
-        nView.addMenu("Details", Url.Action("FlightRegistrationDetails", "RPAS", new { ID = "_PKey" }));
+        nView.addMenu("Details", Url.Action("NOCRegistrationDetails", "RPAS", new { ID = "_PKey" }));
 
       if (exLogic.User.hasAccess("RPAS.APPLICATION"))
-        nView.addMenu("Approve/Reject", Url.Action("FlightApproval", "RPAS", new { ID = "_PKey" }));
+        nView.addMenu("Approve/Reject", Url.Action("NOCApproval", "RPAS", new { ID = "_PKey" }));
       // nView.addMenu("Approve/Reject", Url.Action("Application", "RPAS", new { ID = "_PKey" }));
 
       if (exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
         nView.addMenu("Authority Approval", Url.Action("AuthorityApproval", "Rpas", new { ID = "ApprovalID" }));
       if (exLogic.User.hasAccess("FLIGHT.SETUP"))
-        nView.addMenu("Edit", Url.Action("FlightRegister", "rpas", new { ID = "_PKey", Approval = "Status" }));
+        nView.addMenu("Edit", Url.Action("NOCRegister", "rpas", new { ID = "_PKey", Approval = "Status" }));
       if (exLogic.User.hasAccess("RPAS.FLIGHTDELETE"))
         nView.addMenu("Delete", Url.Action("DeleteGCAApproval", "rpas", new { ID = "_PKey" }));
       if (Request.IsAjaxRequest()) {
@@ -118,8 +118,14 @@ namespace eX_Portal.Controllers {
 
     public ActionResult NoAccessApplication([Bind(Prefix = "ID")] int ID = 0) {
 
-      var Approval = db.GCA_Approval.Find(ID);
-      return View(Approval);
+            var viewModel = db.GCA_Approval.Find(ID);
+            if (viewModel == null)
+                return HttpNotFound();
+            FlightSetupViewModel SetUpModel = new FlightSetupViewModel();
+            SetUpModel.GcaApproval = viewModel;
+            string s = Util.getDBVal("SELECT name from [LUP_Drone] where [Type]='FlightType' and typeID=" + SetUpModel.GcaApproval.FlightTypeID);
+            SetUpModel.FlightType = s;
+            return View(SetUpModel);
     }//public ActionResult Appl
 
     [HttpPost]
@@ -2495,6 +2501,21 @@ namespace eX_Portal.Controllers {
             Util utility= new Util();
             string outerPoly = utility.getOuterPolygon(InnerPolygon,50);
             return Json(outerPoly, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult NOCRegistrationDetails([Bind(Prefix = "ID")] int ApprovalID = 0)
+        {
+            if (!exLogic.User.hasAccess("FLIGHTREG.DETAIL"))
+                return RedirectToAction("NoAccess", "Home");
+            var viewModel = db.GCA_Approval.Find(ApprovalID);
+            if (viewModel == null)
+                return HttpNotFound();
+            FlightSetupViewModel SetUpModel = new FlightSetupViewModel();
+            SetUpModel.GcaApproval = viewModel;
+            string s = Util.getDBVal("SELECT name from [LUP_Drone] where [Type]='FlightType' and typeID=" + SetUpModel.GcaApproval.FlightTypeID);
+            SetUpModel.FlightType = s;
+            return View(SetUpModel);
+
         }
     }
 }

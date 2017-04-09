@@ -52,5 +52,7 @@ namespace eX_Portal.Models
         public string CompanyEmail { get; set; }
         public string TradeLicenceCopyUrl { get; set; }
         public string EmiratesID { get; set; }
+        public Nullable<System.DateTime> DOI_RPASPermit { get; set; }
+        public Nullable<System.DateTime> DOE_RPASPermit { get; set; }
     }
 }
