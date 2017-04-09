@@ -55,9 +55,7 @@ namespace eX_Portal.exLogic {
           cmd.CommandType = CommandType.StoredProcedure;
           using(var reader = cmd.ExecuteReader()) {
             while(reader.Read()) {
-
               SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Code"].ToString() });
-
             }
           }
           if(TypeField == "Camera")

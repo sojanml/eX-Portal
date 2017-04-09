@@ -1,15 +1,41 @@
-﻿@{
-  Layout = null;
-}
-<div>
-<div class="photo-upload">
-  <div class="user-photo" style="background-image: url('@ViewBag.ProfileImage')"></div>
-</div>
-<div style="margin-right:200px">
-  @Html.Raw(ViewBag.Message)
-</div>
-<div style="clear:both"></div>
-</div>
+﻿@model Dictionary<String, String>
+  @{
+    Layout = null;
+  }
+  <div>
+    <div class="photo-upload">
+      <div class="user-photo" style="background-image: url('@ViewBag.ProfileImage')"></div>
+    </div>
+    <div style="margin-right:200px">
+      <table class="qDetailView">
+        <tbody>
+          <tr>
+            <td id="ShowUserDescription"><span class="caption">First Name:</span><span class="value">@Model["FirstName"]</span>
+            <div id="UserDescription">@Html.Raw(Model["UserDescription"])</div>
+            </td>
+            <td><span class="caption">Middle Name:</span><span class="value">@Model["MiddleName"]</span></td>
+            <td><span class="caption">Last Name:</span><span class="value">@Model["LastName"]</span></td>
+          </tr>
+          <tr>
+            <td><span class="caption">Home No:</span><span class="value">@Model["HomeNo"]</span></td>
+            <td><span class="caption">Mobile No:</span><span class="value">@Model["MobileNo"]</span></td>
+            <td><span class="caption">Office No:</span><span class="value">@Model["OfficeNo"]</span></td>
+          </tr>
+          <tr>
+            <td><span class="caption">User Name:</span><span class="value">@Model["UserName"]</span></td>            
+            <td><span class="caption">Email Id:</span><span class="value">@Model["EmailId"]</span></td>
+            <td><span class="caption">Passport No:</span><span class="value">@Model["PassportNo"]</span></td>
+          </tr>
+          <tr>
+            <td><span class="caption">Date Of Expiry:</span><span class="value">@Model["DateOfExpiry"]</span></td>
+            <td><span class="caption">Department:</span><span class="value">@Model["Department"]</span></td>
+            <td><span class="caption">Emirates Id:</span><span class="value">@Model["EmiratesId"]</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="clear:both"></div>
+  </div>
 
 
 

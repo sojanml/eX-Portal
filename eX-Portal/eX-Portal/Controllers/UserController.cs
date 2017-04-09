@@ -324,44 +324,57 @@ namespace eX_Portal.Controllers {
 
     [ChildActionOnly]
     public ActionResult UserDetailView([Bind(Prefix = "ID")] int UserID = 0) {
-
-      string SQL = "SELECT a.[UserName]\n" +
-                  " ,a.[FirstName] \n " +
-                  ",a.[MiddleName]\n " +
-                  ",a.[LastName]\n  " +
-                  //",a.[Remarks]\n   " +
-                  ",a.[MobileNo]\n  " +
-                  ",a.[OfficeNo]\n  " +
-                  ",a.[HomeNo]\n" +
-                  " ,a.[EmailId]\n  " +
-                  ",b.[PassportNo]" +
-                  " ,CONVERT(NVARCHAR, b.[DateOfExpiry], 106) AS DateOfExpiry\n   " +
-                  ",b.[Department]\n  " +
-                  " ,b.[EmiratesId] \n   " +
-                  ",b.[Title] as JobTitle\n   " +
-                  //",c.[Name] as Authority\n   " +
-                  //",d.[ProfileName]\n   " +
-                  " FROM[MSTR_User] a\n   " +
-                  " left join mstr_user_pilot b\n  " +
-                  "on a.UserId=b.UserId\n   " +
-                  "left join MSTR_Account c\n  " +
-                  "on a.AccountId=c.AccountId\n  " +
-                  "left join MSTR_Profile d " +
-                  "on a.UserProfileId=d.ProfileId" +
-                  " where a.userid=" + UserID;
+      Dictionary<String, String> TheFields = new Dictionary<String, String>();
+      string SQL = $@"SELECT a.[UserName],
+         a.[FirstName],
+         a.[MiddleName],
+         a.[LastName],
+         a.[MobileNo],
+         a.[OfficeNo],
+         a.[HomeNo],
+         a.[EmailId],
+         b.[PassportNo],
+         CONVERT(NVARCHAR, b.[DateOfExpiry], 106) AS DateOfExpiry,
+         b.[Department],
+         b.[EmiratesId],
+         b.[Title] AS JobTitle,
+         a.UserDescription
+      FROM 
+        [MSTR_User] a
+      LEFT JOIN mstr_user_pilot b
+        ON a.UserId = b.UserId
+      LEFT JOIN MSTR_Account c
+        ON a.AccountId = c.AccountId
+      LEFT JOIN MSTR_Profile d
+        ON a.UserProfileId = d.ProfileId
+      WHERE 
+        a.userid =  {UserID}";
 
       if (exLogic.User.hasAccess("PILOT")) {
         //nothing
       } else if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
-        SQL +=
-" AND\n" +
-"  a.AccountID=" + Util.getAccountID();
+        SQL += " AND a.AccountID=" + Util.getAccountID();
       }
+      
+      using (var ctx = new ExponentPortalEntities()) {
+        ctx.Database.Connection.Open();
+        using (var cmd = ctx.Database.Connection.CreateCommand()) {
+          cmd.CommandText = SQL;
+          using (var RS = cmd.ExecuteReader()) {
+            while (RS.Read()) {
+              for (var i = 0; i < RS.FieldCount; i++) {
+                String FieldName = RS.GetName(i);
+                String FieldValue = RS.IsDBNull(i) ? String.Empty : RS.GetValue(i).ToString();
+                TheFields.Add(FieldName, FieldValue);
+              }
+            }// while(RS.Read()) {
+          }//using(var RS = cmd.ExecuteReader())
+        }//using (var cmd = ctx.Database.Connection.CreateCommand())
+      }//using (var ctx = new ExponentPortalEntities())
 
-      qDetailView nView = new qDetailView(SQL);
-      ViewBag.Message = nView.getTable();
+
       ViewBag.ProfileImage = Util.getProfileImage(UserID);
-      return View();
+      return View(TheFields);
     }
 
 

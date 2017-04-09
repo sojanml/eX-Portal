@@ -1257,3 +1257,34 @@ div.adsb-point.drone.alert span.flight-title,
 div.adsb-point.drone.alert span.tail {
   background-color: #ff4e00;
 }
+
+#ShowUserDescription > span {
+  font-weight: bold;
+}
+#ShowUserDescription #UserDescription {
+  position: absolute;
+  display: none;
+  white-space: nowrap;
+  border: 1px #222222 solid;
+  background-color: #e5e5e5;
+  padding: 10px;
+  -moz-box-shadow: #222222 1px 1px 10px;
+  -webkit-box-shadow: #222222 1px 1px 10px;
+  box-shadow: #222222 1px 1px 10px;
+}
+#ShowUserDescription #UserDescription ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+#ShowUserDescription #UserDescription ul li {
+  list-style: none;
+  padding: 0px 0px 4px 0px;
+}
+#ShowUserDescription #UserDescription ul li span {
+  color: red;
+  padding-left: 5px;
+}
+#ShowUserDescription:hover #UserDescription {
+  display: block;
+}
