@@ -355,7 +355,10 @@ namespace eX_Portal.exLogic {
               LEFT JOIN MSTR_User ON
                 MSTR_User.UserID = GCA_Approval.CreatedBy
                LEFT JOIN MSTR_Drone  on GCA_Approval.DroneId= MSTR_Drone.DroneId  
-                where MSTR_Drone.AccountID={User.AccountId}";
+                where MSTR_Drone.AccountID={User.AccountId}
+             Order By
+                StartDate DESC
+";
             using (var ctx = new ExponentPortalEntities())
             using (var cmd = ctx.Database.Connection.CreateCommand())
             {
@@ -369,7 +372,11 @@ namespace eX_Portal.exLogic {
                         GCADet.ApprovalID = Util.toInt(reader[0]);
                         GCADet.ApprovalName = reader[1].ToString();
                         GCADet.ApprovalStatus = reader[9].ToString();
-                        AppList.Add(GCADet);
+            GCADet.StartDate = reader.GetDateTime(reader.GetOrdinal("StartDate"));
+            GCADet.EndDate = reader.GetDateTime(reader.GetOrdinal("StartDate"));
+            GCADet.StartTime = reader["StartTime"].ToString();
+            GCADet.EndTime = reader["EndTime"].ToString();
+            AppList.Add(GCADet);
                     }
                 }
             }
@@ -380,7 +387,7 @@ namespace eX_Portal.exLogic {
                           D.[CommissionDate],
                           O.Name as Authority,
                           M.Name as Manufacture,
-                          U.Name as RPASType,
+                          U.GroupName as RPASType,
                           Count(*) Over() as _TotalRecords,
                           D.[DroneId] as _PKey
                         FROM

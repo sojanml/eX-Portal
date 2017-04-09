@@ -14,6 +14,10 @@ $TitleTextColor: #ff9b9b;
 $MaxResolution: 1150px;
 $VerticalGap: 12px;
 
+$BreachColor: #fe0000;
+$AlertColor: #f2a003;
+$SafeColor: #53a100;
+
 @include font-face("FontAwesome", font-files( "../fonts/fontawesome-webfont.ttf", "../fonts/FontAwesome.otf", "../fonts/fontawesome-webfont.svg", "../fonts/fontawesome-webfont.eot", "../fonts/fontawesome-webfont.woff", "../fonts/fontawesome-webfont.woff2" ));
 @include font-face("OpenSans", font-files( "../fonts/OpenSans.ttf", "../fonts/OpenSans.eot", "../fonts/OpenSans.svg", "../fonts/OpenSans.woff", "../fonts/OpenSans.woff2" ));
 @include font-face("Gobold_Light", font-files( "../fonts/GoboldThinLight.ttf", "../fonts/GoboldThinLight.eot", "../fonts/GoboldThinLight.svg", "../fonts/GoboldThinLight.woff", "../fonts/GoboldThinLight.woff2" ));
@@ -1130,8 +1134,58 @@ div.dashboard-column {
         padding: 0px 0px 10px 0px;
         border-bottom: 1px $MenuHiliteColor solid;
 
+
+        div.icon {
+          float: left;
+          margin-right: 10px;
+
+          img {
+            width: 40px;
+            height: auto;
+          }
+        }
+
         div.caption {
           font-weight: bold;
+        }
+
+        div.floating {
+          float: right;
+          padding: 1px 4px 1px 4px;
+          border-radius: 3px;
+          font-size: 8pt;
+
+          &.Amended {
+            background-color: $BreachColor;
+            color: white;
+          }
+
+          &.Approved {
+            background-color: $SafeColor;
+            color: white;
+          }
+
+          &.New {
+            background-color: $AlertColor;
+          }
+        }
+      }
+
+      &.single-line {
+        li {
+          @include clearfix();
+          margin: 0px 0px 5px 0px;
+          padding: 0px 0px 5px 0px;
+
+          div.caption,
+          div.detail {
+            float: left;
+          }
+
+          div.detail {
+            margin-left: 5px;
+            color: red;
+          }
         }
       }
     }
@@ -1147,9 +1201,25 @@ div.dashboard-column {
       border: 1px $MenuHiliteColor solid;
       background-color: white;
       border-radius: 5px;
-      padding: 2px 15px 2px 15px;
+      padding: 2px 15px 4px 15px;
       cursor: pointer;
       color: black;
+
+      span.icon {
+        font-family: FontAwesome;
+        display:inline-block;
+        margin-right:5px;
+        background-color: $SafeColor;
+        color:white;
+        border-radius:50%;
+        width:18px;
+        height:18px;
+        line-height:18px;
+        text-align:center;
+        font-size:12px;
+        box-sizing:border-box;
+
+      }
 
       &:hover {
         background-color: $ReportHeadBackground;
@@ -1233,10 +1303,6 @@ div.GraphSection {
 
 
 div.adsb-point {
-  $BreachColor: #fe0000;
-  $AlertColor: #f2a003;
-  $SafeColor: #53a100;
-
 
   position: absolute;
   cursor: pointer;

@@ -319,7 +319,7 @@ namespace eX_Portal.Controllers {
                             left join(select u.DroneId, min(u.ReadTime) as ReadTime,
                             max(u.TotalFlightTime) as FlightTime
                             from FlightMapData u
-                            where
+                            Select * from 
                             convert(nvarchar(30), u.ReadTime, 120)
                             BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) 
                             AND  GETDATE()

@@ -1098,8 +1098,50 @@ div.dashboard-column div.fixed-height ul li {
   padding: 0px 0px 10px 0px;
   border-bottom: 1px #cacaca solid;
 }
+div.dashboard-column div.fixed-height ul li div.icon {
+  float: left;
+  margin-right: 10px;
+}
+div.dashboard-column div.fixed-height ul li div.icon img {
+  width: 40px;
+  height: auto;
+}
 div.dashboard-column div.fixed-height ul li div.caption {
   font-weight: bold;
+}
+div.dashboard-column div.fixed-height ul li div.floating {
+  float: right;
+  padding: 1px 4px 1px 4px;
+  border-radius: 3px;
+  font-size: 8pt;
+}
+div.dashboard-column div.fixed-height ul li div.floating.Amended {
+  background-color: #fe0000;
+  color: white;
+}
+div.dashboard-column div.fixed-height ul li div.floating.Approved {
+  background-color: #53a100;
+  color: white;
+}
+div.dashboard-column div.fixed-height ul li div.floating.New {
+  background-color: #f2a003;
+}
+div.dashboard-column div.fixed-height ul.single-line li {
+  margin: 0px 0px 5px 0px;
+  padding: 0px 0px 5px 0px;
+}
+div.dashboard-column div.fixed-height ul.single-line li:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+div.dashboard-column div.fixed-height ul.single-line li div.caption,
+div.dashboard-column div.fixed-height ul.single-line li div.detail {
+  float: left;
+}
+div.dashboard-column div.fixed-height ul.single-line li div.detail {
+  margin-left: 5px;
+  color: red;
 }
 div.dashboard-column div.toolbar {
   height: 20px;
@@ -1111,9 +1153,23 @@ div.dashboard-column div.toolbar div.button {
   border: 1px #cacaca solid;
   background-color: white;
   border-radius: 5px;
-  padding: 2px 15px 2px 15px;
+  padding: 2px 15px 4px 15px;
   cursor: pointer;
   color: black;
+}
+div.dashboard-column div.toolbar div.button span.icon {
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-right: 5px;
+  background-color: #53a100;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  font-size: 12px;
+  box-sizing: border-box;
 }
 div.dashboard-column div.toolbar div.button:hover {
   background-color: #474747;
