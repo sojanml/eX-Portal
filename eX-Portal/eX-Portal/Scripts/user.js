@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿var FileName = '';
+$(document).ready(function () {
   $('#User_IsPilot').on("change", function () {
     if ($(this).val() == 'true') {
       $('#PilotInfo').slideDown();
@@ -34,7 +35,7 @@ function startUploadImage() {
 function SubmitFileImage(file) {
 
 
-  var FileName = file.name;
+   FileName = file.name;
   var HTML = 'Uploading ' + FileName + ' (' + Math.floor(file.size / 1024) + ' KB)';
   var Elem = $('#photo-upload-msg');
   Elem.show().html(HTML);

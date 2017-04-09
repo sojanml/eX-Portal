@@ -15,8 +15,8 @@
     </div>
     <div class="editor-field">
 
-      @Html.DropDownListFor(model => model.Drone.AccountID, Model.OwnerList)
-      @Html.ValidationMessageFor(model => model.Drone.AccountID)
+      @Html.DisplayFor(model => model.Drone.AccountID, Model.AccountName)
+     
     </div>
     <div>
         <div class="editor-label" >

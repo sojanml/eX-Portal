@@ -34,6 +34,7 @@ namespace eX_Portal.ViewModel {
         return SelectListItems;
       }
     }
+        public string AccountName { get; set; }
   }
 
 }

@@ -646,12 +646,15 @@ namespace eX_Portal.Controllers {
                 if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
                 OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();           
       OwnerListSQL +=" ORDER BY Name";
-      var viewModel = new ViewModel.DroneView {
-        Drone = new MSTR_Drone(),
-          OwnerList = Util.getListSQL(GetsqlforOwner(exLogic.User.hasAccess("DRONE.MANAGE"))),
-          UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
-        ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
-        //PartsGroupList = Util.GetDropDowntList();
+
+            string AccName = Util.getDBVal("select name from FROM MSTR_Account where AccountID=" + Util.getAccountID());
+            var viewModel = new ViewModel.DroneView {
+                Drone = new MSTR_Drone(),
+                OwnerList = Util.getListSQL(GetsqlforOwner(exLogic.User.hasAccess("DRONE.MANAGE"))),
+                UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
+                ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown"),
+                AccountName = AccName
+          //PartsGroupList = Util.GetDropDowntList();
       };
             //deleting if unwanted files exist in drone documents;
             string SQL = " Delete from droneDocuments where droneid=0 and documenttype='Drone Image'";
@@ -720,6 +723,7 @@ namespace eX_Portal.Controllers {
         ModelState.Remove("Drone.RefName");
         ModelState.Remove("Drone.MakeID");
         ModelState.Remove("Drone.ModelID");
+                DroneView.Drone.AccountID = Util.getAccountID();
         if (DroneView.Name==null||DroneView.Name=="") {
                 
                     if (DroneView.Drone.ManufactureId < 1 || DroneView.Drone.ManufactureId == null)
@@ -728,9 +732,7 @@ namespace eX_Portal.Controllers {
              }
            }
               
-                    if (DroneView.Drone.AccountID< 1 || DroneView.Drone.AccountID == null) {
-          ModelState.AddModelError("Drone.AccountID", "Please Select Owner.");
-        }
+                   
 
        
 
@@ -848,7 +850,7 @@ namespace eX_Portal.Controllers {
 
                         if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
                         else
-                            return RedirectToAction("Detail", new { ID = DroneId });
+                            return RedirectToAction("Home", new { ID = DroneId });
                   
                 }
                 else
@@ -910,7 +912,7 @@ namespace eX_Portal.Controllers {
                     }
                     if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
                     else
-                        return RedirectToAction("Detail", new { ID = DroneId });
+                        return RedirectToAction("Home", new { ID = DroneId });
                 }
         } catch(Exception ex)
         {
