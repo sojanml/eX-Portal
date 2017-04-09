@@ -647,7 +647,7 @@ namespace eX_Portal.Controllers {
                 OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();           
       OwnerListSQL +=" ORDER BY Name";
 
-            string AccName = Util.getDBVal("select name from FROM MSTR_Account where AccountID=" + Util.getAccountID());
+            string AccName = Util.getDBVal("select name FROM MSTR_Account where AccountID=" + Util.getAccountID());
             var viewModel = new ViewModel.DroneView {
                 Drone = new MSTR_Drone(),
                 OwnerList = Util.getListSQL(GetsqlforOwner(exLogic.User.hasAccess("DRONE.MANAGE"))),
@@ -850,7 +850,7 @@ namespace eX_Portal.Controllers {
 
                         if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
                         else
-                            return RedirectToAction("Home", new { ID = DroneId });
+                            return RedirectToAction("index","Home");
                   
                 }
                 else
@@ -912,7 +912,7 @@ namespace eX_Portal.Controllers {
                     }
                     if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
                     else
-                        return RedirectToAction("Home", new { ID = DroneId });
+                        return RedirectToAction("index","Home");
                 }
         } catch(Exception ex)
         {

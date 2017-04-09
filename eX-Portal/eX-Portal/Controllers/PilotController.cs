@@ -467,7 +467,7 @@ namespace eX_Portal.Controllers
                  "  UserId=" + UserModel.User.UserId; ;
                 int idPilot = Util.doSQL(SQL);
 
-                return RedirectToAction("PilotDetail", new { ID = UserModel.User.UserId });
+                return RedirectToAction("Index","Home");
             }
 
             var viewModel = new ViewModel.UserViewModel

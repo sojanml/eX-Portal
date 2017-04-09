@@ -10,12 +10,12 @@
     @Html.HiddenFor(model => model.Drone.DroneId)
 
     <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.AccountID, "Authority")<span style="color:red">*</span>
+      @Html.LabelFor(model => model.Drone.AccountID, "Authority")
        
     </div>
-    <div class="editor-field">
+    <div class="editor-label">
 
-      @Html.DisplayFor(model => model.Drone.AccountID, Model.AccountName)
+      @Html.DisplayFor(model => model.AccountName   )
      
     </div>
     <div>

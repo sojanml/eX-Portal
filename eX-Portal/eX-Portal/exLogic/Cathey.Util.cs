@@ -315,12 +315,12 @@ namespace eX_Portal.exLogic {
                         PDetail.Title = reader.GetValue(10).ToString();
                         PDetail.RPASPermitNo = reader.GetValue(11).ToString();
                         PDetail.PermitCategory = reader.GetValue(12).ToString();
-                        PDetail.PilotImage = reader.GetValue(13).ToString();
+                        PDetail.PilotImage = reader.GetValue(15).ToString();
                        
-                        PDetail.CompanyName= reader.GetValue(14).ToString();
-                        PDetail.Nationality = reader.GetValue(15).ToString();
-                        PDetail.DOI_RPASPermit =toDate( reader.GetValue(16).ToString());
-                        PDetail.DOE_RPASPermit  = toDate(reader.GetValue(17).ToString());
+                        PDetail.CompanyName= reader.GetValue(16).ToString();
+                        PDetail.Nationality = reader.GetValue(17).ToString();
+                        PDetail.DOI_RPASPermit =toDate( reader.GetValue(18).ToString());
+                        PDetail.DOE_RPASPermit  = toDate(reader.GetValue(19).ToString());
                         PDetail.UserId = UserID;
                     }
 
