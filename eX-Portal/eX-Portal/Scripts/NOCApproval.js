@@ -164,7 +164,7 @@ function initialize() {
   // Construct the polygon.
   BoundaryBox = new google.maps.Polygon({
     paths: BoxCord,
-    strokeColor: '#FF0000',
+    strokeColor: '#00FF00',
     strokeOpacity: 0.7,
     strokeWeight: 1,
     fillColor: '#00FF00',
@@ -176,16 +176,15 @@ function initialize() {
   BoundaryBox.setMap(map);
   OuterBorder = new google.maps.Polyline({
     path: [],
-    geodesic: true,
     strokeColor: 'red',
-    strokeOpacity: 0.3,
-    strokeWeight: 3,
+    strokeOpacity: 1,
+    strokeWeight: 4,
     map: map
   });
   OuterPoly = new google.maps.Polygon({
     paths: [],
     strokeWeight: 0,
-    fillColor: '#fd2525',
+    fillColor: '#f2a003',
     fillOpacity: 0.4,
     map: map
   });
