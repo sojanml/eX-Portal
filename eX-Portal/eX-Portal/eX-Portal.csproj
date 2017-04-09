@@ -1439,6 +1439,8 @@
     <Content Include="Views\FlightMap\Index.cshtml" />
     <Content Include="Views\FlightMap\Map.cshtml" />
     <Content Include="Views\DashBoard\UserDashboard.cshtml" />
+    <Content Include="Views\Rpas\NOCApproval.cshtml" />
+    <Content Include="Views\Rpas\NOCRegister.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

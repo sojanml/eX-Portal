@@ -267,6 +267,20 @@ button {
   padding: 2px 4px 2px 4px;
 }
 
+input[type=datetime] {
+  background-image: url('../images/cal-icon.png');
+  background-position: calc(100% - 4px) 3px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+input.time-picker {
+  background-image: url('../images/time-picker.png');
+  background-position: calc(100% - 4px) 3px;
+  background-repeat: no-repeat;
+  background-size: 20px;
+}
+
 select {
   padding: 1px 4px 1px 4px;
 }
@@ -842,13 +856,18 @@ UL.qViewMenu {
   }
 }
 
-
 div.form-horizontal {
   border: 1px $ReportHeadBackground solid;
   margin: 0px auto 40px auto;
   @include border-bottom-left-radius(10px);
   @include border-bottom-right-radius(10px);
   padding: 30px;
+
+  &.NoBorder {
+    border: 0px red none !important;
+    padding:0px !important;
+  }
+
 
   span.field-validation-error {
     display: block;
@@ -889,6 +908,8 @@ div.form-horizontal {
   select,
   input[type=text],
   input[type=file],
+  input[type=datetime],
+  input[type=number],
   textarea {
     width: 100%;
   }
