@@ -3,28 +3,29 @@
 
 @{
   ViewBag.Title = "RPAS Registration";
-  Layout = "~/Views/Shared/_exPortal.cshtml";
   DateTime CommissionDate = Model.Drone.CommissionDate == null ? DateTime.Now : (DateTime)Model.Drone.CommissionDate;
 
 }
 
-<section class="general-form" id="loginForm">
-  @using(Html.BeginForm()) {
-    @Html.ValidationSummary(false)
+<section class="general-form" >
+  <div class="form-horizontal">
+    <div style="width:60%; margin:auto">
+      @using (Html.BeginForm()) {
+        @Html.ValidationSummary(false)
 
-    @Html.HiddenFor(model => model.Drone.DroneId)
-    <div class="error" id="error-message" style="display:none;margin-bottom:20px;"></div>
-    <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.AccountID, "Authority")
-    </div>
-    <div class="editor-field">
-      @Html.DropDownListFor(model => model.Drone.AccountID, Model.OwnerList)
-      @Html.ValidationMessageFor(model => model.Drone.AccountID)
-    </div>
+        @Html.HiddenFor(model => model.Drone.DroneId)
+        <div class="error" id="error-message" style="display:none;margin-bottom:20px;"></div>
+        <div class="editor-label">
+          @Html.LabelFor(model => model.Drone.AccountID, "Authority")
+        </div>
+        <div class="editor-field">
+          @Html.DropDownListFor(model => model.Drone.AccountID, Model.OwnerList)
+          @Html.ValidationMessageFor(model => model.Drone.AccountID)
+        </div>
 
-    <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.UavTypeId, "RPAS Type")
-    </div>
+        <div class="editor-label">
+          @Html.LabelFor(model => model.Drone.UavTypeId, "RPAS Type")
+        </div>
         <div class="editor-field">
           @*Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)*@
           @Html.Action("UAVTypeList", new { UavTypeId = Model.Drone.UavTypeId })
@@ -59,23 +60,25 @@
           @Html.ValidationMessageFor(model => model.Drone.CommissionDate)
         </div>
 
-    if(eX_Portal.exLogic.User.hasAccess("DRONE.PARTS")) {
-      <div class="editor-label">
-        @Html.LabelFor(model => model.DroneParts.PartsName, "Parts")
-      </div>
-      <div class="editor-field">
-        <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="SelectItemsForParts" />
-        @Html.Action("DroneParts", "Drone", new { ID = ViewBag.DroneId })
-      </div>
-      }//if(eX_Portal.exLogic.User.hasAccess("DRONE.PARTS"))
+        if (eX_Portal.exLogic.User.hasAccess("DRONE.PARTS")) {
+          <div class="editor-label">
+            @Html.LabelFor(model => model.DroneParts.PartsName, "Parts")
+          </div>
+          <div class="editor-field">
+            <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="SelectItemsForParts" />
+            @Html.Action("DroneParts", "Drone", new { ID = ViewBag.DroneId })
+          </div>
+        }//if(eX_Portal.exLogic.User.hasAccess("DRONE.PARTS"))
 
-    @Html.Action("DroneImaging", "Drone", new { ID = ViewBag.DroneId ,Actions="Edit"})
+        @Html.Action("DroneImaging", "Drone", new { ID = ViewBag.DroneId, Actions = "Edit" })
 
-    <div class="form-toolbar">
-      <input type="submit" value="Save" />
+        <div class="form-toolbar">
+          <input type="submit" value="Save" />
+        </div>
+
+      }
     </div>
-  }
-
+  </div>
 </section>
 
 @section header{
