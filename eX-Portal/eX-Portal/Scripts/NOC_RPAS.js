@@ -107,10 +107,10 @@ $(document).ready(function () {
     //to dynamically show the other camera textbox
     $('#GcaApproval_FlightTypeID').on("change", function () {
         var s = $('#GcaApproval_FlightTypeID option:selected').text().toUpperCase();
-        if (s == 'OTHER') {
-            $('#Other_FlightType').slideUp(); 
-        } else {
+        if (s.slice(0,5) == 'OTHER') {
             $('#Other_FlightType').slideDown();
+        } else {
+            $('#Other_FlightType').slideUp();
         }//if
     })
    
