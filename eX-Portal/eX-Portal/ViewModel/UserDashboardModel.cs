@@ -52,6 +52,11 @@ namespace eX_Portal.ViewModel
             public string Department { get; set; }
             public string EmiratesId { get; set; }
             public string Title { get; set; }
+            public string Nationality { get; set; }
+            public DateTime DOI_RPASPermit { get; set; }
+            public DateTime DOE_RPASPermit { get; set; }
+            public string UserDescription { get; set; }
+            public string CompanyName { get; set; }
         }
             public class RPASDetail
         {

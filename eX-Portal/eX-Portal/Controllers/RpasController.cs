@@ -2366,8 +2366,11 @@ namespace eX_Portal.Controllers {
                 return HttpNotFound();
             FlightSetupViewModel SetUpModel = new FlightSetupViewModel();
             SetUpModel.GcaApproval = viewModel;
+            if(SetUpModel.GcaApproval.FlightTypeID!=null)
+            { 
             string s = Util.getDBVal("SELECT name from [LUP_Drone] where [Type]='FlightType' and typeID="+ SetUpModel.GcaApproval.FlightTypeID);
             SetUpModel.FlightType = s;
+            }
             return View(SetUpModel);
         }
 
@@ -2409,6 +2412,7 @@ namespace eX_Portal.Controllers {
               
 
                 String SQL = String.Empty;
+
                 var StartDate = (flightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(-1) : (DateTime)flightsetupvm.GcaApproval.StartDate);
                 var EndDate = (flightsetupvm.GcaApproval.EndDate == null ? DateTime.Now.AddDays(90) : (DateTime)flightsetupvm.GcaApproval.EndDate);
                 var MinAltitude = (flightsetupvm.GcaApproval.MinAltitude == null ? 0 : flightsetupvm.GcaApproval.MinAltitude);
@@ -2512,8 +2516,11 @@ namespace eX_Portal.Controllers {
                 return HttpNotFound();
             FlightSetupViewModel SetUpModel = new FlightSetupViewModel();
             SetUpModel.GcaApproval = viewModel;
-            string s = Util.getDBVal("SELECT name from [LUP_Drone] where [Type]='FlightType' and typeID=" + SetUpModel.GcaApproval.FlightTypeID);
-            SetUpModel.FlightType = s;
+            if (SetUpModel.GcaApproval.FlightTypeID != null)
+            {
+                string s = Util.getDBVal("SELECT name from [LUP_Drone] where [Type]='FlightType' and typeID=" + SetUpModel.GcaApproval.FlightTypeID);
+                SetUpModel.FlightType = s;
+            }
             return View(SetUpModel);
 
         }

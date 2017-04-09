@@ -280,7 +280,11 @@ namespace eX_Portal.exLogic {
                        ,b.[Title] as JobTitle
                          ,a.[RPASPermitNo] as [RPAS Permit No.] 
                          ,a.[PermitCategory] as [Permit Category] 
-                         ,ISNULL(a.PhotoURL, '') as PilotImage
+                         ,ISNULL(a.PhotoURL, '') as PilotImage,
+                           c.Name as CompanyName,
+                           a.Nationality,
+                           a.DOI_RPASPermit,
+                           a.DOE_RPASPermit
                           FROM [MSTR_User] a
                           left join mstr_user_pilot b
                          on a.UserId=b.UserId
@@ -314,6 +318,11 @@ namespace eX_Portal.exLogic {
                         PDetail.RPASPermitNo = reader.GetValue(11).ToString();
                         PDetail.PermitCategory = reader.GetValue(12).ToString();
                         PDetail.PilotImage = reader.GetValue(13).ToString();
+                       
+                        PDetail.CompanyName= reader.GetValue(14).ToString();
+                        PDetail.Nationality = reader.GetValue(15).ToString();
+                        PDetail.DOI_RPASPermit =toDate( reader.GetValue(16).ToString());
+                        PDetail.DOE_RPASPermit  = toDate(reader.GetValue(17).ToString());
                         PDetail.UserId = UserID;
                     }
 

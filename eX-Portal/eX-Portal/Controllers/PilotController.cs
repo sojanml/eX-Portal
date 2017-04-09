@@ -54,7 +54,7 @@ namespace eX_Portal.Controllers
             qView nView = new qView(SQL);
             if (exLogic.User.hasAccess("PILOTS.VIEW")) nView.addMenu("Detail", Url.Action("PilotDetail", new { ID = "_PKey" }));
             if (exLogic.User.hasAccess("PILOTS.EDIT")) nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
-            if (exLogic.User.hasAccess("PILOTS.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
+           // if (exLogic.User.hasAccess("PILOTS.DELETE")) nView.addMenu("Delete", Url.Action("Delete", new { ID = "_PKey" }));
             //if (exLogic.User.hasAccess("PILOTLOG.VIEW")) nView.addMenu("Add Pilot Log", Url.Action("Create", "PilotLog", new { ID = "_PKey" }));
             if (Request.IsAjaxRequest())
             {

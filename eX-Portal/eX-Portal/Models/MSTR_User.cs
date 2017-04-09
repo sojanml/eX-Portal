@@ -54,5 +54,7 @@ namespace eX_Portal.Models
         public string EmiratesID { get; set; }
         public Nullable<System.DateTime> DOI_RPASPermit { get; set; }
         public Nullable<System.DateTime> DOE_RPASPermit { get; set; }
+        public string UserDescription { get; set; }
+        public string Nationality { get; set; }
     }
 }

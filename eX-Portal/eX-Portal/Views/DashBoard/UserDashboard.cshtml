@@ -1,4 +1,4 @@
-﻿@using eX_Portal.ViewModel
+﻿@model eX_Portal.ViewModel.UserDashboardModel
 
 @{
   ViewBag.Title = String.Empty;
@@ -18,6 +18,19 @@
           <div class="caption">RPAS Permit No</div>
           <div class="detail">@Model.Pilot.RPASPermitNo</div>
         </li>
+        <li>
+            <div class="caption">Nationality</div>
+            <div class="detail">@Model.Pilot.Nationality</div>
+        </li>
+          <li>
+              <div class="caption">Date Of Issue</div>
+              <div class="detail">@Model.Pilot.DOI_RPASPermit</div>
+          </li>
+          <li>
+              <div class="caption">Date Of Expiry</div>
+              <div class="detail">@Model.Pilot.DOE_RPASPermit</div>
+          </li>
+          
         <li>
           <div class="caption">Permit Category</div>
           <div class="detail">@Model.Pilot.PermitCategory</div>
@@ -64,7 +77,7 @@
       </ul>
     </div>
     <div class="toolbar">
-        <a href="@Url.Action("FlightRegister", "Rpas")"><div class="button">Apply for NOC</div></a>
+        <a href="@Url.Action("NOCRegister", "Rpas")"><div class="button">Apply for NOC</div></a>
 </div>
 
   </div>
