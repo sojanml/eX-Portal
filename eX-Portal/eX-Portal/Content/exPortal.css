@@ -1,14 +1,14 @@
 @font-face {
   font-family: "FontAwesome";
-  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1470292567') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1470292567') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1470292567') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1470292567') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1470292567') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1470292567') format('woff2');
+  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
 }
 @font-face {
   font-family: "OpenSans";
-  src: url('../fonts/../fonts/OpenSans.ttf?1479187204') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1479187204') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1479187204') format('svg'), url('../fonts/../fonts/OpenSans.woff?1479187204') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1479187204') format('woff2');
+  src: url('../fonts/../fonts/OpenSans.ttf?1478508894') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1478508894') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1478508894') format('svg'), url('../fonts/../fonts/OpenSans.woff?1478508894') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1478508894') format('woff2');
 }
 @font-face {
   font-family: "Gobold_Light";
-  src: url('../fonts/../fonts/GoboldThinLight.ttf?1479187204') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1479187204') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1479187204') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1479187204') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1479187204') format('woff2');
+  src: url('../fonts/../fonts/GoboldThinLight.ttf?1478593771') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1478593771') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1478593771') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1478593771') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1478593771') format('woff2');
 }
 @-moz-keyframes spin {
   100% {
@@ -69,6 +69,20 @@ select,
 textarea,
 button {
   padding: 2px 4px 2px 4px;
+}
+
+input[type=datetime] {
+  background-image: url("../images/cal-icon.png");
+  background-position: calc(100% - 4px) 3px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+input.time-picker {
+  background-image: url("../images/time-picker.png");
+  background-position: calc(100% - 4px) 3px;
+  background-repeat: no-repeat;
+  background-size: 20px;
 }
 
 select {
@@ -850,6 +864,10 @@ div.form-horizontal {
   border-bottom-right-radius: 10px;
   padding: 30px;
 }
+div.form-horizontal.NoBorder {
+  border: 0px red none !important;
+  padding: 0px !important;
+}
 div.form-horizontal span.field-validation-error {
   display: block;
   color: red;
@@ -884,6 +902,8 @@ div.form-horizontal div.form-group div.col-md-10 {
 div.form-horizontal select,
 div.form-horizontal input[type=text],
 div.form-horizontal input[type=file],
+div.form-horizontal input[type=datetime],
+div.form-horizontal input[type=number],
 div.form-horizontal textarea {
   width: 100%;
 }

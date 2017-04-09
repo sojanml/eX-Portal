@@ -203,7 +203,8 @@ function initialize() {
     var mapDiv = document.getElementById('map_canvas');
     map = new google.maps.Map(mapDiv, {
         center: myLatLng,
-        zoom: 10
+        zoom: 10,
+        styles: getADSBMapStyle()
     });
 
     var BoxCord = setBoundary(getCoordinates());
