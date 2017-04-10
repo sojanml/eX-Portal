@@ -124,7 +124,7 @@ function InitChart() {
     name: 'Altitude',
     type: 'spline',
     data: [],
-    yAxis: 1,
+    yAxis: 0,
     tooltip: { valueSuffix: ' Meter' },
     color: ChartColors.Altitude
   }];
@@ -152,14 +152,18 @@ function getChartOptions(renderTo) {
     credits: { enabled: false },
     title: { text: '' },
     subtitle: { text: '' },
-    xAxis: [{
+    xAxis: {
+      lineWidth: 1,
+      minorGridLineWidth: 1,
       categories: [],
       crosshair: true,
       labels: {
         enabled: false,
         rotation: 320
-      }
-    }],
+      },
+      gridLineColor: '#e5e5e5',
+      gridLineWidth: '1px'
+    },
     yAxis: [{ // Primary yAxis
       labels: {
         format: '{value}',

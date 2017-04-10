@@ -160,7 +160,7 @@ function InitVideos() {
 
   var VideoSetup = {
     width: 240,
-    height: 140,
+    height: 160,
     description: 'Click on play to start video.',
     mediaid: 'b669e4e759db46e996db1432cdff433c'
   };

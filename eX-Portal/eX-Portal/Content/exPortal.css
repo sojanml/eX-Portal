@@ -49,7 +49,7 @@ span.refresh:hover {
 }
 
 #flightmap {
-  min-height: 460px;
+  min-height: 510px;
 }
 
 input,
@@ -198,6 +198,9 @@ div.clearfix:after {
   background-color: #ededed;
 }
 
+header {
+  font-size: 11px;
+}
 header div.left-section {
   float: left;
 }
@@ -463,6 +466,9 @@ section div.column:last-child {
     font-family: Gobold_Light;
     font-size: 10px;
   }
+  section div.column.NoVideo div#FlightSummary {
+    width: 100%;
+  }
   section div.column-full {
     width: 920px;
   }
@@ -477,7 +483,7 @@ section div.column:last-child {
   }
   section div.column-half div#FlightVideo {
     width: 240px;
-    height: 140px;
+    height: 160px;
     float: left;
     background-color: black;
   }
@@ -615,6 +621,9 @@ section div.column:last-child {
     font-family: Gobold_Light;
     font-size: 10px;
   }
+  section div.column.NoVideo div#FlightSummary {
+    width: 100%;
+  }
   section div.column-full {
     width: 1150px;
   }
@@ -629,7 +638,7 @@ section div.column:last-child {
   }
   section div.column-half div#FlightVideo {
     width: 240px;
-    height: 140px;
+    height: 160px;
     float: left;
     background-color: black;
   }
@@ -965,10 +974,9 @@ div#FlightInfoNOC span {
 }
 #FlightInformation table.FlightLastInformation tr td {
   width: 50%;
-  line-height: 30px;
   padding-bottom: 4px;
   text-transform: uppercase;
-  font-size: 6pt;
+  font-size: 8pt;
 }
 #FlightInformation table.FlightLastInformation tr td span {
   font-size: 10pt;
@@ -979,16 +987,18 @@ div#FlightInfoNOC span {
 #FlightGraph,
 #SecondGraph {
   width: 100%;
-  height: 100px;
+  height: 90px;
   background-color: white;
   margin-top: 5px;
 }
 
 #ThirdGraph {
   width: 100%;
-  height: 35px;
+  height: 50px;
   background-color: white;
-  margin-top: 0px;
+  margin-top: 5px;
+  border-top: 1px red solid;
+  padding-top: 5px;
 }
 
 #FlightData {
@@ -1016,7 +1026,7 @@ div#FlightInfoNOC span {
   background-color: #e5e5e5;
 }
 #FlightData ul#FlightDataScroll {
-  height: 140px;
+  height: 125px;
   width: 100%;
   overflow-y: auto;
   border-bottom: 1px red solid;
@@ -1031,17 +1041,14 @@ div#RpasInformation div.FlightSummaryImage {
   height: 30px;
   background-size: cover;
   background-color: white;
-  margin-right: 10px;
+  margin: auto;
 }
 div#RpasInformation table {
   margin-top: 5px;
 }
 div#RpasInformation table td {
   white-space: nowrap;
-  line-height: 30px;
-}
-div#RpasInformation table td > div {
-  float: left;
+  text-align: center;
 }
 
 .dash-image {
@@ -1217,6 +1224,9 @@ div.photo-upload div.user-photo img {
   height: auto;
 }
 
+div.GraphSection {
+  margin-top: 10px;
+}
 div.GraphSection table {
   width: 570px;
   height: 100px;
@@ -1230,9 +1240,50 @@ div.GraphSection table tr td.GraphDivider {
 div.GraphSection table tr td.GraphDivider > div {
   margin: 0px 3px 0px 3px;
   width: 1px;
-  background-color: #cacaca;
+  background-color: red;
   height: 100px;
   display: block;
+}
+
+div#Legend ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+div#Legend ul li {
+  float: left;
+  margin-right: 65px;
+}
+div#Legend ul li:last-child {
+  margin-right: 0px;
+}
+div#Legend ul li span {
+  margin-right: 5px;
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: black;
+}
+div#Legend ul li span.pitch {
+  background-color: #ff5900;
+}
+div#Legend ul li span.altitude {
+  background-color: #dbd301;
+}
+div#Legend ul li span.satallite {
+  background-color: #65ba19;
+}
+div#Legend ul li span.speed {
+  background-color: #0b9076;
+}
+div#Legend ul li span.roll {
+  background-color: #9983c7;
+}
+div#Legend:after {
+  clear: both;
+  display: block;
+  content: "";
 }
 
 div.adsb-point {
