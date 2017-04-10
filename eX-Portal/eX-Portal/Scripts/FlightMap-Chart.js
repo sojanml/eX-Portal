@@ -1,5 +1,6 @@
 ﻿var TheFlightChart = null;
 var TheSecondChart = null;
+var ThirdGraph = null;
 var CharSeries = {};
 
 
@@ -14,8 +15,13 @@ function ClearChart() {
   CharSeries['SecondGraph'][0].setData([], false);
   CharSeries['SecondGraph'][1].setData([], false);
 
+  
+  CharSeries['ThirdGraph'][0].xAxis.setCategories([], false);
+  CharSeries['ThirdGraph'][0].setData([], false);
+
   TheFlightChart.redraw();
   TheSecondChart.redraw();
+  ThirdGraph.redraw();
 }
 
 function AddChart(ChartData) {
@@ -40,26 +46,30 @@ function AddChart(ChartData) {
     var DataItem = _FlightData[i];
     var FlightTime = dtConvFromJSON(DataItem.FlightTime, true);
     Categories.push(FlightTime.substring(FlightTime.length - 5));
-    Series[0].push(DataItem.Altitude);
-    Series[1].push(DataItem.Pich);
-    Series[2].push(DataItem.Roll);
+    Series[0].push(DataItem.Pich);
+    Series[1].push(DataItem.Roll);
 
-    Series[3].push(DataItem.Speed);
-    Series[4].push(DataItem.Satellites);
+    Series[2].push(DataItem.Speed);
+    Series[3].push(DataItem.Satellites);
+
+    Series[4].push(DataItem.Altitude);
 
   }
 
   CharSeries['FlightGraph'][0].xAxis.setCategories(Categories, false);
   CharSeries['FlightGraph'][0].setData(Series[0], false);
   CharSeries['FlightGraph'][1].setData(Series[1], false);
-  CharSeries['FlightGraph'][2].setData(Series[2], false);
 
   CharSeries['SecondGraph'][0].xAxis.setCategories(Categories, false);
-  CharSeries['SecondGraph'][0].setData(Series[3], false);
-  CharSeries['SecondGraph'][1].setData(Series[4], false);
+  CharSeries['SecondGraph'][0].setData(Series[2], false);
+  CharSeries['SecondGraph'][1].setData(Series[3], false);
+
+  CharSeries['ThirdGraph'][0].xAxis.setCategories(Categories, false);
+  CharSeries['ThirdGraph'][0].setData(Series[4], false);
 
   TheFlightChart.redraw();
   TheSecondChart.redraw();
+  ThirdGraph.redraw();
 }
 
 
@@ -74,15 +84,9 @@ function InitChart() {
 
   var ChartOptions1 = getChartOptions('FlightGraph');
   var ChartOptions2 = getChartOptions('SecondGraph');
+  var ChartOptions3 = getChartOptions('ThirdGraph');
 
-  ChartOptions1.series = [ {
-    name: 'Altitude',
-    type: 'spline',
-    data: [],
-    yAxis: 1,
-    tooltip: { valueSuffix: ' Meter' },
-    color: ChartColors.Altitude
-  }, {
+  ChartOptions1.series = [  {
     name: 'Pitch',
     type: 'spline',
     data: [],
@@ -115,8 +119,19 @@ function InitChart() {
   }
   ];
 
+
+  ChartOptions3.series = [{
+    name: 'Altitude',
+    type: 'spline',
+    data: [],
+    yAxis: 1,
+    tooltip: { valueSuffix: ' Meter' },
+    color: ChartColors.Altitude
+  }];
+
   TheFlightChart = new Highcharts.Chart(ChartOptions1);
   TheSecondChart = new Highcharts.Chart(ChartOptions2);
+  ThirdGraph = new Highcharts.Chart(ChartOptions3);
 }
 
 function getChartOptions(renderTo) {

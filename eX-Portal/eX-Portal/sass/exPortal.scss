@@ -1000,14 +1000,20 @@ div#FlightInfoNOC {
 #FlightGraph,
 #SecondGraph {
   width: 100%;
-  height: 140px;
+  height: 100px;
   background-color: white;
-  margin-top: 10px;
+  margin-top: 5px;
+}
+#ThirdGraph {
+  width: 100%;
+  height: 35px;
+  background-color: white;
+  margin-top: 0px;
 }
 
 #FlightData {
   margin-top: 10px;
-
+  font-size:11px;
   ul {
     list-style: none;
     margin: 0px;
@@ -1277,7 +1283,7 @@ div.GraphSection {
 
   table {
     width: $TableWidth;
-    height: 140px;
+    height: 100px;
 
     tr {
       td.Graph {
@@ -1291,7 +1297,7 @@ div.GraphSection {
           margin: 0px ($Seperation - 1px)/2 0px ($Seperation - 1px)/2;
           width: 1px;
           background-color: $MenuHiliteColor;
-          height: 140px;
+          height: 100px;
           display:block;
         }
       }
