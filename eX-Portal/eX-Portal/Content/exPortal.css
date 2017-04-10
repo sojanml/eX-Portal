@@ -1132,6 +1132,13 @@ div.dashboard-column div.fixed-height ul li div.icon img {
 div.dashboard-column div.fixed-height ul li div.caption {
   font-weight: bold;
 }
+div.dashboard-column div.fixed-height ul li div.caption a {
+  text-decoration: none;
+  color: #474747;
+}
+div.dashboard-column div.fixed-height ul li div.caption a:hover {
+  color: red;
+}
 div.dashboard-column div.fixed-height ul li div.floating {
   float: right;
   padding: 1px 4px 1px 4px;

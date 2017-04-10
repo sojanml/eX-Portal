@@ -75,7 +75,7 @@
           <li>
 
             <div class="floating @Item.ApprovalStatus">@Item.ApprovalStatus</div>
-              <a href="@Url.Action("NOCRegistrationDetails", "Rpas",new  { ID = Item.ApprovalID})"><div class="caption">#@Item.ApprovalID - @Item.ApprovalName</div></a>
+              <div class="caption">#@Item.ApprovalID - <a href="@Url.Action("NOCRegistrationDetails", "Rpas",new  { ID = Item.ApprovalID})">@Item.ApprovalName</a></div>
             <div class="detail">@(((DateTime)Item.StartDate).ToString("dd-MMM-yyyy")) @@ @Item.StartTime</div>
           </li>
         }

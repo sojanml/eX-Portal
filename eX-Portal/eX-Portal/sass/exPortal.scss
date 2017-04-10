@@ -1170,6 +1170,13 @@ div.dashboard-column {
 
         div.caption {
           font-weight: bold;
+          a {
+            text-decoration:none;
+            color:$ReportHeadBackground;
+            &:hover {
+              color:red;
+            }
+          }
         }
 
         div.floating {
