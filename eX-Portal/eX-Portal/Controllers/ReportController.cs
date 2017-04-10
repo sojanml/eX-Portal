@@ -311,7 +311,7 @@ namespace eX_Portal.Controllers {
       String FullPath = String.Empty;
       if(System.IO.File.Exists(FullPath1)) {
         FullPath = FullPath1;
-      } else if(System.IO.File.Exists(FullPath1)) {
+      } else if(System.IO.File.Exists(FullPath2)) {
         FullPath = FullPath2;
       } else {
         ViewBag.Title = "Report not found";

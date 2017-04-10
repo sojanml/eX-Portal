@@ -9,7 +9,6 @@ function ClearChart() {
   CharSeries['FlightGraph'][0].xAxis.setCategories([], false);
   CharSeries['FlightGraph'][0].setData([], false);
   CharSeries['FlightGraph'][1].setData([], false);
-  CharSeries['FlightGraph'][2].setData([], false);
 
   CharSeries['SecondGraph'][0].xAxis.setCategories([], false);
   CharSeries['SecondGraph'][0].setData([], false);
