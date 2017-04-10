@@ -293,7 +293,19 @@ namespace Exponent.ADSB {
       //go through each postion and add to database
       foreach (var Position in NewPositions) {
         //Delete if already exists
-        SQL = "DELETE FROM AdsbLive WHERE [FlightId]='" + Position.FlightID + "'";
+        SQL = $"SELECT HeadingHistory FROM AdsbLive WHERE [FlightId]='{Position.FlightID}'";
+        String HeadingHistory = GetDBVal(SQL);
+        StringBuilder SB = new StringBuilder(HeadingHistory);
+
+        int HistoryCount = HeadingHistory.Count(c => c == ',');
+        if (HistoryCount >= 5)
+          SB.Remove(0, HeadingHistory.IndexOf(',') + 1);
+        if (SB.Length > 0)
+          SB.Append(',');
+        SB.Append(Position.Heading);
+
+
+        SQL = $"DELETE FROM AdsbLive WHERE [FlightId]='{Position.FlightID}'";
         doSQL(SQL);
 
         SQL = @"INSERT INTO AdsbLive(
@@ -324,7 +336,7 @@ namespace Exponent.ADSB {
           '" + Position.ADSBDate.ToString("yyyy-MM-dd hh:mm:ss") + @"',
           '" + Position.FlightSource + @"',
           GETDATE(),
-          '" + Position.Heading + @"',
+          '" + SB.ToString() + @"',
           abs([dbo].[fnCalcDistanceKM](" + Position.Lat + ", " + Airport.OMDB.lat + ", " + Position.Lon + ", " + Airport.OMDB.lng + @")),
           abs([dbo].[fnCalcDistanceKM](" + Position.Lat + ", " + Airport.OMDW.lat + ", " + Position.Lon + ", " + Airport.OMDW.lng + @")),
           abs([dbo].[fnCalcDistanceKM](" + Position.Lat + ", " + Airport.OMSJ.lat + ", " + Position.Lon + ", " + Airport.OMSJ.lng + @"))
@@ -338,6 +350,20 @@ namespace Exponent.ADSB {
         CMD.ExecuteNonQuery();
       }
     }
+
+    private String GetDBVal(String SQL) {
+      try { 
+      using(var cmd = new SqlCommand(SQL, CN)) {
+        var oResult = cmd.ExecuteScalar();
+        return oResult.ToString();
+      }
+      } catch {
+
+      }
+      return String.Empty;
+
+    }
+
     private int getActiveFlights() {
       int Result = 0;
       String SQL = @"select count(*) from 

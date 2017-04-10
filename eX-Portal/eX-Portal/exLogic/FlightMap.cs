@@ -112,6 +112,16 @@ namespace eX_Portal.exLogic {
         if(FlightMapDataID > 0) {
           Query = Query.Where(e => e.FlightMapDataID > FlightMapDataID);
         }
+
+        //we need to find the last flight time from database for the ID
+        var FirstFlightTime = ctx.FlightMapDatas
+          .Where(e => e.FlightID == FlightID)
+          .OrderBy(e => e.FlightMapDataID)
+          .Select(e => e.TotalFlightTime)
+          .FirstOrDefault();
+        if (FirstFlightTime == null)
+          FirstFlightTime = 0;
+      
         var Data = Query
           .OrderBy(o => o.ReadTime)
           .Select(e => new {
@@ -120,7 +130,7 @@ namespace eX_Portal.exLogic {
             FlightTime = e.ReadTime,
             Altitude = e.Altitude,
             Speed = e.Speed,
-            FlightDuration = e.TotalFlightTime,
+            FlightDuration = e.TotalFlightTime - FirstFlightTime,
             Distance = e.Distance,
             Satellites = e.Satellites,
             Pich = e.Pitch,
