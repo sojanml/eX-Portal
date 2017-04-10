@@ -44,17 +44,6 @@
             </tr>
 
             <tr>
-              <td rowspan="2"><div class="alert traffic_stat"><div class="vertical">Alert</div></div></td>
-              <td>Define Horizontal Separation</td>
-              <td><input id="hAlert" class="spinner" value="@Model.hAlert" name="hAlert" type="text" /></td>
-              <td>KM</td>
-            </tr>
-            <tr>
-              <td>Define Vertical Separation</td>
-              <td><input id="vAlert" class="spinner" value="@Model.vAlert" name="vAlert" type="text" /></td>
-              <td>Feet</td>
-            </tr>
-            <tr>
               <td rowspan="2"><div class="breach traffic_stat"><div class="vertical">Breach</div></div></td>
               <td>Define Horizontal Separation</td>
               <td><input id="hBreach" class="spinner" value="@Model.hBreach" name="hBreach" type="text" /></td>
@@ -65,6 +54,20 @@
               <td><input id="vBreach" class="spinner" value="@Model.vBreach" name="vBreach" type="text" /></td>
               <td>Feet</td>
             </tr>
+
+            <tr>
+              <td rowspan="2"><div class="alert traffic_stat"><div class="vertical">Alert</div></div></td>
+              <td>Define Horizontal Separation</td>
+              <td><input id="hAlert" class="spinner" value="@Model.hAlert" name="hAlert" type="text" /></td>
+              <td>KM</td>
+            </tr>
+            <tr>
+              <td>Define Vertical Separation</td>
+              <td><input id="vAlert" class="spinner" value="@Model.vAlert" name="vAlert" type="text" /></td>
+              <td>Feet</td>
+            </tr>
+
+
           </table>
 
           <input class="query" id="minAltitude" name="minAltitude" value="@Model.minAltitude" type="hidden" />
