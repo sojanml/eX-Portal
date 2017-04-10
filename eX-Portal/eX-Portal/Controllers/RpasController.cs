@@ -63,8 +63,7 @@ namespace eX_Portal.Controllers {
         StartTime,
         EndTime,
         MaxAltitude,
-        MinAltitude,        
-        case IsUseCamara when 1 then 'Yes' else 'No' end as Camara,       
+        MinAltitude,   
         ApprovalStatus as Status,
         Count(*) Over() as _TotalRecords,
         ApprovalID as _PKey
@@ -2164,6 +2163,10 @@ namespace eX_Portal.Controllers {
                         flightsetupvm.GcaApproval.FlightTypeID = flighttypeid;
                     }
                 }
+                else
+                {
+                    flightsetupvm.FlightType = Util.getDBVal("Select name from LUP_Drone where typeID=" + flightsetupvm.GcaApproval.FlightTypeID + " and type='FlightType'");
+                }
                 //checking email validation
 
                 string Email = "";
@@ -2191,14 +2194,11 @@ namespace eX_Portal.Controllers {
                 {
                     return "Start time is greater than end time";
                 }
-                if (flightsetupvm.GcaApproval.ApprovalName == null)
+                if (flightsetupvm.GcaApproval.ClientName == null)
                 {
-                    return "Please enter approval name.";
+                    return "Please enter client name.";
                 }
-                else if (flightsetupvm.GcaApproval.ApprovalName.Length > 50)
-                {
-                    return "Approval name Max 50 characters are allowed.";
-                }
+               
                 if (flightsetupvm.GcaApproval.MaxAltitude == null || flightsetupvm.GcaApproval.MaxAltitude < 1)
                 {
                     return "Please enter Max Altitude.";
@@ -2207,9 +2207,9 @@ namespace eX_Portal.Controllers {
                 {
                     return "Please select coordinates";
                 }
-               
-              
-                    DateTime todaydate = System.DateTime.Now;
+                flightsetupvm.GcaApproval.ApprovalName = flightsetupvm.FlightType + " for " + flightsetupvm.GcaApproval.ClientName;
+
+                 DateTime todaydate = System.DateTime.Now;
                     String SQL = String.Empty;
                     var StartDate = (flightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(-1) : (DateTime)flightsetupvm.GcaApproval.StartDate);
                     var EndDate = (flightsetupvm.GcaApproval.StartDate == null ? DateTime.Now.AddDays(90) : (DateTime)flightsetupvm.GcaApproval.EndDate);

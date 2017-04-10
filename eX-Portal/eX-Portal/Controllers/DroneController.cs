@@ -83,8 +83,8 @@ namespace eX_Portal.Controllers {
         nView.addMenu("Create Flight", Url.Action("Create", "DroneFlight", new { ID = "_Pkey" }));
       if(exLogic.User.hasAccess("FLIGHT"))
         nView.addMenu("Flights", Url.Action("Index", "DroneFlight", new { ID = "_Pkey" }));
-      if(exLogic.User.hasAccess("DRONE.MANAGE"))
-        nView.addMenu("Manage", Url.Action("Manage", new { ID = "_Pkey" }));
+      //if(exLogic.User.hasAccess("DRONE.MANAGE"))
+      //  nView.addMenu("Manage", Url.Action("Manage", new { ID = "_Pkey" }));
       if(exLogic.User.hasAccess("BLACKBOX"))
         nView.addMenu("FDR Data", Url.Action("Index", "BlackBox", new { ID = "_Pkey" }));
       if(exLogic.User.hasAccess("DRONE.DELETE"))
