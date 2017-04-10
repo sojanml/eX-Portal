@@ -250,11 +250,13 @@ namespace Exponent.ADSB {
             History = getHistory(RS["HeadingHistory"].ToString())
           };
           if(FlightSource== "SkyCommander")
-            { 
-                  if (Position.Altitude>QueryData.minAltitude  && Position.Altitude<QueryData.maxAltitude)
+            {
+                        if (Position.Altitude < 0)
+                            Position.Altitude = 0;
+                  if ((Position.Altitude>=QueryData.minAltitude  && Position.Altitude<=QueryData.maxAltitude) &&
+                            (Position.Speed >= QueryData.minSpeed && Position.Speed <= QueryData.maxSpeed))
                      PositionDatas.Add(Position);
-                  if(Position.Speed > QueryData.minSpeed && Position.Speed < QueryData.maxSpeed)
-                      PositionDatas.Add(Position);
+                 
             }
             else
             {
