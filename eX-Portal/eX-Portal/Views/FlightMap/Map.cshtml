@@ -1,6 +1,6 @@
 ﻿@model eX_Portal.exLogic.FlightMap
 <section class="top-space">
-  <div class="column column-half">
+  <div class="column column-half @(Model.IsLive || Model.Videos.Count() > 0 ? "" : "NoVideo")">
     <div class="title">Flight Information
       <div class="info" >(Ref#: <span>@Model.FlightID</span>)</div>
       <div class="info" style="float:right"><span id="FlightInfo_FlightDate">@Model.FlightDate</span>(UTC)</div>
@@ -9,7 +9,7 @@
       @if (Model.IsLive || Model.Videos.Count() > 0) {
       <div id="FlightVideo"></div>
       }
-      <div id="FlightSummary" class="@(Model.IsLive || Model.Videos.Count() > 0 ? "" : "NoVideo")" >
+      <div id="FlightSummary" >
         <div class="column-content" id="RpasInformation">
           <div id="GeneralInformation">
             <table class="infoTable" cellpadding="0" cellspacing="0">
@@ -36,18 +36,22 @@
           <table class="FlightLastInformation" cellpadding="0" cellspacing="0">
             <tr>
               <td><div class="dash-image img_duration"></div>
-              Duration: <span id="FlightInfo_FlightDuration">0:00</span> Mins</td>
+              Duration: (Mins)<br />
+              <span id="FlightInfo_FlightDuration">0:00</span> </td>
               <td>
                 <div class="dash-image img_altitude"></div>
-              Altitude: <span id="FlightInfo_Altitude">0.0</span> Meter</td>
+              Altitude: (Meter)<br />
+              <span id="FlightInfo_Altitude">0.0</span> </td>
             </tr>
             <tr>
               <td>
                 <div class="dash-image img_speed"></div>
-              Speed: <span id="FlightInfo_Speed">0.0</span> Meter/Sec</td>
+              Speed: (Meter/Sec)<br />
+              <span id="FlightInfo_Speed">0.0</span> </td>
               <td>
                 <div class="dash-image img_distance"></div>
-              Distance: <span id="FlightInfo_Distance">0.0</span> Meter</td>
+              Distance: (Meter)
+                <br /><span id="FlightInfo_Distance">0.0</span> </td>
             </tr>
           </table>
         </div>
@@ -64,6 +68,16 @@
           <td class="Graph"><div id="SecondGraph"></div></td>
         </tr>
       </table>
+      <div id="ThirdGraph"></div>
+      <div id="Legend">
+        <ul>
+          <li><span class="pitch"></span>Pitch</li>
+          <li><span class="roll"></span>Roll</li>
+          <li><span class="speed"></span>Speed</li>
+          <li><span class="satallite"> </span>Salallite</li>
+          <li><span class="altitude"></span>Altitude</li>
+        </ul>
+      </div>
 
     </div>
 

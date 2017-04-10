@@ -75,6 +75,12 @@ $SafeColor: #53a100;
       font-family: Gobold_Light;
       font-size: 10px;
     }
+
+    &.NoVideo {
+      div#FlightSummary {
+        width:100%;
+      }
+    }
   }
 
   div.column-full {
@@ -96,7 +102,7 @@ $SafeColor: #53a100;
 
     div#FlightVideo {
       width: 240px;
-      height: 140px;
+      height: 160px;
       float: left;
       background-color: black;
     }
@@ -191,6 +197,7 @@ $SafeColor: #53a100;
   &.top-space {
     margin-top: $Gap;
   }
+
   div.two-column-form-group {
     div.form-group {
       width: 48%;
@@ -249,7 +256,7 @@ span.refresh {
 }
 
 #flightmap {
-  min-height: 460px;
+  min-height: 510px;
 }
 
 input,
@@ -415,6 +422,7 @@ div.clearfix {
 }
 
 header {
+  font-size:11px;
   div.left-section {
     float: left;
   }
@@ -984,10 +992,9 @@ div#FlightInfoNOC {
 
     tr td {
       width: 50%;
-      line-height: 30px;
       padding-bottom: 4px;
       text-transform: uppercase;
-      font-size:6pt;
+      font-size:8pt;
       span {
         font-size: 10pt;
         font-weight: bold;
@@ -1000,14 +1007,22 @@ div#FlightInfoNOC {
 #FlightGraph,
 #SecondGraph {
   width: 100%;
-  height: 140px;
+  height: 90px;
   background-color: white;
-  margin-top: 10px;
+  margin-top: 5px;
+}
+#ThirdGraph {
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  margin-top: 5px;
+  border-top:1px red solid;
+  padding-top:5px;
 }
 
 #FlightData {
   margin-top: 10px;
-
+  font-size:11px;
   ul {
     list-style: none;
     margin: 0px;
@@ -1033,7 +1048,7 @@ div#FlightInfoNOC {
   }
 
   ul#FlightDataScroll {
-    height: 140px;
+    height: 125px;
     width: 100%;
     overflow-y: auto;
     border-bottom: 1px red solid;
@@ -1050,18 +1065,14 @@ div#RpasInformation {
     height: 30px;
     background-size: cover;
     background-color: white;
-    margin-right: 10px;
+    margin: auto;
   }
 
   table {
     margin-top:5px;
     td {
       white-space: nowrap;
-      line-height: 30px;
-
-      & > div {
-        float: left;
-      }
+      text-align:center;
     }
   }
 }
@@ -1274,10 +1285,10 @@ div.photo-upload {
 div.GraphSection {
   $Seperation: 7px;
   $TableWidth: (($MaxResolution - 10px) / 2);
-
+  margin-top:10px;
   table {
     width: $TableWidth;
-    height: 140px;
+    height: 100px;
 
     tr {
       td.Graph {
@@ -1290,8 +1301,8 @@ div.GraphSection {
         & > div {
           margin: 0px ($Seperation - 1px)/2 0px ($Seperation - 1px)/2;
           width: 1px;
-          background-color: $MenuHiliteColor;
-          height: 140px;
+          background-color: red;
+          height: 100px;
           display:block;
         }
       }
@@ -1299,205 +1310,250 @@ div.GraphSection {
   }
 }
 
+div#Legend {
+  ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
 
+    li {
+      float: left;
+      margin-right: 65px;
 
-
-div.adsb-point {
-
-  position: absolute;
-  cursor: pointer;
-  width: 100px;
-  height: 100px;
-  margin-left: -50px;
-  margin-top: -50px;
-
-  span.tail {
-    position: absolute;
-    background-color: aquamarine;
-    width: 2px;
-    height: 2px;
-    margin-left: -1px;
-    margin-top: -1px;
-    border-radius: 50%;
-    display: block;
-    font-size: 1px;
-  }
-
-  span.FlightIcon,
-  span.DroneIcon {
-    position: absolute;
-    left: 50px;
-    top: 50px;
-    font-size: 18px;
-    width: 25px;
-    height: 25px;
-    margin-left: -13px;
-    margin-top: -13px;
-    -webkit-transform-origin: 50% 50%;
-    -moz-transform-origin: 50% 50%;
-    -o-transform-origin: 50% 50%;
-    transform-origin: 50% 50%;
-  }
-
-  span.DroneIcon {
-  }
-
-  span.flight-title {
-    position: absolute;
-    top: 60px;
-    left: 40px;
-    z-index: 10;
-    color: white;
-    display: none;
-    padding: 0px 2px 0px 2px;
-    font-size: 9px;
-  }
-
-
-  &:hover {
-    span.flight-title {
-      display: block;
-    }
-  }
-
-  &.breach {
-    color: $BreachColor;
-
-    span.flight-title,
-    span.tail {
-      background-color: $BreachColor;
-    }
-  }
-
-  &.alert {
-    color: #ff4e00;
-
-    span.flight-title,
-    span.tail {
-      background-color: $AlertColor;
-    }
-  }
-
-  &.safe {
-    color: #0189ff;
-
-    span.flight-title,
-    span.tail {
-      background-color: $SafeColor;
-    }
-  }
-
-  &.normal {
-    color: #ffcc01;
-
-    span.flight-title,
-    span.tail {
-      background-color: #ffcc01;
-    }
-  }
-
-  &.drone {
-    color: #018aff;
-
-    span.flight-title,
-    span.tail {
-      background-color: #018aff;
-    }
-
-    &.breach {
-      span.flight-title,
-      span.tail {
-        background-color: red;
+      &:last-child {
+        margin-right: 0px;
       }
-    }
 
-    &.alert {
-      span.flight-title,
-      span.tail {
-        background-color: #ff4e00;
-      }
-    }
-  }
+      span {
+        margin-right: 5px;
+        display: inline-block;
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background-color: black;
 
-  &.breach,
-  &.alert,
-  &.safe {
-  }
-}
+        &.pitch {
+          background-color: rgba(255, 89, 0,1)
+        }
 
+        &.altitude {
+          background-color: rgb(219, 211, 1);
+        }
 
-#ShowUserDescription {
-  & > span {
-    font-weight: bold;
-  }
+        &.satallite {
+          background-color: rgba(101, 186, 25,1)
+        }
 
-  #UserDescription {
-    position: absolute;
-    display: none;
-    white-space: nowrap;
-    border: 1px #222222 solid;
-    background-color: $MenuColor;
-    padding: 10px;
-    @include box-shadow(#222222 1px 1px 10px);
+        &.speed {
+          background-color: rgb(11, 144, 118)
+        }
 
-    ul {
-      margin: 0px;
-      padding: 0px;
-      list-style: none;
-
-      li {
-        list-style: none;
-        padding: 0px 0px 4px 0px;
-
-        span {
-          color: red;
-          padding-left: 5px;
+        &.roll {
+          background-color: rgb(153, 131, 199)
         }
       }
     }
   }
 
-  &:hover {
-    #UserDescription {
+  @include clearfix();
+}
+
+  div.adsb-point {
+    position: absolute;
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+    margin-left: -50px;
+    margin-top: -50px;
+
+    span.tail {
+      position: absolute;
+      background-color: aquamarine;
+      width: 2px;
+      height: 2px;
+      margin-left: -1px;
+      margin-top: -1px;
+      border-radius: 50%;
       display: block;
+      font-size: 1px;
+    }
+
+    span.FlightIcon,
+    span.DroneIcon {
+      position: absolute;
+      left: 50px;
+      top: 50px;
+      font-size: 18px;
+      width: 25px;
+      height: 25px;
+      margin-left: -13px;
+      margin-top: -13px;
+      -webkit-transform-origin: 50% 50%;
+      -moz-transform-origin: 50% 50%;
+      -o-transform-origin: 50% 50%;
+      transform-origin: 50% 50%;
+    }
+
+    span.DroneIcon {
+    }
+
+    span.flight-title {
+      position: absolute;
+      top: 60px;
+      left: 40px;
+      z-index: 10;
+      color: white;
+      display: none;
+      padding: 0px 2px 0px 2px;
+      font-size: 9px;
+    }
+
+
+    &:hover {
+      span.flight-title {
+        display: block;
+      }
+    }
+
+    &.breach {
+      color: $BreachColor;
+
+      span.flight-title,
+      span.tail {
+        background-color: $BreachColor;
+      }
+    }
+
+    &.alert {
+      color: #ff4e00;
+
+      span.flight-title,
+      span.tail {
+        background-color: $AlertColor;
+      }
+    }
+
+    &.safe {
+      color: #0189ff;
+
+      span.flight-title,
+      span.tail {
+        background-color: $SafeColor;
+      }
+    }
+
+    &.normal {
+      color: #ffcc01;
+
+      span.flight-title,
+      span.tail {
+        background-color: #ffcc01;
+      }
+    }
+
+    &.drone {
+      color: #018aff;
+
+      span.flight-title,
+      span.tail {
+        background-color: #018aff;
+      }
+
+      &.breach {
+        span.flight-title,
+        span.tail {
+          background-color: red;
+        }
+      }
+
+      &.alert {
+        span.flight-title,
+        span.tail {
+          background-color: #ff4e00;
+        }
+      }
+    }
+
+    &.breach,
+    &.alert,
+    &.safe {
     }
   }
-}
 
-div.upload-btn {
-  position: relative;
-  margin-top: 10px;
 
-  a {
-    display: block;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 30px;
-    background-color: $ReportHeadBackground;
-    z-index: 11;
-    border-radius: 5px;
-    color: $TitleTextColor;
-    text-align: center;
-    text-decoration: none;
-    padding: 3px 0px 0px 0px;
-    cursor: pointer;
-    line-height: 30px;
-    font-size:11pt;
+  #ShowUserDescription {
+    & > span {
+      font-weight: bold;
+    }
+
+    #UserDescription {
+      position: absolute;
+      display: none;
+      white-space: nowrap;
+      border: 1px #222222 solid;
+      background-color: $MenuColor;
+      padding: 10px;
+      @include box-shadow(#222222 1px 1px 10px);
+
+      ul {
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+
+        li {
+          list-style: none;
+          padding: 0px 0px 4px 0px;
+
+          span {
+            color: red;
+            padding-left: 5px;
+          }
+        }
+      }
+    }
+
+    &:hover {
+      #UserDescription {
+        display: block;
+      }
+    }
   }
 
-  input[type=file] {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    height: 30px;
-    width: 100%;
-    opacity: 0;
-    z-index: 12;
-    cursor: pointer;
+  div.upload-btn {
+    position: relative;
+    margin-top: 10px;
+
+    a {
+      display: block;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 30px;
+      background-color: $ReportHeadBackground;
+      z-index: 11;
+      border-radius: 5px;
+      color: $TitleTextColor;
+      text-align: center;
+      text-decoration: none;
+      padding: 3px 0px 0px 0px;
+      cursor: pointer;
+      line-height: 30px;
+      font-size: 11pt;
+    }
+
+    input[type=file] {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      height: 30px;
+      width: 100%;
+      opacity: 0;
+      z-index: 12;
+      cursor: pointer;
+    }
   }
-}
-div.error {
-  color:red;
-}
+
+  div.error {
+    color: red;
+  }
