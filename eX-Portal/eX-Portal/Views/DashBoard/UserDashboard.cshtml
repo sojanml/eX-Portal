@@ -73,8 +73,9 @@
       <ul>
         @foreach (var Item in @Model.ApprovalList) {
           <li>
+
             <div class="floating @Item.ApprovalStatus">@Item.ApprovalStatus</div>
-            <div class="caption">#@Item.ApprovalID - @Item.ApprovalName</div>
+              <a href="@Url.Action("NOCRegistrationDetails", "Rpas",new  { ID = Item.ApprovalID})"><div class="caption">#@Item.ApprovalID - @Item.ApprovalName</div></a>
             <div class="detail">@(((DateTime)Item.StartDate).ToString("dd-MMM-yyyy")) @@ @Item.StartTime</div>
           </li>
         }
