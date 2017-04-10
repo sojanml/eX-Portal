@@ -76,7 +76,7 @@ namespace eX_Portal.Controllers {
         if (SQLFilter != "")
           SQLFilter += " where ";
         SQLFilter += " \n" +
-          "  MSTR_Drone.AccountID=" + Util.getAccountID();
+          "  GCA_Approval.[PilotUserId]=" + Util.getLoginUserID();
       }
       qView nView = new qView(SQLFilter);
       if (exLogic.User.hasAccess("FLIGHTREG.DETAIL"))
@@ -88,8 +88,8 @@ namespace eX_Portal.Controllers {
 
       if (exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
         nView.addMenu("Authority Approval", Url.Action("AuthorityApproval", "Rpas", new { ID = "ApprovalID" }));
-      if (exLogic.User.hasAccess("FLIGHT.SETUP"))
-        nView.addMenu("Edit", Url.Action("NOCRegister", "rpas", new { ID = "_PKey", Approval = "Status" }));
+      //if (exLogic.User.hasAccess("FLIGHT.SETUP"))
+      //  nView.addMenu("Edit", Url.Action("NOCRegister", "rpas", new { ID = "_PKey", Approval = "Status" }));
       if (exLogic.User.hasAccess("RPAS.FLIGHTDELETE"))
         nView.addMenu("Delete", Url.Action("DeleteGCAApproval", "rpas", new { ID = "_PKey" }));
       if (Request.IsAjaxRequest()) {

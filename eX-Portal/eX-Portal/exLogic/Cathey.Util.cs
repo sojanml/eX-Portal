@@ -355,7 +355,7 @@ namespace eX_Portal.exLogic {
               LEFT JOIN MSTR_User ON
                 MSTR_User.UserID = GCA_Approval.CreatedBy
                LEFT JOIN MSTR_Drone  on GCA_Approval.DroneId= MSTR_Drone.DroneId  
-                where MSTR_Drone.AccountID={User.AccountId}
+                where GCA_Approval.[PilotUserId]={UserID}
              Order By
                 StartDate DESC
 ";
