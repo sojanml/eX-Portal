@@ -2341,7 +2341,7 @@ namespace eX_Portal.Controllers {
                          [DroneId]=" + DroneID;
                     Util.doSQL(SQL);
                     //  return RedirectToAction("Applications", "Rpas","");
-                return "OK";
+                return "OK|/Home/Index/";
             }
             catch (Exception ex)
             {
