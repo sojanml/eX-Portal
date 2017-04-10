@@ -1,7 +1,7 @@
 ﻿@model eX_Portal.ViewModel.FlightSetupViewModel
 @using eX_Portal.exLogic
 @{
-  ViewBag.Title = "RPAS Flight Approval";
+  ViewBag.Title = "NOC Approval";
 }
 
 <h2>Requested By</h2>
@@ -65,7 +65,7 @@
 
     <div class="two-column-form-group">
       <div class="form-group">
-        @Html.LabelFor(model => Model.GcaApproval.MinAltitude)
+        @Html.LabelFor(model => Model.GcaApproval.MinAltitude)  (Meter)
         <div class="col-md-10">
           @Html.EditorFor(model => Model.GcaApproval.MinAltitude, new { htmlAttributes = new { @class = "form-control" } })
           @Html.ValidationMessageFor(model => Model.GcaApproval.MinAltitude, "", new { @class = "text-danger" })
@@ -73,7 +73,7 @@
       </div>
 
       <div class="form-group">
-        @Html.LabelFor(model => Model.GcaApproval.MaxAltitude)
+        @Html.LabelFor(model => Model.GcaApproval.MaxAltitude)  (Meter)
         <div class="col-md-10">
           @Html.EditorFor(model => Model.GcaApproval.MaxAltitude, new { htmlAttributes = new { @class = "form-control" } })
           @Html.ValidationMessageFor(model => Model.GcaApproval.MaxAltitude, "", new { @class = "text-danger" })
