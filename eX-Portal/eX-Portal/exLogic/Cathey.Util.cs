@@ -313,14 +313,14 @@ namespace eX_Portal.exLogic {
                         PDetail.DateOfExpiry = Util.toDate(reader.GetValue(8).ToString());
                         PDetail.EmiratesID = reader.GetValue(9).ToString();
                         PDetail.Title = reader.GetValue(10).ToString();
-                        PDetail.RPASPermitNo = reader.GetValue(11).ToString();
-                        PDetail.PermitCategory = reader.GetValue(12).ToString();
+                        PDetail.RPASPermitNo = reader.GetValue(13).ToString();
+                        PDetail.PermitCategory = reader.GetValue(14).ToString();
                         PDetail.PilotImage = reader.GetValue(15).ToString();
                        
                         PDetail.CompanyName= reader.GetValue(16).ToString();
                         PDetail.Nationality = reader.GetValue(17).ToString();
-                        PDetail.DOI_RPASPermit =toDate( reader.GetValue(18).ToString());
-                        PDetail.DOE_RPASPermit  = toDate(reader.GetValue(19).ToString());
+                        PDetail.DOI_RPASPermit =reader.GetDateTime(18);
+                        PDetail.DOE_RPASPermit  = reader.GetDateTime(19);
                         PDetail.UserId = UserID;
                     }
 
