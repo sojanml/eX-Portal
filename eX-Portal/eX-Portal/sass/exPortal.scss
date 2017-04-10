@@ -17,6 +17,7 @@ $VerticalGap: 12px;
 $BreachColor: #fe0000;
 $AlertColor: #f2a003;
 $SafeColor: #53a100;
+$FilterColor: #018aff;
 
 @include font-face("FontAwesome", font-files( "../fonts/fontawesome-webfont.ttf", "../fonts/FontAwesome.otf", "../fonts/fontawesome-webfont.svg", "../fonts/fontawesome-webfont.eot", "../fonts/fontawesome-webfont.woff", "../fonts/fontawesome-webfont.woff2" ));
 @include font-face("OpenSans", font-files( "../fonts/OpenSans.ttf", "../fonts/OpenSans.eot", "../fonts/OpenSans.svg", "../fonts/OpenSans.woff", "../fonts/OpenSans.woff2" ));
@@ -1176,19 +1177,22 @@ div.dashboard-column {
           padding: 1px 4px 1px 4px;
           border-radius: 3px;
           font-size: 8pt;
+          color: white;
+
+          &.Rejected {
+            background-color: $BreachColor;
+          }
 
           &.Amended {
-            background-color: $BreachColor;
-            color: white;
+            background-color: $AlertColor;
           }
 
           &.Approved {
             background-color: $SafeColor;
-            color: white;
           }
 
           &.New {
-            background-color: $AlertColor;
+            background-color: $FilterColor;
           }
         }
       }
@@ -1229,18 +1233,17 @@ div.dashboard-column {
 
       span.icon {
         font-family: FontAwesome;
-        display:inline-block;
-        margin-right:5px;
+        display: inline-block;
+        margin-right: 5px;
         background-color: $SafeColor;
-        color:white;
-        border-radius:50%;
-        width:18px;
-        height:18px;
-        line-height:18px;
-        text-align:center;
-        font-size:12px;
-        box-sizing:border-box;
-
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        text-align: center;
+        font-size: 12px;
+        box-sizing: border-box;
       }
 
       &:hover {
@@ -1510,7 +1513,10 @@ div#Legend {
         margin: 0px;
         padding: 0px;
         list-style: none;
-
+        float:left;
+        &:first-child {
+          margin-right:10px;
+        }
         li {
           list-style: none;
           padding: 0px 0px 4px 0px;
@@ -1518,6 +1524,11 @@ div#Legend {
           span {
             color: red;
             padding-left: 5px;
+          }
+          &:first-child {
+            font-weight:bold;
+            border-bottom:1px red solid;
+            margin-bottom:5px;
           }
         }
       }
