@@ -1137,17 +1137,19 @@ div.dashboard-column div.fixed-height ul li div.floating {
   padding: 1px 4px 1px 4px;
   border-radius: 3px;
   font-size: 8pt;
+  color: white;
+}
+div.dashboard-column div.fixed-height ul li div.floating.Rejected {
+  background-color: #fe0000;
 }
 div.dashboard-column div.fixed-height ul li div.floating.Amended {
-  background-color: #fe0000;
-  color: white;
+  background-color: #f2a003;
 }
 div.dashboard-column div.fixed-height ul li div.floating.Approved {
   background-color: #53a100;
-  color: white;
 }
 div.dashboard-column div.fixed-height ul li div.floating.New {
-  background-color: #f2a003;
+  background-color: #018aff;
 }
 div.dashboard-column div.fixed-height ul.single-line li {
   margin: 0px 0px 5px 0px;
@@ -1403,6 +1405,10 @@ div.adsb-point.drone.alert span.tail {
   margin: 0px;
   padding: 0px;
   list-style: none;
+  float: left;
+}
+#ShowUserDescription #UserDescription ul:first-child {
+  margin-right: 10px;
 }
 #ShowUserDescription #UserDescription ul li {
   list-style: none;
@@ -1411,6 +1417,11 @@ div.adsb-point.drone.alert span.tail {
 #ShowUserDescription #UserDescription ul li span {
   color: red;
   padding-left: 5px;
+}
+#ShowUserDescription #UserDescription ul li:first-child {
+  font-weight: bold;
+  border-bottom: 1px red solid;
+  margin-bottom: 5px;
 }
 #ShowUserDescription:hover #UserDescription {
   display: block;
