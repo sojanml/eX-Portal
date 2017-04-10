@@ -306,19 +306,27 @@ namespace eX_Portal.Controllers {
 
     public ActionResult PostFlightReport([Bind(Prefix ="ID")] int FlightID = 0) {
       //check if the PDF is generated
-      String FullPath = System.IO.Path.Combine("C:\\Reports", String.Format("{0}.pdf", FlightID));
-      if(System.IO.File.Exists(FullPath)) {
-        var ReturnData = System.IO.File.ReadAllBytes(FullPath);
-        var ReturnType = System.Web.MimeMapping.GetMimeMapping(FullPath);
-        var cd = new System.Net.Mime.ContentDisposition {
-          FileName = "FlightReport-" + FlightID + DateTime.Now.ToString("-yyyymmddhhMMss") + ".pdf",
-          Inline = false,
-        };
-        Response.AppendHeader("Content-Disposition", cd.ToString());
-        return File(ReturnData, ReturnType);
+      String FullPath1 = System.IO.Path.Combine("C:\\Reports", String.Format("{0}.pdf", FlightID));
+      String FullPath2 = System.IO.Path.Combine("C:\\Reports_DCAA", String.Format("{0}.pdf", FlightID));
+      String FullPath = String.Empty;
+      if(System.IO.File.Exists(FullPath1)) {
+        FullPath = FullPath1;
+      } else if(System.IO.File.Exists(FullPath1)) {
+        FullPath = FullPath2;
+      } else {
+        ViewBag.Title = "Report not found";
+        return View();
       }
-      ViewBag.Title = "Report not found";
-      return View();
+
+      var ReturnData = System.IO.File.ReadAllBytes(FullPath);
+      var ReturnType = System.Web.MimeMapping.GetMimeMapping(FullPath);
+      var cd = new System.Net.Mime.ContentDisposition {
+        FileName = "FlightReport-" + FlightID + DateTime.Now.ToString("-yyyymmddhhMMss") + ".pdf",
+        Inline = false,
+      };
+      Response.AppendHeader("Content-Disposition", cd.ToString());
+      return File(ReturnData, ReturnType);
+
     }
 
     public ActionResult FlightReport([Bind(Prefix = "ID")]int FlightID = 0) {

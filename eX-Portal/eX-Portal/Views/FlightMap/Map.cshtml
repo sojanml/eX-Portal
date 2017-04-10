@@ -16,7 +16,7 @@
               <tr>
                 <td>
                   <div class="FlightSummaryImage" style="background-image:url('@Model.PilotImage')"></div>
-                  <div>@Model.PilotName</div>                
+                  <div><A href="@Url.Action("PilotDetail", "Pilot", new { ID = Model.PilotID })">@Model.PilotName</A></div>                
                 </td>
                 <td>
                   <div class="FlightSummaryImage" style="background-image:url('/images/rpas.png')"></div>
