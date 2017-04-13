@@ -265,11 +265,7 @@ function getCoordinates() {
 }
 
 function getDefaultCoordinates() {
-    var thisCoordinates =
-    '24.94990 55.337585,' +
-    '25.21855 55.620971,' +
-    '25.38770 55.414978,' +
-    '25.08709 55.137084';
+    var thisCoordinates = '25.05569 55.44882,25.12533 55.52759,25.16790 55.50150,25.09580 55.41586';
 
     return thisCoordinates;
 }
