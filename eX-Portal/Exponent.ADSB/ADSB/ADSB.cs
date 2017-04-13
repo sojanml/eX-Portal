@@ -414,8 +414,8 @@ namespace Exponent.ADSB {
         "?query=" + System.Uri.EscapeDataString(Query) +
         "&howMany=30" +
         "&offset=0";
-
-      using (var webClient = new System.Net.WebClient()) {
+            return FlightPositions; //remove line for ADSB to work
+            using (var webClient = new System.Net.WebClient()) {
         webClient.UseDefaultCredentials = true;
         webClient.Credentials = new NetworkCredential("catheythattil", "9f8b8719108bdaa973fe4a96fef5646cd3fd32ea");
         webClient.Encoding = System.Text.Encoding.UTF8;
