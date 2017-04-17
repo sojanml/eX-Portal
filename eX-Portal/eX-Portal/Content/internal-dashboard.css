@@ -199,3 +199,16 @@ div.AlertSum {
 div.AlertSum span {
   color: red;
 }
+
+#RecentFlight,
+#TotalFlight,
+#Pilotcontainer {
+  width: 545px;
+  height: 290px;
+}
+
+#LegendRecent,
+#LegendTotal {
+  width: 545px;
+  display: none;
+}

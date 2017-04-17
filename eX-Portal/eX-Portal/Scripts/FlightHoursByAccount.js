@@ -23,16 +23,11 @@ $(document).ready(function () {
 
 
 function OnSuccessMonthlyData_(reponse) {
-    var start = 0;
-    for (var k = 0; k < 12; k++) {
-        if ((CurrentMonth + k)>= 12) {
-         
-            MonthData[k] = Months[start];
-            start=start+1;
-        }
-        else {
-            MonthData[k] = Months[CurrentMonth + k];
-        }
+  var StartMonth = CurrentDate.getMonth();
+  for (var k = 0; k < 12; k++) {
+    StartMonth++;
+    if (StartMonth > 11) StartMonth = 0;
+    MonthData.push(Months[StartMonth]);
     }
 
     var aDataMonthly = reponse;

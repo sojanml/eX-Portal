@@ -79,11 +79,16 @@ namespace eX_Portal.exLogic {
       String Tilte = FillColor.ToLower().Equals("green") ? 
         "DCAA Permission is required for all flights" : 
         "Inner circle 3km and extended Departure and Arrival Path 5km NO FLY ZONE";
-      KML.Append(@"<Placemark>
-          <name>" + Tilte + @"</name>
+      KML.Append($@"<Placemark>
+          <name>{Tilte}</name>
+          <style>
+            <BalloonStyle>
+                <displayMode>hide</displayMode>
+            </BalloonStyle>
+          </style>
           <visibility>1</visibility>
-          <styleUrl>#" + StyleURL + @"</styleUrl>
-          <Polygon id=""#" + ID + @""">
+          <styleUrl>#{StyleURL}</styleUrl>
+          <Polygon id=""#{ID}"">
             <outerBoundaryIs>
               <LinearRing>
                 <coordinates>");

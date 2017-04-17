@@ -16,7 +16,7 @@ $(document).ready(function () {
 
   initialize();
 
-  var KmlUrl = 'http://test.exponent-ts.com/Map/NoFlyzone?R=' + Math.random();
+  var KmlUrl = window.location.origin + '/Map/NoFlyzone?R=' + Math.random();
   var kmlOptions = {
     preserveViewport: true,
     map: map

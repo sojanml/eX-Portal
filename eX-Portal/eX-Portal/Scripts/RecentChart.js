@@ -5,16 +5,12 @@ var TotalFlightData = [];
 var xLabel = new Object();
 var scrollData = new Object();
 var max;
-
-
-//var LastFlightcolors = ['red', 'green', 'blue', 'orange', 'yellow'];
-//var CurrentMonthFlightcolors = ['DarkRed', 'DarkGreen', 'DarkBlue', 'DarkOrange', 'DarkYellow'];
-
-
-//var TotalMultiDashHrs = [], TotalFixedWingHrs = [], LastMultiDashHrs = [], LastFixedwingHrs = [], LastMonthMultiDashHrs = [], LastMonthFixedwingHrs = [];
-
+var ChartWidth = 545;
+var ChartHeight = 290;
 
 $(document).ready(function () {
+
+
   $.ajax({
     type: "GET",
     url: FlightDataURL,
@@ -24,15 +20,6 @@ $(document).ready(function () {
     success: OnSuccess_,
     error: OnErrorCall_
   });
-
-
-
-  $(".tag").click(function () {
-
-
-    alert($(this).attr("id"));
-  });
-
 
 });
 
@@ -49,7 +36,6 @@ function OnSuccess_(reponse) {
     CurrentMonthAlert: 0
   };
   category = [];
-
 
   var LastAccountID = 0;
   var ColorSelector = 0;
@@ -74,35 +60,16 @@ function OnSuccess_(reponse) {
   for (var i = 0; i < aData.length; i++) {
     var data = aData[i];
 
-
-
     var name = data.DroneName;
     var value = data.ShortName;
+    var ChColor = ChColor = data.ChartColor;
+
     xLabel[value] = name;
-    if (LastAccountID != data.AccountID) {
-      if (count < 4) {
-
-        Hdata = Hdata + '<td id=rectangle style="width:5px;height:1px;background:' + data.ChartColor + '"></td ><td  style="font-size:7px">' + data.AccountName + '</td>'
-
-        // Hdata = Hdata + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
-        // Hdata = Hdata + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
-      }
-      else {
-        Hdata1 = Hdata1 + '<td id=rectangle style="width:5px;height:1px;background:' + data.ChartColor + '"></td ><td  style="font-size:7px">' + data.AccountName + '</td>'
-        // Hdata1 = Hdata1 + '<span  class="taglabellabel-info" id=' + data.AccountID + '  style="color:' + data.ChartColor + '; font-size:60px">.</span><span style="font-size:8px">' + data.AccountName + '</span></td></tr>'
-      }
-
-      count = count + 1;
-    }
-    LastAccountID = data.AccountID;
 
     category.push(data.ShortName);
-    var ChColor;
-    if (data.ChartColor != null) {
-      ChColor = data.ChartColor;
-    }
-    else {
-      ChColor = "Black";
+    
+    if (ChColor == null || ChColor == '') {
+      ChColor = "#FF0000";
     }
     //  alert(ColorLuminance(ChColor, -10));
     var testcolor = getNewBrightnessColor(ChColor, 80)
@@ -129,33 +96,12 @@ function OnSuccess_(reponse) {
 
   }
 
-  if (Hdata1 != "") {
-    HtmlData = '<table><tr>' + Hdata + '</tr><tr>' + Hdata1 + '</tr></table>';
-  }
-  else {
-    HtmlData = '<table><tr>' + Hdata + '</tr></table>';
-  }
-  console.log(HtmlData);
 
-  //category = category + "]"
-  //alert(category);
   initChart();
-
-
-  $('#RecentFlight').mousemove(function (e) {
-    var chart = Highcharts.charts[0];
-
-    chart.options.Exporting = {
-      'enabled': false
-    }
-  });
-
-  initChartTotalFlight()
+  initChartTotalFlight();
+  
 };
 
-function clickfn() {
-  alert('ok');
-}
 
 function OnErrorCall_(repo) {
   //alert("Woops something went wrong, pls try later !");
@@ -236,15 +182,11 @@ function hslToRgb(h, s, l) {
 //end of conversion
 
 function initChart() {
-
-
-
-
-  //$('#container').highcharts({
   var chart = new Highcharts.Chart({
     chart: {
       renderTo: 'RecentFlight',
-
+      width: ChartWidth,
+      height: ChartHeight,
       type: 'column',
       marginRight: 0,
       marginBottom: 68,
@@ -258,14 +200,10 @@ function initChart() {
               Exporting: false
             }
           });
-
-
-
         }
       }
     },
     title: {
-
       text: "Recent Flight Time",
       align: 'left',
       style: {
@@ -287,7 +225,6 @@ function initChart() {
       labels: {
         rotation: -60,
         style: {
-
           font: '8px'
         }
       },
@@ -295,23 +232,6 @@ function initChart() {
 
       crosshair: true,
       scrollbar: scrollData,
-    },
-
-    exporting: {
-      enabled: true,
-      sourceWidth: 960,
-      sourceHeight: 400,
-      chartOptions: {
-        xAxis: [{
-          categories: category,
-          min: 0,
-          minRange: category.length - 1,
-          max: category.length - 1
-        }],
-        scrollbar: {
-          enabled: false
-        }
-      }
     },
     yAxis: {
       min: 0,
@@ -322,38 +242,18 @@ function initChart() {
     },
     legend: {
       display: null
-
     },
 
     tooltip: {
-
       formatter: function () {
         var html = xLabel[this.x];
         return '<b>' + html + '</b><br/>' +
           this.series.name + ': ' + this.y + '<br/>'
-
-
-
-
-        //$.each(this.points, function (i, point) {
-        //    s += '<br/><span style="color:' + point.series.color + '">\u25CF</span>: ' + point.series.name + ': ' + point.y;
-        //});
-
-        //return s;
       }
     },
     credits: {
       enabled: false
     },
-    //tooltip: {
-    //    //var html=xLabel[this.x]
-    //    headerFormat: '<span style="font-size:10px">{'+xLabel[this.xLabel]+'}</span><table>',
-    //    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-    //        '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-    //    footerFormat: '</table>',
-    //    shared: true,
-    //    useHTML: true
-    //},
     plotOptions: {
       column: {
         stacking: 'normal',
@@ -364,14 +264,7 @@ function initChart() {
         borderWidth: 0
       }
     },
-    events: {
-      mouseOver: function () {
-        alert('ok');
-      },
-      mouseOut: function () {
-        alert('ok');
-      }
-    },
+
     series: [{
       name: 'Last Flight',
       data: LastFlightData,
@@ -403,48 +296,19 @@ function initChart() {
           }
         }
       }
-      //-----
-
     }]
-
-
-
-  },
-    function (chart) { // on complete
-
-      $('#LegendRecent').html(HtmlData);
-
-      // chart.renderer.text(HtmlData, 0, 275)
-
-
-      //chart.renderer.text('This text is <span style="color: red">styled</span> and <a href="http://example.com">linked</a>', 50,250)
-      //    .css({
-      //        color: '#4572A7',
-      //        fontSize: '10px'
-      //    })
-
-    });
-
-
-  var g = $('#RecentFlight').find('g.highcharts-button ~ rect, g.highcharts-button ~ path');
-  g.hide();
-  $('#container').mouseenter(function () {
-    g.show();
   });
-  $('#container').mouseleave(function () {
-    g.hide();
-  });
+
 }
 
 
 function initChartTotalFlight() {
 
-
-
-
   //$('#container').highcharts({
   var chart = new Highcharts.Chart({
     chart: {
+      width: ChartWidth,
+      height: ChartHeight,
       renderTo: 'TotalFlight',
 
       type: 'column',
@@ -452,6 +316,7 @@ function initChartTotalFlight() {
       marginBottom: 68,
       spacingLeft: 0,
       spacingBottom: 0,
+
     },
     title: {
       text: "Total Flight Time",
@@ -535,15 +400,6 @@ function initChartTotalFlight() {
         var html = xLabel[this.x];
         return '<b>' + html + '</b><br/>' +
           this.series.name + ': ' + this.y + '<br/>'
-
-
-
-
-        //$.each(this.points, function (i, point) {
-        //    s += '<br/><span style="color:' + point.series.color + '">\u25CF</span>: ' + point.series.name + ': ' + point.y;
-        //});
-
-        //return s;
       }
     },
     credits: {
@@ -581,20 +437,5 @@ function initChartTotalFlight() {
       //-----
 
     }]
-
-
-
-  },
-    function (chart) { // on complete
-
-      $('#LegendTotal').html(HtmlData);
-      // chart.renderer.text(HtmlData, 0, 275)
-
-      //chart.renderer.text('This text is <span style="color: red">styled</span> and <a href="http://example.com">linked</a>', 50,250)
-      //    .css({
-      //        color: '#4572A7',
-      //        fontSize: '10px'
-      //    })
-      //.add();
-    });
+  });
 }

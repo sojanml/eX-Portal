@@ -264,6 +264,7 @@
     <Compile Include="exLogic\BlackBox.cs" />
     <Compile Include="exLogic\Blessy.Util.cs" />
     <Compile Include="exLogic\Cathey.Util.cs" />
+    <Compile Include="exLogic\Dashboard.cs" />
     <Compile Include="exLogic\Drone.cs" />
     <Compile Include="exLogic\DroneCheckListForm.cs" />
     <Compile Include="exLogic\DroneFlightSetup.cs" />

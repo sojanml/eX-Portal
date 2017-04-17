@@ -10,10 +10,10 @@ using System.Web.Mvc;
 namespace eX_Portal.Controllers {
   public class FlightMapController : Controller {
     public ExponentPortalEntities ctx = new ExponentPortalEntities();
-        // GET: Adsb
-        private String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ADSB_DB"].ToString();
-        // GET: FlightMap
-        public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0, string FlightType = "") {
+    // GET: Adsb
+    private String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ADSB_DB"].ToString();
+    // GET: FlightMap
+    public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0, string FlightType = "") {
       if (!exLogic.User.hasAccess("FLIGHT"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "RPAS Flights";
@@ -130,7 +130,7 @@ namespace eX_Portal.Controllers {
     }
 
     [HttpGet]
-    public JsonResult Data([Bind(Prefix = "ID")] int FlightID = 0, int FlightMapDataID = 0) {     
+    public JsonResult Data([Bind(Prefix = "ID")] int FlightID = 0, int FlightMapDataID = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.MAP")) {
         var oResult = new {
           Status = "Error",
@@ -143,20 +143,34 @@ namespace eX_Portal.Controllers {
       return Json(TheMap.MapData(FlightID, FlightMapDataID), JsonRequestBehavior.AllowGet);
     }
 
-        [HttpGet]
-        public JsonResult ADSBData()
-        {
-            Exponent.ADSB.ADSBQuery QueryData = new Exponent.ADSB.ADSBQuery();
-            using (SqlConnection CN = new SqlConnection(DSN))
-            {
-                CN.Open();
-                QueryData.GetDefaults(CN);
-                CN.Close();
-            }
-            var ADSB = new Exponent.ADSB.Live();
-            var Data = ADSB.FlightStat(DSN, false, QueryData);
-            //  var Data = "";
-            return Json(Data, JsonRequestBehavior.AllowGet);
-        }
+    [HttpGet]
+    public JsonResult ADSBData() {
+      Exponent.ADSB.ADSBQuery QueryData = new Exponent.ADSB.ADSBQuery();
+      using (SqlConnection CN = new SqlConnection(DSN)) {
+        CN.Open();
+        QueryData.GetDefaults(CN);
+        CN.Close();
+      }
+      var ADSB = new Exponent.ADSB.Live();
+      var Data = ADSB.FlightStat(DSN, false, QueryData);
+      //  var Data = "";
+      return Json(Data, JsonRequestBehavior.AllowGet);
     }
+
+    [HttpPost]
+    public ActionResult Notify([Bind(Prefix = "ID")] String Action = "invalid") {
+      String RefFile = Server.MapPath("/Upload/Notify.log");
+
+      using (System.IO.StreamWriter sw = System.IO.File.AppendText(RefFile)) {
+        sw.WriteLine($"Date: {DateTime.Now.ToLongDateString()}  {DateTime.Now.ToLongTimeString()}");
+        sw.WriteLine($"Action: {Action}");
+        sw.WriteLine(Request.Form);
+        sw.WriteLine("");
+      }
+
+      return new ContentResult() {
+        Content = "OK"
+      };
+    }
+  }
 }

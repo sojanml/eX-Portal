@@ -1,5 +1,8 @@
 ﻿var categoryPilot = [];
 var TotalMultiDashHrs = [], TotalFixedWingHrs = [], LastMultiDashHrs = [], LastFixedwingHrs = [], LastMonthMultiDashHrs = [], LastMonthFixedwingHrs = [];
+var ChartWidth = 545;
+var ChartHeight = 290;
+
 var Datalength;
 $(document).ready(function () {
   $.ajax({
@@ -114,6 +117,8 @@ function initCharts() {
       //  load: moveLegend,
       //  redraw: moveLegend
       //},
+      width: ChartWidth,
+      height: ChartHeight,
       type: 'column',
       marginRight: 95,
       marginBottom: 110,

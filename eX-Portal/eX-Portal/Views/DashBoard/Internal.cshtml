@@ -12,8 +12,8 @@
     <div class="dash-content">
       @*<h3>Recent Flight Time</h3>*@
       @*<div id="RecentFlight" style="width: 480px; height: 280px"></div>*@
-      <div id="RecentFlight" style="width: 480px; height: 260px"></div>
-      <div id="LegendRecent" style="width: 480px; height: 20px"></div>
+      <div id="RecentFlight"></div>
+      <div id="LegendRecent"></div>
     </div>
   </div>
 
@@ -21,8 +21,8 @@
     <div class="dash-content">
       @*<h3>Total Flight Time</h3>*@
 
-      <div id="TotalFlight" style="width: 480px; height: 260px;"></div>
-      <div id="LegendTotal" style="width: 480px; height: 20px"></div>
+      <div id="TotalFlight" ></div>
+      <div id="LegendTotal" ></div>
     </div>
   </div>
 
@@ -106,16 +106,16 @@
 @{
   Html.AddJavaScript("//maps.google.com/maps/api/js?sensor=false");
   Html.AddJavaScript("//code.highcharts.com/highcharts.js");
-  //Html.AddJavaScript("//code.highcharts.com/stock/highstock.js");
-  Html.AddJavaScript("//code.highcharts.com/modules/exporting.js");
-
   Html.AddJavaScript("/Scripts/Chart.js");
-  Html.AddJavaScript("/Scripts/infobox.js");
-  Html.AddJavaScript("/Scripts/HomeMap.js");
+  Html.AddJavaScript("/Scripts/InfoBox.js");
+  //Html.AddJavaScript("//code.highcharts.com/stock/highstock.js");
 
-  Html.AddJavaScript("/Scripts/PilotLogChart.js");
   Html.AddJavaScript("/Scripts/RecentChart.js");
+  Html.AddJavaScript("/Scripts/PilotLogChart.js");
   Html.AddJavaScript("/Scripts/FlightHoursByAccount.js");
+
   Html.AddJavaScript("/Scripts/DashBoardAlertChart.js");
+
+  Html.AddJavaScript("/Scripts/HomeMap.js");
 
 }

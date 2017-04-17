@@ -106,16 +106,8 @@ namespace eX_Portal.Controllers {
 
     [System.Web.Mvc.HttpGet]
     public JsonResult FlightHoursByAccount() {
-      try {
-        IList<ChartViewModel> ChartList = Util.getFlightHoursByAccount();
-        return Json(ChartList, JsonRequestBehavior.AllowGet);
-      } catch (Exception ex) {
-        if (DebugOption == "True") {
-          throw ex;
-        } else
-          return null;
-
-      }
+      var ThisDashboard = new Dashboard();
+      return Json(ThisDashboard.GetFlightHoursByAccount(), JsonRequestBehavior.AllowGet);
     }
 
 
@@ -123,16 +115,8 @@ namespace eX_Portal.Controllers {
     //new chart for flights
     [System.Web.Mvc.HttpGet]
     public JsonResult getFlightData() {
-      try {
-        IList<ChartViewModel> ChartList = Util.getRecentFlightChartData();
-        return Json(ChartList, JsonRequestBehavior.AllowGet);
-      } catch (Exception ex) {
-        if (DebugOption == "True") {
-          throw ex;
-        } else
-          return null;
-
-      }
+      var ThisDashboard = new Dashboard();
+      return Json(ThisDashboard.getRecentFlights(), JsonRequestBehavior.AllowGet);
     }
 
 
