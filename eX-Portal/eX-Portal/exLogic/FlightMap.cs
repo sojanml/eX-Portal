@@ -103,6 +103,8 @@ namespace eX_Portal.exLogic {
 
     private int GetDroneID() {
       int iDroneID = 0;
+      if (name == null)
+        return 0;
       String sDroneID = name.Substring(5);
       int.TryParse(sDroneID, out iDroneID);
       return iDroneID;

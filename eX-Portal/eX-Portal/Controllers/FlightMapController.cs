@@ -171,12 +171,13 @@ namespace eX_Portal.Controllers {
       return Json(TheMap.ChartSummaryData(FlightID), JsonRequestBehavior.AllowGet);
     }
 
-    [HttpPost]
+    
     public ActionResult Notify([Bind(Prefix = "ID")] String RequestAction, NotifyParser TheParser) {
       String RefFile = Server.MapPath("/Upload/Notify.log");      
       using (System.IO.StreamWriter sw = System.IO.File.AppendText(RefFile)) {
         sw.WriteLine($"Date: {DateTime.Now.ToLongDateString()}  {DateTime.Now.ToLongTimeString()}");
         sw.WriteLine(Request.Form);
+        sw.WriteLine(Request.QueryString);
         sw.WriteLine("");
       }
 
