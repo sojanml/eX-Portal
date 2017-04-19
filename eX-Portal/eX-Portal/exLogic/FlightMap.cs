@@ -71,8 +71,15 @@ namespace eX_Portal.exLogic {
 
     private bool SetFlightID(ExponentPortalEntities ctx) {
       String SQL;
+      String VideoURL = path.Substring(path.LastIndexOf('/') + 1);
+      SQL = $@"DELETE FROM DroneFlightVideo        
+      WHERE
+        VideoURL='{VideoURL}' AND
+        FlightID={FlightID}";
+      DoSQL(SQL, ctx);
+
       SQL = $@"UPDATE DroneFlight SET
-        RecordedVideoURL='{path}'
+        RecordedVideoURL='{VideoURL}'
       WHERE
         ID={FlightID}";
       DoSQL(SQL, ctx);
@@ -80,7 +87,7 @@ namespace eX_Portal.exLogic {
       SQL = $@"INSERT INTO DroneFlightVideo(
         DroneID, FlightID, VideoURL, CreatedDate, VideoDateTime
       ) VALUES (
-        {DroneID}, {FlightID}, '{path}', GETDATE(), '{VideoDate.ToString("yyyy-MM-dd HH:mm:ss")}'
+        {DroneID}, {FlightID}, '{VideoURL}', GETDATE(), '{VideoDate.ToString("yyyy-MM-dd HH:mm:ss")}'
       )";
       DoSQL(SQL, ctx);
 
