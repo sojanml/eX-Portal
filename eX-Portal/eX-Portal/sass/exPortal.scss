@@ -1379,127 +1379,134 @@ div#Legend {
   @include clearfix();
 }
 
-  div.adsb-point {
-    position: absolute;
-    cursor: pointer;
+div.adsb-point {
+  position: absolute;
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+  margin-left: -50px;
+  margin-top: -50px;
+
+  canvas {
     width: 100px;
     height: 100px;
-    margin-left: -50px;
-    margin-top: -50px;
+    position:absolute;
+    z-index:0;
+  }
 
-    span.tail {
-      position: absolute;
-      background-color: aquamarine;
-      width: 2px;
-      height: 2px;
-      margin-left: -1px;
-      margin-top: -1px;
-      border-radius: 50%;
-      display: block;
-      font-size: 1px;
-    }
+  span.tail {
+    position: absolute;
+    background-color: aquamarine;
+    width: 2px;
+    height: 2px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border-radius: 50%;
+    display: block;
+    font-size: 1px;
+  }
 
-    span.FlightIcon,
-    span.DroneIcon {
-      position: absolute;
-      left: 50px;
-      top: 50px;
-      font-size: 18px;
-      width: 25px;
-      height: 25px;
-      margin-left: -13px;
-      margin-top: -13px;
-      -webkit-transform-origin: 50% 50%;
-      -moz-transform-origin: 50% 50%;
-      -o-transform-origin: 50% 50%;
-      transform-origin: 50% 50%;
-    }
+  span.FlightIcon,
+  span.DroneIcon {
+    position: absolute;
+    left: 50px;
+    top: 50px;
+    font-size: 18px;
+    width: 25px;
+    height: 25px;
+    margin-left: -13px;
+    margin-top: -13px;
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+  }
 
-    span.DroneIcon {
-    }
+  span.DroneIcon {
+  }
 
+  span.flight-title {
+    position: absolute;
+    top: 60px;
+    left: 40px;
+    z-index: 10;
+    color: white;
+    display: none;
+    padding: 0px 2px 0px 2px;
+    font-size: 9px;
+  }
+
+
+  &:hover {
     span.flight-title {
-      position: absolute;
-      top: 60px;
-      left: 40px;
-      z-index: 10;
-      color: white;
-      display: none;
-      padding: 0px 2px 0px 2px;
-      font-size: 9px;
+      display: block;
     }
+  }
 
+  &.breach {
+    color: $BreachColor;
 
-    &:hover {
-      span.flight-title {
-        display: block;
-      }
+    span.flight-title,
+    span.tail {
+      background-color: $BreachColor;
+    }
+  }
+
+  &.alert {
+    color: #ff4e00;
+
+    span.flight-title,
+    span.tail {
+      background-color: $AlertColor;
+    }
+  }
+
+  &.safe {
+    color: #0189ff;
+
+    span.flight-title,
+    span.tail {
+      background-color: $SafeColor;
+    }
+  }
+
+  &.normal {
+    color: #ffcc01;
+
+    span.flight-title,
+    span.tail {
+      background-color: #ffcc01;
+    }
+  }
+
+  &.drone {
+    color: #018aff;
+
+    span.flight-title,
+    span.tail {
+      background-color: #018aff;
     }
 
     &.breach {
-      color: $BreachColor;
-
       span.flight-title,
       span.tail {
-        background-color: $BreachColor;
+        background-color: red;
       }
     }
 
     &.alert {
-      color: #ff4e00;
-
       span.flight-title,
       span.tail {
-        background-color: $AlertColor;
+        background-color: #ff4e00;
       }
-    }
-
-    &.safe {
-      color: #0189ff;
-
-      span.flight-title,
-      span.tail {
-        background-color: $SafeColor;
-      }
-    }
-
-    &.normal {
-      color: #ffcc01;
-
-      span.flight-title,
-      span.tail {
-        background-color: #ffcc01;
-      }
-    }
-
-    &.drone {
-      color: #018aff;
-
-      span.flight-title,
-      span.tail {
-        background-color: #018aff;
-      }
-
-      &.breach {
-        span.flight-title,
-        span.tail {
-          background-color: red;
-        }
-      }
-
-      &.alert {
-        span.flight-title,
-        span.tail {
-          background-color: #ff4e00;
-        }
-      }
-    }
-
-    &.breach,
-    &.alert,
-    &.safe {
     }
   }
+
+  &.breach,
+  &.alert,
+  &.safe {
+  }
+}
 
 
   #ShowUserDescription {
@@ -1586,3 +1593,37 @@ div#Legend {
   div.error {
     color: red;
   }
+
+
+#DroneIcon {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  margin-left:-12px;
+  margin-top:-12px;
+  background-image: url('/images/Drone.png');
+}
+
+div.InfoWindow {
+  b {
+    color: red;
+  }
+
+  span.value, span.feet {
+    color: #ff5900;
+    padding-left: 10px;
+  }
+
+  span.meter {
+    color: forestgreen;
+    padding-left: 10px;
+  }
+
+  div.hr {
+    font-size:1px;
+    height:1px;
+    width:100%;
+    background-color: silver;
+    margin:3px 0px 3px 0px;
+  }
+}

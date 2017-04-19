@@ -157,20 +157,35 @@ namespace eX_Portal.Controllers {
       return Json(Data, JsonRequestBehavior.AllowGet);
     }
 
-    [HttpPost]
-    public ActionResult Notify([Bind(Prefix = "ID")] String Action = "invalid") {
-      String RefFile = Server.MapPath("/Upload/Notify.log");
+    [HttpGet]
+    public JsonResult ChartSummaryData([Bind(Prefix = "ID")] int FlightID = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT.MAP")) {
+        var oResult = new {
+          Status = "Error",
+          Message = "Do not have access"
+        };
+        return Json(oResult, JsonRequestBehavior.AllowGet);
+      }
 
+      var TheMap = new FlightMap();
+      return Json(TheMap.ChartSummaryData(FlightID), JsonRequestBehavior.AllowGet);
+    }
+
+    [HttpPost]
+    public ActionResult Notify([Bind(Prefix = "ID")] String RequestAction, NotifyParser TheParser) {
+      String RefFile = Server.MapPath("/Upload/Notify.log");      
       using (System.IO.StreamWriter sw = System.IO.File.AppendText(RefFile)) {
         sw.WriteLine($"Date: {DateTime.Now.ToLongDateString()}  {DateTime.Now.ToLongTimeString()}");
-        sw.WriteLine($"Action: {Action}");
         sw.WriteLine(Request.Form);
         sw.WriteLine("");
       }
 
-      return new ContentResult() {
-        Content = "OK"
-      };
+      TheParser.RequestAction = RequestAction;
+      //NotifyParser TheParser = (NotifyParser)Info;
+      TheParser.Assign(ctx);
+
+      return Json(TheParser, JsonRequestBehavior.AllowGet);
     }
   }
 }
+ 

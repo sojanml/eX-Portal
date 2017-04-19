@@ -393,16 +393,9 @@ namespace Exponent.ADSB {
       //  return FlightPositions;
       //}
 
-      //return FlightPositions;
+      return FlightPositions;
 
-      /*
-        "{> alt 5} " +
-        "{> speed 200} " +
-        "{true inAir} " +
-        "{range lat 23.85438 26.39335} " +
-        "{range lon 52.99612 59.31375}";
-       
-       * */
+
       String Query = 
         "{> alt 5} " +
         "{> speed 20} " +
@@ -414,8 +407,7 @@ namespace Exponent.ADSB {
         "?query=" + System.Uri.EscapeDataString(Query) +
         "&howMany=30" +
         "&offset=0";
-            return FlightPositions; //remove line for ADSB to work
-            using (var webClient = new System.Net.WebClient()) {
+      using (var webClient = new System.Net.WebClient()) {
         webClient.UseDefaultCredentials = true;
         webClient.Credentials = new NetworkCredential("catheythattil", "9f8b8719108bdaa973fe4a96fef5646cd3fd32ea");
         webClient.Encoding = System.Text.Encoding.UTF8;

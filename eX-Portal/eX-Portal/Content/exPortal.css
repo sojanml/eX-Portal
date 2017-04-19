@@ -1311,6 +1311,12 @@ div.adsb-point {
   margin-left: -50px;
   margin-top: -50px;
 }
+div.adsb-point canvas {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  z-index: 0;
+}
 div.adsb-point span.tail {
   position: absolute;
   background-color: aquamarine;
@@ -1469,4 +1475,32 @@ div.upload-btn input[type=file] {
 
 div.error {
   color: red;
+}
+
+#DroneIcon {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  margin-left: -12px;
+  margin-top: -12px;
+  background-image: url("/images/Drone.png");
+}
+
+div.InfoWindow b {
+  color: red;
+}
+div.InfoWindow span.value, div.InfoWindow span.feet {
+  color: #ff5900;
+  padding-left: 10px;
+}
+div.InfoWindow span.meter {
+  color: forestgreen;
+  padding-left: 10px;
+}
+div.InfoWindow div.hr {
+  font-size: 1px;
+  height: 1px;
+  width: 100%;
+  background-color: silver;
+  margin: 3px 0px 3px 0px;
 }

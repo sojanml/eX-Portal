@@ -5,9 +5,132 @@ using System.Linq;
 using System.Web;
 
 namespace eX_Portal.exLogic {
+  public class NotifyInfo {
+    public String RequestAction { get; set; }
+    public String app { get; set; }
+    public String flashver { get; set; }
+    public String swfurl { get; set; }
+    public String tcurl { get; set; }
+    public String pageurl { get; set; }
+    public String addr { get; set; }
+    public String clientid { get; set; }
+    public String call { get; set; }
+    public String recorder { get; set; }
+    public String name { get; set; }
+    public String path { get; set; }
+  }
+
+  public class NotifyParser: NotifyInfo {
+    public int DroneID { get; set; }
+    public DateTime VideoDate { get; set; }
+    public int FlightID { get; set; }
+    public bool AssignStatus { get; set; } = false;
+
+    public bool Assign(ExponentPortalEntities ctx) {
+      //get the DroneID from path
+      DroneID = GetDroneID();
+      VideoDate = GetVideoDate();
+      if(DroneID < 0 || VideoDate <= DateTime.MinValue) {
+        return false;
+      }
+      ctx.Database.Connection.Open();
+      FlightID = GetFlightID(ctx);
+      if(FlightID > 0) {
+        SetFlightID(ctx);
+        AssignStatus = true;
+        return true;
+      }
+
+      return false;
+    }
+
+
+    private int GetFlightID(ExponentPortalEntities ctx) {
+      int iFlightID = 0;
+      String sVideoDate = VideoDate.ToString("yyyy-MM-dd HH:mm:ss");
+      String SQL = String.Empty;
+
+      SQL = $@"Select TOP 1 
+        FlightID 
+      FROM 
+        FlightMapData
+      WHERE 
+        CreatedTime BETWEEN DATEADD(MINUTE, -10, '{sVideoDate}')  AND DATEADD(MINUTE,10, '{sVideoDate}') AND
+        DroneID={DroneID}
+      ORDER BY
+        ABS(DATEDIFF(SECOND, CreatedTime, '{sVideoDate}')) ASC";
+      using (var cmd = ctx.Database.Connection.CreateCommand()) {
+        cmd.CommandText = SQL;
+        var oFlightID = cmd.ExecuteScalar();
+        if (oFlightID == null)
+          return iFlightID;
+        int.TryParse(oFlightID.ToString(), out iFlightID);
+      }
+      return iFlightID;
+    }
+
+    private bool SetFlightID(ExponentPortalEntities ctx) {
+      String SQL;
+      SQL = $@"UPDATE DroneFlight SET
+        RecordedVideoURL='{path}'
+      WHERE
+        ID={FlightID}";
+      DoSQL(SQL, ctx);
+
+      SQL = $@"INSERT INTO DroneFlightVideo(
+        DroneID, FlightID, VideoURL, CreatedDate, VideoDateTime
+      ) VALUES (
+        {DroneID}, {FlightID}, '{path}', GETDATE(), '{VideoDate.ToString("yyyy-MM-dd HH:mm:ss")}'
+      )";
+      DoSQL(SQL, ctx);
+
+      return true;
+    }
+
+    private void DoSQL(String SQL, ExponentPortalEntities ctx) {
+      using (var cmd = ctx.Database.Connection.CreateCommand()) {
+        cmd.CommandText = SQL;
+        cmd.ExecuteNonQuery();
+      }
+    }
+
+    private int GetDroneID() {
+      int iDroneID = 0;
+      String sDroneID = name.Substring(5);
+      int.TryParse(sDroneID, out iDroneID);
+      return iDroneID;
+    }
+
+    private DateTime GetVideoDate() {
+      try { 
+        int HyphenAt = path.IndexOf('-');
+        if (HyphenAt < 1) return DateTime.MinValue;
+        String sDate = path.Substring(HyphenAt+1, path.Length - HyphenAt - 5);
+        //2017-04-13T12-00-19
+        //0   -1 -2 -3 -4 -5
+        String[] sDateParts = sDate.Split(new char[]{'-', 'T' });
+        int[] iDateParts = Array.ConvertAll(sDateParts, s => int.Parse(s));
+        return new DateTime(iDateParts[0], iDateParts[1], iDateParts[2], iDateParts[3], iDateParts[4], iDateParts[5]);
+      } catch(Exception ex) {
+        return DateTime.MinValue;
+      }
+    }
+
+  }
+
+
   public class FlightVideo {
     public String VideoName { get; set; }
     public DateTime? VideoDate { get; set; }
+  }
+
+  public class ChartData {
+    public Double Speed { get; set; } = 0;
+    public Double Pich { get; set; } = 0;
+    public Double Roll { get; set; } = 0;
+    public Double Altitude { get; set; } = 0;
+    public Double Satellites { get; set; } = 0;
+    public DateTime FlightTime { get; set; } = DateTime.MinValue;
   }
 
   public class FlightMap {
@@ -107,7 +230,7 @@ namespace eX_Portal.exLogic {
       using(var ctx = new ExponentPortalEntities()) {
         var Query = ctx.FlightMapDatas.Where(e => 
           e.FlightID == FlightID &&
-          e.Altitude >= 1
+          (e.Altitude > 0 || e.Speed > 0)
           );
         if(FlightMapDataID > 0) {
           Query = Query.Where(e => e.FlightMapDataID > FlightMapDataID);
@@ -145,6 +268,55 @@ namespace eX_Portal.exLogic {
           Data = Data.ToList()
         };
       }//using(var ctx)
+    }
+
+    public Object ChartSummaryData(int FlightID) {
+      List<ChartData> ChartDatas = new List<ChartData>();
+      String SQL = $@"SELECT
+         ChunkStart = Min(FlightMapDataID),
+         ChunkEnd = Max(FlightMapDataID),
+         Speed = Avg(Speed),
+         Pitch = Avg(Pitch),
+         Roll = Avg(Roll),
+         Altitude = Avg(Altitude),
+         Satellites =Avg(Satellites),
+         FlightTime = Max(ReadTime),
+         Chunk
+      FROM
+         (
+            SELECT
+               Chunk = NTILE(80) OVER (ORDER BY FlightMapDataID),
+               *
+            FROM
+               FlightMapData
+	        WHERE
+	          FlightID= {FlightID} AND
+		        (Speed > 0 OR Altitude > 0)
+         ) AS T
+      GROUP BY
+         Chunk
+      ORDER BY 
+         ChunkStart;
+      ";
+      using (var ctx = new ExponentPortalEntities()) {
+        ctx.Database.Connection.Open();
+        using(var cmd = ctx.Database.Connection.CreateCommand()) {
+          cmd.CommandText = SQL;
+          using(var RS = cmd.ExecuteReader() ) {
+            while(RS.Read()) {
+              ChartDatas.Add(new ChartData() {
+                Speed = (Double)RS.GetDecimal(RS.GetOrdinal("Speed")),
+                Pich = (Double)RS.GetDecimal(RS.GetOrdinal("Pitch")),
+                Roll = (Double)RS.GetDecimal(RS.GetOrdinal("Roll")),
+                Altitude = (Double)RS.GetDecimal(RS.GetOrdinal("Altitude")),
+                Satellites = (Double)RS.GetInt32(RS.GetOrdinal("Satellites")),
+                FlightTime = RS.GetDateTime(RS.GetOrdinal("FlightTime"))
+              });
+            }//while(RS.Read())
+          }//using(var RS)
+        }//using(var cmd)
+      }//using (var ctx)
+      return ChartDatas;
     }
 
     private String GetString(System.Data.Common.DbDataReader RS, String FiledName) {

@@ -23,18 +23,35 @@ function ClearChart() {
   ThirdGraph.redraw();
 }
 
-function AddChart(ChartData) {
+function LoadChartSummaryData() {
+  $.ajax({
+    type: "GET",
+    url: '/FlightMap/ChartSummaryData/' + FlightID,
+    contentType: "application/json;charset=utf-8",
+    dataType: "json",
+    success: function (msg) {
+      AddToChart(msg);
+    },
+    failure: function (msg) {
+      alert('Live Drone Position Error' + msg);
+    }
+  });
+
+}
+
+
+function AddToChart(ChartData) {
   //console.log("Position : " + Position + ", ChartIndex:" + ChartIndex);
   //if (ChartData.length < 1) return;
-  var MaxRows = 15;
+  var MaxRows = 80;
   var Categories = [];
   var Series = [
     [], [], [], [], []
   ];
 
-  var EndPoint = _FlightData.length;
-  var StartPoint = _FlightData.length > MaxRows ? _FlightData.length - MaxRows : 0;
-  if (_ReplayIndex > 0) {
+  var EndPoint = ChartData.length;
+  var StartPoint = ChartData.length > MaxRows ? ChartData.length - MaxRows : 0;
+  if (_ReplayIndex >= 0) {
     StartPoint = _ReplayIndex - MaxRows;
     if (StartPoint < 0) StartPoint = 0;
     if (EndPoint > _ReplayIndex) EndPoint = _ReplayIndex;
@@ -42,7 +59,7 @@ function AddChart(ChartData) {
 
 
   for (var i = StartPoint; i < EndPoint; i++) {
-    var DataItem = _FlightData[i];
+    var DataItem = ChartData[i];
     var FlightTime = dtConvFromJSON(DataItem.FlightTime, true);
     Categories.push(FlightTime.substring(FlightTime.length - 5));
     Series[0].push(DataItem.Pich);
@@ -69,6 +86,11 @@ function AddChart(ChartData) {
   TheFlightChart.redraw();
   TheSecondChart.redraw();
   ThirdGraph.redraw();
+}
+
+
+function AddChart(ChartData) {
+  AddToChart(_FlightData);
 }
 
 

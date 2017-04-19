@@ -16,9 +16,11 @@ var _FlightEndMarker = null;
 var _FlightReplayPath = null;
 var _RPASIcon = null;
 
-var _ReplayIndex = 0;
+var _ReplayIndex = -1;
 var _ReplayTimer = null;
 var _IsGetNextDataSet = true;
+var _DroneIcon = null;
+var _RPASIconData = null;
 
 $(document).ready(function () {
   initializeMap();
@@ -26,7 +28,7 @@ $(document).ready(function () {
   InitChart();
   LoadMapData();
   InitVideos();
-
+  if (!IsLive) LoadChartSummaryData();
   $('#FlightReplay').on("click", StartFlightReplay);
 
 });
@@ -70,7 +72,7 @@ function LoadPolygons() {
 
 function ToPath(Coordinates) {
   var Path = [];
-  if (Coordinates == '' || Coordinates == 'null') return Path;
+  if (Coordinates === '' || Coordinates === 'null') return Path;
   var aLatLng = Coordinates.split(',');
   for (var i = 0; i < aLatLng.length; i++) {
     var Points = aLatLng[i].split(' ');
@@ -95,7 +97,7 @@ function StartFlightReplay() {
 
 function RpasReplayTimer() {
   var thisData = _FlightData[_ReplayIndex];
-  var ReplayDelay = 500;
+  var ReplayDelay = 1000;
   var PositionDateTime = dtFromJSON(thisData.FlightTime);
   var position = {
     lat: thisData.Lat,
@@ -103,6 +105,7 @@ function RpasReplayTimer() {
   };
   var Pos = new google.maps.LatLng(thisData.Lat, thisData.Lng);
   _RPASIcon.setPosition(Pos);
+  _DroneIcon.setIconPos(Pos);
   ShowFlightInformation(thisData);
   AddToTable([thisData]);
   AddChart(thisData);
@@ -112,7 +115,7 @@ function RpasReplayTimer() {
   Path.push(Pos);
 
   if (_FlightVideos.length) {
-    ReplayDelay = 200;
+    ReplayDelay = 500;
     var FirstVideoDate = new Date(_FlightVideoPlayer.getPlaylistItem(_FlightVideoPlayer.getPlaylistIndex()).title);
     var VideoPosition = _FlightVideoPlayer.getPosition();
     var VideoPositionTime = FirstVideoDate;
@@ -121,8 +124,11 @@ function RpasReplayTimer() {
       _ReplayIndex++;
     } else {
       var VideoState = _FlightVideoPlayer.getState();
-      console.log("Waiting at index: " + _ReplayIndex + ', VideoState: ' + VideoState);
-      if (VideoState == 'idle') {
+      //console.log("Waiting at index: " + _ReplayIndex + ', VideoState: ' + VideoState);
+      if (VideoState === 'error') {
+        ReplayDelay = 1000;
+        _ReplayIndex++;
+      } else if (VideoState === 'idle') {
         _FlightVideoPlayer.play();
       }
       
@@ -166,7 +172,7 @@ function InitVideos() {
   };
 
   if (IsLive) {
-    VideoSetup.file = "rtmp:" + "//52.29.242.123/live/drone" + DroneID;
+    VideoSetup.file = "rtmp:" + "//52.34.136.76/live/drone" + DroneID;
   } else {
     VideoSetup.playlist = GetVideoPlaylist()
   }
@@ -193,7 +199,7 @@ function GetVideoPlaylist() {
 }
 
 function initializeMap() {
-  var MarkerPosition = { lat: 25.0955354, lng: 55.1527025 };
+  var MarkerPosition = new google.maps.LatLng(25.0955354, 55.1527025);
 
   var mapOptions = {
     zoom: 14,
@@ -231,7 +237,7 @@ function initializeMap() {
     map: map
   };
   NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
-
+  _DroneIcon = new DroneIcon({ map: map }, MarkerPosition);
 }
 
 function LoadMapData() {
@@ -243,9 +249,11 @@ function LoadMapData() {
     success: function (msg) {
       if (msg.Data.length > 0) {
         _FlightData = _FlightData.concat(msg.Data);
-        if (!IsInitilized) InitilizeMapData();
-        AddDataToMap(msg.Data);
-        AddChart(msg.Data);
+        if (!IsInitilized) {
+          InitilizeMapData();
+        }
+        if (IsLive) AddChart(msg.Data);
+        AddDataToMap(msg.Data);        
         AddToTable(msg.Data);
         IsInitilized = true;
       } else {
@@ -312,7 +320,7 @@ function InitilizeMapData() {
       size: new google.maps.Size(26, 26),
       anchor: new google.maps.Point(12, 12)
     },
-    map: map
+    map: null
   });
 }
 
@@ -366,22 +374,23 @@ function AddDataToMap(TheData) {
 
   var LastDataItem = TheData[TheData.length - 1];
   //When live, sometime distance is shown as null
-  if (LastDataItem.Distance == null) {
-    for (var i = _FlightData.length - 1; i > 0; i--) {
-      if (_FlightData[i].Distance != null) {
-        LastDataItem.Distance = _FlightData[i].Distance;
+  if (LastDataItem.Distance === null) {
+    for (var j = _FlightData.length - 1; j > 0; ij--) {
+      if (_FlightData[j].Distance !== null) {
+        LastDataItem.Distance = _FlightData[j].Distance;
         break;
       }
     }
   }
 
   var LastPosition = { lat: LastDataItem.Lat, lng: LastDataItem.Lng };
+  var LastPosition = new google.maps.LatLng(LastDataItem.Lat, LastDataItem.Lng);
   _FlightDataID = LastDataItem.FlightMapDataID;
   _FlightPath.setPath(_FlightCoordinates);
   _FlightEndMarker.setPosition(LastPosition);
 
   if (IsLive) {
-    
+    //nothing
   } else {
     map.fitBounds(_FlightBoundBox);
   }
@@ -389,9 +398,8 @@ function AddDataToMap(TheData) {
   ShowFlightInformation(LastDataItem);
   map.setCenter(LastPosition);
   _RPASIcon.setPosition(LastPosition);
-  
+  _DroneIcon.setIconPos(LastPosition);
 }
-
 
 function ShowFlightInformation(TheDataItem) {
   $('#FlightInfo_Altitude').html(TheDataItem.Altitude.toFixed(1));
@@ -399,10 +407,10 @@ function ShowFlightInformation(TheDataItem) {
   $('#FlightInfo_Speed').html(TheDataItem.Speed.toFixed(2));
   $('#FlightInfo_Distance').html(TheDataItem.Distance.toFixed(2));
   $('#FlightInfo_FlightDate').html(dtConvFromJSON(TheDataItem.FlightTime, true));
+
+  _RPASIconData = TheDataItem;
+  ShowInfoWindow(null);
 }
-
-
-
 
 function toHour(Seconds) {
   var Hours = Math.floor(Seconds / 60);
@@ -411,3 +419,41 @@ function toHour(Seconds) {
   var sHour = '0' + Hours;
   return sHour.substring(sHour.length - 2) + ':' + sSeconds.substring(sSeconds.length - 2);
 }
+
+
+
+
+
+
+function DroneIcon(options, IconPos ) {
+  this.setValues(options);
+  this.markerLayer =
+    $('<div />')
+      .addClass('overlay')
+      .html('<div id="DroneIcon" style=""></div>');
+  this.IconPos = IconPos;
+
+  this.setIconPos = function (newIconPos) {
+    this.IconPos = newIconPos;
+    this.draw();
+  }
+}
+
+DroneIcon.prototype = new google.maps.OverlayView;
+
+DroneIcon.prototype.onAdd = function () {
+  var $pane = $(this.getPanes().overlayImage); // Pane 3  
+  $pane.append(this.markerLayer);
+};
+
+DroneIcon.prototype.onRemove = function () {
+  this.markerLayer.remove();
+};
+
+DroneIcon.prototype.draw = function () {
+  var projection = this.getProjection();
+  if (!projection) return false;
+  var theIcon = $('#DroneIcon');
+  var IconLocation = projection.fromLatLngToDivPixel(this.IconPos);
+  theIcon.animate({ left: IconLocation.x, top: IconLocation.y });
+};
