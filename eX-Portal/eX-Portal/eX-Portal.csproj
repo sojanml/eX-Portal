@@ -271,6 +271,7 @@
     <Compile Include="exLogic\ExifLib.cs" />
     <Compile Include="exLogic\FlightMap.cs" />
     <Compile Include="exLogic\GeoGrid.cs" />
+    <Compile Include="exLogic\GlobalVariables.cs" />
     <Compile Include="exLogic\HtmlHelperExtensions.cs" />
     <Compile Include="exLogic\Listing.cs" />
     <Compile Include="exLogic\FlyZone.cs" />
@@ -283,6 +284,7 @@
     <Compile Include="exLogic\Sojan.Util.cs" />
     <Compile Include="exLogic\TrafficMonitor.cs" />
     <Compile Include="exLogic\User.cs" />
+    <Compile Include="exLogic\Weather.Util.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

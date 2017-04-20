@@ -18,7 +18,8 @@ namespace eX_Portal.exLogic {
     public String recorder { get; set; }
     public String name { get; set; }
     public String path { get; set; }
-  }
+    public String key { get; set; }
+    }
 
   public class NotifyParser: NotifyInfo {
     public int DroneID { get; set; }

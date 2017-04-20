@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -206,9 +207,29 @@ namespace eX_Portal.Controllers {
         sw.WriteLine("");
       }
 
-      TheParser.RequestAction = RequestAction;
+      switch (TheParser.call)
+        {
+                case "publish":
+                    int uservalid = exLogic.User.StreamKeyValidation(TheParser.key);
+                    
+                    if(uservalid>0)
+                    {
+                        int userID = exLogic.User.GetKeyUserId(TheParser.key);
+                        if (exLogic.User.hasAccessUser("STREAM.VIDEO", userID))
+                            return new HttpStatusCodeResult(HttpStatusCode.OK);
+                        else
+                            return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                    }
+                    break;
+                case "record_done":
+                    TheParser.RequestAction = RequestAction;
+                    TheParser.Assign(ctx);
+                    break;
+        }
+
+      
       //NotifyParser TheParser = (NotifyParser)Info;
-      TheParser.Assign(ctx);
+      
 
       return Json(TheParser, JsonRequestBehavior.AllowGet);
     }

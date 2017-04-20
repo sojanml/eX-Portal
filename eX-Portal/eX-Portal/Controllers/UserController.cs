@@ -135,6 +135,8 @@ namespace eX_Portal.Controllers {
             var UID = Util.InsertSQL(sql);
             Session["uid"] = UID.ToString();
 
+            
+
             HttpCookie myCookie = new HttpCookie("uid");
             myCookie.Value = UID.ToString();
             myCookie.Expires = DateTime.Now.AddHours(1);

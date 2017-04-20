@@ -274,6 +274,58 @@ namespace eX_Portal.exLogic {
       }
     }
 
+        public static bool hasAccessUser(String PermissionID,int UserID)
+        {
+            HttpSessionState Session = HttpContext.Current.Session;
+            
+            String SQL =
+            "select\n" +
+            "  Count(MSTR_Menu.MenuID) as PermissionCount\n" +
+            "FROM\n" +
+            "  MSTR_User,\n" +
+            "  MSTR_Profile,\n" +
+            "  M2M_ProfileMenu,\n" +
+            "  MSTR_Menu\n" +
+            "WHERE\n" +
+            "  MSTR_User.UserID = " + UserID + " AND\n" +
+            "  MSTR_User.UserProfileId = MSTR_Profile.ProfileId AND\n" +
+            "  M2M_ProfileMenu.ProfileID = MSTR_Profile.ProfileId AND\n" +
+            "  MSTR_Menu.MenuId = M2M_ProfileMenu.MenuID AND\n" +
+            "  MSTR_Menu.PermissionId = '" + PermissionID + "'";
+            int PermissionCount = Util.getDBInt(SQL);
+
+            return (PermissionCount > 0);
+        }
+        public static int StreamKeyValidation(String key)
+        {
+
+           
+            int result = 0;
+            using (var ctx = new ExponentPortalEntities())
+            {
+                var _objuserdetail = (from data in ctx.MSTR_User
+                                      where data.VideoKey.Equals(key) && data.IsActive==true                                  
+                                      select data).ToList();
+                
+                result = _objuserdetail.Count;
+            }
+            return result;
+
+
+        }
+        public static int GetKeyUserId(String Key)
+        {
+            int result = 0;
+            using (var ctx = new ExponentPortalEntities())
+            {
+                String SQL = "select UserId from MSTR_User" +
+                " where VideoKey='" + Key + "'";
+                int UserId = ctx.Database.SqlQuery<int>(SQL).FirstOrDefault<int>();
+                result = UserId;
+            }
+
+            return result;
+        }
     }//class
 
   public class UserInfo {
