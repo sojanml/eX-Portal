@@ -149,7 +149,7 @@ ADSBOverlay.prototype.draw = function () {
     var heading = this.ADSBData[i].Heading;
     heading = parseFloat(heading);
     if (isNaN(heading)) heading = 0;
-
+    if (title.substr(0, 3) == 'A00') continue;
     // Determine a random location from the bounds set previously  
     var IconGeoPos = new google.maps.LatLng(lat, lng)
     var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
