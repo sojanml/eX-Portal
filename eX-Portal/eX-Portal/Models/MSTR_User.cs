@@ -56,5 +56,6 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> DOE_RPASPermit { get; set; }
         public string UserDescription { get; set; }
         public string Nationality { get; set; }
+        public string VideoKey { get; set; }
     }
 }

@@ -107,7 +107,7 @@
           <Property Name="RentDays" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAAPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BlackBoxData">
           <Key>
             <PropertyRef Name="BlackBoxDataID" />
@@ -421,8 +421,8 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="FlightMapDataID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DroneId" Type="int" />
           <Property Name="DroneRFID" Type="varchar" MaxLength="50" />
-          <Property Name="Latitude" Type="decimal" Precision="18" Scale="5" />
-          <Property Name="Longitude" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="Latitude" Type="numeric" Precision="18" Scale="8" />
+          <Property Name="Longitude" Type="numeric" Precision="18" Scale="8" />
           <Property Name="ProductRFID" Type="nvarchar" MaxLength="50" />
           <Property Name="ProductQrCode" Type="nvarchar" MaxLength="50" />
           <Property Name="ProductRSSI" Type="nvarchar" MaxLength="50" />
@@ -494,11 +494,11 @@ warning 6002: The table/view 'TestPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="NotificationEmails" Type="nvarchar" MaxLength="300" />
           <Property Name="CameraId" Type="int" />
           <Property Name="RpasApprovalRefNum" Type="int" Nullable="false" />
-          <Property Name="FlightTypeID" Type="int" />
           <Property Name="ClientName" Type="varchar" MaxLength="100" />
+          <Property Name="FlightTypeID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ip2location">
           <Key>
             <PropertyRef Name="ip_from" />
@@ -980,10 +980,11 @@ warning 6002: The table/view 'TestPortal.dbo.ip2location' does not have a primar
           <Property Name="CompanyEmail" Type="nvarchar" MaxLength="50" />
           <Property Name="TradeLicenceCopyUrl" Type="nvarchar" MaxLength="150" />
           <Property Name="EmiratesID" Type="nvarchar" MaxLength="50" />
-          <Property Name="DOI_RPASPermit" Type="datetime" />
           <Property Name="DOE_RPASPermit" Type="datetime" />
-          <Property Name="UserDescription" Type="nvarchar" MaxLength="255" />
+          <Property Name="DOI_RPASPermit" Type="datetime" />
+          <Property Name="UserDescription" Type="text" />
           <Property Name="Nationality" Type="nvarchar" MaxLength="50" />
+          <Property Name="VideoKey" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -1038,7 +1039,7 @@ warning 6002: The table/view 'TestPortal.dbo.ip2location' does not have a primar
           <Property Name="Col" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAAPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadData">
           <Key>
             <PropertyRef Name="PayLoadDataID" />
@@ -1066,7 +1067,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadData' does not have a primar
           <Property Name="CellID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAAPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadFlight">
           <Key>
             <PropertyRef Name="PayLoadFlightID" />
@@ -1084,7 +1085,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadFlight' does not have a prim
           <Property Name="PayLoadDroneID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAAPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadImageData">
           <Key>
             <PropertyRef Name="PayLoadImageDataID" />
@@ -1103,7 +1104,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadImageData' does not have a p
           <Property Name="LogFilePath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAAPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadMapData">
           <Key>
             <PropertyRef Name="PayLoadDataMapID" />
@@ -1151,7 +1152,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadMapData' does not have a pri
           <Property Name="GridLng" Type="numeric" Precision="18" Scale="6" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayloadTraffic' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAAPortal.dbo.PayloadTraffic' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayloadTraffic">
           <Key>
             <PropertyRef Name="PTid" />
@@ -1189,7 +1190,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayloadTraffic' does not have a pri
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAAPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadYardGrid">
           <Key>
             <PropertyRef Name="CellID" />
@@ -1213,7 +1214,7 @@ warning 6002: The table/view 'TestPortal.dbo.PayLoadYardGrid' does not have a pr
           <Property Name="Polygon" Type="geography" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAAPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PortalAlert">
           <Key>
             <PropertyRef Name="AlertID" />
@@ -1241,7 +1242,7 @@ warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primar
           </Key>
           <Property Name="EmailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FromAddress" Type="varchar" MaxLength="120" />
-          <Property Name="ToAddress" Type="varchar" MaxLength="120" />
+          <Property Name="ToAddress" Type="varchar" MaxLength="1200" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="EmailSubject" Type="varchar" MaxLength="120" />
           <Property Name="Body" Type="varchar(max)" />
@@ -1327,7 +1328,7 @@ warning 6002: The table/view 'TestPortal.dbo.PortalAlert' does not have a primar
           <Property Name="CellReference" Type="varchar" MaxLength="120" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="sysdiagrams">
           <Key>
             
@@ -2489,8 +2490,9 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="EmiratesID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DOI_RPASPermit" Type="DateTime" Precision="3" />
           <Property Name="DOE_RPASPermit" Type="DateTime" Precision="3" />
-          <Property Name="UserDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UserDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Nationality" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VideoKey" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PayLoadData">
           <Key>
@@ -2741,7 +2743,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           </Key>
           <Property Name="EmailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FromAddress" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
-          <Property Name="ToAddress" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="ToAddress" Type="String" MaxLength="1200" FixedLength="false" Unicode="false" />
           <Property Name="EmailSubject" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
           <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="EmailURL" Type="String" MaxLength="600" FixedLength="false" Unicode="false" />
@@ -2968,8 +2970,8 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="FlightMapDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DroneId" Type="Int32" />
           <Property Name="DroneRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="8" />
           <Property Name="ProductRFID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ProductQrCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ProductRSSI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -3908,6 +3910,7 @@ warning 6002: The table/view 'TestPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="MSTR_User">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
               <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="VideoKey" ColumnName="VideoKey" />
                 <ScalarProperty Name="Nationality" ColumnName="Nationality" />
                 <ScalarProperty Name="UserDescription" ColumnName="UserDescription" />
                 <ScalarProperty Name="DOE_RPASPermit" ColumnName="DOE_RPASPermit" />
