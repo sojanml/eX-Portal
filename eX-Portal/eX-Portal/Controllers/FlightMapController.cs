@@ -145,6 +145,14 @@ namespace eX_Portal.Controllers {
 
     [HttpGet]
     public JsonResult ADSBData() {
+      if (!exLogic.User.hasAccess("FLIGHT.MAP")) {
+        var oResult = new {
+          Status = "Error",
+          Message = "Do not have access"
+        };
+        return Json(oResult, JsonRequestBehavior.AllowGet);
+      }
+
       Exponent.ADSB.ADSBQuery QueryData = new Exponent.ADSB.ADSBQuery();
       using (SqlConnection CN = new SqlConnection(DSN)) {
         CN.Open();
@@ -155,6 +163,23 @@ namespace eX_Portal.Controllers {
       var Data = ADSB.FlightStat(DSN, false, QueryData);
       //  var Data = "";
       return Json(Data, JsonRequestBehavior.AllowGet);
+    }
+
+    [HttpGet]
+    public JsonResult ADSBHistory(DateTime History) {
+      if (!exLogic.User.hasAccess("FLIGHT.MAP")) {
+        var oResult = new {
+          Status = "Error",
+          Message = "Do not have access"
+        };
+        return Json(oResult, JsonRequestBehavior.AllowGet);
+      }
+
+      var ADSB = new Exponent.ADSB.Live();
+      var Data = ADSB.ADSBHistory(DSN, History);
+      //  var Data = "";
+      return Json(Data, JsonRequestBehavior.AllowGet);
+
     }
 
     [HttpGet]

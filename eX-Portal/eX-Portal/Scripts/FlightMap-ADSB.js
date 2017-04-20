@@ -57,6 +57,17 @@ function setADSBLine(t) {
 }
 
 function getADSB(ADSBObj) {
+  var ADSBURL = "";
+  if (IsLive) {
+    ADSBURL = "/FlightMap/ADSBData"
+  } else {
+    if (_RPASIconData == null) {
+      Timers['getADSB'] = window.setTimeout(getADSB, UpdateDelay, ADSBObj);
+      return;
+    }
+    ADSBURL = "/FlightMap/ADSBHistory?History=" + toDate(_RPASIconData.FlightTime);
+  }
+  
   // var QueryData = $('input.spinner, input.query').serialize();
   $.ajax({
     type: "GET",

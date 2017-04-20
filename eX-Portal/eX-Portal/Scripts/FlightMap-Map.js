@@ -90,6 +90,7 @@ function StartFlightReplay() {
   _ReplayIndex = 0;
   _ReplayTimer = window.setTimeout(RpasReplayTimer, 500);
   _FlightPath.setOptions({ 'strokeOpacity': 0.1 });
+  _FlightReplayPath.setMap(map);
 
   var Path = _FlightReplayPath.getPath();
   Path.clear();  

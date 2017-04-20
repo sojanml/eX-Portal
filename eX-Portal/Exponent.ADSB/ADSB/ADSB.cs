@@ -19,6 +19,7 @@ namespace Exponent.ADSB {
     private SqlConnection CN;
     private const int NewFlightTime = 8;
     private bool isDemoMode = false;
+
     public List<FlightPosition> FlightStat(String DSN, bool DemoMode = false, ADSBQuery QueryData = null)  {
       var Data = new List<FlightPosition>();
       isDemoMode = DemoMode;
@@ -34,6 +35,56 @@ namespace Exponent.ADSB {
 
 
       return Data;
+    }
+
+
+    public List<FlightPosition> ADSBHistory(String DSN, DateTime OnDate) {
+      List<FlightPosition> PositionDatas = new List<FlightPosition>();
+
+      String FromDate = OnDate.AddMinutes(-1).ToString("yyyy-MM-dd HH:mm:ss");
+      String ToDate = OnDate.ToString("yyyy-MM-dd HH:mm:ss");
+      String SQL = $@"SELECT
+        *
+      FROM
+        AdsbHistory,
+      (select 
+        FlightID,
+        MAX(CreatedDate) as LastCreatedDate
+      FROM 
+        AdsbHistory
+      WHERE
+        CreatedDate BETWEEN '{FromDate}' AND '{ToDate}'
+      GROUP BY
+        FlightId) as FilterAdsbHistory
+      WHERE
+        AdsbHistory.CreatedDate = FilterAdsbHistory.LastCreatedDate AND
+        AdsbHistory.FlightId = FilterAdsbHistory.FlightId";
+
+      using(var CN = new SqlConnection(DSN)) {
+        CN.Open();
+        using (var Cmd = new SqlCommand(SQL.ToString(), CN)) {
+          var RS = Cmd.ExecuteReader();
+          while (RS.Read()) {
+            int fSpeed = RS.GetOrdinal("Speed");
+            int fHeading = RS.GetOrdinal("Heading");
+            string FlightSource = RS["FlightSource"].ToString();
+            var Position = new FlightPosition {
+              FlightID = RS["FlightId"].ToString(),
+              Heading = RS.IsDBNull(fHeading) ? 0 : (Double)RS.GetDecimal(fHeading),
+              TailNumber = RS["TailNumber"].ToString(),
+              CallSign = RS["CallSign"].ToString(),
+              Lon = (Double)RS.GetDecimal(RS.GetOrdinal("Lon")),
+              Lat = (Double)RS.GetDecimal(RS.GetOrdinal("Lat")),
+              Speed = RS.IsDBNull(fSpeed) ? 0 : (Double)RS.GetDecimal(fSpeed),
+              Altitude = (Double)RS.GetDecimal(RS.GetOrdinal("Altitude")),
+              ADSBDate = RS.GetDateTime(RS.GetOrdinal("AdsbDate")),
+              History = getHistory(RS["HeadingHistory"].ToString())
+            };
+            PositionDatas.Add(Position);
+          }//while
+        }//using
+      }//using(var CN)
+      return PositionDatas;
     }
 
     public List<FlightSummary> GetSummary(String DSN, int LastProcessedID = 0, int MaxRecords = 20, Double TimezoneOffset = 0) {
