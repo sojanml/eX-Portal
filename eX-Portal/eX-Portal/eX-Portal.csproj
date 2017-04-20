@@ -743,6 +743,7 @@
     <Content Include="images\adsb-check-off.png" />
     <Content Include="images\adsb-check-on.png" />
     <Content Include="images\adsb-gcaa-logo.png" />
+    <Content Include="images\adsb-logo-sep.png" />
     <Content Include="images\adsb-logo.png" />
     <Content Include="images\bullet.png" />
     <Content Include="images\cal-icon.png" />
@@ -1076,10 +1077,12 @@
     <Content Include="stylesheets\screen.css" />
     <Content Include="temp\temp.html" />
     <Content Include="test.txt" />
+    <Content Include="Upload\Brand-Logo\dcaa-logo.png" />
     <Content Include="Upload\Brand-Logo\dcca-logo-02.png" />
     <Content Include="Upload\Brand-Logo\dcca-logo-03.png" />
     <Content Include="Upload\Brand-Logo\dcca-logo.png" />
     <Content Include="Upload\Brand-Logo\dewa-logo.png" />
+    <Content Include="Upload\Brand-Logo\dmat-logo.png" />
     <Content Include="Upload\Brand-Logo\DpWorld-logo.png" />
     <Content Include="Upload\Brand-Logo\exponent-logo.png" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -1448,6 +1451,7 @@
     <Content Include="Views\DashBoard\UserDashboard.cshtml" />
     <Content Include="Views\Rpas\NOCApproval.cshtml" />
     <Content Include="Views\Rpas\NOCRegister.cshtml" />
+    <Content Include="Views\Shared\_ADSB.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

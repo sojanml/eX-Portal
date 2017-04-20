@@ -553,6 +553,20 @@ namespace eX_Portal.exLogic {
       return AccountID;
     }
 
+    public static String GetLogo() {
+      int AccountID = getAccountID();
+      String SQL = "select brandlogo from mstr_account WHERE AccountID=" + getAccountID();
+      String BrandLogo = getDBVal(SQL);
+      String LogoPath = $"/Upload/Brand-Logo/{BrandLogo}";
+      if (!String.IsNullOrEmpty(BrandLogo)) {
+        String FullPath = HttpContext.Current.Server.MapPath(LogoPath);
+        if (System.IO.File.Exists(FullPath))
+          return LogoPath;
+      }
+      return String.Empty;
+
+    }
+
     public static String getDashboard() {
       String SQL = "SELECT DashBoard From MSTR_User WHERE UserID=" + getLoginUserID();
       String DashBoard = getDBVal(SQL);

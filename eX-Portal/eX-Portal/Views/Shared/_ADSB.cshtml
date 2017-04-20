@@ -1,6 +1,7 @@
 ﻿
 @{
   Layout = null;
+  String BrandLogo = eX_Portal.exLogic.Util.GetLogo();
 }
 
 <!DOCTYPE html>
@@ -20,14 +21,10 @@
     <header>
       <div class="left-section">
         <div class="logo">
-          @if (String.IsNullOrWhiteSpace(ViewBag.Logo)) {
-            if (eX_Portal.exLogic.Util.getLoginUserID() == 152) {
-              <img src="~/images/adsb-gcaa-logo.png" />
-            } else {
-              <img src="~/images/adsb-logo.png" />
-            }
-          } else {
-            <img src="~/images/@ViewBag.Logo" />
+          <img src="~/images/adsb-logo.png" />
+          @if (!String.IsNullOrEmpty(BrandLogo)) {
+            <img src="~/images/adsb-logo-sep.png" />
+            <img src="@BrandLogo" />
           }
         </div>
       </div>
