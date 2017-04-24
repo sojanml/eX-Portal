@@ -87,7 +87,7 @@ function initLoadTraffic() {
 
   //Load the data for specific time
   _LoadedPlayTime = _VideoPlayTime;
-  var URL = 'http://api.exponent-ts.com/api/trafficmonitor' + (
+  var URL = 'http://portalapi.exponent-ts.com/api/trafficmonitor' + (
     DroneID > 0 ?
     '/json/' + DroneID :
       '/flight/json/' + FlightID + '?Video=' + (_LoadedPlayTime * 1000));
