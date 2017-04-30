@@ -339,10 +339,10 @@ function ShowInfoWindow(t) {
     '<div class="InfoWindow">' +
     '<div><b>' + title + '</b></div>' +
     '<div><span class="caption">Location:</span><span class="value">' + lt + '&deg;N ' + lg  + '&deg;E</span></div>\n' +
-    '<div><span class="caption">Altitude:</span><span class="feet">' + alt.toFixed(0) + ' Feet</span><span class="meter">(' + (alt * FeetToMeter).toFixed(2) + ' Meter)</div>\n' +
+    '<div><span class="caption">Altitude:</span><span class="feet">' + alt.toFormatted(0) + ' Feet</span><span class="meter">(' + (alt * FeetToMeter).toFormatted(2) + ' Meter)</div>\n' +
     '<div class="hr"></div>' +
-    '<div><span class="caption">Horizontal Distance:</span><span class="feet">' + (hDistance / FeetToMeter).toFixed(0) + ' Feet</span><span class="meter">(' + hDistance.toFixed(2) + ' Meter)</div>\n' +
-    '<div><span class="caption">Vertical Distance:</span><span class="feet">' + vDistance.toFixed(0) + ' Feet</span><span class="meter">(' + (vDistance * FeetToMeter).toFixed(2) + ' Meter)</div>\n' +
+    '<div><span class="caption">Horizontal Distance:</span><span class="feet">' + (hDistance / FeetToMeter).toFormatted(2) + ' Feet</span><span class="meter">(' + hDistance.toFormatted(2) + ' Meter)</div>\n' +
+    '<div><span class="caption">Vertical Distance:</span><span class="feet">' + vDistance.toFormatted(2) + ' Feet</span><span class="meter">(' + (vDistance * FeetToMeter).toFormatted(2) + ' Meter)</div>\n' +
     '</div>';
 
   
@@ -356,6 +356,17 @@ function ShowInfoWindow(t) {
 
 var rad = function (x) {
   return x * Math.PI / 180;
+};
+
+Number.prototype.toFormatted = function (c) {
+  var n = this,
+    c = isNaN(c = Math.abs(c)) ? 2 : c,
+    d = ".",
+    t = ",",
+    s = n < 0 ? "-" : "",
+    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+    j = (j = i.length) > 3 ? j % 3 : 0;
+  return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
 
 var getDistance = function (p1, p2) {

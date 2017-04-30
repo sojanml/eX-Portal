@@ -128,9 +128,9 @@ namespace Exponent.ADSB {
         CN.Close();
       }//using (CN)
 
-
       return TheSummary;
     }
+
     public List<FlightStatus> GetFlightStatus(String DSN, Exponent.ADSB.ADSBQuery QueryData) {
       var Dist = new List<FlightStatus>();
       String SQL = $@"Select 
