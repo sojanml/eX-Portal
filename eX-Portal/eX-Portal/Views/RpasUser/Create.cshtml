@@ -8,8 +8,8 @@
 {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.User.PhotoUrl)
-
-    <input type="hidden" name="hdnRPASid" value="@ViewBag.RPASid" />
+    <div class="form-horizontal">
+        <input type="hidden" name="hdnRPASid" value="@ViewBag.RPASid" />
 
         <div class="photo-upload">
             <div class="user-photo">
@@ -33,20 +33,20 @@
                 </div>
             </div>
             @*<div class="form-group"  style="display:@(ViewBag.IsPassowrdRequired == true ? "block" : "none")">
-                @Html.LabelFor(model => model.User.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.PasswordFor(model => model.User.Password, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.User.Password, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.User.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(model => model.User.Password, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.User.Password, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group"  style="display:@(ViewBag.IsPassowrdRequired == true ? "block" : "none")">
-                @Html.LabelFor(model => model.User.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.PasswordFor(model => model.User.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.User.ConfirmPassword, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
+                <div class="form-group"  style="display:@(ViewBag.IsPassowrdRequired == true ? "block" : "none")">
+                    @Html.LabelFor(model => model.User.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(model => model.User.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.User.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
 
             <h2>Personal Details</h2>
 
@@ -122,7 +122,7 @@
                 </div>
             </div>
 
-            <div id="PilotInfo">       
+            <div id="PilotInfo">
                 <div class="form-group">
                     @Html.LabelFor(model => model.Pilot.EmiratesId, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -145,12 +145,12 @@
                         @Html.EditorFor(model => model.Pilot.DateOfExpiry, new { htmlAttributes = new { @class = "date-picker" } })
                         @Html.ValidationMessageFor(model => model.Pilot.DateOfExpiry, "", new { @class = "text-danger" })
                     </div>
-                </div>               
+                </div>
             </div>
 
             <div id="RPASInfo">
                 <h2>Regulatory Registeration</h2>
-               
+
                 <div class="form-group">
                     @Html.LabelFor(model => model.User.RPASPermitNo, "RPAS Permit No", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -165,7 +165,7 @@
                         @Html.ValidationMessageFor(model => model.User.PermitCategory, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                         
+
                 <div class="form-group">
                     @Html.LabelFor(model => model.User.CompanyAddress, "Company Address",htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -199,10 +199,12 @@
                 </div>
             </div>
             <div class="toolbar" style="text-align:right">
-                <input type="submit" value="Create & Continue" class="button"/>
+                <input type="submit" value="Create & Continue" class="button" />
             </div>
 
         </div>
+    </div>
+
 
     @*</form>*@
 }
