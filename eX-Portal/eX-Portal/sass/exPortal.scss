@@ -674,17 +674,6 @@ section {
 
 
 
-@media screen and (min-width: 960px) {
-  section {
-    @include MultiResolution(920px,10px, 10px);
-  }
-
-  footer {
-    width: 920px;
-    margin: auto;
-  }
-}
-
 @media screen and (min-width: 1200px) {
   section {
     @include MultiResolution(1150px,15px, 11pt);
@@ -1022,8 +1011,61 @@ div#FlightInfoNOC {
 }
 
 #FlightData {
+  $CalulatedWidth: (($MaxResolution - 15px) / 2);
+  $PitchRoll: 70px;
+
   margin-top: 10px;
-  font-size:11px;
+  font-size: 11px;
+
+  div#FlightPichRoll {
+    float: right;
+    width: $PitchRoll;
+    height: 125px;
+    padding-top: 10px;
+
+    div.MapDataHolder {
+      width: $PitchRoll;
+      height: 60px;
+      display: block;
+      position: relative;
+      margin-bottom: 20px;
+
+      div.info {
+        position: absolute;
+        bottom: 0px;
+        width: $PitchRoll;
+        background-color: rgba(255, 255, 255, 0.60);
+        text-align: center;
+      }
+    }
+
+    img {
+      $ImgSize: 40px;
+
+      &.MapDataShow {
+        position: absolute;
+        width: $ImgSize;
+        padding: 0px 0px 0px 10px;
+        height: $ImgSize;
+        -webkit-transition: 0.3s ease-in-out;
+        -moz-transition: 0.3s ease-in-out;
+        -o-transition: 0.3s ease-in-out;
+        transition: 0.3s ease-in-out;
+      }
+
+      &:hover {
+        -webkit-transform: rotateX(30deg);
+        transform: rotateX(30deg);
+      }
+    }
+  }
+
+  div#FlightDataInfo {
+    $ImgWidth: $CalulatedWidth - $PitchRoll;
+    width: $ImgWidth;
+    float: left;
+  }
+
   ul {
     list-style: none;
     margin: 0px;
@@ -1032,10 +1074,15 @@ div#FlightInfoNOC {
 
   ul.FlightDataRow {
     li {
-      width: 46px;
+      width: 40px;
       float: left;
       margin-right: 5px;
       padding: 2px 2px 2px 2px;
+    }
+
+    li.col8,
+    li.col9 {
+      width: 30px;
     }
 
     @include clearfix();
@@ -1627,3 +1674,4 @@ div.InfoWindow {
     margin:3px 0px 3px 0px;
   }
 }
+

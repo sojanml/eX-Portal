@@ -83,25 +83,38 @@
 
 
     <div id="FlightData">
-      <ul id="FlightDataHeader">
-        <li>
-          <ul class="FlightDataRow">
-            <li class="col1">Time</li>
-            <li class="col2">Lat</li>
-            <li class="col2">Lng</li>
-            <li class="col3">Duration</li>
-            <li class="col4">Altitude</li>
-            <li class="col5">Speed</li>
-            <li class="col6">Distance</li>
-            <li class="col7">Satalites</li>
-            <li class="col8">Pich</li>
-            <li class="col9">Roll</li>
-          </ul>
-        </li>
-      </ul>
+      <div id="FlightPichRoll">
+        <div class="MapDataHolder">
+          <img class="MapDataShow" id="FlightPichShow" src="~/images/drone-view-front.svg">
+          <div class="info">Pitch <span id="FlightInfo_Pich">0.0</span>&deg;</div>
+        </div>
+        <div class="MapDataHolder">
+          <img class="MapDataShow" id="FlightRollShow" src="~/images/drone-view-top.svg">
+          <div class="info">Roll <span id="FlightInfo_Roll">0.0</span>&deg;</div>
+          </div>
+        </div>
 
-      <ul id="FlightDataScroll">
-      </ul>
+      <div id="FlightDataInfo">
+
+        <ul id="FlightDataHeader">
+          <li>
+            <ul class="FlightDataRow">
+              <li class="col1">Time</li>
+              <li class="col2">Lat</li>
+              <li class="col2">Lng</li>
+              <li class="col3">Duration</li>
+              <li class="col4">Altitude</li>
+              <li class="col5">Speed</li>
+              <li class="col6">Distance</li>
+              <li class="col7">Satalites</li>
+              <li class="col8">Pich</li>
+              <li class="col9">Roll</li>
+            </ul>
+          </li>
+        </ul>
+
+        <ul id="FlightDataScroll"></ul>
+      </div>
 
     </div>
 

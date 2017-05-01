@@ -417,161 +417,6 @@ section div.column:last-child {
   margin-right: 0;
 }
 
-@media screen and (min-width: 960px) {
-  section {
-    width: 920px;
-    font-size: 10px;
-  }
-  section div.column {
-    margin-right: 10px;
-  }
-  section div.column div.column-content {
-    width: 100%;
-    padding: 0px 0px 0px 5px;
-    box-sizing: border-box;
-  }
-  section div.column div.title {
-    padding: 5px 0px 5px 5px;
-    background-color: #474747;
-    margin: 0px;
-    font-family: Gobold_Light;
-    font-size: 12px;
-    color: #cacaca;
-  }
-  section div.column div.title div.button {
-    float: right;
-    display: inline-block;
-    padding: 0px 8px 2px 8px;
-    background-color: #e5e5e5;
-    color: black;
-    margin-right: 10px;
-    font-family: OpenSans;
-    font-size: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  section div.column div.title div.button:hover {
-    background-color: #ff9b9b;
-  }
-  section div.column div.title div.info {
-    display: inline-block;
-    margin: 0px 10px 0px 10px;
-    color: white;
-  }
-  section div.column div.sub-title {
-    padding: 5px 0px 5px 5px;
-    background-color: #ededed;
-    border-bottom: 2px white solid;
-    margin: 0px 0px 5px 0px;
-    font-family: Gobold_Light;
-    font-size: 10px;
-  }
-  section div.column.NoVideo div#FlightSummary {
-    width: 100%;
-  }
-  section div.column-full {
-    width: 920px;
-  }
-  section div.column-half {
-    width: 455px;
-  }
-  section div.column-half div.column-2-of-6 {
-    width: 178px;
-  }
-  section div.column-half div.column-4-of-6 {
-    width: 267px;
-  }
-  section div.column-half div#FlightVideo {
-    width: 240px;
-    height: 160px;
-    float: left;
-    background-color: black;
-  }
-  section div.column-half div#FlightSummary {
-    width: 215px;
-    float: right;
-  }
-  section div.column-half div#FlightSummary.NoVideo {
-    width: 100%;
-    float: none;
-    padding-top: 5px;
-  }
-  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td {
-    width: 50%;
-  }
-  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td > div {
-    line-height: 30px;
-    float: left;
-  }
-  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td div.FlightSummaryImage {
-    width: 30px !important;
-    height: 30px !important;
-    margin-right: 10px;
-  }
-  section div.column-2-of-6 {
-    width: 300px;
-  }
-  section div.column-4-of-6 {
-    width: 610px;
-  }
-  section div.column-1-of-3 {
-    width: 300px;
-  }
-  section div.column-3 {
-    width: 303.33333px;
-  }
-  section div.column-3 div.column-2-of-6 {
-    width: 117.33333px;
-  }
-  section div.column-3 div.column-4-of-6 {
-    width: 176px;
-  }
-  section div.column-3 div#FlightVideo {
-    width: 240px;
-    height: 140px;
-    float: left;
-    background-color: black;
-  }
-  section div.column-3 div#FlightSummary {
-    width: 100%;
-    align-items: center;
-    float: right;
-  }
-  section div.column-3 div#FlightSummary.NoVideo {
-    width: 100%;
-    float: none;
-    padding-top: 10px;
-  }
-  section div.hr {
-    width: 100%;
-    height: 2px;
-    background-color: white;
-    margin-bottom: 2px;
-  }
-  section div.fixed-height-1 {
-    height: 165px;
-  }
-  section .top-space, section.top-space {
-    margin-top: 10px;
-  }
-  section div.two-column-form-group div.form-group {
-    width: 48%;
-    float: left;
-  }
-  section div.two-column-form-group div.form-group:after {
-    clear: both;
-    display: block;
-    content: "";
-  }
-  section div.two-column-form-group div.form-group:last-child {
-    margin-left: 4%;
-  }
-
-  footer {
-    width: 920px;
-    margin: auto;
-  }
-}
 @media screen and (min-width: 1200px) {
   section {
     width: 1150px;
@@ -1005,16 +850,58 @@ div#FlightInfoNOC span {
   margin-top: 10px;
   font-size: 11px;
 }
+#FlightData div#FlightPichRoll {
+  float: right;
+  width: 70px;
+  height: 125px;
+  padding-top: 10px;
+}
+#FlightData div#FlightPichRoll div.MapDataHolder {
+  width: 70px;
+  height: 60px;
+  display: block;
+  position: relative;
+  margin-bottom: 20px;
+}
+#FlightData div#FlightPichRoll div.MapDataHolder div.info {
+  position: absolute;
+  bottom: 0px;
+  width: 70px;
+  background-color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+#FlightData div#FlightPichRoll img.MapDataShow {
+  position: absolute;
+  width: 40px;
+  padding: 0px 0px 0px 10px;
+  height: 40px;
+  -webkit-transition: 0.3s ease-in-out;
+  -moz-transition: 0.3s ease-in-out;
+  -o-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+#FlightData div#FlightPichRoll img:hover {
+  -webkit-transform: rotateX(30deg);
+  transform: rotateX(30deg);
+}
+#FlightData div#FlightDataInfo {
+  width: 497.5px;
+  float: left;
+}
 #FlightData ul {
   list-style: none;
   margin: 0px;
   padding: 0px;
 }
 #FlightData ul.FlightDataRow li {
-  width: 46px;
+  width: 40px;
   float: left;
   margin-right: 5px;
   padding: 2px 2px 2px 2px;
+}
+#FlightData ul.FlightDataRow li.col8,
+#FlightData ul.FlightDataRow li.col9 {
+  width: 30px;
 }
 #FlightData ul.FlightDataRow:after {
   clear: both;

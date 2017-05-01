@@ -96,6 +96,7 @@ function StartFlightReplay() {
   Path.clear();  
 }
 
+
 function RpasReplayTimer() {
   var thisData = _FlightData[_ReplayIndex];
   var ReplayDelay = 1000;
@@ -104,39 +105,32 @@ function RpasReplayTimer() {
     lat: thisData.Lat,
     lng: thisData.Lng,
   };
-  var Pos = new google.maps.LatLng(thisData.Lat, thisData.Lng);
-  _RPASIcon.setPosition(Pos);
-  _DroneIcon.setIconPos(Pos);
-  ShowFlightInformation(thisData);
-  AddToTable([thisData]);
-  AddChart(thisData);
 
-  //add to path completed polyline
-  var Path = _FlightReplayPath.getPath();
-  Path.push(Pos);
 
   if (_FlightVideos.length) {
-    ReplayDelay = 500;
+    ReplayDelay = 200;
     var FirstVideoDate = new Date(_FlightVideoPlayer.getPlaylistItem(_FlightVideoPlayer.getPlaylistIndex()).title);
     var VideoPosition = _FlightVideoPlayer.getPosition();
     var VideoPositionTime = FirstVideoDate;
     VideoPositionTime.setSeconds(FirstVideoDate.getSeconds() + VideoPosition);
     if (PositionDateTime < VideoPositionTime) {
-      _ReplayIndex++;
-    } else {
+      FastForwardTo(VideoPositionTime);    
+      RpasReplayTimerShow();
+    } else {      
       var VideoState = _FlightVideoPlayer.getState();
       //console.log("Waiting at index: " + _ReplayIndex + ', VideoState: ' + VideoState);
-      if (VideoState === 'error') {
+      if (VideoState === 'error' || VideoState === "complete") {
         ReplayDelay = 1000;
-        _ReplayIndex++;
+        RpasReplayTimerShow();
+        _ReplayIndex++;        
       } else if (VideoState === 'idle') {
         _FlightVideoPlayer.play();
-      }
-      
+      }  
     }
   } else {
     ReplayDelay = 1000;
-    _ReplayIndex++;
+    RpasReplayTimerShow();
+    _ReplayIndex++;    
   }
   
   //Play the next item
@@ -147,10 +141,36 @@ function RpasReplayTimer() {
     _ReplayTimer = window.setTimeout(RpasReplayTimer, ReplayDelay);
   }
 
-
 }
 
+function RpasReplayTimerShow() {
+  var thisData = _FlightData[_ReplayIndex];
+  var Pos = new google.maps.LatLng(thisData.Lat, thisData.Lng);
+  _RPASIcon.setPosition(Pos);
+  _DroneIcon.setIconPos(Pos);
+  ShowFlightInformation(thisData);
+  AddToTable([thisData]);
+  AddChart(thisData);
 
+  //add to path completed polyline
+  var Path = _FlightReplayPath.getPath();
+  Path.push(Pos);
+}
+
+function FastForwardTo(VideoPositionTime) {
+  var Path = _FlightReplayPath.getPath();  
+  while (_ReplayIndex <= _FlightData.length) {
+    var thisData = _FlightData[_ReplayIndex];
+    var PositionDateTime = dtFromJSON(thisData.FlightTime);
+    if (PositionDateTime < VideoPositionTime) {
+      var Pos = new google.maps.LatLng(thisData.Lat, thisData.Lng);
+      Path.push(Pos);
+      _ReplayIndex++;
+    } else {
+      return;
+    }
+  }
+}
 
 function RpasReplayCompleted() {
   //finishing touches.
@@ -347,16 +367,16 @@ function AddToTable(TheData) {
     var HTML =
       '<li>\n' +
       '<ul class="FlightDataRow">\n' +
-      '<li>' + FlightTime.substring(FlightTime.length - 5) + '</li>\n' +
-      '<li>' + DataItem.Lat.toFixed(4) + '</li>\n' +
-      '<li>' + DataItem.Lng.toFixed(4) + '</li>\n' +
-      '<li>' + toHour(DataItem.FlightDuration) + '</li>\n' +
-      '<li>' + DataItem.Altitude.toFixed(1) + '</li>\n' +
-      '<li>' + DataItem.Speed.toFixed(2) + '</li>\n' +
-      '<li>' + DataItem.Distance.toFixed(2) + '</li>\n' +
-      '<li>' + DataItem.Satellites.toFixed(0) + '</li>\n' +
-      '<li>' + DataItem.Pich.toFixed(1) + '</li>\n' +
-      '<li>' + DataItem.Roll.toFixed(1) + '</li>\n' +
+      '<li class="col1">' + FlightTime.substring(FlightTime.length - 5) + '</li>\n' +
+      '<li class="col2">' + DataItem.Lat.toFixed(4) + '</li>\n' +
+      '<li class="col2">' + DataItem.Lng.toFixed(4) + '</li>\n' +
+      '<li class="col3">' + toHour(DataItem.FlightDuration) + '</li>\n' +
+      '<li class="col4">' + DataItem.Altitude.toFixed(1) + '</li>\n' +
+      '<li class="col5">' + DataItem.Speed.toFixed(2) + '</li>\n' +
+      '<li class="col6">' + DataItem.Distance.toFixed(2) + '</li>\n' +
+      '<li class="col7">' + DataItem.Satellites.toFixed(0) + '</li>\n' +
+      '<li class="col8">' + DataItem.Pich.toFixed(1) + '</li>\n' +
+      '<li class="col9">' + DataItem.Roll.toFixed(1) + '</li>\n' +
       "</ul></li>";
 
     UL.prepend($(HTML));
@@ -376,7 +396,7 @@ function AddDataToMap(TheData) {
   var LastDataItem = TheData[TheData.length - 1];
   //When live, sometime distance is shown as null
   if (LastDataItem.Distance === null) {
-    for (var j = _FlightData.length - 1; j > 0; ij--) {
+    for (var j = _FlightData.length - 1; j > 0; j--) {
       if (_FlightData[j].Distance !== null) {
         LastDataItem.Distance = _FlightData[j].Distance;
         break;
@@ -408,10 +428,29 @@ function ShowFlightInformation(TheDataItem) {
   $('#FlightInfo_Speed').html(TheDataItem.Speed.toFixed(2));
   $('#FlightInfo_Distance').html(TheDataItem.Distance.toFixed(2));
   $('#FlightInfo_FlightDate').html(dtConvFromJSON(TheDataItem.FlightTime, true));
+  $('#FlightInfo_Pich').html(TheDataItem.Pich);
+  $('#FlightInfo_Roll').html(TheDataItem.Roll);
+
+
+  var Roll = parseFloat(TheDataItem.Roll);
+
+  $('#FlightRollShow').css({
+    WebkitTransform: 'rotate(' + TheDataItem.Pich + 'deg)',
+    '-moz-transform': 'rotate(' + TheDataItem.Pich + 'deg)'
+  });
+
+
+  // For webkit browsers: e.g. Chrome
+  $('#FlightPichShow').css({
+    WebkitTransform: 'rotate('+ Roll + 'deg)',
+    '-moz-transform': 'rotate(' + Roll + 'deg)'
+  });
 
   _RPASIconData = TheDataItem;
   ShowInfoWindow(null);
 }
+
+
 
 function toHour(Seconds) {
   var Hours = Math.floor(Seconds / 60);
@@ -420,10 +459,6 @@ function toHour(Seconds) {
   var sHour = '0' + Hours;
   return sHour.substring(sHour.length - 2) + ':' + sSeconds.substring(sSeconds.length - 2);
 }
-
-
-
-
 
 
 function DroneIcon(options, IconPos ) {
@@ -456,5 +491,6 @@ DroneIcon.prototype.draw = function () {
   if (!projection) return false;
   var theIcon = $('#DroneIcon');
   var IconLocation = projection.fromLatLngToDivPixel(this.IconPos);
+  theIcon.clearQueue();
   theIcon.animate({ left: IconLocation.x, top: IconLocation.y });
 };
