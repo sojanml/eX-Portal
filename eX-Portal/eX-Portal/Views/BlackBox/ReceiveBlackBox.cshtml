@@ -5,100 +5,100 @@
   Layout = "~/Views/Shared/_eXPortal.cshtml";
 }
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "RecBlackBox", name = "RecBlackBox" })) {
-<section class="general-form" id="loginForm">
+  <section class="general-form" id="loginForm">
 
-  <input type="hidden" name="DroneID" value="@Model.DroneID" />
-  <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
-  <input type="hidden" name="ApprovalID" value="@Model.ApprovalID" />
+    <input type="hidden" name="DroneID" value="@Model.DroneID" />
+    <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
+    <input type="hidden" name="ApprovalID" value="@Model.ApprovalID" />
 
-  <input type="hidden" name="hdnTotalAmount" value="@Model.TotalAmount" />
-  <input type="hidden" name="hdnRentStartDate" value="@Model.RentStartDate" />
+    <input type="hidden" name="hdnTotalAmount" value="@Model.TotalAmount" />
+    <input type="hidden" name="hdnRentStartDate" value="@Model.RentStartDate" />
 
 
-  <div class="editor-label">
-    Select the Black box
-  </div>
-  <div class="editor-field">
-    @Html.DropDownListFor(model => model.BlackBoxID, Util.GetBlackBox(), "Please Select...")
-    @Html.ValidationMessageFor(model => model.BlackBoxID)
-  </div>
-  <div class="editor-label">
-    @Html.LabelFor(model => model.BBStatus)
-  </div>
-  <div class="editor-field">
-    <div class="input-field">@Model.BBStatus</div>
-          @Html.ValidationMessageFor(model => model.BBStatus)
-        </div>
+    <div class="editor-label">
+      Select the Black box
+    </div>
+    <div class="editor-field">
+      @Html.DropDownListFor(model => model.BlackBoxID, Util.GetBlackBox(), "Please Select...")
+      @Html.ValidationMessageFor(model => model.BlackBoxID)
+    </div>
+    <div class="editor-label">
+      @Html.LabelFor(model => model.BBStatus)
+    </div>
+    <div class="editor-field">
+      <div class="input-field">@Model.BBStatus</div>
+      @Html.ValidationMessageFor(model => model.BBStatus)
+    </div>
+    <div class="editor-label">
+      @Html.LabelFor(model => model.Note, "Note")
+    </div>
+    <div class="editor-field">
+      @Html.EditorFor(model => model.Note)
+      @Html.ValidationMessageFor(model => model.Note)
+    </div>
+
+    <div class="two-column-form-group">
+      <div class="form-group">
         <div class="editor-label">
-          @Html.LabelFor(model => model.Note, "Note")
+          @Html.LabelFor(model => model.RentStartDate)
         </div>
         <div class="editor-field">
-          @Html.EditorFor(model => model.Note)
-          @Html.ValidationMessageFor(model => model.Note)
+          <div id="RentStartDate" class="input-field date-picker">@Model.RentStartDate&nbsp;</div>
         </div>
-
-        <div class="two-column-form-group">
-          <div class="form-group">
-            <div class="editor-label">
-              @Html.LabelFor(model => model.RentStartDate)
-            </div>
-            <div class="editor-field">
-              <div id="RentStartDate" class="input-field date-picker">@Model.RentStartDate&nbsp;</div>                               
-              </div>
-          </div>
-          <div class="form-group">
-            <div class="editor-label">
-              @Html.LabelFor(model => model.RentEndDate)
-            </div>
-            <div class="editor-field">
-              @Html.TextBoxFor(model => model.RentEndDate, new { @class = "date-picker" })
-              @Html.ValidationMessageFor(model => model.RentEndDate)
-            </div>
-          </div>
+      </div>
+      <div class="form-group">
+        <div class="editor-label">
+          @Html.LabelFor(model => model.RentEndDate)
         </div>
+        <div class="editor-field">
+          @Html.TextBoxFor(model => model.RentEndDate, new { @class = "date-picker" })
+          @Html.ValidationMessageFor(model => model.RentEndDate)
+        </div>
+      </div>
+    </div>
 
-      <h2>Rent Calculation</h2>
+    <h2>Rent Calculation</h2>
     <div id="msg" style="font-size:small">Please select blackbox and rent end date to view rent calculations...</div>
-  <div id="RentCalculation">Please select a blackbox from list for calculation...</div>
+    <div id="RentCalculation">Please select a blackbox from list for calculation...</div>
 
-  <div class="two-column-form-group">
-    <h2>Receive Black Box</h2>
+    <div class="two-column-form-group">
+      <h2>Receive Black Box</h2>
       <div class="form-group">
-          <div>
-              <div class="editor-label">
-                  Rental Amount (In AED)
-              </div>
-              <div class="editor-field">
-                  @Html.EditorFor(model => model.Amount,new{ disabled = "disabled"})
-                  @ViewData["RAmount"]
-              </div>
+        <div>
+          <div class="editor-label">
+            Rental Amount (In AED)
           </div>
+          <div class="editor-field">
+            @Html.EditorFor(model => model.Amount, new { disabled = "disabled" })
+            @ViewData["RAmount"]
+          </div>
+        </div>
       </div>
       <div class="form-group">
-          <div>
-              <div class="editor-label">
-                  Total Amount Paid (In AED)s
-              </div>
-              <div class="editor-field">
-                  @Html.EditorFor(model => model.TotalAmount)
-                  @Html.ValidationMessageFor(model => model.TotalAmount)
-              </div>
+        <div>
+          <div class="editor-label">
+            Total Amount Paid (In AED)s
           </div>
+          <div class="editor-field">
+            @Html.EditorFor(model => model.TotalAmount)
+            @Html.ValidationMessageFor(model => model.TotalAmount)
+          </div>
+        </div>
       </div>
-          
-  </div>
+
+    </div>
     <div class="form-group">
-            <div class="editor-label">
-                Balance Amount (In AED)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.NameOnCard, new { disabled = "disabled" })
-            </div>
+      <div class="editor-label">
+        Balance Amount (In AED)
+      </div>
+      <div class="editor-field">
+        @Html.EditorFor(model => model.NameOnCard, new { disabled = "disabled" })
+      </div>
     </div>
     <div class="form-toolbar">
       <input type="submit" id="btn-submit" value="Save" />
     </div>
-</section>
+  </section>
 }
 @section scripts {
   @Scripts.Render("~/bundles/jqueryval")
@@ -114,28 +114,7 @@
 
         var e = document.getElementById("BlackBoxID");
         var bxID = e.options[e.selectedIndex].value;
-        if (bxID != null)
-        {
-            var URL_t = '@Url.Action("BlackBoxTransAmountPaidVal")' + "/" + bxID;
-            $.ajax({
-                method: 'GET',
-                url: URL_t
-            }).done(ShowAmount);
 
-            var URL_t = '@Url.Action("BlackBoxTransDroneVal")' + "/" + bxID;
-            $.ajax({
-                method: 'GET',
-                url: URL_t
-            }).done(ShowDroneID);
-
-            var URL = '@Url.Action("BlackBoxInfo")' + "/" + bxID;
-            $('#RecBlackBox :input').prop("disabled", true);
-            $('#RentCalculation').slideUp();
-            $.ajax({
-                method: 'GET',
-                url: URL
-            }).done(ShowRentCalcualtion);
-        }
         $('#BlackBoxID').on("change", function () {
             var URL_t = '@Url.Action("BlackBoxTransAmountPaidVal")' + "/" + $(this).val();
             $.ajax({
@@ -177,18 +156,17 @@
 
       });//$('#RentEndDate').on("change")
 
-        $('#TotalAmount').on("change", function () {
-            GetfinalAmount($(this).val(), RentAmount);
-        });
-
+      $('#TotalAmount').on("change", GetfinalAmount);
+      
+      $('#Amount').on("change", GetfinalAmount);
 
     });//$(document).ready(function ()
       function ShowAmount(data) {
           FORM['Amount'].value = data;
           RentAmount = data;
-      }
-      function ShowDroneID(data) {
-          FORM['DroneID'].value = data;
+    }
+    function ShowDroneID(data) {
+        FORM['DroneID'].value = data;
       }
 
     function ShowRentCalcualtion(data) {
@@ -204,11 +182,22 @@
     }
     function GetfinalAmount(A,B)
     {
-        BalanceAmount = A - B;
-        FORM['NameOnCard'].value = BalanceAmount;
+      var Total = $('#TotalAmount').val();
+      var Rental = $('#Amount').val();
+      var nTotal = parseFloat(Total.replace(/\,/, ''));
+      var nRental = parseFloat(Rental.replace(/\,/, ''));
+      if (isNaN(nTotal)) nTotal = 0;
+      if (isNaN(nRental)) nRental = 0;
+      BalanceAmount = nTotal - nRental;
+
+      FORM['NameOnCard'].value = fmtMoney(BalanceAmount);
+      FORM['Amount'].value = fmtMoney(nRental);
+      FORM['TotalAmount'].value = fmtMoney(nTotal);
     }
 
     function getCostDetail(Cost) {
+      if (!Cost || Cost.length < 1) return;
+
 
       var HTML = '<table class="report" cellspacing="0">' +
       '<thead>\n' +
