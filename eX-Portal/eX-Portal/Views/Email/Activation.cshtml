@@ -1,6 +1,6 @@
 ﻿@model eX_Portal.Models.MSTR_User
 @{
-    Layout = "~/Views/Shared/_Email.cshtml";
+  
 }
 
 <!DOCTYPE html>
@@ -9,11 +9,15 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Activation</title>
-    Please click on the link below for activation.
+   
+    
 
 </head>
 <body>
     <div> 
+        Please click on the link below for activation.
+        <br />
+        <a href="http://portal.exponent-ts.com/User/Activation?email=@Model.EmailId&key=@Model.ActivationKey">Activate</a>
     </div>
 </body>
 </html>

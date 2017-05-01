@@ -93,7 +93,6 @@ namespace eX_Portal.Models {
 
     [Required(ErrorMessage = "Please enter a valid email address.")]
     [Display(Name = "Email Address")]
-    [EmailAddress(ErrorMessage = "Invalid Email Address")]
     public string EmailId { get; set; }
 
     [Display(Name = "Account/Company")]

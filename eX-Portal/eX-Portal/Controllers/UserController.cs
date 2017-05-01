@@ -1006,9 +1006,12 @@ namespace eX_Portal.Controllers {
             {
                 ModelState.AddModelError("AccountId", "Please select company.");
             }
-            if (URegister.AccountId < 1 && (string.IsNullOrEmpty(URegister.AccountName) || string.IsNullOrEmpty(URegister.AccountName.Trim())))
+            if (URegister.AccountId < 1)
             {
+                if(string.IsNullOrEmpty(URegister.AccountName) || string.IsNullOrEmpty(URegister.AccountName.Trim()))
                 ModelState.AddModelError("AccountName", "Please enter new company.");
+                else if(URegister.AccountName.Length<4)
+                    ModelState.AddModelError("AccountName", "Minimum 4 characters");
             }
             if (string.IsNullOrEmpty(URegister.EmailId) || string.IsNullOrEmpty(URegister.EmailId.Trim()))
             {
@@ -1018,13 +1021,18 @@ namespace eX_Portal.Controllers {
             {
                 ModelState.AddModelError("RPASPermitNo", "Please enter your RPAS permit number.");
             }
+            if (string.IsNullOrEmpty(URegister.Password) )
+            {
+              
+                    ModelState.AddModelError("Password", "Please enter your password");
+            }
             if (URegister.Password !=URegister.ConfirmPassword)
             {
                 ModelState.AddModelError("Password","Passwords do not match");
             }
              if (URegister.Password!=null)
             {
-                if(URegister.Password.Length>6)
+                if(URegister.Password.Length<6)
                 ModelState.AddModelError("Password", "Password length should be minimium 6 characters");
             }
             if (ModelState.IsValid && ValidateUser(URegister.EmailId)) {

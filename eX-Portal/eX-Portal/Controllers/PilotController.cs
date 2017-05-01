@@ -400,31 +400,13 @@ namespace eX_Portal.Controllers
             if (!exLogic.User.hasAccess("PILOTS.EDIT")) return RedirectToAction("NoAccess", "Home");
             UserModel.User.IsPilot = true;
             
-            if (ModelState.IsValid)
-            {
-                if (!String.IsNullOrEmpty(UserModel.User.Password) && !String.IsNullOrEmpty(UserModel.User.ConfirmPassword))
-                {
-                    //if(UserModel.User.Password.Length<=5)
-                    //{
-                    //    ModelState.AddModelError("User.Password", "Password character should be minimum 6");
-                    //}
-                    if (UserModel.User.Password != UserModel.User.ConfirmPassword)
-                    {
-                        ModelState.AddModelError("User.Password", "Password doesn't match.");
-                    }
-                    else
-                    {
-                        Pass_SQL = ",\n  Password='" + Util.GetEncryptedPassword(UserModel.User.Password).ToString() + "'\n";
-                    }
-                }
-            }
+           
 
             if (ModelState.IsValid)
             {
                 int AccountID = Util.getAccountID();
 
                 string SQL = "UPDATE MSTR_USER SET\n" +
-               "  UserProfileId=" + Util.toInt(Util.getPilotProfileID(AccountID)) + ",\n" +
                   "  FirstName='" + Util.FirstLetterToUpper( UserModel.User.FirstName) + "',\n" +
                   "  MiddleName='" + Util.FirstLetterToUpper( UserModel.User.MiddleName) + "',\n" +
                   "  LastName='" + Util.FirstLetterToUpper(UserModel.User.LastName) + "',\n" +
@@ -432,22 +414,13 @@ namespace eX_Portal.Controllers
                   "  MobileNo='" + UserModel.User.MobileNo + "',\n" +
                   "  EmailId='" + UserModel.User.EmailId + "',\n" +
                   "  CountryId=" + Util.toInt(UserModel.User.CountryId.ToString()) + ",\n" +
-                  "  AccountId=" + Util.toInt(AccountID) + ",\n" +
                   "  OfficeNo='" + UserModel.User.OfficeNo + "',\n" +
                   "  HomeNo='" + UserModel.User.HomeNo + "',\n" +
-                 // "  IsActive='" + UserModel.User.IsActive + "', \n" +
-                 // "  IsPilot='" + UserModel.User.IsPilot + "',\n" +
-                //  "  Dashboard= '" + UserModel.User.Dashboard.ToString() + "',\n" +
                   "  PhotoUrl='" + UserModel.User.PhotoUrl + "',\n" +
                   "  RPASPermitNo='" + UserModel.User.RPASPermitNo + "',\n" +
                   "  PermitCategory='" + UserModel.User.PermitCategory + "'\n" +
-                 // "  ContactAddress='" + UserModel.User.ContactAddress + "',\n" +
-                 // "  RegRPASSerialNo='" + UserModel.User.RegRPASSerialNo + "',\n" +
-                //  "  CompanyAddress='" + UserModel.User.CompanyAddress + "',\n" +
-                //  "  CompanyTelephone='" + UserModel.User.CompanyTelephone + "',\n" +
-                //  "  CompanyEmail='" + UserModel.User.CompanyEmail + "',\n" +
-                 // "  EmiratesID='" + UserModel.User.EmiratesID + "'\n" +
-                  Pass_SQL +
+                  "  DOE_RPASPermit='"+UserModel.User.DOE_RPASPermit+"'\n"+
+                  "  DOI_RPASPermit='"+UserModel.User.DOI_RPASPermit+"'\n"+
                   "where\n" +
                   "  UserId=" + UserModel.User.UserId;
 
