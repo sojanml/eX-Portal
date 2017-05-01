@@ -104,5 +104,16 @@ namespace eX_Portal.Controllers {
             return View(User);
         }//ActionResult RPASUserCreated
 
+        public ActionResult Activation(int ID=0)
+        {
+            var User = ctx.MSTR_User.Find(ID);
+            if (User != null)
+                ViewBag.Username = User.UserName;
+
+            ViewBag.Title = "User Created";
+            return View(User);
+        }
+
+
   }//public class EmailController
 }//namespace eX_Portal.Controllers

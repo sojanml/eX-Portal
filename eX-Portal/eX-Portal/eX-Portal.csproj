@@ -583,6 +583,7 @@
     <Compile Include="ViewModel\TrafficViewModel.cs" />
     <Compile Include="ViewModel\UserDashboardModel.cs" />
     <Compile Include="ViewModel\UserLogin.cs" />
+    <Compile Include="ViewModel\UserRegister.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="ViewModel\WeatherViewModel.cs" />
   </ItemGroup>
@@ -1452,6 +1453,10 @@
     <Content Include="Views\Rpas\NOCApproval.cshtml" />
     <Content Include="Views\Rpas\NOCRegister.cshtml" />
     <Content Include="Views\Shared\_ADSB.cshtml" />
+    <Content Include="Views\User\Register.cshtml" />
+    <Content Include="Views\Rpas\NOCRegistrationDetails.cshtml" />
+    <Content Include="Views\Email\Activation.cshtml" />
+    <Content Include="Views\User\Activation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

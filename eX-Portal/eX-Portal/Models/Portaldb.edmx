@@ -985,6 +985,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="UserDescription" Type="text" />
           <Property Name="Nationality" Type="nvarchar" MaxLength="50" />
           <Property Name="VideoKey" Type="nvarchar" MaxLength="100" />
+          <Property Name="ActivationKey" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -2493,6 +2494,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="UserDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Nationality" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="VideoKey" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ActivationKey" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PayLoadData">
           <Key>
@@ -3910,6 +3912,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="MSTR_User">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
               <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="ActivationKey" ColumnName="ActivationKey" />
                 <ScalarProperty Name="VideoKey" ColumnName="VideoKey" />
                 <ScalarProperty Name="Nationality" ColumnName="Nationality" />
                 <ScalarProperty Name="UserDescription" ColumnName="UserDescription" />

@@ -986,7 +986,185 @@ namespace eX_Portal.Controllers {
       return "OK";
     }
 
-  }
+    public ActionResult Register()
+    {
+            MSTR_User EPASValues = new MSTR_User();
+            var viewModel = new ViewModel.UserRegister
+            {
+                AccountList = Util.GetAccountList()                
+            };
+            List<SelectListItem> AccSelectList = viewModel.AccountList.ToList();
+            AccSelectList.Add(new SelectListItem() { Text = "Other", Value = "-1" });
+            viewModel.AccountList = AccSelectList;
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Register(UserRegister URegister)
+        {
+            if (URegister.AccountId == null || URegister.AccountId == 0)
+            {
+                ModelState.AddModelError("AccountId", "Please select company.");
+            }
+            if (URegister.AccountId < 1 && (string.IsNullOrEmpty(URegister.AccountName) || string.IsNullOrEmpty(URegister.AccountName.Trim())))
+            {
+                ModelState.AddModelError("AccountName", "Please enter new company.");
+            }
+            if (string.IsNullOrEmpty(URegister.EmailId) || string.IsNullOrEmpty(URegister.EmailId.Trim()))
+            {
+                ModelState.AddModelError("EmailId", "Please enter your email ID.");
+            }
+            if (string.IsNullOrEmpty(URegister.RPASPermitNo) || string.IsNullOrEmpty(URegister.RPASPermitNo.Trim()))
+            {
+                ModelState.AddModelError("RPASPermitNo", "Please enter your RPAS permit number.");
+            }
+            if (URegister.Password !=URegister.ConfirmPassword)
+            {
+                ModelState.AddModelError("Password","Passwords do not match");
+            }
+             if (URegister.Password!=null)
+            {
+                if(URegister.Password.Length>6)
+                ModelState.AddModelError("Password", "Password length should be minimium 6 characters");
+            }
+            if (ModelState.IsValid && ValidateUser(URegister.EmailId)) {
+
+                MSTR_User newUser = new MSTR_User();
+
+            if (URegister.AccountId==-1)
+            {
+                                   
+                if (ValidateAccount(URegister.AccountName))
+                {
+                        MSTR_Account newAcc = new MSTR_Account();
+                        newAcc.Name = URegister.AccountName;
+                        newAcc.PilotProfileID = 4;
+                        newAcc.CountryCode = 2;
+                        newAcc.Code= newAcc.Name.Substring(0, 4);
+                        db.MSTR_Account.Add(newAcc);
+                        db.SaveChanges();
+                        int newAccID = db.MSTR_Account.First(x => x.Name == URegister.AccountName).AccountId;
+                            
+                        newUser.AccountId = newAccID;
+                }
+            }
+            else
+            {
+                    newUser.AccountId = URegister.AccountId;
+            }
+                
+                    
+                    string pwd = Util.GetEncryptedPassword(URegister.Password).ToString();
+                    string activationKey = Guid.NewGuid().ToString();
+                    newUser.ActivationKey = activationKey;
+                    newUser.EmailId = URegister.EmailId;
+                    newUser.Password = pwd;
+                    newUser.ConfirmPassword = pwd;
+                    newUser.IsActive = false;
+                    newUser.IsPilot = true;
+                    newUser.RPASPermitNo = URegister.RPASPermitNo;
+                    newUser.UserName = URegister.EmailId;
+                    newUser.UserProfileId = 4;
+                    newUser.Dashboard = "UserDashboard";
+
+                    db.MSTR_User.Add(newUser);
+                db.SaveChanges();
+                int newUserID = db.MSTR_User.First(x => x.UserName == URegister.EmailId).UserId;
+                    PortalAlertEmail newMail = new PortalAlertEmail();
+                    newMail.EmailSubject = "Exponent Portal Activation";
+                    newMail.ToAddress = newUser.EmailId;
+                    newMail.UserID = 0;
+                    newMail.SendType = "EMAIL";
+                    newMail.EmailURL = $"~/Email/Activation/{newUserID}";
+
+                db.PortalAlertEmails.Add(newMail);
+
+                    db.SaveChanges();
+               
+
+            }
+            else
+            {
+                ModelState.AddModelError("EmailId", "Email already registered.");
+               List<SelectListItem> AccSelectList = exLogic.Util.GetAccountList().ToList();
+               int AccCount = AccSelectList.Count;
+               AccSelectList.Add(new SelectListItem() { Text = "Other", Value = "-1" });
+               URegister.AccountList = AccSelectList;
+                return View(URegister);
+            }
+
+            TempData["Message"] = "You have sucessfully registered in Exponent. Please activate your account before logging in.";
+            return RedirectToAction("Index", "User");
+        }
+
+        public bool ValidateAccount(string AccName)
+        {
+            var ExistAcc = from acc in db.MSTR_Account
+                    where acc.Name == AccName
+                    select acc;
+
+            bool result= false;
+           
+            if (ExistAcc.Count()==0)
+                result = true;
+            return result;
+
+        }
+        public bool ValidateUser(string emailid)
+        {
+            var Existuser = from u in db.MSTR_User
+                           where u.UserName == emailid
+                           select u;
+
+            bool result = false;
+
+            if (Existuser.Count() == 0)
+                result = true;
+            return result;
+
+        }
+
+        private string CreateActivationKey()
+        {
+            string activationKey = Guid.NewGuid().ToString();
+
+            bool activationKeyAlreadyExists =
+             db.MSTR_User.Any(key => key.ActivationKey == activationKey);
+
+            if (activationKeyAlreadyExists)
+            {
+                activationKey = CreateActivationKey();
+            }
+
+            return activationKey;
+        }
+
+        public ActionResult Activation(string email, string key)
+        {
+            MSTR_User newUser = db.MSTR_User.FirstOrDefault(x => x.UserName == email && x.ActivationKey == key && x.IsActive == false);
+            if(newUser!=null)
+            { 
+                
+               
+                    newUser.ConfirmPassword = newUser.Password;
+                    newUser.IsActive = true;
+                    db.SaveChanges();
+                    ViewBag.Message = "Thank you for activating the account.Please login to continue";
+
+               
+            }
+            else
+            {
+                ViewBag.Message = "Activation link expired.";
+            }
+            return View();
+        }
+
+
+
+
+
+    }
 
 
 }

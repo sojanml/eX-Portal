@@ -1,0 +1,105 @@
+﻿@model eX_Portal.ViewModel.UserRegister
+@using eX_Portal.Models;
+@{
+ 
+}
+
+<!DOCTYPE html>
+<div class="form-horizontal">
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "Register" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="hdnRPASid" value="@ViewBag.RPASid" />
+
+        <div class="error" style="margin-bottom:10px;color:red">
+            @ViewBag.message
+        </div>
+
+
+            <h2>User Registration</h2>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            
+            <div class="form-group">
+                @Html.LabelFor(model => model.AccountId,"Company Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.AccountId, Model.AccountList)
+                    @Html.ValidationMessageFor(model => model.AccountId, "", new { @class = "text-danger" })
+                    <div class="editor-field" id="divAccOther" style="display:none;">
+                      
+                        @Html.EditorFor(model => model.AccountName ,new { htmlAttributes = new { @class = "editor-label", @maxlength = "350",@minlength=4 } })
+                    
+                    </div>
+                </div>
+               
+                
+                
+                </div>
+            
+
+            
+            <div class="form-group">
+                @Html.LabelFor(model => model.EmailId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.EmailId, new { placeholder = "xxxyyy@zzz.com", htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
+                </div>
+            </div>        
+           
+           
+              
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RPASPermitNo, "RPAS Permit No", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.RPASPermitNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RPASPermitNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Password, "Password", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ConfirmPassword, "Confirm Password", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+            <div class="toolbar" style="text-align:right">
+                <input type="submit" value="Create & Continue" class="button" />
+            </div>
+
+            }
+        </div>
+@section header{
+    <link href="~/Content/black-box.css" rel="stylesheet" />
+}
+
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+           
+    <script type="text/javascript" >
+        $(document).ready(function () {
+            var r = $('#AccountId').val();
+            $('#AccountId').on("change", function () {
+                var s = $('#AccountId option:selected').text().toUpperCase();
+                if (s == 'OTHER') {
+                    $('#divAccOther').slideDown();
+                } else {
+                    $('#divAccOther').slideUp();
+                }//if
+            })
+        })
+   
+      
+            </script>
+        }
