@@ -18,7 +18,8 @@ namespace eX_Portal.Controllers {
     // GET: BlackBox
 
     public ActionResult Index() {
-      if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.VIEW"))
+        return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "FDR Data";
 
@@ -41,11 +42,10 @@ namespace eX_Portal.Controllers {
         "  MSTR_Drone.DroneId = [BlackBoxData].DroneId\n" +
         "WHERE\n" +
         "  Speed > 0.00";
-                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-                {
-                    SQL += " AND\n" +
-                      "  MSTR_Drone.AccountID=" + Util.getAccountID();
-                }
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+        SQL += " AND\n" +
+          "  MSTR_Drone.AccountID=" + Util.getAccountID();
+      }
       SQL = SQL + "\n" +
         "GROUP BY\n" +
         "  [BlackBoxData].DroneId,\n" +
@@ -65,7 +65,8 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult Live() {
-      if (!exLogic.User.hasAccess("BLACKBOX.LIVE")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.LIVE"))
+        return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "FDR Live Data";
       string SQL =
@@ -86,23 +87,22 @@ namespace eX_Portal.Controllers {
         "  [DroneData]\n" +
         "LEFT JOIN MSTR_Drone ON\n" +
         "  MSTR_Drone.DroneID = [DroneData].DroneID";
-            /*
-                    "  CASE isnumeric(TotalFlightTime)\n" +
-                    "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), TotalFlightTime) / 60.0, 2) as numeric(36, 2))\n" +
-                    "    ELSE 0.00\n" +
-                    "  END as TotalFlightTime, \n " +
-            */
-            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-            {
-                SQL += " AND\n" +
-                  "  MSTR_Drone.AccountID=" + Util.getAccountID() + "\n" +
-                  "WHERE\n" +
-                  "  MSTR_Drone.AccountID=" + Util.getAccountID();
-            }
-            //   SQL+= " Order By UasDataid";
+      /*
+              "  CASE isnumeric(TotalFlightTime)\n" +
+              "    WHEN 1 THEN cast(round(CONVERT(numeric(12, 3), TotalFlightTime) / 60.0, 2) as numeric(36, 2))\n" +
+              "    ELSE 0.00\n" +
+              "  END as TotalFlightTime, \n " +
+      */
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+        SQL += " AND\n" +
+          "  MSTR_Drone.AccountID=" + Util.getAccountID() + "\n" +
+          "WHERE\n" +
+          "  MSTR_Drone.AccountID=" + Util.getAccountID();
+      }
+      //   SQL+= " Order By UasDataid";
 
 
-            qView nView = new qView(SQL);
+      qView nView = new qView(SQL);
       //if (!exLogic.User.hasAccess("BLACKBOX.LIVE")) nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
 
       if (Request.IsAjaxRequest()) {
@@ -114,12 +114,15 @@ namespace eX_Portal.Controllers {
     }//Index()
 
     public ActionResult Detail([Bind(Prefix = "ID")] String DroneID_BBFlightID = "") {
-      if (!exLogic.User.hasAccess("BLACKBOX.VIEW")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.VIEW"))
+        return RedirectToAction("NoAccess", "Home");
       String[] SplitData = DroneID_BBFlightID.Split(',');
-      if (SplitData.Length != 2) return RedirectToAction("Error");
+      if (SplitData.Length != 2)
+        return RedirectToAction("Error");
       int DroneID = Util.toInt(SplitData[0]);
       int BBFlightID = Util.toInt(SplitData[1]);
-      if (DroneID < 1 || BBFlightID < 1) return RedirectToAction("Error");
+      if (DroneID < 1 || BBFlightID < 1)
+        return RedirectToAction("Error");
       ViewBag.Title = "FDR  Data";
       ViewBag.DroneID = DroneID;
 
@@ -155,7 +158,8 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult Upload() {
-      if (!exLogic.User.hasAccess("BLACKBOX.UPLOAD")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.UPLOAD"))
+        return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Upload";
       return View();
     }//upload()
@@ -195,7 +199,8 @@ namespace eX_Portal.Controllers {
         var TheFile = Request.Files[0];
         String FullName = UploadPath + TheFile.FileName;
 
-        if (!Directory.Exists(UploadPath)) Directory.CreateDirectory(UploadPath);
+        if (!Directory.Exists(UploadPath))
+          Directory.CreateDirectory(UploadPath);
         TheFile.SaveAs(FullName);
         JsonText.Append("{");
         JsonText.Append(Util.Pair("status", "success", true));
@@ -222,7 +227,8 @@ namespace eX_Portal.Controllers {
       JsonText.Append("\"addFile\":[");
       bool isAddComma = false;
       foreach (string file in Directory.EnumerateFiles(UploadPath, "*.*")) {
-        if (isAddComma) JsonText.Append(",\n");
+        if (isAddComma)
+          JsonText.Append(",\n");
         JsonText.Append(Util.getFileInfo(file));
         isAddComma = true;
       }
@@ -257,7 +263,8 @@ namespace eX_Portal.Controllers {
 
     //Get:BlackBox/Create
     public ActionResult Create() {
-      if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.CREATE"))
+        return RedirectToAction("NoAccess", "Home");
       //ViewBag.IsAESVisible = false;
       //if (exLogic.User.hasAccess("BLACKBOX.AES"))
       //    ViewBag.IsAESVisible = true;
@@ -269,7 +276,8 @@ namespace eX_Portal.Controllers {
     // POST: BlackBox/Create
     [HttpPost]
     public ActionResult Create(Models.MSTR_BlackBox BlackBoxData) {
-      if (!exLogic.User.hasAccess("BLACKBOX.CREATE")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.CREATE"))
+        return RedirectToAction("NoAccess", "Home");
       if (ModelState.IsValid) {
         BlackBox BB = new BlackBox();
         //  BlackBox.BlackBoxID = 0;
@@ -326,7 +334,8 @@ namespace eX_Portal.Controllers {
 
     // GET: Parts/Edit/5
     public ActionResult Edit(int id) {
-      if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.EDIT"))
+        return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Edit Blackbox";
       ViewBag.IsAESVisible = false;
       if (exLogic.User.hasAccess("BLACKBOX.AES"))
@@ -344,7 +353,8 @@ namespace eX_Portal.Controllers {
     public ActionResult Edit(MSTR_BlackBox BB) {
       try {
         // TODO: Add update logic here
-        if (!exLogic.User.hasAccess("BlackBox.EDIT")) return RedirectToAction("NoAccess", "Home");
+        if (!exLogic.User.hasAccess("BlackBox.EDIT"))
+          return RedirectToAction("NoAccess", "Home");
         if (ModelState.IsValid) {
           ViewBag.Title = "Edit BlackBox";
           BB.CreatedBy = Util.getLoginUserID();
@@ -399,35 +409,36 @@ namespace eX_Portal.Controllers {
         if (BB != null)
           ViewBag.EncryptionKey = BB.EncryptionKey;
       }
-      if (BB == null) return RedirectToAction("Error", "Home");
+      if (BB == null)
+        return RedirectToAction("Error", "Home");
       ViewBag.Title = "Black Box Details";
       return View(BB);
     }
 
     //by BT
     public ActionResult TransactionDet([Bind(Prefix = "ID")] int BlackBoxID) {
-            //string SQL = @"SELECT MSTR_BlackBox.BlackBoxName,
-            //                     BlackBoxTransaction.BBStatus as Status,
-            //                     BlackBoxTransaction.CollectionMode as 'TransactionMode',
-            //                     BlackBoxTransaction.BankName as 'BankName',
-            //                     BlackBoxTransaction.Amount, 
-            //                     BlackBoxTransaction.ChequeNumber as 'ChequeNumber',
-            //                     BlackBoxTransaction.DateOfCheque as 'ChequeDate', 
-            //                     BlackBoxTransaction.NameOnCard as 'NameOnCard',
-            //                     BlackBoxTransaction.CreatedDate as 'CreatedDate',
-            //                     MSTR_Drone.DroneName as 'DroneName',
-            //                     BlackBoxTransaction.Note,
-            //                     Count(*) Over() as _TotalRecords,
-            //                     BlackBoxTransaction.ID as _PKey                           
-            //                     FROM
-            //                     BlackBoxTransaction LEFT OUTER JOIN
-            //                     MSTR_BlackBox ON BlackBoxTransaction.BlackBoxID = MSTR_BlackBox.BlackBoxID LEFT OUTER JOIN
-            //                     MSTR_Drone ON BlackBoxTransaction.DroneID = MSTR_Drone.DroneId 
-            //                     WHERE(BlackBoxTransaction.BlackBoxID = " + BlackBoxID + ")";
+      //string SQL = @"SELECT MSTR_BlackBox.BlackBoxName,
+      //                     BlackBoxTransaction.BBStatus as Status,
+      //                     BlackBoxTransaction.CollectionMode as 'TransactionMode',
+      //                     BlackBoxTransaction.BankName as 'BankName',
+      //                     BlackBoxTransaction.Amount, 
+      //                     BlackBoxTransaction.ChequeNumber as 'ChequeNumber',
+      //                     BlackBoxTransaction.DateOfCheque as 'ChequeDate', 
+      //                     BlackBoxTransaction.NameOnCard as 'NameOnCard',
+      //                     BlackBoxTransaction.CreatedDate as 'CreatedDate',
+      //                     MSTR_Drone.DroneName as 'DroneName',
+      //                     BlackBoxTransaction.Note,
+      //                     Count(*) Over() as _TotalRecords,
+      //                     BlackBoxTransaction.ID as _PKey                           
+      //                     FROM
+      //                     BlackBoxTransaction LEFT OUTER JOIN
+      //                     MSTR_BlackBox ON BlackBoxTransaction.BlackBoxID = MSTR_BlackBox.BlackBoxID LEFT OUTER JOIN
+      //                     MSTR_Drone ON BlackBoxTransaction.DroneID = MSTR_Drone.DroneId 
+      //                     WHERE(BlackBoxTransaction.BlackBoxID = " + BlackBoxID + ")";
 
 
 
-            string SQL = @"SELECT MSTR_BlackBox.BlackBoxName,
+      string SQL = @"SELECT MSTR_BlackBox.BlackBoxName,
                                  BlackBoxTransaction.BBStatus as Status,                               
                                  BlackBoxTransaction.Amount,                              
                                  MSTR_Drone.DroneName as 'DroneName',
@@ -441,7 +452,7 @@ namespace eX_Portal.Controllers {
                                  WHERE(BlackBoxTransaction.BlackBoxID = " + BlackBoxID + ")";
 
 
-            qView nView = new qView(SQL);
+      qView nView = new qView(SQL);
 
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text /javascript";
@@ -454,7 +465,8 @@ namespace eX_Portal.Controllers {
 
     // GET: BlackBox/Issue/5
     public ActionResult Rental([Bind(Prefix = "ID")] int approvalid = 0) {
-      if (!exLogic.User.hasAccess("BLACKBOX.RENT")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.RENT"))
+        return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Blackbox Rental";
       var dronedet = (from d in db.GCA_Approval
                       where d.ApprovalID == approvalid
@@ -475,202 +487,201 @@ namespace eX_Portal.Controllers {
       return View();
     }
 
-        [HttpPost]
-        public ActionResult Rental(BlackBoxTransaction BBTransaction)
-        {
-            if (!exLogic.User.hasAccess("BLACKBOX.RENT")) return RedirectToAction("NoAccess", "Home");
-            ModelState.Remove("Note");
-            ModelState.Remove("VerifyCode");
-            if (ModelState.IsValid)
-            {
-                BBTransaction.BBStatus = "OUT";
-                BBTransaction.CreatedBy = Session["UserID"].ToString();
-                BBTransaction.DroneID = Convert.ToInt32(TempData["Droneid"]);
-                BBTransaction.ApprovalID = Convert.ToInt32(TempData["Approvalid"]);
-                
-
-                string insertsql = "insert into[BlackBoxTransaction] ([BlackBoxID] \n" +
-                         ",[BBStatus] \n" +
-                         ",[CollectionMode] \n" +
-                         ",[NameOnCard] \n" +
-                         ",[BankName] \n" +
-                         ",[Amount] \n" +
-                         ",[ChequeNumber] \n" +
-                         ",[CreatedDate] \n" +
-                         ",[CreatedBy] \n" +
-                         ",[DroneID] \n" +
-                         ",[RentType] \n" +
-                         ",[RentAmount] \n" +
-                         ",[ApprovalID])values( \n" +
-                         BBTransaction.BlackBoxID + ",'OUT','" + BBTransaction.CollectionMode + "','" + BBTransaction.NameOnCard + "','" + BBTransaction.BankName + "',\n" +
-                         BBTransaction.Amount + ",'" + BBTransaction.ChequeNumber + "',"+"sysdatetime()"+",'\n" +
-                         BBTransaction.CreatedBy + "'," + BBTransaction.DroneID + ",'" + BBTransaction.RentType + "','" + BBTransaction.RentAmount + "'," + BBTransaction.ApprovalID + ")";
-                int bbtransctionid = Util.InsertSQL(insertsql);
-                string bbupdatesql = "update [MSTR_BlackBox] set [LastRentalId]=" + bbtransctionid + ",[CurrentStatus]='OUT',CurrentUserID=" + Convert.ToInt32(Session["UserID"].ToString()) + ",CurrentDroneID=" + Convert.ToInt32(TempData["Droneid"]) + " where [BlackBoxID]=" + BBTransaction.BlackBoxID;
-                Util.doSQL(bbupdatesql);
-                string droneupdatesql = "update [MSTR_Drone] set [BlackBoxID]=" + BBTransaction.BlackBoxID + " where [DroneId]=" + BBTransaction.DroneID;
-                Util.doSQL(droneupdatesql);
-                return RedirectToAction("AllApplications", "Rpas");
-            }
-            return View();
-        }
-
-        [HttpGet]
-        public JsonResult BlackBoxTransAmountPaidVal([Bind(Prefix = "ID")] int BlackBoxID = 0)
-        {
-            var lastID = (
-                from y in db.MSTR_BlackBox
-                where y.BlackBoxID == BlackBoxID
-                select y.LastRentalId
-                  ).FirstOrDefault();
-
-            BlackBoxTransaction btx = (
-                from n in db.BlackBoxTransactions
-                where n.ID == lastID
-                select n
-              ).FirstOrDefault();
-
-            decimal? Amount = 0;
-            if (btx != null)
-                Amount = btx.Amount;
-
-            return Json(Amount, JsonRequestBehavior.AllowGet);
-
-        }
-
-        [HttpGet]
-        public JsonResult BlackBoxTransDroneVal([Bind(Prefix = "ID")] int BlackBoxID = 0)
-        {
-            var lastID = (
-                from y in db.MSTR_BlackBox
-                where y.BlackBoxID == BlackBoxID
-                select y.LastRentalId
-                  ).FirstOrDefault();
-
-            BlackBoxTransaction btx = (
-                from n in db.BlackBoxTransactions
-                where n.ID == lastID
-                select n
-              ).FirstOrDefault();
+    [HttpPost]
+    public ActionResult Rental(BlackBoxTransaction BBTransaction) {
+      if (!exLogic.User.hasAccess("BLACKBOX.RENT"))
+        return RedirectToAction("NoAccess", "Home");
+      ModelState.Remove("Note");
+      ModelState.Remove("VerifyCode");
+      if (ModelState.IsValid) {
+        BBTransaction.BBStatus = "OUT";
+        BBTransaction.CreatedBy = Session["UserID"].ToString();
+        BBTransaction.DroneID = Convert.ToInt32(TempData["Droneid"]);
+        BBTransaction.ApprovalID = Convert.ToInt32(TempData["Approvalid"]);
 
 
-            int? DroneID=0;
-            if (btx != null)
-                DroneID = btx.DroneID;
+        string insertsql = "insert into[BlackBoxTransaction] ([BlackBoxID] \n" +
+                 ",[BBStatus] \n" +
+                 ",[CollectionMode] \n" +
+                 ",[NameOnCard] \n" +
+                 ",[BankName] \n" +
+                 ",[Amount] \n" +
+                 ",[ChequeNumber] \n" +
+                 ",[CreatedDate] \n" +
+                 ",[CreatedBy] \n" +
+                 ",[DroneID] \n" +
+                 ",[RentType] \n" +
+                 ",[RentAmount] \n" +
+                 ",[ApprovalID])values( \n" +
+                 BBTransaction.BlackBoxID + ",'OUT','" + BBTransaction.CollectionMode + "','" + BBTransaction.NameOnCard + "','" + BBTransaction.BankName + "',\n" +
+                 BBTransaction.Amount + ",'" + BBTransaction.ChequeNumber + "'," + "sysdatetime()" + ",'\n" +
+                 BBTransaction.CreatedBy + "'," + BBTransaction.DroneID + ",'" + BBTransaction.RentType + "','" + BBTransaction.RentAmount + "'," + BBTransaction.ApprovalID + ")";
+        int bbtransctionid = Util.InsertSQL(insertsql);
+        string bbupdatesql = "update [MSTR_BlackBox] set [LastRentalId]=" + bbtransctionid + ",[CurrentStatus]='OUT',CurrentUserID=" + Convert.ToInt32(Session["UserID"].ToString()) + ",CurrentDroneID=" + Convert.ToInt32(TempData["Droneid"]) + " where [BlackBoxID]=" + BBTransaction.BlackBoxID;
+        Util.doSQL(bbupdatesql);
+        string droneupdatesql = "update [MSTR_Drone] set [BlackBoxID]=" + BBTransaction.BlackBoxID + " where [DroneId]=" + BBTransaction.DroneID;
+        Util.doSQL(droneupdatesql);
+        return RedirectToAction("AllApplications", "Rpas");
+      }
+      return View();
+    }
 
-            return Json(DroneID, JsonRequestBehavior.AllowGet);
+    [HttpGet]
+    public JsonResult BlackBoxTransAmountPaidVal([Bind(Prefix = "ID")] int BlackBoxID = 0) {
+      var lastID = (
+          from y in db.MSTR_BlackBox
+          where y.BlackBoxID == BlackBoxID
+          select y.LastRentalId
+            ).FirstOrDefault();
 
-        }
+      BlackBoxTransaction btx = (
+          from n in db.BlackBoxTransactions
+          where n.ID == lastID
+          select n
+        ).FirstOrDefault();
 
-        public int GetLastTransactionID(int BlackBoxID = 0)
-        {try
-            {
-                var lastID = (
-                   from y in db.MSTR_BlackBox
-                   where y.BlackBoxID == BlackBoxID
-                   select y.LastRentalId
-                     ).FirstOrDefault();
+      decimal? Amount = 0;
+      if (btx != null)
+        Amount = btx.Amount;
 
-                BlackBoxTransaction btx = (
-                    from n in db.BlackBoxTransactions
-                    where n.ID == lastID
-                    select n
-                  ).FirstOrDefault();
-                return btx.ID;
-            }
-            catch(Exception Ex)
-            {
-                return 0;
-            }
-        }
+      return Json(Amount, JsonRequestBehavior.AllowGet);
 
-        [HttpGet]
-        public JsonResult BlackBoxInfo(
+    }
+
+    [HttpGet]
+    public JsonResult BlackBoxTransDroneVal([Bind(Prefix = "ID")] int BlackBoxID = 0) {
+      var lastID = (
+          from y in db.MSTR_BlackBox
+          where y.BlackBoxID == BlackBoxID
+          select y.LastRentalId
+            ).FirstOrDefault();
+
+      BlackBoxTransaction btx = (
+          from n in db.BlackBoxTransactions
+          where n.ID == lastID
+          select n
+        ).FirstOrDefault();
+
+
+      int? DroneID = 0;
+      if (btx != null)
+        DroneID = btx.DroneID;
+
+      return Json(DroneID, JsonRequestBehavior.AllowGet);
+
+    }
+
+    public int GetLastTransactionID(int BlackBoxID = 0) {
+      try {
+        var lastID = (
+           from y in db.MSTR_BlackBox
+           where y.BlackBoxID == BlackBoxID
+           select y.LastRentalId
+             ).FirstOrDefault();
+
+        BlackBoxTransaction btx = (
+            from n in db.BlackBoxTransactions
+            where n.ID == lastID
+            select n
+          ).FirstOrDefault();
+        return btx.ID;
+      } catch (Exception Ex) {
+        return 0;
+      }
+    }
+
+    [HttpGet]
+    public JsonResult BlackBoxInfo(
       [Bind(Prefix = "ID")] int BlackBoxID = 0,
       DateTime? StartDate = null,
-      DateTime? EndDate = null
-    )
-        {
+      DateTime? EndDate = null ) {
 
-            var lastID = (
-                from y in db.MSTR_BlackBox
-                where y.BlackBoxID == BlackBoxID
-                select y.LastRentalId
-                  ).FirstOrDefault();
+      var lastID = (
+          from y in db.MSTR_BlackBox
+          where y.BlackBoxID == BlackBoxID
+          select y.LastRentalId
+            ).FirstOrDefault();
 
-            BlackBoxTransaction btx = (
-                from n in db.BlackBoxTransactions
-                where n.ID == lastID
-                select n
-              ).FirstOrDefault();
+      BlackBoxTransaction btx = (
+          from n in db.BlackBoxTransactions
+          where n.ID == lastID
+          select n
+        ).FirstOrDefault();
 
-            if (btx == null)
-                return Json(new BlackBox(), JsonRequestBehavior.AllowGet);
+      //if (btx == null)
+      //  return Json(new BlackBox(), JsonRequestBehavior.AllowGet);
 
-            if (StartDate == null) StartDate = btx.RentStartDate == null ? System.DateTime.Now : btx.RentStartDate;
-            if (EndDate == null) EndDate = btx.RentEndDate == null ? System.DateTime.Now : btx.RentEndDate;
-            //get the information of calucation for the dates
-            ViewData["RAmount"] = btx.Amount == null ? 0 : btx.Amount;
-            var NumDays = (int)((TimeSpan)(StartDate - EndDate)).TotalDays;
-            if (NumDays < 0) NumDays = -1 * NumDays;
-            var BB = new BlackBox();
-            var BBInfo = new
-            {
-                Cost = BB.getBlackBoxCost(NumDays),
-                Info = btx
-            };
-            //      ViewData["BalanceAmount"] = totalAmt;
-            return Json(BBInfo, JsonRequestBehavior.AllowGet);
-        }
+      if(btx != null) { 
+        if (StartDate == null)
+          StartDate = btx.RentStartDate == null ? System.DateTime.Now : btx.RentStartDate;
+        if (EndDate == null)
+          EndDate = btx.RentEndDate == null ? System.DateTime.Now : btx.RentEndDate;
+        //get the information of calucation for the dates
+        //ViewData["RAmount"] = btx.Amount == null ? 0 : btx.Amount;
+      }
+
+      if (StartDate == null || EndDate == null)
+        return Json(new BlackBox(), JsonRequestBehavior.AllowGet);
+
+      var NumDays = (int)((TimeSpan)(StartDate - EndDate)).TotalDays;
+      if (NumDays < 0)
+        NumDays = -1 * NumDays;
+      var BB = new BlackBox();
+      var BBInfo = new {
+        Cost = BB.getBlackBoxCost(NumDays),
+        Info = btx
+      };
+      //      ViewData["BalanceAmount"] = totalAmt;
+      return Json(BBInfo, JsonRequestBehavior.AllowGet);
+    }
 
 
-        public ActionResult ReceiveBlackBox([Bind(Prefix = "ID")] int BlackBoxTransID = 0)
-        {
-            if (!exLogic.User.hasAccess("BLACKBOX.RECEIVE")) return RedirectToAction("NoAccess", "Home");
-            BlackBoxTransaction btx = new BlackBoxTransaction();
-            if (BlackBoxTransID != 0)
-            {
-                btx = db.BlackBoxTransactions.Find(BlackBoxTransID);
-                if (btx == null) return RedirectToAction("Error", "Home");
+    public ActionResult ReceiveBlackBox([Bind(Prefix = "ID")] int BlackBoxTransID = 0) {
+      if (!exLogic.User.hasAccess("BLACKBOX.RECEIVE"))
+        return RedirectToAction("NoAccess", "Home");
+      BlackBoxTransaction btx = new BlackBoxTransaction();
+      if (BlackBoxTransID != 0) {
+        btx = db.BlackBoxTransactions.Find(BlackBoxTransID);
+        if (btx == null)
+          return RedirectToAction("Error", "Home");
 
-                //BlackBoxTransaction btxTran = (
-                //                 from n in db.BlackBoxTransactions
-                //                 where n.ID == BlackBoxTransID
-                //                 select n
-                //               ).FirstOrDefault();
-                //btx.ID = btxTran.BlackBoxID;
-            }
-            btx.RentStartDate = btx.RentStartDate == null ? System.DateTime.Now : btx.RentStartDate;
-            btx.RentEndDate = btx.RentEndDate == null ? System.DateTime.Now : btx.RentEndDate;
-            btx.BBStatus = "IN";
-            return View(btx);
-        }
+        //BlackBoxTransaction btxTran = (
+        //                 from n in db.BlackBoxTransactions
+        //                 where n.ID == BlackBoxTransID
+        //                 select n
+        //               ).FirstOrDefault();
+        //btx.ID = btxTran.BlackBoxID;
+      }
+      btx.RentStartDate = btx.RentStartDate == null ? System.DateTime.Now : btx.RentStartDate;
+      btx.RentEndDate = btx.RentEndDate == null ? System.DateTime.Now : btx.RentEndDate;
+      btx.BBStatus = "IN";
+      return View(btx);
+    }
 
-        [HttpPost]
-        public ActionResult ReceiveBlackBox(BlackBoxTransaction Btx)
-        {
-            if (!exLogic.User.hasAccess("BLACKBOX.RECEIVE")) return RedirectToAction("NoAccess", "Home");            
-            string StartDate = Request.Form["hdnRentStartDate"];
-            string tAmount = Request.Form["hdnTotalAmount"];
-            string DroneID = Request.Form["DroneID"];
-            if ((Convert.ToDateTime(Btx.RentEndDate)) < (Convert.ToDateTime(StartDate)))
-            {
-                ModelState.AddModelError("RentEndDate", "Rent End Date should be greater than Start Date!!");
-                Btx.BBStatus = "IN";
-                return View(Btx);
-            }
-            string sDate = Convert.ToDateTime(StartDate).ToString("yyyy/MM/dd");
-            string eDate = Convert.ToDateTime(Btx.RentEndDate).ToString("yyyy/MM/dd");
+    [HttpPost]
+    public ActionResult ReceiveBlackBox(BlackBoxTransaction Btx) {
+      if (!exLogic.User.hasAccess("BLACKBOX.RECEIVE"))
+        return RedirectToAction("NoAccess", "Home");
+      string StartDate = Request.Form["hdnRentStartDate"];
+      string tAmount = Request.Form["hdnTotalAmount"];
+      string DroneID = Request.Form["DroneID"];
+      if ((Convert.ToDateTime(Btx.RentEndDate)) < (Convert.ToDateTime(StartDate))) {
+        ModelState.AddModelError("RentEndDate", "Rent End Date should be greater than Start Date!!");
+        Btx.BBStatus = "IN";
+        return View(Btx);
+      }
+      string sDate = Convert.ToDateTime(StartDate).ToString("yyyy/MM/dd");
+      string eDate = Convert.ToDateTime(Btx.RentEndDate).ToString("yyyy/MM/dd");
 
-            string ye;
-         
-            ye = " RentStartDate='" + sDate + "',  RentEndDate='" + eDate + "', Amount='" + Btx.Amount + "',TotalAmount = " + (tAmount == "" ? 0 :Util.toDecimal(tAmount)) + "";
-            //ye = " Amount='" + Btx.Amount + "',TotalAmount = " + (tAmount == "" ? 0 : Util.toDecimal(tAmount)) + "";
+      string ye;
 
-            string SQL = "update BlackBoxTransaction set DroneID = 0, BBStatus = 'IN', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "'," + ye + " where ID = " + GetLastTransactionID(Btx.BlackBoxID);
-            //need to appnd after testing
-           
-            int Val = Util.doSQL(SQL);
+      ye = " RentStartDate='" + sDate + "',  RentEndDate='" + eDate + "', Amount='" + Btx.Amount + "',TotalAmount = " + (tAmount == "" ? 0 : Util.toDecimal(tAmount)) + "";
+      //ye = " Amount='" + Btx.Amount + "',TotalAmount = " + (tAmount == "" ? 0 : Util.toDecimal(tAmount)) + "";
+
+      string SQL = "update BlackBoxTransaction set DroneID = 0, BBStatus = 'IN', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "'," + ye + " where ID = " + GetLastTransactionID(Btx.BlackBoxID);
+      //need to appnd after testing
+
+      int Val = Util.doSQL(SQL);
 
       SQL = "update MSTR_BlackBox set LastReceiveId = '" + GetLastTransactionID(Btx.BlackBoxID) + "',CurrentStatus='IN',CurrentUserID = '" + Util.getLoginUserID() + "',CurrentDroneID='0' where BlackBoxID = " + Btx.BlackBoxID;
       Val = Util.doSQL(SQL);
@@ -678,7 +689,7 @@ namespace eX_Portal.Controllers {
       SQL = "update dbo.MSTR_Drone set BlackBoxID = 0 where DroneId = " + Btx.DroneID;
       Val = Util.doSQL(SQL);
 
-      
+
       return RedirectToAction("BlackBoxList", "Blackbox");
       //return View();
     }
@@ -713,82 +724,78 @@ namespace eX_Portal.Controllers {
 
     //Get:BlackBoxCost/Rent
     public ActionResult Rent([Bind(Prefix = "ID")] int BlackBoxID = 0) {
-            if (!exLogic.User.hasAccess("BLACKBOX.RENT")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("BLACKBOX.RENT"))
+        return RedirectToAction("NoAccess", "Home");
 
-            //BlackBoxViewModel BV = new BlackBoxViewModel();
-            //BV.BlackBoxCostList = new List<List<BlackBoxCostCalucation>>();
+      //BlackBoxViewModel BV = new BlackBoxViewModel();
+      //BV.BlackBoxCostList = new List<List<BlackBoxCostCalucation>>();
 
 
-            BlackBoxTransaction btx = new BlackBoxTransaction();
-            if (BlackBoxID != 0)
-            {
-                btx = db.BlackBoxTransactions.Find(BlackBoxID);
-                if (btx == null) return RedirectToAction("Error", "Home");
-            }
-            btx.BBStatus = "OUT";
-            return View(btx);
-           
+      BlackBoxTransaction btx = new BlackBoxTransaction();
+      if (BlackBoxID != 0) {
+        btx = db.BlackBoxTransactions.Find(BlackBoxID);
+        if (btx == null)
+          return RedirectToAction("Error", "Home");
+      }
+      btx.BBStatus = "OUT";
+      return View(btx);
+
     }
 
 
-        [HttpPost]
-        public ActionResult Rent(BlackBoxTransaction Btx)
-        {
-            if (!exLogic.User.hasAccess("BLACKBOX.RENT")) return RedirectToAction("NoAccess", "Home");
-            Nullable<int> DroneID = Btx.DroneID;
-            Nullable<int> BlackBoxID = Btx.BlackBoxID;
-            ModelState.Remove("Amount");
-            if (Btx.DroneID < 1 || Btx.DroneID == null)
-            {
-                ModelState.AddModelError("DroneID", "You must select a Drone.");
-                Btx.BBStatus = "OUT";
-                return View(Btx);
-            }
+    [HttpPost]
+    public ActionResult Rent(BlackBoxTransaction Btx) {
+      if (!exLogic.User.hasAccess("BLACKBOX.RENT"))
+        return RedirectToAction("NoAccess", "Home");
+      Nullable<int> DroneID = Btx.DroneID;
+      Nullable<int> BlackBoxID = Btx.BlackBoxID;
+      ModelState.Remove("Amount");
+      if (Btx.DroneID < 1 || Btx.DroneID == null) {
+        ModelState.AddModelError("DroneID", "You must select a Drone.");
+        Btx.BBStatus = "OUT";
+        return View(Btx);
+      }
 
-            if ((Btx.RentStartDate==null)||(Btx.RentEndDate==null))
-            {
-                ModelState.AddModelError("RentStartDate", "Please select both dates!!");
-                Btx.BBStatus = "OUT";
-                return View(Btx);
-            }
-            
-            string sDate = Convert.ToDateTime(Btx.RentStartDate).ToString("yyyy/MM/dd");
-            string eDate = Convert.ToDateTime(Btx.RentEndDate).ToString("yyyy/MM/dd");
-            if (Convert.ToDateTime(Btx.RentEndDate).Date < Convert.ToDateTime(Btx.RentStartDate).Date)
-            {
-                ModelState.AddModelError("RentEndDate", "Rent end date should be greater than rent start date!!");
-                Btx.BBStatus = "OUT";
-                return View(Btx);
-            }
-            string SQL = "insert into blackboxtransaction(DroneID,BBstatus,Note,createdby,Blackboxid,amount,rentamount,RentStartDate,RentEndDate) values("+Btx.DroneID +",'OUT','" + Btx.Note + "'," + Util.getLoginUserID() + "," +BlackBoxID + "," + Util.toInt(Btx.Amount) + "," + Util.toInt(Btx.RentAmount) + ",'"+ sDate + "','"+ eDate +"')";
-            //  string SQL = "update BlackBoxTransaction set DroneID = '0', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "' where ID = " + Btx.ID;
+      if ((Btx.RentStartDate == null) || (Btx.RentEndDate == null)) {
+        ModelState.AddModelError("RentStartDate", "Please select both dates!!");
+        Btx.BBStatus = "OUT";
+        return View(Btx);
+      }
 
-            int bbtransctionid = Util.InsertSQL(SQL);
-           
+      string sDate = Convert.ToDateTime(Btx.RentStartDate).ToString("yyyy/MM/dd");
+      string eDate = Convert.ToDateTime(Btx.RentEndDate).ToString("yyyy/MM/dd");
+      if (Convert.ToDateTime(Btx.RentEndDate).Date < Convert.ToDateTime(Btx.RentStartDate).Date) {
+        ModelState.AddModelError("RentEndDate", "Rent end date should be greater than rent start date!!");
+        Btx.BBStatus = "OUT";
+        return View(Btx);
+      }
+      string SQL = "insert into blackboxtransaction(DroneID,BBstatus,Note,createdby,Blackboxid,amount,rentamount,RentStartDate,RentEndDate) values(" + Btx.DroneID + ",'OUT','" + Btx.Note + "'," + Util.getLoginUserID() + "," + BlackBoxID + "," + Util.toInt(Btx.Amount) + "," + Util.toInt(Btx.RentAmount) + ",'" + sDate + "','" + eDate + "')";
+      //  string SQL = "update BlackBoxTransaction set DroneID = '0', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "' where ID = " + Btx.ID;
 
-            SQL = "update MSTR_BlackBox  set [LastRentalId]=" + bbtransctionid + ", CurrentStatus='OUT',CurrentUserID = '" + Util.getLoginUserID() + "',CurrentDroneID="+Btx.DroneID +" where BlackBoxID = " + BlackBoxID;
-          int  Val = Util.doSQL(SQL);
-
-            SQL = "update dbo.MSTR_Drone set BlackBoxID ="+ BlackBoxID + " where DroneId = " + Btx.DroneID;
-            Val = Util.doSQL(SQL);
-
-            return RedirectToAction("BlackBoxList", "Blackbox");
-        }
+      int bbtransctionid = Util.InsertSQL(SQL);
 
 
-        //adding this for auto complete drone name
-        public ActionResult DroneFilter(FlightReportFilter ReportFilter)
-        {
-            return View(ReportFilter);
-        }
+      SQL = "update MSTR_BlackBox  set [LastRentalId]=" + bbtransctionid + ", CurrentStatus='OUT',CurrentUserID = '" + Util.getLoginUserID() + "',CurrentDroneID=" + Btx.DroneID + " where BlackBoxID = " + BlackBoxID;
+      int Val = Util.doSQL(SQL);
 
-        public String getUAS(String Term = "")
-        {
-            var theReport = new exLogic.Report();
-            return theReport.getUAS(Term);
-        }
+      SQL = "update dbo.MSTR_Drone set BlackBoxID =" + BlackBoxID + " where DroneId = " + Btx.DroneID;
+      Val = Util.doSQL(SQL);
 
-      
+      return RedirectToAction("BlackBoxList", "Blackbox");
+    }
+
+
+    //adding this for auto complete drone name
+    public ActionResult DroneFilter(FlightReportFilter ReportFilter) {
+      return View(ReportFilter);
+    }
+
+    public String getUAS(String Term = "") {
+      var theReport = new exLogic.Report();
+      return theReport.getUAS(Term);
+    }
+
+
     public ActionResult Acknowledgement([Bind(Prefix = "ID")] int TransactionID = 0) {
       //   if (!exLogic.User.hasAccess("BLACKBOX.EDIT")) return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Blackbox Rental";
@@ -796,7 +803,8 @@ namespace eX_Portal.Controllers {
       BlackBoxTransaction btx = new BlackBoxTransaction();
       if (TransactionID != 0) {
         btx = db.BlackBoxTransactions.Find(TransactionID);
-        if (btx == null) return RedirectToAction("Error", "Home");
+        if (btx == null)
+          return RedirectToAction("Error", "Home");
       }
       return View(btx);
 
