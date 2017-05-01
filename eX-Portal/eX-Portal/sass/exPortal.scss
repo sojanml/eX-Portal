@@ -313,6 +313,15 @@ h2 {
   border-bottom: 1px $ReportHeadBackground solid;
 }
 
+a {
+  text-decoration:none;
+  color: #ff0000
+}
+a:hover {
+  text-decoration:underline;
+  color:black;
+}
+
 input:focus,
 select:focus,
 textarea:focus,
@@ -867,7 +876,7 @@ div.form-horizontal {
 
   &.NoBorder {
     border: 0px red none !important;
-    padding:0px !important;
+    padding: 0px !important;
   }
 
 
@@ -912,6 +921,7 @@ div.form-horizontal {
   input[type=file],
   input[type=datetime],
   input[type=number],
+  input[type=password],
   textarea {
     width: 100%;
   }

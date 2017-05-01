@@ -105,6 +105,16 @@ h2 {
   border-bottom: 1px #474747 solid;
 }
 
+a {
+  text-decoration: none;
+  color: #ff0000;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: black;
+}
+
 input:focus,
 select:focus,
 textarea:focus,
@@ -758,6 +768,7 @@ div.form-horizontal input[type=text],
 div.form-horizontal input[type=file],
 div.form-horizontal input[type=datetime],
 div.form-horizontal input[type=number],
+div.form-horizontal input[type=password],
 div.form-horizontal textarea {
   width: 100%;
 }
