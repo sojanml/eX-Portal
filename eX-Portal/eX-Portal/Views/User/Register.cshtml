@@ -31,17 +31,11 @@
                     
                     </div>
                 </div>
-               
-                
-                
-                </div>
-            
-
-            
+            </div>
             <div class="form-group">
                 @Html.LabelFor(model => model.EmailId, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.EmailId, new { placeholder = "xxxyyy@zzz.com", htmlAttributes = new { @class = "form-control" } })
+                    @Html.TextBoxFor(model => model.EmailId,"Email", new { placeholder = "xxxyyy@zzz.com", htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
                 </div>
             </div>        
@@ -90,6 +84,13 @@
     <script type="text/javascript" >
         $(document).ready(function () {
             var r = $('#AccountId').val();
+
+            var selAccount = $('#AccountId option:selected').text().toUpperCase();
+            if (selAccount == 'OTHER') {
+                $('#divAccOther').slideDown();
+            } else {
+                $('#divAccOther').slideUp();
+            }
             $('#AccountId').on("change", function () {
                 var s = $('#AccountId option:selected').text().toUpperCase();
                 if (s == 'OTHER') {
