@@ -436,18 +436,20 @@ namespace Exponent.ADSB {
       DateTime Now = DateTime.UtcNow;
       var FlightPositions = new List<FlightPosition>();
 
-      //if (Now.DayOfWeek == DayOfWeek.Friday || Now.DayOfWeek == DayOfWeek.Saturday) {
-      //  return FlightPositions;
-      //}
+            if (Now.DayOfWeek == DayOfWeek.Friday || Now.DayOfWeek == DayOfWeek.Saturday)
+            {
+                return FlightPositions;
+            }
 
-      //if (Now.Hour < 2 || Now.Hour >= 14) {
-      //  return FlightPositions;
-      //}
+            if (Now.Hour < 2 || Now.Hour >= 14)
+            {
+                return FlightPositions;
+            }
 
-      return FlightPositions;
+            return FlightPositions;
 
 
-      String Query = 
+            String Query = 
         "{> alt 5} " +
         "{> speed 20} " +
         "{true inAir} " +
