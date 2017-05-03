@@ -23,6 +23,13 @@
        
         <input type="hidden" name="ApprovalID" value="@Model.ApprovalID" />
         <input type="hidden" name="RentAmount" value="@Model.RentAmount "/>
+        <div class="editor-label">
+            Select User
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("pilot"))
+            @Html.ValidationMessageFor(model => model.DroneID)
+        </div>
 
 
         <div class="editor-label">

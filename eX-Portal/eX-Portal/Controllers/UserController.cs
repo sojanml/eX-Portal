@@ -1020,6 +1020,9 @@ namespace eX_Portal.Controllers {
             if (string.IsNullOrEmpty(URegister.RPASPermitNo) || string.IsNullOrEmpty(URegister.RPASPermitNo.Trim()))
             {
                 ModelState.AddModelError("RPASPermitNo", "Please enter your RPAS permit number.");
+
+            }else if(ValidateDCAAPermit(URegister.RPASPermitNo.Trim())){
+                ModelState.AddModelError("RPASPermitNo", "Please enter valid permit number.");
             }
             if (string.IsNullOrEmpty(URegister.Password) )
             {
@@ -1032,19 +1035,30 @@ namespace eX_Portal.Controllers {
             }
              if (URegister.Password!=null)
             {
-                if(URegister.Password.Length<6)
+                if(URegister.Password.Length<=6)
                 ModelState.AddModelError("Password", "Password length should be minimium 6 characters");
             }
-            if (ModelState.IsValid && ValidateUser(URegister.EmailId)) {
+             if(!ValidateUser(URegister.EmailId))
+            {
+                ModelState.AddModelError("EmailId", "Email already registered");
+            }
+            if (URegister.AccountId == -1)
+            {
+
+                if (!ValidateAccount(URegister.AccountName))
+                {
+                    ModelState.AddModelError("AccountName", "Account already registered");
+                }
+            }
+
+                    if (ModelState.IsValid) {
 
                 MSTR_User newUser = new MSTR_User();
 
             if (URegister.AccountId==-1)
             {
                                    
-                if (ValidateAccount(URegister.AccountName))
-                {
-                        MSTR_Account newAcc = new MSTR_Account();
+                      MSTR_Account newAcc = new MSTR_Account();
                         newAcc.Name = URegister.AccountName;
                         newAcc.PilotProfileID = 4;
                         newAcc.CountryCode = 2;
@@ -1054,7 +1068,7 @@ namespace eX_Portal.Controllers {
                         int newAccID = db.MSTR_Account.First(x => x.Name == URegister.AccountName).AccountId;
                             
                         newUser.AccountId = newAccID;
-                }
+               
             }
             else
             {
@@ -1074,8 +1088,10 @@ namespace eX_Portal.Controllers {
                     newUser.UserName = URegister.EmailId;
                     newUser.UserProfileId = 4;
                     newUser.Dashboard = "UserDashboard";
+                newUser.DOE_RPASPermit = DateTime.Now.AddYears(1);
+                newUser.DOI_RPASPermit= DateTime.Now;
 
-                    db.MSTR_User.Add(newUser);
+                db.MSTR_User.Add(newUser);
                 db.SaveChanges();
                 int newUserID = db.MSTR_User.First(x => x.UserName == URegister.EmailId).UserId;
                     PortalAlertEmail newMail = new PortalAlertEmail();
@@ -1083,6 +1099,7 @@ namespace eX_Portal.Controllers {
                     newMail.ToAddress = newUser.EmailId;
                     newMail.UserID = 0;
                     newMail.SendType = "EMAIL";
+                    newMail.IsSend = 0;
                     newMail.EmailURL = $"~/Email/Activation/{newUserID}";
 
                 db.PortalAlertEmails.Add(newMail);
@@ -1093,7 +1110,7 @@ namespace eX_Portal.Controllers {
             }
             else
             {
-                ModelState.AddModelError("EmailId", "Email already registered.");
+            
                List<SelectListItem> AccSelectList = exLogic.Util.GetAccountList().ToList();
                int AccCount = AccSelectList.Count;
                AccSelectList.Add(new SelectListItem() { Text = "Other", Value = "-1" });
@@ -1127,6 +1144,19 @@ namespace eX_Portal.Controllers {
             bool result = false;
 
             if (Existuser.Count() == 0)
+                result = true;
+            return result;
+
+        }
+        public bool ValidateDCAAPermit(string RPASPermit)
+        {
+            var valid = from u in db.MSTR_User
+                            where u.RPASPermitNo == RPASPermit
+                            select u;
+
+            bool result = false;
+
+            if (valid.Count()>0)
                 result = true;
             return result;
 
@@ -1169,7 +1199,21 @@ namespace eX_Portal.Controllers {
         }
 
 
+        public ActionResult BillingInformation(int ID=0)
+        {
+            string Sql = $@"SELECT  [ID],[RentType]
+                        ,[RentStartDate]
+                        ,[RentEndDate]
+                        ,[Amount]
+                        ,[CreatedDate]
+                        ,[RentAmount]
+                        ,[TotalAmount]
+                        ,[UserID]
+                    FROM[DCAAPortal].[dbo].[BlackBoxTransaction]  
+                    where userid={ID}";
 
+            return View();
+        }
 
 
     }
