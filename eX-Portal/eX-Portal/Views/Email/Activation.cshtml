@@ -3,21 +3,13 @@
     Layout = "~/Views/Shared/_Email.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Activation</title>
-   
-    
-
-</head>
-<body>
     <div> 
+      <P>Hello,</P>
+
+      <P>
         Please click on the link below for activation.
         <br />
         <a href="http://portal.exponent-ts.com/User/Activation?email=@Model.EmailId&key=@Model.ActivationKey">Activate</a>
+      </P>
     </div>
-</body>
-</html>
+

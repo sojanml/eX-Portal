@@ -2,53 +2,53 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-<title>HTML Email Format</title>
-<style type="text/css">
-body {
-  font-family: Roboto, sans-serif;
-}
-</style>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <title>Untitled 1</title>
+  <style type="text/css">
+    .auto-style1 {
+      color: #FFFFFF;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: large;
+    }
+  </style>
 </head>
-<body>
-<table style="width: 100%">
-  <tr>
-    <td valign="top"><img alt="" height="62" src="cid:CompanyLogo" width="300" /></td>
-    <td align="right" valign="top"><font size="6">@ViewBag.Title</font></td>
-  </tr>
-</table>
-  <p>&nbsp;</p>
-<table style="margin-top:30px;" border="1" borderColor="red" cellpadding="10" cellspacing="0" width="100%">
-  <tr>
-    <td style="font-size:12pt;">
-      @RenderBody()
-    </td>
-  </tr>
-</table>
-  <p>&nbsp;</p>
 
-  <table style="background-color:#f1f1f1; width: 100%" cellpadding="10">
+<body>
+
+  <p><img alt="" height="62" src="cid:CompanyLogo" /></p>
+  <table cellpadding="5" cellspacing="0" style="background-color: #474747; width: 100%;">
     <tr>
-      <td valign="top"><p><strong>Exponent</strong></p>
-      <p style="font-size:9pt;">
-      At EXPONENT, we invest time and passion into revamping everyday processes with creative 21st century solutions, using the latest tools and technology. The benefits of which, 
-      you will find, are "Exponential" to your business and its bottom line.</p></td>
-      <td width="40%" style="white-space:nowrap" valign="top">
-      <p><strong>Contact us</strong></p>
-      <p style="font-size:9pt;">
-      2203 Concord Tower Al Sofouh Street<br />
-      P.O.Box 454483 Dubai, UAE<br />
-      <br />      
-      info@exponent-ts.com<br />
-      +971-4-436-4203</p></td>
+      <td class="auto-style1">@ViewBag.Title</td>
     </tr>
   </table>
+  <p>&nbsp;</p>
+  @RenderBody()
 
-
-
-<p>&nbsp;</p>
-
+  <p>&nbsp;</p>
+  <table style="background-color:#f1f1f1; width: 100%" cellpadding="10">
+    <tr>
+      <td valign="top">
+        <p><strong>Exponent</strong></p>
+        <p style="font-size:9pt;">
+          At EXPONENT, we invest time and passion into revamping everyday processes with creative 21st century solutions, using the latest tools and technology. The benefits of which,
+          you will find, are "Exponential" to your business and its bottom line.
+        </p>
+      </td>
+      <td width="40%" style="white-space:nowrap" valign="top">
+        <p><strong>Contact us</strong></p>
+        <p style="font-size:9pt;">
+          Dubai World Central, Building D, Office 102 <br />
+          P.O.Box 454483 Dubai, UAE<br />
+          <br />
+          info@exponent-ts.com<br />
+          +971-4-436-4203
+        </p>
+      </td>
+    </tr>
+  </table>
 
 </body>
 
 </html>
+
+

@@ -37,6 +37,7 @@
                 Welcome
                 <b>@Session["FirstName"]</b>
               </li>
+
               <li id="user-menu">
                 <a href="#" id="user-menu-link">Account Settings <span class="icon spinner">&#xf013;</span></a>
                 <ul id="user-menu-items">
@@ -47,17 +48,14 @@
             }
           </ul>
         </nav>
+        @if (Session["UserID"] != null) {
         <nav class="main-menu">
-          @*
-          <div class="navigation-logo">
-            <img src="~/images/logo-small.png" />
-          </div>
-          *@
           @Html.Action("SystemMenu", "Design")
         </nav>
         <nav class="breadcrumbs">
           @Html.Partial("_BreadCrumbs")
         </nav>
+        }
       </div>
     </header>
   </section>
