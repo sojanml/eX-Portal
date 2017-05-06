@@ -27,8 +27,8 @@
             Select User
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("pilot"))
-            @Html.ValidationMessageFor(model => model.DroneID)
+            @Html.DropDownListFor(model => model.UserID, Util.GetDropDowntList("pilot"))
+            @Html.ValidationMessageFor(model => model.UserID)
         </div>
 
 
@@ -36,7 +36,7 @@
             Select the UAS
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("Drone"))
+            @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("D"))
             @Html.ValidationMessageFor(model => model.DroneID)
         </div>
     
@@ -114,7 +114,7 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
     var FORM = document.forms['RecBlackBox'];
-    var RentStartDate = null; 
+    var RentStartDate = null;
     var RentEndDate = null;
 
     $(document).ready(function () {
@@ -126,11 +126,11 @@
           method: 'GET',
           url: URL
         }).done(ShowRentCalcualtion);
-      })//$('#ID').on("change")*@                
+      })//$('#ID').on("change")*@
         $('#RentStartDate').val(fmtDt(new Date()));
         $('#Amount').attr("disabled", "disabled");
         $('#RentEndDate').on("change", function () {
-            RentStartDate =new Date( FORM['RentStartDate'].value);            
+            RentStartDate =new Date( FORM['RentStartDate'].value);
             RentEndDate = new Date($(this).val());
            // RentEndDate = FORM['RentEndDate'].value;
         var Days = Math.abs(RentEndDate - RentStartDate);
@@ -189,7 +189,7 @@
 
            FORM['Amount'].value = amt;
            FORM['RentAmount'].value = RentAmount;
-          
+
         HTML +=
         '<tr class="' + (Cost[i].isSelected ? "selected" : "") + '">\n' +
         '<td>' +  (i+1) + '</td>\n' +
@@ -213,7 +213,7 @@
     }
 
     function fmtDt(theDate) {
-      
+
       var Month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var fmtDate =
         theDate.getDate() + '-' +
@@ -236,26 +236,42 @@
 
 //function for uas dropdown
 
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        var FORM = document.forms['DroneFilterForm'];
-        $("#UASName").autocomplete({
-            source: "@Url.Action("getUAS","Report",null)",
-            minLength: 2,
-        select: function (event, ui) {
-            if (ui.item) {
-                event.preventDefault();
-                FORM['UAS'].value = ui.item.value;
-                FORM['UASName'].value = ui.item.label;
-            } else {
-                FORM['UAS'].value = '0';
-            }
-        }
-    });
+            var FORM = document.forms['DroneFilterForm'];
+            $("#UASName").autocomplete({
+                source: "@Url.Action("getUAS","Report",null)",
+                minLength: 2,
+                select: function (event, ui) {
+                    if (ui.item) {
+                        event.preventDefault();
+                        FORM['UAS'].value = ui.item.value;
+                        FORM['UASName'].value = ui.item.label;
+                    } else {
+                        FORM['UAS'].value = '0';
+                    }
+                }
+            });
 
-    $("#UASName").on("blur", function (e) {
-        if ($(this).val() == "") FORM['UAS'].value = '0';
-    });
+            $("#UASName").on("blur", function (e) {
+                if ($(this).val() == "") FORM['UAS'].value = '0';
+            });
+
+            $("#UserID").on("change", function (e) {
+                var user = $("#UserID").val();
+                $.ajax({
+                    url: '@Url.Action("UserDrones")' + '/' + user,
+                   dataType: 'json',
+                   success: function (data) {
+                       $('#DroneID').empty();  
+                       $.each(data, function (i, data) {
+                           var opt = $('<option>' + data["DroneName"] + '</option>');
+                           opt.attr("value", data["DroneId"]);
+                           $('#DroneID').append(opt);
+                        });
+                    }
+                });
+            });
 
     })
 

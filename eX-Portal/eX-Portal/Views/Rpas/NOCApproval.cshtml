@@ -94,15 +94,7 @@
         @Html.ValidationMessageFor(model => Model.GcaApproval.ApprovalStatus)
       </div>
     </div>
-    <div class="form-group">
-      <div class="editor-label">
-        @Html.LabelFor(model => Model.GcaApproval.BlackBoxID)
-      </div>
-      <div class="editor-field">
-        @Html.DropDownListFor(model => Model.GcaApproval.BlackBoxID, Model.GcaApproval.GetBlackBoxList())
-        @Html.ValidationMessageFor(model => Model.GcaApproval.BlackBoxID)
-      </div>
-    </div>
+  
     <div class="form-group">
       <div class="editor-label">
         @Html.LabelFor(model => Model.GcaApproval.ApprovalRemarks, "Remarks")

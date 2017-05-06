@@ -319,6 +319,7 @@ namespace eX_Portal.exLogic {
                        
                         PDetail.CompanyName= reader.GetValue(16).ToString();
                         PDetail.Nationality = reader.GetValue(17).ToString();
+
                         PDetail.DOI_RPASPermit =reader.GetDateTime(18);
                         PDetail.DOE_RPASPermit  = reader.GetDateTime(19);
                         PDetail.UserId = UserID;

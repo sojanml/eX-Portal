@@ -173,6 +173,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="VerifyCode" Type="nvarchar" MaxLength="30" />
           <Property Name="RentAcknowledged" Type="bit" />
           <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="UserID" Type="int" />
         </EntityType>
         <EntityType Name="ContentManagement">
           <Key>
@@ -186,6 +187,17 @@ warning 6002: The table/view 'DCAAPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="CreatedBy" Type="int" Nullable="false" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
           <Property Name="MenuTitle" Type="varchar" MaxLength="120" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DCAAPortal.dbo.DCAA_PermitDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="DCAA_PermitDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PermitNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="DroneCheckList">
           <Key>
@@ -1547,6 +1559,14 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
     [BlackBoxData].[BBFlightID] AS [BBFlightID]
     FROM [dbo].[BlackBoxData] AS [BlackBoxData]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="DCAA_PermitDetail" EntityType="Self.DCAA_PermitDetail" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [DCAA_PermitDetail].[ID] AS [ID], 
+    [DCAA_PermitDetail].[PermitNo] AS [PermitNo], 
+    [DCAA_PermitDetail].[FirstName] AS [FirstName], 
+    [DCAA_PermitDetail].[LastName] AS [LastName]
+    FROM [dbo].[DCAA_PermitDetail] AS [DCAA_PermitDetail]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="ip2location" EntityType="Self.ip2location" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [ip2location].[ip_from] AS [ip_from], 
@@ -2110,6 +2130,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="AgriTraxImages" EntityType="ExponentPortalModel.AgriTraxImage" />
           <EntitySet Name="AgriTraxManagements" EntityType="ExponentPortalModel.AgriTraxManagement" />
           <EntitySet Name="TrafficMonitors" EntityType="ExponentPortalModel.TrafficMonitor" />
+          <EntitySet Name="DCAA_PermitDetail" EntityType="ExponentPortalModel.DCAA_PermitDetail" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -3115,6 +3136,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="VerifyCode" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="RentAcknowledged" Type="Boolean" />
           <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="UserID" Type="Int32" />
         </EntityType>
         <EntityType Name="ContentManagement">
           <Key>
@@ -3292,6 +3314,15 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="FlightID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DCAA_PermitDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PermitNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4574,6 +4605,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="BlackBoxTransactions">
             <EntityTypeMapping TypeName="ExponentPortalModel.BlackBoxTransaction">
               <MappingFragment StoreEntitySet="BlackBoxTransaction">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="RentAcknowledged" ColumnName="RentAcknowledged" />
                 <ScalarProperty Name="VerifyCode" ColumnName="VerifyCode" />
@@ -4781,6 +4813,16 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="FrameNumber" ColumnName="FrameNumber" />
                 <ScalarProperty Name="DroneID" ColumnName="DroneID" />
                 <ScalarProperty Name="TrafficMonitorID" ColumnName="TrafficMonitorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DCAA_PermitDetail">
+            <EntityTypeMapping TypeName="ExponentPortalModel.DCAA_PermitDetail">
+              <MappingFragment StoreEntitySet="DCAA_PermitDetail">
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="PermitNo" ColumnName="PermitNo" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -683,7 +683,7 @@ namespace eX_Portal.Controllers {
 
       int Val = Util.doSQL(SQL);
 
-      SQL = "update MSTR_BlackBox set LastReceiveId = '" + GetLastTransactionID(Btx.BlackBoxID) + "',CurrentStatus='IN',CurrentUserID = '" + Util.getLoginUserID() + "',CurrentDroneID='0' where BlackBoxID = " + Btx.BlackBoxID;
+      SQL = "update MSTR_BlackBox set LastReceiveId = '" + GetLastTransactionID(Btx.BlackBoxID) + "',CurrentStatus='IN',CurrentUserID = '" + Util.getLoginUserID() + "',CurrentDroneID=0 where BlackBoxID = " + Btx.BlackBoxID;
       Val = Util.doSQL(SQL);
 
       SQL = "update dbo.MSTR_Drone set BlackBoxID = 0 where DroneId = " + Btx.DroneID;
@@ -778,10 +778,38 @@ namespace eX_Portal.Controllers {
       SQL = "update MSTR_BlackBox  set [LastRentalId]=" + bbtransctionid + ", CurrentStatus='OUT',CurrentUserID = '" + Util.getLoginUserID() + "',CurrentDroneID=" + Btx.DroneID + " where BlackBoxID = " + BlackBoxID;
       int Val = Util.doSQL(SQL);
 
-      SQL = "update dbo.MSTR_Drone set BlackBoxID =" + BlackBoxID + " where DroneId = " + Btx.DroneID;
+      SQL = "update MSTR_Drone set BlackBoxID =" + BlackBoxID + " where DroneId = " + Btx.DroneID;
       Val = Util.doSQL(SQL);
 
-      return RedirectToAction("BlackBoxList", "Blackbox");
+            SQL = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + Btx.DroneID;
+            int DroneSetupId = Util.getDBInt(SQL);
+            if (DroneSetupId == 0)
+            {
+                SQL = @"INSERT INTO MSTR_Drone_Setup (
+            DroneID,
+            CreatedBy,
+            CreatedOn,
+            [ModifiedOn]
+          ) VALUES (
+            " + DroneID + @",
+            " + Util.getLoginUserID() + @",
+            GETDATE(),
+            GETDATE()
+          )";
+                Util.doSQL(SQL);
+            }
+            SQL = @"update 
+          MSTR_Drone_Setup 
+        set 
+          PilotUserId=" + Btx.UserID + @",
+          GroundStaffUserId=" + Btx.UserID + @",        
+          [ModifiedBy]=" + Util.getLoginUserID() + @",
+          [ModifiedOn]=GETDATE()
+        where 
+          [DroneId]=" + DroneID;
+            Util.doSQL(SQL);
+
+            return RedirectToAction("BlackBoxList", "Blackbox");
     }
 
 
@@ -825,5 +853,20 @@ namespace eX_Portal.Controllers {
         return View(btx);
       }
     }
+        [HttpGet]
+        public JsonResult UserDrones(int ID=0)
+        {
+            var accID = from usr in db.MSTR_User
+                        where usr.UserId == ID
+                        select usr.AccountId.Value;
+            
+
+
+            var droneList = from drone in db.MSTR_Drone
+                        where drone.AccountID==accID.First()
+                        select drone;
+
+            return Json(droneList,JsonRequestBehavior.AllowGet);
+        }
   }
 }//namespace

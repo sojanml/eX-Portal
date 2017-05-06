@@ -317,6 +317,9 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DataAnnotationsHelper.cs" />
+    <Compile Include="Models\DCAA_PermitDetail.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DroneCheckList.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -611,6 +614,7 @@
     <Content Include="bullet_green.png" />
     <Content Include="bullet_red.png" />
     <Content Include="Content\ADSB.css" />
+    <Content Include="Content\ADSB2.css" />
     <Content Include="Content\Agriculture.css" />
     <Content Include="Content\black-box.css" />
     <Content Include="Content\bootstrap.css" />
@@ -618,6 +622,7 @@
     <Content Include="Content\dashboard.css" />
     <Content Include="Content\dewa-dashboard.css" />
     <Content Include="Content\drone-live.css" />
+    <Content Include="Content\exPortal.css" />
     <Content Include="Content\eXPortalWidget.css" />
     <Content Include="Content\flight-data.css" />
     <Content Include="Content\font\vjs.svg" />
@@ -751,10 +756,16 @@
     <Content Include="images\car-icon.png" />
     <Content Include="images\dcaa_logo.png" />
     <Content Include="images\dcca-logo.png" />
+    <Content Include="images\dmat-logo.png" />
+    <Content Include="images\dmat-traffic-layout.png" />
+    <Content Include="images\dot-logo.png" />
     <Content Include="images\Drone-alert.png" />
     <Content Include="images\Drone-breach.png" />
     <Content Include="images\drone-pos.png" />
+    <Content Include="images\drone-view-front.svg" />
+    <Content Include="images\drone-view-top.svg" />
     <Content Include="images\Drone.png" />
+    <Content Include="images\drone.svg" />
     <Content Include="images\drop-down.png" />
     <Content Include="images\filter-check.png" />
     <Content Include="images\flag-RpasEnd.png" />
@@ -1005,6 +1016,8 @@
     <Content Include="Scripts\map-replay.js" />
     <Content Include="Scripts\map.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\NOCApproval.js" />
+    <Content Include="Scripts\NOC_RPAS.js" />
     <Content Include="Scripts\PayLoadMap.js" />
     <Content Include="Scripts\PilotLogChart.js" />
     <Content Include="Scripts\RecentChart.js" />
@@ -1457,6 +1470,7 @@
     <Content Include="Views\Rpas\NOCRegistrationDetails.cshtml" />
     <Content Include="Views\Email\Activation.cshtml" />
     <Content Include="Views\User\Activation.cshtml" />
+    <Content Include="Views\User\BillingInformation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

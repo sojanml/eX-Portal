@@ -2311,6 +2311,7 @@ namespace eX_Portal.Controllers {
                         Util.doSQL(SQL);
                     }
 
+                    /*DroneSetUp updation removed as itis done while assigning blackbox"
                     int DroneID = Util.toInt(flightsetupvm.GcaApproval.DroneID);
                     SQL = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + DroneID;
                     int DroneSetupId = Util.getDBInt(SQL);
@@ -2338,8 +2339,8 @@ namespace eX_Portal.Controllers {
                          [ModifiedOn]=GETDATE(),
                          [NotificationEmails]='" + flightsetupvm.GcaApproval.NotificationEmails + @"'
                         where 
-                         [DroneId]=" + DroneID;
-                    Util.doSQL(SQL);
+                         [DroneId]=" + DroneID;*/
+             //       Util.doSQL(SQL);
                     //  return RedirectToAction("Applications", "Rpas","");
                 return "OK|/Home/Index/";
             }
@@ -2385,10 +2386,6 @@ namespace eX_Portal.Controllers {
                
                 string Email = "";
                
-                
-                
-
-               
                 if (flightsetupvm.GcaApproval.MaxAltitude == null || flightsetupvm.GcaApproval.MaxAltitude < 1)
                 {
                     return "Please enter Max Altitude.";
@@ -2398,10 +2395,7 @@ namespace eX_Portal.Controllers {
                 {
                     return "Please select coordinates";
                 }
-                if (flightsetupvm.GcaApproval.ApprovalStatus == "Approved" && flightsetupvm.GcaApproval.BlackBoxID < 1)
-                {
-                    return "Please select a Sky Commander from dropdown";
-                }
+                
 
                 var Approval = db.GCA_Approval.Where(e => e.ApprovalID == flightsetupvm.GcaApproval.ApprovalID).FirstOrDefault();
                 if (Approval == null)
@@ -2439,7 +2433,7 @@ namespace eX_Portal.Controllers {
                 Util.doSQL(SQL);
 
 
-
+                /*Drone Setup updating removed
                 int DroneID = Util.toInt(Approval.DroneID);
                 int BlackBoxID = flightsetupvm.GcaApproval.BlackBoxID;
 
@@ -2490,7 +2484,7 @@ namespace eX_Portal.Controllers {
                     SQL = $"update MSTR_Drone set BlackBoxID={BlackBoxID} where DroneId = {DroneID}";
                     Val = Util.doSQL(SQL);
                 }//if(flightsetupvm.ApprovalStatus == "Approved")
-
+                */
                 return "OK|/Rpas/Applications/";
             }
             catch (Exception ex)
