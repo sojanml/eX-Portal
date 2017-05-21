@@ -65,13 +65,16 @@ function getADSB(ADSBObj) {
       Timers['getADSB'] = window.setTimeout(getADSB, UpdateDelay, ADSBObj);
       return;
     }
-    ADSBURL = "/FlightMap/ADSBHistory?History=" + toDate(_RPASIconData.FlightTime);
+    var DT = toDate(_RPASIconData.FlightTime);
+    DT = DT.replace('&nbsp;', '+');
+    DT = DT.replace(/:/g, '%3A');
+    ADSBURL = "/FlightMap/ADSBHistory?History=" + DT;
   }
   
   // var QueryData = $('input.spinner, input.query').serialize();
   $.ajax({
     type: "GET",
-    url: '/FlightMap/ADSBData',
+    url: ADSBURL,
     contentType: "application/json",
     success: function (data) {
       ADSBObj.setADSB(data);
