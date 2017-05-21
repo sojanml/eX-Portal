@@ -20,10 +20,11 @@ namespace Exponent.ADSB {
     private const int NewFlightTime = 8;
     private bool isDemoMode = false;
 
-    public List<FlightPosition> FlightStat(String DSN, bool DemoMode = false, ADSBQuery QueryData = null)  {
+    public List<FlightPosition> FlightStat(String DSN, bool DemoMode = false, ADSBQuery QueryData = null) {
       var Data = new List<FlightPosition>();
       isDemoMode = DemoMode;
-      if (QueryData == null) QueryData = new ADSBQuery();
+      if (QueryData == null)
+        QueryData = new ADSBQuery();
       //connect to database for reading data
       using (CN = new SqlConnection(DSN)) {
         CN.Open();
@@ -60,7 +61,7 @@ namespace Exponent.ADSB {
         AdsbHistory.CreatedDate = FilterAdsbHistory.LastCreatedDate AND
         AdsbHistory.FlightId = FilterAdsbHistory.FlightId";
 
-      using(var CN = new SqlConnection(DSN)) {
+      using (var CN = new SqlConnection(DSN)) {
         CN.Open();
         using (var Cmd = new SqlCommand(SQL.ToString(), CN)) {
           var RS = Cmd.ExecuteReader();
@@ -99,8 +100,9 @@ namespace Exponent.ADSB {
             AlertCount
           FROM 
             ADSBSummary ";
-      if (LastProcessedID > 0) SQL = SQL + $" WHERE ID > {LastProcessedID}";
-        SQL = SQL + @"
+      if (LastProcessedID > 0)
+        SQL = SQL + $" WHERE ID > {LastProcessedID}";
+      SQL = SQL + @"
         ORDER BY 
           SummaryDate DESC
         ) as InnerTable
@@ -121,7 +123,7 @@ namespace Exponent.ADSB {
           RS.Close();
         }//using (var Cmd)
 
-        if(TheSummary.Any()) {
+        if (TheSummary.Any()) {
           TheSummary.Last().SetSummary(CN);
         }
 
@@ -173,7 +175,8 @@ namespace Exponent.ADSB {
             ADSBDetail
           WHERE
             HorizontalDistance > {QueryData.hAlert} AND VerticalDistance > {QueryData.vAlert * FeetToKiloMeter}";
-        if(!String.IsNullOrWhiteSpace(AllIDs)) SQL = SQL + $"AND ADSBDetail.FromFlightID NOT IN ({AllIDs})";
+        if (!String.IsNullOrWhiteSpace(AllIDs))
+          SQL = SQL + $"AND ADSBDetail.FromFlightID NOT IN ({AllIDs})";
 
         using (var Cmd = new SqlCommand(SQL, CN)) {
           var RS = Cmd.ExecuteReader();
@@ -206,10 +209,12 @@ namespace Exponent.ADSB {
     }
 
     private List<FlightPosition> getLivePositions(Exponent.ADSB.ADSBQuery QueryData = null) {
-      if (QueryData == null) QueryData = new ADSBQuery();
+      if (QueryData == null)
+        QueryData = new ADSBQuery();
       if (QueryData.tracking_adsb_commercial == 0 &
         QueryData.tracking_adsb_rpas == 0 &&
-        QueryData.tracking_adsb_skycommander == 0) QueryData.tracking_adsb_commercial = 1;
+        QueryData.tracking_adsb_skycommander == 0)
+        QueryData.tracking_adsb_commercial = 1;
       var PositionDatas = new List<FlightPosition>();
       StringBuilder Filter = new StringBuilder();
       StringBuilder WHERE = new StringBuilder();
@@ -230,20 +235,23 @@ namespace Exponent.ADSB {
         AdsbLive
       ");
 
-      if(QueryData.adsb_omdb == 1 || QueryData.adsb_omdw == 1 || QueryData.adsb_omsj == 1) {
+      if (QueryData.adsb_omdb == 1 || QueryData.adsb_omdw == 1 || QueryData.adsb_omsj == 1) {
 
-        if(QueryData.adsb_omdb == 1) {
-          if (Filter.Length > 0) Filter.AppendLine(" OR");
+        if (QueryData.adsb_omdb == 1) {
+          if (Filter.Length > 0)
+            Filter.AppendLine(" OR");
           Filter.Append("[OMDB] <= " + QueryData.ATCRadious);
         }
 
         if (QueryData.adsb_omdw == 1) {
-          if (Filter.Length > 0) Filter.AppendLine(" OR");
+          if (Filter.Length > 0)
+            Filter.AppendLine(" OR");
           Filter.Append("[OMDW] <= " + QueryData.ATCRadious);
         }
 
         if (QueryData.adsb_omsj == 1) {
-          if (Filter.Length > 0) Filter.AppendLine(" OR");
+          if (Filter.Length > 0)
+            Filter.AppendLine(" OR");
           Filter.Append("[OMSJ] <= " + QueryData.ATCRadious);
         }
 
@@ -255,36 +263,37 @@ namespace Exponent.ADSB {
 
       Filter.Append(QueryData.getTrackingFilter());
       if (Filter.Length > 0) {
-        if(WHERE.Length > 0) WHERE.AppendLine(" AND");
+        if (WHERE.Length > 0)
+          WHERE.AppendLine(" AND");
         WHERE.Append(Filter);
         Filter.Clear();
       }
 
-    //Filter.Append(QueryData.getaltitudeFilter());
-    //if (Filter.Length > 0)
-    //{
-    //    if (WHERE.Length > 0) WHERE.AppendLine(" AND");
-    //    WHERE.Append(Filter);
-    //    Filter.Clear();
-    //}
+      //Filter.Append(QueryData.getaltitudeFilter());
+      //if (Filter.Length > 0)
+      //{
+      //    if (WHERE.Length > 0) WHERE.AppendLine(" AND");
+      //    WHERE.Append(Filter);
+      //    Filter.Clear();
+      //}
 
-    //Filter.Append(QueryData.getspeedFilter());
-    //if(Filter.Length>0)
-    //{
-    //    if (WHERE.Length > 0) WHERE.AppendLine(" AND");
-    //    WHERE.Append(Filter);
-    //    Filter.Clear();
-    //}
+      //Filter.Append(QueryData.getspeedFilter());
+      //if(Filter.Length>0)
+      //{
+      //    if (WHERE.Length > 0) WHERE.AppendLine(" AND");
+      //    WHERE.Append(Filter);
+      //    Filter.Clear();
+      //}
 
-            if (WHERE.Length > 0) { 
+      if (WHERE.Length > 0) {
         SQL.AppendLine(" WHERE");
         SQL.Append(WHERE);
       }
 
 
       using (var Cmd = new SqlCommand(SQL.ToString(), CN)) {
-         var RS = Cmd.ExecuteReader();
-        while(RS.Read()) {
+        var RS = Cmd.ExecuteReader();
+        while (RS.Read()) {
           int fSpeed = RS.GetOrdinal("Speed");
           int fHeading = RS.GetOrdinal("Heading");
           string FlightSource = RS["FlightSource"].ToString();
@@ -300,19 +309,16 @@ namespace Exponent.ADSB {
             ADSBDate = RS.GetDateTime(RS.GetOrdinal("AdsbDate")),
             History = getHistory(RS["HeadingHistory"].ToString())
           };
-          if(FlightSource== "SkyCommander")
-            {
-                        if (Position.Altitude < 0)
-                            Position.Altitude = 0;
-                  if ((Position.Altitude>=QueryData.minAltitude  && Position.Altitude<=QueryData.maxAltitude) &&
-                            (Position.Speed >= QueryData.minSpeed && Position.Speed <= QueryData.maxSpeed))
-                     PositionDatas.Add(Position);
-                 
-            }
-            else
-            {
-                PositionDatas.Add(Position);
-            }
+          if (FlightSource == "SkyCommander") {
+            if (Position.Altitude < 0)
+              Position.Altitude = 0;
+            if ((Position.Altitude >= QueryData.minAltitude && Position.Altitude <= QueryData.maxAltitude) &&
+                      (Position.Speed >= QueryData.minSpeed && Position.Speed <= QueryData.maxSpeed))
+              PositionDatas.Add(Position);
+
+          } else {
+            PositionDatas.Add(Position);
+          }
         }//while
       }//using
 
@@ -323,7 +329,8 @@ namespace Exponent.ADSB {
 
     private List<Double> getHistory(String HeadingHistory) {
       List<Double> History = new List<Double>();
-      if (String.IsNullOrEmpty(HeadingHistory)) return History;
+      if (String.IsNullOrEmpty(HeadingHistory))
+        return History;
       foreach (String sHeading in HeadingHistory.Split(',')) {
         Double Heading = 0;
         Double.TryParse(sHeading, out Heading);
@@ -336,10 +343,11 @@ namespace Exponent.ADSB {
       String SQL;
 
       var FlightCount = getActiveFlights();
-      if (FlightCount > 0) return;
+      if (FlightCount > 0)
+        return;
 
       //Change for today - 12-Mar-2017 (Do not get data from FlightAware)
-      var NewPositions =  getFlightAware();
+      var NewPositions = getFlightAware();
 
       //go through each postion and add to database
       foreach (var Position in NewPositions) {
@@ -397,17 +405,17 @@ namespace Exponent.ADSB {
     }
 
     private void doSQL(String SQL) {
-      using(var CMD = new SqlCommand(SQL, CN)) {
+      using (var CMD = new SqlCommand(SQL, CN)) {
         CMD.ExecuteNonQuery();
       }
     }
 
     private String GetDBVal(String SQL) {
-      try { 
-      using(var cmd = new SqlCommand(SQL, CN)) {
-        var oResult = cmd.ExecuteScalar();
-        return oResult.ToString();
-      }
+      try {
+        using (var cmd = new SqlCommand(SQL, CN)) {
+          var oResult = cmd.ExecuteScalar();
+          return oResult.ToString();
+        }
       } catch {
 
       }
@@ -436,20 +444,20 @@ namespace Exponent.ADSB {
       DateTime Now = DateTime.UtcNow;
       var FlightPositions = new List<FlightPosition>();
 
-            if (Now.DayOfWeek == DayOfWeek.Friday || Now.DayOfWeek == DayOfWeek.Saturday)
-            {
-                return FlightPositions;
-            }
+      if (Now.DayOfWeek == DayOfWeek.Friday || Now.DayOfWeek == DayOfWeek.Saturday) {
+        return FlightPositions;
+      }
+      /*
+      if (Now.Hour < 2 || Now.Hour >= 14)
+      {
+          return FlightPositions;
+      }
 
-            if (Now.Hour < 2 || Now.Hour >= 14)
-            {
-                return FlightPositions;
-            }
+     */
+     return FlightPositions;
+     
 
-            return FlightPositions;
-
-
-            String Query = 
+      String Query =
         "{> alt 5} " +
         "{> speed 20} " +
         "{true inAir} " +

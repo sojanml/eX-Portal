@@ -206,9 +206,9 @@ namespace eX_Portal.exLogic {
 
     public List<TrafficMonitorVideo> GetLiveVideos() {
       List<TrafficMonitorVideo> TheVideos = new List<TrafficMonitorVideo>();
-
+      
       TheVideos.Add( new TrafficMonitorVideo {
-        VideoURL = $"rtmp://52.29.242.123/live/drone{DroneID}",
+        VideoURL = $"rtmp://52.34.136.76/live/drone{DroneID}",
         StartTime = 0,
         Title = "Live"
       });
