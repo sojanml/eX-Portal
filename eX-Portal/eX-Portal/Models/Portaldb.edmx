@@ -107,7 +107,7 @@
           <Property Name="RentDays" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BlackBoxData">
           <Key>
             <PropertyRef Name="BlackBoxDataID" />
@@ -189,7 +189,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="MenuTitle" Type="varchar" MaxLength="120" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.DCAA_PermitDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.DCAA_PermitDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="DCAA_PermitDetail">
           <Key>
             <PropertyRef Name="ID" />
@@ -497,7 +497,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.DCAA_PermitDetail' does not have a 
           <Property Name="MinDefault" Type="int" />
           <Property Name="MaxDefault" Type="int" />
           <Property Name="CreatedBy" Type="int" />
-          <Property Name="IsUseCamara" Type="int" />
+          <Property Name="IsUseCamara" Type="bit" Nullable="false" />
           <Property Name="MOD_ApprovalURL" Type="varchar" MaxLength="100" />
           <Property Name="ApprovalStatus" Type="varchar" MaxLength="100" />
           <Property Name="ApprovalRemarks" Type="varchar" MaxLength="500" />
@@ -510,7 +510,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.DCAA_PermitDetail' does not have a 
           <Property Name="FlightTypeID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ip2location">
           <Key>
             <PropertyRef Name="ip_from" />
@@ -1052,7 +1052,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="Col" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PayLoadData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadData">
           <Key>
             <PropertyRef Name="PayLoadDataID" />
@@ -1080,7 +1080,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayLoadData' does not have a primar
           <Property Name="CellID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadFlight">
           <Key>
             <PropertyRef Name="PayLoadFlightID" />
@@ -1098,7 +1098,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayLoadFlight' does not have a prim
           <Property Name="PayLoadDroneID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadImageData">
           <Key>
             <PropertyRef Name="PayLoadImageDataID" />
@@ -1117,7 +1117,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayLoadImageData' does not have a p
           <Property Name="LogFilePath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadMapData">
           <Key>
             <PropertyRef Name="PayLoadDataMapID" />
@@ -1165,7 +1165,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayLoadMapData' does not have a pri
           <Property Name="GridLng" Type="numeric" Precision="18" Scale="6" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PayloadTraffic' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PayloadTraffic' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayloadTraffic">
           <Key>
             <PropertyRef Name="PTid" />
@@ -1203,7 +1203,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayloadTraffic' does not have a pri
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadYardGrid">
           <Key>
             <PropertyRef Name="CellID" />
@@ -1227,7 +1227,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayLoadYardGrid' does not have a pr
           <Property Name="Polygon" Type="geography" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PortalAlert">
           <Key>
             <PropertyRef Name="AlertID" />
@@ -1341,7 +1341,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PortalAlert' does not have a primar
           <Property Name="CellReference" Type="varchar" MaxLength="120" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="sysdiagrams">
           <Key>
             
@@ -3057,7 +3057,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="MinDefault" Type="Int32" />
           <Property Name="MaxDefault" Type="Int32" />
           <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="IsUseCamara" Type="Int32" />
+          <Property Name="IsUseCamara" Type="Boolean" Nullable="false" />
           <Property Name="MOD_ApprovalURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ApprovalStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ApprovalRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />

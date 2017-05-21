@@ -33,7 +33,7 @@ namespace eX_Portal.Controllers
             string SQL = "select\n" +
             "  a.UserName,\n" +
             "  a.FirstName" + " + '  '+ " +" a.LastName as FullName,\n" +
-            "  c.Name as AccountName, \n" +
+            "  c.Name as Organization, \n" +
             "  a.MobileNo,\n" +          
             "  Count(*) Over() as _TotalRecords ,\n" +
             "  a.UserId as _PKey\n" +
@@ -103,7 +103,7 @@ namespace eX_Portal.Controllers
                         ",b.[Title] as JobTitle\n   " +
                         ",a.[RPASPermitNo] as [RPAS Permit No.]\n  " +
                         ",a.[PermitCategory] as [Permit Category]\n  " +
-                        //",c.[Name] as OrganizationName\n   " +
+                        ",c.[Name] as Organization\n   " +
                         //",d.[ProfileName]\n   " +
                         " FROM[MSTR_User] a\n   " +
                         " left join mstr_user_pilot b\n  " +
@@ -405,6 +405,10 @@ namespace eX_Portal.Controllers
             if (ModelState.IsValid)
             {
                 int AccountID = Util.getAccountID();
+                int ctyid =Util.toInt(UserModel.User.CountryId);
+                string Nationality = (from cty in db.LUP_Drone
+                                     where cty.TypeId == ctyid && cty.Type== "Country"
+                                      select cty.Name).FirstOrDefault();
 
                 string SQL = "UPDATE MSTR_USER SET\n" +
                   "  FirstName='" + Util.FirstLetterToUpper( UserModel.User.FirstName) + "',\n" +
@@ -418,10 +422,11 @@ namespace eX_Portal.Controllers
                   "  HomeNo='" + UserModel.User.HomeNo + "',\n" +
                   "  PhotoUrl='" + UserModel.User.PhotoUrl + "',\n" +
                   "  RPASPermitNo='" + UserModel.User.RPASPermitNo + "',\n" +
-                  "  PermitCategory='" + UserModel.User.PermitCategory + "'\n" +
-                  "  DOE_RPASPermit='"+UserModel.User.DOE_RPASPermit+"'\n"+
-                  "  DOI_RPASPermit='"+UserModel.User.DOI_RPASPermit+"'\n"+
-                  "where\n" +
+                  "  PermitCategory='" + UserModel.User.PermitCategory + "',\n" +
+                  "  DOE_RPASPermit='"+UserModel.User.DOE_RPASPermit+"',\n"+
+                  "  DOI_RPASPermit='"+UserModel.User.DOI_RPASPermit+"',\n"+
+                  "  Nationality='"+ Nationality+"'\n"+
+                  " where\n" +
                   "  UserId=" + UserModel.User.UserId;
 
 

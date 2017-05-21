@@ -45,7 +45,7 @@ namespace eX_Portal.Controllers {
           "  D.[DroneName] as RPAS,\n" +
           "  D.[ModelName] as Description,\n" +
           "  D.[CommissionDate],\n" +
-          "  O.Name as Authority,\n" +
+          "  O.Name as Organization,\n" +
           "  M.Name as Manufacture,\n" +
           "  U.Name as RPASType,\n" +
           "  Count(*) Over() as _TotalRecords,\n" +
@@ -726,17 +726,25 @@ namespace eX_Portal.Controllers {
                 DroneView.Drone.AccountID = Util.getAccountID();
         if (DroneView.Name==null||DroneView.Name=="") {
                 
-                    if (DroneView.Drone.ManufactureId < 1 || DroneView.Drone.ManufactureId == null)
+             if (DroneView.Drone.ManufactureId < 1 || DroneView.Drone.ManufactureId == null)
             {
              ModelState.AddModelError("Drone.ManufactureId", "Please Select Manufacture.");
              }
            }
-              
-                   
+                if (DroneView.TypeName == null || DroneView.TypeName == "")
+                {
 
-       
+                    if (DroneView.Drone.UavTypeId < 1 || DroneView.Drone.UavTypeId == null)
+                    {
+                        ModelState.AddModelError("Drone.UavTypeId", "Please Select UAV Type.");
+                    }
+                }
 
-       if (DroneView.Drone.CommissionDate == null) {
+
+
+
+
+                if (DroneView.Drone.CommissionDate == null) {
           ModelState.AddModelError("Drone.CommissionDate", "Commission Date is Required.");
         }
 
@@ -764,8 +772,44 @@ namespace eX_Portal.Controllers {
          
           return View(viewModel);
         }
-        //insert into LUP_Drone table -- to insert the manufacturer then to use it for inserting to the other table       
-        if (DroneView.Name != null)
+                int DTypeID = 0;
+                if(DroneView.TypeName!=null)
+                {
+                    int maxid = Util.getDBInt("SELECT Max(TypeId) + 1 from [LUP_Drone] where [Type]='UAVType'");
+                    string BinaryCode = Util.DecToBin(maxid);
+                    string s = DroneView.TypeName.ToString();
+                    string code = s.Substring(0, 3);
+                    var validateType = from type in ctx.LUP_Drone
+                                       where type.Name.ToUpper() == DroneView.TypeName.ToUpper()
+                                       && type.Type == "UAVType"
+                                       select type;
+                    if(validateType.FirstOrDefault().Id==0)
+                    { 
+                    LUP_Drone LuD = new LUP_Drone();
+                    LuD.BinaryCode = BinaryCode;
+                    LuD.Code = code;
+                    LuD.IsActive = true;
+                    LuD.Name = DroneView.TypeName;
+                    LuD.CreatedBy = Util.getLoginUserID();
+                    LuD.CreatedOn = DateTime.Now;
+                    ctx.LUP_Drone.Add(LuD);
+                        var newTypeID= from type in ctx.LUP_Drone
+                                 where type.Name.ToUpper() == DroneView.TypeName.ToUpper()
+                                 && type.Type == "UAVType"
+                                 select type;
+                        DTypeID = newTypeID.FirstOrDefault().Id;
+                    }
+                    else
+                    {
+                        DTypeID =Convert.ToInt32(DroneView.Drone.UavTypeId) ;
+                    }
+                }
+                else
+                {
+                    DTypeID = Convert.ToInt32(DroneView.Drone.UavTypeId);
+                }
+                //insert into LUP_Drone table -- to insert the manufacturer then to use it for inserting to the other table       
+                if (DroneView.Name != null)
                 {
                     int typeid = Util.getDBInt("SELECT Max(TypeId) + 1 from [LUP_Drone] where [Type]='Manufacturer'");
                     string BinaryCode = Util.DecToBin(typeid);
@@ -815,7 +859,7 @@ namespace eX_Portal.Controllers {
                                  ") VALUES(\n" +
                                  "  '" + Drone.AccountID + "',\n" +
                                  "  '" + typeid + "',\n" +
-                                 "  '" + Drone.UavTypeId + "',\n" +
+                                 "  '" + DTypeID+ "',\n" +
                                  "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
                                  "  11,\n" +
                                  "  'True',\n" +
@@ -828,25 +872,25 @@ namespace eX_Portal.Controllers {
                                  ");";
                     int DroneId = Util.InsertSQL(SQL);
                     MoveDroneUploadFileTo(DroneId);
-                    if (DroneView.SelectItemsForParts != null)
-                    {
-                        for (var count = 0; count < DroneView.SelectItemsForParts.Count(); count++)
-                        {
-                            string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
-                            int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
-                            SQL = "Insert into M2M_DroneParts (\n" +
-                                    "  DroneId,\n" +
-                                    "  PartsId,\n" +
-                                    "  Quantity\n" +
-                                    ") values(\n" +
-                                    "  " + DroneId + ",\n" +
-                                    "  " + PartsId + ",\n" +
-                                    "  " + Qty + "\n" +
-                                    ");";
-                            int ID = Util.doSQL(SQL);
-                        }
+                    //if (DroneView.SelectItemsForParts != null)
+                    //{
+                    //    for (var count = 0; count < DroneView.SelectItemsForParts.Count(); count++)
+                    //    {
+                    //        string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
+                    //        int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
+                    //        SQL = "Insert into M2M_DroneParts (\n" +
+                    //                "  DroneId,\n" +
+                    //                "  PartsId,\n" +
+                    //                "  Quantity\n" +
+                    //                ") values(\n" +
+                    //                "  " + DroneId + ",\n" +
+                    //                "  " + PartsId + ",\n" +
+                    //                "  " + Qty + "\n" +
+                    //                ");";
+                    //        int ID = Util.doSQL(SQL);
+                    //    }
                       
-                    }
+                    //}
 
                         if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
                         else
@@ -878,7 +922,7 @@ namespace eX_Portal.Controllers {
                                  ") VALUES(\n" +
                                  "  '" + Drone.AccountID + "',\n" +
                                  "  '" + Drone.ManufactureId + "',\n" +
-                                 "  '" + Drone.UavTypeId + "',\n" +
+                                 "  '" + DTypeID+ "',\n" +
                                  "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
                                  "  11,\n" +
                                  "  'True',\n" +
@@ -891,25 +935,25 @@ namespace eX_Portal.Controllers {
                                  ");";                    
                     int DroneId = Util.InsertSQL(SQL);
                     MoveDroneUploadFileTo(DroneId);
-                    if (DroneView.SelectItemsForParts != null)
-                    {
-                        for (var count = 0; count < DroneView.SelectItemsForParts.Count(); count++)
-                        {
-                            string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
-                            int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
-                            SQL = "Insert into M2M_DroneParts (\n" +
-                                    "  DroneId,\n" +
-                                    "  PartsId,\n" +
-                                    "  Quantity\n" +
-                                    ") values(\n" +
-                                    "  " + DroneId + ",\n" +
-                                    "  " + PartsId + ",\n" +
-                                    "  " + Qty + "\n" +
-                                    ");";
-                            int ID = Util.doSQL(SQL);
-                        }
+                    //if (DroneView.SelectItemsForParts != null)
+                    //{
+                    //    for (var count = 0; count < DroneView.SelectItemsForParts.Count(); count++)
+                    //    {
+                    //        string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
+                    //        int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
+                    //        SQL = "Insert into M2M_DroneParts (\n" +
+                    //                "  DroneId,\n" +
+                    //                "  PartsId,\n" +
+                    //                "  Quantity\n" +
+                    //                ") values(\n" +
+                    //                "  " + DroneId + ",\n" +
+                    //                "  " + PartsId + ",\n" +
+                    //                "  " + Qty + "\n" +
+                    //                ");";
+                    //        int ID = Util.doSQL(SQL);
+                    //    }
 
-                    }
+                    //}
                     if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
                     else
                         return RedirectToAction("index","Home");

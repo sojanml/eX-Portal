@@ -928,8 +928,7 @@ namespace eX_Portal.Controllers {
         if (flightsetupvm.MaxAltitude == null || flightsetupvm.MaxAltitude < 1) {
           return "Please enter Max Altitude.";
         }
-        if (flightsetupvm.IsUseCamara == null || flightsetupvm.IsUseCamara < 0)
-          return "Please select camera being Used.";
+       
 
         if (flightsetupvm.Coordinates == null) {
           return "Please select coordinates";
@@ -1221,15 +1220,7 @@ namespace eX_Portal.Controllers {
 
         }
 
-        if (flightsetupvm.GcaApproval.IsUseCamara < 1)
-          return "Please select camera being Used.";
-
-        //
-
-        if (flightsetupvm.GcaApproval.IsUseCamara == 1 && (flightsetupvm.GcaApproval.CameraId < 1 || flightsetupvm.GcaApproval.CameraId == null)) {
-          return "Please select camera.";
-        }
-
+       
 
         if (flightsetupvm.GcaApproval.Coordinates == null) {
 
@@ -1908,7 +1899,7 @@ namespace eX_Portal.Controllers {
             50,
             " + MinAltitude + @",
             " + MaxAltidute + @",
-            " + (DCAAFlightsetupvm.GcaApproval.IsUseCamara == null ? 0 : DCAAFlightsetupvm.GcaApproval.IsUseCamara) + @",
+            " + (DCAAFlightsetupvm.GcaApproval.IsUseCamara) + @",
             " + (DCAAFlightsetupvm.GcaApproval.PilotUserId == null ? 0 : DCAAFlightsetupvm.GcaApproval.PilotUserId) + @",
             " + (DCAAFlightsetupvm.GcaApproval.GroundStaffUserId == null ? 0 : DCAAFlightsetupvm.GcaApproval.GroundStaffUserId) + @",
             '" + DCAAFlightsetupvm.GcaApproval.NotificationEmails + @"'
@@ -2255,7 +2246,8 @@ namespace eX_Portal.Controllers {
                             GroundStaffUserId,
                             NotificationEmails,
                             FlightTypeID,
-                            Clientname
+                            Clientname,
+                            IsUseCamara
                           ) values(
                             '" + flightsetupvm.GcaApproval.ApprovalName + @"',
                             GETDATE(),
@@ -2275,7 +2267,8 @@ namespace eX_Portal.Controllers {
                             " + flightsetupvm.GcaApproval.GroundStaffUserId + @",
                             '" + flightsetupvm.GcaApproval.NotificationEmails + @"',
                             " + flightsetupvm.GcaApproval.FlightTypeID + @",
-                            '"+flightsetupvm.GcaApproval.ClientName +@"'
+                            '"+flightsetupvm.GcaApproval.ClientName +@"',
+                            '"+flightsetupvm.GcaApproval.IsUseCamara + @"'
                           )";
                         //
                     }
@@ -2301,7 +2294,8 @@ namespace eX_Portal.Controllers {
                             GroundStaffUserId=" + flightsetupvm.GcaApproval.PilotUserId + @",
                             NotificationEmails='" + flightsetupvm.GcaApproval.NotificationEmails + @"',
                             clientname='" + flightsetupvm.GcaApproval.ClientName + @"',
-                            flighttypeID="+flightsetupvm.GcaApproval.FlightTypeID+@"
+                            flighttypeID="+flightsetupvm.GcaApproval.FlightTypeID+ @",
+                            IsUseCamara="+flightsetupvm.GcaApproval.IsUseCamara+@"
                            where 
                             ApprovalID=" + ApprovalID;
                     }

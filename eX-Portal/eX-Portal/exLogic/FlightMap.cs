@@ -158,6 +158,8 @@ namespace eX_Portal.exLogic {
     public bool IsLive { get; private set; }
     public String InnerPolygon { get; private set; }
     public String OuterPolygon { get; private set; }
+    
+   
 
     public void GetInformation(int FlightID) {
       String SQL = @"SELECT 
@@ -267,8 +269,9 @@ namespace eX_Portal.exLogic {
             Distance = e.Distance,
             Satellites = e.Satellites,
             Pich = e.Pitch,
-            Roll = e.Roll,
-            FlightMapDataID = e.FlightMapDataID
+            Roll = e.Roll,           
+            FlightMapDataID = e.FlightMapDataID,
+            Heading = e.Heading
           })
           .Take(1000);
 

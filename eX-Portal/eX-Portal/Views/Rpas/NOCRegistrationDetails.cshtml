@@ -30,9 +30,14 @@
         <td>Minimum Altitude    : <span class="value">@Html.DisplayFor(model => model.GcaApproval.MinAltitude, "ShortDateTime")</span></td>
         <td>Maximum Altitude    : <span class="value">@Html.DisplayFor(model => model.GcaApproval.MaxAltitude)</span></td>
     </tr>
-    <tr><td>Notification Emails : <span class="value">@Html.DisplayFor(model => model.GcaApproval.NotificationEmails)</span></td>
-        <td colspan="3">Status : <span class="value">@Html.DisplayFor(model => model.GcaApproval.ApprovalStatus)</span></td>
-        </tr>
+    <tr>
+        <td>Use Camera
+            <span class="value">
+                @(Model.GcaApproval.IsUseCamara ? "Yes" : "No")
+            </span></td>
+        <td>Notification Emails : <span class="value">@Html.DisplayFor(model => model.GcaApproval.NotificationEmails)</span></td>
+        <td colspan="2">Status : <span class="value">@Html.DisplayFor(model => model.GcaApproval.ApprovalStatus)</span></td>
+</tr>
 
 </table>
 <div id="map_canvas" style="width: 100%; height: 450px"></div>

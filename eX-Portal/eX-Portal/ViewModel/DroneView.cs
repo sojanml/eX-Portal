@@ -35,6 +35,7 @@ namespace eX_Portal.ViewModel {
       }
     }
         public string AccountName { get; set; }
+        public string TypeName { get; set; }
   }
 
 }
