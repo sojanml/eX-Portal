@@ -1035,7 +1035,7 @@ namespace eX_Portal.Controllers {
             }
              if (URegister.Password!=null)
             {
-                if(URegister.Password.Length<=6)
+                if(URegister.Password.Length<6)
                 ModelState.AddModelError("Password", "Password length should be minimium 6 characters");
             }
              if(!ValidateUser(URegister.EmailId))
@@ -1050,8 +1050,19 @@ namespace eX_Portal.Controllers {
                     ModelState.AddModelError("AccountName", "Account already registered");
                 }
             }
+            if (string.IsNullOrEmpty(URegister.FirstName) || string.IsNullOrEmpty(URegister.FirstName.Trim()))
+            {
 
-                    if (ModelState.IsValid) {
+               
+                    ModelState.AddModelError("FirstName", "Please enter your name.");
+              
+            }else if(URegister.FirstName.Length>50)
+            {
+                ModelState.AddModelError("FirstName", "Name cannot be greater than 50 characters. ");
+            }
+
+
+            if (ModelState.IsValid) {
 
                 MSTR_User newUser = new MSTR_User();
 
@@ -1088,6 +1099,8 @@ namespace eX_Portal.Controllers {
                     newUser.UserName = URegister.EmailId;
                     newUser.UserProfileId = 4;
                     newUser.Dashboard = "UserDashboard";
+                newUser.FirstName = URegister.FirstName;
+                newUser.LastName = URegister.LastName;
                 newUser.DOE_RPASPermit = DateTime.Now.AddYears(1);
                 newUser.DOI_RPASPermit= DateTime.Now;
 
@@ -1150,14 +1163,14 @@ namespace eX_Portal.Controllers {
         }
         public bool ValidateDCAAPermit(string RPASPermit)
         {
-            var valid = from u in db.MSTR_User
-                            where u.RPASPermitNo == RPASPermit
+            var valid = from u in db.DCAA_PermitDetail
+                            where u.PermitNo == RPASPermit
                             select u;
 
-            bool result = false;
+            bool result = true;
 
             if (valid.Count()>0)
-                result = true;
+                result = false;
             return result;
 
         }
@@ -1208,11 +1221,20 @@ namespace eX_Portal.Controllers {
                         ,[CreatedDate]
                         ,[RentAmount]
                         ,[TotalAmount]
-                        ,[UserID]
-                    FROM[DCAAPortal].[dbo].[BlackBoxTransaction]  
+                    FROM [BlackBoxTransaction]  
                     where userid={ID}";
 
-            return View();
+            qView nView = new qView(Sql);
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+           
         }
 
 

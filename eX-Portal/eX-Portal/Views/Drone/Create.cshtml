@@ -21,79 +21,93 @@
         @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList)
         @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
       </div>
+        <div class="editor-field" id="divManuDetails" style="display:none;">
+            @*@Html.LabelFor(model => model.Name, "Other Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "editor-label", @maxlength = "50" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
       <div class="editor-field" >
         <input id="othermanu" value="1" name="othermanu" type="checkbox" />
         <label for="othermanu">Other Manufacturer</label>
       </div>
     </div>
-    <div class="editor-field" id="divManuDetails" style="display:none;">
-      @*@Html.LabelFor(model => model.Name, "Other Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })*@
-      <div class="editor-field">
-        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "editor-label", @maxlength = "50" } })
-        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-      </div>
-    </div>
+   
 
+    <div>
     <div class="editor-label">
       @Html.LabelFor(model => model.Drone.UavTypeId, "RPAS Type")<span style="color:red">*</span>
-
+       
     </div>
     <div class="editor-field">
       @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)
       @*Html.Action("UAVTypeList", new { UavTypeId = Model.Drone.UavTypeId } )*@
       @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
     </div>
+    <div class="editor-field" id="divTypeDetails" style="display:none;">
+        @*@Html.LabelFor(model => model.Name, "Other Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <div class="editor-field">
+            @Html.EditorFor(model => model.TypeName, new { htmlAttributes = new { @class = "editor-label", @maxlength = "50" } })
+            @Html.ValidationMessageFor(model => model.TypeName, "", new { @class = "text-danger" })
+        </div>
+     </div>
+        <div class="editor-field">
+            <input id="othertype" value="1" name="othertype" type="checkbox" />
+            <label for="othertype">Other Type</label>
+        </div>
+</div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Drone.ModelName, "Description")
+        </div>
 
-    <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.ModelName, "Description")
+        <div class="editor-field">
+
+            @Html.EditorFor(model => model.Drone.ModelName)
+            @Html.ValidationMessageFor(model => model.Drone.ModelName)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Drone.CommissionDate, "Commission Date")<span style="color:red">*</span>
+
+        </div>
+        <div class="editor-field">
+
+            @Html.EditorFor(model => model.Drone.CommissionDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
+            @Html.ValidationMessageFor(model => model.Drone.CommissionDate)
+        </div>
+
+        if (eX_Portal.exLogic.User.hasAccess("DRONE.PARTS")) {
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DroneParts.PartsName, "Parts")
+        </div>
+        <div class="editor-field">
+            <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="SelectItemsForParts" />
+            <table class="report" id="Table_SelectItemsForParts" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Parts Name</th>
+                        <th>Model</th>
+                        <th>Supplier</th>
+                        <th>Qty</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        }
+
+        @Html.Action("DroneImaging", "Drone", new { ID = 0, Actions = "Create" })
+
+
+
+        <div class="form-toolbar">
+            <input type="submit" value="Create" />
+        </div>
+
+
+        }
     </div>
-
-    <div class="editor-field">
-
-      @Html.EditorFor(model => model.Drone.ModelName)
-      @Html.ValidationMessageFor(model => model.Drone.ModelName)
-    </div>
-    <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.CommissionDate, "Commission Date")<span style="color:red">*</span>
-
-    </div>
-    <div class="editor-field">
-
-      @Html.EditorFor(model => model.Drone.CommissionDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
-      @Html.ValidationMessageFor(model => model.Drone.CommissionDate)
-    </div>
-
-    if (eX_Portal.exLogic.User.hasAccess("DRONE.PARTS")) {
-      <div class="editor-label">
-        @Html.LabelFor(model => model.DroneParts.PartsName, "Parts")
-      </div>
-      <div class="editor-field">
-        <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="SelectItemsForParts" />
-        <table class="report" id="Table_SelectItemsForParts" style="display:none;">
-          <thead>
-            <tr>
-              <th>Parts Name</th>
-              <th>Model</th>
-              <th>Supplier</th>
-              <th>Qty</th>
-              <th>&nbsp;</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-    }
-
-    @Html.Action("DroneImaging", "Drone", new { ID = 0, Actions = "Create" })
-
-
-
-    <div class="form-toolbar">
-      <input type="submit" value="Create" />
-    </div>
-
-
-  }
-  </div>
 
 </div>
 
@@ -131,6 +145,12 @@
           $('#divManuDetails').slideUp();
         }
       });
+      $('#Drone_UavTypeId').on('change', function () {
+          if ($('#othertype').prop('checked')) {
+              $('#TypeName').val("");
+              $('#divTypeDetails').slideUp();
+          }
+      });
     });
 
     function AutoCompleteSelect(event, ui) {
@@ -160,7 +180,17 @@
         $('#divManuDetails').hide();
         $("#Drone_ManufactureId").show();
       }
-    })
+      })
+      $('#othertype').on("change", function (e) {
+          if ($(this).prop('checked')) {
+              $('#divTypeDetails').show();
+              $("#Drone_UavTypeId").hide();
+          }
+          else {
+              $('#divTypeDetails').hide();
+              $("#Drone_UavTypeId").show();
+          }
+      })
 
   </script>
 }

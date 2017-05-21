@@ -427,16 +427,20 @@ function ShowFlightInformation(TheDataItem) {
   $('#FlightInfo_FlightDuration').html(toHour(TheDataItem.FlightDuration));
   $('#FlightInfo_Speed').html(TheDataItem.Speed.toFixed(2));
   $('#FlightInfo_Distance').html(TheDataItem.Distance.toFixed(2));
-  $('#FlightInfo_FlightDate').html(dtConvFromJSON(TheDataItem.FlightTime, true));
-  $('#FlightInfo_Pich').html(TheDataItem.Pich);
-  $('#FlightInfo_Roll').html(TheDataItem.Roll);
+  var Fdate = dtConvFromJSON(TheDataItem.FlightTime, true).split(' ')[0];
+  var FTime = dtConvFromJSON(TheDataItem.FlightTime, true).split(' ')[1];
+  $('#FlightInfo_FlightDate').html(Fdate);
+  $('#FlightInfo_FlightTime').html(FTime);
+
+  $('#FlightInfo_Pich').html(TheDataItem.Roll);
+  $('#FlightInfo_Roll').html(TheDataItem.Heading);
 
 
   var Roll = parseFloat(TheDataItem.Roll);
 
   $('#FlightRollShow').css({
-    WebkitTransform: 'rotate(' + TheDataItem.Pich + 'deg)',
-    '-moz-transform': 'rotate(' + TheDataItem.Pich + 'deg)'
+      WebkitTransform: 'rotate(' + TheDataItem.Heading + 'deg)',
+      '-moz-transform': 'rotate(' + TheDataItem.Heading + 'deg)'
   });
 
 

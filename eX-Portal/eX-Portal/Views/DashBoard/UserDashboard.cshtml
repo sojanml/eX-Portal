@@ -35,7 +35,16 @@
           <div class="caption">Category:</div>
           <div class="detail">@Model.Pilot.PermitCategory</div>
         </li>
+          <li>
+              <div class="caption">Organization:</div>
+              <div class="detail">@Model.Pilot.CompanyName</div>
+          </li>
+          <li>
+              <div class="caption">Email:</div>
+              <div class="detail">@Model.Pilot.EmailId</div>
+          </li>
       </ul>
+
     </div>
     <div class="toolbar">
         <a href="@Url.Action("Edit", "Pilot", new  { ID = @Model.Pilot.UserId })"> <div class="button">Edit Profile</div></a>

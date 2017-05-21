@@ -928,8 +928,7 @@ namespace eX_Portal.Controllers {
         if (flightsetupvm.MaxAltitude == null || flightsetupvm.MaxAltitude < 1) {
           return "Please enter Max Altitude.";
         }
-        if (flightsetupvm.IsUseCamara == null || flightsetupvm.IsUseCamara < 0)
-          return "Please select camera being Used.";
+       
 
         if (flightsetupvm.Coordinates == null) {
           return "Please select coordinates";
@@ -1221,15 +1220,7 @@ namespace eX_Portal.Controllers {
 
         }
 
-        if (flightsetupvm.GcaApproval.IsUseCamara < 1)
-          return "Please select camera being Used.";
-
-        //
-
-        if (flightsetupvm.GcaApproval.IsUseCamara == 1 && (flightsetupvm.GcaApproval.CameraId < 1 || flightsetupvm.GcaApproval.CameraId == null)) {
-          return "Please select camera.";
-        }
-
+       
 
         if (flightsetupvm.GcaApproval.Coordinates == null) {
 
@@ -1908,7 +1899,7 @@ namespace eX_Portal.Controllers {
             50,
             " + MinAltitude + @",
             " + MaxAltidute + @",
-            " + (DCAAFlightsetupvm.GcaApproval.IsUseCamara == null ? 0 : DCAAFlightsetupvm.GcaApproval.IsUseCamara) + @",
+            " + (DCAAFlightsetupvm.GcaApproval.IsUseCamara) + @",
             " + (DCAAFlightsetupvm.GcaApproval.PilotUserId == null ? 0 : DCAAFlightsetupvm.GcaApproval.PilotUserId) + @",
             " + (DCAAFlightsetupvm.GcaApproval.GroundStaffUserId == null ? 0 : DCAAFlightsetupvm.GcaApproval.GroundStaffUserId) + @",
             '" + DCAAFlightsetupvm.GcaApproval.NotificationEmails + @"'
@@ -2255,7 +2246,8 @@ namespace eX_Portal.Controllers {
                             GroundStaffUserId,
                             NotificationEmails,
                             FlightTypeID,
-                            Clientname
+                            Clientname,
+                            IsUseCamara
                           ) values(
                             '" + flightsetupvm.GcaApproval.ApprovalName + @"',
                             GETDATE(),
@@ -2275,7 +2267,8 @@ namespace eX_Portal.Controllers {
                             " + flightsetupvm.GcaApproval.GroundStaffUserId + @",
                             '" + flightsetupvm.GcaApproval.NotificationEmails + @"',
                             " + flightsetupvm.GcaApproval.FlightTypeID + @",
-                            '"+flightsetupvm.GcaApproval.ClientName +@"'
+                            '"+flightsetupvm.GcaApproval.ClientName +@"',
+                            '"+flightsetupvm.GcaApproval.IsUseCamara + @"'
                           )";
                         //
                     }
@@ -2301,7 +2294,8 @@ namespace eX_Portal.Controllers {
                             GroundStaffUserId=" + flightsetupvm.GcaApproval.PilotUserId + @",
                             NotificationEmails='" + flightsetupvm.GcaApproval.NotificationEmails + @"',
                             clientname='" + flightsetupvm.GcaApproval.ClientName + @"',
-                            flighttypeID="+flightsetupvm.GcaApproval.FlightTypeID+@"
+                            flighttypeID="+flightsetupvm.GcaApproval.FlightTypeID+ @",
+                            IsUseCamara="+flightsetupvm.GcaApproval.IsUseCamara+@"
                            where 
                             ApprovalID=" + ApprovalID;
                     }
@@ -2311,6 +2305,7 @@ namespace eX_Portal.Controllers {
                         Util.doSQL(SQL);
                     }
 
+                    /*DroneSetUp updation removed as itis done while assigning blackbox"
                     int DroneID = Util.toInt(flightsetupvm.GcaApproval.DroneID);
                     SQL = "select DroneSetupId from MSTR_Drone_Setup where DroneId=" + DroneID;
                     int DroneSetupId = Util.getDBInt(SQL);
@@ -2338,8 +2333,8 @@ namespace eX_Portal.Controllers {
                          [ModifiedOn]=GETDATE(),
                          [NotificationEmails]='" + flightsetupvm.GcaApproval.NotificationEmails + @"'
                         where 
-                         [DroneId]=" + DroneID;
-                    Util.doSQL(SQL);
+                         [DroneId]=" + DroneID;*/
+             //       Util.doSQL(SQL);
                     //  return RedirectToAction("Applications", "Rpas","");
                 return "OK|/Home/Index/";
             }
@@ -2385,10 +2380,6 @@ namespace eX_Portal.Controllers {
                
                 string Email = "";
                
-                
-                
-
-               
                 if (flightsetupvm.GcaApproval.MaxAltitude == null || flightsetupvm.GcaApproval.MaxAltitude < 1)
                 {
                     return "Please enter Max Altitude.";
@@ -2398,10 +2389,7 @@ namespace eX_Portal.Controllers {
                 {
                     return "Please select coordinates";
                 }
-                if (flightsetupvm.GcaApproval.ApprovalStatus == "Approved" && flightsetupvm.GcaApproval.BlackBoxID < 1)
-                {
-                    return "Please select a Sky Commander from dropdown";
-                }
+                
 
                 var Approval = db.GCA_Approval.Where(e => e.ApprovalID == flightsetupvm.GcaApproval.ApprovalID).FirstOrDefault();
                 if (Approval == null)
@@ -2439,7 +2427,7 @@ namespace eX_Portal.Controllers {
                 Util.doSQL(SQL);
 
 
-
+                /*Drone Setup updating removed
                 int DroneID = Util.toInt(Approval.DroneID);
                 int BlackBoxID = flightsetupvm.GcaApproval.BlackBoxID;
 
@@ -2490,7 +2478,7 @@ namespace eX_Portal.Controllers {
                     SQL = $"update MSTR_Drone set BlackBoxID={BlackBoxID} where DroneId = {DroneID}";
                     Val = Util.doSQL(SQL);
                 }//if(flightsetupvm.ApprovalStatus == "Approved")
-
+                */
                 return "OK|/Rpas/Applications/";
             }
             catch (Exception ex)

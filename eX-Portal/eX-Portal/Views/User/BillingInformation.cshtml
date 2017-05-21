@@ -1,19 +1,10 @@
-﻿
-@{
-    Layout = null;
+﻿@model eX_Portal.exLogic.qView
+
+@Html.Raw(Model.getDataTable())
+
+@section scripts {
+    <script type="text/javascript">
+@Html.Raw(Model.getScripts())
+    </script>
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>BillingInformation</title>
-
-
-</head>
-<body>
-    <div> 
-    </div>
-</body>
-</html>

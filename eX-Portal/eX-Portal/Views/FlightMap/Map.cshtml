@@ -3,7 +3,8 @@
   <div class="column column-half @(Model.IsLive || Model.Videos.Count() > 0 ? "" : "NoVideo")">
     <div class="title">Flight Information
       <div class="info" >(Ref#: <span>@Model.FlightID</span>)</div>
-      <div class="info" style="float:right"><span id="FlightInfo_FlightDate">@Model.FlightDate</span>(UTC)</div>
+      <div class="info" style="float:none;align-self:center;margin-left:100px"><span id="FlightInfo_FlightDate">@Model.FlightDate.Split(' ')[0]</span></div>
+      <div class="info" style="float:right;"><span id="FlightInfo_FlightTime" style="margin-right:5px;">@Model.FlightDate.Split(' ')[1]</span> (UTC)</div>
     </div>
     <div id="FlightInformation">
       @if (Model.IsLive || Model.Videos.Count() > 0) {
@@ -86,11 +87,11 @@
       <div id="FlightPichRoll">
         <div class="MapDataHolder">
           <img class="MapDataShow" id="FlightPichShow" src="~/images/drone-view-front.svg">
-          <div class="info">Pitch <span id="FlightInfo_Pich">0.0</span>&deg;</div>
+          <div class="info">Roll <span id="FlightInfo_Pich">0.0</span>&deg;</div>
         </div>
         <div class="MapDataHolder">
           <img class="MapDataShow" id="FlightRollShow" src="~/images/drone-view-top.svg">
-          <div class="info">Roll <span id="FlightInfo_Roll">0.0</span>&deg;</div>
+          <div class="info">Yaw <span id="FlightInfo_Roll">0.0</span>&deg;</div>
           </div>
         </div>
 
@@ -106,8 +107,8 @@
               <li class="col4">Altitude</li>
               <li class="col5">Speed</li>
               <li class="col6">Distance</li>
-              <li class="col7">Satalites</li>
-              <li class="col8">Pich</li>
+              <li class="col7">Satellites</li>
+              <li class="col8">Pitch</li>
               <li class="col9">Roll</li>
             </ul>
           </li>

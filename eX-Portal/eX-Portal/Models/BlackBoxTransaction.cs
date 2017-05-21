@@ -36,5 +36,6 @@ namespace eX_Portal.Models
         public string VerifyCode { get; set; }
         public Nullable<bool> RentAcknowledged { get; set; }
         public Nullable<decimal> TotalAmount { get; set; }
+        public Nullable<int> UserID { get; set; }
     }
 }

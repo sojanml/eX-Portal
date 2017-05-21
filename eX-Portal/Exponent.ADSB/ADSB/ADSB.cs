@@ -444,18 +444,18 @@ namespace Exponent.ADSB {
       DateTime Now = DateTime.UtcNow;
       var FlightPositions = new List<FlightPosition>();
 
-      if (Now.DayOfWeek == DayOfWeek.Friday || Now.DayOfWeek == DayOfWeek.Saturday) {
-        return FlightPositions;
-      }
-      /*
-      if (Now.Hour < 2 || Now.Hour >= 14)
-      {
-          return FlightPositions;
-      }
+            //if (Now.DayOfWeek == DayOfWeek.Friday || Now.DayOfWeek == DayOfWeek.Saturday)
+            //{
+            //    return FlightPositions;
+            //}
 
-     */
-     return FlightPositions;
-     
+            if (Now.Hour < 2 || Now.Hour >= 14)
+            {
+                return FlightPositions;
+            }
+
+          //  return FlightPositions;
+
 
       String Query =
         "{> alt 5} " +

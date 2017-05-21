@@ -338,11 +338,11 @@ function ShowInfoWindow(t) {
   var Content =
     '<div class="InfoWindow">' +
     '<div><b>' + title + '</b></div>' +
-    '<div><span class="caption">Location:</span><span class="value">' + lt + '&deg;N ' + lg  + '&deg;E</span></div>\n' +
-    '<div><span class="caption">Altitude:</span><span class="feet">' + alt.toFormatted(0) + ' Feet</span><span class="meter">(' + (alt * FeetToMeter).toFormatted(2) + ' Meter)</div>\n' +
+    '<div><span class="caption">Location</span>:<span class="value">' + lt + '&deg;N ' + lg  + '&deg;E</span></div>\n' +
+    '<div><span class="caption">Altitude</span>:<span class="feet">' + alt.toFormatted(0) + ' Feet</span><span class="meter">(' + (alt * FeetToMeter).toFormatted(0) + ' Meter)</div>\n' +
     '<div class="hr"></div>' +
-    '<div><span class="caption">Horizontal Distance:</span><span class="feet">' + (hDistance / FeetToMeter).toFormatted(2) + ' Feet</span><span class="meter">(' + hDistance.toFormatted(2) + ' Meter)</div>\n' +
-    '<div><span class="caption">Vertical Distance:</span><span class="feet">' + vDistance.toFormatted(2) + ' Feet</span><span class="meter">(' + (vDistance * FeetToMeter).toFormatted(2) + ' Meter)</div>\n' +
+    '<div><span class="caption">Horizontal Distance</span>:<span class="feet">' + (hDistance / FeetToMeter).toFormatted(0) + ' Feet</span><span class="meter">(' + hDistance.toFormatted(0) + ' Meter)</div>\n' +
+    '<div><span class="caption">Vertical Distance</span>:<span class="feet">' + vDistance.toFormatted(0) + ' Feet</span><span class="meter">(' + (vDistance * FeetToMeter).toFormatted(0) + ' Meter)</div>\n' +
     '</div>';
 
   

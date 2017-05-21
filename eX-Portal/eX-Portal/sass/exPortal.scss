@@ -1234,6 +1234,10 @@ div.dashboard-column {
               color:red;
             }
           }
+          .UniformWidth
+          {
+              width:200px;
+          }
         }
 
         div.floating {
@@ -1659,29 +1663,34 @@ div.adsb-point {
   margin-left:-12px;
   margin-top:-12px;
   background-image: url('/images/Drone.png');
-} 
+}
 
 div.InfoWindow {
-  b {
-    color: red;
-  }
+    b {
+        color: red;
+    }
 
-  span.value, span.feet {
-    color: #ff5900;
-    padding-left: 10px;
-  }
+    span.value, span.feet {
+        color: #ff5900;
+        padding-left: 10px;
+    }
 
-  span.meter {
-    color: forestgreen;
-    padding-left: 10px;
-  }
+    span.caption {
+        width:120px;
+        display:inline-block;
+    }
 
-  div.hr {
-    font-size:1px;
-    height:1px;
-    width:100%;
-    background-color: silver;
-    margin:3px 0px 3px 0px;
-  }
+    span.meter {
+        color: forestgreen;
+        padding-left: 10px;
+    }
+
+    div.hr {
+        font-size: 1px;
+        height: 1px;
+        width: 100%;
+        background-color: silver;
+        margin: 3px 0px 3px 0px;
+    }
 }
 
