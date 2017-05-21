@@ -12,6 +12,7 @@ function dtConvFromJSON(sNetDate, isAddTime = false) {
   var matches = sNetDate.match(r);
   if (matches.length === 2) {
     var tDate = new Date(parseInt(matches[1]));
+    tDate = tDate.setMinutes(tDate.getMinutes() + tDate.getTimezoneOffset());
     sDate = dFormat(tDate, isAddTime )
   } else {
     sDate =  "N/A";
@@ -36,6 +37,7 @@ function dFormat(tDate, isAddTime) {
   if (isAddTime) {
     sDate = sDate + ' ' + pad(tDate.getHours()) + ":" + pad(tDate.getMinutes()) + ':' + pad(tDate.getSeconds());
   }
+
   return sDate;
 }
 

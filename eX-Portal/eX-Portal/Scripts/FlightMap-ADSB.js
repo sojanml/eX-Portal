@@ -93,6 +93,7 @@ function toDate(JsonDate) {
   var Month = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
   //var Dt = Date(JsonDate.replace(/[\/"]/g, ""));
   var Dt = new Date(JsonDate.match(/\d+/)[0] * 1);
+  Dt.setMinutes(Dt.getMinutes() + Dt.getTimezoneOffset());
   var dd = "0" + Dt.getDate();
   var MM = Dt.getMonth();
   var yyyy = Dt.getFullYear();
