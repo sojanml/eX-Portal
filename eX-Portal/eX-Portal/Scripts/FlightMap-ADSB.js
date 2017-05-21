@@ -116,7 +116,7 @@ function ADSBOverlay(options, ADSBData) {
   this.ADSBActive = [];
 
   this.getIconFor = function (FlightID, Angle) {
-    var IsDrone = (FlightID.substr(0, 3) == 'A00');
+    var IsDrone = (FlightID.substr(0, 3) == 'SC0');
     var ReturnHTML = '';
     var Icon = '/images/Airline.png';
 
@@ -160,7 +160,7 @@ ADSBOverlay.prototype.draw = function () {
     var heading = this.ADSBData[i].Heading;
     heading = parseFloat(heading);
     if (isNaN(heading)) heading = 0;
-    if (title.substr(0, 3) == 'A00') continue;
+    if (title.substr(0, 3) == 'SC0') continue;
     // Determine a random location from the bounds set previously  
     var IconGeoPos = new google.maps.LatLng(lat, lng)
     var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
@@ -193,7 +193,7 @@ ADSBOverlay.prototype.draw = function () {
         + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
         + '<canvas id="canvas_' + DivID + '"></canvas>' 
         + Icon 
-        + '<span class="flight-title" style="">' + title.replace('A00', 'SC0') + '</span>' 
+        + '<span class="flight-title" style="">' + title + '</span>' 
         + '</div>'
       );
       // Append the HTML to the fragment in memory  

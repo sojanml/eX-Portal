@@ -133,10 +133,10 @@ function setStatusSummary(StatusData, ADSBObj) {
   ['Safe', 'Breach', 'Alert'].forEach(function (Stat, index, array) {
       var RPASList = [];
       var RPASLabels = '';
-    var aRPAS = Object.keys(StatusInfo[Stat]['RPAS']);
-    aRPAS.forEach(function (elem) {
-        RPASList.push(elem.replace('A00', 'SC0'));
-        RPASLabels = '<div class="label-auto">' + elem.replace('A00', 'SC0') + '</div>' + RPASLabels;
+      var aRPAS = Object.keys(StatusInfo[Stat]['RPAS']);
+      aRPAS.forEach(function (elem) {
+        //RPASList.push(elem.replace('A00', 'SC0'));
+        RPASLabels = '<div class="label-auto">' + elem + '</div>' + RPASLabels;
     })
     var aAircraft = Object.keys(StatusInfo[Stat]['Aircraft']);
     $('#' + Stat + '-Aircraft-Count').html(aAircraft.length);
@@ -175,7 +175,7 @@ function setStatusWatching(WatchingFlights) {
     var Flight = WatchingFlights[FlightIDs[i]];
     HTML += '<div class="row">\n' +
       '<div class="col1">' + toDate(Flight.ADSBDate) + '</div>\n' +
-      '<div class="col2">' + Flight.FlightID.replace('A00', 'SC0') + '</div>\n' +
+      '<div class="col2">' + Flight.FlightID + '</div>\n' +
       '<div class="col3">' + Flight.Lat + '</div>\n' +
       '<div class="col4">' + Flight.Lon + '</div>\n' +
       '<div class="col5">' + Flight.Speed + '</div>\n' +
@@ -245,11 +245,11 @@ function ADSBOverlay(options, ADSBData) {
     }
 
     this.getIconClass = function (FlightID) {
-        var IsDrone = (FlightID.substr(0, 3) == 'A00');
+        var IsDrone = (FlightID.substr(0, 3) == 'SC0');
         var ClassName = 'normal';
         //return IsDrone ? 'drone' : 'normal';
 
-        if ((FlightID.substr(0, 3) === 'A00')) {
+        if ((FlightID.substr(0, 3) === 'SC0')) {
             ClassName = 'drone';
             if (StatusInfo['Breach']['RPAS'] && FlightID in StatusInfo['Breach']['RPAS']) {
                 ClassName = 'drone breach';
@@ -287,7 +287,7 @@ function ADSBOverlay(options, ADSBData) {
     };
 
     this.getIconFor = function (FlightID, Angle) {
-        var IsDrone = (FlightID.substr(0, 3) == 'A00');
+        var IsDrone = (FlightID.substr(0, 3) == 'SC0');
 
         var ReturnHTML = '';
         var Icon = this.getIconImage(FlightID);
@@ -301,7 +301,7 @@ function ADSBOverlay(options, ADSBData) {
 
     this.getIconImage = function (FlightID) {
         var Icon = '/images/Airline.png';
-        if ((FlightID.substr(0, 3) === 'A00')) {
+        if ((FlightID.substr(0, 3) === 'SC0')) {
             Icon = '/images/Drone.png';
             if (StatusInfo['Breach']['RPAS'] && FlightID in StatusInfo['Breach']['RPAS']) {
                 Icon = '/images/Drone-breach.png';
@@ -490,7 +490,7 @@ ADSBOverlay.prototype.draw = function () {
         + 'data-ident="' + title + '" '
         + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
         + Icon
-        + '<span class="flight-title" style="">' + title.replace('A00', 'SC0') + '</span>' +
+        + '<span class="flight-title" style="">' + title + '</span>' +
         + '</div>'
       );
       // Append the HTML to the fragment in memory  
@@ -574,7 +574,7 @@ function ShowInfoWindow(t) {
 
     var title = t.attr('data-ident');
     var DroneFlightID = parseInt(title.substr(title.length-4)); //
-    var IsDrone = (title.substr(0, 3) == 'A00');
+    var IsDrone = (title.substr(0, 3) == 'SC0');
     var FlightLink = '\n';
     if (IsDrone)
     {
