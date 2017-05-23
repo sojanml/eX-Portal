@@ -2,7 +2,7 @@
 var RefreshTimer = null;
 var LastProcessedID = null;
 var ChartIndex = 0;
-var UpdateDelay = 5 * 1000;
+var UpdateDelay = 1 * 1000;
 var IsQueryChanged = 0;
 var timeZoneOffset = 0; //(new Date()).getTimezoneOffset();
 
@@ -46,7 +46,7 @@ $(document).ready(function () {
   
 
   Timers['getADSB'] = window.setTimeout(getADSB, UpdateDelay, _ADSBLayer);
-  Timers['getStatus'] = window.setTimeout(getStatus, UpdateDelay, _ADSBLayer);
+  //Timers['getStatus'] = window.setTimeout(getStatus, UpdateDelay, _ADSBLayer);
   Timers['getChartData'] = window.setTimeout(getChartData, 100);
 
 
@@ -171,7 +171,7 @@ function RequestFilterData() {
   if (RefreshTimer) window.clearTimeout(RefreshTimer);
   RefreshTimer = null;
   
-  getStatus(_ADSBLayer);
+  //getStatus(_ADSBLayer);
 }
 
 function initializeMap() {

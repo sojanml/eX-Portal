@@ -15,7 +15,7 @@ namespace Exponent.ADSB {
 
   public class ADSBQuery {
 
-    public Double FeetToKiloMeter = 0.0003048;
+    public Double FeetToKiloMeter { get; private set; }  = 0.0003048;
     public Double ATCRadious { get; set; }
     public Double hSafe { get; set; }
     public Double hAlert { get; set; }
@@ -210,6 +210,8 @@ namespace Exponent.ADSB {
 
   }
 
+
+
   public class FlightPosition {
     public String FlightID { get; set; }
     public Double Heading { get; set; }
@@ -221,15 +223,45 @@ namespace Exponent.ADSB {
     public Double Speed { get; set; }
     public Double Altitude { get; set; }
     public DateTime ADSBDate { get; set; }
-
+    public String HexCode { get; set; }
+    public List<String> BreachToFlights { get; set; } = new List<String>();
+    public List<String> AlertToFlights { get; set; } = new List<String>();
 
     public List<Double> History { get; set; }
 
     public FlightPosition() {
       History = new List<Double>();
-
     }
 
+
+    public void SetBreachFlights(SqlConnection CN, ADSBQuery QueryData) {
+      String SQL = $"Select ToFlightID FROM ADSBDetail WHERE HorizontalDistance <= {QueryData.hBreach} AND VerticalDistance <= {QueryData.vBreach * QueryData.FeetToKiloMeter} AND FromFlightID = '{FlightID}'";
+      using(SqlCommand cmd = new SqlCommand(SQL, CN)) {
+        using(SqlDataReader RS = cmd.ExecuteReader()) {
+          BreachToFlights = new List<String>();
+          while (RS.Read()) {
+            BreachToFlights.Add(RS["ToFlightID"].ToString());
+          }
+        }//using(SqlDataReader RS)
+      }//using(SqlCommand cmd)
+    }//public void SetBreachFlights
+
+
+    public void SetAlertFlights(SqlConnection CN, ADSBQuery QueryData) {
+      String SQL = $"Select ToFlightID FROM ADSBDetail WHERE HorizontalDistance <= {QueryData.hAlert} AND VerticalDistance <= {QueryData.vAlert * QueryData.FeetToKiloMeter} AND FromFlightID = '{FlightID}'";
+      if(BreachToFlights.Any()) {
+        SQL = SQL  + " AND ToFlightID NOT IN('" + String.Join("','", BreachToFlights) + "')";
+      }
+      using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
+        using (SqlDataReader RS = cmd.ExecuteReader()) {
+          AlertToFlights = new List<String>();
+          while (RS.Read()) {
+            AlertToFlights.Add(RS["ToFlightID"].ToString());
+          }
+        }//using(SqlDataReader RS)
+      }//using(SqlCommand cmd)
+
+    }//public void SetAlertFlights
   }
 
   public class FlightStatus {

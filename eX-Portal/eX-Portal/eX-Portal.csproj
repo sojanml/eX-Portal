@@ -1081,6 +1081,7 @@
     <Content Include="sass\Agriculture.scss" />
     <Content Include="sass\_colors.scss" />
     <Content Include="sass\_mixin.scss" />
+    <Content Include="Scripts\ADSB-Aircraft-DB.js" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\video.dev.js" />
     <Content Include="Scripts\video.js" />

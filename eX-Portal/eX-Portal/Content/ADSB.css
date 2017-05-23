@@ -965,3 +965,40 @@ table.Sliders td.SliderColumn {
   padding-right: 15px;
   width: 200px;
 }
+
+div.InfoWindow {
+  text-transform: none !important;
+}
+div.InfoWindow div.Header {
+  border-bottom: 1px silver solid;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+div.InfoWindow div.BigTitle {
+  font-size: 16pt;
+  color: #018aff;
+  font-weight: bold;
+  white-space: nowrap;
+}
+div.InfoWindow div.BigTitle span {
+  font-size: 8pt;
+  padding-left: 10px;
+  font-weight: normal;
+}
+div.InfoWindow div.SubTitle {
+  color: #222222;
+  font-size: 9pt;
+}
+div.InfoWindow div.Altitude,
+div.InfoWindow div.Location {
+  font-size: 9pt;
+}
+div.InfoWindow div.Altitude span,
+div.InfoWindow div.Location span {
+  color: #53a100;
+  padding-left: 10px;
+}
+div.InfoWindow div.Altitude span.meter,
+div.InfoWindow div.Location span.meter {
+  color: #018aff;
+}

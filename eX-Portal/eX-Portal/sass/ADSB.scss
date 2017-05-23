@@ -1110,3 +1110,45 @@ table.Sliders {
     }
   }
 }
+
+div.InfoWindow {
+  text-transform: none !important;
+
+  div.Header {
+    border-bottom: 1px silver solid;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+  }
+
+  div.BigTitle {
+    font-size: 16pt;
+    color: $FilterColor;
+    font-weight: bold;
+    white-space: nowrap;
+
+    span {
+      font-size: 8pt;
+      padding-left: 10px;
+      font-weight: normal;
+    }
+  }
+
+  div.SubTitle {
+    color: $TitleHeading;
+    font-size: 9pt;
+  }
+
+  div.Altitude,
+  div.Location {
+    font-size: 9pt;
+
+    span {
+      color: $SafeColor;
+      padding-left:10px;
+    }
+    span.meter {
+      color: $FilterColor;
+    }
+    
+  }
+}

@@ -269,22 +269,6 @@ namespace Exponent.ADSB {
         Filter.Clear();
       }
 
-      //Filter.Append(QueryData.getaltitudeFilter());
-      //if (Filter.Length > 0)
-      //{
-      //    if (WHERE.Length > 0) WHERE.AppendLine(" AND");
-      //    WHERE.Append(Filter);
-      //    Filter.Clear();
-      //}
-
-      //Filter.Append(QueryData.getspeedFilter());
-      //if(Filter.Length>0)
-      //{
-      //    if (WHERE.Length > 0) WHERE.AppendLine(" AND");
-      //    WHERE.Append(Filter);
-      //    Filter.Clear();
-      //}
-
       if (WHERE.Length > 0) {
         SQL.AppendLine(" WHERE");
         SQL.Append(WHERE);
@@ -307,21 +291,29 @@ namespace Exponent.ADSB {
             Speed = RS.IsDBNull(fSpeed) ? 0 : (Double)RS.GetDecimal(fSpeed),
             Altitude = (Double)RS.GetDecimal(RS.GetOrdinal("Altitude")),
             ADSBDate = RS.GetDateTime(RS.GetOrdinal("AdsbDate")),
-            History = getHistory(RS["HeadingHistory"].ToString())
+            History = getHistory(RS["HeadingHistory"].ToString()),
+            FlightSource = FlightSource,
+            HexCode = RS["HexCode"].ToString().ToUpper()
           };
           if (FlightSource == "SkyCommander") {
-            if (Position.Altitude < 0)
-              Position.Altitude = 0;
+            if (Position.Altitude < 0) Position.Altitude = 0;
             if ((Position.Altitude >= QueryData.minAltitude && Position.Altitude <= QueryData.maxAltitude) &&
-                      (Position.Speed >= QueryData.minSpeed && Position.Speed <= QueryData.maxSpeed))
+               (Position.Speed >= QueryData.minSpeed && Position.Speed <= QueryData.maxSpeed)) {
               PositionDatas.Add(Position);
-
+            }
           } else {
             PositionDatas.Add(Position);
           }
         }//while
+        RS.Close();
       }//using
 
+      //Find the breaches and alerts for SkyCommander
+      foreach(var Position in PositionDatas.Where(e => e.FlightSource=="SkyCommander").ToList()) {
+        Position.SetBreachFlights(CN, QueryData);
+        Position.SetAlertFlights(CN, QueryData);
+      }
+      
       return PositionDatas;
     }
 
