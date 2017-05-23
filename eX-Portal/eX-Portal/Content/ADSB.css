@@ -1002,3 +1002,39 @@ div.InfoWindow div.Altitude span.meter,
 div.InfoWindow div.Location span.meter {
   color: #018aff;
 }
+div.InfoWindow div.BreachInfo {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  padding-bottom: 3px;
+  color: #fe0000;
+}
+div.InfoWindow div.BreachInfo div.BreachFlight {
+  color: #fe0000;
+  font-size: 12pt;
+  font-weight: bold;
+}
+div.InfoWindow div.BreachInfo span {
+  color: #53a100;
+  padding-left: 10px;
+}
+div.InfoWindow div.BreachInfo span.meter {
+  color: #018aff;
+}
+div.InfoWindow div.AlertInfo {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  padding-bottom: 3px;
+  color: #f2a003;
+}
+div.InfoWindow div.AlertInfo div.AlertFlight {
+  color: #f2a003;
+  font-size: 12pt;
+  font-weight: bold;
+}
+div.InfoWindow div.AlertInfo span {
+  color: #53a100;
+  padding-left: 10px;
+}
+div.InfoWindow div.AlertInfo span.meter {
+  color: #018aff;
+}

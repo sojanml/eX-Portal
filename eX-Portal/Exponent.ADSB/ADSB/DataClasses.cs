@@ -235,12 +235,12 @@ namespace Exponent.ADSB {
 
 
     public void SetBreachFlights(SqlConnection CN, ADSBQuery QueryData) {
-      String SQL = $"Select ToFlightID FROM ADSBDetail WHERE HorizontalDistance <= {QueryData.hBreach} AND VerticalDistance <= {QueryData.vBreach * QueryData.FeetToKiloMeter} AND FromFlightID = '{FlightID}'";
+      String SQL = $"Select ToHexCode FROM ADSBDetail WHERE HorizontalDistance <= {QueryData.hBreach} AND VerticalDistance <= {QueryData.vBreach} AND FromHexCode = '{HexCode}'";
       using(SqlCommand cmd = new SqlCommand(SQL, CN)) {
         using(SqlDataReader RS = cmd.ExecuteReader()) {
           BreachToFlights = new List<String>();
           while (RS.Read()) {
-            BreachToFlights.Add(RS["ToFlightID"].ToString());
+            BreachToFlights.Add(RS["ToHexCode"].ToString().ToUpper());
           }
         }//using(SqlDataReader RS)
       }//using(SqlCommand cmd)
@@ -248,15 +248,15 @@ namespace Exponent.ADSB {
 
 
     public void SetAlertFlights(SqlConnection CN, ADSBQuery QueryData) {
-      String SQL = $"Select ToFlightID FROM ADSBDetail WHERE HorizontalDistance <= {QueryData.hAlert} AND VerticalDistance <= {QueryData.vAlert * QueryData.FeetToKiloMeter} AND FromFlightID = '{FlightID}'";
+      String SQL = $"Select ToHexCode FROM ADSBDetail WHERE HorizontalDistance <= {QueryData.hAlert} AND VerticalDistance <= {QueryData.vAlert} AND FromHexCode = '{HexCode}'";
       if(BreachToFlights.Any()) {
-        SQL = SQL  + " AND ToFlightID NOT IN('" + String.Join("','", BreachToFlights) + "')";
+        SQL = SQL  + " AND ToHexCode NOT IN('" + String.Join("','", BreachToFlights) + "')";
       }
       using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
         using (SqlDataReader RS = cmd.ExecuteReader()) {
           AlertToFlights = new List<String>();
           while (RS.Read()) {
-            AlertToFlights.Add(RS["ToFlightID"].ToString());
+            AlertToFlights.Add(RS["ToHexCode"].ToString().ToUpper());
           }
         }//using(SqlDataReader RS)
       }//using(SqlCommand cmd)
@@ -347,7 +347,7 @@ namespace Exponent.ADSB {
   public class ADSBData {
 
     public string hex { get; set; }
-    public string altitude { get; set; }
+    public double altitude { get; set; }
     public double seen { get; set; }
     public double speed { get; set; }
     public string squawk { get; set; }
@@ -372,9 +372,7 @@ namespace Exponent.ADSB {
     }
 
     public double Alt() {
-      double temp = 0.0;
-      Double.TryParse(altitude, out temp);
-      return temp;
+      return altitude;
     }
     public void Setflightdate(long timeinsecond) {
       ADSBDate = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);

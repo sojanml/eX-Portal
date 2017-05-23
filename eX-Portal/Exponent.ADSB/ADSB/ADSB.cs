@@ -230,7 +230,8 @@ namespace Exponent.ADSB {
         HeadingHistory,
         [Altitude],
         [AdsbDate],
-        FlightSource
+        FlightSource,
+        HexCode
       from
         AdsbLive
       ");

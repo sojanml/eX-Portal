@@ -1144,11 +1144,56 @@ div.InfoWindow {
 
     span {
       color: $SafeColor;
-      padding-left:10px;
+      padding-left: 10px;
     }
+
     span.meter {
       color: $FilterColor;
     }
-    
+  }
+
+  div.BreachInfo {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-bottom: 3px;
+    color: $BreachColor;
+
+    div.BreachFlight {
+      color: $BreachColor;
+      font-size: 12pt;
+      font-weight: bold;
+    }
+
+    span {
+      color: $SafeColor;
+      padding-left: 10px;
+    }
+
+    span.meter {
+      color: $FilterColor;
+    }
+  }
+
+
+  div.AlertInfo {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-bottom: 3px;
+    color: $AlertColor;
+
+    div.AlertFlight {
+      color: $AlertColor;
+      font-size: 12pt;
+      font-weight: bold;
+    }
+
+    span {
+      color: $SafeColor;
+      padding-left: 10px;
+    }
+
+    span.meter {
+      color: $FilterColor;
+    }
   }
 }

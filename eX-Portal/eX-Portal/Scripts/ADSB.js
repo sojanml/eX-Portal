@@ -1,9 +1,7 @@
 ﻿var _InfoWindowKey = '';
 var AlertRef = {}
 var BreachRef = {}
-var _InfoWindow = new google.maps.InfoWindow({
-  content: '<div id="InfoWindowContent">...</div>'
-});
+var _InfoWindow = null;
 
 $(document).ready(function () {
   $(document).on("click", "div.adsb-point", function () {
@@ -28,6 +26,14 @@ $(document).ready(function () {
     }
 
   });
+
+  _InfoWindow = new google.maps.InfoWindow({
+    content: '<div id="InfoWindowContent">...</div>'
+  });
+  google.maps.event.addListener(_InfoWindow, 'closeclick', function () {
+    _InfoWindowKey = '';
+  });
+
 });
 
 var StatusInfo = {
@@ -380,11 +386,12 @@ ADSBOverlay.prototype.draw = function (IsSetADSB) {
     var title = this.ADSBData[i].FlightID.trim();    
     var heading = this.ADSBData[i].Heading;
     var IconClass = 'drone';
-    var DivID = 'adsb-' + this.ADSBData[i].HexCode.trim();
+    var HexCode = this.ADSBData[i].HexCode.trim();
+    var DivID = 'adsb-' + HexCode;
     heading = parseFloat(heading);
     if (isNaN(heading)) heading = 0;
     //save what is on map
-    this.FlightsOnMap[title] = i;
+    this.FlightsOnMap[HexCode] = i;
 
     // Determine a random location from the bounds set previously  
     var IconGeoPos = new google.maps.LatLng(lat, lng)
@@ -400,6 +407,9 @@ ADSBOverlay.prototype.draw = function (IsSetADSB) {
       $point.find('img').attr('src', this.getIconImage(this.ADSBData[i]));
     } else {
       var Icon = this.getIconFor(this.ADSBData[i]);
+      var AircraftCode = title.substr(0, 3).toUpperCase();
+      if (AircraftDB[AircraftCode]) title = AircraftDB[AircraftCode]["IATA"] + ' ' + title.substr(3).toUpperCase();
+
       var $NewPoint = $(
         '<div  class="adsb-point ' + IconClass + '" id="' + DivID + '" title="' + title + '" '
         + 'data-lat="' + lat + '" '
@@ -416,7 +426,6 @@ ADSBOverlay.prototype.draw = function (IsSetADSB) {
       this.markerLayer.append($NewPoint.get(0));
       $point = $('#' + DivID);
     }
-
     setTail(DivID, this.ADSBData[i]);
 
   }//for (var i = 0)
@@ -441,8 +450,14 @@ ADSBOverlay.prototype.draw = function (IsSetADSB) {
     if (this.FlightsOnMap[TheKey] + 0 >= 0) {
     } else {
       $('#adsb-' + TheKey).remove();
+      if (_InfoWindowKey == TheKey) {
+        _InfoWindow.close()
+        _InfoWindowKey = "";
+      }
     }//if (gADSBData[key] > 20) 
   }//for (var key in gADSBData)
+
+  if (_InfoWindowKey != "") ShowInfoWindow();
 
 
   //clone the object - not the refence to object
@@ -531,8 +546,9 @@ function lineToAngle(x1, y1, length, angle) {
 
 function ShowInfoWindow() {
   if (_InfoWindowKey == '') return;
-  var FlightID = _InfoWindowKey.replace('adsb-', '');
-  var Data = _ADSBLayer.GetData(FlightID);
+  var HexCode = _InfoWindowKey.replace('adsb-', '');
+  var Data = _ADSBLayer.GetData(HexCode);
+  var FlightID = Data.FlightID;
   if (Data == null) return;
   if (Data.FlightSource == 'SkyCommander') {
     var DroneFlightID = FlightID.substr(3);
@@ -542,6 +558,9 @@ function ShowInfoWindow() {
   }
 
   var InfoTitle = '';
+  var BreachInfo = '';
+  var AlertInfo = '';
+
   var AircraftCode = FlightID.substr(0, 3).toUpperCase();
   if (AircraftDB[AircraftCode])
     InfoTitle =
@@ -551,19 +570,56 @@ function ShowInfoWindow() {
       '<div class="SubTitle">' + AircraftDB[AircraftCode]["Country"] + '</div>';
   else
     InfoTitle = '<div class="BigTitle">' + FlightID.toUpperCase() + '</div>';
-
+  
   var alt = Data.Altitude;
   var lt = Data.Lat;
   var lg = Data.Lon;
   var FeetToMeter = 0.3048;
+  var MeterToFeet = 3.28084;
+
+  if (Data.BreachToFlights.length > 0) {
+    BreachInfo = '';
+    for (var i = 0; i < Data.BreachToFlights.length; i++) {
+      var FlightHexCode = Data.BreachToFlights[i];
+      var FlightData = _ADSBLayer.GetData(FlightHexCode);
+      if (FlightData != null) {
+        var vDist = alt - (FlightData.Altitude * MeterToFeet);
+        var hDist = getDistance({ lat: lt, lng: lg }, { lat: FlightData.Lat, lng: FlightData.Lon });
+        BreachInfo = BreachInfo +
+          '<div class="BreachInfo">\n' +
+          '<div class="BreachFlight">' + FlightData.FlightID + '</div>\n' +
+          '<div class="vDist">Vertical Seperation (Altitude):<span class="feet">' + vDist.toFormatted(0) + ' Feet</span><span class="meter">(' + (vDist * FeetToMeter).toFormatted(0) + ' Meter)</span></div>\n' +
+          '<div class="hDist">Horizondal Seperation:<span class="meter">' + (hDist / 1000).toFormatted(2) + ' KM</span><span class="feet">(' + (hDist * MeterToFeet).toFormatted(0) + ' Feet)</span></div>\n' +
+          '</div>\n';
+      }
+    }
+  }
+
+  if (Data.AlertToFlights.length > 0) {
+    AlertInfo = '';
+    for (var i = 0; i < Data.AlertToFlights.length; i++) {
+      var FlightHexCode = Data.AlertToFlights[i];
+      var FlightData = _ADSBLayer.GetData(FlightHexCode);
+      if (FlightData != null) {
+        var vDist = alt - (FlightData.Altitude * MeterToFeet);
+        var hDist = getDistance({ lat: lt, lng: lg }, { lat: FlightData.Lat, lng: FlightData.Lon });
+        AlertInfo = AlertInfo +
+          '<div class="AlertInfo">\n' +
+          '<div class="AlertFlight">' + FlightData.FlightID + '</div>\n' +
+          '<div class="vDist">Vertical Seperation (Altitude):<span class="feet">' + vDist.toFormatted(0) + ' Feet</span><span class="meter">(' + (vDist * FeetToMeter).toFormatted(0) + ' Meter)</span></div>\n' +
+          '<div class="hDist">Horizondal Seperation:<span class="meter">' + (hDist / 1000).toFormatted(2) + ' KM</span><span class="feet">(' + (hDist * MeterToFeet).toFormatted(0) + ' Feet)</span></div>\n' +
+          '</div>\n';
+      }
+    }
+  }
 
   var Content =
     '<div class="InfoWindow">' +
     '<div class="Header">' + InfoTitle + '</div>' + 
     '<div class="Location">Location: <span>' + lt + '&deg;N, ' + lg + '&deg;E</span></div>\n' +
     '<div class="Altitude">Altitude:<span class="feet">' + alt.toFormatted(0) + ' Feet</span><span class="meter">(' + (alt * FeetToMeter).toFormatted(0) + ' Meter)</span></div>\n' +
-    '<div>Breach Alerts to: ' + Data.BreachToFlights.join(',') + '</div>\n' +
-    '<div>Alerts to: ' + Data.AlertToFlights.join(',') + '</div>\n' +
+    BreachInfo +
+    AlertInfo +
     FlightLink +
     '</div>';
   var myLatlng = new google.maps.LatLng(lt, lg);
