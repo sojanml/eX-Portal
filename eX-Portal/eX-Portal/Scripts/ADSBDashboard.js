@@ -215,14 +215,14 @@ function setChartData(ChartData) {
 
     var BarColor = 'red';
     var theData = {
-      y: DataItem.Breach,
+      y: DataItem.AircraftBreach,
       categories
     }; //{ y: , x: ], color: 'yellow' };
 
     LastProcessedID = DataItem.ID;
     //theChartSeries[0].xAxis.categories = categories;
     theChartSeries[1].addPoint(theData, false, isRemovePoints, false);
-    theChartSeries[0].addPoint([categories, DataItem.Alert], true, isRemovePoints, true);
+    theChartSeries[0].addPoint([categories, DataItem.AircraftAlert], true, isRemovePoints, true);
   }
 
 }

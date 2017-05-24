@@ -265,8 +265,8 @@ namespace Exponent.ADSB {
   }
 
   public class FlightStatus {
-    public String FromFlightID { get; set; }
-    public String ToFlightID { get; set; }
+    public String FromHexCode { get; set; }
+    public String ToHexCode { get; set; }
     public Double vDistance { get; set; }
     public Double hDistance { get; set; }
     public String Status { get; set; }
@@ -274,9 +274,12 @@ namespace Exponent.ADSB {
 
   public class FlightSummary {
     public String SummaryDate { get; set; }
-    public int Breach { get; set; }
-    public int Alert { get; set; }
     public int ID { get; set; }
+
+    public int AircraftBreach { get; set; }
+    public int AircraftAlert { get; set; }
+    public int RPASBreach { get; set; }
+    public int RPASAlert { get; set; }
 
     public int TotalRPAS { get; set; }
     public Double Area { get; set; }
@@ -285,7 +288,7 @@ namespace Exponent.ADSB {
     public void SetSummary(SqlConnection CN) {
       ADSBQuery adsb = new ADSBQuery();
       adsb.GetDefaults(CN);
-      String SQL1 = $"select Count(DISTINCT FromFlightID) from ADSBDetailHistory WHERE VerticalDistance <= {adsb.vBreach * adsb.FeetToKiloMeter}  and HorizontalDistance <= {adsb.hBreach}  and CreatedDate >=DATEADD(day, -1, GETDATE());";
+      String SQL1 = $"select Count(DISTINCT FromHexCode) from ADSBDetailHistory WHERE VerticalDistance <= {adsb.vBreach * adsb.FeetToKiloMeter}  and HorizontalDistance <= {adsb.hBreach}  and CreatedDate >=DATEADD(day, -1, GETDATE());";
       Breach24H = GetDBInt(CN, SQL1);
       TotalRPAS = GetDBInt(CN, "select Count(*) from AdsbLive WHERE FlightSource='SkyCommander'");
       Area = GetArea(CN);

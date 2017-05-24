@@ -833,7 +833,7 @@ div.adsb-point {
   }
 
   span.FlightIcon,
-  span.DroneIcon {
+  span.SkyCommander {
     position: absolute;
     left: 50px;
     top: 50px;
@@ -846,9 +846,11 @@ div.adsb-point {
     -moz-transform-origin: 50% 50%;
     -o-transform-origin: 50% 50%;
     transform-origin: 50% 50%;
+    z-index: 20;
   }
 
-  span.DroneIcon {
+  span.FlightIcon:hover img {
+    filter: saturate(8);
   }
 
   span.flight-title {
@@ -862,12 +864,6 @@ div.adsb-point {
     font-size: 9px;
   }
 
-
-  &:hover {
-    span.flight-title {
-      display: block;
-    }
-  }
 
   &.breach {
     color: $BreachColor;
@@ -912,8 +908,8 @@ div.adsb-point {
     span.flight-title,
     span.tail {
       background-color: #018aff;
-    } 
-     
+    }
+
     &.breach {
       span.flight-title,
       span.tail {
@@ -1194,6 +1190,18 @@ div.InfoWindow {
 
     span.meter {
       color: $FilterColor;
+    }
+  }
+
+  div.Link {
+    margin-top:10px;
+    a {
+      text-decoration: none;
+      color: $BreachColor;
+      &:hover {
+        text-decoration:underline;
+        color: $FilterColor
+      }
     }
   }
 }

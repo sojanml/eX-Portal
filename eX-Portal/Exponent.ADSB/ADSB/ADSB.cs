@@ -96,8 +96,10 @@ namespace Exponent.ADSB {
           SELECT TOP {MaxRecords} 
             ID, 
             DATEADD(MINUTE,{TimezoneOffset},SummaryDate) as SummaryDate,
-            BreachCount,
-            AlertCount
+            AircraftBreach,
+            AircraftAlert,
+            RPASBreach,
+            RPASAlert
           FROM 
             ADSBSummary ";
       if (LastProcessedID > 0)
@@ -115,8 +117,10 @@ namespace Exponent.ADSB {
           while (RS.Read()) {
             TheSummary.Add(new FlightSummary {
               SummaryDate = RS.GetDateTime(RS.GetOrdinal("SummaryDate")).ToString("HH:mm"),
-              Breach = RS.GetInt32(RS.GetOrdinal("BreachCount")),
-              Alert = RS.GetInt32(RS.GetOrdinal("AlertCount")),
+              AircraftBreach = RS.GetInt32(RS.GetOrdinal("AircraftBreach")),
+              AircraftAlert = RS.GetInt32(RS.GetOrdinal("AircraftAlert")),
+              RPASBreach = RS.GetInt32(RS.GetOrdinal("RPASBreach")),
+              RPASAlert = RS.GetInt32(RS.GetOrdinal("RPASAlert")),
               ID = RS.GetInt32(RS.GetOrdinal("ID"))
             });
           }//while
@@ -136,8 +140,8 @@ namespace Exponent.ADSB {
     public List<FlightStatus> GetFlightStatus(String DSN, Exponent.ADSB.ADSBQuery QueryData) {
       var Dist = new List<FlightStatus>();
       String SQL = $@"Select 
-        ADSBDetail.FromFlightID,
-        ADSBDetail.ToFlightID,
+        ADSBDetail.FromHexCode,
+        ADSBDetail.ToHexCode,
         ADSBDetail.VerticalDistance,
         ADSBDetail.HorizontalDistance,
         CASE
@@ -156,8 +160,8 @@ namespace Exponent.ADSB {
           var RS = Cmd.ExecuteReader();
           while (RS.Read()) {
             Dist.Add(new FlightStatus {
-              FromFlightID = RS["FromFlightID"].ToString(),
-              ToFlightID = RS["ToFlightID"].ToString(),
+              FromHexCode = RS["FromHexCode"].ToString(),
+              ToHexCode = RS["ToHexCode"].ToString(),
               vDistance = toDouble(RS["VerticalDistance"].ToString()),
               hDistance = toDouble(RS["HorizontalDistance"].ToString()),
               Status = RS["StatusModel"].ToString()
@@ -167,7 +171,7 @@ namespace Exponent.ADSB {
         }//using (var Cmd)
 
         //Find the safe operating RPS - not in above condition
-        var FromFlightIDs = Dist.Select(e => $"'{e.FromFlightID}'").ToArray();
+        var FromFlightIDs = Dist.Select(e => $"'{e.FromHexCode}'").ToArray();
         var AllIDs = String.Join(",", FromFlightIDs);
 
         SQL = $@"Select DISTINCT ADSBDetail.FromFlightID
@@ -182,8 +186,8 @@ namespace Exponent.ADSB {
           var RS = Cmd.ExecuteReader();
           while (RS.Read()) {
             Dist.Add(new FlightStatus {
-              FromFlightID = RS["FromFlightID"].ToString(),
-              ToFlightID = "",
+              FromHexCode = RS["HexCode"].ToString(),
+              ToHexCode = "",
               vDistance = 0,
               hDistance = 0,
               Status = "Safe"
