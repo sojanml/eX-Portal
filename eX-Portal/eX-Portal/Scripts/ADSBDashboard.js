@@ -5,10 +5,10 @@ var ChartIndex = 0;
 var UpdateDelay = 1 * 1000;
 var IsQueryChanged = 0;
 var timeZoneOffset = 0; //(new Date()).getTimezoneOffset();
+var TheChartObject = null;
 
 var Timers = {
   getADSB: null,
-  getStatus: null,
   getChartData: null
 }
 
@@ -20,20 +20,15 @@ $(document).ready(function () {
 
   var spinner = $("input.spinner").spinner({
     change: function (event, ui) {
-      if (Timers['getStatus']) window.clearTimeout(Timers['getStatus']);
-      Timers['getStatus'] = window.setTimeout(RequestFilterData, 1 * 1000);
-
       AutoUpdateZone($(this));
       IsQueryChanged = 1;
-      //console.log("Setting Timer ID : " + RefreshTimer);
+      ReGetAdsb();
     }
   });
 
   var CheckBox = $('input.query').on("change", function () {
-    if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
-    Timers['getADSB'] = window.setTimeout(getADSB, 1 * 1000, _ADSBLayer);
     IsQueryChanged = 1;
-    //d.getTimezoneOffset()
+    ReGetAdsb();
   });
 
   $('#TimeZone').on("change", function () {
@@ -45,7 +40,8 @@ $(document).ready(function () {
   });
   
 
-  Timers['getADSB'] = window.setTimeout(getADSB, UpdateDelay, _ADSBLayer);
+  
+  Timers['getADSB'] = window.setTimeout(getADSB, 100, _ADSBLayer);
   //Timers['getStatus'] = window.setTimeout(getStatus, UpdateDelay, _ADSBLayer);
   Timers['getChartData'] = window.setTimeout(getChartData, 100);
 
@@ -92,7 +88,7 @@ function InitSliders() {
 function ReGetAdsb() {
   IsQueryChanged = 1;
   if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
-  Timers['getADSB'] = window.setTimeout(getADSB, 1 * 1000, _ADSBLayer);
+  Timers['getADSB'] = window.setTimeout(getADSB, 400, _ADSBLayer);
 }
 
 function AutoUpdateZone(Elem) {
@@ -201,29 +197,18 @@ function setLiveSummary(ChartData) {
 function setChartData(ChartData) {
   //console.log("Position : " + Position + ", ChartIndex:" + ChartIndex);
   if (ChartData.length < 1) return;
-
+  var Categories = [];
+  var Alerts = [];
+  var Breach = [];
   for (var i = 0; i < ChartData.length; i++) {
-    ChartIndex++;
-
-
-    isRemovePoints = false;
     var DataItem = ChartData[i];
-    var categories = theChartSeries[0].xAxis.categories;
-    var isRemovePoints = categories.length  >= 20 ? true : false;
-    categories.shift;
-    categories.push(DataItem.SummaryDate);
-
-    var BarColor = 'red';
-    var theData = {
-      y: DataItem.AircraftBreach,
-      categories
-    }; //{ y: , x: ], color: 'yellow' };
-
-    LastProcessedID = DataItem.ID;
-    //theChartSeries[0].xAxis.categories = categories;
-    theChartSeries[1].addPoint(theData, false, isRemovePoints, false);
-    theChartSeries[0].addPoint([categories, DataItem.AircraftAlert], true, isRemovePoints, true);
+    Categories.push(DataItem.SummaryDate);
+    Breach.push(DataItem.AircraftBreach);
+    Alerts.push(DataItem.AircraftAlert);
   }
+  theChartSeries[0].setData(Alerts, false);
+  theChartSeries[1].setData(Breach, false);
+  TheChartObject.xAxis[0].setCategories(Categories);
 
 }
 
@@ -231,7 +216,7 @@ function setChartData(ChartData) {
 function getChartData() {
   //download data from the server
   var d = new Date();
-  var URL = '/Adsb/Summary?LastProcessedID=' + LastProcessedID + '&TimezoneOffset=' + (-1 * timeZoneOffset);
+  var URL = '/Adsb/Summary?TimezoneOffset=' + (-1 * timeZoneOffset);
   var AJAX = $.ajax({
     url: URL,
     type: 'GET',
@@ -240,7 +225,7 @@ function getChartData() {
       setLiveSummary(data);
     }, //succes
     complete: function () {
-      Timers['getChartData'] = window.setTimeout(getChartData, 30 * 1000);
+      Timers['getChartData'] = window.setTimeout(getChartData, 10 * 1000);
     }    
   });//$.ajax
 }
@@ -262,6 +247,7 @@ function InitChart() {
         load: function () {
           // set up the updating of the chart each second
           theChartSeries = this.series;
+          TheChartObject = this;
         }
       }
     },

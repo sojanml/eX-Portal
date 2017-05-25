@@ -262,12 +262,12 @@
           <div class="tile-detail">
 
             <div class="ui-box">
-              <input @(Model.BreachLine == 1 ? "checked" : "") class="query" value="1" type="checkbox" name="BreachLine" id="BreachLine" />
+              <input class="QueryModel" checked  value="1" type="checkbox" name="BreachLine" id="BreachLine" />
               <label for="BreachLine"><span></span>Breach Lines</label>
             </div>
 
             <div class="ui-box">
-              <input  @(Model.AlertLine == 1 ? "checked" : "") class="query" value="1" type="checkbox" name="AlertLine" id="AlertLine" />
+              <input  class="QueryModel" checked  value="1" type="checkbox" name="AlertLine" id="AlertLine" />
               <label for="AlertLine"><span></span>Alert Lines</label>
             </div>
 
@@ -286,9 +286,6 @@
     </tr>
 
   </table>
-
-
-
 
 </section>
 <p>&nbsp;</p>

@@ -10,22 +10,8 @@ $(document).ready(function () {
     ShowInfoWindow();
   });
 
-  var CheckBox = $('input.query#BreachLine').on("change", function () {
-    if ($('input.query#BreachLine').is(':checked')) {
-      _ADSBLayer.DrawLinesOf(BreachRef);
-    } else {
-      _ADSBLayer.DeleteLinesOf(_ADSBLayer.ADSBLines);
-    }
-
-  });
-  var CheckBox = $('input.query#AlertLine').on("change", function () {
-    if ($('input.query#AlertLine').is(':checked')) {
-      _ADSBLayer.DrawLinesOfAlert(AlertRef);
-    } else {
-      _ADSBLayer.DeleteLinesOf(_ADSBLayer.ADSBAlertLines);
-    }
-
-  });
+  $('input#BreachLine').on("change", ShowHideLines);
+  $('input#AlertLine').on("change", ShowHideLines);
 
   $(document).on("mouseenter", 'span.SkyCommander', function () { _ADSBLayer.ShowCircles($(this))});
   $(document).on("mouseleave", 'span.SkyCommander', function () { _ADSBLayer.HideCircles($(this))});
@@ -38,6 +24,13 @@ $(document).ready(function () {
   });
 
 });
+
+function ShowHideLines() {
+  var Breach = $('input#BreachLine').is(':checked');
+  var Alert = $('input#AlertLine').is(':checked');
+  _ADSBLayer.ShowHideLines(Breach, Alert);
+  IsQueryChanged = 0;
+}
 
 var StatusInfo = {
   'Breach': {},
@@ -54,11 +47,70 @@ var StatusInfo = {
   },
   SetWatchingFlight: function (Data) {
     WatchingFlights = Data;
+  },
+
+  AddStatusOf: function (FlightData) {
+    for (var i = 0; i < FlightData.BreachToFlights.length; i++) {
+      var thisFlightHex = FlightData.BreachToFlights[i];
+      this.Breach.Aircraft[thisFlightHex] = true;
+    }
+
+    for (var i = 0; i < FlightData.AlertToFlights.length; i++) {
+      var thisFlightHex = FlightData.AlertToFlights[i];
+      this.Alert.Aircraft[thisFlightHex] = true;
+    }
+    var HexCode = FlightData.HexCode;
+
+    if (FlightData.BreachToFlights.length > 0) {
+      this.Breach.RPAS[HexCode] = true;
+    }
+    if (FlightData.AlertToFlights.length > 0) {
+      this.Alert.RPAS[HexCode] = true;
+    }
+    if (FlightData.BreachToFlights.length == 0 && FlightData.AlertToFlights.length == 0) {
+      this.Safe.RPAS[HexCode] = true;
+    }
+
+  },
+
+  ShowStatus: function () {
+    var BreachAircraft = Object.keys(this.Breach.Aircraft);
+    var BreachRPAS = Object.keys(this.Breach.RPAS);
+    $('#Breach-Aircraft-Count').html(BreachAircraft.length);
+    $('#Breach-RPAS-Count').html(BreachRPAS.length);
+    $('#Breach-Aircraft').html(this.NiceNames(BreachAircraft));
+
+    var AlertAircraft = Object.keys(this.Alert.Aircraft);
+    var AlertRPAS = Object.keys(this.Alert.RPAS);
+    $('#Alert-Aircraft-Count').html(AlertAircraft.length);
+    $('#Alert-RPAS-Count').html(AlertRPAS.length);
+    $('#Alert-RPAS').html(AlertRPAS.join(", "));
+    $('#Alert-Aircraft').html(this.NiceNames(AlertAircraft));
+
+    var SafeRPAS = Object.keys(this.Safe.RPAS);
+    $('#Safe-RPAS-Count').html(SafeRPAS.length);
+    $('#Safe-RPAS').html(SafeRPAS.join(", "));
+
+    setStatusWatching(BreachRPAS);
+  },
+
+  NiceNames: function (HexCodes) {
+    var Names = [];
+    for (var i = 0; i < HexCodes.length; i++) {
+      var Data = _ADSBLayer.GetData(HexCodes[i]);
+      if (Data != null) Names.push(Data.NiceName);
+    }
+    return Names.join(", ");
   }
+
+
+
 }
 
 function getADSB(ADSBObj) {
-  var QueryData = $('input.spinner, input.query').serialize();
+  var QueryData =
+    $('input.spinner, input.query, input.QueryModel').serialize()
+    + '&IsQueryChanged=' + IsQueryChanged;
   $.ajax({
     type: "GET",
     url: '/ADSB?' + QueryData,
@@ -70,63 +122,17 @@ function getADSB(ADSBObj) {
       //alert('Failed to fetch flight: ' + data);
     },
     complete: function () {
+      if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
+      IsQueryChanged = 0;
       Timers['getADSB'] = window.setTimeout(getADSB, UpdateDelay, ADSBObj);
     }
   });
 }
 
-function setStatusSummary(StatusData, ADSBObj) {
-  StatusInfo.Reset();
-  BreachRef = {};
-  AlertRef = {};
-  for (var i = 0; i < StatusData.length; i++) {
-    var Stat = StatusData[i];
-    var RpasID = Stat.FromFlightID;
-    var AircraftID = Stat.ToFlightID;
-    var StatKey = Stat.Status;
-    if (!(RpasID in StatusInfo[StatKey]['RPAS'])) StatusInfo[StatKey]['RPAS'][RpasID] = 1;
-    if (!(AircraftID in StatusInfo[StatKey]['Aircraft'])) StatusInfo[StatKey]['Aircraft'][AircraftID] = 1;
-
-    if (StatKey == 'Breach') {
-      if (BreachRef[RpasID] == undefined) BreachRef[RpasID] = [];
-      BreachRef[RpasID].push(AircraftID);
-
-    }
-    if (StatKey == 'Alert') {
-      if (AlertRef[RpasID] == undefined) AlertRef[RpasID] = [];
-      AlertRef[RpasID].push(AircraftID);
-    }
-  }//for
-
-
-  ['Safe', 'Breach', 'Alert'].forEach(function (Stat, index, array) {
-    var RPASList = [];
-    var RPASLabels = '';
-    var aRPAS = Object.keys(StatusInfo[Stat]['RPAS']);
-    aRPAS.forEach(function (elem) {
-      RPASLabels = '<div class="label-auto">' + elem + '</div>' + RPASLabels;
-    })
-    var aAircraft = Object.keys(StatusInfo[Stat]['Aircraft']);
-    $('#' + Stat + '-Aircraft-Count').html(aAircraft.length);
-    $('#' + Stat + '-RPAS-Count').html(aRPAS.length);
-    $('#' + Stat + '-Aircraft').html(aAircraft.join(", "));
-    $('#' + Stat + '-RPAS').html(RPASLabels);
-  });
-
-  var Flights = StatusInfo['Breach']['RPAS'];
-  ADSBObj.SetWatchingFlight(Flights);
-  var TheDatas = ADSBObj.GetWatchingFlight()
-
-  setStatusWatching(TheDatas);
-
-
-}
-
-function setStatusWatching(WatchingFlights) {
-  var FlightIDs = Object.keys(WatchingFlights);
+function setStatusWatching(FlightIDs) {
   var HTML = '';
   for (var i = 0; i < FlightIDs.length; i++) {
-    var Flight = WatchingFlights[FlightIDs[i]];
+    var Flight = _ADSBLayer.GetData(FlightIDs[i]);
     HTML += '<div class="row">\n' +
       '<div class="col1">' + toDate(Flight.ADSBDate) + '</div>\n' +
       '<div class="col2">' + Flight.FlightID + '</div>\n' +
@@ -180,14 +186,24 @@ function ADSBOverlay(options, ADSBData) {
     this.ADSBData = ADSBData;
     this.DrawCount++;
     this.GetWatchingFlight();
-    this.draw(true);
+
     this.SkyCommander = [];
+    StatusInfo.Reset();
     for (var i = 0; i < this.ADSBData.length; i++) {
       var FlightData = this.ADSBData[i];
+      FlightData.NiceName = FlightData.FlightID.trim();
+
       if (FlightData.FlightSource == 'SkyCommander') {
         this.SkyCommander.push(FlightData.FlightID.trim());
+        StatusInfo.AddStatusOf(FlightData);
+      } else {
+        var AircraftCode = FlightData.FlightID.substr(0, 3).toUpperCase();
+        if (AircraftDB[AircraftCode]) FlightData.NiceName = AircraftDB[AircraftCode]["IATA"] + ' ' + FlightData.FlightID.substr(3).toUpperCase();
+      
       }//if (this.ADSBData[i].FlightSource)
     }//for (var i = 0; i < this.ADSBData.length; i++)
+
+    this.draw(true);
   },
 
   this.GetWatchingFlight = function () {
@@ -247,6 +263,16 @@ ADSBOverlay.prototype.ClearLines = function() {
   this.AlertLineReference = [];
 }
 
+ADSBOverlay.prototype.ShowHideLines = function (Breach, Alert) {
+  for (var i = 0; i < this.BreachLineReference.length; i++) {
+    this.BreachLineReference[i].setMap(Breach ? map : null);
+  }
+
+  for (var i = 0; i < this.AlertLineReference.length; i++) {
+    this.AlertLineReference[i].setMap(Alert ? map : null);
+  }
+}
+
 ADSBOverlay.prototype.DrawLinesTo = function (DroneID) {
   if (this.map == null || this.map == undefined) return;
 
@@ -292,13 +318,12 @@ ADSBOverlay.prototype.DrawLinesTo = function (DroneID) {
     }
   }
 
-  for (var i = 0; i < this.BreachLineReference.length; i++) {
-    this.BreachLineReference[i].setMap(map);
-  }
 
-  for (var i = 0; i < this.AlertLineReference.length; i++) {
-    this.AlertLineReference[i].setMap(map);
-  }
+  var IsBreachLines = $('input#BreachLine').is(':checked');
+  var IsAlertLines = $('input#AlertLine').is(':checked');
+
+  this.ShowHideLines(IsBreachLines, IsAlertLines);
+
 }; //this.DrawLinesOf
 
 
@@ -363,6 +388,7 @@ ADSBOverlay.prototype.ClearCircles = function() {
 ADSBOverlay.prototype.draw = function (IsSetADSB) {
   var projection = this.getProjection();
   if (!projection) return false;
+  if (this.ADSBData.length < 1) return;
   this.FlightsOnMap = {};
 
   for (var i = 0; i < this.ADSBData.length; i++) {
@@ -373,6 +399,9 @@ ADSBOverlay.prototype.draw = function (IsSetADSB) {
     var heading = this.ADSBData[i].Heading;
     var IconClass = 'drone';
     var HexCode = this.ADSBData[i].HexCode.trim();
+    if (HexCode == '') {
+      this.ADSBData[i].HexCode =  HexCode = this.ADSBData[i].FlightID.trim();     
+    }
     var DivID = 'adsb-' + HexCode;
     heading = parseFloat(heading);
     if (isNaN(heading)) heading = 0;
@@ -393,15 +422,13 @@ ADSBOverlay.prototype.draw = function (IsSetADSB) {
       $point.find('img').attr('src', this.getIconImage(this.ADSBData[i]));
     } else {
       var Icon = this.getIconFor(this.ADSBData[i]);
-      var AircraftCode = title.substr(0, 3).toUpperCase();
-      if (AircraftDB[AircraftCode]) title = AircraftDB[AircraftCode]["IATA"] + ' ' + title.substr(3).toUpperCase();
 
       var $NewPoint = $(
-        '<div  class="adsb-point ' + IconClass + '" id="' + DivID + '" title="' + title + '" '
+        '<div  class="adsb-point ' + IconClass + '" id="' + DivID + '" title="' + this.ADSBData[i].NiceName + '" '
         + 'data-lat="' + lat + '" '
         + 'data-lng="' + lng + '" '
         + 'data-alt="' + alt + '" '
-        + 'data-ident="' + title + '" '
+        + 'data-ident="' + this.ADSBData[i].NiceName + '" '
         + 'style="left:' + IconLocation.x + 'px; top:' + IconLocation.y + 'px;">'
         + '<canvas style="z-Index:0" id="canvas_' + DivID + '"></canvas>'
         + Icon
@@ -426,6 +453,8 @@ ADSBOverlay.prototype.draw = function (IsSetADSB) {
     } else {
       this.ClearLines();
     }
+    StatusInfo.ShowStatus();
+
   }
 
 

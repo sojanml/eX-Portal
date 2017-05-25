@@ -32,6 +32,11 @@ namespace Exponent.ADSB {
 
         //get active positions
         Data = getLivePositions(QueryData);
+
+        //Save changes to query data if updated.
+        if (QueryData.IsQueryChanged == 1) {
+          QueryData.SetDefaults(CN);
+        }
       }
 
 
