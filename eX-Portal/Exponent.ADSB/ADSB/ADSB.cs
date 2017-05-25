@@ -382,7 +382,8 @@ namespace Exponent.ADSB {
         [HeadingHistory],
         OMDB, 
         OMDW, 
-        OMSJ
+        OMSJ,
+        hexcode
         ) VALUES (
           '" + Position.FlightID + @"',
           " + Position.Heading + @",
@@ -398,7 +399,8 @@ namespace Exponent.ADSB {
           '" + SB.ToString() + @"',
           abs([dbo].[fnCalcDistanceKM](" + Position.Lat + ", " + Airport.OMDB.lat + ", " + Position.Lon + ", " + Airport.OMDB.lng + @")),
           abs([dbo].[fnCalcDistanceKM](" + Position.Lat + ", " + Airport.OMDW.lat + ", " + Position.Lon + ", " + Airport.OMDW.lng + @")),
-          abs([dbo].[fnCalcDistanceKM](" + Position.Lat + ", " + Airport.OMSJ.lat + ", " + Position.Lon + ", " + Airport.OMSJ.lng + @"))
+          abs([dbo].[fnCalcDistanceKM](" + Position.Lat + ", " + Airport.OMSJ.lat + ", " + Position.Lon + ", " + Airport.OMSJ.lng + @")),'"+
+          Position.FlightID+@"'
         )";
         doSQL(SQL);
       }

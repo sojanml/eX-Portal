@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -314,6 +315,7 @@ namespace Exponent.ADSB {
 
   public class ADSBData {
 
+
     public string hex { get; set; }
     public string altitude { get; set; }
     public double seen { get; set; }
@@ -326,21 +328,23 @@ namespace Exponent.ADSB {
     public string flight { get; set; }
     private DateTime ADSBDate { get; set; }
     public String flightsource { get; set; }
+   private string category { get; set; }
 
     private int ID { get; set; }
     private double dbLat { get; set; }
     private double dbLon { get; set; }
     private String LatLonHistory { get; set; }
     private String HeadingHistory { get; set; }
-
+   
 
     public ADSBData() {
       ID = 0;
       flightsource = "Exponent";
+            HeadingHistory = "";
     }
 
     public double Alt() {
-      double temp = 0.0;
+      double temp = 0.00;
       Double.TryParse(altitude, out temp);
       return temp;
     }
@@ -364,13 +368,14 @@ namespace Exponent.ADSB {
       bool result = true;
       if (lat == 0 && lon == 0.0)
         return false;
-      setDataFromDb(sqlCon);
+            //setDataFromDb(sqlCon);
 
-      if (ID == 0) {
-        InsertRow(sqlCon);
-      } else {
-        UpdateRow(sqlCon);
-      }
+            //if (ID == 0) {
+            //  InsertRow(sqlCon);
+            //} else {
+            //  UpdateRow(sqlCon);
+            //}
+            InsertUpdateRow(sqlCon);
       AddToHistory(sqlCon);
       return result;
     }
@@ -501,7 +506,60 @@ namespace Exponent.ADSB {
       }
     }
 
-  }
+        private void InsertUpdateRow(SqlConnection CN)
+        {
+            StringBuilder SB = new StringBuilder(HeadingHistory);
+            if (dbLat == lat && dbLon == lon)
+            {
+                //keep the history. do not change
+            }
+            else
+            {
+                int HistoryCount = HeadingHistory.Count(c => c == ',');
+                if (HistoryCount >= 5)
+                    SB.Remove(0, HeadingHistory.IndexOf(',') + 1);
+                if (SB.Length > 0)
+                    SB.Append(',');
+                SB.Append(track);
+            }
+            List<SqlParameter> ParametersList=new List<SqlParameter>();
+            object[] Parameters = new object[11];
+            SqlParameter sqlparam_0 = new SqlParameter("@FlightID", flight.Trim()??(object)DBNull.Value);
+            ParametersList.Add(sqlparam_0);
+            SqlParameter sqlparam_1 = new SqlParameter("@HexID", hex ?? (object)DBNull.Value);
+            ParametersList.Add(sqlparam_1);
+            SqlParameter sqlparam_2 = new SqlParameter("@FlightTime", ADSBDate.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? (object)DBNull.Value);
+            ParametersList.Add(sqlparam_2);
+            SqlParameter sqlparam_3 = new SqlParameter("@Lat", lat );
+            ParametersList.Add(sqlparam_3);
+            SqlParameter sqlparam_4 = new SqlParameter("@Lon", lon );
+            ParametersList.Add(sqlparam_4);
+            SqlParameter sqlparam_5 = new SqlParameter("@Alt", Alt());
+            ParametersList.Add(sqlparam_5);
+            SqlParameter sqlparam_6 = new SqlParameter("@speed", speed );
+            ParametersList.Add(sqlparam_6);
+            SqlParameter sqlparam_7 = new SqlParameter("@track", track );
+            ParametersList.Add(sqlparam_7);
+            SqlParameter sqlparam_8 = new SqlParameter("@flightsource", flightsource ?? (object)DBNull.Value);
+            ParametersList.Add(sqlparam_8);
+            SqlParameter sqlparam_9 = new SqlParameter("@newtrack", SB.ToString() ?? (object)DBNull.Value);
+            ParametersList.Add(sqlparam_9);
+            SqlParameter sqlparam_10 = new SqlParameter("@category", category ?? (object)DBNull.Value);
+            ParametersList.Add(sqlparam_10);
+
+            string spname = "usp_ADSB_UpdateInsert";
+            using (SqlCommand cmd = new SqlCommand(spname, CN))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                foreach (SqlParameter p in ParametersList)
+                { 
+                cmd.Parameters.Add(p);
+                }
+                cmd.ExecuteNonQuery();
+            }//using (SqlCommand cmd)
+
+        }
+    }
 
 
 }
