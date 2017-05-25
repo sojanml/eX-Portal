@@ -9,10 +9,11 @@ namespace eX_Portal.Controllers {
   public class AdsbController : Controller {
     // GET: Adsb
     private String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ADSB_DB"].ToString();
-    public JsonResult Index(Exponent.ADSB.ADSBQuery QueryData)  {
-              var ADSB = new Exponent.ADSB.Live();
-            var Data = ADSB.FlightStat(DSN, false, QueryData);
-          //  var Data = "";
+    public JsonResult Index(Exponent.ADSB.ADSBQuery QueryData) {
+      var ADSB = new Exponent.ADSB.Live();
+      var Data = ADSB.FlightStat(DSN, false, QueryData);
+
+      //  var Data = "";
       return Json(Data, JsonRequestBehavior.AllowGet);
     }
 
@@ -34,7 +35,7 @@ namespace eX_Portal.Controllers {
         CN.Open();
         Params.GetDefaults(CN);
         CN.Close();
-      }      
+      }
 
       return View(Params);
     }

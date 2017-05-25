@@ -32,6 +32,11 @@ namespace Exponent.ADSB {
 
         //get active positions
         Data = getLivePositions(QueryData);
+
+        //Save changes to query data if updated.
+        if (QueryData.IsQueryChanged == 1) {
+          QueryData.SetDefaults(CN);
+        }
       }
 
 
@@ -96,8 +101,10 @@ namespace Exponent.ADSB {
           SELECT TOP {MaxRecords} 
             ID, 
             DATEADD(MINUTE,{TimezoneOffset},SummaryDate) as SummaryDate,
-            BreachCount,
-            AlertCount
+            AircraftBreach,
+            AircraftAlert,
+            RPASBreach,
+            RPASAlert
           FROM 
             ADSBSummary ";
       if (LastProcessedID > 0)
@@ -115,8 +122,10 @@ namespace Exponent.ADSB {
           while (RS.Read()) {
             TheSummary.Add(new FlightSummary {
               SummaryDate = RS.GetDateTime(RS.GetOrdinal("SummaryDate")).ToString("HH:mm"),
-              Breach = RS.GetInt32(RS.GetOrdinal("BreachCount")),
-              Alert = RS.GetInt32(RS.GetOrdinal("AlertCount")),
+              AircraftBreach = RS.GetInt32(RS.GetOrdinal("AircraftBreach")),
+              AircraftAlert = RS.GetInt32(RS.GetOrdinal("AircraftAlert")),
+              RPASBreach = RS.GetInt32(RS.GetOrdinal("RPASBreach")),
+              RPASAlert = RS.GetInt32(RS.GetOrdinal("RPASAlert")),
               ID = RS.GetInt32(RS.GetOrdinal("ID"))
             });
           }//while
@@ -136,8 +145,8 @@ namespace Exponent.ADSB {
     public List<FlightStatus> GetFlightStatus(String DSN, Exponent.ADSB.ADSBQuery QueryData) {
       var Dist = new List<FlightStatus>();
       String SQL = $@"Select 
-        ADSBDetail.FromFlightID,
-        ADSBDetail.ToFlightID,
+        ADSBDetail.FromHexCode,
+        ADSBDetail.ToHexCode,
         ADSBDetail.VerticalDistance,
         ADSBDetail.HorizontalDistance,
         CASE
@@ -156,8 +165,8 @@ namespace Exponent.ADSB {
           var RS = Cmd.ExecuteReader();
           while (RS.Read()) {
             Dist.Add(new FlightStatus {
-              FromFlightID = RS["FromFlightID"].ToString(),
-              ToFlightID = RS["ToFlightID"].ToString(),
+              FromHexCode = RS["FromHexCode"].ToString(),
+              ToHexCode = RS["ToHexCode"].ToString(),
               vDistance = toDouble(RS["VerticalDistance"].ToString()),
               hDistance = toDouble(RS["HorizontalDistance"].ToString()),
               Status = RS["StatusModel"].ToString()
@@ -167,7 +176,7 @@ namespace Exponent.ADSB {
         }//using (var Cmd)
 
         //Find the safe operating RPS - not in above condition
-        var FromFlightIDs = Dist.Select(e => $"'{e.FromFlightID}'").ToArray();
+        var FromFlightIDs = Dist.Select(e => $"'{e.FromHexCode}'").ToArray();
         var AllIDs = String.Join(",", FromFlightIDs);
 
         SQL = $@"Select DISTINCT ADSBDetail.FromFlightID
@@ -182,8 +191,8 @@ namespace Exponent.ADSB {
           var RS = Cmd.ExecuteReader();
           while (RS.Read()) {
             Dist.Add(new FlightStatus {
-              FromFlightID = RS["FromFlightID"].ToString(),
-              ToFlightID = "",
+              FromHexCode = RS["HexCode"].ToString(),
+              ToHexCode = "",
               vDistance = 0,
               hDistance = 0,
               Status = "Safe"
@@ -230,7 +239,8 @@ namespace Exponent.ADSB {
         HeadingHistory,
         [Altitude],
         [AdsbDate],
-        FlightSource
+        FlightSource,
+        HexCode
       from
         AdsbLive
       ");
@@ -269,22 +279,6 @@ namespace Exponent.ADSB {
         Filter.Clear();
       }
 
-      //Filter.Append(QueryData.getaltitudeFilter());
-      //if (Filter.Length > 0)
-      //{
-      //    if (WHERE.Length > 0) WHERE.AppendLine(" AND");
-      //    WHERE.Append(Filter);
-      //    Filter.Clear();
-      //}
-
-      //Filter.Append(QueryData.getspeedFilter());
-      //if(Filter.Length>0)
-      //{
-      //    if (WHERE.Length > 0) WHERE.AppendLine(" AND");
-      //    WHERE.Append(Filter);
-      //    Filter.Clear();
-      //}
-
       if (WHERE.Length > 0) {
         SQL.AppendLine(" WHERE");
         SQL.Append(WHERE);
@@ -307,21 +301,29 @@ namespace Exponent.ADSB {
             Speed = RS.IsDBNull(fSpeed) ? 0 : (Double)RS.GetDecimal(fSpeed),
             Altitude = (Double)RS.GetDecimal(RS.GetOrdinal("Altitude")),
             ADSBDate = RS.GetDateTime(RS.GetOrdinal("AdsbDate")),
-            History = getHistory(RS["HeadingHistory"].ToString())
+            History = getHistory(RS["HeadingHistory"].ToString()),
+            FlightSource = FlightSource,
+            HexCode = RS["HexCode"].ToString().ToUpper()
           };
           if (FlightSource == "SkyCommander") {
-            if (Position.Altitude < 0)
-              Position.Altitude = 0;
+            if (Position.Altitude < 0) Position.Altitude = 0;
             if ((Position.Altitude >= QueryData.minAltitude && Position.Altitude <= QueryData.maxAltitude) &&
-                      (Position.Speed >= QueryData.minSpeed && Position.Speed <= QueryData.maxSpeed))
+               (Position.Speed >= QueryData.minSpeed && Position.Speed <= QueryData.maxSpeed)) {
               PositionDatas.Add(Position);
-
+            }
           } else {
             PositionDatas.Add(Position);
           }
         }//while
+        RS.Close();
       }//using
 
+      //Find the breaches and alerts for SkyCommander
+      foreach(var Position in PositionDatas.Where(e => e.FlightSource=="SkyCommander").ToList()) {
+        Position.SetBreachFlights(CN, QueryData);
+        Position.SetAlertFlights(CN, QueryData);
+      }
+      
       return PositionDatas;
     }
 

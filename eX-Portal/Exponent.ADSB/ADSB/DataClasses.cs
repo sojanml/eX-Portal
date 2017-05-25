@@ -16,7 +16,7 @@ namespace Exponent.ADSB {
 
   public class ADSBQuery {
 
-    public Double FeetToKiloMeter = 0.0003048;
+    public Double FeetToKiloMeter { get; private set; }  = 0.0003048;
     public Double ATCRadious { get; set; }
     public Double hSafe { get; set; }
     public Double hAlert { get; set; }
@@ -211,6 +211,8 @@ namespace Exponent.ADSB {
 
   }
 
+
+
   public class FlightPosition {
     public String FlightID { get; set; }
     public Double Heading { get; set; }
@@ -222,20 +224,50 @@ namespace Exponent.ADSB {
     public Double Speed { get; set; }
     public Double Altitude { get; set; }
     public DateTime ADSBDate { get; set; }
-
+    public String HexCode { get; set; }
+    public List<String> BreachToFlights { get; set; } = new List<String>();
+    public List<String> AlertToFlights { get; set; } = new List<String>();
 
     public List<Double> History { get; set; }
 
     public FlightPosition() {
       History = new List<Double>();
-
     }
 
+
+    public void SetBreachFlights(SqlConnection CN, ADSBQuery QueryData) {
+      String SQL = $"Select ToHexCode FROM ADSBDetail WHERE HorizontalDistance <= {QueryData.hBreach} AND VerticalDistance <= {QueryData.vBreach} AND FromHexCode = '{HexCode}'";
+      using(SqlCommand cmd = new SqlCommand(SQL, CN)) {
+        using(SqlDataReader RS = cmd.ExecuteReader()) {
+          BreachToFlights = new List<String>();
+          while (RS.Read()) {
+            BreachToFlights.Add(RS["ToHexCode"].ToString().ToUpper());
+          }
+        }//using(SqlDataReader RS)
+      }//using(SqlCommand cmd)
+    }//public void SetBreachFlights
+
+
+    public void SetAlertFlights(SqlConnection CN, ADSBQuery QueryData) {
+      String SQL = $"Select ToHexCode FROM ADSBDetail WHERE HorizontalDistance <= {QueryData.hAlert} AND VerticalDistance <= {QueryData.vAlert} AND FromHexCode = '{HexCode}'";
+      if(BreachToFlights.Any()) {
+        SQL = SQL  + " AND ToHexCode NOT IN('" + String.Join("','", BreachToFlights) + "')";
+      }
+      using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
+        using (SqlDataReader RS = cmd.ExecuteReader()) {
+          AlertToFlights = new List<String>();
+          while (RS.Read()) {
+            AlertToFlights.Add(RS["ToHexCode"].ToString().ToUpper());
+          }
+        }//using(SqlDataReader RS)
+      }//using(SqlCommand cmd)
+
+    }//public void SetAlertFlights
   }
 
   public class FlightStatus {
-    public String FromFlightID { get; set; }
-    public String ToFlightID { get; set; }
+    public String FromHexCode { get; set; }
+    public String ToHexCode { get; set; }
     public Double vDistance { get; set; }
     public Double hDistance { get; set; }
     public String Status { get; set; }
@@ -243,9 +275,12 @@ namespace Exponent.ADSB {
 
   public class FlightSummary {
     public String SummaryDate { get; set; }
-    public int Breach { get; set; }
-    public int Alert { get; set; }
     public int ID { get; set; }
+
+    public int AircraftBreach { get; set; }
+    public int AircraftAlert { get; set; }
+    public int RPASBreach { get; set; }
+    public int RPASAlert { get; set; }
 
     public int TotalRPAS { get; set; }
     public Double Area { get; set; }
@@ -254,7 +289,7 @@ namespace Exponent.ADSB {
     public void SetSummary(SqlConnection CN) {
       ADSBQuery adsb = new ADSBQuery();
       adsb.GetDefaults(CN);
-      String SQL1 = $"select Count(DISTINCT FromFlightID) from ADSBDetailHistory WHERE VerticalDistance <= {adsb.vBreach * adsb.FeetToKiloMeter}  and HorizontalDistance <= {adsb.hBreach}  and CreatedDate >=DATEADD(day, -1, GETDATE());";
+      String SQL1 = $"select Count(DISTINCT FromHexCode) from ADSBDetailHistory WHERE VerticalDistance <= {adsb.vBreach * adsb.FeetToKiloMeter}  and HorizontalDistance <= {adsb.hBreach}  and CreatedDate >=DATEADD(day, -1, GETDATE());";
       Breach24H = GetDBInt(CN, SQL1);
       TotalRPAS = GetDBInt(CN, "select Count(*) from AdsbLive WHERE FlightSource='SkyCommander'");
       Area = GetArea(CN);
@@ -317,7 +352,7 @@ namespace Exponent.ADSB {
 
 
     public string hex { get; set; }
-    public string altitude { get; set; }
+    public double altitude { get; set; }
     public double seen { get; set; }
     public double speed { get; set; }
     public string squawk { get; set; }
