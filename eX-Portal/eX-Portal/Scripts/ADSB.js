@@ -413,9 +413,7 @@ ADSBOverlay.prototype.draw = function (IsSetADSB) {
     var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
     var $point = $('#' + DivID);
 
-    if (heading == 0) {
-      //Landed flight - Ignore movement
-    } else if ($point.length) {
+    if ($point.length) {
       $point.animate({ left: IconLocation.x, top: IconLocation.y });
       $point.find(".icon").css({ transform: 'rotate(' + (heading) + 'deg)' });
       $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });
@@ -445,8 +443,8 @@ ADSBOverlay.prototype.draw = function (IsSetADSB) {
 
   if (IsSetADSB) {
     if (this.SkyCommander.length > 0) {
+      this.ClearLines();
       for (var i = 0; i < this.SkyCommander.length; i++) {
-        this.ClearLines();
         this.DrawLinesTo(this.SkyCommander[i]);
         this.SetReverseReference(this.SkyCommander[i]);
       }
