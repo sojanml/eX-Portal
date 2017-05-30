@@ -10,7 +10,7 @@ namespace eX_Portal.Controllers {
     // GET: Adsb
     private String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ADSB_DB"].ToString();
 
-    [OutputCache(Duration = 2, VaryByParam = "none")]
+    [OutputCache(Duration = 2)]
     public JsonResult Index(Exponent.ADSB.ADSBQuery QueryData) {
       var ADSB = new Exponent.ADSB.Live();
       var Data = ADSB.FlightStat(DSN, false, QueryData);

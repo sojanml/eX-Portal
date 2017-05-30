@@ -343,6 +343,7 @@ namespace Exponent.ADSB {
 
     private void setActiveFlights() {
       String SQL;
+      return;
 
       var FlightCount = getActiveFlights();
       if (FlightCount > 0)

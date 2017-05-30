@@ -352,7 +352,7 @@ namespace Exponent.ADSB {
 
 
     public string hex { get; set; }
-    public double altitude { get; set; }
+    public String altitude { get; set; }
     public double seen { get; set; }
     public double speed { get; set; }
     public string squawk { get; set; }
@@ -363,7 +363,7 @@ namespace Exponent.ADSB {
     public string flight { get; set; }
     private DateTime ADSBDate { get; set; }
     public String flightsource { get; set; }
-   private string category { get; set; }
+    public string category { get; set; }
 
     private int ID { get; set; }
     private double dbLat { get; set; }
@@ -379,9 +379,9 @@ namespace Exponent.ADSB {
     }
 
     public double Alt() {
-      double temp = 0.00;
-      Double.TryParse(altitude, out temp);
-      return temp;
+      Double t = 0;
+      Double.TryParse(altitude, out t);
+      return t;
     }
     public void Setflightdate(long timeinsecond) {
       ADSBDate = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -403,69 +403,14 @@ namespace Exponent.ADSB {
       bool result = true;
       if (lat == 0 && lon == 0.0)
         return false;
-            //setDataFromDb(sqlCon);
 
-            //if (ID == 0) {
-            //  InsertRow(sqlCon);
-            //} else {
-            //  UpdateRow(sqlCon);
-            //}
-            InsertUpdateRow(sqlCon);
-      AddToHistory(sqlCon);
+      InsertUpdateRow(sqlCon);
+      //AddToHistory(sqlCon);
       return result;
     }
+    
 
-    private void setDataFromDb(SqlConnection CN) {
-      string SQL = "Select  " +
-        "  ID, Lat, Lon, " +
-        "  ISNULL(HeadingHistory,'') as HeadingHistory " +
-        "from " +
-        "  ADSBLive " +
-        "where " +
-        "  hexcode='" + hex + "' or flightid='" + flight + "'";
-      using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
-        using (SqlDataReader RS = cmd.ExecuteReader()) {
-          while (RS.Read()) {
-            ID = RS.GetInt32(RS.GetOrdinal("ID"));
-            dbLat = (Double)RS.GetDecimal(RS.GetOrdinal("Lat"));
-            dbLon = (Double)RS.GetDecimal(RS.GetOrdinal("Lon"));
-            HeadingHistory = RS["HeadingHistory"].ToString();
-          }//while(RS.Read())
-          RS.Close();
-        }//using(SqlDataReader RS)
-      }//using (SqlCommand cmd)
-
-    }
-
-    private void InsertRow(SqlConnection CN) {
-      string SQL = @"Insert into ADSBLive(
-        Adsbdate, Lat, Lon, CallSign, Altitude, Speed, heading, flightid, flightsource, TailNumber, hexcode,
-        HeadingHistory, IsCalculated,
-        OMDB, OMDW, OMSJ
-        ) values (" +
-        "  '" + ADSBDate.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'," +
-        lat + "," +
-        lon + "," +
-        "'" + flight + "'," +
-        Alt() + "," +
-        speed + "," +
-        track + "," +
-        "'" + flight + "'," +
-        "'" + flightsource + "'," +
-        "'" + flight + "'," +
-        "'" + hex + "'," +
-        "'" + track + "'," +
-        "0," +
-        "abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMDB.lat + ", " + lon + ", " + Airport.OMDB.lng + ")),\n" +
-        "abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMDW.lat + ", " + lon + ", " + Airport.OMDW.lng + ")),\n" +
-        "abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMSJ.lat + ", " + lon + ", " + Airport.OMSJ.lng + "))\n" +
-        ")";
-      using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
-        cmd.ExecuteNonQuery();
-      }
-    }
-
-    private void UpdateRow(SqlConnection CN) {
+    private void InsertUpdateRow(SqlConnection CN) {
       StringBuilder SB = new StringBuilder(HeadingHistory);
       if (dbLat == lat && dbLon == lon) {
         //keep the history. do not change
@@ -478,123 +423,25 @@ namespace Exponent.ADSB {
         SB.Append(track);
       }
 
-      String SQL = @"UPDATE ADSBLive SET
-        Adsbdate='" + ADSBDate.ToString("yyyy-MM-dd HH:mm:ss.fff") + @"',
-        Lat = " + lat + @", 
-        Lon = " + lon + @", 
-        Altitude = " + Alt() + @", 
-        Speed = " + speed + @", 
-        heading = " + track + @", 
-        HeadingHistory = '" + SB.ToString() + @"', 
-        IsCalculated = 0, 
-        CreatedDate = GETDATE(),
-        OMDB = abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMDB.lat + ", " + lon + ", " + Airport.OMDB.lng + @")),
-        OMDW = abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMDW.lat + ", " + lon + ", " + Airport.OMDW.lng + @")),
-        OMSJ = abs([dbo].[fnCalcDistanceKM](" + lat + ", " + Airport.OMSJ.lat + ", " + lon + ", " + Airport.OMSJ.lng + @"))
-      WHERE
-        ID =" + ID;
+      String SQL = $@"[usp_ADSB_UpdateInsert]
+		@FlightID = N'{flight}',
+		@HexID = N'{hex}',
+		@FlightTime = N'{ ADSBDate.ToString("yyyy-MM-dd HH:mm:ss.fff")}',
+		@Lat = {lat},
+		@Lon = {lon},
+		@Alt = {Alt()},
+		@speed = {speed},
+		@track = N'{track}',
+		@flightsource = N'{flightsource}',
+		@newtrack = N'{SB.ToString()}',
+		@category = N'{category}',
+		@IPAddress = N'{System.Web.HttpContext.Current.Request.UserHostAddress}'";
       using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
         cmd.ExecuteNonQuery();
-      }
+      }//using (SqlCommand cmd)
+
     }
-
-
-    private void AddToHistory(SqlConnection CN) {
-      var SQL = @"
-        INSERT INTO [dbo].[AdsbHistory] (
-          [FlightId]      ,
-          [Heading]       ,
-          [TailNumber]    ,
-          [FlightSource]  ,
-          [CallSign]      ,
-          [Lon]           ,
-          [Lat]           ,
-          [Speed]         ,
-          [Altitude]      ,
-          [CreatedDate]   ,
-          [AdsbDate]      ,
-          [HexCode]       ,
-          [HeadingHistory] ,
-          [IsCalculated]
-        )  
-        SELECT
-          [FlightId]      ,
-          [Heading]       ,
-          [TailNumber]    ,
-          [FlightSource]  ,
-          [CallSign]      ,
-          [Lon]           ,
-          [Lat]           ,
-          [Speed]         ,
-          [Altitude]      ,
-          [CreatedDate]   ,
-          [AdsbDate]      ,
-          [HexCode]       ,
-          [HeadingHistory] ,
-          [IsCalculated]
-        FROM
-          ADSBLive
-        WHERE
-          hexcode='" + hex + "' or flightid='" + flight + "'";
-      using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
-        cmd.ExecuteNonQuery();
-      }
-    }
-
-        private void InsertUpdateRow(SqlConnection CN)
-        {
-            StringBuilder SB = new StringBuilder(HeadingHistory);
-            if (dbLat == lat && dbLon == lon)
-            {
-                //keep the history. do not change
-            }
-            else
-            {
-                int HistoryCount = HeadingHistory.Count(c => c == ',');
-                if (HistoryCount >= 5)
-                    SB.Remove(0, HeadingHistory.IndexOf(',') + 1);
-                if (SB.Length > 0)
-                    SB.Append(',');
-                SB.Append(track);
-            }
-            List<SqlParameter> ParametersList=new List<SqlParameter>();
-            object[] Parameters = new object[11];
-            SqlParameter sqlparam_0 = new SqlParameter("@FlightID", flight.Trim()??(object)DBNull.Value);
-            ParametersList.Add(sqlparam_0);
-            SqlParameter sqlparam_1 = new SqlParameter("@HexID", hex ?? (object)DBNull.Value);
-            ParametersList.Add(sqlparam_1);
-            SqlParameter sqlparam_2 = new SqlParameter("@FlightTime", ADSBDate.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? (object)DBNull.Value);
-            ParametersList.Add(sqlparam_2);
-            SqlParameter sqlparam_3 = new SqlParameter("@Lat", lat );
-            ParametersList.Add(sqlparam_3);
-            SqlParameter sqlparam_4 = new SqlParameter("@Lon", lon );
-            ParametersList.Add(sqlparam_4);
-            SqlParameter sqlparam_5 = new SqlParameter("@Alt", Alt());
-            ParametersList.Add(sqlparam_5);
-            SqlParameter sqlparam_6 = new SqlParameter("@speed", speed );
-            ParametersList.Add(sqlparam_6);
-            SqlParameter sqlparam_7 = new SqlParameter("@track", track );
-            ParametersList.Add(sqlparam_7);
-            SqlParameter sqlparam_8 = new SqlParameter("@flightsource", flightsource ?? (object)DBNull.Value);
-            ParametersList.Add(sqlparam_8);
-            SqlParameter sqlparam_9 = new SqlParameter("@newtrack", SB.ToString() ?? (object)DBNull.Value);
-            ParametersList.Add(sqlparam_9);
-            SqlParameter sqlparam_10 = new SqlParameter("@category", category ?? (object)DBNull.Value);
-            ParametersList.Add(sqlparam_10);
-
-            string spname = "usp_ADSB_UpdateInsert";
-            using (SqlCommand cmd = new SqlCommand(spname, CN))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                foreach (SqlParameter p in ParametersList)
-                { 
-                cmd.Parameters.Add(p);
-                }
-                cmd.ExecuteNonQuery();
-            }//using (SqlCommand cmd)
-
-        }
-    }
+  }
 
 
 }

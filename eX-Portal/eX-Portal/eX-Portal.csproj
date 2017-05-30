@@ -248,7 +248,8 @@
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Controllers\PartsController.cs" />
-    <Compile Include="Controllers\PayLoadController.cs" />
+    <Compile Include="Controllers\PayloadController.cs" />
+    <Compile Include="Controllers\PayLoad_Removed_Controller.cs" />
     <Compile Include="Controllers\PilotController.cs" />
     <Compile Include="Controllers\PilotLogController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
