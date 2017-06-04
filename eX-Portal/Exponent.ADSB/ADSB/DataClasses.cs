@@ -423,6 +423,13 @@ namespace Exponent.ADSB {
         SB.Append(track);
       }
 
+      String IPAddress = "0.0.0.0";
+      try {
+        IPAddress = System.Web.HttpContext.Current.Request.UserHostAddress;
+      } catch {
+
+      }
+
       String SQL = $@"[usp_ADSB_UpdateInsert]
 		@FlightID = N'{flight}',
 		@HexID = N'{hex}',
@@ -435,7 +442,7 @@ namespace Exponent.ADSB {
 		@flightsource = N'{flightsource}',
 		@newtrack = N'{SB.ToString()}',
 		@category = N'{category}',
-		@IPAddress = N'{System.Web.HttpContext.Current.Request.UserHostAddress}'";
+		@IPAddress = N'{IPAddress}'";
       using (SqlCommand cmd = new SqlCommand(SQL, CN)) {
         cmd.ExecuteNonQuery();
       }//using (SqlCommand cmd)

@@ -14,7 +14,7 @@ var _FlightBoundBox = null;
 var _FlightStartMarker = null;
 var _FlightEndMarker = null;
 var _FlightReplayPath = null;
-var _RPASIcon = null;
+var _RPASIcon = null; dFormat
 
 var _ReplayIndex = -1;
 var _ReplayTimer = null;
@@ -362,7 +362,9 @@ function AddToTable(TheData) {
 
   for (var i = RowStartAt; i < TheData.length; i++) {
     var DataItem = TheData[i]
-    var FlightTime = dtConvFromJSON(DataItem.FlightTime, true);
+    var tDate = dtFromJSON(DataItem.FlightTime);
+    var FlightTime = dFormat(tDate, true);
+    //var FlightTime = dtConvFromJSON(DataItem.FlightTime, true);
 
     var HTML =
       '<li>\n' +
@@ -427,8 +429,10 @@ function ShowFlightInformation(TheDataItem) {
   $('#FlightInfo_FlightDuration').html(toHour(TheDataItem.FlightDuration));
   $('#FlightInfo_Speed').html(TheDataItem.Speed.toFixed(2));
   $('#FlightInfo_Distance').html(TheDataItem.Distance.toFixed(2));
-  var Fdate = dtConvFromJSON(TheDataItem.FlightTime, true).split(' ')[0];
-  var FTime = dtConvFromJSON(TheDataItem.FlightTime, true).split(' ')[1];
+  var tDate = dtFromJSON(TheDataItem.FlightTime);
+  var aDate = dFormat(tDate, true).split(' ');
+  var Fdate = aDate[0];
+  var FTime = aDate[1];;
   $('#FlightInfo_FlightDate').html(Fdate);
   $('#FlightInfo_FlightTime').html(FTime);
 

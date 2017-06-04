@@ -60,7 +60,11 @@ function AddToChart(ChartData) {
 
   for (var i = StartPoint; i < EndPoint; i++) {
     var DataItem = ChartData[i];
-    var FlightTime = dtConvFromJSON(DataItem.FlightTime, true);
+    var tDate = dtFromJSON(DataItem.FlightTime);
+    var aDate = dFormat(tDate, true).split(' ');
+    var Fdate = aDate[0];
+    var FlightTime = aDate[1];
+
     Categories.push(FlightTime.substring(FlightTime.length - 5));
     Series[0].push(DataItem.Pich);
     Series[1].push(DataItem.Roll);
