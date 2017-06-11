@@ -16,24 +16,24 @@ namespace eX_Portal.Models
     {
         public int PayLoadDataID { get; set; }
         public string FlightUniqueID { get; set; }
-        public string DroneId { get; set; }
+        public Nullable<int> DroneId { get; set; }
         public string RFID { get; set; }
         public string ProductQrCode { get; set; }
-        public string RSSI { get; set; }
-        public string ReadTime { get; set; }
-        public string ReadCount { get; set; }
-        public string ReadFreq { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
-        public string GPSTime { get; set; }
+        public Nullable<int> RSSI { get; set; }
+        public Nullable<System.DateTime> ReadTime { get; set; }
+        public Nullable<int> ReadCount { get; set; }
+        public Nullable<int> ReadFreq { get; set; }
+        public Nullable<decimal> Latitude { get; set; }
+        public Nullable<decimal> Longitude { get; set; }
+        public Nullable<System.DateTime> GPSTime { get; set; }
         public Nullable<System.DateTime> CreatedTime { get; set; }
         public Nullable<int> FlightID { get; set; }
-        public string GPSFix { get; set; }
+        public Nullable<int> GPSFix { get; set; }
         public Nullable<int> YardID { get; set; }
+        public Nullable<int> ProcessingModel { get; set; }
         public Nullable<bool> IsProcessed { get; set; }
         public Nullable<int> RowNumber { get; set; }
         public Nullable<int> ColumnNumber { get; set; }
         public Nullable<int> CellID { get; set; }
-        public Nullable<int> ProcessingModel { get; set; }
     }
 }

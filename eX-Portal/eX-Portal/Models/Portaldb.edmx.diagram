@@ -26,7 +26,6 @@
         <EntityTypeShape EntityType="ExponentPortalModel.M2M_ProfileMenu" Width="1.5" PointX="14.75" PointY="0.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.DroneDocument" Width="1.5" PointX="14.75" PointY="4.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxData" Width="1.5" PointX="14.75" PointY="9.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadData" Width="1.5" PointX="4.75" PointY="15.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.PayLoadMapData" Width="1.5" PointX="10.75" PointY="15.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.DroneFlight" Width="1.5" PointX="16.75" PointY="0.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.PayLoadYard" Width="1.5" PointX="0.75" PointY="16.75" />
@@ -51,7 +50,6 @@
         <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneParts" Width="1.5" PointX="21.375" PointY="23.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.DroneData" Width="1.5" PointX="17.375" PointY="22.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.FlightMapData" Width="1.5" PointX="23.375" PointY="7.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="23.375" PointY="17.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.LUP_Drone" Width="1.5" PointX="25.375" PointY="3.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_BlackBox" Width="1.5" PointX="25.375" PointY="8.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxTransaction" Width="1.5" PointX="0.75" PointY="21.75" />
@@ -66,6 +64,9 @@
         <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxImage" Width="1.5" PointX="11.375" PointY="26.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxManagement" Width="1.5" PointX="25.375" PointY="19.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.TrafficMonitor" Width="1.5" PointX="13.375" PointY="26.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataRFID" Width="1.5" PointX="27.375" PointY="3.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="27.375" PointY="7.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadData" Width="1.5" PointX="5.375" PointY="15.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.DCAA_PermitDetail" Width="1.5" PointX="27.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>

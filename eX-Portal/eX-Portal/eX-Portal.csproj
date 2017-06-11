@@ -443,6 +443,9 @@
     <Compile Include="Models\PayLoadData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PayLoadDataRFID.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PayLoadFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -632,6 +635,7 @@
     <Content Include="Content\jqsimplemenu.css" />
     <Content Include="Content\jquery.mCustomScrollbar.min.css" />
     <Content Include="Content\map.css" />
+    <Content Include="Content\Payload-RFID.css" />
     <Content Include="Content\print.css" />
     <Content Include="Content\screen.css" />
     <Content Include="Content\Scss1.css" />
@@ -914,7 +918,6 @@
     <Content Include="ReportsManager\WebForm1.aspx" />
     <Content Include="Scripts\ADSB-Map.js" />
     <Content Include="Scripts\ADSB.js" />
-    <Content Include="Scripts\ADSBDashboard.js" />
     <Content Include="Scripts\FlightMap-ADSB.js" />
     <Content Include="Scripts\Agriculture.js" />
     <Content Include="Scripts\AgricultureBulkUpload.js" />
@@ -1029,6 +1032,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\NOCApproval.js" />
     <Content Include="Scripts\NOC_RPAS.js" />
+    <Content Include="Scripts\Payload-RFID.js" />
     <Content Include="Scripts\PayLoadMap.js" />
     <Content Include="Scripts\PilotLogChart.js" />
     <Content Include="Scripts\RecentChart.js" />

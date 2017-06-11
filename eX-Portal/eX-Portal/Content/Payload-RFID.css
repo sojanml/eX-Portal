@@ -1,0 +1,108 @@
+  section div.title {
+    padding: 3px 0px 3px 5px;
+    border-bottom: 2px white solid;
+    margin-bottom: 5px;
+    vertical-align: text-bottom;
+    background-color: #c2c0c0;
+    font-size:12pt;
+  }
+
+/*
+      min-height: 460px;
+
+ */
+div#PayloadRuns,
+div#PayloadRFIDs {
+  height:210px;
+  width:100%;
+  border-bottom:2px red solid;
+}
+
+
+ul#PayloadRunIDs,
+ul#RFIDs {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 170px;
+  overflow: auto;
+}
+ul#RFIDs li,
+ul#PayloadRunIDs li {
+  border-bottom:1px silver solid;
+  padding:1px 0px 1px 0px;
+  height:16px;
+}
+  ul#PayloadRunIDs li.active {
+    background-color: #90ff13;
+  }
+  ul#PayloadRunIDs li:hover {
+    background-color: #fbd74c;
+  }
+
+  ul#RFIDs li:hover {
+    background-color: #fc9d9d;
+  }
+  
+
+ul#PayloadRunIDs LI div {
+  float:left;
+  display: block;
+  margin-right:5px;
+  width:150px;
+}
+  ul#PayloadRunIDs LI div:last-child:after {
+    clear: both;
+    display: block;
+    content: "";
+  }
+
+  ul#RFIDs li div {
+    width:70px;
+    float:left;
+    overflow:hidden;
+  }
+
+  ul#RFIDs li.active {
+    background-color:aqua;
+  }
+
+  ul#RFIDs li div.c1 {
+    width:200px;
+  }
+
+div#RSSIs {
+  height: 33px;
+  border-bottom: 2px red solid;
+  overflow: scroll;
+  overflow-y: hidden;
+}
+
+  div#RSSIs::-webkit-scrollbar-track {
+    background: #ddd;
+  }
+
+  div#RSSIs::-webkit-scrollbar-thumb {
+    background: #666;
+  }
+
+  div#RSSIs::-webkit-scrollbar {
+    width: 8px;
+    height:8px;
+  }
+
+ul#RSSI {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  white-space: nowrap;
+  width:5000px;
+}
+
+ul#RSSI li {
+  float:left;
+  margin-right:10px;
+  list-style:none;
+  padding-top:5px;
+}

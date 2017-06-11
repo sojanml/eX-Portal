@@ -34,7 +34,7 @@ namespace eX_Portal.Models
         public Nullable<int> MinDefault { get; set; }
         public Nullable<int> MaxDefault { get; set; }
         public Nullable<int> CreatedBy { get; set; }
-        public bool IsUseCamara { get; set; }
+        public Nullable<int> IsUseCamara { get; set; }
         public string MOD_ApprovalURL { get; set; }
         public string ApprovalStatus { get; set; }
         public string ApprovalRemarks { get; set; }
@@ -43,7 +43,7 @@ namespace eX_Portal.Models
         public string NotificationEmails { get; set; }
         public Nullable<int> CameraId { get; set; }
         public int RpasApprovalRefNum { get; set; }
-        public Nullable<int> FlightTypeID { get; set; }
         public string ClientName { get; set; }
+        public Nullable<int> FlightTypeID { get; set; }
     }
 }
