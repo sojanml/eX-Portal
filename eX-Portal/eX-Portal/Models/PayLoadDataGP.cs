@@ -12,14 +12,14 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class MSTR_DroneCheckListItems
+    public partial class PayLoadDataGP
     {
-        public int ID { get; set; }
-        public int DroneCheckList_ID { get; set; }
-        public Nullable<decimal> SlNo { get; set; }
-        public string Title { get; set; }
-        public string FieldType { get; set; }
-        public string Responsibility { get; set; }
-        public Nullable<bool> IsSelected { get; set; }
+        public long id { get; set; }
+        public string FlightUniqueID { get; set; }
+        public Nullable<decimal> Lat { get; set; }
+        public Nullable<decimal> Lng { get; set; }
+        public Nullable<System.DateTime> GPSDate { get; set; }
+        public Nullable<int> Satellite { get; set; }
+        public Nullable<byte> IsSend { get; set; }
     }
 }

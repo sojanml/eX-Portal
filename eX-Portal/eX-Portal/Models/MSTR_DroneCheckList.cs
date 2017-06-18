@@ -17,5 +17,6 @@ namespace eX_Portal.Models
         public int ID { get; set; }
         public string CheckListTitle { get; set; }
         public string CheckListSubTitle { get; set; }
+        public Nullable<bool> IsSelected { get; set; }
     }
 }

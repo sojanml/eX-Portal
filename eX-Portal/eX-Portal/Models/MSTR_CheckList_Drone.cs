@@ -12,14 +12,11 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class MSTR_DroneCheckListItems
+    public partial class MSTR_CheckList_Drone
     {
         public int ID { get; set; }
-        public int DroneCheckList_ID { get; set; }
-        public Nullable<decimal> SlNo { get; set; }
-        public string Title { get; set; }
-        public string FieldType { get; set; }
-        public string Responsibility { get; set; }
-        public Nullable<bool> IsSelected { get; set; }
+        public string CheckListTitle { get; set; }
+        public string CheckListSubTitle { get; set; }
+        public Nullable<int> DroneID { get; set; }
     }
 }

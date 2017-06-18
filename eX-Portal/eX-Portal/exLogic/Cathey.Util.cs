@@ -381,6 +381,14 @@ namespace eX_Portal.exLogic {
                     }
                 }
             }
+            String SQLVideo = $@"CASE 
+                              WHEN 
+                                  D.LastFlightID =(Select Top 1  DroneFlight.ID
+                                  from DroneFlight order by DroneFlight.ID desc) and
+                                  D.FlightTime > DATEADD(MINUTE, -1, GETDATE())
+                                THEN '<a href=FlightMap/Map/'+ TRY_CONVERT(nvarchar(10), D.LastFlightID) +'><span class=green_icon>&#xf04b;</span></a>'                             
+                              ELSE ''
+                              END AS LiveStatus,";
 
             string RPASSql = $@"SELECT 
                           D.[DroneName] as RPAS,
@@ -389,6 +397,7 @@ namespace eX_Portal.exLogic {
                           O.Name as Authority,
                           M.Name as Manufacture,
                           U.GroupName as RPASType,
+                          {SQLVideo}                          
                           Count(*) Over() as _TotalRecords,
                           D.[DroneId] as _PKey
                         FROM
@@ -401,7 +410,7 @@ namespace eX_Portal.exLogic {
                           U.Type= 'UAVType'
                         WHERE
                           D.AccountID={User.AccountId}";
-            
+           
             using (var ctx = new ExponentPortalEntities())
             using (var cmd = ctx.Database.Connection.CreateCommand())
             {
@@ -417,6 +426,7 @@ namespace eX_Portal.exLogic {
                         RPAS.DroneId = Util.toInt( reader.GetValue(7));
                         RPAS.ManufactureName = reader.GetValue(4).ToString();
                         RPAS.UavTypeName = reader.GetValue(5).ToString();
+                        RPAS.LiveStatus = reader.GetValue(6).ToString();
                         RPASDet.Add(RPAS);
                     }
                 }

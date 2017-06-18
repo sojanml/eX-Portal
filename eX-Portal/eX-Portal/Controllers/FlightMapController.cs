@@ -125,9 +125,23 @@ namespace eX_Portal.Controllers {
     public ActionResult Map([Bind(Prefix = "ID")] int FlightID = 0, int IsLive = 0) {
       if (!exLogic.User.hasAccess("FLIGHT.MAP"))
         return RedirectToAction("NoAccess", "Home");
-      var TheMap = new FlightMap();
-      TheMap.GetInformation(FlightID);
-      return View(TheMap);
+
+            int DroneID =Util.toInt(ctx.DroneFlights.Where(x => x.ID == FlightID).Select(x => x.DroneID).FirstOrDefault());
+            int AccID = Util.getAccountID();
+            bool CheckValid = ctx.MSTR_Drone.Where(x => x.DroneId == DroneID && x.AccountID == AccID).Count() > 0 ? true:false ;
+            if (!CheckValid )
+                return RedirectToAction("NoAccess", "Home");
+           
+                var TheMap = new FlightMap();
+               
+                TheMap.GetInformation(FlightID);
+                if(!TheMap.IsLive)
+                {
+                    if (!exLogic.User.hasAccess("FLIGHT.ARCHIVE"))
+                        return RedirectToAction("NoAccess", "Home");
+                }
+                return View(TheMap);
+          
     }
 
     [HttpGet]
