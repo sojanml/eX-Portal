@@ -1104,7 +1104,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FlightUniqueID" Type="nvarchar" MaxLength="60" />
+          <Property Name="FlightUniqueID" Type="nvarchar" MaxLength="16" />
           <Property Name="Lat" Type="numeric" Precision="19" Scale="10" />
           <Property Name="Lng" Type="numeric" Precision="19" Scale="10" />
           <Property Name="GPSDate" Type="datetime" />
@@ -1116,7 +1116,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
             <PropertyRef Name="PayLoadDataRFIDID" />
           </Key>
           <Property Name="PayLoadDataRFIDID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FlightUniqueID" Type="varchar" MaxLength="16" />
+          <Property Name="FlightUniqueID" Type="nvarchar" MaxLength="16" />
           <Property Name="RFID" Type="varchar" MaxLength="64" />
           <Property Name="ReadCount" Type="int" />
           <Property Name="Row" Type="int" />
@@ -3382,7 +3382,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FlightUniqueID" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="FlightUniqueID" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="Lat" Type="Decimal" Precision="19" Scale="10" />
           <Property Name="Lng" Type="Decimal" Precision="19" Scale="10" />
           <Property Name="GPSDate" Type="DateTime" Precision="3" />
@@ -3394,7 +3394,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
             <PropertyRef Name="PayLoadDataRFIDID" />
           </Key>
           <Property Name="PayLoadDataRFIDID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FlightUniqueID" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="FlightUniqueID" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="RFID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="ReadCount" Type="Int32" />
           <Property Name="Row" Type="Int32" />
