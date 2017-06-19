@@ -22,6 +22,9 @@ namespace eX_Portal.Controllers {
                   let TheData = new {
                     FlightUniqueID = gdata.Key,
                     RFIDCount = gdata.Count(),
+                    Grid = gdata.Max(e => e.Row).ToString() + " x " + gdata.Max(e => e.Col).ToString(),
+                    Lat = gdata.Average(e => e.Lat),
+                    Lng = gdata.Average(e => e.Lat),
                     ReadDate = gdata.Min(_ => _.ReadMinDate)
                   }
                   orderby TheData.ReadDate
