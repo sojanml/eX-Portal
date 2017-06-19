@@ -452,7 +452,9 @@
     <Compile Include="Models\PayLoadDataGP.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PayloadDataGrid.cs" />
+    <Compile Include="Models\PayloadDataGrid.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PayLoadDataRFID.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -929,6 +931,7 @@
     <Content Include="ReportsManager\WebForm1.aspx" />
     <Content Include="Scripts\ADSB-Map.js" />
     <Content Include="Scripts\ADSB.js" />
+    <Content Include="Scripts\ADSBDashboard.js" />
     <Content Include="Scripts\FlightMap-ADSB.js" />
     <Content Include="Scripts\Agriculture.js" />
     <Content Include="Scripts\AgricultureBulkUpload.js" />
@@ -1057,6 +1060,7 @@
     <Content Include="Scripts\RpasGCAAflight.js" />
     <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
+    <Content Include="Scripts\site.js" />
     <Content Include="Scripts\traffic-dmat.js" />
     <Content Include="Scripts\TrafficControl-x.js" />
     <Content Include="Scripts\TrafficControl.js" />
@@ -1499,6 +1503,7 @@
     <Content Include="Views\Email\Activation.cshtml" />
     <Content Include="Views\User\Activation.cshtml" />
     <Content Include="Views\User\BillingInformation.cshtml" />
+    <Content Include="Views\DroneCheckList\DefineCheckList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
