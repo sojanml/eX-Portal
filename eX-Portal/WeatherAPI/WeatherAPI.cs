@@ -14,9 +14,7 @@ namespace  Exponent  {
   public sealed class WeatherAPI {
     private const String APIKey = "e925e5f9b310f96d54cb45e01bfb3fe0";
     private const String APIUrl = "http://api.openweathermap.org/data/2.5/";
-    private String ApplicationPah = String.Empty;
-    //private System.Net.WebClient webClient ;
-    
+    private String ApplicationPah = String.Empty; 
 
     public WeatherAPI() {
       //ApplicationPah = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);      
