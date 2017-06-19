@@ -1111,6 +1111,18 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="Satellite" Type="int" />
           <Property Name="IsSend" Type="tinyint" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DCAAPortal.dbo.PayloadDataGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PayloadDataGrid">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FlightUniqueID" Type="nvarchar" MaxLength="16" />
+          <Property Name="SlNo" Type="int" />
+          <Property Name="Lat" Type="numeric" Precision="18" Scale="8" />
+          <Property Name="Lng" Type="numeric" Precision="18" Scale="8" />
+        </EntityType>
         <EntityType Name="PayLoadDataRFID">
           <Key>
             <PropertyRef Name="PayLoadDataRFIDID" />
@@ -1626,6 +1638,15 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
     [ip2location].[country_code] AS [country_code], 
     [ip2location].[country_name] AS [country_name]
     FROM [dbo].[ip2location] AS [ip2location]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PayloadDataGrid" EntityType="Self.PayloadDataGrid" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PayloadDataGrid].[ID] AS [ID], 
+    [PayloadDataGrid].[FlightUniqueID] AS [FlightUniqueID], 
+    [PayloadDataGrid].[SlNo] AS [SlNo], 
+    [PayloadDataGrid].[Lat] AS [Lat], 
+    [PayloadDataGrid].[Lng] AS [Lng]
+    FROM [dbo].[PayloadDataGrid] AS [PayloadDataGrid]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadFlight" EntityType="Self.PayLoadFlight" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -2162,6 +2183,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="MSTR_CheckListItems_Drone" EntityType="ExponentPortalModel.MSTR_CheckListItems_Drone" />
           <EntitySet Name="PayLoadDataGPS" EntityType="ExponentPortalModel.PayLoadDataGP" />
           <EntitySet Name="PayLoadDataRFIDs" EntityType="ExponentPortalModel.PayLoadDataRFID" />
+          <EntitySet Name="PayloadDataGrids" EntityType="ExponentPortalModel.PayloadDataGrid" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -3403,6 +3425,16 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="Lng" Type="Decimal" Precision="19" Scale="8" />
           <Property Name="ReadMinDate" Type="DateTime" Precision="3" />
           <Property Name="RadMaxDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PayloadDataGrid">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FlightUniqueID" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="SlNo" Type="Int32" />
+          <Property Name="Lat" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="Lng" Type="Decimal" Precision="18" Scale="8" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4956,6 +4988,17 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="RFID" ColumnName="RFID" />
                 <ScalarProperty Name="FlightUniqueID" ColumnName="FlightUniqueID" />
                 <ScalarProperty Name="PayLoadDataRFIDID" ColumnName="PayLoadDataRFIDID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayloadDataGrids">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PayloadDataGrid">
+              <MappingFragment StoreEntitySet="PayloadDataGrid">
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="SlNo" ColumnName="SlNo" />
+                <ScalarProperty Name="FlightUniqueID" ColumnName="FlightUniqueID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
