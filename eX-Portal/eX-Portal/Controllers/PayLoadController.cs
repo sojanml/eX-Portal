@@ -47,22 +47,20 @@ namespace eX_Portal.Controllers {
                      lng = data.Longitude
                    };
 
-      var LatLngQuery = from data in db.PayLoadDatas
-                   where data.FlightUniqueID == ID &&
-                   data.Latitude > 0 &&
-                   data.Longitude > 0
-                   group data by 1 into g
-                   select  new {
-                     LatMin = g.Min(l => l.Latitude),
-                     LatMax = g.Max(l => l.Latitude),
-                     LngMin = g.Min(l => l.Longitude),
-                     LngMax = g.Max(l => l.Longitude)
-                   };
+      var LatLngQuery = from data in db.PayloadDataGrids
+                        where data.FlightUniqueID == ID
+                        orderby data.SlNo
+                        select new {
+                          lat = data.Lat,
+                          lng = data.Lng
+                        };
+    
+                   
 
       var jObject = new {
         RFID = Query1,
         FlightPath = Query2,
-        BoundBox = LatLngQuery.FirstOrDefault()
+        BoundBox = LatLngQuery
       };
 
       return Json(jObject, JsonRequestBehavior.AllowGet);

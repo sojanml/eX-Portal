@@ -396,7 +396,7 @@ namespace eX_Portal.Controllers
         [HttpPost]
         public ActionResult Edit(ViewModel.UserViewModel UserModel)
         {
-            String Pass_SQL = "\n";
+            //String Pass_SQL = "\n";
             if (!exLogic.User.hasAccess("PILOTS.EDIT")) return RedirectToAction("NoAccess", "Home");
             UserModel.User.IsPilot = true;
             

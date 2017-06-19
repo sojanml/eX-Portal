@@ -121,7 +121,7 @@ namespace eX_Portal.exLogic {
         String[] sDateParts = sDate.Split(new char[]{'-', 'T' });
         int[] iDateParts = Array.ConvertAll(sDateParts, s => int.Parse(s));
         return new DateTime(iDateParts[0], iDateParts[1], iDateParts[2], iDateParts[3], iDateParts[4], iDateParts[5]);
-      } catch(Exception ex) {
+      } catch  {
         return DateTime.MinValue;
       }
     }

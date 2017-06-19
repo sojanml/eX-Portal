@@ -261,7 +261,7 @@ namespace eX_Portal.Controllers {
 
     public ActionResult RPAS() {
 
-      string City, Lat = null, Lng = null, woeid = "";
+      string Lat = null, Lng = null, woeid = "";
       if (Session["Lat"] != null) {
         Lat = Session["Lat"].ToString();
       } else {
