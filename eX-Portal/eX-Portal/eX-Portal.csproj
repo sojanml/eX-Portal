@@ -452,6 +452,7 @@
     <Compile Include="Models\PayLoadDataGP.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PayloadDataGrid.cs" />
     <Compile Include="Models\PayLoadDataRFID.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
