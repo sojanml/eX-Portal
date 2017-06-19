@@ -618,8 +618,8 @@ function ShowInfoWindow() {
         AlertInfo = AlertInfo +
           '<div class="AlertInfo">\n' +
           '<div class="AlertFlight">' + FlightData.FlightID + '</div>\n' +
-          '<div class="vDist">Vertical Seperation (Altitude):<span class="feet">' + vDist.toFormatted(0) + ' Feet</span><span class="meter">(' + (vDist * FeetToMeter).toFormatted(0) + ' Meter)</span></div>\n' +
-          '<div class="hDist">Horizondal Seperation:<span class="meter">' + (hDist / 1000).toFormatted(2) + ' KM</span><span class="feet">(' + (hDist * MeterToFeet).toFormatted(0) + ' Feet)</span></div>\n' +
+          '<div class="vDist">Vertical Separation (Altitude):<span class="feet">' + vDist.toFormatted(0) + ' Feet</span><span class="meter">(' + (vDist * FeetToMeter).toFormatted(0) + ' Meter)</span></div>\n' +
+          '<div class="hDist">Horizontal Separation:<span class="meter">' + (hDist / 1000).toFormatted(2) + ' KM</span><span class="feet">(' + (hDist * MeterToFeet).toFormatted(0) + ' Feet)</span></div>\n' +
           '</div>\n';
       }
     }  

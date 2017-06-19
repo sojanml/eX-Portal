@@ -1,5 +1,6 @@
 ﻿using eX_Portal.exLogic;
 using eX_Portal.Models;
+using eX_Portal.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,5 +122,20 @@ namespace eX_Portal.Controllers {
       return RedirectToAction("Detail", "Drone", new { ID = DroneID });
     }
 
-  }//class
+        public ActionResult DefineCheckList(int DroneID = 0)
+        {
+            ViewBag.DroneID = DroneID.ToString();
+            ExponentPortalEntities db = new ExponentPortalEntities();
+            List<CheckListView> TheRows = new List<CheckListView>();
+           foreach(MSTR_DroneCheckList dr in db.MSTR_DroneCheckList)
+            {
+                CheckListView cv = new CheckListView();
+                cv.CheckHeader = dr;
+                cv.CheckList = db.MSTR_DroneCheckListItems.Where(x => x.DroneCheckList_ID == dr.ID).ToList();
+                TheRows.Add(cv);
+            }
+            return View(TheRows);
+        }
+
+    }//class
 }//namespace

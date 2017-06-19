@@ -104,6 +104,7 @@ namespace eX_Portal.ViewModel
             public string ManufactureName { get; set; }
             public string UavTypeName { get; set; }
             public string PartsGroupName { get; set; }
+            public string LiveStatus { get; set; }
 
         }
             public ApproalDetail ApprovalDetails { get; set; }

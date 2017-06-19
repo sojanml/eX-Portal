@@ -1,0 +1,41 @@
+﻿@model  List<eX_Portal.ViewModel.CheckListView>
+@{
+   // Layout = null;
+}
+
+    <div> 
+        <p>@foreach (var cl in Model)
+        {
+            <div>
+                <h1>@Html.CheckBox("IsSelected", cl.IsSelected, new { onchange = $"HideCurrentDiv(Div_{cl.CheckHeader.ID})" }) @Html.DisplayFor(x=>cl.CheckHeader.CheckListTitle)</h1>
+                <div id ="Div_@(cl.CheckHeader.ID)" >
+                    @foreach (var ci in cl.CheckList)
+                    {
+                        <div>
+                            @Html.CheckBox("IsSelected", ci.IsSelected)
+                            @Html.DisplayTextFor(x => ci.Title)
+                        </div>
+
+                    }
+                </div>
+            </div>
+        }
+        </p>
+
+    </div>
+
+@section scripts{
+<script type="text/javascript">
+    $(document).ready(function() {
+
+});
+
+    function HideCurrentDiv(divid)
+    {
+        if ($(divid).checked)
+            $(divid).addClass("show");
+        else
+            $(divid).addClass("hide");
+    }
+    </script>
+}
