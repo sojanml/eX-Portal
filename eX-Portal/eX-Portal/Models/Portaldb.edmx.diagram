@@ -4,70 +4,74 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="530561658f0f46cd9e30c8dc885ae2b4" Name="Diagram1" ZoomLevel="63" DisplayType="true" ShowGrid="true">
-        <EntityTypeShape EntityType="ExponentPortalModel.DroneDefinition" Width="1.5" PointX="2.125" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.LUP_Product" Width="1.5" PointX="5.5" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneDetails" Width="2.125" PointX="8.25" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneServiceParts" Width="2.125" PointX="0.5" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.M2M_UserAccount" Width="2.5" PointX="5.5" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Account" Width="1.5" PointX="8.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_DroneService" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Menu" Width="1.5" PointX="2.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Parts" Width="1.5" PointX="4.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Product" Width="1.5" PointX="10.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Profile" Width="1.5" PointX="6.75" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_User" Width="1.5" PointX="8.75" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.ProductDefinition" Width="1.5" PointX="10.75" PointY="11.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.ProductTransaction" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="530561658f0f46cd9e30c8dc885ae2b4" Name="Diagram1" ZoomLevel="62" DisplayType="false" ShowGrid="true">
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneDefinition" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.LUP_Product" Width="1.5" PointX="4.625" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneDetails" Width="2.125" PointX="20" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneServiceParts" Width="2.125" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_UserAccount" Width="2.5" PointX="20.125" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Account" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_DroneService" Width="1.5" PointX="6.25" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Menu" Width="1.5" PointX="6.25" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Parts" Width="1.5" PointX="6.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Product" Width="1.5" PointX="3" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Profile" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_User" Width="1.5" PointX="16.375" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ProductDefinition" Width="1.5" PointX="7.875" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ProductTransaction" Width="1.5" PointX="4.625" PointY="3.625" IsExpanded="true" />
         <AssociationConnector Association="ExponentPortalModel.FK_M2M_DroneServiceParts_M2M_DroneServiceParts" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.ProductHistory" Width="1.5" PointX="12.75" PointY="4.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.DroneCheckListValidation" Width="1.5" PointX="12.75" PointY="8.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.LiveDrone" Width="1.5" PointX="12.75" PointY="12.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.M2M_ProfileMenu" Width="1.5" PointX="14.75" PointY="0.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.DroneDocument" Width="1.5" PointX="14.75" PointY="4.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxData" Width="1.5" PointX="14.75" PointY="9.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadMapData" Width="1.5" PointX="10.75" PointY="15.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.DroneFlight" Width="1.5" PointX="16.75" PointY="0.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadYard" Width="1.5" PointX="0.75" PointY="16.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadFlight" Width="1.5" PointX="16.75" PointY="10.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadImageData" Width="1.5" PointX="12.75" PointY="16.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadYardGrid" Width="1.5" PointX="16.75" PointY="14.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PortalAlert" Width="1.5" PointX="18.75" PointY="7.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoad_AutoFix" Width="1.5" PointX="18.75" PointY="12.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.UserLog" Width="1.5" PointX="18.75" PointY="15.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.DroneFlightVideo" Width="1.5" PointX="14.75" PointY="19.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PortalAuth" Width="1.5" PointX="16.75" PointY="19.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.sysdiagram" Width="1.5" PointX="18.75" PointY="19.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone_Setup" Width="1.5" PointX="20.75" PointY="0.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PortalAlertEmail" Width="1.5" PointX="20.75" PointY="5.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PortalAlertRegistration" Width="1.5" PointX="20.75" PointY="10.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.FlightInfo" Width="1.5" PointX="20.75" PointY="13.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_RPAS_User" Width="1.5" PointX="20.75" PointY="19.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone" Width="1.5" PointX="6.75" PointY="21.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxCost" Width="1.5" PointX="22.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ProductHistory" Width="1.5" PointX="6.25" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneCheckListValidation" Width="1.5" PointX="9.5" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.LiveDrone" Width="1.5" PointX="9.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_ProfileMenu" Width="1.5" PointX="0.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneDocument" Width="1.5" PointX="4.625" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxData" Width="1.5" PointX="3" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadMapData" Width="1.5" PointX="19.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneFlight" Width="1.5" PointX="14.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadYard" Width="1.5" PointX="3" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadFlight" Width="1.5" PointX="16.375" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadImageData" Width="1.5" PointX="9.5" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadYardGrid" Width="1.5" PointX="4.625" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PortalAlert" Width="1.5" PointX="11.125" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoad_AutoFix" Width="1.5" PointX="3" PointY="23.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.UserLog" Width="1.5" PointX="7.875" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneFlightVideo" Width="1.5" PointX="12.75" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PortalAuth" Width="1.5" PointX="9.5" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.sysdiagram" Width="1.5" PointX="11.25" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone_Setup" Width="1.5" PointX="9.5" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PortalAlertEmail" Width="1.5" PointX="7.875" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PortalAlertRegistration" Width="1.5" PointX="9.5" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.FlightInfo" Width="1.5" PointX="4.625" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_RPAS_User" Width="1.5" PointX="13.125" PointY="19.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone" Width="1.5" PointX="18.25" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxCost" Width="1.5" PointX="9.5" PointY="7.5" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.ApproalDetail1" Width="1.5" PointX="17.375" PointY="22.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxLog1" Width="1.5" PointX="13.375" PointY="23.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneParts" Width="1.5" PointX="21.375" PointY="23.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.DroneData" Width="1.5" PointX="17.375" PointY="22.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.FlightMapData" Width="1.5" PointX="23.375" PointY="7.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.LUP_Drone" Width="1.5" PointX="25.375" PointY="3.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_BlackBox" Width="1.5" PointX="25.375" PointY="8.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxTransaction" Width="1.5" PointX="0.75" PointY="21.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.ContentManagement" Width="1.5" PointX="3.375" PointY="21.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.SMSTable" Width="1.5" PointX="25.375" PointY="0.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.ADSBData" Width="1.5" PointX="3.375" PointY="25.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.DroneGPSLog" Width="1.5" PointX="9.375" PointY="25.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_NoFlyZone" Width="1.5" PointX="25.375" PointY="13.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.ip2location" Width="1.5" PointX="25.375" PointY="16.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.TrafficData" Width="1.5" PointX="23.375" PointY="25.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayloadTraffic" Width="1.5" PointX="25.375" PointY="25.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxImage" Width="1.5" PointX="11.375" PointY="26.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxManagement" Width="1.5" PointX="25.375" PointY="19.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.TrafficMonitor" Width="1.5" PointX="13.375" PointY="26.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataRFID" Width="1.5" PointX="27.375" PointY="3.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="27.375" PointY="7.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadData" Width="1.5" PointX="5.375" PointY="15.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.DCAA_PermitDetail" Width="1.5" PointX="27.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxLog1" Width="1.5" PointX="7.875" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_DroneParts" Width="1.5" PointX="6.25" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneData" Width="1.5" PointX="18.125" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.FlightMapData" Width="1.5" PointX="14.875" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.LUP_Drone" Width="1.5" PointX="6.25" PointY="20.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_BlackBox" Width="1.5" PointX="4.625" PointY="19.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxTransaction" Width="1.5" PointX="7.875" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ContentManagement" Width="1.5" PointX="13.25" PointY="22.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.SMSTable" Width="1.5" PointX="9.5" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ADSBData" Width="1.5" PointX="11.25" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DroneGPSLog" Width="1.5" PointX="16.5" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_NoFlyZone" Width="1.5" PointX="12.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.ip2location" Width="1.5" PointX="11.25" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.TrafficData" Width="1.5" PointX="12.875" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayloadTraffic" Width="1.5" PointX="9.5" PointY="19.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxImage" Width="1.5" PointX="11.375" PointY="20.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxManagement" Width="1.5" PointX="0.75" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.TrafficMonitor" Width="1.5" PointX="0.75" PointY="19.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataRFID" Width="1.5" PointX="13" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadData" Width="1.5" PointX="7.875" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DCAA_PermitDetail" Width="1.5" PointX="11.25" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_CheckList_Drone" Width="1.5" PointX="12.875" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_CheckListItems_Drone" Width="1.5" PointX="13" PointY="14.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataGP" Width="1.5" PointX="12.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayloadDataGrid" Width="1.5" PointX="12.875" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="11.25" PointY="13.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

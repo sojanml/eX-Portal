@@ -585,7 +585,7 @@ namespace eX_Portal.Controllers {
             select n
           ).FirstOrDefault();
         return btx.ID;
-      } catch (Exception Ex) {
+      } catch  {
         return 0;
       }
     }

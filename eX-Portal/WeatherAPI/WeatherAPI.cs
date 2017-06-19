@@ -15,7 +15,7 @@ namespace  Exponent  {
     private const String APIKey = "e925e5f9b310f96d54cb45e01bfb3fe0";
     private const String APIUrl = "http://api.openweathermap.org/data/2.5/";
     private String ApplicationPah = String.Empty;
-    private System.Net.WebClient webClient ;
+    //private System.Net.WebClient webClient ;
     
 
     public WeatherAPI() {
@@ -48,7 +48,7 @@ namespace  Exponent  {
           String LatLngFolder = String.Format("#{0}#{1}", Convert.ToInt32(Lat), Convert.ToInt32(Lng));
           SaveWeatherCashe(ThisWeather, LatLngFolder);
         }
-      } catch (Exception ex) {
+      } catch  {
         ThisWeather.Today.ConditionText = "Error";
       }
       return ThisWeather;

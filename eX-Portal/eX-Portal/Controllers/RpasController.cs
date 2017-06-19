@@ -2378,7 +2378,7 @@ namespace eX_Portal.Controllers {
                     // return RedirectToAction("NoAccess", "Home");
                     return "You do not have accesss to this page";
                
-                string Email = "";
+                //string Email = "";
                
                 if (flightsetupvm.GcaApproval.MaxAltitude == null || flightsetupvm.GcaApproval.MaxAltitude < 1)
                 {

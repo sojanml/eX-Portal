@@ -31,7 +31,7 @@ function initializeMap() {
 
   });
 
-  BoundBox = new google.maps.Polyline({
+  BoundBox = new google.maps.Polygon({
     strokeColor: '#00FF00',
     strokeOpacity: 0.5,
     strokeWeight: 1
@@ -103,18 +103,12 @@ function RFIDLoadSuccess(TheData) {
   }
   Markers = [];
 
-  var TheBox = TheData.BoundBox;
-  var TheBoundPath = [
-    { lat: TheBox.LatMin, lng: TheBox.LngMin },
-    { lat: TheBox.LatMin, lng: TheBox.LngMax },
-    { lat: TheBox.LatMax, lng: TheBox.LngMax },
-    { lat: TheBox.LatMax, lng: TheBox.LngMin },
-    { lat: TheBox.LatMin, lng: TheBox.LngMin }
-  ];
+  var TheBoundPath = TheData.BoundBox;
+  if (TheBoundPath != null) {
+    ResetPath(BoundBox, TheBoundPath, true);
+  }
 
   ResetPath(FlightPath, TheData.FlightPath);
-  ResetPath(BoundBox, TheBoundPath, true);
-
   $('#RFIDs').empty();
   var LI = $('<li >' +
     '<div class="c1">RFID</div>' +
@@ -149,7 +143,6 @@ function RFIDLoadSuccess(TheData) {
     }
 
   }
-
 
   IsLoading = false;
 }
