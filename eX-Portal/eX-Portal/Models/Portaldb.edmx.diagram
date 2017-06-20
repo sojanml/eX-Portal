@@ -64,14 +64,13 @@
         <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxImage" Width="1.5" PointX="11.375" PointY="26.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxManagement" Width="1.5" PointX="25.375" PointY="19.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.TrafficMonitor" Width="1.5" PointX="13.375" PointY="26.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataRFID" Width="1.5" PointX="27.375" PointY="3.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="27.375" PointY="7.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.PayLoadData" Width="1.5" PointX="5.375" PointY="15.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.DCAA_PermitDetail" Width="1.5" PointX="27.375" PointY="0.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_CheckList_Drone" Width="1.5" PointX="27.375" PointY="3.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_CheckListItems_Drone" Width="1.5" PointX="27.375" PointY="6.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataGP" Width="1.5" PointX="27.375" PointY="9.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayloadDataGrid" Width="1.5" PointX="27.375" PointY="15.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_CheckList_Drone" Width="1.5" PointX="29.5" PointY="3.625" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_CheckListItems_Drone" Width="1.5" PointX="29.75" PointY="7.125" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayloadDataGrid" Width="1.5" PointX="27.375" PointY="19.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataRFID" Width="1.5" PointX="27.375" PointY="15.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

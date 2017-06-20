@@ -1,15 +1,17 @@
 ﻿@model eX_Portal.exLogic.FlightMap
 <section class="top-space">
-  <div class="column column-half @(Model.IsLive || Model.Videos.Count() > 0 ? "" : "NoVideo")">
+  <div class="column column-half  @( eX_Portal.exLogic.User.hasAccess("FLIGHT.VIDEO") &&  (Model.IsLive || Model.Videos.Count() > 0)? "" : "NoVideo")">
     <div class="title">Flight Information
       <div class="info" >(Ref#: <span>@Model.FlightID</span>)</div>
       <div class="info" style="float:none;align-self:center;margin-left:100px"><span id="FlightInfo_FlightDate">@Model.FlightDate.Split(' ')[0]</span></div>
       <div class="info" style="float:right;"><span id="FlightInfo_FlightTime" style="margin-right:5px;">@Model.FlightDate.Split(' ')[1]</span> (UTC)</div>
     </div>
     <div id="FlightInformation">
-      @if (Model.IsLive || Model.Videos.Count() > 0) {
+        @if(eX_Portal.exLogic.User.hasAccess("FLIGHT.VIDEO"))
+        { 
+      if (Model.IsLive || Model.Videos.Count() > 0) {
       <div id="FlightVideo"></div>
-      }
+      }}
       <div id="FlightSummary" >
         <div class="column-content" id="RpasInformation">
           <div id="GeneralInformation">

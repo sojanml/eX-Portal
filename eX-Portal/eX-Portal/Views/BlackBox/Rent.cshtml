@@ -27,7 +27,7 @@
             Select User
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.UserID, Util.GetDropDowntList("pilot"))
+            @Html.DropDownListFor(model => model.UserID, Util.GetDropDowntList("pilot"), new { id = "UserID" })
             @Html.ValidationMessageFor(model => model.UserID)
         </div>
 
@@ -36,7 +36,7 @@
             Select the UAS
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("D"))
+            @Html.DropDownListFor(model => model.DroneID, Util.GetDropDowntList("D"), Model.UserID )
             @Html.ValidationMessageFor(model => model.DroneID)
         </div>
     

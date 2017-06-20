@@ -126,13 +126,16 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("FLIGHT.MAP"))
         return RedirectToAction("NoAccess", "Home");
 
-            int DroneID =Util.toInt(ctx.DroneFlights.Where(x => x.ID == FlightID).Select(x => x.DroneID).FirstOrDefault());
-            int AccID = Util.getAccountID();
-            bool CheckValid = ctx.MSTR_Drone.Where(x => x.DroneId == DroneID && x.AccountID == AccID).Count() > 0 ? true:false ;
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL") && exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
+                           
+                int DroneID =Util.toInt(ctx.DroneFlights.Where(x => x.ID == FlightID).Select(x => x.DroneID).FirstOrDefault());
+                int AccID = Util.getAccountID();
+                bool CheckValid = ctx.MSTR_Drone.Where(x => x.DroneId == DroneID && x.AccountID == AccID).Count() > 0 ? true:false ;
             if (!CheckValid )
                 return RedirectToAction("NoAccess", "Home");
-           
-                var TheMap = new FlightMap();
+            }
+            var TheMap = new FlightMap();
                
                 TheMap.GetInformation(FlightID);
                 if(!TheMap.IsLive)

@@ -1,13 +1,9 @@
 ﻿@model eX_Portal.exLogic.qView
 @{ 
-    Layout = "";
+ Layout = "";
 }
 @Html.Raw(Model.getDataTable())
 
-@section scripts {
-    <script type="text/javascript">
-@Html.Raw(Model.getScripts())
-    </script>
-}
+
 
 

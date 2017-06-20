@@ -81,7 +81,7 @@ namespace eX_Portal.Controllers {
       }
       if(exLogic.User.hasAccess("FLIGHT.CREATE"))
         nView.addMenu("Create Flight", Url.Action("Create", "DroneFlight", new { ID = "_Pkey" }));
-      if(exLogic.User.hasAccess("FLIGHT"))
+      if(exLogic.User.hasAccess("FLIGHT.ARCHIVE"))
         nView.addMenu("Flights", Url.Action("Index", "DroneFlight", new { ID = "_Pkey" }));
       //if(exLogic.User.hasAccess("DRONE.MANAGE"))
       //  nView.addMenu("Manage", Url.Action("Manage", new { ID = "_Pkey" }));
@@ -1157,26 +1157,27 @@ namespace eX_Portal.Controllers {
 
           //Parts updating
 
-          SQL = "delete from M2M_DroneParts where DroneId=" + Drone.DroneId;
-          int Id = Util.doSQL(SQL);
-          if(DroneView.SelectItemsForParts != null) {
-            for(var count = 0; count < DroneView.SelectItemsForParts.Count(); count++) {
-              string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
-              int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
-              SQL = "Insert into M2M_DroneParts (DroneId,PartsId,Quantity) values(" + Drone.DroneId + "," + PartsId + "," + Qty + ");";
-              int ID = Util.doSQL(SQL);
-            }
+          //SQL = "delete from M2M_DroneParts where DroneId=" + Drone.DroneId;
+          //int Id = Util.doSQL(SQL);
+          //if(DroneView.SelectItemsForParts != null) {
+          //  for(var count = 0; count < DroneView.SelectItemsForParts.Count(); count++) {
+          //    string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
+          //    int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
+          //    SQL = "Insert into M2M_DroneParts (DroneId,PartsId,Quantity) values(" + Drone.DroneId + "," + PartsId + "," + Qty + ");";
+          //    int ID = Util.doSQL(SQL);
+          //  }
 
-          }
+          //}
                    
-                        if (exLogic.User.hasAccess("DRONE.MANAGE"))
-                        return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
-                    else
-                        return RedirectToAction("Detail", new { ID = DroneView.Drone.DroneId });
+        if (exLogic.User.hasAccess("DRONE.MANAGE"))
+        return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
+    else
+        return RedirectToAction("Detail", new { ID = DroneView.Drone.DroneId });
                   //  
         } else {
 
-          DroneView.OwnerList = Util.getListSQL("SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name");
+
+          DroneView.OwnerList = Util.getListSQL(GetsqlforOwner(exLogic.User.hasAccess("DRONE.MANAGE")));
           DroneView.UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown");
           DroneView.ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown");
             //PartsGroupList = Util.GetDropDowntList();

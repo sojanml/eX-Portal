@@ -38,7 +38,14 @@
         <td>Notification Emails : <span class="value">@Html.DisplayFor(model => model.GcaApproval.NotificationEmails)</span></td>
         <td colspan="2">Status : <span class="value">@Html.DisplayFor(model => model.GcaApproval.ApprovalStatus)</span></td>
 </tr>
-
+    <tr>
+        <td colspan="4">
+           Remarks :
+            <span class="value">
+               @Html.DisplayFor(model => model.GcaApproval.ApprovalRemarks)
+            </span>
+        </td>
+       </tr>
 </table>
 <div id="map_canvas" style="width: 100%; height: 450px"></div>
 

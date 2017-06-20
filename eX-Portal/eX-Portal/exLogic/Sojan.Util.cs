@@ -363,7 +363,7 @@ namespace eX_Portal.exLogic {
       return sVal;
     }
 
-    public static IEnumerable<SelectListItem> GetDropDowntList(String TypeOfList, bool IsStrictFilter = false) {
+    public static IEnumerable<SelectListItem> GetDropDowntList(String TypeOfList, bool IsStrictFilter = false,int PilotID=0) {
       List<SelectListItem> SelectList = new List<SelectListItem>();
       SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
 
@@ -400,6 +400,13 @@ namespace eX_Portal.exLogic {
           }
           SQL += "\nORDER BY FirstName";
           break;
+            case "pilotdrones":
+            SQL= $@"SELECT [DroneId] as Value,
+                 Convert(nvarchar(20), DroneId) + '-' +[DroneName] as
+                 Name
+                 FROM[MSTR_Drone] where IsActive = 1
+                 and AccountID = (Select AccountID from MSTR_User where userID = {PilotID}) ";
+             break;
           }
           cmd.CommandText = SQL;
           using (var reader = cmd.ExecuteReader()) {

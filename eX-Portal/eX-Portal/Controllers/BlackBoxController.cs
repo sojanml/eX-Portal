@@ -438,11 +438,12 @@ namespace eX_Portal.Controllers {
 
 
 
-      string SQL = @"SELECT MSTR_BlackBox.BlackBoxName,
+      string SQL = @"SELECT BlackBoxTransaction.ID as TransID,MSTR_BlackBox.BlackBoxName,
                                  BlackBoxTransaction.BBStatus as Status,                               
                                  BlackBoxTransaction.Amount,                              
                                  MSTR_Drone.DroneName as 'DroneName',
                                  BlackBoxTransaction.Note,
+                                 RentStartDate,
                                  Count(*) Over() as _TotalRecords,
                                  BlackBoxTransaction.ID as _PKey                           
                                  FROM
@@ -769,7 +770,7 @@ namespace eX_Portal.Controllers {
         Btx.BBStatus = "OUT";
         return View(Btx);
       }
-      string SQL = "insert into blackboxtransaction(DroneID,BBstatus,Note,createdby,Blackboxid,amount,rentamount,RentStartDate,RentEndDate) values(" + Btx.DroneID + ",'OUT','" + Btx.Note + "'," + Util.getLoginUserID() + "," + BlackBoxID + "," + Util.toInt(Btx.Amount) + "," + Util.toInt(Btx.RentAmount) + ",'" + sDate + "','" + eDate + "')";
+      string SQL = "insert into blackboxtransaction(DroneID,BBstatus,Note,createdby,Blackboxid,amount,rentamount,RentStartDate,RentEndDate,UserID) values(" + Btx.DroneID + ",'OUT','" + Btx.Note + "'," + Util.getLoginUserID() + "," + BlackBoxID + "," + Util.toInt(Btx.Amount) + "," + Util.toInt(Btx.RentAmount) + ",'" + sDate + "','" + eDate + "',"+Btx.UserID+")";
       //  string SQL = "update BlackBoxTransaction set DroneID = '0', BBStatus = '" + Btx.BBStatus + "', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "' where ID = " + Btx.ID;
 
       int bbtransctionid = Util.InsertSQL(SQL);
@@ -859,12 +860,11 @@ namespace eX_Portal.Controllers {
             var accID = from usr in db.MSTR_User
                         where usr.UserId == ID
                         select usr.AccountId.Value;
+            int AccountID = accID.First();
             
-
-
             var droneList = from drone in db.MSTR_Drone
-                        where drone.AccountID==accID.First()
-                        select drone;
+                        where drone.AccountID== AccountID
+                            select drone;
 
             return Json(droneList,JsonRequestBehavior.AllowGet);
         }
