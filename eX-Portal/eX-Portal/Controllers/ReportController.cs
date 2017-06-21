@@ -308,12 +308,18 @@ namespace eX_Portal.Controllers {
       //check if the PDF is generated
       String FullPath1 = System.IO.Path.Combine("C:\\Reports", String.Format("{0}.pdf", FlightID));
       String FullPath2 = System.IO.Path.Combine("C:\\Reports_DCAA", String.Format("{0}.pdf", FlightID));
-      String FullPath = String.Empty;
+            String FullPath3= System.IO.Path.Combine("F:\\Reports", String.Format("{0}.pdf", FlightID));
+            String FullPath = String.Empty;
       if(System.IO.File.Exists(FullPath1)) {
         FullPath = FullPath1;
       } else if(System.IO.File.Exists(FullPath2)) {
         FullPath = FullPath2;
-      } else {
+      }
+      else if (System.IO.File.Exists(FullPath3))
+        {
+            FullPath = FullPath3;
+        }
+        else {
         ViewBag.Title = "Report not found";
         return View();
       }

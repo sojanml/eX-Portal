@@ -8,8 +8,10 @@
 @Html.Action("DroneImaging", "Drone", new { ID = DroneID, Actions = "View" })
 
 <!-- Recent Flights-->
+@if (eX_Portal.exLogic.User.hasAccess("FLIGHT.ARCHIVE"))
+{
 @Html.Action("ByDrone", "DroneFlight", new { ID = DroneID })
-
+}
 <!-- Recent Service -->
 @Html.Action("ByDrone", "DroneService", new { ID = DroneID })
 

@@ -8,7 +8,35 @@
     <span>Encryption Key :  @ViewBag.EncryptionKey</span> 
 }
 <hr />
-<h2>Black Box Transaction Details</h2>
 @Html.Action("TransactionDet", "BlackBox", new { ID = Model.BlackBoxID })
 
+@section scripts {
+    <script type="text/javascript">
+     var qViewDataTable = null;
+     var qViewMenu = [
+     ];
+     $(document).ready(function () {
+         qViewDataTable = $('#qViewTable').DataTable({
+             "processing": true,
+             "serverSide": true,
+             "searchDelay": 1000,
+             "iDisplayLength": 50,
+             "fnFooterCallback": _fnFooterCallback,
+             "fnDrawCallback": _fnDrawCallback,
+             "dom": '<"dataTables_wrapper"<"dataTables_head"lf>t<"dataTables_footer"p>>',
+             "order": [[0, "asc"]],
+             "ajax": "/Blackbox/TransactionDet/@Model.BlackBoxID",
+             "columns": [
+                 { "data": "BlackBoxName" },
+                 { "data": "Status" },
+                 { "data": "Amount" },
+                 { "data": "DroneName" },
+                 { "data": "Note" }
+                 , { "data": null, "defaultContent": "<img class=button src=/images/drop-down.png>", "orderable": false, className: "menu" }
+             ]
+         });
+     });
 
+    </script>
+
+}

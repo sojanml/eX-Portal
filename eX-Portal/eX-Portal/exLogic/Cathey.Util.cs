@@ -386,7 +386,7 @@ namespace eX_Portal.exLogic {
                                   D.LastFlightID =(Select Top 1  DroneFlight.ID
                                   from DroneFlight order by DroneFlight.ID desc) and
                                   D.FlightTime > DATEADD(MINUTE, -1, GETDATE())
-                                THEN '<a href=FlightMap/Map/'+ TRY_CONVERT(nvarchar(10), D.LastFlightID) +'><span class=green_icon>&#xf04b;</span></a>'                             
+                                THEN '<a href=/FlightMap/Map/'+ TRY_CONVERT(nvarchar(10), D.LastFlightID) +'><span class=green_icon>&#xf04b;</span></a>'                             
                               ELSE ''
                               END AS LiveStatus,";
 
