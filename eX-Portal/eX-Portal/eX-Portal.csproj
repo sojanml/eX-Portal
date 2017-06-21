@@ -455,6 +455,9 @@
     <Compile Include="Models\PayloadDataGrid.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PayloadDataGridLine.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PayLoadDataRFID.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -1102,6 +1105,7 @@
     <Content Include="sass\_colors.scss" />
     <Content Include="sass\_mixin.scss" />
     <Content Include="Scripts\ADSB-Aircraft-DB.js" />
+    <Content Include="sass\Payload-RFID.scss" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\video.dev.js" />
     <Content Include="Scripts\video.js" />

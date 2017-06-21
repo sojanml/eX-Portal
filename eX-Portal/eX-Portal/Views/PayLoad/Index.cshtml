@@ -5,12 +5,13 @@
 <section class="top-space">
   <div class="column column-half">
     <div id="PayloadRuns">
-      <div class="title">Payload Runs</div>
+      <div class="title">Inventory Summary</div>
       <ul id="PayloadRunIDs">
         <li>
           <div class="c1">ID</div>
-          <div class="c2">RFID Count</div>
-          <div class="c3">Date</div>          
+          <div class="c2">Items</div>
+          <div class="c3">Grid</div>
+          <div class="c4">Date</div>          
         </li>
 
       </ul>
@@ -20,7 +21,11 @@
       <ul id="RFIDs"></ul>
     </div>
     <div id="RSSIs">
-      <ul id="RSSI"></ul>
+      <form>
+        <input type="checkbox" name="chkRawGPS" id="chkRawGPS" /> <label for="chkRawGPS">Show RAW GPS Data</label>
+        <input style="margin-left:30px;" type="checkbox" name="chkRawRFIDGPS" id="chkRawRFIDGPS" /> <label for="chkRawRFIDGPS">Show RAW GPS for RFID</label>
+        <ul style="display:none" id="RSSI"></ul>
+      </form>
     </div>
   </div>
   <div id="adsb_map" class="column column-half shaded"></div>

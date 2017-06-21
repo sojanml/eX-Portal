@@ -34,7 +34,7 @@ namespace eX_Portal.Models
         public Nullable<int> MinDefault { get; set; }
         public Nullable<int> MaxDefault { get; set; }
         public Nullable<int> CreatedBy { get; set; }
-        public Nullable<bool> IsUseCamara { get; set; }
+        public bool IsUseCamara { get; set; }
         public string MOD_ApprovalURL { get; set; }
         public string ApprovalStatus { get; set; }
         public string ApprovalRemarks { get; set; }

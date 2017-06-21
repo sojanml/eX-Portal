@@ -27,7 +27,7 @@ namespace eX_Portal.Controllers {
                     Lng = gdata.Average(e => e.Lat),
                     ReadDate = gdata.Min(_ => _.ReadMinDate)
                   }
-                  orderby TheData.ReadDate
+                  orderby TheData.ReadDate descending
                   select TheData;
                                     
       return Json(Query, JsonRequestBehavior.AllowGet);
@@ -36,15 +36,15 @@ namespace eX_Portal.Controllers {
     public JsonResult Data(String ID) {
       ExponentPortalEntities db = new ExponentPortalEntities();
       var Query1 = from data in db.PayLoadDataRFIDs
-                  where data.FlightUniqueID == ID
-                  orderby data.Row, data.Col
-                  select data;
+                   where data.FlightUniqueID == ID
+                   orderby data.Row, data.Col
+                   select data;
 
       var Query2 = from data in db.PayLoadDatas
                    where data.FlightUniqueID == ID &&
                    data.Latitude > 0 &&
                    data.Longitude > 0
-                   orderby data.ReadTime
+                   orderby data.ReadTime descending
                    select new {
                      lat = data.Latitude,
                      lng = data.Longitude
@@ -57,13 +57,19 @@ namespace eX_Portal.Controllers {
                           lat = data.Lat,
                           lng = data.Lng
                         };
-    
-                   
+      var LinesQuery = from data in db.PayloadDataGridLines
+                       where data.FlightUniqueID == ID
+                       select new {
+                           RowCol = data.RowOrCol,
+                           StartPoint = new { lat = data.SLat, lng = data.SLng } ,
+                           EndPoint = new { lat = data.ELat, lng = data.ELng }
+                       };
 
       var jObject = new {
         RFID = Query1,
         FlightPath = Query2,
-        BoundBox = LatLngQuery
+        BoundBox = LatLngQuery,
+        GridLines = LinesQuery
       };
 
       return Json(jObject, JsonRequestBehavior.AllowGet);
