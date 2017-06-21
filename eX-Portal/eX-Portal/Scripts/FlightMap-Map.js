@@ -100,7 +100,8 @@ function StartFlightReplay() {
 function RpasReplayTimer() {
   var thisData = _FlightData[_ReplayIndex];
   var ReplayDelay = 1000;
-  var PositionDateTime = dtFromJSON(thisData.FlightTime);
+  var PositionDateTime = ToLocalTime(dtFromJSON(thisData.FlightTime));
+
   var position = {
     lat: thisData.Lat,
     lng: thisData.Lng,
@@ -161,7 +162,7 @@ function FastForwardTo(VideoPositionTime) {
   var Path = _FlightReplayPath.getPath();  
   while (_ReplayIndex <= _FlightData.length) {
     var thisData = _FlightData[_ReplayIndex];
-    var PositionDateTime = dtFromJSON(thisData.FlightTime);
+    var PositionDateTime = ToLocalTime(dtFromJSON(thisData.FlightTime));
     if (PositionDateTime < VideoPositionTime) {
       var Pos = new google.maps.LatLng(thisData.Lat, thisData.Lng);
       Path.push(Pos);
@@ -294,7 +295,7 @@ function LoadMapData() {
 
 function IsDataLoadCompleted() {
   if (_FlightData.length < 1) return false;
-  var DateOfLastItem = dtFromJSON(_FlightData[_FlightData.length - 1].FlightTime);
+  var DateOfLastItem = ToLocalTime(dtFromJSON(_FlightData[_FlightData.length - 1].FlightTime));
   var Now = new Date();
   //set to 2 mins before
   //convert to UTC time
@@ -362,7 +363,7 @@ function AddToTable(TheData) {
 
   for (var i = RowStartAt; i < TheData.length; i++) {
     var DataItem = TheData[i]
-    var tDate = dtFromJSON(DataItem.FlightTime);
+    var tDate = ToLocalTime(dtFromJSON(DataItem.FlightTime));
     var FlightTime = dFormat(tDate, true);
     //var FlightTime = dtConvFromJSON(DataItem.FlightTime, true);
 
@@ -429,7 +430,7 @@ function ShowFlightInformation(TheDataItem) {
   $('#FlightInfo_FlightDuration').html(toHour(TheDataItem.FlightDuration));
   $('#FlightInfo_Speed').html(TheDataItem.Speed.toFixed(2));
   $('#FlightInfo_Distance').html(TheDataItem.Distance.toFixed(2));
-  var tDate = dtFromJSON(TheDataItem.FlightTime);
+  var tDate = ToLocalTime(dtFromJSON(TheDataItem.FlightTime));
   var aDate = dFormat(tDate, true).split(' ');
   var Fdate = aDate[0];
   var FTime = aDate[1];;
