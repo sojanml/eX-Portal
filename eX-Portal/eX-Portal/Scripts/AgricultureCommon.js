@@ -30,6 +30,11 @@ function dtFromJSON(sNetDate) {
   return new Date();
 }
 
+function ToLocalTime(TheDate) {
+  TheDate.setMinutes(TheDate.getMinutes() + TheDate.getTimezoneOffset());
+  return TheDate;
+}
+
 
 function dFormat(tDate, isAddTime) {
   var Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

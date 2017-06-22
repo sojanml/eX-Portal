@@ -1,0 +1,117 @@
+section div.title {
+  padding: 3px 0px 3px 5px;
+  border-bottom: 2px white solid;
+  margin-bottom: 5px;
+  vertical-align: text-bottom;
+  background-color: #c2c0c0;
+  font-size: 12pt;
+}
+
+div {
+  &#PayloadRuns, &#PayloadRFIDs {
+    height: 215px;
+    width: 100%;
+    border-bottom: 2px red solid;
+  }
+}
+
+ul {
+  &#PayloadRunIDs,
+  &#RFIDs {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 175px;
+    overflow: auto;
+
+    li {
+      border-bottom: 1px silver solid;
+      padding: 1px 0px 1px 0px;
+      height: 16px;
+      div {
+        height:16px;
+      }
+    }
+  }
+
+  &#PayloadRunIDs li {
+    &.active {
+      background-color: #90ff13;
+    }
+
+    &:hover {
+      background-color: #fbd74c;
+    }
+
+    div {
+      float: left;
+      display: block;
+      margin-right: 5px;
+      width: 100px;
+      &.c4 {
+        width:150px;
+      }
+    }
+  }
+
+
+
+  &#RFIDs li {
+    &:hover {
+      background-color: #fc9d9d;
+    }
+
+    div {
+      width: 70px;
+      float: left;
+      overflow: hidden;
+    }
+
+    &.active {
+      background-color: aqua;
+    }
+
+    div.c1 {
+      width: 200px;
+    }
+  }
+}
+
+div#RSSIs {
+  border-bottom: 2px red solid;
+  line-height: 20px;
+
+  label {
+    line-height: 20px;
+    vertical-align: text-bottom;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #ddd;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #666;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+ul#RSSI {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  white-space: nowrap;
+  width: 5000px;
+
+  li {
+    float: left;
+    margin-right: 10px;
+    list-style: none;
+    padding-top: 5px;
+  }
+}

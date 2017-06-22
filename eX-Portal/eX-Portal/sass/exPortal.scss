@@ -1702,3 +1702,53 @@ div.hide{
     display:none;
 }
 
+ul.prifle_menu {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+
+  & > ul {
+    margin-left: 50px;
+  }
+
+  & > li {
+    margin: 5px 0px 0px 0px;
+    cursor: pointer;
+
+    &:hover {
+      color: $SelectedItemColor;
+    }
+
+    span.permission {
+      padding-left: 10px;
+      color: $TitleTextColor;
+    }
+
+    span.icon {
+      display: none;
+
+      &.on {
+        color: $SafeColor;
+      }
+
+      &.off {
+        color: $BreachColor;
+      }
+    }
+
+    &.profile_menu_row {
+      &.on {
+        span.icon.on {
+          display: inline-block;
+        }
+      }
+
+      &.off {
+        span.icon.off {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
+

@@ -57,7 +57,6 @@ namespace eX_Portal.Models
         public virtual DbSet<DroneFlight> DroneFlights { get; set; }
         public virtual DbSet<MSTR_Account> MSTR_Account { get; set; }
         public virtual DbSet<MSTR_User> MSTR_User { get; set; }
-        public virtual DbSet<PayLoadData> PayLoadDatas { get; set; }
         public virtual DbSet<PayLoadMapData> PayLoadMapDatas { get; set; }
         public virtual DbSet<PayLoadYard> PayLoadYards { get; set; }
         public virtual DbSet<PayLoadFlight> PayLoadFlights { get; set; }
@@ -98,8 +97,11 @@ namespace eX_Portal.Models
         public virtual DbSet<DCAA_PermitDetail> DCAA_PermitDetail { get; set; }
         public virtual DbSet<MSTR_CheckList_Drone> MSTR_CheckList_Drone { get; set; }
         public virtual DbSet<MSTR_CheckListItems_Drone> MSTR_CheckListItems_Drone { get; set; }
-        public virtual DbSet<PayloadDataGrid> PayloadDataGrids { get; set; }
+        public virtual DbSet<PayLoadDataGP> PayLoadDataGPS { get; set; }
         public virtual DbSet<PayLoadDataRFID> PayLoadDataRFIDs { get; set; }
+        public virtual DbSet<PayloadDataGrid> PayloadDataGrids { get; set; }
+        public virtual DbSet<PayLoadData> PayLoadDatas { get; set; }
+        public virtual DbSet<PayloadDataGridLine> PayloadDataGridLines { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

@@ -3,17 +3,20 @@
   Layout = null;
 }
 
-<ul class="prifle_menu_@ViewBag.ParentID">
+<ul class="prifle_menu prifle_menu_@ViewBag.ParentID">
   @foreach (var Row in Model) {
     int SubItems = 0, MenuID = 0, IsChecked = 0;
     int.TryParse(Row["SubCount"].ToString(), out SubItems);
     int.TryParse(Row["MenuId"].ToString(), out MenuID);
     int.TryParse(Row["IsChecked"].ToString(), out IsChecked);
-  <li data-menuid="@MenuID" class="profile_menu_row @(IsChecked == 0 ? "off": "on")">
+  <li data-menuid="@MenuID" class="profile_menu_row @(IsChecked == 0 ? "off" : "on")">
   <span class="icon on">&#xf00c;</span>
   <span class="icon off">&#xf00d;</span>
   <span class="icon progress">&#xf110;</span>
-  @Row["MenuName"] <span class="permission">[@Row["PermissionId"]]</span></li>
+  @Row["MenuName"] 
+  @if(!String.IsNullOrEmpty(Row["PermissionId"].ToString())){
+        <span class="permission">[@Row["PermissionId"]]</span>
+  }</li>
     if (SubItems > 0) {
       Html.RenderAction("ProfileMenuGen", new { ProfileID = ViewBag.ProfileID, ParentID = MenuID });
     }

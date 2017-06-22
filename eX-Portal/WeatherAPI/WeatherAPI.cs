@@ -73,11 +73,11 @@ namespace  Exponent  {
         } else { 
           dynamic WeatherJson = JObject.Parse(JsonData);
           SetWeatherInfo(ThisWeather, WeatherJson);
-          SetWeatherStation(ThisWeather.Today, ThisCity.Lat, ThisCity.Lng);
+          //SetWeatherStation(ThisWeather.Today, ThisCity.Lat, ThisCity.Lng);
         }
         SaveWeatherCashe(ThisWeather);
       } catch {
-        ThisWeather.Today.ConditionText = "Error";
+        //ThisWeather.Today.ConditionText = "Error";
       }
       return ThisWeather;
     }
@@ -190,6 +190,7 @@ namespace  Exponent  {
 
     }
 
+
     private void SetWeatherInfo(WeatherForcast ThisWeather, dynamic WeatherJson) {
 
       var WeatherInfo = WeatherJson.list;
@@ -211,6 +212,10 @@ namespace  Exponent  {
           ThisCondition.Low = WeatherInfo[i].temp.min;
           ThisCondition.WindDirection = WeatherInfo[i].deg;
           ThisCondition.WindSpeed = WeatherInfo[i].speed * 3.6;
+
+          if (i == 0)
+            ThisWeather.Today = ThisCondition;
+
         } catch (Exception e) {
           ThisCondition.ConditionText = e.Message;
         }
