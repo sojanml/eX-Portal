@@ -702,7 +702,22 @@ namespace eX_Portal.Controllers {
       };
       return pdf;
     }
-  }//public class ReportController
+        public String GoogleMapApproval([Bind(Prefix = "ID")]int DroneID = 0, int ApprovalID = 0)
+        {
+            String GoogleURL = String.Empty;
+            var GoogleAPI = ConfigurationManager.AppSettings["GoogleAPI"];
+            
+              
+                GoogleURL = "https://maps.googleapis.com/maps/api/staticmap" +
+                "?key=" + GoogleAPI +
+                "&size=640x400" +
+                getGoogleBoundary(0, ApprovalID);
+          
+
+            return GoogleURL;
+
+        }//public ActionResult GoogleMap
+    }//public class ReportController
 
   public class PdfResult :PartialViewResult {
     // Setting a FileDownloadName downloads the PDF instead of viewing it
