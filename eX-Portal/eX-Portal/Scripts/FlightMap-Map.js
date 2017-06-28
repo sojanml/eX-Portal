@@ -180,11 +180,14 @@ function RpasReplayCompleted() {
 }
 
 function InitVideos() {
-  if (IsLive) {
+  if ($('#FlightVideo').length < 1) {
+    return;
+  } else if (IsLive) {
     //live video
   } else if (_FlightVideos.length < 1) {
     return;
-  }
+  } 
+
 
   var VideoSetup = {
     width: 240,
