@@ -256,30 +256,6 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasAccess("USER.CREATE"))
         return RedirectToAction("NoAccess", "Home");
 
-
-      //var fileStorageProvider = new AmazonS3FileStorageProvider();
-      //var fileUploadViewModel = new S3Upload(
-      //  fileStorageProvider.PublicKey,
-      //  fileStorageProvider.PrivateKey,
-      //  fileStorageProvider.BucketName,
-      //  Url.Action("complete", "home", null, Request.Url.Scheme)
-      //);
-      //fileUploadViewModel.SetPolicy(
-      //  fileStorageProvider.GetPolicyString(
-      //    fileUploadViewModel.FileId,
-      //    fileUploadViewModel.RedirectUrl
-      //  )
-      //);
-
-
-      //ViewBag.FormAction = fileUploadViewModel.FormAction;
-      //ViewBag.FormMethod = fileUploadViewModel.FormMethod;
-      //ViewBag.FormEnclosureType = fileUploadViewModel.FormEnclosureType;
-      //ViewBag.AWSAccessKey = fileUploadViewModel.AWSAccessKey;
-      //ViewBag.Acl = fileUploadViewModel.Acl;
-      //ViewBag.Base64EncodedPolicy = fileUploadViewModel.Base64EncodedPolicy;
-      //ViewBag.Signature = fileUploadViewModel.Signature;
-
       ViewBag.IsPassowrdRequired = true;
       MSTR_User EPASValues = new MSTR_User();
       if (RPASID != 0) {
@@ -296,10 +272,13 @@ namespace eX_Portal.Controllers {
         EPASValues.Dashboard = "RPAS";
         EPASValues.IsActive = false;
         EPASValues.IsPilot = false;
+                EPASValues.DOE_RPASPermit = DateTime.Now;
+                EPASValues.DOI_RPASPermit = DateTime.Now;
       }
 
       var viewModel = new ViewModel.UserViewModel {
         User = EPASValues,
+       
         Pilot = new MSTR_User_Pilot(),
         ProfileList = Util.GetProfileList(),
         CountryList = Util.GetCountryLists("Country", "CountryName", "Code", "sp"),
@@ -530,17 +509,17 @@ namespace eX_Portal.Controllers {
         }
       }
 
-      if (UserModel.User.IsPilot == true) {
-        if (String.IsNullOrEmpty(UserModel.Pilot.EmiratesId)) {
-          ModelState.AddModelError("Pilot.EmiratesId", "Emirates ID is required.");
-        }
-        if (String.IsNullOrEmpty(UserModel.Pilot.PassportNo)) {
-          ModelState.AddModelError("Pilot.PassportNo", "Passport  ID is required.");
-        }
-        if (String.IsNullOrEmpty(UserModel.Pilot.Department)) {
-          ModelState.AddModelError("Pilot.Department", "Department is required.");
-        }
-      }//if(UserModel.User.IsPilot == true) {
+      //if (UserModel.User.IsPilot == true) {
+      //  //if (String.IsNullOrEmpty(UserModel.Pilot.EmiratesId)) {
+      //  //  ModelState.AddModelError("Pilot.EmiratesId", "Emirates ID is required.");
+      //  //}
+      //  //if (String.IsNullOrEmpty(UserModel.Pilot.PassportNo)) {
+      //  //  ModelState.AddModelError("Pilot.PassportNo", "Passport  ID is required.");
+      //  //}
+      //  //if (String.IsNullOrEmpty(UserModel.Pilot.Department)) {
+      //  //  ModelState.AddModelError("Pilot.Department", "Department is required.");
+      //  }
+      //}//if(UserModel.User.IsPilot == true) {
        //}
 
       if (ModelState.IsValid) {
@@ -577,7 +556,9 @@ namespace eX_Portal.Controllers {
           " CompanyAddress,\n" +
           " CompanyTelephone,\n" +
           " CompanyEmail,\n" +
-          " EmiratesID\n" +
+          " EmiratesID,\n" +
+          " DOI_RPASPermit,\n" +
+          "DOE_RPASPermit\n" +
           ") values(\n" +
           "  '" + Util.FirstLetterToUpper(UserModel.User.UserName) + "',\n" +
           "  '" + Password + "',\n" +
@@ -605,7 +586,9 @@ namespace eX_Portal.Controllers {
           "  '" + (UserModel.User.ContactAddress) + "',\n" +
           "  '" + (UserModel.User.CompanyTelephone) + "',\n" +
           "  '" + (UserModel.User.CompanyEmail) + "',\n" +
-          "  '" + (UserModel.User.EmiratesID) + "'\n" +
+          "  '" + (UserModel.User.EmiratesID) + "',\n" +
+          "   '"+ (UserModel.User.DOI_RPASPermit) +"',\n"+
+          "   '"+ (UserModel.User.DOE_RPASPermit) +"'\n"+
           ")";
         //inserting pilot information to the pilot table
         int id = Util.InsertSQL(SQL);
