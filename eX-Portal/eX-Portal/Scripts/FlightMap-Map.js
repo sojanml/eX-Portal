@@ -108,7 +108,7 @@ function RpasReplayTimer() {
   };
 
 
-  if (_FlightVideos.length) {
+  if (_FlightVideoPlayer && _FlightVideos.length) {
     ReplayDelay = 200;
     var FirstVideoDate = new Date(_FlightVideoPlayer.getPlaylistItem(_FlightVideoPlayer.getPlaylistIndex()).title);
     var VideoPosition = _FlightVideoPlayer.getPosition();
@@ -187,7 +187,6 @@ function InitVideos() {
   } else if (_FlightVideos.length < 1) {
     return;
   } 
-
 
   var VideoSetup = {
     width: 240,

@@ -102,7 +102,7 @@ function InitChart() {
   var ChartColors = {
     'Pitch': 'rgba(255, 89, 0,1)',
     'Altitude': 'rgb(219, 211, 1)',
-    'Satallites': 'rgba(101, 186, 25,1)',
+    'Satellite': 'rgba(101, 186, 25,1)',
     'Speed': 'rgb(11, 144, 118)',
     'Roll': 'rgb(153, 131, 199)'
   };
@@ -135,12 +135,12 @@ function InitChart() {
     tooltip: { valueSuffix: ' Meter/Hour' },
     color: ChartColors.Speed
   }, {
-    name: 'Satallite',
+      name: 'Satellite',
     type: 'spline',
     data: [],
     yAxis: 1,
     tooltip: { valueSuffix: '' },
-    color: ChartColors.Satallites
+    color: ChartColors.Satellite
   }
   ];
 
