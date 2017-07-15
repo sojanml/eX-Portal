@@ -14,9 +14,9 @@ namespace eX_Portal.Controllers {
     public ActionResult Index() {
       //if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home")
       ViewBag.DashBoard = Util.getDashboard();
-            if (Util.getLoginUserID() == 2)
-                return RedirectToAction("Dashboard", "ADSB");
-            else
+            //if (Util.getLoginUserID() == 2)
+            //    return RedirectToAction("Dashboard", "ADSB");
+            //else
                 return View();
     }
 

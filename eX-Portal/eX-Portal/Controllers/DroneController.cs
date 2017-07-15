@@ -77,8 +77,10 @@ namespace eX_Portal.Controllers {
         nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
       if(exLogic.User.hasAccess("DRONE.EDIT")) {
         nView.addMenu("Edit", Url.Action("Edit", new { ID = "_Pkey" }));
-        nView.addMenu("Authority Approval", Url.Action("AuthorityApproval", new { ID = "_Pkey" }));
-      }
+            }
+      if (exLogic.User.hasAccess("DRONE.AuthorityApproval"))
+                nView.addMenu("Authority Approval", Url.Action("AuthorityApproval", new { ID = "_Pkey" }));
+     
       if(exLogic.User.hasAccess("FLIGHT.CREATE"))
         nView.addMenu("Create Flight", Url.Action("Create", "DroneFlight", new { ID = "_Pkey" }));
       if(exLogic.User.hasAccess("FLIGHT.ARCHIVE"))

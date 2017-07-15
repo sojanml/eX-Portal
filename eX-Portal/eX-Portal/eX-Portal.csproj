@@ -261,6 +261,7 @@
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TrafficController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\VideoController.cs" />
     <Compile Include="exLogic\Ajith.Util.cs" />
     <Compile Include="exLogic\BlackBox.cs" />
     <Compile Include="exLogic\Blessy.Util.cs" />
@@ -1508,6 +1509,8 @@
     <Content Include="Views\User\Activation.cshtml" />
     <Content Include="Views\User\BillingInformation.cshtml" />
     <Content Include="Views\DroneCheckList\DefineCheckList.cshtml" />
+    <Content Include="Views\Traffic\LPR.cshtml" />
+    <Content Include="Views\Video\LiveStream.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

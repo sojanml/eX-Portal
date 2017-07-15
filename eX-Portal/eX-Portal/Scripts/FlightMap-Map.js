@@ -197,7 +197,8 @@ function InitVideos() {
   };
 
   if (IsLive) {
-    VideoSetup.file = "rtmp:" + "//52.34.136.76/live/drone" + DroneID;
+   // VideoSetup.file = "rtmp:" + "//52.34.136.76/live/drone" + DroneID;
+      VideoSetup.file = "rtsp:" + "//192.168.1.123:554/main" ;
   } else {
     VideoSetup.playlist = GetVideoPlaylist()
   }
@@ -469,7 +470,11 @@ function toHour(Seconds) {
   var RestSeconds = Seconds % 60;
   var sSeconds = '0' + RestSeconds;
   var sHour = '0' + Hours;
-  return sHour.substring(sHour.length - 2) + ':' + sSeconds.substring(sSeconds.length - 2);
+  if (sHour.length > 2)
+      sHour = sHour.substring(sHour.length - (sHour.length-1 ))
+  if (sSeconds.length > 2)
+      sSeconds = sSeconds.substring(sSeconds.length - (sHour.length - 1))
+  return sHour + ':' + sSeconds;
 }
 
 

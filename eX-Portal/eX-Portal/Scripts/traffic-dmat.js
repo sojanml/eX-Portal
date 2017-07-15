@@ -104,25 +104,29 @@ function initLoadTraffic() {
 }
 
 function ShowTrafficData(TheData) {
-  if (TheData === null) return;
+    if (TheData === null) return;
+    var d = new Date();
   $.each(TheData, function (key, value) {
-    var SpanID = '#data-' + key.toLowerCase();
+      var SpanID = '#data-' + key.toLowerCase();
+     
     if (!isSetData) $(SpanID).html('');
     switch (key) {
       case 'CreatedOn':
-        var d = new Date(value.replace('T', ' '));
-        value = dFormat(d, true);
+        d = new Date(value.replace('T', ' '));
+        value = dFormat(d, false);     
+      
         break;
       case 'FrameTime':
         value = TimeFromMs(value);
         break;
     }    
     setHtmlTo(SpanID, value);
+    //isSetData = true;
   });
 
-  var d = new Date();
+  
   if (!isSetData) $('#data-date').html('');
-  setHtmlTo('#data-date', dFormat(d, true));
+  setHtmlTo('#data-date', dFormat(d, false));
   isSetData = true;
 }
 

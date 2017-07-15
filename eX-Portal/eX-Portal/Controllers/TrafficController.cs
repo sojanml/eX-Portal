@@ -17,6 +17,7 @@ namespace eX_Portal.Controllers {
     // GET: Traffic
     public ActionResult Index() {
       ViewBag.Title = "Trafic Monitoring";
+      
       return View();
     }
 
@@ -30,7 +31,14 @@ namespace eX_Portal.Controllers {
       return View(Monitor);
     }
 
-    [System.Web.Mvc.HttpGet]
+        public ActionResult LPR()
+        {
+            //if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
+           // var Monitor = new TrafficMamager(DroneID, FlightID);
+            return View();
+        }
+
+        [System.Web.Mvc.HttpGet]
     public ActionResult Export([Bind(Prefix = "id")] int DroneID = 0, int FlightID = 0, int Interval = 5) {
       var Monitor = new TrafficMamager(DroneID, FlightID);
       StringBuilder CSV = Monitor.Export(Interval);
