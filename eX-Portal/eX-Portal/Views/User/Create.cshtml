@@ -225,17 +225,6 @@
                     </div>
                 </div>
 
-            </div>
-
-            <div id="RPASInfo">
-                <h2>RPAS Information</h2>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.User.EmiratesID, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.User.EmiratesID, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.User.EmiratesID, "", new { @class = "text-danger" })
-                    </div>
-                </div>
                 <div class="form-group">
                     @Html.LabelFor(model => model.User.RPASPermitNo, "RPAS Permit No", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -257,13 +246,7 @@
                         @Html.ValidationMessageFor(model => model.User.ContactAddress, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.User.RegRPASSerialNo, "Registration RPAS Serial No", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.User.RegRPASSerialNo, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.User.RegRPASSerialNo, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+                
                 <div class="form-group">
                     @Html.LabelFor(model => model.User.CompanyAddress, "Company Address",htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -285,6 +268,31 @@
                         @Html.ValidationMessageFor(model => model.User.CompanyEmail, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.User.DOI_RPASPermit,"Date Of Issue", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input class="form-control date-picker text-box single-line "
+                               data-val="true" data-val-date="The field Permit Issue Date must be a date."
+                               data-val-required="Please Enter Permit Issue Date" id="User_DOI_RPASPermit"
+                               name="User.DOI_RPASPermit" type="datetime"
+                               value="@(
+        Model.User.DOI_RPASPermit == null ? DateTime.UtcNow.ToString("dd-MMM-yyyy") :
+        ((DateTime)(Model.User.DOI_RPASPermit)).ToString("dd-MMM-yyyy"))">
+                        @Html.ValidationMessageFor(model => model.User.DOI_RPASPermit, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.User.DOE_RPASPermit, "Expiry Date Of Issue", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                       <input data-val="true" data-val-date="The field Start Date must be a date."
+                        data-val-required="Please Enter Permit Expiry Date" id="User_DOE_RPASPermit"
+                        name="User.DOE_RPASPermit" type="datetime"
+                        value="@(
+        Model.User.DOE_RPASPermit == null ? DateTime.UtcNow.ToString("dd-MMM-yyyy") :
+        ((DateTime)(Model.User.DOE_RPASPermit)).ToString("dd-MMM-yyyy"))">
+                        @Html.ValidationMessageFor(model => model.User.DOE_RPASPermit, "", new { @class = "text-danger" })
+                    </div>
+                </div>
             </div>
 
             <div class="form-toolbar">
@@ -297,7 +305,7 @@
 }
 
     @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
+      
         <script type="text/javascript">
     var PhotoUploadURL = '@Url.Action("UploadFile", new { ID = 0})';
         </script>
