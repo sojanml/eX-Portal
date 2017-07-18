@@ -11,8 +11,39 @@
     <title>LiveStream</title>
 </head>
 <body>
-    <div> 
-
-    </div>
+    <div id="FlightVideo"></div>
 </body>
 </html>
+
+
+@section scripts {
+<script type="text/javascript" src="~/jwplayer/jwplayer.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var _FlightVideoPlayer = null;
+            InitVideos();
+        });
+
+
+        function InitVideos() {
+            
+
+            var VideoSetup = {
+                width: 240,
+                height: 160,
+                description: 'Click on play to start video.',
+                mediaid: 'b669e4e759db46e996db1432cdff433c',
+                file: "video.flv",
+                streamer: "http://10.132.9.25/live/test",
+            };
+
+            jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";
+            _FlightVideoPlayer = jwplayer("FlightVideo");
+            _FlightVideoPlayer.setup(VideoSetup);
+
+            //playerInstance.on("play", fn_on_play);
+            //playerInstance.on("pause", fn_on_pause);
+        }
+    </script>
+
+    }
