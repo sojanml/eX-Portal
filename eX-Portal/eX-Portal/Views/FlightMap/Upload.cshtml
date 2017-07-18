@@ -1,0 +1,40 @@
+﻿@{
+  ViewBag.Title = $"Upload Videos to Flights";  
+}
+
+
+<section class="top-space">
+  <div id="FirstSection" style="min-height:500px;" class="column column-half">
+    <div id="BulkUploadImages">
+      <div class="title-bar">
+        Video Upload
+        <span id="btnAddCustomer" class="button" style="display:inline-block;">
+          <a href="@Url.Action("Index", "FlightMap", new { })">Flight Map</a>
+        </span>
+      </div>
+
+      <ul id="BulkImages"></ul>
+
+      <div class="form-group-row">
+        <form method="post" id="frmImages" name="frmImages">
+          <input name="AgriImage" id="AgriImage" type="file" multiple />
+          <input style="float:right" name="btnImage" id="btnImage" type="submit" value="upload" />
+        </form>
+      </div>
+
+      <ul id="FileQueue"></ul>
+
+    </div>
+
+  </div>
+</section>
+
+
+
+@section scripts {
+  <script type="text/javascript" src="~/Scripts/AgricultureBulkUpload.js"></script>
+}
+
+@section header {
+  @Scripts.Render("~/bundles/jqueryval")
+}

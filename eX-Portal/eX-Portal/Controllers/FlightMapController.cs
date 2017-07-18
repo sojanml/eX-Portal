@@ -128,23 +128,23 @@ namespace eX_Portal.Controllers {
 
       if (exLogic.User.hasAccess("DRONE.VIEWALL") || exLogic.User.hasAccess("DRONE.MANAGE")) {
         //no permission check
-      } else {                           
+      } else {
         //Check the drone is in user account
-        int DroneID =Util.toInt(ctx.DroneFlights.Where(x => x.ID == FlightID).Select(x => x.DroneID).FirstOrDefault());
+        int DroneID = Util.toInt(ctx.DroneFlights.Where(x => x.ID == FlightID).Select(x => x.DroneID).FirstOrDefault());
         int AccID = Util.getAccountID();
-        bool CheckValid = ctx.MSTR_Drone.Where(x => x.DroneId == DroneID && x.AccountID == AccID).Count() > 0 ? true:false ;
-        if (!CheckValid )
+        bool CheckValid = ctx.MSTR_Drone.Where(x => x.DroneId == DroneID && x.AccountID == AccID).Count() > 0 ? true : false;
+        if (!CheckValid)
           return RedirectToAction("NoAccess", "Home");
       }
       var TheMap = new FlightMap();
-               
+
       TheMap.GetInformation(FlightID);
-      if(!TheMap.IsLive) {
-          if (!exLogic.User.hasAccess("FLIGHT.ARCHIVE"))
-              return RedirectToAction("NoAccess", "Home");
+      if (!TheMap.IsLive) {
+        if (!exLogic.User.hasAccess("FLIGHT.ARCHIVE"))
+          return RedirectToAction("NoAccess", "Home");
       }
       return View(TheMap);
-          
+
     }
 
     [HttpGet]
@@ -214,9 +214,13 @@ namespace eX_Portal.Controllers {
       return Json(TheMap.ChartSummaryData(FlightID), JsonRequestBehavior.AllowGet);
     }
 
-    
+
+    public ActionResult Upload() {
+      return View();
+    }
+
     public ActionResult Notify([Bind(Prefix = "ID")] String RequestAction, NotifyParser TheParser) {
-      String RefFile = Server.MapPath("/Upload/Notify.log");      
+      String RefFile = Server.MapPath("/Upload/Notify.log");
       using (System.IO.StreamWriter sw = System.IO.File.AppendText(RefFile)) {
         sw.WriteLine($"Date: {DateTime.Now.ToLongDateString()}  {DateTime.Now.ToLongTimeString()}");
         sw.WriteLine(Request.Form);
@@ -224,32 +228,29 @@ namespace eX_Portal.Controllers {
         sw.WriteLine("");
       }
 
-      switch (TheParser.call)
-        {
-                case "publish":
-                    int uservalid = exLogic.User.StreamKeyValidation(TheParser.key);
-                    
-                    if(uservalid>0)
-                    {
-                        int userID = exLogic.User.GetKeyUserId(TheParser.key);
-                        if (exLogic.User.hasAccessUser("STREAM.VIDEO", userID))
-                            return new HttpStatusCodeResult(HttpStatusCode.OK);
-                        else
-                            return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-                    }
-                    break;
-                case "record_done":
-                    TheParser.RequestAction = RequestAction;
-                    TheParser.Assign(ctx);
-                    break;
-        }
+      switch (TheParser.call) {
+      case "publish":
+        int uservalid = exLogic.User.StreamKeyValidation(TheParser.key);
 
-      
+        if (uservalid > 0) {
+          int userID = exLogic.User.GetKeyUserId(TheParser.key);
+          if (exLogic.User.hasAccessUser("STREAM.VIDEO", userID))
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+          else
+            return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+        }
+        break;
+      case "record_done":
+        TheParser.RequestAction = RequestAction;
+        TheParser.Assign(ctx);
+        break;
+      }
+
+
       //NotifyParser TheParser = (NotifyParser)Info;
-      
+
 
       return Json(TheParser, JsonRequestBehavior.AllowGet);
     }
   }
 }
- 
