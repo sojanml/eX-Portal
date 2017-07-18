@@ -1182,10 +1182,12 @@
     <Content Include="video-js\lang\zh-TW.js" />
     <Content Include="video-js\video-js.css" />
     <Content Include="video-js\video-js.min.css" />
+    <Content Include="video-js\video-js.swf" />
     <Content Include="video-js\video.cjs.js" />
     <Content Include="video-js\video.es.js" />
     <Content Include="video-js\video.js" />
     <Content Include="video-js\video.min.js" />
+    <Content Include="video-js\videojs-contrib-hls.min.js" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
