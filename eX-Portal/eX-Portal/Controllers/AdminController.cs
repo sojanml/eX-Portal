@@ -377,7 +377,7 @@ namespace eX_Portal.Controllers {
       ,[MobileNo] as [Mobile No.]
       ,[OfficeNo] as [Office No.]    
       ,[ContactName] as [Contact Person]     
-        FROM[ExponentPortal].[dbo].[MSTR_Account] WHERE AccountID=" + AccountID; ;
+        FROM [MSTR_Account] WHERE AccountID=" + AccountID; ;
 
         qDetailView nView = new qDetailView(SQL);
       return nView.getTable();

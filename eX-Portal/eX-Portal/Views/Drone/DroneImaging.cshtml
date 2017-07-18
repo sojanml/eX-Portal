@@ -41,7 +41,7 @@
 @section Scripts{
     <script type="text/javascript">
       var UploadDroneURL = '@Url.Action("UploadDroneFile","Drone", new { ID = ViewBag.DroneID, DocumentType="Drone Image"})';
-        var DeleteDroneURL = '@Url.Action("DeleteDroneFile", "Drone",new { ID = ViewBag.DroneID, DocumentType="Drone Image"})';
+        var DeleteURL = '@Url.Action("DeleteDroneFile", "Drone",new { ID = ViewBag.DroneID, DocumentType="Drone Image"})';
 
       @*var GpsTags = [
       @foreach (var item in Model) {<text>

@@ -2294,8 +2294,7 @@ namespace eX_Portal.Controllers {
                             GroundStaffUserId=" + flightsetupvm.GcaApproval.PilotUserId + @",
                             NotificationEmails='" + flightsetupvm.GcaApproval.NotificationEmails + @"',
                             clientname='" + flightsetupvm.GcaApproval.ClientName + @"',
-                            flighttypeID="+flightsetupvm.GcaApproval.FlightTypeID+ @",
-                            IsUseCamara="+flightsetupvm.GcaApproval.IsUseCamara+@"
+                            flighttypeID="+flightsetupvm.GcaApproval.FlightTypeID+ @"
                            where 
                             ApprovalID=" + ApprovalID;
                     }
