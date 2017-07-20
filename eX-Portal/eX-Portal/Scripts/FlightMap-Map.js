@@ -33,6 +33,7 @@ $(document).ready(function () {
 
 });
 
+
 function LoadPolygons() {
   var InnerPolyPath = ToPath(Boundaries[0]);
   var OuterPath = ToPath(Boundaries[1]);

@@ -261,6 +261,7 @@
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TrafficController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\VideoController.cs" />
     <Compile Include="exLogic\Ajith.Util.cs" />
     <Compile Include="exLogic\BlackBox.cs" />
     <Compile Include="exLogic\Blessy.Util.cs" />
@@ -932,6 +933,7 @@
     </Content>
     <Content Include="red.png" />
     <Content Include="ReportsManager\WebForm1.aspx" />
+    <Content Include="Scripts\ADSB-FullScreen.js" />
     <Content Include="Scripts\ADSB-Map.js" />
     <Content Include="Scripts\ADSB.js" />
     <Content Include="Scripts\ADSBDashboard.js" />
@@ -1208,6 +1210,7 @@
     <Content Include="Views\Admin\ProfileMenuGen.cshtml" />
     <Content Include="Views\Admin\Profiles.cshtml" />
     <Content Include="Views\Admin\SMS.cshtml" />
+    <Content Include="Views\Adsb\Dashboard.cshtml" />
     <Content Include="Views\BlackBox\Decommission.cshtml" />
     <Content Include="Views\BlackBox\Detail.cshtml" />
     <Content Include="Views\BlackBox\Index.cshtml" />
@@ -1539,7 +1542,6 @@
     <Content Include="Views\Test\Test.cshtml" />
     <Content Include="Views\Traffic\Index.cshtml" />
     <Content Include="Views\Traffic\Detail.cshtml" />
-    <Content Include="Views\Adsb\Dashboard.cshtml" />
     <Content Include="Views\Traffic\Live.cshtml" />
     <Content Include="temp\test.json" />
     <Content Include="Views\Agriculture\Index.cshtml" />
@@ -1573,6 +1575,8 @@
     <Content Include="video-js\font\VideoJS.eot" />
     <Content Include="video-js\font\VideoJS.ttf" />
     <Content Include="video-js\font\VideoJS.woff" />
+    <Content Include="Views\Video\LiveStream.cshtml" />
+    <Content Include="Views\Adsb\FullScreen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

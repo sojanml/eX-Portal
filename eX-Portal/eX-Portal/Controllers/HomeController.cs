@@ -8,16 +8,18 @@ using eX_Portal.Models;
 using Exponent.ADSB;
 
 namespace eX_Portal.Controllers {
-  public class HomeController :Controller {
+  public class HomeController : Controller {
 
     //[OutputCache(Duration = 3600, VaryByCustom = "User")]
     public ActionResult Index() {
       //if (!exLogic.User.hasAccess("DRONE")) return RedirectToAction("NoAccess", "Home")
-      ViewBag.DashBoard = Util.getDashboard();
-            //if (Util.getLoginUserID() == 2)
-            //    return RedirectToAction("Dashboard", "ADSB");
-            //else
-                return View();
+      String DashBoard = Util.getDashboard();
+      ViewBag.DashBoard = DashBoard;
+      switch (DashBoard.ToLower()) {
+      case "adsb":
+        return RedirectToAction("Dashboard", "ADSB");
+      }        
+      return View();
     }
 
     public ActionResult About() {
@@ -43,9 +45,9 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult Demo(String ID = "") {
-      using(ExponentPortalEntities db = new ExponentPortalEntities()) {
+      using (ExponentPortalEntities db = new ExponentPortalEntities()) {
         var CMS = db.ContentManagements.Where(e => e.CmsRefName == ID);
-        if(CMS.Any()) {
+        if (CMS.Any()) {
           var CMSItem = CMS.First();
           ViewBag.Title = CMSItem.PageTitle;
           return View(CMSItem);

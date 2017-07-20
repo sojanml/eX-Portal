@@ -26,7 +26,7 @@ $(document).ready(function () {
 });
 
 function ShowHideLines() {
-  var Breach = $('input#BreachLine').is(':checked');
+  var Breach = $('input#BreachLine').length > 0 ? $('input#BreachLine').is(':checked') : InitQuery.BreachLine == 1;
   var Alert = $('input#AlertLine').is(':checked');
   _ADSBLayer.ShowHideLines(Breach, Alert);
   IsQueryChanged = 0;
@@ -108,9 +108,13 @@ var StatusInfo = {
 }
 
 function getADSB(ADSBObj) {
-  var QueryData =
-    $('input.spinner, input.query, input.QueryModel').serialize()
-    + '&IsQueryChanged=' + IsQueryChanged;
+  var QueryData = $('input.spinner, input.query, input.QueryModel').serialize();
+  if (QueryData == "") {
+    QueryData = window.location.search.substr(1);
+  } else {
+    QueryData = QueryData + '&IsQueryChanged=' + IsQueryChanged;
+  }
+
   $.ajax({
     type: "GET",
     url: '/ADSB?' + QueryData,
@@ -319,8 +323,9 @@ ADSBOverlay.prototype.DrawLinesTo = function (DroneID) {
   }
 
 
-  var IsBreachLines = $('input#BreachLine').is(':checked');
-  var IsAlertLines = $('input#AlertLine').is(':checked');
+  var IsBreachLines = $('input#BreachLine').length > 0 ? $('input#BreachLine').is(':checked') : InitQuery.BreachLine == '1';
+  var IsAlertLines = $('input#AlertLine').length > 0 ? $('input#AlertLine').is(':checked') : InitQuery.AlertLine == '1';
+  
 
   this.ShowHideLines(IsBreachLines, IsAlertLines);
 

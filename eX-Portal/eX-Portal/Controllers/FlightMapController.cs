@@ -3,8 +3,10 @@ using eX_Portal.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -145,6 +147,44 @@ namespace eX_Portal.Controllers {
       }
       return View(TheMap);
 
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> Export([Bind(Prefix ="ID")]int FlightID = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT.MAP")) {
+        return HttpNotFound("You do not have acces to this section");
+      }
+
+      using (var tempFiles = new System.CodeDom.Compiler.TempFileCollection()) {
+        string ExportFileName = tempFiles.AddExtension("csv");
+        // do something with the file here 
+        using (System.IO.StreamWriter stream = new System.IO.StreamWriter(ExportFileName)) {
+          var query = from d in ctx.FlightMapDatas
+                      where d.FlightID == FlightID
+                      orderby d.ReadTime
+                      select new {
+                        ReadTime = (DateTime)d.ReadTime,
+                        Lat = d.Latitude,
+                        Lng = d.Longitude,
+                        Altitude = d.Altitude,
+                        Speed = d.Speed,
+                        Satellite = d.Satellites,
+                        Pitch = d.Pitch,
+                        Roll = d.Roll,
+                        Heading = d.Heading,
+                        Voltage = d.voltage,
+                        Distance = d.Distance
+                      };
+          if(query.Any()) {
+           await stream.WriteLineAsync("DateTime,Lat,Lng,Altitude,Speed,Satellite,Pitch,Roll,Heading,Voltage,Distance");
+            foreach (var row in query.ToList()) {
+              await stream.WriteLineAsync($"{row.ReadTime.ToString("yyyy-MM-dd HH:mm:ss")},{row.Lat},{row.Lng},{row.Altitude},{row.Speed},{row.Satellite},{row.Pitch},{row.Roll},{row.Heading},{row.Voltage},{row.Distance}");
+            }
+          }//if(query.Any())
+        }//using (System.IO.StreamWriter stream)
+
+        return File(System.IO.File.OpenRead(ExportFileName), "text/csv", $"Flight-{FlightID}.csv");
+      }//using (var tempFiles)
     }
 
     [HttpGet]

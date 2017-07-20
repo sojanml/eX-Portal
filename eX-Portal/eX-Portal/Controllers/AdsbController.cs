@@ -39,6 +39,17 @@ namespace eX_Portal.Controllers {
 
       return View(Params);
     }
+
+    [HttpGet]
+    public ActionResult FullScreen(Exponent.ADSB.ADSBQuery Params) {
+      using (SqlConnection CN = new SqlConnection(DSN)) {
+        CN.Open();
+        Params.GetDefaults(CN);
+        CN.Close();
+      }
+
+      return View(Params);
+    }
   }
 
 

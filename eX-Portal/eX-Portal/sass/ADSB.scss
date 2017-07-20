@@ -1,4 +1,5 @@
 @import "compass";
+$TextColor: #292929;
 
 $SpaceBetweenColumns: 10px;
 $TotalColumns: 12;
@@ -63,10 +64,32 @@ span.icon {
   font-family: FontAwesome;
 }
 
+#adsb_map_holder,
 #adsb_map {
   min-height: 460px;
 }
+#adsb_map_holder {
+  position: relative;
+  display: block;
 
+  div.toolbar {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    display: block;
+    padding: 8px;
+    color: silver;
+    background-color: white;
+    border-radius: 3px;
+    &:hover {
+      background-color: $MenuColor;
+    }
+    a {
+      text-decoration: none;
+      color: $TextColor
+    }
+  }
+}
 div.label {
   display: inline-block;
   padding: 0px 5px 0px 5px;
@@ -355,7 +378,7 @@ body, html {
   padding: 0px;
   margin: 0px;
   font-family: OpenSans;
-  color: #292929;
+  color: $TextColor;
   text-transform: uppercase;
 }
 

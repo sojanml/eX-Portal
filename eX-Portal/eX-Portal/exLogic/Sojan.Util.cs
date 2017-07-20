@@ -553,6 +553,17 @@ namespace eX_Portal.exLogic {
       return UserID;
     }
 
+    public static String getUserName() {
+      using (var ctx = new ExponentPortalEntities()) {
+        int UserID = getLoginUserID();
+        var q = from d in ctx.MSTR_User where d.UserId == UserID select d.UserName;
+        if (q.Any())
+          return q.FirstOrDefault().ToString();
+      }
+      return String.Empty;
+    }
+
+
     public static int getAccountID() {
       HttpSessionState Session = HttpContext.Current.Session;
       int AccountID = 0;
