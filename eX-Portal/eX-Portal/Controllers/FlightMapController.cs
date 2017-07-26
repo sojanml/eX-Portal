@@ -270,13 +270,35 @@ namespace eX_Portal.Controllers {
 
       switch (TheParser.call) {
       case "publish":
-        int uservalid = exLogic.User.StreamKeyValidation(TheParser.key);
-
+                   
+                    int uservalid = exLogic.User.StreamKeyValidation(TheParser.key);
+                    string DID = TheParser.name.Substring(5);
+                    TheParser.DroneID = Util.toInt(DID);
         if (uservalid > 0) {
           int userID = exLogic.User.GetKeyUserId(TheParser.key);
           if (exLogic.User.hasAccessUser("STREAM.VIDEO", userID))
+            {
+                            try
+                            {
+                                int flightID = getFlightID(TheParser.DroneID);
+                                MSTR_Drone dr = ctx.MSTR_Drone.Where(x => x.DroneId == TheParser.DroneID).Select(x=>x).FirstOrDefault();
+                                if (dr != null)
+                                { 
+                                    dr.LastFlightID = flightID;
+                                    dr.MakeID = 0;
+                                    dr.RefName = dr.DroneName;
+                                    dr.RpasSerialNo = dr.DroneName;
+                                    dr.ModelID = 0;
+                                }
+                                ctx.SaveChanges();
+                            }
+                            catch (Exception Ex)
+                            {
+                                return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
+                            }            
             return new HttpStatusCodeResult(HttpStatusCode.OK);
-          else
+            }
+            else
             return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
         }
         break;
@@ -284,7 +306,8 @@ namespace eX_Portal.Controllers {
         TheParser.RequestAction = RequestAction;
         TheParser.Assign(ctx);
         break;
-      }
+     
+       }
 
 
       //NotifyParser TheParser = (NotifyParser)Info;
@@ -292,5 +315,72 @@ namespace eX_Portal.Controllers {
 
       return Json(TheParser, JsonRequestBehavior.AllowGet);
     }
-  }
+
+        public int getFlightID( int DroneID)
+        {
+            int FlightID = 0;
+            String SQL;
+            String TimeOutDate = System.DateTime.UtcNow.AddMinutes(-5).ToString("yyyy-MM-dd HH:mm:ss");
+            String ReadTime = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+
+          
+
+            // Check 2 - If no flight is available with BBFlightID
+            // then find the last flight created before 120 mins
+            if (FlightID <= 0)
+            {
+                SQL = "SELECT TOP 1 [ID]\n" +
+                  "FROM\n" +
+                  "  [DroneFlight]\n" +
+                  "WHERE\n" +
+                  "  DroneId = " + DroneID + " and\n" +
+                  "  FlightDate BETWEEN '" + TimeOutDate + "' AND '" + ReadTime + "' \n" +
+                  "ORDER BY CreatedOn DESC";
+               
+                FlightID =Util.getDBInt( SQL);
+
+                
+                
+            } 
+
+            //Check 3 - No flight is created with in 120 Mins before receive
+            //          Black Box data, then create a new flight with black box data
+            if (FlightID <= 0)
+            {
+               FlightID = CreateFlight( DroneID);
+                FlightID = FlightID;
+            }//if (FlightID <=  0)
+
+            return FlightID;
+        }
+        public int CreateFlight(int DroneID)
+        {
+            int FlightID = 0;
+            int Pilotid = 0, GSCID = 0;
+
+            String Dt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+            var checkdefault = ctx.MSTR_Drone_Setup.Where(x => x.DroneId == DroneID).Select(x=>x).FirstOrDefault();
+            
+            Pilotid = checkdefault.PilotUserId==null?0:Util.toInt(checkdefault.PilotUserId);
+            GSCID = checkdefault.GroundStaffUserId == null ? 0 : Util.toInt(checkdefault.GroundStaffUserId);
+
+            DroneFlight df = new DroneFlight();
+            df.DroneID = DroneID;
+            df.PilotID = Pilotid;
+            df.CreatedOn = System.DateTime.UtcNow;
+            df.FlightDate = System.DateTime.UtcNow;
+            ctx.DroneFlights.Add(df);
+            ctx.SaveChanges();
+            DroneFlight dft = ctx.DroneFlights.Where(x => x.CreatedOn == df.CreatedOn && x.DroneID==df.DroneID).FirstOrDefault();
+            if(df !=null)
+            FlightID = df.ID;
+
+            return FlightID;
+        }//using (SqlTransaction sqlTrans)
+
+
+
+
+    }//CreateFlight()
+    
 }

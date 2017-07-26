@@ -114,6 +114,45 @@ namespace eX_Portal.Controllers {
       return Json(Row, JsonRequestBehavior.AllowGet);
     }
 
+    public ActionResult TrafficMonitoring()
+        {
+            ViewBag.Title = "Trafic Monitoring";
+          //  if (!exLogic.User.hasAccess("TRAFFIC.LIVE")) return RedirectToAction("NoAccess", "Home");
 
+            string SQL = $@"Select [MonitorID]  [Monitor_ID]
+                          ,[CreatedDate],
+                            [DD]
+                          ,[DR]
+                          ,[DU]
+                          ,[DL]
+                          ,[RD]
+                          ,[RR]
+                          ,[RU]
+                          ,[RL]
+                          ,[UD]
+                          ,[UR]
+                          ,[UU]
+                          ,[UL]
+                          ,[LD]
+                          ,[LR]
+                          ,[LU]
+                          ,[LL],FlightID,
+                            Count(*) Over() as _TotalRecords,
+                           [MonitorID] as _PKey
+                      FROM [MSTR_TrafficMonitor]";
+            qView nView = new qView(SQL);
+            
+            nView.addMenu("View", Url.Action("dmat", new { FlightID = "FlightID" }));
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+            
+        }
   }
 }

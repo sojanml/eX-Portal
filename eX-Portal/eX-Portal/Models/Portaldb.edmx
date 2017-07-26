@@ -972,6 +972,19 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedOn" Type="datetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DCAAPortal.dbo.MSTR_TrafficMonitor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="MSTR_TrafficMonitor">
+          <Key>
+            <PropertyRef Name="MonitorID" />
+            <PropertyRef Name="CreatedDate" />
+          </Key>
+          <Property Name="MonitorID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UniqueID" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+          <Property Name="FlightID" Type="int" />
+        </EntityType>
         <EntityType Name="MSTR_User">
           <Key>
             <PropertyRef Name="UserId" />
@@ -1461,6 +1474,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="FlightID" Type="int" Nullable="false" />
+          <Property Name="UniqueID" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="UserLog">
           <Key>
@@ -1651,6 +1665,15 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
     [ip2location].[country_code] AS [country_code], 
     [ip2location].[country_name] AS [country_name]
     FROM [dbo].[ip2location] AS [ip2location]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="MSTR_TrafficMonitor" EntityType="Self.MSTR_TrafficMonitor" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MSTR_TrafficMonitor].[MonitorID] AS [MonitorID], 
+    [MSTR_TrafficMonitor].[UniqueID] AS [UniqueID], 
+    [MSTR_TrafficMonitor].[CreatedDate] AS [CreatedDate], 
+    [MSTR_TrafficMonitor].[Remarks] AS [Remarks], 
+    [MSTR_TrafficMonitor].[FlightID] AS [FlightID]
+    FROM [dbo].[MSTR_TrafficMonitor] AS [MSTR_TrafficMonitor]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayloadDataGrid" EntityType="Self.PayloadDataGrid" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -2175,7 +2198,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="BlackBoxLog1" EntityType="ExponentPortalModel.BlackBoxLog1" />
           <EntitySet Name="DroneDatas" EntityType="ExponentPortalModel.DroneData" />
           <EntitySet Name="FlightMapDatas" EntityType="ExponentPortalModel.FlightMapData" />
-          <EntitySet Name="GCA_Approval" EntityType="ExponentPortalModel.GCA_Approval" />
           <EntitySet Name="LUP_Drone" EntityType="ExponentPortalModel.LUP_Drone" />
           <EntitySet Name="MSTR_BlackBox" EntityType="ExponentPortalModel.MSTR_BlackBox" />
           <EntitySet Name="BlackBoxTransactions" EntityType="ExponentPortalModel.BlackBoxTransaction" />
@@ -2197,7 +2219,9 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="PayLoadDataRFIDs" EntityType="ExponentPortalModel.PayLoadDataRFID" />
           <EntitySet Name="PayloadDataGrids" EntityType="ExponentPortalModel.PayloadDataGrid" />
           <EntitySet Name="PayLoadDatas" EntityType="ExponentPortalModel.PayLoadData" />
-          <EntitySet Name="PayloadDataGridLines" EntityType="ExponentPortalModel.PayloadDataGridLine" />
+          <EntitySet Name="PayloadDataGridLines" EntityType="ExponentPortalModel.PayloadDataGridLines" />
+          <EntitySet Name="MSTR_TrafficMonitor" EntityType="ExponentPortalModel.MSTR_TrafficMonitor" />
+          <EntitySet Name="GCA_Approval" EntityType="ExponentPortalModel.GCA_Approval" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -3076,42 +3100,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="OtherFlightIDs" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="IsAdsbProcessed" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="GCA_Approval">
-          <Key>
-            <PropertyRef Name="ApprovalID" />
-          </Key>
-          <Property Name="ApprovalID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ApprovalName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
-          <Property Name="StartDate" Type="DateTime" Precision="3" />
-          <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="Coordinates" Type="String" MaxLength="750" FixedLength="false" Unicode="true" />
-          <Property Name="Polygon" Type="Geography" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="DroneID" Type="Int32" />
-          <Property Name="ApprovalFileUrl" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="EndTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="StartTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="InnerBoundary" Type="Geography" />
-          <Property Name="InnerBoundaryCoord" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BoundaryInMeters" Type="Int32" />
-          <Property Name="MinAltitude" Type="Int32" />
-          <Property Name="MaxAltitude" Type="Int32" />
-          <Property Name="MinDefault" Type="Int32" />
-          <Property Name="MaxDefault" Type="Int32" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="IsUseCamara" Type="Boolean" Nullable="false" />
-          <Property Name="MOD_ApprovalURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ApprovalStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ApprovalRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="PilotUserId" Type="Int32" />
-          <Property Name="GroundStaffUserId" Type="Int32" />
-          <Property Name="NotificationEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-          <Property Name="CameraId" Type="Int32" />
-          <Property Name="RpasApprovalRefNum" Type="Int32" Nullable="false" />
-          <Property Name="FlightTypeID" Type="Int32" />
-          <Property Name="ClientName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="LUP_Drone">
           <Key>
             <PropertyRef Name="Id" />
@@ -3357,6 +3345,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="FlightID" Type="Int32" Nullable="false" />
+          <Property Name="UniqueID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DCAA_PermitDetail">
           <Key>
@@ -3450,7 +3439,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="ColumnNumber" Type="Int32" />
           <Property Name="CellID" Type="Int32" />
         </EntityType>
-        <EntityType Name="PayloadDataGridLine">
+        <EntityType Name="PayloadDataGridLines">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -3461,6 +3450,53 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="SLng" Type="Decimal" Nullable="false" Precision="18" Scale="8" />
           <Property Name="ELat" Type="Decimal" Nullable="false" Precision="18" Scale="8" />
           <Property Name="ELng" Type="Decimal" Nullable="false" Precision="18" Scale="8" />
+        </EntityType>
+        <EntityType Name="MSTR_TrafficMonitor">
+          <Key>
+            <PropertyRef Name="MonitorID" />
+            <PropertyRef Name="CreatedDate" />
+          </Key>
+          <Property Name="MonitorID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UniqueID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="GCA_Approval">
+          <Key>
+            <PropertyRef Name="ApprovalID" />
+          </Key>
+          <Property Name="ApprovalID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApprovalName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="Coordinates" Type="String" MaxLength="750" FixedLength="false" Unicode="true" />
+          <Property Name="Polygon" Type="Geography" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="DroneID" Type="Int32" />
+          <Property Name="ApprovalFileUrl" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="EndTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="StartTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="InnerBoundary" Type="Geography" />
+          <Property Name="InnerBoundaryCoord" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BoundaryInMeters" Type="Int32" />
+          <Property Name="MinAltitude" Type="Int32" />
+          <Property Name="MaxAltitude" Type="Int32" />
+          <Property Name="MinDefault" Type="Int32" />
+          <Property Name="MaxDefault" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="IsUseCamara" Type="Boolean" Nullable="false" />
+          <Property Name="MOD_ApprovalURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PilotUserId" Type="Int32" />
+          <Property Name="GroundStaffUserId" Type="Int32" />
+          <Property Name="NotificationEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="CameraId" Type="Int32" />
+          <Property Name="RpasApprovalRefNum" Type="Int32" Nullable="false" />
+          <Property Name="ClientName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FlightTypeID" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4635,43 +4671,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="GCA_Approval">
-            <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
-              <MappingFragment StoreEntitySet="GCA_Approval">
-                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
-                <ScalarProperty Name="FlightTypeID" ColumnName="FlightTypeID" />
-                <ScalarProperty Name="RpasApprovalRefNum" ColumnName="RpasApprovalRefNum" />
-                <ScalarProperty Name="CameraId" ColumnName="CameraId" />
-                <ScalarProperty Name="NotificationEmails" ColumnName="NotificationEmails" />
-                <ScalarProperty Name="GroundStaffUserId" ColumnName="GroundStaffUserId" />
-                <ScalarProperty Name="PilotUserId" ColumnName="PilotUserId" />
-                <ScalarProperty Name="ApprovalRemarks" ColumnName="ApprovalRemarks" />
-                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
-                <ScalarProperty Name="MOD_ApprovalURL" ColumnName="MOD_ApprovalURL" />
-                <ScalarProperty Name="IsUseCamara" ColumnName="IsUseCamara" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="MaxDefault" ColumnName="MaxDefault" />
-                <ScalarProperty Name="MinDefault" ColumnName="MinDefault" />
-                <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
-                <ScalarProperty Name="MinAltitude" ColumnName="MinAltitude" />
-                <ScalarProperty Name="BoundaryInMeters" ColumnName="BoundaryInMeters" />
-                <ScalarProperty Name="InnerBoundaryCoord" ColumnName="InnerBoundaryCoord" />
-                <ScalarProperty Name="InnerBoundary" ColumnName="InnerBoundary" />
-                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
-                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
-                <ScalarProperty Name="ApprovalFileUrl" ColumnName="ApprovalFileUrl" />
-                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="Polygon" ColumnName="Polygon" />
-                <ScalarProperty Name="Coordinates" ColumnName="Coordinates" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
-                <ScalarProperty Name="ApprovalName" ColumnName="ApprovalName" />
-                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="LUP_Drone">
             <EntityTypeMapping TypeName="ExponentPortalModel.LUP_Drone">
               <MappingFragment StoreEntitySet="LUP_Drone">
@@ -4902,6 +4901,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="TrafficMonitors">
             <EntityTypeMapping TypeName="ExponentPortalModel.TrafficMonitor">
               <MappingFragment StoreEntitySet="TrafficMonitor">
+                <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
                 <ScalarProperty Name="FlightID" ColumnName="FlightID" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -5029,7 +5029,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PayloadDataGridLines">
-            <EntityTypeMapping TypeName="ExponentPortalModel.PayloadDataGridLine">
+            <EntityTypeMapping TypeName="ExponentPortalModel.PayloadDataGridLines">
               <MappingFragment StoreEntitySet="PayloadDataGridLines">
                 <ScalarProperty Name="ELng" ColumnName="ELng" />
                 <ScalarProperty Name="ELat" ColumnName="ELat" />
@@ -5038,6 +5038,54 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="RowOrCol" ColumnName="RowOrCol" />
                 <ScalarProperty Name="FlightUniqueID" ColumnName="FlightUniqueID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_TrafficMonitor">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_TrafficMonitor">
+              <MappingFragment StoreEntitySet="MSTR_TrafficMonitor">
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
+                <ScalarProperty Name="MonitorID" ColumnName="MonitorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GCA_Approval">
+            <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
+              <MappingFragment StoreEntitySet="GCA_Approval">
+                <ScalarProperty Name="FlightTypeID" ColumnName="FlightTypeID" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="RpasApprovalRefNum" ColumnName="RpasApprovalRefNum" />
+                <ScalarProperty Name="CameraId" ColumnName="CameraId" />
+                <ScalarProperty Name="NotificationEmails" ColumnName="NotificationEmails" />
+                <ScalarProperty Name="GroundStaffUserId" ColumnName="GroundStaffUserId" />
+                <ScalarProperty Name="PilotUserId" ColumnName="PilotUserId" />
+                <ScalarProperty Name="ApprovalRemarks" ColumnName="ApprovalRemarks" />
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+                <ScalarProperty Name="MOD_ApprovalURL" ColumnName="MOD_ApprovalURL" />
+                <ScalarProperty Name="IsUseCamara" ColumnName="IsUseCamara" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="MaxDefault" ColumnName="MaxDefault" />
+                <ScalarProperty Name="MinDefault" ColumnName="MinDefault" />
+                <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
+                <ScalarProperty Name="MinAltitude" ColumnName="MinAltitude" />
+                <ScalarProperty Name="BoundaryInMeters" ColumnName="BoundaryInMeters" />
+                <ScalarProperty Name="InnerBoundaryCoord" ColumnName="InnerBoundaryCoord" />
+                <ScalarProperty Name="InnerBoundary" ColumnName="InnerBoundary" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="ApprovalFileUrl" ColumnName="ApprovalFileUrl" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Polygon" ColumnName="Polygon" />
+                <ScalarProperty Name="Coordinates" ColumnName="Coordinates" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="ApprovalName" ColumnName="ApprovalName" />
+                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

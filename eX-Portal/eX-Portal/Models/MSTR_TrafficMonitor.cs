@@ -12,14 +12,12 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PayloadDataGridLine
+    public partial class MSTR_TrafficMonitor
     {
-        public long ID { get; set; }
-        public string FlightUniqueID { get; set; }
-        public string RowOrCol { get; set; }
-        public decimal SLat { get; set; }
-        public decimal SLng { get; set; }
-        public decimal ELat { get; set; }
-        public decimal ELng { get; set; }
+        public long MonitorID { get; set; }
+        public string UniqueID { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public string Remarks { get; set; }
+        public Nullable<int> FlightID { get; set; }
     }
 }

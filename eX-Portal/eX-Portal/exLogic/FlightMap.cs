@@ -36,11 +36,16 @@ namespace eX_Portal.exLogic {
       }
       ctx.Database.Connection.Open();
       FlightID = GetFlightID(ctx);
+      if(FlightID<=0)
+            {
+            int? fid = ctx.MSTR_Drone.Where(x => x.DroneId == DroneID).Select(x => x.LastFlightID).FirstOrDefault();
+            FlightID = fid == null ? 0 : Util.toInt(fid);
+            }
       if(FlightID > 0) {
         SetFlightID(ctx);
         AssignStatus = true;
         return true;
-      }
+        }
 
       return false;
     }
