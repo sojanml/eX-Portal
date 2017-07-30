@@ -312,13 +312,16 @@ namespace eX_Portal.Controllers {
                           ,m.[BlackBoxSerial]
                           ,m.[BlackBoxName]
                           ,m.[CurrentStatus]
-                          ,isnull(u.Firstname,'') +' '+ isnull(u.lastname,'') as CreatedBy
-                          ,d.RpasSerialNo
+                          ,isnull(u.Firstname,'') +' '+ isnull(u.lastname,'') as Pilot,
+                           MSTR_Account.name as Organization
+                          ,d.DroneName
                             , Count(*) Over() as _TotalRecords
                       FROM  MSTR_BlackBox m left join mstr_user u
-                      on m.CreatedBy = u.userid
+                      on m.currentUserID = u.userid
                       left join mstr_drone d
-                      on d.droneid = m.currentDroneID where m.[IsActive] = 1";
+                      on d.droneid = m.currentDroneID
+                     left join MSTR_Account on u.Accountid=MSTR_Account.AccountID  
+                     where m.[IsActive] = 1 ";
       qView nView = new qView(SQL);
       nView.addMenu("Detail", Url.Action("BlackBoxDetails", new { ID = "_PKey" }));
       nView.addMenu("Edit", Url.Action("Edit", new { ID = "_PKey" }));
@@ -776,7 +779,7 @@ namespace eX_Portal.Controllers {
       int bbtransctionid = Util.InsertSQL(SQL);
 
 
-      SQL = "update MSTR_BlackBox  set [LastRentalId]=" + bbtransctionid + ", CurrentStatus='OUT',CurrentUserID = '" + Util.getLoginUserID() + "',CurrentDroneID=" + Btx.DroneID + " where BlackBoxID = " + BlackBoxID;
+      SQL = "update MSTR_BlackBox  set [LastRentalId]=" + bbtransctionid + ", CurrentStatus='OUT',CurrentUserID = '" + Btx.UserID + "',CurrentDroneID=" + Btx.DroneID + " where BlackBoxID = " + BlackBoxID;
       int Val = Util.doSQL(SQL);
 
       SQL = "update MSTR_Drone set BlackBoxID =" + BlackBoxID + " where DroneId = " + Btx.DroneID;
