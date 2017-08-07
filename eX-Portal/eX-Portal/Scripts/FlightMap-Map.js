@@ -263,8 +263,8 @@ function InitVideos() {
   };
 
   if (IsLive) {
-   // VideoSetup.file = "rtmp:" + "//52.34.136.76/live/drone" + DroneID;
-      VideoSetup.file = "rtsp:" + "//192.168.1.123:554/main" ;
+    VideoSetup.file = "rtmp:" + "//52.34.136.76/live/drone" + DroneID;
+      //VideoSetup.file = "rtsp:" + "//192.168.1.123:554/main" ;
   } else {
     VideoSetup.playlist = GetVideoPlaylist()
   }

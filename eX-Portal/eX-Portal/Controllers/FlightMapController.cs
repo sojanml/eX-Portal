@@ -270,14 +270,15 @@ namespace eX_Portal.Controllers {
 
       switch (TheParser.call) {
       case "publish":
-                   
+
                     int uservalid = exLogic.User.StreamKeyValidation(TheParser.key);
                     string DID = TheParser.name.Substring(5);
                     TheParser.DroneID = Util.toInt(DID);
-        if (uservalid > 0) {
-          int userID = exLogic.User.GetKeyUserId(TheParser.key);
-          if (exLogic.User.hasAccessUser("STREAM.VIDEO", userID))
-            {
+                    if (uservalid > 0)
+                    {
+                        int userID = exLogic.User.GetKeyUserId(TheParser.key);
+                        if (exLogic.User.hasAccessUser("STREAM.VIDEO", userID))
+                        {
                             try
                             {
                                 int flightID = getFlightID(TheParser.DroneID);
@@ -295,8 +296,8 @@ namespace eX_Portal.Controllers {
                             catch (Exception Ex)
                             {
                                 return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
-                            }            
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+                            }
+                    return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
             else
             return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
