@@ -297,12 +297,14 @@ namespace eX_Portal.Controllers {
                             {
                                 return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
                             }
-                    return new HttpStatusCodeResult(HttpStatusCode.OK);
-            }
-            else
-            return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-        }
-        break;
+                                return new HttpStatusCodeResult(HttpStatusCode.OK);
+                        }
+                        else
+                        return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                    }
+                    else
+                        return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                    break;
       case "record_done":
         TheParser.RequestAction = RequestAction;
         TheParser.Assign(ctx);
