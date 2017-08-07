@@ -17,7 +17,7 @@
     <AssemblyName>eX-Portal</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -435,6 +435,9 @@
     <Compile Include="Models\MSTR_RPAS_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MSTR_TrafficMonitor.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MSTR_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -456,7 +459,7 @@
     <Compile Include="Models\PayloadDataGrid.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PayloadDataGridLine.cs">
+    <Compile Include="Models\PayloadDataGridLines.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PayLoadDataRFID.cs">
@@ -1805,6 +1808,9 @@
     <Content Include="video-js\font\VideoJS.woff" />
     <Content Include="Views\Video\LiveStream.cshtml" />
     <Content Include="Views\Adsb\FullScreen.cshtml" />
+    <Content Include="Views\Traffic\TrafficMonitoring.cshtml" />
+    <Content Include="Views\Traffic\LPR.cshtml" />
+    <Content Include="Views\Traffic\RTA.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1869,7 +1875,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2727</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2727/</IISUrl>
+          <IISUrl>http://localhost/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
