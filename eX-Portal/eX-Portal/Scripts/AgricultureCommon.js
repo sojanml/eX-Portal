@@ -31,7 +31,7 @@ function dtFromJSON(sNetDate) {
 }
 
 function ToLocalTime(TheDate) {
-  TheDate.setMinutes(TheDate.getMinutes() + TheDate.getTimezoneOffset());
+  //TheDate.setMinutes(TheDate.getMinutes() + TheDate.getTimezoneOffset());
   return TheDate;
 }
 

@@ -27,7 +27,8 @@ $(document).ready(function () {
   LoadPolygons();
   InitChart();
   LoadMapData();
-  InitVideos();
+  //InitVideos();
+  InitVideoJs()
   if (!IsLive) LoadChartSummaryData();
   $('#FlightReplay').on("click", StartFlightReplay);
 
@@ -86,7 +87,10 @@ function StartFlightReplay() {
   //clear chart
   ClearChart();
   $('#FlightDataScroll').empty();
-  if (_FlightVideoPlayer) _FlightVideoPlayer.stop();
+  if (_FlightVideoPlayer) {
+    _FlightVideoPlayer.currentTime(0);
+    _FlightVideoPlayer.play();
+  }
 
   _ReplayIndex = 0;
   _ReplayTimer = window.setTimeout(RpasReplayTimer, 500);
@@ -97,6 +101,19 @@ function StartFlightReplay() {
   Path.clear();  
 }
 
+function ToVideoJSDate(VideoUrl) {
+  var HyphenAt = VideoUrl.indexOf('-', VideoUrl.indexOf('/MP4/'));
+  if (HyphenAt < 1) return new Date();
+  var YY = parseInt(VideoUrl.substring(HyphenAt + 1, HyphenAt + 5));
+  var MM = parseInt(VideoUrl.substring(HyphenAt + 6, HyphenAt + 8));
+  var DD = parseInt(VideoUrl.substring(HyphenAt + 9, HyphenAt + 11));
+
+  var hh = parseInt(VideoUrl.substring(HyphenAt + 12, HyphenAt + 14));
+  var mm = parseInt(VideoUrl.substring(HyphenAt + 15, HyphenAt + 17));
+  var ss = parseInt(VideoUrl.substring(HyphenAt + 18, HyphenAt + 20));
+
+  return new Date(YY, MM - 1, DD, hh, mm, ss, 0);
+}
 
 function RpasReplayTimer() {
   var thisData = _FlightData[_ReplayIndex];
@@ -110,15 +127,19 @@ function RpasReplayTimer() {
 
 
   if (_FlightVideoPlayer && _FlightVideos.length) {
+
     ReplayDelay = 200;
-    var FirstVideoDate = new Date(_FlightVideoPlayer.getPlaylistItem(_FlightVideoPlayer.getPlaylistIndex()).title);
-    var VideoPosition = _FlightVideoPlayer.getPosition();
+    //var FirstVideoDate = new Date(_FlightVideoPlayer.getPlaylistItem(_FlightVideoPlayer.getPlaylistIndex()).title);
+    var FirstVideoDate = ToVideoJSDate(_FlightVideoPlayer.playlist(0)[0].sources[0].src);
+
+    var VideoPosition = _FlightVideoPlayer.currentTime();
     var VideoPositionTime = FirstVideoDate;
     VideoPositionTime.setSeconds(FirstVideoDate.getSeconds() + VideoPosition);
     if (PositionDateTime < VideoPositionTime) {
       FastForwardTo(VideoPositionTime);    
       RpasReplayTimerShow();
-    } else {      
+    } else {    
+      /*
       var VideoState = _FlightVideoPlayer.getState();
       //console.log("Waiting at index: " + _ReplayIndex + ', VideoState: ' + VideoState);
       if (VideoState === 'error' || VideoState === "complete") {
@@ -127,8 +148,20 @@ function RpasReplayTimer() {
         _ReplayIndex++;        
       } else if (VideoState === 'idle') {
         _FlightVideoPlayer.play();
-      }  
+      }
+      */
+
+      if (_FlightVideoPlayer.paused()) {
+        _FlightVideoPlayer.play();
+        RpasReplayTimerShow();
+      } else {
+        ReplayDelay = 1000;
+        RpasReplayTimerShow();
+        _ReplayIndex++;      
+      }
     }
+ 
+
   } else {
     ReplayDelay = 1000;
     RpasReplayTimerShow();
@@ -146,6 +179,7 @@ function RpasReplayTimer() {
 }
 
 function RpasReplayTimerShow() {
+  if (_ReplayIndex >= _FlightData.length - 1) return;
   var thisData = _FlightData[_ReplayIndex];
   var Pos = new google.maps.LatLng(thisData.Lat, thisData.Lng);
   _RPASIcon.setPosition(Pos);
@@ -161,7 +195,7 @@ function RpasReplayTimerShow() {
 
 function FastForwardTo(VideoPositionTime) {
   var Path = _FlightReplayPath.getPath();  
-  while (_ReplayIndex <= _FlightData.length) {
+  while (_ReplayIndex < _FlightData.length) {
     var thisData = _FlightData[_ReplayIndex];
     var PositionDateTime = ToLocalTime(dtFromJSON(thisData.FlightTime));
     if (PositionDateTime < VideoPositionTime) {
@@ -178,6 +212,38 @@ function RpasReplayCompleted() {
   //finishing touches.
   _FlightPath.setOptions({ 'strokeOpacity': 1 });
   _FlightReplayPath.setMap(null);
+}
+
+function InitVideoJs() {
+  //<source src="http://192.168.1.101/live/test/index.m3u8" type="application/x-mpegURL" />
+
+  if ($('#FlightVideo').length < 1) {
+    return;
+  } else if (_FlightVideos.length < 1) {
+    return;
+  } 
+
+  var player = videojs('FlightVideo');
+  player.ready(function () {
+    _FlightVideoPlayer = this;
+  });
+
+  if (IsLive) {
+    //live video
+    player.playlist([{
+      src: 'http://192.168.1.101/live/test/index.m3u8',
+      type: 'application/x-mpegURL'
+    }]);
+  } else {
+    var VideoPlayList = GetVideoPlaylistJS();
+    player.playlist(VideoPlayList);
+  }
+ 
+  // Play through the playlist automatically.
+  player.playlist.autoadvance(0);
+
+
+  _FlightVideoPlayer
 }
 
 function InitVideos() {
@@ -218,6 +284,21 @@ function GetVideoPlaylist() {
     var Source = {
       sources: [{ file: VideoURL }],
       title: dtConvFromJSON(_FlightVideos[i].VideoDate, true)
+    };
+    PlaySources.push(Source);
+  }
+  return PlaySources;
+}
+
+function GetVideoPlaylistJS() {
+  var PlaySources = [];
+  for (var i = 0; i < _FlightVideos.length; i++) {
+    var VideoURL = "http://exponent-s3.s3.amazonaws.com/MP4/" + _FlightVideos[i].VideoName.replace(".flv", ".mp4");
+    var Source = {
+      sources: [{
+        src: VideoURL,
+        type: 'video/mp4'
+      }]
     };
     PlaySources.push(Source);
   }
