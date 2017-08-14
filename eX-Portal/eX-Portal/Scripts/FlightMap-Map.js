@@ -215,7 +215,6 @@ function RpasReplayCompleted() {
 }
 
 function InitVideoJs() {
-  //<source src="http://192.168.1.101/live/test/index.m3u8" type="application/x-mpegURL" />
 
   if ($('#FlightVideo').length < 1) {
     return;
@@ -231,7 +230,7 @@ function InitVideoJs() {
   if (IsLive) {
     //live video
     player.playlist([{
-      src: 'http://192.168.1.101/live/test/index.m3u8',
+      src: 'http://52.34.136.76/live/drone' + DroneID + '/index.m3u8',
       type: 'application/x-mpegURL'
     }]);
   } else {

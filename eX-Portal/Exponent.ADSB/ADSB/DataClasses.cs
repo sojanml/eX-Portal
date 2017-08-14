@@ -394,6 +394,15 @@ namespace Exponent.ADSB {
     }
 
     public bool InsertADSBSingle(SqlConnection sqlCon) {
+      if (!String.IsNullOrEmpty(flight)) {
+        flight = flight.ToUpper();
+        flight = System.Text.RegularExpressions.Regex.Replace(flight, "[^0-9A-Z]+", "");
+      }
+      if (!String.IsNullOrEmpty(hex)) {
+        hex = hex.ToUpper();
+        hex = System.Text.RegularExpressions.Regex.Replace(hex, "[^0-9A-Z]+", "");
+      }
+
       if (!String.IsNullOrEmpty(hex))
         hex = hex.Trim();
       if (String.IsNullOrEmpty(flight))
