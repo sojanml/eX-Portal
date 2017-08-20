@@ -241,8 +241,6 @@ function InitVideoJs() {
   // Play through the playlist automatically.
   player.playlist.autoadvance(0);
 
-
-  _FlightVideoPlayer
 }
 
 function InitVideos() {
