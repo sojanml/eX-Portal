@@ -452,7 +452,7 @@ function AddToTable(TheData) {
     var HTML =
       '<li>\n' +
       '<ul class="FlightDataRow">\n' +
-      '<li class="col1">' + FlightTime.substring(FlightTime.length - 5) + '</li>\n' +
+      '<li class="col1">' + FlightTime.substring(FlightTime.length - 8) + '</li>\n' +
       '<li class="col2">' + DataItem.Lat.toFixed(4) + '</li>\n' +
       '<li class="col2">' + DataItem.Lng.toFixed(4) + '</li>\n' +
       '<li class="col3">' + toHour(DataItem.FlightDuration) + '</li>\n' +
@@ -542,16 +542,15 @@ function ShowFlightInformation(TheDataItem) {
 }
 
 
-
 function toHour(Seconds) {
   var Hours = Math.floor(Seconds / 60);
   var RestSeconds = Seconds % 60;
   var sSeconds = '0' + RestSeconds;
   var sHour = '0' + Hours;
   if (sHour.length > 2)
-      sHour = sHour.substring(sHour.length - (sHour.length-1 ))
+      sHour = sHour.substring(1)
   if (sSeconds.length > 2)
-      sSeconds = sSeconds.substring(sSeconds.length - (sHour.length - 1))
+      sSeconds = sSeconds.substring(1)
   return sHour + ':' + sSeconds;
 }
 
