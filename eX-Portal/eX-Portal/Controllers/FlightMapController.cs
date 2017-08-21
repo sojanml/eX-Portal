@@ -270,40 +270,59 @@ namespace eX_Portal.Controllers {
 
       switch (TheParser.call) {
       case "publish":
-
-                    int uservalid = exLogic.User.StreamKeyValidation(TheParser.key);
-                    string DID = TheParser.name.Substring(5);
-                    TheParser.DroneID = Util.toInt(DID);
-                    if (uservalid > 0)
+                    if (TheParser.name.Substring(0, 5) == "DMAT0")
                     {
-                        int userID = exLogic.User.GetKeyUserId(TheParser.key);
-                        if (exLogic.User.hasAccessUser("STREAM.VIDEO", userID))
+                        string DID = TheParser.name.Substring(5);
+                        TheParser.DroneID = Util.toInt(DID);
+                        int flightID = getFlightID(TheParser.DroneID);
+                        MSTR_Drone dr = ctx.MSTR_Drone.Where(x => x.DroneId == TheParser.DroneID).Select(x => x).FirstOrDefault();
+                        if (dr != null)
                         {
-                            try
-                            {
-                                int flightID = getFlightID(TheParser.DroneID);
-                                MSTR_Drone dr = ctx.MSTR_Drone.Where(x => x.DroneId == TheParser.DroneID).Select(x=>x).FirstOrDefault();
-                                if (dr != null)
-                                { 
-                                    dr.LastFlightID = flightID;
-                                    dr.MakeID = 0;
-                                    dr.RefName = dr.DroneName;
-                                    dr.RpasSerialNo = dr.DroneName;
-                                    dr.ModelID = 0;
-                                }
-                                ctx.SaveChanges();
-                            }
-                            catch (Exception Ex)
-                            {
-                                return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
-                            }
-                                return new HttpStatusCodeResult(HttpStatusCode.OK);
+                            dr.LastFlightID = flightID;
+                            dr.MakeID = 0;
+                            dr.RefName = dr.DroneName;
+                            dr.RpasSerialNo = dr.DroneName;
+                            dr.ModelID = 0;
                         }
-                        else
-                        return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                        ctx.SaveChanges();
                     }
                     else
-                        return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                    {
+
+                        int uservalid = exLogic.User.StreamKeyValidation(TheParser.key);
+                        string DID = TheParser.name.Substring(5);
+                        TheParser.DroneID = Util.toInt(DID);
+                        if (uservalid > 0)
+                        {
+                            int userID = exLogic.User.GetKeyUserId(TheParser.key);
+                            if (exLogic.User.hasAccessUser("STREAM.VIDEO", userID))
+                            {
+                                try
+                                {
+                                    int flightID = getFlightID(TheParser.DroneID);
+                                    MSTR_Drone dr = ctx.MSTR_Drone.Where(x => x.DroneId == TheParser.DroneID).Select(x => x).FirstOrDefault();
+                                    if (dr != null)
+                                    {
+                                        dr.LastFlightID = flightID;
+                                        dr.MakeID = 0;
+                                        dr.RefName = dr.DroneName;
+                                        dr.RpasSerialNo = dr.DroneName;
+                                        dr.ModelID = 0;
+                                    }
+                                    ctx.SaveChanges();
+                                }
+                                catch (Exception Ex)
+                                {
+                                    return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
+                                }
+                                return new HttpStatusCodeResult(HttpStatusCode.OK);
+                            }
+                            else
+                                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                        }
+                        else
+                            return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                    }
                     break;
       case "record_done":
         TheParser.RequestAction = RequestAction;
