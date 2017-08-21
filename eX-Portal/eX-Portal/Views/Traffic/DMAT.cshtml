@@ -47,7 +47,7 @@
           <li><label>Straight <i>LL</i>:</label> <div id="data-ll">-</div></li>
           <li><label>U-Turn <i>LR</i>:</label> <div id="data-lr">-</div></li>
           <li><label>Left <i>LD</i>: </label> <div id="data-ld">-</div></li>
-          <li><label>Right <i>LU</i>:</label> <div id="data-lu">-</div></li>          
+          <li><label>Right <i>LU</i>:</label> <div id="data-lu">-</div></li>
         </ul>
 
       </div>
@@ -59,40 +59,49 @@
           <li><label>Now:</label> <div id="data-date">0000-00-00 00:00:00</div></li>
           <li><div id="data-location">@Model.GetLocation()</div></li>
         </ul>
-        
+
       </div>
     </div>
   </div>
-  <div class="column column-half shaded">
 
+  <div class="column column-half shaded">
     <div class="title-bar">
       MAP Video:
     </div>
-      <div style="display:none;visibility:hidden;">
-          <div id="map-video" class="column-half" style="display:none; visibility:hidden;">
-              <div id="myElement" style="display:none;visibility:hidden;">Loading the player...</div>
-          </div>
+    <div id="map-video" class="column-half">
+      <video id="FlightVideo" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="none"></video>
     </div>
   </div>
-
 
 </section>
 
 
 <p>&nbsp;</p>
 @section scripts {
-  <script src="~/jwplayer/jwplayer.js"></script> 
-  <script type="text/javascript" src="~/Scripts/AgricultureCommon.js"></script>
-  <script type="text/javascript" src="~/Scripts/traffic-dmat.js"></script>
-  <script type="text/javascript">
+<script type="text/javascript">
     var DroneID = @Model.DroneID
     var FlightID = @Model.FlightID;
-    var VideoFiles = @Html.Raw(Model.GetTrafficVideos());
-  </script>
+    var _FlightVideos = @Html.Raw(Model.GetTrafficVideos());
+</script>
+
+  <script type="text/javascript" src="~/Scripts/AgricultureCommon.js"></script>
+  <script type="text/javascript" src="~/Scripts/traffic-dmat.js"></script>
+  <script src="~/video-js/videojs-vtt.js"></script>
+  <script src="~/video-js/video.min.js"></script>
+  <script src="~/video-js/videojs-playlist.js"></script>
+  <script src="~/video-js/videojs-contrib-hls.min.js"></script>
 }
 
 @section header {
   <link href="~/Content/Traffic-Dmat.css" rel="stylesheet" />
+  <link href="~/video-js/video-js.min.css" rel="stylesheet">
+  <style type="text/css">
+    #FlightVideo {
+      width:567px;
+      height:460px;
+    }
+
+  </style>
 }
 
 

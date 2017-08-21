@@ -6,55 +6,56 @@ var _LoadedPlayTime = _VideoPlayTime;
 var _PlayListPlayTime = 0;
 var _PlayListIndex = 0;
 var playerInstance = null;
-
+var _FlightVideoPlayer;
 
 $(document).ready(function () {
-  jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";
-  InitilizeVideo();
+  InitVideoJs();
   initLoadTraffic();
 });
 
-function InitilizeVideo() {
-  var PlayerSource = {
-    width: '100%',
-    description: 'Click on play to start video.',
-    mediaid: '50d509642b4f4ccb81ccdcc26ca594c6'
-  };
+function InitVideoJs() {
 
-  if (VideoFiles.length > 0) {
-    if (VideoFiles[0].VideoURL.substr(0, 7).toLowerCase() === 'rtmp://') {
-      PlayerSource['file'] = VideoFiles[0].VideoURL;
-    } else {
-      PlayerSource['playlist'] = getPlayList();
-    }
+  if ($('#FlightVideo').length < 1) {
+    return;
+  } else if (_FlightVideos.length < 1) {
+    return;
   }
 
-  playerInstance = jwplayer("map-video");
-  playerInstance.setup(PlayerSource);
+  var player = videojs('FlightVideo');
+  player.ready(function () {
+    _FlightVideoPlayer = this;
+  });
 
-  playerInstance.on("play", fn_on_play);
-  playerInstance.on("pause", fn_on_pause);
-  playerInstance.on("time", fn_on_time);
-  playerInstance.on("playlistItem", fn_on_playlistitem);
+  if (DroneID > 0) {
+    //live video
+    player.playlist([{
+      src: 'http://52.34.136.76/live/drone' + DroneID + '/index.m3u8',
+      type: 'application/x-mpegURL'
+    }]);
+  } else {
+    var VideoPlayList = GetVideoPlaylistJS();
+    player.playlist(VideoPlayList);
+  }
+
+  // Play through the playlist automatically.
+  player.playlist.autoadvance(0);
+
 }
 
-function getPlayList() {
-  var PlayList = [];
 
-  for (var i = 0; i < VideoFiles.length; i++) {
-    var File = VideoFiles[i];
-    var VideoURL = "http://exponent-s3.s3.amazonaws.com/MP4/" + File.VideoURL.replace(".flv", ".mp4");
+function GetVideoPlaylistJS() {
+  var PlaySources = [];
+  for (var i = 0; i < _FlightVideos.length; i++) {
+    var VideoURL = "http://exponent-s3.s3.amazonaws.com/MP4/" + _FlightVideos[i].VideoURL.replace(".flv", ".mp4");
     var Source = {
-      sources: [ {
-        file: VideoURL,
-          type: "mp4"
-        }
-      ],
-      title: File.Title
+      sources: [{
+        src: VideoURL,
+        type: 'video/mp4'
+      }]
     };
-    PlayList.push(Source);
+    PlaySources.push(Source);
   }
-  return PlayList;
+  return PlaySources;
 }
 
 function fn_on_play(theData) {
@@ -68,7 +69,6 @@ function fn_on_pause(theData) {
 function fn_on_time(theData) {
   //console.log(theData);
   _VideoPlayTime = VideoFiles[_PlayListIndex].StartTime + theData.position;
-
 }
 
 function fn_on_playlistitem(theData) {
@@ -89,7 +89,7 @@ function initLoadTraffic() {
   _LoadedPlayTime = _VideoPlayTime;
   var URL = 'http://portalapi.exponent-ts.com/api/trafficmonitor' + (
     DroneID > 0 ?
-    '/json/' + DroneID :
+      '/json/' + DroneID :
       '/flight/json/' + FlightID + '?Video=' + (_LoadedPlayTime * 1000));
   
   var AJAX = $.ajax({
@@ -163,3 +163,54 @@ function setHtmlTo(SpanID, html) {
     $(this).addClass('active');
   });
 }
+
+
+
+/*
+
+
+
+function InitilizeVideo() {
+  var PlayerSource = {
+    width: '100%',
+    description: 'Click on play to start video.',
+    mediaid: '50d509642b4f4ccb81ccdcc26ca594c6'
+  };
+
+  if (VideoFiles.length > 0) {
+    if (VideoFiles[0].VideoURL.substr(0, 7).toLowerCase() === 'rtmp://') {
+      PlayerSource['file'] = VideoFiles[0].VideoURL;
+    } else {
+      PlayerSource['playlist'] = getPlayList();
+    }
+  }
+
+  playerInstance = jwplayer("map-video");
+  playerInstance.setup(PlayerSource);
+
+  playerInstance.on("play", fn_on_play);
+  playerInstance.on("pause", fn_on_pause);
+  playerInstance.on("time", fn_on_time);
+  playerInstance.on("playlistItem", fn_on_playlistitem);
+}
+
+function getPlayList() {
+  var PlayList = [];
+
+  for (var i = 0; i < VideoFiles.length; i++) {
+    var File = VideoFiles[i];
+    var VideoURL = "http://exponent-s3.s3.amazonaws.com/MP4/" + File.VideoURL.replace(".flv", ".mp4");
+    var Source = {
+      sources: [ {
+        file: VideoURL,
+          type: "mp4"
+        }
+      ],
+      title: File.Title
+    };
+    PlayList.push(Source);
+  }
+  return PlayList;
+}
+
+*/
