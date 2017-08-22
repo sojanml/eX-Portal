@@ -1205,6 +1205,7 @@
     <Content Include="Scripts\PayLoadMap.js" />
     <Content Include="Scripts\PilotLogChart.js" />
     <Content Include="Scripts\RecentChart.js" />
+    <Content Include="Scripts\Report-Map.js" />
     <Content Include="Scripts\Reports.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />

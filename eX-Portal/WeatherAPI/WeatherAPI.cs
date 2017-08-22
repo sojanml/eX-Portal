@@ -14,8 +14,9 @@ namespace  Exponent  {
   public sealed class WeatherAPI {
     private const String APIKey = "e925e5f9b310f96d54cb45e01bfb3fe0";
     private const String APIUrl = "http://api.openweathermap.org/data/2.5/";
-    private String ApplicationPah = String.Empty; 
-
+    private String ApplicationPah = String.Empty;
+    private String APIServer = "APIxu";
+    private readonly object _lockObject = new object();
     public WeatherAPI() {
       //ApplicationPah = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);      
       //ApplicationPah = Path.Combine(ApplicationPah.Replace("file:\\", ""), "OpenWeatherMap");
@@ -24,6 +25,71 @@ namespace  Exponent  {
     }
 
     public WeatherForcast GetByLocation(Double Lat, Double Lng) {
+      WeatherForcast ThisWeather;
+      switch (APIServer) {
+      case "APIxu":
+        ThisWeather = GetBy_APIxu($"{Lat},{Lng}");
+        break;
+      case "OpenWeatherMap":
+        ThisWeather = GetByLocation_OpenWeatherMap(Lat, Lng);
+        break;
+      default:
+        ThisWeather = new WeatherForcast();
+        break;
+      }
+      return ThisWeather;
+    }
+
+    public WeatherForcast GetByIP(String IPAddress) {
+      WeatherForcast ThisWeather;
+      IPAddress = Exponent.APIxu.IP.Fix(IPAddress);
+      switch (APIServer) {
+      case "APIxu":
+        CityInfo ThisCity = GetCityByIP(IPAddress);
+        ThisWeather = GetBy_APIxu(ThisCity.City);
+        break;
+      case "OpenWeatherMap":
+        ThisWeather = GetByIP_OpenWeatherMap(IPAddress);
+        break;
+      default:
+        ThisWeather = new WeatherForcast();
+        break;
+      }
+      return ThisWeather;
+    }
+
+    private WeatherForcast GetBy_APIxu(String QueryVar) {
+      WeatherForcast ThisWeather = new WeatherForcast();
+      try {
+        DateTime LastCashedOn = getLastProcessedDateTime(QueryVar);
+        DateTime MaxCashedTime = LastCashedOn.AddMinutes(30);
+
+        if (MaxCashedTime > DateTime.Now) {
+          return CashedWeather(QueryVar);
+        }
+
+        String URL = $"http://api.apixu.com/v1/forecast.json?key=773b7eabe1a848ca94164724172008&q={QueryVar}&days=5";
+        String JsonData = getWeatherJson(URL);
+        if (String.IsNullOrEmpty(JsonData)) {
+          return CashedWeather(QueryVar);
+        } else {
+          APIxu.WeatherModel APIxuWeather = JsonConvert.DeserializeObject<APIxu.WeatherModel>(JsonData);
+          ThisWeather.City = APIxuWeather.location.region;
+          ThisWeather.Country = APIxuWeather.location.country;
+          ThisWeather.Forecast = APIxu.Pipe.GetForcast(APIxuWeather.forecast);
+          ThisWeather.Today = ThisWeather.Forecast[0];
+          APIxu.Pipe.SetToday(APIxuWeather.current, ThisWeather.Today);
+          SaveWeatherCashe(ThisWeather, QueryVar);
+        }
+      } catch {
+        ThisWeather.Today.ConditionText = "Error";
+      }
+      return ThisWeather;
+    }
+
+
+
+    private WeatherForcast GetByLocation_OpenWeatherMap(Double Lat, Double Lng) {
       WeatherForcast ThisWeather = new WeatherForcast();
       try {
         DateTime LastCashedOn = getLastProcessedDateTime(Lat, Lng);
@@ -52,7 +118,7 @@ namespace  Exponent  {
       return ThisWeather;
     }
     
-    public WeatherForcast GetByIP(String IPAddress) {
+    private WeatherForcast GetByIP_OpenWeatherMap(String IPAddress) {
       WeatherForcast ThisWeather = new WeatherForcast();
       try { 
         CityInfo ThisCity = GetCityByIP(IPAddress);
@@ -82,10 +148,21 @@ namespace  Exponent  {
       return ThisWeather;
     }
 
+    private WeatherForcast CashedWeather(String QueryVar) {
+      return CashedWeather_Core(QueryVar);
+    }
 
     private WeatherForcast CashedWeather(String Country, String City) {
+      return CashedWeather_Core($"{Country}\\{City}");
+    }
+
+    private WeatherForcast CashedWeather(Double Lat, Double Lng) {
+      return CashedWeather_Core($"#{Convert.ToInt32(Lat)}#{Convert.ToInt32(Lng)}");
+    }
+
+    private WeatherForcast CashedWeather_Core(String FolderName) {
       WeatherForcast tmp = new WeatherForcast();
-      String LastCachedFile = Path.Combine(ApplicationPah, Country, City, "CachedWeather.json");
+      String LastCachedFile = Path.Combine(ApplicationPah, FolderName, "CachedWeather.json");
       if (File.Exists(LastCachedFile)) {
         String JSonText = File.ReadAllText(LastCachedFile);
         try {
@@ -97,20 +174,6 @@ namespace  Exponent  {
       return tmp;
     }
 
-    private WeatherForcast CashedWeather(Double Lat, Double Lng) {
-      WeatherForcast tmp = new WeatherForcast();
-      String LatLngFolder = String.Format("#{0}#{1}", Convert.ToInt32(Lat), Convert.ToInt32(Lng));
-      String LastCachedFile = Path.Combine(ApplicationPah, LatLngFolder, "CachedWeather.json");
-      if (File.Exists(LastCachedFile)) {
-        String JSonText = File.ReadAllText(LastCachedFile);
-        try { 
-          tmp = JsonConvert.DeserializeObject<WeatherForcast>(JSonText);
-        } catch {
-          //nothing
-        }
-      }
-      return tmp;
-    }
     private void SaveWeatherCashe(WeatherForcast ThisWeather, String LatLngFolder = "") {
       //save the cached file
       String Country = ThisWeather.Country.Replace(" ", "");
@@ -123,40 +186,42 @@ namespace  Exponent  {
 
       String LastCachedFileRef = Path.Combine(FileDir, "CachedDate.txt");
       String LastCachedFile = Path.Combine(FileDir, "CachedWeather.json");
-     
-      if (!Directory.Exists(FileDir)) Directory.CreateDirectory(FileDir);
-      if (File.Exists(LastCachedFileRef)) File.Delete(LastCachedFileRef);
-      if (File.Exists(LastCachedFile)) File.Delete(LastCachedFile);
 
       String TheTime = DateTime.Now.ToString("yyyy-MMM-dd HH:mm:ss");
-      System.IO.File.WriteAllText(LastCachedFileRef, TheTime);
+      String json = JsonConvert.SerializeObject(ThisWeather);
 
-      //Save Json
-      var json = JsonConvert.SerializeObject(ThisWeather);
-      System.IO.File.WriteAllText(LastCachedFile, json);
+      lock (_lockObject) { 
+        if (!Directory.Exists(FileDir)) Directory.CreateDirectory(FileDir);
+        if (File.Exists(LastCachedFileRef)) File.Delete(LastCachedFileRef);
+        if (File.Exists(LastCachedFile)) File.Delete(LastCachedFile);
+        System.IO.File.WriteAllText(LastCachedFileRef, TheTime);
+        //Save Json
+        System.IO.File.WriteAllText(LastCachedFile, json);
+      }
+    }
 
+    private DateTime getLastProcessedDateTime(String QueryVar) {
+      return getLastProcessedDateTime_Core(QueryVar);
     }
 
     private DateTime getLastProcessedDateTime(String Country, String City) {
-      DateTime LastDate = DateTime.MinValue;
-      String LastCachedFileRef = Path.Combine(ApplicationPah, Country, City, "CachedDate.txt");
-      if(File.Exists(LastCachedFileRef)) {
-        String sLastDate = File.ReadAllText(LastCachedFileRef);
-        DateTime.TryParse(sLastDate, out LastDate);
-      }
-      return LastDate;
+      return getLastProcessedDateTime_Core($"{Country}\\{City}");
     }
 
     private DateTime getLastProcessedDateTime(Double Lat, Double Lng) {
+      return getLastProcessedDateTime_Core($"#{Convert.ToInt32(Lat)}#{Convert.ToInt32(Lng)}");
+    }
+
+    private DateTime getLastProcessedDateTime_Core(String FilePath) {
       DateTime LastDate = DateTime.MinValue;
-      String LatLngFolder = String.Format("#{0}#{1}", Convert.ToInt32(Lat), Convert.ToInt32(Lng));
-      String LastCachedFileRef = Path.Combine(ApplicationPah, LatLngFolder, "CachedDate.txt");
+      String LastCachedFileRef = Path.Combine(ApplicationPah, FilePath, "CachedDate.txt");
       if (File.Exists(LastCachedFileRef)) {
         String sLastDate = File.ReadAllText(LastCachedFileRef);
         DateTime.TryParse(sLastDate, out LastDate);
       }
       return LastDate;
     }
+
 
     private void SetWeatherStation(WeatherCondition Today, Double Lat, Double Lng) {
 
