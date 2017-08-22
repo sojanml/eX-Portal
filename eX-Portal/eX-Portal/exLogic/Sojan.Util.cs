@@ -391,7 +391,19 @@ namespace eX_Portal.exLogic {
           }
           SQL += "\n MSTR_User.IsPilot=1 ORDER BY FirstName";
           break;
-          case "gsc":
+        case "allpilot":
+            SQL = $"SELECT UserID as Value, FirstName+" +" ' - ' "+ "+Name as Name FROM MSTR_User " +
+                 "Left join MSTR_Account on MSTR_Account.AccountID=MSTR_User.AccountID WHERE \n";
+            if (IsStrictFilter || !exLogic.User.hasAccess("DRONE.VIEWALL"))
+            {
+                SQL += "\n" +
+
+                    "  MSTR_User.AccountID=" + Util.getAccountID() +
+                    " and ";
+            }
+            SQL += "\n MSTR_User.IsPilot=1 ORDER BY FirstName";
+            break;
+        case "gsc":
           SQL = "SELECT UserID as Value, FirstName as Name FROM MSTR_User";
           if (IsStrictFilter || !exLogic.User.hasAccess("DRONE.VIEWALL")) {
             SQL += "\n" +

@@ -157,7 +157,7 @@ namespace eX_Portal.exLogic {
 
                     ctx.Database.Connection.Open();
 
-                    cmd.CommandText = "SELECT BlackBoxID,BlackBoxName from MSTR_BlackBox where CurrentStatus='IN' and IsActive=1";
+                    cmd.CommandText = "SELECT BlackBoxID,BlackBoxName,BlackBoxSerial from MSTR_BlackBox where CurrentStatus='IN' and IsActive=1";
                     cmd.CommandType = CommandType.Text;
 
 
@@ -165,7 +165,7 @@ namespace eX_Portal.exLogic {
                     {
                         while (reader.Read())
                         {
-                            SelectList.Add(new SelectListItem { Text = reader["BlackBoxName"].ToString(), Value = reader["BlackBoxID"].ToString() });
+                            SelectList.Add(new SelectListItem { Text = reader["BlackBoxSerial"].ToString()+"-"+reader["BlackBoxName"].ToString(), Value = reader["BlackBoxID"].ToString() });
                         }
                     }
                     DropDownList1 = SelectList.ToList();

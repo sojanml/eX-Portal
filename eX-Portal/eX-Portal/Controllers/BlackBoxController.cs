@@ -314,7 +314,7 @@ namespace eX_Portal.Controllers {
                           ,m.[CurrentStatus]
                           ,isnull(u.Firstname,'') +' '+ isnull(u.lastname,'') as Pilot,
                            MSTR_Account.name as Organization
-                          ,d.DroneName
+                          ,d.DroneName,m.currentDroneID as [Stream Key]
                             , Count(*) Over() as _TotalRecords
                       FROM  MSTR_BlackBox m left join mstr_user u
                       on m.currentUserID = u.userid
@@ -742,6 +742,7 @@ namespace eX_Portal.Controllers {
           return RedirectToAction("Error", "Home");
       }
       btx.BBStatus = "OUT";
+            btx.Note = "Given";
       return View(btx);
 
     }
