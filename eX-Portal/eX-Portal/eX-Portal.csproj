@@ -1205,6 +1205,7 @@
     <Content Include="Scripts\PayLoadMap.js" />
     <Content Include="Scripts\PilotLogChart.js" />
     <Content Include="Scripts\RecentChart.js" />
+    <Content Include="Scripts\Report-Map.js" />
     <Content Include="Scripts\Reports.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -1419,6 +1420,10 @@
     <Content Include="video-js\video.js" />
     <Content Include="video-js\video.min.js" />
     <Content Include="video-js\videojs-contrib-hls.min.js" />
+    <Content Include="video-js\videojs-playlist.cjs.js" />
+    <Content Include="video-js\videojs-playlist.es.js" />
+    <Content Include="video-js\videojs-playlist.js" />
+    <Content Include="video-js\videojs-playlist.min.js" />
     <Content Include="video-js\videojs-vtt.js" />
     <Content Include="video-js\videojs-vtt.min.js" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
