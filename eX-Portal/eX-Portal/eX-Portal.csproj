@@ -1419,6 +1419,10 @@
     <Content Include="video-js\video.js" />
     <Content Include="video-js\video.min.js" />
     <Content Include="video-js\videojs-contrib-hls.min.js" />
+    <Content Include="video-js\videojs-playlist.cjs.js" />
+    <Content Include="video-js\videojs-playlist.es.js" />
+    <Content Include="video-js\videojs-playlist.js" />
+    <Content Include="video-js\videojs-playlist.min.js" />
     <Content Include="video-js\videojs-vtt.js" />
     <Content Include="video-js\videojs-vtt.min.js" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />

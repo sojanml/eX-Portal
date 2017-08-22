@@ -682,12 +682,12 @@ namespace eX_Portal.Controllers {
       ye = " RentStartDate='" + sDate + "',  RentEndDate='" + eDate + "', Amount='" + Btx.Amount + "',TotalAmount = " + (tAmount == "" ? 0 : Util.toDecimal(tAmount)) + "";
       //ye = " Amount='" + Btx.Amount + "',TotalAmount = " + (tAmount == "" ? 0 : Util.toDecimal(tAmount)) + "";
 
-      string SQL = "update BlackBoxTransaction set DroneID = 0, BBStatus = 'IN', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "'," + ye + " where ID = " + GetLastTransactionID(Btx.BlackBoxID);
+      string SQL = "update BlackBoxTransaction set BBStatus = 'IN', Note = '" + Btx.Note + "',CreatedBy='" + Util.getLoginUserID() + "'," + ye + " where ID = " + GetLastTransactionID(Btx.BlackBoxID);
       //need to appnd after testing
 
       int Val = Util.doSQL(SQL);
 
-      SQL = "update MSTR_BlackBox set LastReceiveId = '" + GetLastTransactionID(Btx.BlackBoxID) + "',CurrentStatus='IN',CurrentUserID = '" + Util.getLoginUserID() + "',CurrentDroneID=0 where BlackBoxID = " + Btx.BlackBoxID;
+      SQL = "update MSTR_BlackBox set LastReceiveId = '" + GetLastTransactionID(Btx.BlackBoxID) + "',CurrentStatus='IN',CurrentUserID = '" + Util.getLoginUserID() + "',CurrentDroneID=31 where BlackBoxID = " + Btx.BlackBoxID;
       Val = Util.doSQL(SQL);
 
       SQL = "update dbo.MSTR_Drone set BlackBoxID = 0 where DroneId = " + Btx.DroneID;
