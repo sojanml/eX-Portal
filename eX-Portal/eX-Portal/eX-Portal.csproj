@@ -1029,7 +1029,6 @@
     <Content Include="Scripts\flightCreation.js" />
     <Content Include="Scripts\FlightHoursByAccount.js" />
     <Content Include="Scripts\FlightMap-Chart.js" />
-    <Content Include="Scripts\FlightMap-Map.js" />
     <Content Include="Scripts\FlightSetup.js" />
     <Content Include="Scripts\Flight_Gps_Map.js" />
     <Content Include="Scripts\geotag.js" />
