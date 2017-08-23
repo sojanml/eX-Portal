@@ -312,7 +312,7 @@ namespace eX_Portal.Controllers {
       string ReportPath = ConfigurationManager.AppSettings["ReportFolder"].ToString();
       // String FullPath1 = System.IO.Path.Combine("C:\\Reports", String.Format("{0}.pdf", FlightID));
       // String FullPath2 = System.IO.Path.Combine("C:\\Reports_DCAA", String.Format("{0}.pdf", FlightID));
-      String FullPath3 = System.IO.Path.Combine("C:\\Reports_DCAA_Live", String.Format("{0}.pdf", FlightID));
+      String FullPath3 = System.IO.Path.Combine(ReportPath, String.Format("{0}.pdf", FlightID));
       String FullPath = String.Empty;
       //if(System.IO.File.Exists(FullPath1)) {
       //  FullPath = FullPath1;
