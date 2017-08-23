@@ -218,6 +218,8 @@ function InitVideoJs() {
 
   if ($('#FlightVideo').length < 1) {
     return;
+  } else if (IsLive) {
+    //continue...  
   } else if (_FlightVideos.length < 1) {
     return;
   } 
@@ -229,17 +231,20 @@ function InitVideoJs() {
 
   if (IsLive) {
     //live video
+    /*
     player.playlist([{
       src: 'http://52.34.136.76/live/drone' + DroneID + '/index.m3u8',
       type: 'application/x-mpegURL'
     }]);
+    */
   } else {
     var VideoPlayList = GetVideoPlaylistJS();
     player.playlist(VideoPlayList);
+    // Play through the playlist automatically.
+    player.playlist.autoadvance(0);
   }
  
-  // Play through the playlist automatically.
-  player.playlist.autoadvance(0);
+
 
 }
 
