@@ -71,6 +71,9 @@ namespace eX_Portal.exLogic {
       Lat = tLat;
       Lng = tLng;
     }
+    public LatLng() {
+
+    }
 
     public String GetLocation(bool IsWithSymbol = true) {
       String Symbol = IsWithSymbol ? " °" : "";

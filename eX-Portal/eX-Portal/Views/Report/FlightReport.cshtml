@@ -448,6 +448,13 @@
 
     <p>&nbsp;</p>
   }@*if (Model.PortalAlerts.Count > 0)*@
+  @{ 
+    String ApprovalPath = Model.Approval == null ? "" : Model.Approval.InnerBoundaryCoord;
+  }
+  <script type="text/javascript">
+    var PolyPath = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MapData).ToLower());
+    var ApprovalPath = '@Html.Raw(ApprovalPath)';
+  </script>
   <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyDY6IHXH4-fUAzYq6HBR_ndu_lnyyopcTs"></script>
   <script type="text/javascript" src="~/Scripts/Report-Map.js"></script>
 </body>

@@ -16,41 +16,53 @@ function ToPath(Coordinates) {
 }
 
 function initializeMap() {
-  var MarkerPosition = new google.maps.LatLng(25.0955354, 55.1527025);
-
   var mapOptions = {
     zoom: 14,
     mapTypeControl: false,
-    streetViewControl: false,
-    center: MarkerPosition
+    streetViewControl: false
   };
-
   map = new google.maps.Map(document.getElementById('GoogleMap'), mapOptions);
-  map.setTilt(45);
-
-  _FlightPath = new google.maps.Polyline({
-    path: [],
-    geodesic: true,
-    strokeColor: '#12ffaf',
-    strokeOpacity: 1.0,
-    strokeWeight: 2,
-    map: map
-  });
-  _FlightBoundBox = new google.maps.LatLngBounds();
-
-  _FlightReplayPath = new google.maps.Polyline({
-    path: [],
-    geodesic: true,
-    strokeColor: 'red',
-    strokeOpacity: 1.0,
-    strokeWeight: 2,
-    map: map
-  });
-
-  var KmlUrl = 'http://test.exponent-ts.com/Map/NoFlyzone';
+  
+  var KmlUrl = 'http://dcaa.exponent-ts.com/Map/NoFlyzone?001';
   var kmlOptions = {
     preserveViewport: true,
     map: map
   };
   NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
+
+  // Construct the polygon.
+  var ApprovalPolygon = ToPath(ApprovalPath);
+  _ApprovalPath = new google.maps.Polygon({
+    paths: ApprovalPolygon,
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 0,
+    fillColor: '#00FF00',
+    fillOpacity: 0.35,
+    map: map,
+    zIndex: 200
+  });
+
+  _FlightReplayPath = new google.maps.Polyline({
+    path: PolyPath,
+    geodesic: true,
+    strokeColor: 'red',
+    strokeOpacity: 1.0,
+    strokeWeight: 2,
+    map: map,
+    zIndex: 220
+  });
+
+
+
+
+  var bounds = new google.maps.LatLngBounds();
+  for (var i = 0; i < PolyPath.length; i++) {
+    bounds.extend(PolyPath[i]);
+  }
+  for (var i = 0; i < ApprovalPolygon.length; i++) {
+    bounds.extend(ApprovalPolygon[i]);
+  }
+  map.fitBounds(bounds);
+  
 }
