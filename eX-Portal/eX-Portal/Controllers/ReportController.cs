@@ -305,17 +305,19 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult PostFlightReport([Bind(Prefix ="ID")] int FlightID = 0) {
-      //check if the PDF is generated
-      String FullPath1 = System.IO.Path.Combine("C:\\Reports", String.Format("{0}.pdf", FlightID));
-      String FullPath2 = System.IO.Path.Combine("C:\\Reports_DCAA", String.Format("{0}.pdf", FlightID));
-            String FullPath3= System.IO.Path.Combine("F:\\Reports", String.Format("{0}.pdf", FlightID));
+            //check if the PDF is generated
+            string ReportPath = ConfigurationManager.AppSettings["ReportFolder"].ToString();
+     // String FullPath1 = System.IO.Path.Combine("C:\\Reports", String.Format("{0}.pdf", FlightID));
+     // String FullPath2 = System.IO.Path.Combine("C:\\Reports_DCAA", String.Format("{0}.pdf", FlightID));
+            String FullPath3= System.IO.Path.Combine("C:\\Reports_DCAA_Live", String.Format("{0}.pdf", FlightID));
             String FullPath = String.Empty;
-      if(System.IO.File.Exists(FullPath1)) {
-        FullPath = FullPath1;
-      } else if(System.IO.File.Exists(FullPath2)) {
-        FullPath = FullPath2;
-      }
-      else if (System.IO.File.Exists(FullPath3))
+      //if(System.IO.File.Exists(FullPath1)) {
+      //  FullPath = FullPath1;
+      //} else if(System.IO.File.Exists(FullPath2)) {
+      //  FullPath = FullPath2;
+      //}
+      //else
+      if (System.IO.File.Exists(FullPath3))
         {
             FullPath = FullPath3;
         }
