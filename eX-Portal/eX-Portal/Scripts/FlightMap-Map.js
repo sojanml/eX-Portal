@@ -340,7 +340,7 @@ function initializeMap() {
     map: map
   });
 
-  var KmlUrl = 'http://test.exponent-ts.com/Map/NoFlyzone';
+  var KmlUrl = 'http://dcaa.exponent-ts.com/Map/NoFlyzone';
   var kmlOptions = {
     preserveViewport: true,
     map: map
