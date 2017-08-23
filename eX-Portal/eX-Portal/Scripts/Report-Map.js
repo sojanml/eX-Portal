@@ -31,9 +31,13 @@ function initializeMap() {
   NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
 
   // Construct the polygon.
-  var ApprovalPolygon = ToPath(ApprovalPath);
-  _ApprovalPath = new google.maps.Polygon({
-    paths: ApprovalPolygon,
+  var ApprovalInnerCoordinates = ToPath(ApprovalInnerPath);
+  var TempOuterPath = ToPath(ApprovalOuterPath);
+  var ApprovalOuterCoordinates = ApprovalInnerCoordinates.concat(ApprovalInnerCoordinates[0]);
+  ApprovalOuterCoordinates = ApprovalOuterCoordinates.concat(TempOuterPath);
+  
+  _ApprovalInnerPath = new google.maps.Polygon({
+    paths: ApprovalInnerCoordinates,
     strokeColor: '#FF0000',
     strokeOpacity: 0.8,
     strokeWeight: 0,
@@ -41,6 +45,17 @@ function initializeMap() {
     fillOpacity: 0.35,
     map: map,
     zIndex: 200
+  });
+
+  _ApprovalOuterPath = new google.maps.Polygon({
+    paths: ApprovalOuterCoordinates,
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 0,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35,
+    map: map,
+    zIndex: 210
   });
 
   _FlightReplayPath = new google.maps.Polyline({
@@ -60,8 +75,8 @@ function initializeMap() {
   for (var i = 0; i < PolyPath.length; i++) {
     bounds.extend(PolyPath[i]);
   }
-  for (var i = 0; i < ApprovalPolygon.length; i++) {
-    bounds.extend(ApprovalPolygon[i]);
+  for (var i = 0; i < ApprovalOuterCoordinates.length; i++) {
+    bounds.extend(ApprovalOuterCoordinates[i]);
   }
   map.fitBounds(bounds);
   
