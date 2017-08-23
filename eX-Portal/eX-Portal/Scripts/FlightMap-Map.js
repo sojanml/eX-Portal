@@ -216,8 +216,12 @@ function RpasReplayCompleted() {
 
 function InitVideoJs() {
 
-  if ($('#FlightVideo').length < 1) {
-    return;
+    if ($('#FlightVideo').length < 1) {
+        return;
+
+    } else if (IsLive) {
+
+    //continue;
   } else if (_FlightVideos.length < 1) {
     return;
   } 
@@ -335,7 +339,7 @@ function initializeMap() {
     map: map
   });
 
-  var KmlUrl = 'http://test.exponent-ts.com/Map/NoFlyzone';
+  var KmlUrl = 'http://dcaa.exponent-ts.com/Map/NoFlyzone';
   var kmlOptions = {
     preserveViewport: true,
     map: map
