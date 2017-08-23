@@ -9,7 +9,11 @@
     <div id="FlightInformation">
       @if (eX_Portal.exLogic.User.hasAccess("FLIGHT.VIDEO")) {
         if (Model.IsLive || Model.Videos.Count() > 0) {
+          String VideoURL = $"http://52.34.136.76/live/drone{Model.DroneID}/index.m3u8";
           <video id="FlightVideo" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="none">
+            @if (Model.IsLive) {
+            <source src="@VideoURL" type="application/x-mpegURL">
+            }
           </video>
         }
       }
@@ -171,7 +175,7 @@
   <style type="text/css">
     #FlightVideo {
       width: 235px;
-      height: 165px !important;
+      height: 165px;
       float: left;
     }
 

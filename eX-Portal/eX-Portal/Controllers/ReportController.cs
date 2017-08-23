@@ -20,7 +20,7 @@ using iTextSharp.tool.xml;
 using Microsoft.Reporting.WebForms;
 
 namespace eX_Portal.Controllers {
-  public class ReportController :Controller {
+  public class ReportController : Controller {
     public ExponentPortalEntities db = new ExponentPortalEntities();
     // GET: Report
     public ActionResult Index() {
@@ -29,11 +29,11 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult Flights(FlightReportFilter ReportFilter) {
-      if(!exLogic.User.hasAccess("REPORT.FLIGHTS"))
+      if (!exLogic.User.hasAccess("REPORT.FLIGHTS"))
         return RedirectToAction("NoAccess", "Home");
       var theReport = new exLogic.Report();
       qView nView = new qView(theReport.getFlightReportSQL(ReportFilter));
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -48,7 +48,7 @@ namespace eX_Portal.Controllers {
       //  return RedirectToAction("NoAccess", "Home");
       var theReport = new exLogic.Report();
       qView nView = new qView(theReport.getAlertSQL(ReportFilter));
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -63,7 +63,7 @@ namespace eX_Portal.Controllers {
     /// <param name="ReportFilter"></param>
     /// <returns></returns>
     public ActionResult GeoTag(FlightReportFilter ReportFilter) {
-      if(!exLogic.User.hasAccess("REPORT.FLIGHTS"))
+      if (!exLogic.User.hasAccess("REPORT.FLIGHTS"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.ReportFilter = ReportFilter;
       int DroneID = ReportFilter.UAS;
@@ -77,7 +77,7 @@ namespace eX_Portal.Controllers {
       IList<GeoTagReport> DocsGeo = new List<GeoTagReport>();
       ExponentPortalEntities Db = new ExponentPortalEntities();
 
-      if(!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
         IsCompany = 1;
 
       } else {
@@ -219,6 +219,7 @@ namespace eX_Portal.Controllers {
     }
 
 
+
     public String GoogleMap([Bind(Prefix = "ID")]int FlightID = 0, int ApprovalID = 0) {
       String GoogleURL = String.Empty;
       var GoogleAPI = ConfigurationManager.AppSettings["GoogleAPI"];
@@ -230,7 +231,7 @@ namespace eX_Portal.Controllers {
                          Longitude = (Double)n.Longitude
                        }
                     ).ToList();
-      if(GeoPoints.Count < 1) {
+      if (GeoPoints.Count < 1) {
         GoogleURL = "/images/world.jpg";
       } else {
         var FirstPoint = GeoPoints.First();
@@ -245,6 +246,8 @@ namespace eX_Portal.Controllers {
       return GoogleURL;
 
     }//public ActionResult GoogleMap
+
+
 
     public String getGoogleBoundary([Bind(Prefix = "ID")]int FlightID = 0, int ApprovalID = 0) {
       /*select Coordinates, InnerBoundaryCoord  from GCA_Approval where droneid=50*/
@@ -262,14 +265,14 @@ namespace eX_Portal.Controllers {
           Inner = t1.InnerBoundary.AsText()
         });
 
-      foreach(var Row in GeoPoints.ToList()) {
+      foreach (var Row in GeoPoints.ToList()) {
         Outer = toPoints(Row.Outer);
         Inner = toPoints(Row.Inner);
         //Inner.RemoveAt(Inner.Count - 1);
 
         //Polygon.Add(Outer.FirstOrDefault());
         //Polygon.AddRange(Inner));
-        for(var i = Inner.Count - 1; i >= 0; i--) {
+        for (var i = Inner.Count - 1; i >= 0; i--) {
           Polygon.Add(Inner[i]);
         }
         Polygon.AddRange(Outer);
@@ -292,7 +295,7 @@ namespace eX_Portal.Controllers {
       PointList = PointList.Replace("POLYGON ((", "");
       PointList = PointList.Replace("))", "");
 
-      foreach(String Cord in PointList.Split(',')) {
+      foreach (String Cord in PointList.Split(',')) {
         var LatLnt = Cord.Trim().Split(' ');
         var thisCord = new GeoLocation {
           Latitude = Util.toDouble(LatLnt[1]),
@@ -304,24 +307,22 @@ namespace eX_Portal.Controllers {
       return AllPoints;
     }
 
-    public ActionResult PostFlightReport([Bind(Prefix ="ID")] int FlightID = 0) {
-            //check if the PDF is generated
-            string ReportPath = ConfigurationManager.AppSettings["ReportFolder"].ToString();
-     // String FullPath1 = System.IO.Path.Combine("C:\\Reports", String.Format("{0}.pdf", FlightID));
-     // String FullPath2 = System.IO.Path.Combine("C:\\Reports_DCAA", String.Format("{0}.pdf", FlightID));
-            String FullPath3= System.IO.Path.Combine("C:\\Reports_DCAA_Live", String.Format("{0}.pdf", FlightID));
-            String FullPath = String.Empty;
+    public ActionResult PostFlightReport([Bind(Prefix = "ID")] int FlightID = 0) {
+      //check if the PDF is generated
+      string ReportPath = ConfigurationManager.AppSettings["ReportFolder"].ToString();
+      // String FullPath1 = System.IO.Path.Combine("C:\\Reports", String.Format("{0}.pdf", FlightID));
+      // String FullPath2 = System.IO.Path.Combine("C:\\Reports_DCAA", String.Format("{0}.pdf", FlightID));
+      String FullPath3 = System.IO.Path.Combine("C:\\Reports_DCAA_Live", String.Format("{0}.pdf", FlightID));
+      String FullPath = String.Empty;
       //if(System.IO.File.Exists(FullPath1)) {
       //  FullPath = FullPath1;
       //} else if(System.IO.File.Exists(FullPath2)) {
       //  FullPath = FullPath2;
       //}
       //else
-      if (System.IO.File.Exists(FullPath3))
-        {
-            FullPath = FullPath3;
-        }
-        else {
+      if (System.IO.File.Exists(FullPath3)) {
+        FullPath = FullPath3;
+      } else {
         ViewBag.Title = "Report not found";
         return View();
       }
@@ -340,34 +341,6 @@ namespace eX_Portal.Controllers {
     public ActionResult FlightReport([Bind(Prefix = "ID")]int FlightID = 0) {
       // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       ViewBag.FlightID = FlightID;
-      /*
-      String SQL = @"
-      SELECT TOP 1
-       GCA_Approval.ApprovalID,
-       GCA_Approval.MaxAltitude,
-       GCA_Approval.MinAltitude,
-       GEOGRAPHY::Point((
-         SELECT TOP 1 Cast(Longitude AS VARCHAR)
-         FROM FlightMapData
-         WHERE FlightID = " + FlightID + @"
-         ORDER BY CreatedTime DESC
-         ), (
-         SELECT TOP 1 Cast(Latitude AS VARCHAR)
-         FROM FlightMapData
-         WHERE FlightID = " + FlightID + @"
-         ORDER BY CreatedTime DESC
-         ), 4326).STIntersects(InnerBoundary) AS IsInside
-      FROM GCA_Approval
-      WHERE DroneID = (
-        SELECT DroneID
-        FROM DroneFlight
-        WHERE ID = " + FlightID + @"
-        )
-      ORDER BY
-        IsInside DESC
-      ";
-      */
-      
 
       var FlightData = (
         from n in db.DroneFlights
@@ -383,7 +356,7 @@ namespace eX_Portal.Controllers {
           CreatedOn = n.CreatedOn,
           ApprovalID = n.ApprovalID
         }).ToList().FirstOrDefault();
-      if(FlightData.FlightHours == null)
+      if (FlightData.FlightHours == null)
         FlightData.FlightHours = 0;
       FlightData.PilotName = (
         from n in db.MSTR_User
@@ -406,13 +379,24 @@ namespace eX_Portal.Controllers {
         select n).ToList();
 
 
-      var thisApproval = 
+      var thisApproval =
         from n in db.GCA_Approval
         where n.ApprovalID == FlightData.ApprovalID
         select n;
+      FlightData.Approval = thisApproval.FirstOrDefault();
 
       //set Alert message for Report
-      setReportMessages(FlightData.PortalAlerts, thisApproval.FirstOrDefault());
+      setReportMessages(FlightData.PortalAlerts, FlightData.Approval);
+
+      FlightData.MapData = (
+        from n in db.FlightMapDatas
+        where n.FlightID == FlightID
+        orderby n.FlightMapDataID
+        select new LatLng{
+          Lat = (Decimal)n.Latitude,
+          Lng =(Decimal)n.Longitude
+          }
+        ).ToList();
 
       FlightData.Videos = (
         from n in db.DroneFlightVideos
@@ -435,6 +419,15 @@ namespace eX_Portal.Controllers {
         where n.FlightID == FlightID
         select n).FirstOrDefault();
 
+      LatLng FirstPoint = FlightData.MapData.FirstOrDefault();
+      Exponent.WeatherAPI ReportWeather = new Exponent.WeatherAPI();      
+      Exponent.WeatherForcast Condition = ReportWeather.GetByLocation((Double)FirstPoint.Lat, (Double)FirstPoint.Lng);
+      FlightData.Info.Condition = Condition.Today.ConditionText;
+      FlightData.Info.WindSpeed = Condition.Today.WindSpeed.ToString("0.0");
+      FlightData.Info.Humidity = Condition.Today.Humidity.ToString("0");
+      FlightData.Info.Visibility = (Decimal)Condition.Today.Visibility;
+      FlightData.Info.Pressure = (Decimal)Condition.Today.Pressure;
+      FlightData.Info.Temperature = Condition.Today.Temperature.ToString("0.0");
 
       return View(FlightData);
     }
@@ -442,24 +435,24 @@ namespace eX_Portal.Controllers {
 
     private void setReportMessages(IList<PortalAlert> Messages, GCA_Approval thisApproval) {
 
-      foreach(var Message in Messages) {
-        if(thisApproval != null) {
+      foreach (var Message in Messages) {
+        if (thisApproval != null) {
           var FlightInfo = (
             from f in db.FlightMapDatas
             where f.FlightMapDataID == Message.FlightDataID
             select f
           ).FirstOrDefault();
-          switch(Message.AlertCategory) {
-            case "Height":
-              Message.AlertMessage = "RPAS is above proposed height of " + thisApproval.MaxAltitude + " Meter at " + Message.Altitude + " Meter";
-              break;
-            case "Boundary":
-              Message.AlertCategory = "Perimeter";
-              Message.AlertMessage = "RPAS is outside approved perimeter at " + fmtGPS((Double)Message.Latitude, (Double)Message.Longitude);
-              break;
-            case "Proximity":
-              Message.AlertMessage = getProximityMessage(FlightInfo.OtherFlightIDs, (int)FlightInfo.FlightID);
-              break;
+          switch (Message.AlertCategory) {
+          case "Height":
+            Message.AlertMessage = "RPAS is above proposed height of " + thisApproval.MaxAltitude + " Meter at " + Message.Altitude + " Meter";
+            break;
+          case "Boundary":
+            Message.AlertCategory = "Perimeter";
+            Message.AlertMessage = "RPAS is outside approved perimeter at " + fmtGPS((Double)Message.Latitude, (Double)Message.Longitude);
+            break;
+          case "Proximity":
+            Message.AlertMessage = getProximityMessage(FlightInfo.OtherFlightIDs, (int)FlightInfo.FlightID);
+            break;
 
           }//switch
         } else {
@@ -470,15 +463,15 @@ namespace eX_Portal.Controllers {
 
     private String getProximityMessage(String OtherFlightIDs, int FlightID) {
       StringBuilder SB = new StringBuilder();
-      foreach(var OtherFlight in OtherFlightIDs.Split('|')) {
+      foreach (var OtherFlight in OtherFlightIDs.Split('|')) {
         var ThisInfo = OtherFlight.Split(',');
         var nFlightID = Util.toInt(ThisInfo[0]);
         var nLat = Util.toDouble(ThisInfo[1]);
         var nLng = Util.toDouble(ThisInfo[2]);
         var nDist = Util.toDouble(ThisInfo[3]);
-        if(FlightID != nFlightID) {
+        if (FlightID != nFlightID) {
           String TheMessage = "Flight " + nFlightID + " is close in proximity of " + nDist.ToString("###") + " Meter";
-          if(SB.Length > 0)
+          if (SB.Length > 0)
             SB.Append(", ");
           SB.Append(TheMessage);
         }
@@ -538,10 +531,10 @@ namespace eX_Portal.Controllers {
         [MSTR_DroneCheckList].[CheckListTitle]='Pre-Flight Checklist' AND
         [DroneCheckList].[FlightID]=" + FlightID;
       int CheckListCount = Util.getDBInt(SQL);
-      if(CheckListCount >= 3) {
+      if (CheckListCount >= 3) {
         CheckListMessage = "<div class=\"authorise\"><span class=\"icon\">&#xf214;</span>" +
         "CheckList Completed</div>";
-      } else if(CheckListCount >= 1) {
+      } else if (CheckListCount >= 1) {
         CheckListMessage = "<div class=\"warning\"><span class=\"icon\">&#xf071;</span>" +
         "CheckList Incomplete</div>";
       } else {
@@ -558,7 +551,7 @@ namespace eX_Portal.Controllers {
       "  FlightID = " + FlightID.ToString() + " and\n" +
       "  DocumentType = 'Regulator Approval'\n";
       int TheCount = Util.getDBInt(SQL);
-      if(TheCount < 1) {
+      if (TheCount < 1) {
         UploadedDocs = "<div class=\"warning\"><span class=\"icon\">&#xf071;</span>" +
         "Please upload your Regulatory Authorisation document before the flight</div>";
       } else {
@@ -576,8 +569,8 @@ namespace eX_Portal.Controllers {
                                   where (int)r.FlightID == FlightID
                                   select r).ToList();
       theList.Append("<UL>");
-      foreach(var Doc in Docs) {
-        if(DroneName == "")
+      foreach (var Doc in Docs) {
+        if (DroneName == "")
           DroneName = Util.getDroneName(Doc.DroneID);
         theList.AppendLine("<LI><span class=\"icon\">&#xf0f6;</span> <a href=\"/upload/Drone/" + DroneName + "/" + FlightID +
         "/" + Doc.DocumentName + "\">" + Util.getFilePart(Doc.DocumentName) + "</a></LI>");
@@ -627,7 +620,7 @@ namespace eX_Portal.Controllers {
 
 
       String[] Series = { "Altitude", "Roll", "Pitch", "Satellites", "Speed" };
-      foreach(var Item in Series) {
+      foreach (var Item in Series) {
         chart.Series.Add(Item);
         chart.Series[Item].ChartType = SeriesChartType.Line;
         chart.Series[Item].BorderWidth = 2;
@@ -648,7 +641,7 @@ namespace eX_Portal.Controllers {
                                  Speed = x.Speed,
                                  ReadTime = x.ReadTime
                                }).ToList();
-      for(int i = 0; i < fl.Count; i++) {
+      for (int i = 0; i < fl.Count; i++) {
         String Label = fl[i].ReadTime.Value.ToString("HH:mm");
         chart.Series["Altitude"].Points.AddXY(Label, fl[i].Altitude);
         chart.Series["Speed"].Points.AddXY(Label, fl[i].Speed);
@@ -656,7 +649,7 @@ namespace eX_Portal.Controllers {
         chart.Series["Pitch"].Points.AddXY(Label, fl[i].Pitch);
         chart.Series["Satellites"].Points.AddXY(Label, fl[i].Satellites);
       }
-      using(var chartimage = new MemoryStream()) {
+      using (var chartimage = new MemoryStream()) {
         // chart.RenderControl();
         chart.SaveImage(chartimage, ChartImageFormat.Png);
         //System.Drawing.Image returnImage = System.Drawing.Image.FromStream(chartimage);
@@ -692,7 +685,7 @@ namespace eX_Portal.Controllers {
 
     protected ActionResult Pdf(string fileDownloadName, string viewName, object model) {
       // Based on View() code in Controller base class from MVC
-      if(model != null) {
+      if (model != null) {
         ViewData.Model = model;
       }
       PdfResult pdf = new PdfResult() {
@@ -704,29 +697,28 @@ namespace eX_Portal.Controllers {
       };
       return pdf;
     }
-        public String GoogleMapApproval([Bind(Prefix = "ID")]int DroneID = 0, int ApprovalID = 0)
-        {
-            String GoogleURL = String.Empty;
-            var GoogleAPI = ConfigurationManager.AppSettings["GoogleAPI"];
-            
-              
-                GoogleURL = "https://maps.googleapis.com/maps/api/staticmap" +
-                "?key=" + GoogleAPI +
-                "&size=640x400" +
-                getGoogleBoundary(0, ApprovalID);
-          
+    public String GoogleMapApproval([Bind(Prefix = "ID")]int DroneID = 0, int ApprovalID = 0) {
+      String GoogleURL = String.Empty;
+      var GoogleAPI = ConfigurationManager.AppSettings["GoogleAPI"];
 
-            return GoogleURL;
 
-        }//public ActionResult GoogleMap
-    }//public class ReportController
+      GoogleURL = "https://maps.googleapis.com/maps/api/staticmap" +
+      "?key=" + GoogleAPI +
+      "&size=640x400" +
+      getGoogleBoundary(0, ApprovalID);
 
-  public class PdfResult :PartialViewResult {
+
+      return GoogleURL;
+
+    }//public ActionResult GoogleMap
+  }//public class ReportController
+
+  public class PdfResult : PartialViewResult {
     // Setting a FileDownloadName downloads the PDF instead of viewing it
     public string FileDownloadName { get; set; }
 
     public override void ExecuteResult(ControllerContext context) {
-      if(context == null) {
+      if (context == null) {
         throw new ArgumentNullException("context");
       }
 
@@ -737,24 +729,24 @@ namespace eX_Portal.Controllers {
 
 
       // Get the view name
-      if(string.IsNullOrEmpty(ViewName)) {
+      if (string.IsNullOrEmpty(ViewName)) {
         ViewName = context.RouteData.GetRequiredString("action");
       }
 
       // Get the view
       ViewEngineResult viewEngineResult = null;
-      if(View == null) {
+      if (View == null) {
         viewEngineResult = FindView(context);
         View = viewEngineResult.View;
       }
 
       // Render the view
       StringBuilder sb = new StringBuilder();
-      using(TextWriter tr = new StringWriter(sb)) {
+      using (TextWriter tr = new StringWriter(sb)) {
         ViewContext viewContext = new ViewContext(context, View, ViewData, TempData, tr);
         View.Render(viewContext, tr);
       }
-      if(viewEngineResult != null) {
+      if (viewEngineResult != null) {
         viewEngineResult.ViewEngine.ReleaseView(context, View);
       }
 

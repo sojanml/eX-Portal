@@ -15,6 +15,8 @@ namespace eX_Portal.ViewModel {
     public String EndTime { get; set; }
   }
 
+
+
   public class FlightViewModel {
     public FlightViewModel() {
       ApprovalID = 0;
@@ -58,9 +60,12 @@ namespace eX_Portal.ViewModel {
     public int ZoneId { get; set; }
     public string ZoneCoordinates { get; set; }
     public string DroneName { get; set; }
+
     public IList<PortalAlert> PortalAlerts { get; set; }
     public IList<GCA_Approval> Approvals { get; set; }
     public IList<DroneFlightVideo> Videos { get; set; }
+    public IList<LatLng> MapData { get; set; }
+    public GCA_Approval Approval { get; set; }
 
     public FlightInfo Info { get; set; }
     public Decimal? FlightDistance { get; internal set; }
@@ -71,6 +76,7 @@ namespace eX_Portal.ViewModel {
     public String getFlightDate() {
       return Util.fmtDt(FlightDate);
     }
+
 
     public String getFlightTime() {
       if (FlightHours == null) FlightHours = 0;
