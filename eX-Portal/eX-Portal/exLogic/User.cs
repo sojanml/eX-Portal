@@ -53,11 +53,14 @@ namespace eX_Portal.exLogic {
             string PasswordCrypto = Util.GetEncryptedPassword(Password);
       int result = 0;
       using (var ctx = new ExponentPortalEntities()) {
-        var _objuserdetail = (from data in ctx.MSTR_User
-                              where ((data.UserName.Equals(UserName)
-                              && (data.Password.Equals(PasswordCrypto)))
-                              || (data.GeneratedPassword.Equals(PasswordCrypto)))
-                              select data).ToList();
+        var query = from data in ctx.MSTR_User
+                    where ((data.UserName.Equals(UserName)
+                    && (data.Password.Equals(PasswordCrypto)))
+                    || (data.GeneratedPassword.Equals(PasswordCrypto)))
+                    select data;
+        var _objuserdetail = query.ToList();
+
+
                 if (_objuserdetail.Count > 0)
                 {
                     if (_objuserdetail[0].GeneratedPassword == PasswordCrypto)
