@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eX-Portal", "eX-Portal\eX-Portal.csproj", "{1080A9BA-ADEC-4269-A02A-FD3F5B311494}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BFAF2D75-0AFF-4DFB-AB56-23FCC4070F60} = {BFAF2D75-0AFF-4DFB-AB56-23FCC4070F60}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherAPI", "WeatherAPI\WeatherAPI.csproj", "{BFAF2D75-0AFF-4DFB-AB56-23FCC4070F60}"
 EndProject
@@ -36,5 +39,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BED36AA0-14FC-468C-BEAA-872214FC96C2}
 	EndGlobalSection
 EndGlobal
