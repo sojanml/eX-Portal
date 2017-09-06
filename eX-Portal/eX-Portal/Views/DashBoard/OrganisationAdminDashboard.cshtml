@@ -1,0 +1,122 @@
+﻿@{
+Layout = null;
+}
+
+<section class="top_space">
+  <div class="column column-1-of-3 dashboard-column">
+    <div class="fixed-height-organisation">
+      <div class="SummaryImage" style="background-image:url('@Model.Pilot.PilotImage')"></div>
+      <div class="SummaryCaption">
+        @Model.Pilot.FirstName @Model.Pilot.MiddleName @Model.Pilot.LastName
+      </div>
+    </div>
+  </div>
+
+  <div class="column column-1-of-3 dashboard-column">
+    <div class="fixed-height-organisation">
+      <ul class="single-line">
+        <li>
+          <div class="caption">Permit No:</div>
+          <div class="detail">@Model.Pilot.RPASPermitNo</div>
+        </li>
+        <li>
+          <div class="caption">Nationality:</div>
+          <div class="detail">@Model.Pilot.Nationality</div>
+        </li>
+        <li>
+          <div class="caption">Date Of Issue:</div>
+          <div class="detail">@Model.Pilot.DOI_RPASPermit.ToString("dd-MMM-yyyy")</div>
+        </li>
+        <li>
+          <div class="caption">Date Of Expiry:</div>
+          <div class="detail">@Model.Pilot.DOE_RPASPermit.ToString("dd-MMM-yyyy")</div>
+        </li>
+      </ul>
+      </div>
+    </div>
+  <div class="column column-1-of-3 dashboard-column">
+    <div class="fixed-height-organisation">
+      <ul class="single-line">
+        <li>
+          <div class="caption">Category:</div>
+          <div class="detail">@Model.Pilot.PermitCategory</div>
+        </li>
+        <li>
+          <div class="caption">Organization:</div>
+          <div class="detail">@Model.Pilot.CompanyName</div>
+        </li>
+        <li>
+          <div class="caption">Email:</div>
+          <div class="detail">@Model.Pilot.EmailId</div>
+        </li>
+      </ul>
+      </div>
+    </div>
+</section>
+
+<section class="top-space">
+  <div class="column column-1-of-3 dashboard-column">
+    <div class="title">Profile Details</div>
+    <div class="fixed-height">
+
+    </div>
+    <div class="toolbar">
+      
+    </div>
+
+  </div>
+
+
+  <div class="column column-1-of-3 dashboard-column">
+    <div class="title">RPAS Registrations</div>
+    <div class="fixed-height">
+
+      <ul>
+        @foreach (var Item in @Model.RPASList) {
+          <li>
+            <div class="icon"><img src="~/images/FlightType-@(Item.UavTypeName).png" /></div>
+            <div class="caption">@Item.DroneName</div>
+            <div class="detail"><span>@Item.ManufactureName</span></div>
+            <div class="detail"><span>@Html.Raw(Item.LiveStatus)</span></div>
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="toolbar">
+      <a href="@Url.Action("Create", "Drone")">
+        <div class="button">
+          <span class="icon">&#xf067;</span>
+          Create RPAS
+        </div>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="column column-1-of-3 dashboard-column">
+    <div class="title">NOC Status</div>
+    <div class="fixed-height">
+
+      <ul>
+        @foreach (var Item in @Model.ApprovalList) {
+          <li>
+
+            <div class="floating @Item.ApprovalStatus">@Item.ApprovalStatus</div>
+            <div class="caption">#@Item.ApprovalID - <a href="@Url.Action("NOCRegistrationDetails", "Rpas",new  { ID = Item.ApprovalID})">@Item.ApprovalName</a></div>
+            <div class="detail">@(((DateTime)Item.StartDate).ToString("dd-MMM-yyyy")) @@ @Item.StartTime</div>
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="toolbar">
+      <a href="@Url.Action("NOCRegister", "Rpas")">
+        <div class="button">
+          <span class="icon">&#xf067;</span>
+          Apply for NOC
+        </div>
+      </a>
+    </div>
+
+  </div>
+
+</section>

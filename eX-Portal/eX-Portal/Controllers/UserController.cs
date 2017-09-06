@@ -100,63 +100,81 @@ namespace eX_Portal.Controllers {
 
 
     [HttpPost]
-    public ActionResult Index(UserLogin _objuserlogin) {
+    public async System.Threading.Tasks.Task<ActionResult> Index(UserLogin _objuserlogin) {
       ViewBag.Title = "Login";
-
       /*Create instance of entity model*/
       ExponentPortalEntities objentity = new ExponentPortalEntities();
+      String PasswordHash = Util.MD5(_objuserlogin.Password.ToLower());
       /*Getting data from database for user validation*/
-
-      if (exLogic.User.UserValidation(_objuserlogin.UserName, _objuserlogin.Password) > 0) {
-        if (exLogic.User.UserIsActive(_objuserlogin.UserName, _objuserlogin.Password) > 0) {
-          UserInfo thisUser = exLogic.User.getInfo(_objuserlogin.UserName);
-          /*Redirect user to success apge after successfull login*/
-          if (Util.CheckSessionValid(thisUser.UserID)) {
-            ViewBag.Message = 1;
-            Session["FirstName"] = thisUser.FullName;
-            Session["UserID"] = thisUser.UserID;
-            Session["UserName"] = thisUser.UserName;
-            Session["BrandLogo"] = thisUser.BrandLogo;
-            Session["BrandColor"] = thisUser.BrandColor;
-            Session["AccountID"] = thisUser.AccountID;
-            Session["userIpAddress"] = Request.ServerVariables["REMOTE_ADDR"];
-            if(thisUser.UserID == 152) {
-              Session["BrandLogo"] = "gcaa-logo.png";
-              Session["BrandColor"] = "#009247";
-            }
-
-            var browser = Request.Browser.Browser;
-            var assembly = Assembly.GetExecutingAssembly();
-            var attribute = (GuidAttribute)assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0];
-            var id = attribute.Value;
-            string sessionId = this.Session.SessionID;
-
-            string sql = "insert into userlog(UserID,loggedintime,UserIPAddress,Browser,SessionID,ApplicationID) values('" + thisUser.UserID + "',getdate(),'" + Session["userIpAddress"] + "','" + browser + "','" + sessionId + "','" + id + "') Select @@Identity";
-            var UID = Util.InsertSQL(sql);
-            Session["uid"] = UID.ToString();
-
-            
-
-            HttpCookie myCookie = new HttpCookie("uid");
-            myCookie.Value = UID.ToString();
-            myCookie.Expires = DateTime.Now.AddHours(1);
-            Response.Cookies.Add(myCookie);
-
-
-            return RedirectToAction("Index", "Home");
-          } else {
-            ViewBag.Message = 3;
-          }
-
-        } else {
-          ViewBag.Message = 2;
-        }
-      } else {
+      var Query = from usr in objentity.MSTR_User
+                  where (
+                      usr.EmailId == _objuserlogin.UserName ||
+                      usr.UserName == _objuserlogin.UserName) &&
+                    usr.Password == PasswordHash
+                  select usr;
+      
+      //If user not found return not found message
+      if (!await Query.AnyAsync()) {
         ViewBag.Message = 0;
+        return View(_objuserlogin);
+      }
+      //Get the user details
+      MSTR_User thisUser = await Query.FirstOrDefaultAsync();
+
+      //Check the user is Active
+      if((thisUser.IsActive == null ? false : !(bool)thisUser.IsActive)) {
+        ViewBag.Message = 2;
+        return View(_objuserlogin);
       }
 
+      //Check the session is valid for user.
+      //Limit the number of sessions
+      if (!Util.CheckSessionValid(thisUser.UserId)) {
+        ViewBag.Message = 3;
+        return View(_objuserlogin);
+      }
 
-      return View(_objuserlogin);
+      //Valid User. Set Session Variables
+      ViewBag.Message = 1;
+      ViewBag.Message = 1;
+      Session["FirstName"] = String.Concat(thisUser.FirstName, " ", thisUser.LastName);
+      Session["UserID"] = thisUser.UserId;
+      Session["UserName"] = thisUser.UserName;
+      Session["AccountID"] = thisUser.AccountId;
+      Session["userIpAddress"] = Request.ServerVariables["REMOTE_ADDR"];
+
+      var AccountQuery = from a in objentity.MSTR_Account
+                         where a.AccountId == thisUser.AccountId
+                         select a;
+      if(await AccountQuery.AnyAsync()) {
+        var Account = await AccountQuery.FirstOrDefaultAsync();
+        Session["BrandLogo"] = Account.BrandLogo;
+        Session["BrandColor"] = Account.BrandColor;
+      }
+
+      var assembly = Assembly.GetExecutingAssembly();
+      var attribute = (GuidAttribute)assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0];
+
+      string sql = $@"insert into userlog(
+       UserID,loggedintime,UserIPAddress,Browser,SessionID,ApplicationID
+       ) values(
+        '{thisUser.UserId}',
+        getdate(),
+       '{Request.ServerVariables["REMOTE_ADDR"]}',
+       '{Request.Browser.Browser}',
+       '{this.Session.SessionID}',
+       '{attribute.Value}') 
+      Select @@Identity";
+
+      var UID = Util.InsertSQL(sql);
+      Session["uid"] = UID.ToString();
+
+      HttpCookie myCookie = new HttpCookie("uid");
+      myCookie.Value = UID.ToString();
+      myCookie.Expires = DateTime.Now.AddHours(1);
+      Response.Cookies.Add(myCookie);
+      
+      return RedirectToAction("Index", "Home");
     }//HttpPost Login()
 
     public ActionResult Logout() {
@@ -331,9 +349,10 @@ namespace eX_Portal.Controllers {
       WHERE 
         a.userid =  {UserID}";
 
-      if (exLogic.User.hasAccess("PILOT")) {
+      if (exLogic.User.hasAccess("PILOT") || 
+          exLogic.User.hasAccess("DRONE.VIEWALL")) {
         //nothing
-      } else if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+      } else {
         SQL += " AND a.AccountID=" + Util.getAccountID();
       }
       
@@ -355,6 +374,11 @@ namespace eX_Portal.Controllers {
 
 
       ViewBag.ProfileImage = Util.getProfileImage(UserID);
+      if(TheFields.Count == 0) {
+        var Content = new ContentResult();
+        Content.Content = "Access to User Details is Denied.";
+        return Content;
+      }
       return View(TheFields);
     }
 

@@ -122,10 +122,6 @@ namespace eX_Portal.Controllers {
 
 
     //new chart for Pilot
-
-
-
-
     [System.Web.Mvc.HttpGet]
     public JsonResult getPilotData() {
       try {
@@ -328,11 +324,22 @@ namespace eX_Portal.Controllers {
     }
 
     public JsonResult getUserDashboard() {
-
       int userid = Util.getLoginUserID();
       Util ut = new Util();
       UserDashboardModel UserDashboard = ut.GetUserDetails(userid);
       return Json(UserDashboard);
+    }
+
+    public ActionResult OrganisationAdminDashboard() {
+      bool IsOrganisationAdmin = exLogic.User.hasAccess("ORGANIZATION.ADMIN");
+      if (!IsOrganisationAdmin)
+        return HttpNotFound();
+
+      int userid = Util.getLoginUserID();
+      ViewBag.Title = String.Empty;
+      Util ut = new Util();
+      UserDashboardModel UserDashboard = ut.GetUserDetails(userid, true);
+      return View(UserDashboard);
 
     }
 

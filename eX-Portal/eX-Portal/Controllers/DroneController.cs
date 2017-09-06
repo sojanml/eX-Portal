@@ -533,7 +533,7 @@ namespace eX_Portal.Controllers {
           "  D.[DroneName] as RPAS,\n" +
           "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
           "  D.[DroneSerialNo] as [RPAS S.no],\n" +
-          "  O.Name as Authority,\n" +
+          "  O.Name as Organisation,\n" +
           "  M.Name as ManufactureName,\n" +
           "  U.Name as RPASType\n" +
           //"  D.[DroneIdHexa] as RPASHexaId,\n" +

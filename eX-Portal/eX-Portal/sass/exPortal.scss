@@ -1185,8 +1185,17 @@ div.dashboard-column {
 
   div.fixed-height {
     height: 300px;
-    padding: 10px;
     overflow: auto;
+  }
+
+  div.fixed-height-organisation {
+    height: 125px;
+    overflow: hidden;
+  }
+
+  div.fixed-height,
+  div.fixed-height-organisation {
+    padding: 10px;
 
     div.SummaryImage {
       width: 100px;
@@ -1227,16 +1236,18 @@ div.dashboard-column {
 
         div.caption {
           font-weight: bold;
+
           a {
-            text-decoration:none;
-            color:$ReportHeadBackground;
+            text-decoration: none;
+            color: $ReportHeadBackground;
+
             &:hover {
-              color:red;
+              color: red;
             }
           }
-          .UniformWidth
-          {
-              width:200px;
+
+          .UniformWidth {
+            width: 200px;
           }
         }
 

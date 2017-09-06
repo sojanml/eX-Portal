@@ -26,6 +26,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <IsCompassProject>True</IsCompassProject>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1457,6 +1458,7 @@
     <Content Include="Views\DashBoard\Dewa.cshtml" />
     <Content Include="Views\DashBoard\Internal.cshtml" />
     <Content Include="Views\DashBoard\SubSection.cshtml" />
+    <Content Include="Views\DashBoard\UserAdminDashboard.cshtml" />
     <Content Include="Views\DashBoard\Weather.cshtml" />
     <Content Include="Views\Design\CustomCss.cshtml" />
     <Content Include="Views\Design\SystemMenu.cshtml" />
@@ -1816,6 +1818,7 @@
     <Content Include="Views\Traffic\TrafficMonitoring.cshtml" />
     <Content Include="Views\Traffic\LPR.cshtml" />
     <Content Include="Views\Traffic\RTA.cshtml" />
+    <Content Include="Views\DashBoard\OrganisationAdminDashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

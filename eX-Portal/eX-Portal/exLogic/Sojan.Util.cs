@@ -724,7 +724,7 @@ namespace eX_Portal.exLogic {
          // without dashes
          .Replace("-", string.Empty)
          // make lowercase
-         .ToLower();
+         .ToUpper();
       return encoded;
 
     }
