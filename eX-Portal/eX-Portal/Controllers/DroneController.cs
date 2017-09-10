@@ -10,18 +10,18 @@ using System.IO;
 using System.Globalization;
 
 namespace eX_Portal.Controllers {
-  public class DroneController :Controller {
+  public class DroneController : Controller {
     public ExponentPortalEntities ctx = new ExponentPortalEntities();
     static String RootUploadDir = "~/Upload/Drone/";
 
     public ActionResult Live() {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Live RPAS";
       return View();
     }
     public String LiveData() {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return "{}";
       StringBuilder Json = new StringBuilder();
       var UAS = new Drones();
@@ -33,10 +33,10 @@ namespace eX_Portal.Controllers {
       return Json.ToString();
     }
 
-        // GET: Drone
-        [ValidateInput(false)]
-        public ActionResult Index() {
-      if(!exLogic.User.hasAccess("DRONE"))
+    // GET: Drone
+    [ValidateInput(false)]
+    public ActionResult Index() {
+      if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = "RPAS";
@@ -60,12 +60,12 @@ namespace eX_Portal.Controllers {
           "Left join LUP_Drone U on\n" +
           "  UAVTypeID = U.TypeID and\n" +
           "  U.Type= 'UAVType'\n";
-         //if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-         //{
-         //           SQL +=
-         //             "WHERE\n" +
-         //             "  D.AccountID=" + Util.getAccountID();
-         //}else 
+      //if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+      //{
+      //           SQL +=
+      //             "WHERE\n" +
+      //             "  D.AccountID=" + Util.getAccountID();
+      //}else 
       if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
         SQL +=
           "WHERE\n" +
@@ -73,30 +73,30 @@ namespace eX_Portal.Controllers {
       }
       qView nView = new qView(SQL);
 
-      if(exLogic.User.hasAccess("DRONE"))
+      if (exLogic.User.hasAccess("DRONE"))
         nView.addMenu("Detail", Url.Action("Detail", new { ID = "_Pkey" }));
-      if(exLogic.User.hasAccess("DRONE.EDIT")) {
+      if (exLogic.User.hasAccess("DRONE.EDIT")) {
         nView.addMenu("Edit", Url.Action("Edit", new { ID = "_Pkey" }));
-            }
+      }
       if (exLogic.User.hasAccess("DRONE.AuthorityApproval"))
-                nView.addMenu("Authority Approval", Url.Action("AuthorityApproval", new { ID = "_Pkey" }));
-     
-      if(exLogic.User.hasAccess("FLIGHT.CREATE"))
+        nView.addMenu("Authority Approval", Url.Action("AuthorityApproval", new { ID = "_Pkey" }));
+
+      if (exLogic.User.hasAccess("FLIGHT.CREATE"))
         nView.addMenu("Create Flight", Url.Action("Create", "DroneFlight", new { ID = "_Pkey" }));
-      if(exLogic.User.hasAccess("FLIGHT.ARCHIVE"))
+      if (exLogic.User.hasAccess("FLIGHT.ARCHIVE"))
         nView.addMenu("Flights", Url.Action("Index", "DroneFlight", new { ID = "_Pkey" }));
       //if(exLogic.User.hasAccess("DRONE.MANAGE"))
       //  nView.addMenu("Manage", Url.Action("Manage", new { ID = "_Pkey" }));
-      if(exLogic.User.hasAccess("BLACKBOX"))
+      if (exLogic.User.hasAccess("BLACKBOX"))
         nView.addMenu("FDR Data", Url.Action("Index", "BlackBox", new { ID = "_Pkey" }));
-      if(exLogic.User.hasAccess("DRONE.DELETE"))
+      if (exLogic.User.hasAccess("DRONE.DELETE"))
         nView.addMenu("Delete", Url.Action("Delete", new { ID = "_Pkey" }));
-      if(exLogic.User.hasAccess("FLIGHT.CREATE"))
+      if (exLogic.User.hasAccess("FLIGHT.CREATE"))
         nView.addMenu("Zone Approval", Url.Action("Index", "Approval", new { ID = "_Pkey" }));
-      if(exLogic.User.hasAccess("FLIGHT.GEOTAG"))
+      if (exLogic.User.hasAccess("FLIGHT.GEOTAG"))
         nView.addMenu("Geo-Tagging", Url.Action("GeoTag", "Drone", new { ID = "_Pkey" }));
 
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -104,23 +104,23 @@ namespace eX_Portal.Controllers {
       }//if(IsAjaxRequest)
 
     }
-        
+
     public ActionResult AuthorityApproval([Bind(Prefix = "ID")] int DroneID = 0) {
-      if(!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
+      if (!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.DroneID = DroneID;
       return View();
     }
 
     [ChildActionOnly]
-    public ActionResult AuthorityDocuments(int DroneID = 0, String Authority="DCAA") {
+    public ActionResult AuthorityDocuments(int DroneID = 0, String Authority = "DCAA") {
       ViewBag.DroneID = DroneID;
       ViewBag.Authority = Authority;
 
 
       List<DroneDocument> Docs = (
         from o in ctx.DroneDocuments
-        where 
+        where
         o.DocumentType == "UAS-Registration" &&
         o.DroneID == DroneID &&
         o.DocumentTitle == Authority
@@ -129,16 +129,16 @@ namespace eX_Portal.Controllers {
       return View(Docs);
     }
 
-      [ValidateInput(false)]
+    [ValidateInput(false)]
     public ActionResult Manage([Bind(Prefix = "ID")] int DroneID = 0) {
-      if(!exLogic.User.hasAccess("DRONE.MANAGE"))
+      if (!exLogic.User.hasAccess("DRONE.MANAGE"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Manage - " + Util.getDroneName(DroneID);
       return View(DroneID);
     }
 
     public ActionResult Decommission([Bind(Prefix = "ID")] int DroneID) {
-      if(!exLogic.User.hasAccess("DRONE.MANAGE"))
+      if (!exLogic.User.hasAccess("DRONE.MANAGE"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Decommission - " + Util.getDroneName(DroneID);
       return View(DroneID);
@@ -146,7 +146,7 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public ActionResult Decommission([Bind(Prefix = "ID")] int DroneID, String DecommissionNote) {
-      if(!exLogic.User.hasAccess("DRONE.MANAGE"))
+      if (!exLogic.User.hasAccess("DRONE.MANAGE"))
         return RedirectToAction("NoAccess", "Home");
       String SQL = "UPDATE MSTR_DRONE SET\n" +
         "  DecommissionNote='" + DecommissionNote + "',\n" +
@@ -160,24 +160,24 @@ namespace eX_Portal.Controllers {
     }//Decommission()
      //uploading documents for commission,UAT,incident
     public ActionResult UploadDocument([Bind(Prefix = "ID")] int DroneID, String Type) {
-      if(!exLogic.User.hasAccess("DRONE.MANAGE"))
+      if (!exLogic.User.hasAccess("DRONE.MANAGE"))
         return RedirectToAction("NoAccess", "Home");
 
-      switch(Type.ToLower()) {
-        case "commission":
-          ViewBag.DocumentType = Type;
-          break;
-        case "uat":
-          ViewBag.DocumentType = Type;
-          break;
-        case "incident":
-          ViewBag.DocumentType = Type;
-          break;
-        default:
-          ViewBag.DocumentType = "Commission";
-          break;
+      switch (Type.ToLower()) {
+      case "commission":
+        ViewBag.DocumentType = Type;
+        break;
+      case "uat":
+        ViewBag.DocumentType = Type;
+        break;
+      case "incident":
+        ViewBag.DocumentType = Type;
+        break;
+      default:
+        ViewBag.DocumentType = "Commission";
+        break;
       }
-            ViewBag.DroneID = DroneID;
+      ViewBag.DroneID = DroneID;
       ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
       return View(DroneID);
     }//Decommission()
@@ -187,34 +187,34 @@ namespace eX_Portal.Controllers {
     [HttpPost]
     public ActionResult UploadDocument([Bind(Prefix = "ID")] int DroneID, String Type, String Note) {
       String SQL = "";
-      if(!exLogic.User.hasAccess("DRONE.MANAGE"))
+      if (!exLogic.User.hasAccess("DRONE.MANAGE"))
         return RedirectToAction("NoAccess", "Home");
 
-      switch(Type.ToLower()) {
-        case "commission":
-          SQL = "UPDATE MSTR_DRONE SET\n" +
-            "  CommissionReportNote='" + Note + "'\n" +
-            "WHERE\n" +
-            "  DroneID=" + DroneID;
-          ViewBag.DocumentType = Type;
-          break;
-        case "uat":
-          SQL = "UPDATE MSTR_DRONE SET\n" +
-          "  UATReportNote='" + Note + "'\n" +
+      switch (Type.ToLower()) {
+      case "commission":
+        SQL = "UPDATE MSTR_DRONE SET\n" +
+          "  CommissionReportNote='" + Note + "'\n" +
           "WHERE\n" +
           "  DroneID=" + DroneID;
-          ViewBag.DocumentType = Type;
-          break;
-        case "incident":
-          SQL = "UPDATE MSTR_DRONE SET\n" +
-          " IncidentReportNote='" + Note + "'\n" +
-          "WHERE\n" +
-          "  DroneID=" + DroneID;
-          ViewBag.DocumentType = Type;
-          break;
-        default:
-          ViewBag.DocumentType = "Commission";
-          break;
+        ViewBag.DocumentType = Type;
+        break;
+      case "uat":
+        SQL = "UPDATE MSTR_DRONE SET\n" +
+        "  UATReportNote='" + Note + "'\n" +
+        "WHERE\n" +
+        "  DroneID=" + DroneID;
+        ViewBag.DocumentType = Type;
+        break;
+      case "incident":
+        SQL = "UPDATE MSTR_DRONE SET\n" +
+        " IncidentReportNote='" + Note + "'\n" +
+        "WHERE\n" +
+        "  DroneID=" + DroneID;
+        ViewBag.DocumentType = Type;
+        break;
+      default:
+        ViewBag.DocumentType = "Commission";
+        break;
       }
       ViewBag.Title = ViewBag.DocumentType + " Report - " + Util.getDroneName(DroneID);
       Util.doSQL(SQL);
@@ -223,7 +223,7 @@ namespace eX_Portal.Controllers {
 
     //Geo Tagging for Drone
     public ActionResult GeoTag([Bind(Prefix = "ID")] int DroneID = 0) {
-      if(!exLogic.User.hasAccess("FLIGHT.GEOTAG"))
+      if (!exLogic.User.hasAccess("FLIGHT.GEOTAG"))
         return RedirectToAction("NoAccess", "Home");
       ExponentPortalEntities Db = new ExponentPortalEntities();
       ViewBag.DroneID = DroneID;
@@ -267,13 +267,13 @@ namespace eX_Portal.Controllers {
         String GPSFixName = UploadDir + "GPS-" + FileName;
 
         //Save the file to Disk
-        if(!Directory.Exists(UploadDir)) {
+        if (!Directory.Exists(UploadDir)) {
           Directory.CreateDirectory(UploadDir);
         }
         TheFile.SaveAs(FullName);
 
         //Do the calculation for GPS
-        if(DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".jpg") {
+        if (DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".jpg") {
           //here find the code to find the GPS Cordinate
           ExifLib GeoTag = new ExifLib(FullName, GPSFixName);
 
@@ -289,15 +289,11 @@ namespace eX_Portal.Controllers {
 
           String Thumbnail = S3Download.getThumbnail(FullName);
 
-        }
-        else if (DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".flv") 
-          {
+        } else if (DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".flv") {
 
           String Thumbnail = S3Download.getThumbnail(FullName);
 
-        }
-        else if(DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".mov") 
-          {
+        } else if (DocumentType == "Geo Tag" && System.IO.Path.GetExtension(FullName).ToLower() == ".mov") {
           String Thumbnail = S3Download.getThumbnail(FullName);
         }
 
@@ -320,9 +316,9 @@ namespace eX_Portal.Controllers {
         JsonText.Append(",");
         JsonText.Append("\"FlightID\":");
         JsonText.Append(FlightID);
-                JsonText.Append(",");
-                //JsonText.Append("\"CDATE\":");
-        JsonText.Append(Util.Pair("CreatedDate",  FileCreatedOn.ToString("dd-MMM-yyyy hh:mm"),false ));
+        JsonText.Append(",");
+        //JsonText.Append("\"CDATE\":");
+        JsonText.Append(Util.Pair("CreatedDate", FileCreatedOn.ToString("dd-MMM-yyyy hh:mm"), false));
         JsonText.Append("},");
         JsonText.Append("\"addFile\":[");
         JsonText.Append(Util.getFileInfo(FullName, FileURL));
@@ -344,7 +340,7 @@ namespace eX_Portal.Controllers {
           ")";
         int DocumentID = Util.InsertSQL(SQL);
 
-      } catch(Exception ex) {
+      } catch (Exception ex) {
         JsonText.Clear();
         JsonText.Append("{");
         JsonText.Append(Util.Pair("status", "error", true));
@@ -361,22 +357,22 @@ namespace eX_Portal.Controllers {
       StringBuilder JsonText = new StringBuilder();
       JsonText.Append("{");
 
-      if(!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT")) {
+      if (!exLogic.User.hasAccess("DRONE.AUTHORITY_DOCUMENT")) {
         JsonText.Append(Util.Pair("status", "error", true));
-        JsonText.Append(Util.Pair("message", "You do not have access to RPAS Documents", false));        
-      } else { 
+        JsonText.Append(Util.Pair("message", "You do not have access to RPAS Documents", false));
+      } else {
         String SQL = "SELECT Count(*) FROM DroneDocuments\n" +
           "WHERE\n" +
           "  DocumentName='" + file + "' AND\n" +
           "  DroneID = '" + DroneID + "'";
         int DocCount = Util.getDBInt(SQL);
-        if(DocCount > 0) {
+        if (DocCount > 0) {
           String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
           String FullPath = Path.Combine(UploadPath, file);
 
-                    using (System.IO.File.Create(FullPath)) { }
-                    
-                    if (System.IO.File.Exists(FullPath)) {
+          using (System.IO.File.Create(FullPath)) { }
+
+          if (System.IO.File.Exists(FullPath)) {
             System.IO.File.Delete(FullPath);
             //now add the uploaded file to the database
             SQL = "DELETE FROM DroneDocuments\n" +
@@ -390,7 +386,7 @@ namespace eX_Portal.Controllers {
           }
         }
       }
-      if(!isDeleted) { 
+      if (!isDeleted) {
         JsonText.Append(Util.Pair("status", "error", true));
         JsonText.Append(Util.Pair("message", "Can not delete the file from server.", false));
       }
@@ -406,15 +402,15 @@ namespace eX_Portal.Controllers {
       String OldUploadDir = UploadPath + "0\\0\\";
       String DroneName = DroneID == 0 ? "0" : Util.getDroneName(DroneID);
       String NewUploadDir = UploadPath + DroneName + "\\" + FlightID + "\\";
-      foreach(String file in Files) {
-        if(String.IsNullOrEmpty(file))
+      foreach (String file in Files) {
+        if (String.IsNullOrEmpty(file))
           continue;
         String OldFullPath = OldUploadDir + file;
         String NewFullPath = NewUploadDir + file;
-        if(System.IO.File.Exists(OldFullPath)) {
-          if(!Directory.Exists(NewFullPath))
+        if (System.IO.File.Exists(OldFullPath)) {
+          if (!Directory.Exists(NewFullPath))
             Directory.CreateDirectory(NewUploadDir);
-          if(!System.IO.File.Exists(NewFullPath))
+          if (!System.IO.File.Exists(NewFullPath))
             System.IO.File.Move(OldFullPath, NewFullPath);
           String SQL = "UPDATE DroneDocuments SET\n" +
           "  DroneID=" + DroneID + ",\n" +
@@ -426,7 +422,7 @@ namespace eX_Portal.Controllers {
       }//foreach (String file in Files)
     }//MoveUploadFileT
 
-    public String UploadFile(int DroneID, String DocumentType, String DocumentTitle="", String DocumentDesc="") {
+    public String UploadFile(int DroneID, String DocumentType, String DocumentTitle = "", String DocumentDesc = "") {
       String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
       //send information in JSON Format always
       StringBuilder JsonText = new StringBuilder();
@@ -442,11 +438,11 @@ namespace eX_Portal.Controllers {
         String FileURL = DroneName + "/" + DocumentType + "/" + FileName;
         String FullName = UploadDir + FileName;
 
-        if(!Directory.Exists(UploadDir))
+        if (!Directory.Exists(UploadDir))
           Directory.CreateDirectory(UploadDir);
         TheFile.SaveAs(FullName);
-               
-                JsonText.Append("{");
+
+        JsonText.Append("{");
         JsonText.Append(Util.Pair("status", "success", true));
         JsonText.Append(Util.Pair("DocumentTitle", Util.toSQL(DocumentTitle), true));
         JsonText.Append(Util.Pair("DocumentDesc", Util.toSQL(DocumentDesc), true));
@@ -472,7 +468,7 @@ namespace eX_Portal.Controllers {
           ")";
         Util.doSQL(SQL);
 
-      } catch(Exception ex) {
+      } catch (Exception ex) {
         JsonText.Clear();
         JsonText.Append("{");
         JsonText.Append(Util.Pair("status", "error", true));
@@ -485,9 +481,9 @@ namespace eX_Portal.Controllers {
 
     // GET: Drone/Details/5
     public ActionResult Detail([Bind(Prefix = "ID")] int DroneID) {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
-      if(!exLogic.User.hasDrone(DroneID))
+      if (!exLogic.User.hasDrone(DroneID))
         return RedirectToAction("NoAccess", "Home");
 
       ViewBag.Title = Util.getDroneName(DroneID);
@@ -498,7 +494,7 @@ namespace eX_Portal.Controllers {
 
     //Partial view for Details of file uploaded for commission,decommission,uat,incident etc.
     public ActionResult FileDetail(int ID, String DocumentType) {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.DroneID = ID;
       ViewBag.DocumentType = DocumentType;
@@ -507,7 +503,7 @@ namespace eX_Portal.Controllers {
     }//FileDetail()
 
     public ActionResult DroneParts(int ID = 0) {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
       List<String> Parts = new List<String>();
       Parts = Listing.DroneListing(ID);
@@ -515,67 +511,66 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult getDroneParts(int ID = 0) {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
       var Parts = Listing.getParts(ID);
       return PartialView(Parts);
     }
 
-        // GET: Drone/Details/5
-        [ValidateInput(false)]
-        public String DroneDetail([Bind(Prefix = "ID")]  int DroneID) {
+    // GET: Drone/Details/5
+    [ValidateInput(false)]
+    public String DroneDetail([Bind(Prefix = "ID")]  int DroneID) {
       //string OwnerFormat;
       int OwnerId;
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return "Access Denied";
-          
-            String SQL = "SELECT \n" +
-          "  D.[DroneName] as RPAS,\n" +
-          "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
-          "  D.[DroneSerialNo] as [RPAS S.no],\n" +
-          "  O.Name as Organisation,\n" +
-          "  M.Name as ManufactureName,\n" +
-          "  U.Name as RPASType\n" +
-          //"  D.[DroneIdHexa] as RPASHexaId,\n" +
-          //"  D.[ModelName] as Description,\n" +
-          //"  RegistrationAuthority as RegistrationAuthority\n" +
-          "FROM\n" +
-          "  [MSTR_Drone] D\n" +
-          "Left join MSTR_Account  O on\n" +
-          "  D.AccountID = O.AccountID\n" +
-          "Left join LUP_Drone M on\n" +
-          "  ManufactureID = M.TypeID and\n" +
-          "  M.Type='Manufacturer' " +
-          "Left join LUP_Drone U on\n" +
-          "  UAVTypeID = U.TypeID and\n" +
-          "  U.Type= 'UAVType'\n" +
-          "WHERE\n" +
-          "  D.[DroneId]=" + DroneID;
-            if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-            {
-                    SQL += " AND\n" +
-                      "  D.AccountID=" + Util.getAccountID();
-            }
+
+      String SQL = "SELECT \n" +
+    "  D.[DroneName] as RPAS,\n" +
+    "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
+    "  D.[DroneSerialNo] as [RPAS S.no],\n" +
+    "  O.Name as Organisation,\n" +
+    "  M.Name as ManufactureName,\n" +
+    "  U.Name as RPASType\n" +
+    //"  D.[DroneIdHexa] as RPASHexaId,\n" +
+    //"  D.[ModelName] as Description,\n" +
+    //"  RegistrationAuthority as RegistrationAuthority\n" +
+    "FROM\n" +
+    "  [MSTR_Drone] D\n" +
+    "Left join MSTR_Account  O on\n" +
+    "  D.AccountID = O.AccountID\n" +
+    "Left join LUP_Drone M on\n" +
+    "  ManufactureID = M.TypeID and\n" +
+    "  M.Type='Manufacturer' " +
+    "Left join LUP_Drone U on\n" +
+    "  UAVTypeID = U.TypeID and\n" +
+    "  U.Type= 'UAVType'\n" +
+    "WHERE\n" +
+    "  D.[DroneId]=" + DroneID;
+      if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
+        SQL += " AND\n" +
+          "  D.AccountID=" + Util.getAccountID();
+      }
 
       qDetailView nView = new qDetailView(SQL);
       //this part for adding link to requred fields in the details
       OwnerId = Util.GetAccountIDFromDrone(DroneID);
 
-            //OwnerFormat = "<a  href='/Admin/AccountDetail/" + OwnerId + "'>$OwnerName$</a>";//url
-            //nView.FormatCols.Add("OwnerName", OwnerFormat); //Adding the Column required for formatting  
+      //OwnerFormat = "<a  href='/Admin/AccountDetail/" + OwnerId + "'>$OwnerName$</a>";//url
+      //nView.FormatCols.Add("OwnerName", OwnerFormat); //Adding the Column required for formatting  
 
 
-            return
+      return
 
-        ReassignDetail(DroneID) +
-        DecommissionDetail(DroneID) +
-        nView.getTable() +
-        Util.getDroneRegistrationDocuments(DroneID);
+  ReassignDetail(DroneID) +
+  DecommissionDetail(DroneID) +
+  nView.getTable() +
+  Util.getDroneRegistrationDocuments(DroneID);
       //+
     }
 
     public String ReassignDetail(int DroneID) {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return "Access Denied";
       StringBuilder Detail = new StringBuilder();
 
@@ -597,7 +592,7 @@ namespace eX_Portal.Controllers {
 
 
       var Row = Util.getDBRow(SQL);
-      if((bool)Row["hasRows"] && Row["IsActive"].ToString() != "True") {
+      if ((bool)Row["hasRows"] && Row["IsActive"].ToString() != "True") {
         Detail.AppendLine("<div class=\"decommission-info\">");
         Detail.AppendLine("ReAssigned For");
         Detail.AppendLine("<span>" + Row["RPAS"] + "</span>");
@@ -612,7 +607,7 @@ namespace eX_Portal.Controllers {
       return Detail.ToString();
     } //Decommission()
     public String DecommissionDetail(int DroneID) {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return "Access Denied";
       StringBuilder Detail = new StringBuilder();
       String SQL = "SELECT\n" +
@@ -627,7 +622,7 @@ namespace eX_Portal.Controllers {
          "where\n" +
          "  Mstr_drone.DroneID=" + DroneID;
       var Row = Util.getDBRow(SQL);
-      if((bool)Row["hasRows"] && Row["isactive"].ToString() != "True") {
+      if ((bool)Row["hasRows"] && Row["isactive"].ToString() != "True") {
         Detail.AppendLine("<div class=\"decommission-info\">");
         Detail.AppendLine("Decommissioned on");
         Detail.AppendLine("<span>" + Row["DecommissionDate"] + "</span>");
@@ -641,36 +636,19 @@ namespace eX_Portal.Controllers {
 
     // GET: Drone/Create
     public ActionResult Create() {
-      if(!exLogic.User.hasAccess("DRONE.CREATE"))
+      if (!exLogic.User.hasAccess("DRONE.CREATE"))
         return RedirectToAction("NoAccess", "Home");
-      String OwnerListSQL = 
-        "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account";
-                if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-                OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();           
-      OwnerListSQL +=" ORDER BY Name";
 
-            string AccName = Util.getDBVal("select name FROM MSTR_Account where AccountID=" + Util.getAccountID());
-            var viewModel = new ViewModel.DroneView {
-                Drone = new MSTR_Drone(),
-                OwnerList = Util.getListSQL(GetsqlforOwner(exLogic.User.hasAccess("DRONE.MANAGE"))),
-                UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
-                ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown"),
-                AccountName = AccName
-          //PartsGroupList = Util.GetDropDowntList();
-      };
-            //deleting if unwanted files exist in drone documents;
-            string SQL = " Delete from droneDocuments where droneid=0 and documenttype='Drone Image'";
-            Util.doSQL(SQL);
-     
-
-            return View(viewModel);
+      var viewModel = new ViewModel.DroneCreateModel();
+      return View(viewModel);
     }
+
 
     [ChildActionOnly]
     public String UAVTypeList(int UavTypeId = 0) {
       StringBuilder TypeList = new StringBuilder();
       String LastGroupName = String.Empty;
-      String SQL = 
+      String SQL =
       @"select DISTINCT
         LUP_Drone.TypeID,
         LUP_Drone.Name,
@@ -683,24 +661,25 @@ namespace eX_Portal.Controllers {
         GroupName,
         Name";
       TypeList.AppendLine(@"<select data-val=""true"" data-val-number=""The field UavTypeId must be a number."" id=""Drone_UavTypeId"" name=""Drone.UavTypeId"" class=""valid"">");
-      using(var cmd = ctx.Database.Connection.CreateCommand()) {
+      using (var cmd = ctx.Database.Connection.CreateCommand()) {
         ctx.Database.Connection.Open();
         cmd.CommandText = SQL;
-        using(var reader = cmd.ExecuteReader()) {
-          while(reader.Read()) {
+        using (var reader = cmd.ExecuteReader()) {
+          while (reader.Read()) {
             String GroupName = reader["GroupName"].ToString();
             String Name = reader["Name"].ToString();
             int ID = reader.GetInt32(reader.GetOrdinal("TypeID"));
-            
-            if(GroupName != LastGroupName) {
-              if(!String.IsNullOrEmpty(LastGroupName))
+
+            if (GroupName != LastGroupName) {
+              if (!String.IsNullOrEmpty(LastGroupName))
                 TypeList.AppendLine("</optgroup>");
-              TypeList.AppendLine("<optgroup label=\"" + GroupName  + "\">");
+              TypeList.AppendLine("<optgroup label=\"" + GroupName + "\">");
             }
             TypeList.Append("<option value=\"");
             TypeList.Append(ID);
             TypeList.Append("\"");
-            if(ID == UavTypeId) TypeList.Append(" selected");
+            if (ID == UavTypeId)
+              TypeList.Append(" selected");
             TypeList.Append(">" + Name);
             TypeList.AppendLine("</option>");
 
@@ -712,264 +691,40 @@ namespace eX_Portal.Controllers {
       return TypeList.ToString();
     }
 
-
     // POST: Drone/Create
     [HttpPost]
     [ValidateInput(false)]
-    public ActionResult Create(ViewModel.DroneView DroneView) {
-      if(!exLogic.User.hasAccess("DRONE.CREATE")) return RedirectToAction("NoAccess", "Home");      
-      try {
-        // TODO: Add insert logic here   
+    public ActionResult Create(ViewModel.DroneCreateModel DroneView) {
+      if (!exLogic.User.hasAccess("DRONE.CREATE"))
+        return RedirectToAction("NoAccess", "Home");
+      if(DroneView.ManufactureID == 0 && String.IsNullOrEmpty(DroneView.OtherManufacturer)) {
+        ModelState.AddModelError("ManufactureID", "Please Select Manufacture or enter a new one.");
+      }
+      if (DroneView.RpasTypeId == 0 && String.IsNullOrEmpty(DroneView.OtherRPASType)) {
+        ModelState.AddModelError("RpasTypeId", "Please Select RPAS Type or enter a new one.");
+      }
+      if (DroneView.CommissionDate == null) {
+        ModelState.AddModelError("CommissionDate", "Commission Date is Required.");
+      }
+      if(DroneView.CommissionDate > DateTime.Now.AddDays(-1)) {
+        ModelState.AddModelError("CommissionDate", "Commission Date is Invalid.");
+      }
 
-        ModelState.Remove("Drone.RpasSerialNo");
-        ModelState.Remove("Drone.RefName");
-        ModelState.Remove("Drone.MakeID");
-        ModelState.Remove("Drone.ModelID");
-                DroneView.Drone.AccountID = Util.getAccountID();
-        if (DroneView.Name==null||DroneView.Name=="") {
-                
-             if (DroneView.Drone.ManufactureId < 1 || DroneView.Drone.ManufactureId == null)
-            {
-             ModelState.AddModelError("Drone.ManufactureId", "Please Select Manufacture.");
-             }
-           }
-                if (DroneView.TypeName == null || DroneView.TypeName == "")
-                {
+      if (!ModelState.IsValid) {
+        return View(DroneView);
+      }
 
-                    if (DroneView.Drone.UavTypeId < 1 || DroneView.Drone.UavTypeId == null)
-                    {
-                        ModelState.AddModelError("Drone.UavTypeId", "Please Select UAV Type.");
-                    }
-                }
-
-
-
-
-
-                if (DroneView.Drone.CommissionDate == null) {
-          ModelState.AddModelError("Drone.CommissionDate", "Commission Date is Required.");
-        }
-
-        if (DroneView.Drone.ModelName != null) {
-          if (DroneView.Drone.ModelName.Length > 100) {
-            ModelState.AddModelError("Drone.ModelName", "Maximum 100 characters are allowed.");
-          }
-        }
-               
-                if (!ModelState.IsValid) {
-          
-          String OwnerListSQL =
-      "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account";
-          if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-            OwnerListSQL += " WHERE AccountId=" + Util.getAccountID();
-          OwnerListSQL += " ORDER BY Name";
-          var viewModel = new ViewModel.DroneView {
-            Drone = new MSTR_Drone(),
-            OwnerList = Util.getListSQL(OwnerListSQL),
-            UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown"),
-            ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown")
-          
-          //PartsGroupList = Util.GetDropDowntList();
-        };
-         
-          return View(viewModel);
-        }
-                int DTypeID = 0;
-                if(DroneView.TypeName!=null)
-                {
-                    int maxid = Util.getDBInt("SELECT Max(TypeId) + 1 from [LUP_Drone] where [Type]='UAVType'");
-                    string BinaryCode = Util.DecToBin(maxid);
-                    string s = DroneView.TypeName.ToString();
-                    string code = s.Substring(0, 3);
-                    var validateType = from type in ctx.LUP_Drone
-                                       where type.Name.ToUpper() == DroneView.TypeName.ToUpper()
-                                       && type.Type == "UAVType"
-                                       select type;
-                    if(validateType.FirstOrDefault().Id==0)
-                    { 
-                    LUP_Drone LuD = new LUP_Drone();
-                    LuD.BinaryCode = BinaryCode;
-                    LuD.Code = code;
-                    LuD.IsActive = true;
-                    LuD.Name = DroneView.TypeName;
-                    LuD.CreatedBy = Util.getLoginUserID();
-                    LuD.CreatedOn = DateTime.Now;
-                    ctx.LUP_Drone.Add(LuD);
-                        var newTypeID= from type in ctx.LUP_Drone
-                                 where type.Name.ToUpper() == DroneView.TypeName.ToUpper()
-                                 && type.Type == "UAVType"
-                                 select type;
-                        DTypeID = newTypeID.FirstOrDefault().Id;
-                    }
-                    else
-                    {
-                        DTypeID =Convert.ToInt32(DroneView.Drone.UavTypeId) ;
-                    }
-                }
-                else
-                {
-                    DTypeID = Convert.ToInt32(DroneView.Drone.UavTypeId);
-                }
-                //insert into LUP_Drone table -- to insert the manufacturer then to use it for inserting to the other table       
-                if (DroneView.Name != null)
-                {
-                    int typeid = Util.getDBInt("SELECT Max(TypeId) + 1 from [LUP_Drone] where [Type]='Manufacturer'");
-                    string BinaryCode = Util.DecToBin(typeid);
-                    string s = DroneView.Name.ToString();
-                    string code = s.Substring(0, 3);
-                    string SQL1 = "INSERT INTO LUP_DRONE(\n" +
-                    "  Type,\n" +
-                    "  Code,\n" +
-                    "  TypeId,\n" +
-                    "  BinaryCode,\n" +
-                    "  Name,\n" +
-                    "  CreatedBy,\n" +
-                    "  CreatedOn,\n" +
-                    "  IsActive\n" +
-                    ") VALUES(\n" +
-                    "  'Manufacturer',\n" +
-                    "  '" + code + "',\n" +
-                    "  " + typeid + ",\n" +
-                    "  '" + BinaryCode + "',\n" +
-                    "  '" + DroneView.Name + "',\n" +
-                    "  " + Util.getLoginUserID() + ",\n" +
-                    "  GETDATE(),\n" +
-                    "  'True'" +
-                    ")";
-                    int manufacturerid = Util.InsertSQL(SQL1);
-                    int DroneSerialNo = Util.getDBInt("SELECT Max(DroneSerialNo) + 1 FROM MSTR_DRONE");
-                    if (DroneSerialNo < 1001)
-                        DroneSerialNo = 1001;
-                    MSTR_Drone Drone = DroneView.Drone;
-                    
-                    if (Drone.CommissionDate == null) Drone.CommissionDate = DateTime.Now.Date;
-                    if (Drone.ModelName == null) Drone.ModelName = "Other";
-                    Drone.RegistrationDocument = String.IsNullOrEmpty(Request["FileName"]) ? "" : Request["FileName"];
-                    String SQL = "INSERT INTO MSTR_DRONE(\n" +
-                                 "  AccountID,\n" +
-                                 "  MANUFACTUREID,\n" +
-                                 "  UAVTYPEID,\n" +
-                                 "  COMMISSIONDATE,\n" +
-                                 "  DRONEDEFINITIONID,\n" +
-                                 "  ISACTIVE,\n" +
-                                 "  DroneSerialNo,\n" +
-                                 "  ModelName,\n" +
-                                 "  RegistrationDocument,\n" +
-                                 "  RegistrationAuthority,\n" +
-                                 "  CreatedBy,\n" +
-                                 "  CreatedOn\n" +
-                                 ") VALUES(\n" +
-                                 "  '" + Drone.AccountID + "',\n" +
-                                 "  '" + typeid + "',\n" +
-                                 "  '" + DTypeID+ "',\n" +
-                                 "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
-                                 "  11,\n" +
-                                 "  'True',\n" +
-                                 "  " + DroneSerialNo + ",\n" +
-                                 "  '" + Drone.ModelName + "',\n" +
-                                 "  '" + Drone.RegistrationDocument + "',\n" +
-                                 "  '" + Drone.RegistrationAuthority + "',\n" +
-                                 "  '" + Util.getLoginUserID() + "',\n" +
-                                 "  GETDATE()\n" +
-                                 ");";
-                    int DroneId = Util.InsertSQL(SQL);
-                    MoveDroneUploadFileTo(DroneId);
-                    //if (DroneView.SelectItemsForParts != null)
-                    //{
-                    //    for (var count = 0; count < DroneView.SelectItemsForParts.Count(); count++)
-                    //    {
-                    //        string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
-                    //        int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
-                    //        SQL = "Insert into M2M_DroneParts (\n" +
-                    //                "  DroneId,\n" +
-                    //                "  PartsId,\n" +
-                    //                "  Quantity\n" +
-                    //                ") values(\n" +
-                    //                "  " + DroneId + ",\n" +
-                    //                "  " + PartsId + ",\n" +
-                    //                "  " + Qty + "\n" +
-                    //                ");";
-                    //        int ID = Util.doSQL(SQL);
-                    //    }
-                      
-                    //}
-
-                        if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
-                        else
-                            return RedirectToAction("index","Home");
-                  
-                }
-                else
-                {
-                    int DroneSerialNo = Util.getDBInt("SELECT Max(DroneSerialNo) + 1 FROM MSTR_DRONE");
-                    if (DroneSerialNo < 1001)
-                        DroneSerialNo = 1001;
-                    MSTR_Drone Drone = DroneView.Drone;
-                    if (Drone.CommissionDate == null) Drone.CommissionDate = DateTime.Now;
-                    if (Drone.ModelName == null) Drone.ModelName = "Other";
-                    Drone.RegistrationDocument = String.IsNullOrEmpty(Request["FileName"]) ? "" : Request["FileName"];
-                    String SQL = "INSERT INTO MSTR_DRONE(\n" +
-                                 "  AccountID,\n" +
-                                 "  MANUFACTUREID,\n" +
-                                 "  UAVTYPEID,\n" +
-                                 "  COMMISSIONDATE,\n" +
-                                 "  DRONEDEFINITIONID,\n" +
-                                 "  ISACTIVE,\n" +
-                                 "  DroneSerialNo,\n" +
-                                 "  ModelName,\n" +
-                                 "  RegistrationDocument,\n" +
-                                 "  RegistrationAuthority,\n" +
-                                 "  CreatedBy,\n" +
-                                 "  CreatedOn\n" +
-                                 ") VALUES(\n" +
-                                 "  '" + Drone.AccountID + "',\n" +
-                                 "  '" + Drone.ManufactureId + "',\n" +
-                                 "  '" + DTypeID+ "',\n" +
-                                 "  '" + Drone.CommissionDate.Value.ToString("yyyy-MM-dd") + "',\n" +
-                                 "  11,\n" +
-                                 "  'True',\n" +
-                                 "  " + DroneSerialNo + ",\n" +
-                                 "  '" + Drone.ModelName + "',\n" +
-                                 "  '" + Drone.RegistrationDocument + "',\n" +
-                                 "  '" + Drone.RegistrationAuthority + "',\n" +
-                                 "  '" + Util.getLoginUserID() + "',\n" +
-                                 "  GETDATE()\n" +
-                                 ");";                    
-                    int DroneId = Util.InsertSQL(SQL);
-                    MoveDroneUploadFileTo(DroneId);
-                    //if (DroneView.SelectItemsForParts != null)
-                    //{
-                    //    for (var count = 0; count < DroneView.SelectItemsForParts.Count(); count++)
-                    //    {
-                    //        string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
-                    //        int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
-                    //        SQL = "Insert into M2M_DroneParts (\n" +
-                    //                "  DroneId,\n" +
-                    //                "  PartsId,\n" +
-                    //                "  Quantity\n" +
-                    //                ") values(\n" +
-                    //                "  " + DroneId + ",\n" +
-                    //                "  " + PartsId + ",\n" +
-                    //                "  " + Qty + "\n" +
-                    //                ");";
-                    //        int ID = Util.doSQL(SQL);
-                    //    }
-
-                    //}
-                    if (exLogic.User.hasAccess("DRONE.MANAGE")) return RedirectToAction("Manage", new { ID = DroneId });
-                    else
-                        return RedirectToAction("index","Home");
-                }
-        } catch(Exception ex)
-        {
-            Util.ErrorHandler(ex);
-            return View("InternalError", ex);
-        }
+      int DroneId = DroneView.Create();
+      MoveDroneUploadFileTo(DroneId);
+      if (exLogic.User.hasAccess("DRONE.MANAGE"))
+        return RedirectToAction("Manage", new { ID = DroneId });
+      else
+        return RedirectToAction("index", "Home");
     }
 
 
     public ActionResult ReAssign(int id) {
-      if(!exLogic.User.hasAccess("DRONE.MANAGE"))
+      if (!exLogic.User.hasAccess("DRONE.MANAGE"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.DroneId = id;
       ExponentPortalEntities db = new ExponentPortalEntities();
@@ -985,18 +740,18 @@ namespace eX_Portal.Controllers {
     }
     [HttpPost]
     public ActionResult ReAssign(ViewModel.DroneView DroneView) {
-      if(!exLogic.User.hasAccess("DRONE.MANAGE"))
+      if (!exLogic.User.hasAccess("DRONE.MANAGE"))
         return RedirectToAction("NoAccess", "Home");
       try {
         int DroneId = 0;
         // TODO: Add update logic here
-        if(ModelState.IsValid) {
+        if (ModelState.IsValid) {
 
 
           MSTR_Drone Drone = DroneView.Drone;
           //Inserting the Reassigned Drone
           int DroneSerialNo = Util.getDBInt("SELECT Max(DroneSerialNo) + 1 FROM MSTR_DRONE");
-          if(DroneSerialNo < 1001)
+          if (DroneSerialNo < 1001)
             DroneSerialNo = 1001;
 
           int OldDroneId = Drone.DroneId;
@@ -1041,8 +796,8 @@ namespace eX_Portal.Controllers {
 
           //Parts Inserting to New Drone
 
-          if(DroneView.SelectItemsForParts != null) {
-            for(var count = 0; count < DroneView.SelectItemsForParts.Count(); count++) {
+          if (DroneView.SelectItemsForParts != null) {
+            for (var count = 0; count < DroneView.SelectItemsForParts.Count(); count++) {
               string PartsId = ((string[])DroneView.SelectItemsForParts)[count];
               int Qty = Util.toInt(Request["SelectItemsForParts_" + PartsId]);
               SQL = "Insert into M2M_DroneParts (\n" +
@@ -1061,33 +816,29 @@ namespace eX_Portal.Controllers {
         }
         return RedirectToAction("Detail", new { ID = DroneId });
 
-      } catch(Exception ex) {
+      } catch (Exception ex) {
         return View("InternalError", ex);
       }
     }
 
-        // GET: Drone/Edit/5
-        
-    public string GetsqlforOwner(bool Value)
-        {
-            string OwnerListSQL="";
-            if (Value)
-            { OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name"; }
-            else
-            {
-                OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account where accountID = '" + Convert.ToString(Util.getAccountID()) + "' ORDER BY Name";
-            }
-            return OwnerListSQL;
-        }
+    // GET: Drone/Edit/5
+
+    public string GetsqlforOwner(bool Value) {
+      string OwnerListSQL = "";
+      if (Value) { OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name"; } else {
+        OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account where accountID = '" + Convert.ToString(Util.getAccountID()) + "' ORDER BY Name";
+      }
+      return OwnerListSQL;
+    }
     public ActionResult Edit(int id) {
-      if(!exLogic.User.hasAccess("DRONE.EDIT"))
+      if (!exLogic.User.hasAccess("DRONE.EDIT"))
         return RedirectToAction("NoAccess", "Home");
-            //bool IsmanageAccess = true;
-            //if (!exLogic.User.hasAccess("DRONE.MANAGE"))
-            //{
-            //    IsmanageAccess = false;
-            //}
-            ViewBag.DroneId = id;
+      //bool IsmanageAccess = true;
+      //if (!exLogic.User.hasAccess("DRONE.MANAGE"))
+      //{
+      //    IsmanageAccess = false;
+      //}
+      ViewBag.DroneId = id;
       ExponentPortalEntities db = new ExponentPortalEntities();
       //String OwnerListSQL = "SELECT Name + ' [' + Code + ']', AccountId FROM MSTR_Account ORDER BY Name";
       var viewModel = new ViewModel.DroneView {
@@ -1104,7 +855,7 @@ namespace eX_Portal.Controllers {
     [HttpPost]
     [ValidateInput(false)]
     public ActionResult Edit(ViewModel.DroneView DroneView) {
-      if(!exLogic.User.hasAccess("DRONE.EDIT"))
+      if (!exLogic.User.hasAccess("DRONE.EDIT"))
         return RedirectToAction("NoAccess", "Home");
       ModelState.Remove("Drone.RpasSerialNo");
       ModelState.Remove("Drone.RefName");
@@ -1122,22 +873,22 @@ namespace eX_Portal.Controllers {
 
       }
 
-        if (DroneView.Drone.AccountID< 1 || DroneView.Drone.AccountID == null) {
-          ModelState.AddModelError("Drone.AccountID", "Please Select Owner.");
-        }
+      if (DroneView.Drone.AccountID < 1 || DroneView.Drone.AccountID == null) {
+        ModelState.AddModelError("Drone.AccountID", "Please Select Owner.");
+      }
 
-        if (DroneView.Drone.CommissionDate == null) {
-          ModelState.AddModelError("Drone.CommissionDate", "Commission Date is Required.");
-        }
+      if (DroneView.Drone.CommissionDate == null) {
+        ModelState.AddModelError("Drone.CommissionDate", "Commission Date is Required.");
+      }
 
-        if (DroneView.Drone.ModelName != null) {
-          if (DroneView.Drone.ModelName.Length > 100) {
-            ModelState.AddModelError("Drone.ModelName", "Maximum 100 characters are allowed.");
-          }
+      if (DroneView.Drone.ModelName != null) {
+        if (DroneView.Drone.ModelName.Length > 100) {
+          ModelState.AddModelError("Drone.ModelName", "Maximum 100 characters are allowed.");
         }
+      }
       try {
         // TODO: Add update logic here
-        if(ModelState.IsValid) {
+        if (ModelState.IsValid) {
           //int DroneSerialNo = Util.getDBInt("SELECT Max(DroneSerialNo) FROM MSTR_DRONE");
           //if (DroneSerialNo < 1000) DroneSerialNo = 1001;
 
@@ -1170,24 +921,24 @@ namespace eX_Portal.Controllers {
           //  }
 
           //}
-                   
-        if (exLogic.User.hasAccess("DRONE.MANAGE"))
-        return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
-    else
-        return RedirectToAction("Detail", new { ID = DroneView.Drone.DroneId });
-                  //  
+
+          if (exLogic.User.hasAccess("DRONE.MANAGE"))
+            return RedirectToAction("Manage", new { ID = DroneView.Drone.DroneId });
+          else
+            return RedirectToAction("Detail", new { ID = DroneView.Drone.DroneId });
+          //  
         } else {
 
 
           DroneView.OwnerList = Util.getListSQL(GetsqlforOwner(exLogic.User.hasAccess("DRONE.MANAGE")));
           DroneView.UAVTypeList = Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown");
           DroneView.ManufactureList = Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown");
-            //PartsGroupList = Util.GetDropDowntList();
+          //PartsGroupList = Util.GetDropDowntList();
 
           return View(DroneView);
         }
-        
-      } catch(Exception ex) {
+
+      } catch (Exception ex) {
         return View("InternalError", ex);
       }
     }
@@ -1196,12 +947,12 @@ namespace eX_Portal.Controllers {
     public String Delete([Bind(Prefix = "ID")]int DroneID = 0) {
       String SQL = "";
       Response.ContentType = "text/json";
-      if(!exLogic.User.hasAccess("DRONE.DELETE"))
+      if (!exLogic.User.hasAccess("DRONE.DELETE"))
         return Util.jsonStat("ERROR", "Access Denied");
 
       //Delete the drone from database if there is no flights are created
       SQL = "SELECT Count(*) FROM [DroneFlight] WHERE DroneID = " + DroneID;
-      if(Util.getDBInt(SQL) != 0)
+      if (Util.getDBInt(SQL) != 0)
         return Util.jsonStat("ERROR", "You can not delete a drone with a flight attached");
 
       SQL = "DELETE FROM [M2M_DroneParts] WHERE DroneID = " + DroneID;
@@ -1235,7 +986,7 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult TechnicalLogAdd([Bind(Prefix = "ID")] int DroneID = 0, int FlightID = 0) {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Technical Log";
       Drones theDrone = new Drones() { DroneID = DroneID };
@@ -1255,7 +1006,7 @@ namespace eX_Portal.Controllers {
     [HttpPost]
     [ActionName("TechnicalLogAdd")]
     public ActionResult PostTechnicalLogAdd(List<DroneFlight> theFlight, [Bind(Prefix = "ID")] int DroneID = 0) {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
       Drones theDrone = new Drones() { DroneID = DroneID };
       theDrone.saveTechnicalLog(Request);
@@ -1263,7 +1014,7 @@ namespace eX_Portal.Controllers {
     }//TechnicalLogAdd
 
     public ActionResult TechnicalLog([Bind(Prefix = "ID")] int DroneID = 0) {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
       String SQL =
 "SELECT\n" +
@@ -1289,12 +1040,12 @@ namespace eX_Portal.Controllers {
       ViewBag.Title = "Technical Log";
       ViewBag.DroneID = DroneID;
       qView nView = new qView(SQL);
-      if(exLogic.User.hasAccess("DRONE.EDIT"))
+      if (exLogic.User.hasAccess("DRONE.EDIT"))
         nView.addMenu("Edit", Url.Action("TechnicalLogAdd",
 new { ID = DroneID, FlightID = "_Pkey" }));
 
 
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -1303,9 +1054,9 @@ new { ID = DroneID, FlightID = "_Pkey" }));
     }
 
     public ActionResult Document([Bind(Prefix = "ID")] int? DroneID) {
-      if(!exLogic.User.hasAccess("DRONE"))
+      if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
-      using(var ctx = new ExponentPortalEntities()) {
+      using (var ctx = new ExponentPortalEntities()) {
         var List = ctx.DroneDocuments.ToList();
         var aa = (from p in List where p.DroneID == DroneID select p).ToList();
         ;
@@ -1316,11 +1067,11 @@ new { ID = DroneID, FlightID = "_Pkey" }));
     }
 
     public ActionResult GCAApproval() {
-      if(!exLogic.User.hasAccess("FLIGHT.GCAAPPROVAL"))
+      if (!exLogic.User.hasAccess("FLIGHT.GCAAPPROVAL"))
         return RedirectToAction("NoAccess", "Home");
       String SQL = "SELECT [ApprovalID]\n ,[ApprovalName]\n,[ApprovalDate]\n,[StartDate]\n ,[EndDate]\n ,[StartTime]\n,[EndTime]\n,[ApprovalFileUrl]\n,Count(*) Over() as _TotalRecords,DroneID as _PKey FROM[ExponentPortal].[dbo].[GCA_Approval]";
       qView nView = new qView(SQL);
-      if(Request.IsAjaxRequest()) {
+      if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("qViewData", nView);
       } else {
@@ -1329,9 +1080,9 @@ new { ID = DroneID, FlightID = "_Pkey" }));
     }
 
     public ActionResult GCADetails([Bind(Prefix = "ID")] int? DroneID) {
-      if(!exLogic.User.hasAccess("FLIGHT.GCAAPPROVAL"))
+      if (!exLogic.User.hasAccess("FLIGHT.GCAAPPROVAL"))
         return RedirectToAction("NoAccess", "Home");
-      using(var ctx = new ExponentPortalEntities()) {
+      using (var ctx = new ExponentPortalEntities()) {
         var List = ctx.GCA_Approval.ToList();
         var aa = (from p in List where p.DroneID == DroneID select p).ToList();
         return View(aa);
@@ -1339,226 +1090,210 @@ new { ID = DroneID, FlightID = "_Pkey" }));
     }
 
 
-        //uploading multiple images for the drone
-
-      
-        public ActionResult DroneImaging([Bind(Prefix = "ID")] int DroneID = 0,string Actions="")
-        {
-            if (!exLogic.User.hasAccess("DRONE"))
-                return RedirectToAction("NoAccess", "Home");
-            ViewBag.DroneID = 0;
-            ViewBag.Actions = Actions;
-              ExponentPortalEntities Db = new ExponentPortalEntities();
-            ViewBag.DroneID = DroneID;
-           
-            List<DroneDocument> Docs = (
-              from o in Db.DroneDocuments
-              where o.DocumentType == "Drone Image" &&
-              o.DroneID == DroneID
-              select o).ToList();
-
-            return View(Docs);
-        }//Drone Imaging
+    //uploading multiple images for the drone
 
 
+    public ActionResult DroneImaging([Bind(Prefix = "ID")] int DroneID = 0, string Actions = "") {
+      if (!exLogic.User.hasAccess("DRONE"))
+        return RedirectToAction("NoAccess", "Home");
+      ViewBag.DroneID = 0;
+      ViewBag.Actions = Actions;
+      ExponentPortalEntities Db = new ExponentPortalEntities();
+      ViewBag.DroneID = DroneID;
 
-        [HttpPost]
-        public String UploadDroneFile([Bind(Prefix = "ID")]  int DroneID = 0, String DocumentType = "Drone Image", String CreatedOn = "")
-        {
-            if (!exLogic.User.hasAccess("DRONE"))
-                return "Access Denied";
-            DateTime FileCreatedOn = DateTime.MinValue;
-            String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
-            //send information in JSON Format always
+      List<DroneDocument> Docs = (
+        from o in Db.DroneDocuments
+        where o.DocumentType == "Drone Image" &&
+        o.DroneID == DroneID
+        select o).ToList();
 
-            StringBuilder JsonText = new StringBuilder();
-            GPSInfo GPS = new GPSInfo();
-            Response.ContentType = "text/json";
-
-            try
-            {
-                FileCreatedOn = DateTime.ParseExact(CreatedOn, "ddd, d MMM yyyy HH:mm:ss GMT", CultureInfo.InvariantCulture);
-                string FileCreated_ON = FileCreatedOn.ToString();
-            }
-            catch { }
-
-            //when there are files in the request, save and return the file information
-            try
-            {
-                var TheFile = Request.Files[0];
-                String FileName = System.Guid.NewGuid() + "~" + TheFile.FileName.ToLower();
-                String DroneName = Util.getDroneNameByDroneID(DroneID);
-                String UploadDir = UploadPath + DroneName + "\\" + DroneID + "\\";                
-                String FileURL = FileName;
-                String FullName = UploadDir + FileName;
-                //Save the file to Disk
-                if (!Directory.Exists(UploadDir))
-                    Directory.CreateDirectory(UploadDir);
-               TheFile.SaveAs(FullName);
-                TheFile.InputStream.Close();
-                TheFile.InputStream.Dispose();
-                GC.Collect();
+      return View(Docs);
+    }//Drone Imaging
 
 
-                ExifLib GeoTag = new ExifLib(FullName, FullName);
-               // GPS = GeoTag.getGPS(FlightID, FileCreatedOn);
-               // GeoTag.setGPS(GPS);
-                GeoTag.SetThumbnail(100);
 
-               
+    [HttpPost]
+    public String UploadDroneFile([Bind(Prefix = "ID")]  int DroneID = 0, String DocumentType = "Drone Image", String CreatedOn = "") {
+      if (!exLogic.User.hasAccess("DRONE"))
+        return "Access Denied";
+      DateTime FileCreatedOn = DateTime.MinValue;
+      String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+      //send information in JSON Format always
+
+      StringBuilder JsonText = new StringBuilder();
+      GPSInfo GPS = new GPSInfo();
+      Response.ContentType = "text/json";
+
+      try {
+        FileCreatedOn = DateTime.ParseExact(CreatedOn, "ddd, d MMM yyyy HH:mm:ss GMT", CultureInfo.InvariantCulture);
+        string FileCreated_ON = FileCreatedOn.ToString();
+      } catch { }
+
+      //when there are files in the request, save and return the file information
+      try {
+        var TheFile = Request.Files[0];
+        String FileName = System.Guid.NewGuid() + "~" + TheFile.FileName.ToLower();
+        String DroneName = Util.getDroneNameByDroneID(DroneID);
+        String UploadDir = UploadPath + DroneName + "\\" + DroneID + "\\";
+        String FileURL = FileName;
+        String FullName = UploadDir + FileName;
+        //Save the file to Disk
+        if (!Directory.Exists(UploadDir))
+          Directory.CreateDirectory(UploadDir);
+        TheFile.SaveAs(FullName);
+        TheFile.InputStream.Close();
+        TheFile.InputStream.Dispose();
+        GC.Collect();
+
+
+        ExifLib GeoTag = new ExifLib(FullName, FullName);
+        // GPS = GeoTag.getGPS(FlightID, FileCreatedOn);
+        // GeoTag.setGPS(GPS);
+        GeoTag.SetThumbnail(100);
 
 
 
 
 
 
-                JsonText.Append("{");
-                JsonText.Append(Util.Pair("status", "success", true));
-                JsonText.Append(Util.Pair("url", "/upload/drone/" + DroneName + "/" + DroneID + "/" + FileURL, true));
-                JsonText.Append("\"GPS\":{");
-                JsonText.Append("\"Info\":\"");
-                JsonText.Append(2.00);
-                JsonText.Append("\",");
-                JsonText.Append("\"Latitude\":");
-                JsonText.Append(2.20);
-                JsonText.Append(",");
-                JsonText.Append("\"Longitude\":");
-                JsonText.Append(2.20);
-                JsonText.Append(",");
-                JsonText.Append("\"Altitude\":");
-                JsonText.Append(0);
-                JsonText.Append(",");
-                JsonText.Append(Util.Pair("CreatedDate", FileCreatedOn.ToString("dd-MMM-yyyy hh:mm"), false));
-                JsonText.Append(",");
-                JsonText.Append("\"DroneID\":");
-                JsonText.Append(DroneID);
-                JsonText.Append("},");
 
-                JsonText.Append("\"addFile\":[");
-                JsonText.Append(Util.getFileInfo(FullName, FileURL));
-                JsonText.Append("]}");
 
-                //now add the uploaded file to the database
-                String SQL = "INSERT INTO DroneDocuments(\n" +
-                  " DroneID,  DocumentType, DocumentName, UploadedDate,DocumentDate, UploadedBy\n" +
-                 
-                  ") VALUES (\n" +
-                  "  '" + DroneID + "',\n" +                
-                  "  '" + DocumentType + "',\n" +
-                  "  '" + FileURL + "',\n" +
-                  "  GETDATE(),\n" +
-                  " '" + FileCreatedOn + "'," +
-                  "  " + Util.getLoginUserID() + "\n" +
-                
-                  ")";
-                int DocumentID = Util.InsertSQL(SQL);
+        JsonText.Append("{");
+        JsonText.Append(Util.Pair("status", "success", true));
+        JsonText.Append(Util.Pair("url", "/upload/drone/" + DroneName + "/" + DroneID + "/" + FileURL, true));
+        JsonText.Append("\"GPS\":{");
+        JsonText.Append("\"Info\":\"");
+        JsonText.Append(2.00);
+        JsonText.Append("\",");
+        JsonText.Append("\"Latitude\":");
+        JsonText.Append(2.20);
+        JsonText.Append(",");
+        JsonText.Append("\"Longitude\":");
+        JsonText.Append(2.20);
+        JsonText.Append(",");
+        JsonText.Append("\"Altitude\":");
+        JsonText.Append(0);
+        JsonText.Append(",");
+        JsonText.Append(Util.Pair("CreatedDate", FileCreatedOn.ToString("dd-MMM-yyyy hh:mm"), false));
+        JsonText.Append(",");
+        JsonText.Append("\"DroneID\":");
+        JsonText.Append(DroneID);
+        JsonText.Append("},");
 
-            }
-            catch (Exception ex)
-            {
-                JsonText.Clear();
-                JsonText.Append("{");
-                JsonText.Append(Util.Pair("status", "error", true));
-                JsonText.Append(Util.Pair("message", ex.Message, false));
-                JsonText.Append("}");
-            }//catch
-            return JsonText.ToString();
-        }//UploadDroneFile
-        
-        private void MoveDroneUploadFileTo(int DroneID)
-        {
-       
-   ExponentPortalEntities db = new ExponentPortalEntities();
-        var FileList = (
-        from t1 in db.DroneDocuments
-        where t1.DroneID ==0 &&
-     t1.DocumentType=="Drone Image"       
-        select new
-        {
-            Name=t1.DocumentName
-        }).ToList();
-            String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
-            String OldUploadDir = UploadPath + "0\\";
-            String DroneName = DroneID == 0 ? "0" : Util.getDroneName(DroneID);
-            String NewUploadDir = UploadPath + DroneName + "\\" + DroneID + "\\";
-            foreach (var file in FileList)
-            {
-                if (String.IsNullOrEmpty(file.Name.ToString()))
-                    continue;
-                String OldFullPath = OldUploadDir + file.Name.ToString();
-                String NewFullPath = NewUploadDir + file.Name.ToString();
-                String OldThumbFullPath = OldUploadDir + file.Name.Replace(".jpg", ".t.png");
-                String NewThumbFullPath = NewUploadDir + file.Name.Replace(".jpg", ".t.png");
-                if (System.IO.File.Exists(OldFullPath))
-                {
-                    if (!Directory.Exists(NewFullPath))
-                        Directory.CreateDirectory(NewUploadDir);
+        JsonText.Append("\"addFile\":[");
+        JsonText.Append(Util.getFileInfo(FullName, FileURL));
+        JsonText.Append("]}");
 
-                    if (!System.IO.File.Exists(NewFullPath))
-                    {
-                        System.IO.File.Move(OldFullPath, NewFullPath);
-                        System.IO.File.Move(OldThumbFullPath, NewThumbFullPath);
-                    }
-                
-                String SQL = "UPDATE DroneDocuments SET\n" +
-                "  DroneID=" + DroneID + "\n" +
-                "WHERE\n" +
-                "  DocumentName='" + file.Name.ToString() + "'" +
-                " and DocumentType='Drone Image'";
-                Util.doSQL(SQL);
-            }//if(System.IO.File.Exists
-            }//foreach (String file in Files)
-        }//MoveUploadFileT
+        //now add the uploaded file to the database
+        String SQL = "INSERT INTO DroneDocuments(\n" +
+          " DroneID,  DocumentType, DocumentName, UploadedDate,DocumentDate, UploadedBy\n" +
 
-        public String DeleteDroneFile([Bind(Prefix = "ID")] int DroneID, String file = "")
-        {
-            if (!exLogic.User.hasAccess("DRONE"))
-                return "Access Denied";
-            bool isDeleted = false;
-            StringBuilder JsonText = new StringBuilder();
-            JsonText.Append("{");
+          ") VALUES (\n" +
+          "  '" + DroneID + "',\n" +
+          "  '" + DocumentType + "',\n" +
+          "  '" + FileURL + "',\n" +
+          "  GETDATE(),\n" +
+          " '" + FileCreatedOn + "'," +
+          "  " + Util.getLoginUserID() + "\n" +
 
-                String SQL = "SELECT Count(*) FROM DroneDocuments\n" +
-                  "WHERE\n" +
-                  "  DocumentName='" + file + "' AND\n" +
-                  "  DroneID = '" + DroneID + "'\n" +
-                  " and DocumentType='Drone Image'";
-                int DocCount = Util.getDBInt(SQL);
+          ")";
+        int DocumentID = Util.InsertSQL(SQL);
 
-                if (DocCount > 0)
-                {
-                string DroneName = Util.getDroneNameByDroneID(DroneID);
-                    String UploadPath = Server.MapPath(Url.Content(RootUploadDir+ DroneName+"//"+ DroneID +"//"));
-                    String FullPath = Path.Combine(UploadPath, file);
-                string PngPath= Path.Combine(UploadPath, file.Replace(".jpg", ".t.png"));
-                if (System.IO.File.Exists(FullPath))
-                    {
-                        System.IO.File.Delete(FullPath);
-                    System.IO.File.Delete(PngPath);
-                    //now add the uploaded file to the database
-                    SQL = "DELETE FROM DroneDocuments\n" +
-                        "WHERE\n" +
-                        "  DocumentName='" + file + "' AND\n" +
-                        "  DroneID = '" + DroneID + "'"+
-                        " and DocumentType='Drone Image'";
-                    Util.doSQL(SQL);
-                        isDeleted = true;
-                        JsonText.Append(Util.Pair("status", "success", true));
-                        JsonText.Append(Util.Pair("message", "Deleted successfully.", false));
-                    }
-                }
-            
-            if (!isDeleted)
-            {
-                JsonText.Append(Util.Pair("status", "error", true));
-                JsonText.Append(Util.Pair("message", "Can not delete the file from server.", false));
-            }
-            JsonText.Append("}");
+      } catch (Exception ex) {
+        JsonText.Clear();
+        JsonText.Append("{");
+        JsonText.Append(Util.Pair("status", "error", true));
+        JsonText.Append(Util.Pair("message", ex.Message, false));
+        JsonText.Append("}");
+      }//catch
+      return JsonText.ToString();
+    }//UploadDroneFile
 
-            return JsonText.ToString();
+    private void MoveDroneUploadFileTo(int DroneID) {
+
+      ExponentPortalEntities db = new ExponentPortalEntities();
+      var FileList = (
+      from t1 in db.DroneDocuments
+      where t1.DroneID == 0 &&
+   t1.DocumentType == "Drone Image"
+      select new {
+        Name = t1.DocumentName
+      }).ToList();
+      String UploadPath = Server.MapPath(Url.Content(RootUploadDir));
+      String OldUploadDir = UploadPath + "0\\";
+      String DroneName = DroneID == 0 ? "0" : Util.getDroneName(DroneID);
+      String NewUploadDir = UploadPath + DroneName + "\\" + DroneID + "\\";
+      foreach (var file in FileList) {
+        if (String.IsNullOrEmpty(file.Name.ToString()))
+          continue;
+        String OldFullPath = OldUploadDir + file.Name.ToString();
+        String NewFullPath = NewUploadDir + file.Name.ToString();
+        String OldThumbFullPath = OldUploadDir + file.Name.Replace(".jpg", ".t.png");
+        String NewThumbFullPath = NewUploadDir + file.Name.Replace(".jpg", ".t.png");
+        if (System.IO.File.Exists(OldFullPath)) {
+          if (!Directory.Exists(NewFullPath))
+            Directory.CreateDirectory(NewUploadDir);
+
+          if (!System.IO.File.Exists(NewFullPath)) {
+            System.IO.File.Move(OldFullPath, NewFullPath);
+            System.IO.File.Move(OldThumbFullPath, NewThumbFullPath);
+          }
+
+          String SQL = "UPDATE DroneDocuments SET\n" +
+          "  DroneID=" + DroneID + "\n" +
+          "WHERE\n" +
+          "  DocumentName='" + file.Name.ToString() + "'" +
+          " and DocumentType='Drone Image'";
+          Util.doSQL(SQL);
+        }//if(System.IO.File.Exists
+      }//foreach (String file in Files)
+    }//MoveUploadFileT
+
+    public String DeleteDroneFile([Bind(Prefix = "ID")] int DroneID, String file = "") {
+      if (!exLogic.User.hasAccess("DRONE"))
+        return "Access Denied";
+      bool isDeleted = false;
+      StringBuilder JsonText = new StringBuilder();
+      JsonText.Append("{");
+
+      String SQL = "SELECT Count(*) FROM DroneDocuments\n" +
+        "WHERE\n" +
+        "  DocumentName='" + file + "' AND\n" +
+        "  DroneID = '" + DroneID + "'\n" +
+        " and DocumentType='Drone Image'";
+      int DocCount = Util.getDBInt(SQL);
+
+      if (DocCount > 0) {
+        string DroneName = Util.getDroneNameByDroneID(DroneID);
+        String UploadPath = Server.MapPath(Url.Content(RootUploadDir + DroneName + "//" + DroneID + "//"));
+        String FullPath = Path.Combine(UploadPath, file);
+        string PngPath = Path.Combine(UploadPath, file.Replace(".jpg", ".t.png"));
+        if (System.IO.File.Exists(FullPath)) {
+          System.IO.File.Delete(FullPath);
+          System.IO.File.Delete(PngPath);
+          //now add the uploaded file to the database
+          SQL = "DELETE FROM DroneDocuments\n" +
+              "WHERE\n" +
+              "  DocumentName='" + file + "' AND\n" +
+              "  DroneID = '" + DroneID + "'" +
+              " and DocumentType='Drone Image'";
+          Util.doSQL(SQL);
+          isDeleted = true;
+          JsonText.Append(Util.Pair("status", "success", true));
+          JsonText.Append(Util.Pair("message", "Deleted successfully.", false));
         }
+      }
 
+      if (!isDeleted) {
+        JsonText.Append(Util.Pair("status", "error", true));
+        JsonText.Append(Util.Pair("message", "Can not delete the file from server.", false));
+      }
+      JsonText.Append("}");
 
-
+      return JsonText.ToString();
     }
+
+
+
+  }
 }//class/namespace

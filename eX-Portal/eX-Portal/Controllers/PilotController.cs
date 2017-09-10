@@ -245,7 +245,8 @@ namespace eX_Portal.Controllers {
 
 
         MovePhto(UserModel.PhotoUrl, id);
-        UpdateLinkedDrone(UserModel.LinkedDroneID, id);
+        if(exLogic.User.hasAccess("ORGANIZATION.ADMIN"))
+          UpdateLinkedDrone(UserModel.LinkedDroneID, id);
         return RedirectToAction("PilotDetail", "Pilot", new { ID = id });
 
       }
@@ -270,7 +271,7 @@ namespace eX_Portal.Controllers {
     private void UpdateLinkedDrone(IList<int> LinkedDroneIDs, int id) {
       String SQL = $"DELETE FROM M2M_Drone_User Where UserID={id}";
       Util.doSQL(SQL);
-      if (LinkedDroneIDs.Any()) {
+      if (LinkedDroneIDs != null && LinkedDroneIDs.Any()) {
         SQL = "";
         foreach (var LinkedDroneID in LinkedDroneIDs) {
           if (SQL != "")
@@ -285,8 +286,11 @@ namespace eX_Portal.Controllers {
 
 
     public ActionResult Edit(int id) {
+
       if (!exLogic.User.hasAccess("PILOTS.EDIT"))
-        return RedirectToAction("NoAccess", "Home");
+        id = Util.getLoginUserID();
+      if (!exLogic.User.hasAccess("ORGANIZATION.ADMIN"))
+        id = Util.getLoginUserID();
       PilotEditModel UserModel = new PilotEditModel(id);
       if (UserModel.UserId == 0)
         return HttpNotFound();
@@ -299,7 +303,9 @@ namespace eX_Portal.Controllers {
     public ActionResult Edit(int id, ViewModel.PilotEditModel UserModel) {
       //String Pass_SQL = "\n";
       if (!exLogic.User.hasAccess("PILOTS.EDIT"))
-        return RedirectToAction("NoAccess", "Home");
+        id = Util.getLoginUserID();
+      if (!exLogic.User.hasAccess("ORGANIZATION.ADMIN"))
+        id = Util.getLoginUserID();
 
       if (ModelState.IsValid) {
         int AccountID = Util.getAccountID();
@@ -346,7 +352,8 @@ namespace eX_Portal.Controllers {
         int idPilot = Util.doSQL(SQL);
 
         MovePhto(UserModel.PhotoUrl, id);
-        UpdateLinkedDrone(UserModel.LinkedDroneID, id);
+        if (exLogic.User.hasAccess("ORGANIZATION.ADMIN"))
+          UpdateLinkedDrone(UserModel.LinkedDroneID, id);
 
         return RedirectToAction("Index", "Home");
       }
@@ -397,6 +404,9 @@ namespace eX_Portal.Controllers {
 
     [ChildActionOnly]
     public ActionResult Drones(int PilotID = 0) {
+      if (!exLogic.User.hasAccess("ORGANIZATION.ADMIN"))
+        return null;
+
       int AccountID = Util.getAccountID();
       var Query = from d in db.MSTR_Drone
                   where d.AccountID == AccountID

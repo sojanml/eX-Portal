@@ -1,113 +1,73 @@
-﻿@model eX_Portal.ViewModel.DroneView
+﻿@model eX_Portal.ViewModel.DroneCreateModel
 
 @{
   ViewBag.Title = "RPAS Registration";
+  var UAVTypeList = eX_Portal.exLogic.Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown");
+  var ManufactureList = eX_Portal.exLogic.Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown");
+
 }
 
-<div class="form-horizontal" >
+<div class="form-horizontal">
   <div style="width:60%; margin:auto">
-  @using (Html.BeginForm()) {
+    @using (Html.BeginForm()) {
 
-    @Html.HiddenFor(model => model.Drone.DroneId)
-
-
-    <div>
+      @Html.HiddenFor(model => model.DroneID)
       <div class="editor-label">
-        @Html.LabelFor(model => model.Drone.ManufactureId, "Manufacturer")<span style="color:red">*</span>
-
+        @Html.LabelFor(model => model.ManufactureID, "Manufacturer")<span style="color:red">*</span>
       </div>
-      <div class="editor-field" id="ddlist">
-
-        @Html.DropDownListFor(model => model.Drone.ManufactureId, Model.ManufactureList)
-        @Html.ValidationMessageFor(model => model.Drone.ManufactureId)
-      </div>
-        <div class="editor-field" id="divManuDetails" style="display:none;">
-            @*@Html.LabelFor(model => model.Name, "Other Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <div class="editor-field">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "editor-label", @maxlength = "50" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-
+        <div class="editor-field" id="ddlist">
+          @Html.DropDownListFor(model => model.ManufactureID, ManufactureList)
+          @Html.ValidationMessageFor(model => model.ManufactureID)
         </div>
-      <div class="editor-field" >
-        <input id="othermanu" value="1" name="othermanu" type="checkbox" />
-        <label for="othermanu">Other Manufacturer</label>
-      </div>
-    </div>
-   
-
-    <div>
-    <div class="editor-label">
-      @Html.LabelFor(model => model.Drone.UavTypeId, "RPAS Type")<span style="color:red">*</span>
-       
-    </div>
-    <div class="editor-field">
-      @Html.DropDownListFor(model => model.Drone.UavTypeId, Model.UAVTypeList)
-      @*Html.Action("UAVTypeList", new { UavTypeId = Model.Drone.UavTypeId } )*@
-      @Html.ValidationMessageFor(model => model.Drone.UavTypeId)
-    </div>
-    <div class="editor-field" id="divTypeDetails" style="display:none;">
-        @*@Html.LabelFor(model => model.Name, "Other Manufacturer", htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <div class="editor-field"  style="margin-bottom:0px;">
+          <input id="othermanu" value="1" name="OtherManufacturer" type="checkbox" />
+          @Html.LabelFor(model => model.OtherManufacturer, "Other Manufacturer", htmlAttributes: new { @for = "othermanu", @class = "control -label col-md-2" })
+        </div>
+        <div  class="editor-field" id="divManuDetails" style="display:none; margin-bottom:0px;">
+          <div class="editor-field">
+            @Html.EditorFor(model => model.OtherManufacturer, new { htmlAttributes = new { @class = "editor-label", @maxlength = "50" } })
+            @Html.ValidationMessageFor(model => model.OtherManufacturer, "", new { @class = "text-danger" })
+          </div>
+        </div>
+        <div style="margin-top:30px;" class="editor-label">
+          @Html.LabelFor(model => model.RpasTypeId, "RPAS Type")<span style="color:red">*</span>
+        </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.TypeName, new { htmlAttributes = new { @class = "editor-label", @maxlength = "50" } })
-            @Html.ValidationMessageFor(model => model.TypeName, "", new { @class = "text-danger" })
+          @Html.DropDownListFor(model => model.RpasTypeId, UAVTypeList)
+          @*Html.Action("UAVTypeList", new { UavTypeId = Model.Drone.UavTypeId } )*@
+          @Html.ValidationMessageFor(model => model.RpasTypeId)
         </div>
-     </div>
+        <div class="editor-field" style="margin-bottom:0px">
+          <input id="othertype" value="1" name="OtherRPASType" type="checkbox" />
+          @Html.LabelFor(model => model.OtherRPASType, "Other Type", htmlAttributes: new { @for = "othertype", @class = "control-label col-md-2" })
+        </div>
+        <div class="editor-field" id="divOtherRPASType" style="display:none; margin-bottom:0px">
+          <div class="editor-field">
+            @Html.EditorFor(model => model.OtherRPASType, new { htmlAttributes = new { @for= "othertype", @class = "editor -label", @maxlength = "50" } })
+            @Html.ValidationMessageFor(model => model.OtherRPASType, "", new { @class = "text-danger" })
+          </div>
+        </div>
+        <div style="margin-top:30px;" class="editor-label">
+          @Html.LabelFor(model => model.Description, "Description")
+        </div>
         <div class="editor-field">
-            <input id="othertype" value="1" name="othertype" type="checkbox" />
-            <label for="othertype">Other Type</label>
-        </div>
-</div>
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Drone.ModelName, "Description")
-        </div>
-
-        <div class="editor-field">
-
-            @Html.EditorFor(model => model.Drone.ModelName)
-            @Html.ValidationMessageFor(model => model.Drone.ModelName)
+          @Html.EditorFor(model => model.Description)
+          @Html.ValidationMessageFor(model => model.Description)
         </div>
         <div class="editor-label">
-            @Html.LabelFor(model => model.Drone.CommissionDate, "Commission Date")<span style="color:red">*</span>
-
+          @Html.LabelFor(model => model.CommissionDate, "Commission Date")<span style="color:red">*</span>
         </div>
         <div class="editor-field">
-
-            @Html.EditorFor(model => model.Drone.CommissionDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
-            @Html.ValidationMessageFor(model => model.Drone.CommissionDate)
+          @Html.EditorFor(model => model.CommissionDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
+          @Html.ValidationMessageFor(model => model.CommissionDate)
         </div>
-
-        if (eX_Portal.exLogic.User.hasAccess("DRONE.PARTS")) {
-        <div class="editor-label">
-            @Html.LabelFor(model => model.DroneParts.PartsName, "Parts")
-        </div>
-        <div class="editor-field">
-            <input type="text" placeholder="Enter the Part name, Model or Supplier to Search" id="SelectItemsForParts" />
-            <table class="report" id="Table_SelectItemsForParts" style="display:none;">
-                <thead>
-                    <tr>
-                        <th>Parts Name</th>
-                        <th>Model</th>
-                        <th>Supplier</th>
-                        <th>Qty</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-        }
 
         @Html.Action("DroneImaging", "Drone", new { ID = 0, Actions = "Create" })
-
-
-
         <div class="form-toolbar">
-            <input type="submit" value="Create" />
+          <input type="submit" value="Create" />
         </div>
-
-
-        }
-    </div>
+    }
+  </div>
 
 </div>
 
@@ -121,76 +81,42 @@
   <script type="text/javascript">
     var UploadDroneURL = '@Url.Action("UploadDroneFile","Drone", new { ID = 0, DocumentType="Drone Image"})';
     var DeleteDroneURL = '@Url.Action("DeleteDroneFile", "Drone",new { ID = 0, DocumentType="Drone Image"})';
-  @*var DroneUploadURL = '@Url.Action("UploadFile", new { ID = 0, FlightID = 0, DocumentType="UAS-Registration" })';*@
   </script>
-  @*<script type="text/javascript" src="~/Scripts/drone.js"></script>*@
   <script type="text/javascript" src="~/Scripts/DroneImaging.js"></script>
-
 
   <script>
     $(document).ready(function () {
-      $('#SelectItemsForParts').autocomplete({
-        source: "/AutoComplete/Parts/",
-        minLength: 2,
-        select: AutoCompleteSelect
-      });
-
-      $('#Table_SelectItemsForParts').on("click", "a.delete", function () {
-        $(this).parent().parent().remove();
-      })
-
-      $('#Drone_ManufactureId').on('change', function () {
-        if ($('#othermanu').prop('checked')) {
-          $('#Name').val("");
-          $('#divManuDetails').slideUp();
+      $('#othermanu').on("change", function (e) {
+        if ($(this).prop('checked')) {
+          $('#divManuDetails').show();
+          $('#ManufactureID').val('0');
+        } else {
+          $('#divManuDetails').hide();
         }
       });
-      $('#Drone_UavTypeId').on('change', function () {
-          if ($('#othertype').prop('checked')) {
-              $('#TypeName').val("");
-              $('#divTypeDetails').slideUp();
-          }
-      });
-    });
 
-    function AutoCompleteSelect(event, ui) {
-      event.preventDefault();
-      var ID = $(event.target).prop("id");
-      $('#Table_' + ID).show();
-      $('#' + ID).val('');
-      var HTML = "<tr>" +
-        "<td>" + ui.item.PartsName +
-        '<input type="hidden" name="' + ID + '" value="' + ui.item.id + '">' +
-        "</td>\n" +
-        "<td>" + ui.item.Model + "</td>\n" +
-        "<td>" + ui.item.Supplier + "</td>\n" +
-        '<td><input style="width:40px;" type="text" name="' + ID + '_' + ui.item.id + '"></td>\n' +
-        '<td><a class="delete" href="#">x</a></td>\n' +
-        '</tr>';
-      $('#Table_' + ID).append(HTML);
-    }
-
-
-    $('#othermanu').on("change", function (e) {
-      if ($(this).prop('checked')) {
-        $('#divManuDetails').show();
-        $("#Drone_ManufactureId").hide();
-      }
-      else {
-        $('#divManuDetails').hide();
-        $("#Drone_ManufactureId").show();
-      }
-      })
       $('#othertype').on("change", function (e) {
-          if ($(this).prop('checked')) {
-              $('#divTypeDetails').show();
-              $("#Drone_UavTypeId").hide();
-          }
-          else {
-              $('#divTypeDetails').hide();
-              $("#Drone_UavTypeId").show();
-          }
-      })
+        if ($(this).prop('checked')) {
+          $('#divOtherRPASType').show();
+          $('#RpasTypeId').val('0');
+        } else {
+          $('#divOtherRPASType').hide();
+        }
+      });
 
+      $('#ManufactureID').on('change', function () {
+        $('#othermanu').prop('checked', false);          
+        $('#divManuDetails').hide();
+      });
+
+      $('#RpasTypeId').on('change', function () {
+        $('#othertype').prop('checked', false);
+        $('#divOtherRPASType').hide();
+      });
+
+      
+
+    });
+    
   </script>
 }

@@ -12,46 +12,32 @@ namespace eX_Portal.exLogic {
   public class DroneFlightSetup {
     static IEnumerable<SelectListItem> DropDownList = Enumerable.Empty<SelectListItem>();
     static IEnumerable<SelectListItem> DDoptions = Enumerable.Empty<SelectListItem>();
+    static ExponentPortalEntities ctx = new ExponentPortalEntities();
+
+    public static IEnumerable<SelectListItem> GetDdListDroneForUser(int UserID) {
+      var Query = from d in ctx.MSTR_Drone
+                  join u in ctx.M2M_Drone_User.Where(t => t.UserID == UserID) on
+                    d.DroneId equals u.DroneID
+                  orderby d.DroneName
+                  select new SelectListItem {
+                    Text = d.DroneName,
+                    Value = d.DroneId.ToString()
+                  };
+      return Query.ToList();
+
+    }
 
     public static IEnumerable<SelectListItem> GetDdListDrone(int accountid) {
-      //  ctx=new ExponentPortalEntities();
-      List<SelectListItem> SelectList = new List<SelectListItem>();
-      using (var ctx = new ExponentPortalEntities()) {
-        using (var cmd = ctx.Database.Connection.CreateCommand()) {
 
-          ctx.Database.Connection.Open();
+      var Query = from d in ctx.MSTR_Drone
+                  where d.AccountID == accountid
+                  orderby d.DroneName
+                  select new SelectListItem {
+                    Text = d.DroneName,
+                    Value = d.DroneId.ToString()
+                  };
+      return Query.ToList();
 
-          SqlParameter parameter = new SqlParameter("@accountid", SqlDbType.Int);
-          parameter.Value = accountid;
-          cmd.Parameters.Add(parameter);
-
-          cmd.CommandText = @"Select 
-            CAST(DroneID as VarChar) + ' - ' +  [DroneName] as DroneName,
-            [DroneId] 
-          from 
-            [MSTR_Drone]";
-          if (!exLogic.User.hasAccess("DRONE.VIEWALL")) cmd.CommandText += @"
-          where 
-            [AccountID]=" + accountid;
-          cmd.CommandText += @"
-          order by 
-            [DroneID] asc";
-          cmd.CommandType = CommandType.Text;
-
-
-          using (var reader = cmd.ExecuteReader()) {
-            while (reader.Read()) {
-
-              SelectList.Add(new SelectListItem { Text = reader["DroneName"].ToString(), Value = reader["DroneId"].ToString() });
-
-            }
-          }
-          DropDownList = SelectList.ToList();
-          ctx.Database.Connection.Close();
-          return DropDownList; //return the list objects
-
-        }
-      }
     }
 
 
