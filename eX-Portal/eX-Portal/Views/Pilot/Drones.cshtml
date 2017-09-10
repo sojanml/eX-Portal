@@ -1,0 +1,21 @@
+﻿@model  IList<eX_Portal.exLogic.UserDones>
+@using System.Collections.Generic
+@{
+ Layout = null;
+}
+<h2>UAV Assigned to user</h2>
+<div class="UAV_Selection">
+
+  <ul>
+    @foreach (var Item in Model) {
+      <li>
+        <input id="CheckForDrone_@Item.DroneID" name="LinkedDroneID" value="@Item.DroneID" @Item.Checked type="checkbox" />
+        <label for="CheckForDrone_@Item.DroneID">
+          <div class="icon"><img src="~/images/FlightType-@(Item.UavTypeGroup).png" /></div>
+          <div class="caption">@Item.DroneName</div>
+          <div class="detail"><span>@Item.Manufacture (@Item.UavType)</span></div>
+        </label>
+      </li>
+    }
+  </ul>
+</div>

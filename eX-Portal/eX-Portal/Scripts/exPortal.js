@@ -19,6 +19,7 @@ $(document).ready(function () {
     e.stopPropagation();
     var TR = $(this);    
     var thisRowIndex = TR[0]._DT_RowIndex;
+    if (thisRowIndex == undefined) return;
     if (qViewRowIndex === thisRowIndex) return;
 
     $('table.report tbody tr.active').removeClass('active');
@@ -32,6 +33,7 @@ $(document).ready(function () {
     UL.css('display', 'none');
     TR.find('td.menu').append(UL);
     UL.fadeIn(100);
+    
     //alert('Key: ' + pKey)
   });
 
@@ -74,8 +76,33 @@ $(document).ready(function () {
     changeMonth: true
   });
 
+
+  $('a.btn_delete').on("click", function (e) {
+    var URL = $(this).attr('href');
+    e.stopPropagation();
+    e.preventDefault();
+    if (window.confirm('Are you sure to delete?')) {
+      RunAjax(URL);
+    }
+    return false;
+  });
+
 });
 
+
+function RunAjax(URL) {
+  $('#Overlay').show();
+  $.ajax({
+    url: URL,
+    success: function (data) {
+      top.location.href = '/Home';
+    },
+    error: function (data) {
+      alert('There is an error while processing your request...');
+      $('#Overlay').hide();
+    }
+  });
+}
 
 
 function getqViewMenu(data) {

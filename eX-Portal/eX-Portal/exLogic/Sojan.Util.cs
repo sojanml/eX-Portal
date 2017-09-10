@@ -608,12 +608,15 @@ namespace eX_Portal.exLogic {
       if (UserID == 0) UserID = getLoginUserID();
       String SQL = "SELECT PhotoUrl From MSTR_User WHERE UserID=" + UserID;
       String ProfileImage = Util.getDBVal(SQL).ToString();
-      if (ProfileImage == "") {
-        return "/Upload/User/none.png";
-      } else {
-        return "/Upload/User/" + UserID + "/" + ProfileImage;
-      }
+      String ProfileImageURL = "/images/PilotImage.png";
 
+      if (!String.IsNullOrEmpty(ProfileImage)) {
+        String dProfileImageURL = $"/Upload/User/{UserID}/{ProfileImage}";
+        var FPath = System.Web.Hosting.HostingEnvironment.MapPath(dProfileImageURL);
+        if (System.IO.File.Exists(FPath))
+          return dProfileImageURL;
+      }
+      return ProfileImageURL;
     }
 
     public static String fmtDt(String theDt, bool isAddTime = true) {

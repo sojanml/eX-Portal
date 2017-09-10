@@ -418,6 +418,37 @@ section div.body-title {
   font-size: 18px;
   color: #ff9b9b;
 }
+section div.body-title ul.toolbar {
+  float: right;
+  margin: 3px 10px 0px 0px;
+  list-style: none;
+  font-size: 10pt;
+  font-family: Arial;
+}
+section div.body-title ul.toolbar li {
+  display: inline-block;
+  margin-right: 10px;
+}
+section div.body-title ul.toolbar li span.icon {
+  padding-right: 5px;
+}
+section div.body-title ul.toolbar li a {
+  border: 1px silver solid;
+  border-radius: 3px;
+  color: silver;
+  text-decoration: none;
+  padding: 2px 10px 2px 10px;
+}
+section div.body-title ul.toolbar li a:hover {
+  color: white;
+  background-color: #0e0e0e;
+}
+section div.body-title ul.toolbar li a:hover span.edit {
+  color: greenyellow;
+}
+section div.body-title ul.toolbar li a:hover span.delete {
+  color: orangered;
+}
 section div.column {
   box-sizing: border-box;
   float: left;
@@ -1478,4 +1509,40 @@ ul.prifle_menu > li.profile_menu_row.on span.icon.on {
 }
 ul.prifle_menu > li.profile_menu_row.off span.icon.off {
   display: inline-block;
+}
+
+div.UAV_Selection ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+div.UAV_Selection ul li {
+  margin: 0px 0px 10px 0px;
+  padding: 0px 0px 10px 0px;
+  clear: both;
+  border-bottom: 1px #cacaca solid;
+}
+div.UAV_Selection ul li:hover {
+  background-color: #cacaca;
+}
+div.UAV_Selection ul li input[type=checkbox] {
+  float: right;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  border: 1px red solid;
+  margin: 10px 10px 0px 0px;
+  padding: 0px;
+}
+div.UAV_Selection ul li div.icon {
+  float: left;
+  padding-right: 10px;
+}
+div.UAV_Selection ul li div.icon img {
+  width: 50px;
+  height: 50px;
+}
+div.UAV_Selection ul li div.caption {
+  font-size: 14pt;
+  font-weight: bold;
 }

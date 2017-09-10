@@ -248,6 +248,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\MapController.cs" />
+    <Compile Include="Controllers\OrganisaionAdminController.cs" />
     <Compile Include="Controllers\PartsController.cs" />
     <Compile Include="Controllers\PayloadController.cs" />
     <Compile Include="Controllers\PayLoad_Removed_Controller.cs" />
@@ -278,6 +279,7 @@
     <Compile Include="exLogic\HtmlHelperExtensions.cs" />
     <Compile Include="exLogic\Listing.cs" />
     <Compile Include="exLogic\FlyZone.cs" />
+    <Compile Include="exLogic\OrganisationAdmin.cs" />
     <Compile Include="exLogic\qDetailView.cs" />
     <Compile Include="exLogic\qView.cs" />
     <Compile Include="exLogic\Report.cs" />
@@ -381,6 +383,9 @@
     <Compile Include="Models\M2M_DroneServiceParts.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\M2M_Drone_User.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\M2M_ProfileMenu.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -434,9 +439,6 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MSTR_RPAS_User.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\MSTR_TrafficMonitor.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MSTR_User.cs">
@@ -1819,6 +1821,7 @@
     <Content Include="Views\Traffic\LPR.cshtml" />
     <Content Include="Views\Traffic\RTA.cshtml" />
     <Content Include="Views\DashBoard\OrganisationAdminDashboard.cshtml" />
+    <Content Include="Views\Pilot\Drones.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1826,6 +1829,7 @@
     <Folder Include="Upload\BlackBox\" />
     <Folder Include="Upload\Drone\" />
     <Folder Include="Upload\temp\" />
+    <Folder Include="Views\OrganisaionAdmin\" />
     <Folder Include="Views\UserLogin\" />
     <Folder Include="Weather\" />
   </ItemGroup>

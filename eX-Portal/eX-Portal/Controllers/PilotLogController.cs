@@ -10,106 +10,114 @@ using System.Text;
 
 namespace eX_Portal.Controllers {
   public class PilotLogController : Controller {
-        // GET: PilotLog
+    // GET: PilotLog
     public ActionResult Index() {
-            return View();
-        }
+      return View();
+    }
 
-        // GET: PilotLog/Details/5
+    // GET: PilotLog/Details/5
     public ActionResult Details(int id) {
-            return View();
-        }
+      return View();
+    }
 
-        // GET: PilotLog/Create
+    // GET: PilotLog/Create
     public ActionResult Create([Bind(Prefix = "ID")] int PilotID = 0) {
-            if (!exLogic.User.hasAccess("PILOTLOG.CREATE")) return RedirectToAction("NoAccess", "Home");
-            ViewBag.Title = "Create Pilot Log";
-            MSTR_Pilot_Log PilotLog = new MSTR_Pilot_Log();
-            PilotLog.PilotId = PilotID;          
-            PilotLog.Date = DateTime.Now;
-             
-            return View(PilotLog);
+      if (!exLogic.User.hasAccess("PILOTLOG.CREATE"))
+        return RedirectToAction("NoAccess", "Home");
+      ViewBag.Title = "Create Pilot Log";
+      MSTR_Pilot_Log PilotLog = new MSTR_Pilot_Log();
+      PilotLog.PilotId = PilotID;
+      PilotLog.Date = DateTime.Now;
 
-        }
+      return View(PilotLog);
 
-        // POST: PilotLog/Create
-        [HttpPost]
+    }
+
+    // POST: PilotLog/Create
+    [HttpPost]
     public ActionResult Create(MSTR_Pilot_Log PilotLog) {
-            if (!exLogic.User.hasAccess("PILOTLOG.CREATE")) return RedirectToAction("NoAccess", "Home");
-            if (PilotLog.DroneId < 1 || PilotLog.DroneId == null) ModelState.AddModelError("DroneID", "You must select a UAS.");
+      if (!exLogic.User.hasAccess("PILOTLOG.CREATE"))
+        return RedirectToAction("NoAccess", "Home");
+      if (PilotLog.DroneId < 1 || PilotLog.DroneId == null)
+        ModelState.AddModelError("DroneID", "You must select a UAS.");
 
 
       if (ModelState.IsValid) {
-                ExponentPortalEntities db = new ExponentPortalEntities();
-                db.MSTR_Pilot_Log.Add(PilotLog);
-                db.SaveChanges();
-              
-                db.Dispose();
+        ExponentPortalEntities db = new ExponentPortalEntities();
+        db.MSTR_Pilot_Log.Add(PilotLog);
+        db.SaveChanges();
+
+        db.Dispose();
         return RedirectToAction("UserDetail", "User", new { ID = PilotLog.PilotId });
       } else {
-                ViewBag.Title = "Create Drone Flight";
-                return View(PilotLog);
-            }
+        ViewBag.Title = "Create Drone Flight";
+        return View(PilotLog);
+      }
 
-        }
+    }
 
-        // GET: PilotLog/Edit/5
+    // GET: PilotLog/Edit/5
     public ActionResult Edit([Bind(Prefix = "ID")] int LogId = 0) {
-            if (!exLogic.User.hasAccess("PILOTLOG.EDIT")) return RedirectToAction("NoAccess", "Home");
-            ViewBag.Title = "Edit Pilot Log";
-            ExponentPortalEntities db = new ExponentPortalEntities();
-            MSTR_Pilot_Log PilotLog = db.MSTR_Pilot_Log.Find(LogId);
-            return View(PilotLog);
+      if (!exLogic.User.hasAccess("PILOTLOG.EDIT"))
+        return RedirectToAction("NoAccess", "Home");
+      ViewBag.Title = "Edit Pilot Log";
+      ExponentPortalEntities db = new ExponentPortalEntities();
+      MSTR_Pilot_Log PilotLog = db.MSTR_Pilot_Log.Find(LogId);
+      return View(PilotLog);
 
-        }
+    }
 
-        // POST: PilotLog/Edit/5
-        [HttpPost]
+    // POST: PilotLog/Edit/5
+    [HttpPost]
     public ActionResult Edit(MSTR_Pilot_Log PilotLog) {
       try {
-                if (!exLogic.User.hasAccess("PILOTLOG.EDIT")) return RedirectToAction("NoAccess", "Home");
-                ViewBag.Title = "Edit Pilot Log";
-                ExponentPortalEntities db = new ExponentPortalEntities();
-                db.Entry(PilotLog).State = EntityState.Modified;
-                db.SaveChanges();
+        if (!exLogic.User.hasAccess("PILOTLOG.EDIT"))
+          return RedirectToAction("NoAccess", "Home");
+        ViewBag.Title = "Edit Pilot Log";
+        ExponentPortalEntities db = new ExponentPortalEntities();
+        db.Entry(PilotLog).State = EntityState.Modified;
+        db.SaveChanges();
         return RedirectToAction("UserDetail", "User", new { ID = PilotLog.PilotId });
 
 
       } catch {
-                return View();
-            }
-        }
+        return View();
+      }
+    }
 
-    
 
-        // POST: PilotLog/Delete/5
-        
+
+    // POST: PilotLog/Delete/5
+
     public string Delete([Bind(Prefix = "ID")]int LogId = 0) {
       try {
-                // TODO: Add delete logic here
-                if (!exLogic.User.hasAccess("PILOTLOG.DELETE")) return "Access Denied";
+        // TODO: Add delete logic here
+        if (!exLogic.User.hasAccess("PILOTLOG.DELETE"))
+          return "Access Denied";
 
-                string SQL = "DELETE FROM MSTR_PILOT_LOG WHERE ID=" + LogId;
-                Util.doSQL(SQL);
-               
-                return Util.jsonStat("OK");
+        string SQL = "DELETE FROM MSTR_PILOT_LOG WHERE ID=" + LogId;
+        Util.doSQL(SQL);
+
+        return Util.jsonStat("OK");
       } catch {
-                return Util.jsonStat("Error");
-            }
-        }
+        return Util.jsonStat("Error");
+      }
+    }
 
 
     public ActionResult Detail([Bind(Prefix = "ID")] int UserID) {
-            if (!exLogic.User.hasAccess("PILOTLOG.VIEW")) return RedirectToAction("NoAccess", "Home");
+      if (!exLogic.User.hasAccess("PILOTLOG.VIEW"))
+        return RedirectToAction("NoAccess", "Home");
 
-            ExponentPortalEntities db = new ExponentPortalEntities();
-            Models.MSTR_User User = db.MSTR_User.Find(UserID);
-            if (User == null) return RedirectToAction("Error", "Home");
-            ViewBag.Title = User.FirstName;
+      ExponentPortalEntities db = new ExponentPortalEntities();
+      Models.MSTR_User User = db.MSTR_User.Find(UserID);
+      if (User == null)
+        return RedirectToAction("Error", "Home");
+      ViewBag.Title = User.FirstName;
 
-            return View(User);
+      return View(User);
 
-        }//UserDetail()
+    }//UserDetail()
     public string PilotLogTotal([Bind(Prefix = "ID")] int PilotID) {
       return "";
       /*
@@ -183,10 +191,11 @@ namespace eX_Portal.Controllers {
             Table.AppendLine("</table>");
             return Table.ToString();
       */
-        }
+    }
     public string PilotLogDetails([Bind(Prefix = "ID")] int PilotID) {
 
-      if (!exLogic.User.hasAccess("PILOTLOG.VIEWDETAIL")) return "Access Denied";
+      if (!exLogic.User.hasAccess("PILOTLOG.VIEWDETAIL"))
+        return "Access Denied";
       string SQL =
       @"SELECT REPLACE(CONVERT(NVARCHAR, a.DATE, 106), ' ', '-') AS DATE,
        b.DroneName AS RPAS,
@@ -218,20 +227,19 @@ namespace eX_Portal.Controllers {
 
       qView nView = new qView(SQL);
       nView.TotalSQL = TotalSQL;
+      nView.ClassName += " dataTable";
       if (nView.HasRows) {
+        
         nView.isFilterByTop = false;
         return
           "<h2>Pilot Log Details</h2>\n" +
-  nView.getDataTable(
-    isIncludeData: true,
-    isIncludeFooter: false,
-    qDataTableID: "PilotLogDetails"
-  );
+        nView.getDataTable(
+          isIncludeData: true,
+          isIncludeFooter: false,
+          qDataTableID: "PilotLogDetails"
+        );
       }
-
       return "";
-
-
     }
   }
 }

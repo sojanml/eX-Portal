@@ -568,6 +568,14 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="ModifiedOn" Type="datetime" />
           <Property Name="AccountId" Type="int" />
         </EntityType>
+        <EntityType Name="M2M_Drone_User">
+          <Key>
+            <PropertyRef Name="DroneID" />
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="DroneID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="M2M_DroneDetails">
           <Key>
             <PropertyRef Name="Id" />
@@ -972,19 +980,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedOn" Type="datetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.MSTR_TrafficMonitor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="MSTR_TrafficMonitor">
-          <Key>
-            <PropertyRef Name="MonitorID" />
-            <PropertyRef Name="CreatedDate" />
-          </Key>
-          <Property Name="MonitorID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UniqueID" Type="nvarchar" MaxLength="20" />
-          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
-          <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
-          <Property Name="FlightID" Type="int" />
-        </EntityType>
         <EntityType Name="MSTR_User">
           <Key>
             <PropertyRef Name="UserId" />
@@ -1310,8 +1305,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayLoadYardGrid' does not have a pr
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="Polygon" Type="geography" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PortalAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PortalAlert">
           <Key>
             <PropertyRef Name="AlertID" />
@@ -1580,6 +1573,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="LiveDrone" EntityType="Self.LiveDrone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LUP_Drone" EntityType="Self.LUP_Drone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LUP_Product" EntityType="Self.LUP_Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M2M_Drone_User" EntityType="Self.M2M_Drone_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M2M_DroneDetails" EntityType="Self.M2M_DroneDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M2M_DroneParts" EntityType="Self.M2M_DroneParts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M2M_DroneServiceParts" EntityType="Self.M2M_DroneServiceParts" Schema="dbo" store:Type="Tables" />
@@ -1611,6 +1605,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="PayloadDataGridLines" EntityType="Self.PayloadDataGridLines" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoadDataRFID" EntityType="Self.PayLoadDataRFID" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoadYard" EntityType="Self.PayLoadYard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PortalAlert" EntityType="Self.PortalAlert" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortalAlertEmail" EntityType="Self.PortalAlertEmail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortalAlertRegistration" EntityType="Self.PortalAlertRegistration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortalAuth" EntityType="Self.PortalAuth" Schema="dbo" store:Type="Tables" />
@@ -1665,15 +1660,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
     [ip2location].[country_code] AS [country_code], 
     [ip2location].[country_name] AS [country_name]
     FROM [dbo].[ip2location] AS [ip2location]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="MSTR_TrafficMonitor" EntityType="Self.MSTR_TrafficMonitor" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [MSTR_TrafficMonitor].[MonitorID] AS [MonitorID], 
-    [MSTR_TrafficMonitor].[UniqueID] AS [UniqueID], 
-    [MSTR_TrafficMonitor].[CreatedDate] AS [CreatedDate], 
-    [MSTR_TrafficMonitor].[Remarks] AS [Remarks], 
-    [MSTR_TrafficMonitor].[FlightID] AS [FlightID]
-    FROM [dbo].[MSTR_TrafficMonitor] AS [MSTR_TrafficMonitor]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayloadDataGrid" EntityType="Self.PayloadDataGrid" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1793,26 +1779,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
     [PayLoadYardGrid].[CreatedOn] AS [CreatedOn], 
     [PayLoadYardGrid].[Polygon] AS [Polygon]
     FROM [dbo].[PayLoadYardGrid] AS [PayLoadYardGrid]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="PortalAlert" EntityType="Self.PortalAlert" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [PortalAlert].[AlertID] AS [AlertID], 
-    [PortalAlert].[FlightID] AS [FlightID], 
-    [PortalAlert].[FlightReadTime] AS [FlightReadTime], 
-    [PortalAlert].[Latitude] AS [Latitude], 
-    [PortalAlert].[Longitude] AS [Longitude], 
-    [PortalAlert].[Altitude] AS [Altitude], 
-    [PortalAlert].[FlightDataID] AS [FlightDataID], 
-    [PortalAlert].[AlertMessage] AS [AlertMessage], 
-    [PortalAlert].[AlertType] AS [AlertType], 
-    [PortalAlert].[CreatedOn] AS [CreatedOn], 
-    [PortalAlert].[SMSSend] AS [SMSSend], 
-    [PortalAlert].[AlertCategory] AS [AlertCategory], 
-    [PortalAlert].[AccountID] AS [AccountID], 
-    [PortalAlert].[ApprovalID] AS [ApprovalID], 
-    [PortalAlert].[DroneID] AS [DroneID], 
-    [PortalAlert].[PilotID] AS [PilotID]
-    FROM [dbo].[PortalAlert] AS [PortalAlert]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -2220,8 +2186,8 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="PayloadDataGrids" EntityType="ExponentPortalModel.PayloadDataGrid" />
           <EntitySet Name="PayLoadDatas" EntityType="ExponentPortalModel.PayLoadData" />
           <EntitySet Name="PayloadDataGridLines" EntityType="ExponentPortalModel.PayloadDataGridLines" />
-          <EntitySet Name="MSTR_TrafficMonitor" EntityType="ExponentPortalModel.MSTR_TrafficMonitor" />
           <EntitySet Name="GCA_Approval" EntityType="ExponentPortalModel.GCA_Approval" />
+          <EntitySet Name="M2M_Drone_User" EntityType="ExponentPortalModel.M2M_Drone_User" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -3451,17 +3417,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="ELat" Type="Decimal" Nullable="false" Precision="18" Scale="8" />
           <Property Name="ELng" Type="Decimal" Nullable="false" Precision="18" Scale="8" />
         </EntityType>
-        <EntityType Name="MSTR_TrafficMonitor">
-          <Key>
-            <PropertyRef Name="MonitorID" />
-            <PropertyRef Name="CreatedDate" />
-          </Key>
-          <Property Name="MonitorID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UniqueID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FlightID" Type="Int32" />
-        </EntityType>
         <EntityType Name="GCA_Approval">
           <Key>
             <PropertyRef Name="ApprovalID" />
@@ -3497,6 +3452,14 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="RpasApprovalRefNum" Type="Int32" Nullable="false" />
           <Property Name="ClientName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="FlightTypeID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="M2M_Drone_User">
+          <Key>
+            <PropertyRef Name="DroneID" />
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="DroneID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5041,17 +5004,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MSTR_TrafficMonitor">
-            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_TrafficMonitor">
-              <MappingFragment StoreEntitySet="MSTR_TrafficMonitor">
-                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
-                <ScalarProperty Name="MonitorID" ColumnName="MonitorID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="GCA_Approval">
             <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
               <MappingFragment StoreEntitySet="GCA_Approval">
@@ -5086,6 +5038,14 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
                 <ScalarProperty Name="ApprovalName" ColumnName="ApprovalName" />
                 <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M2M_Drone_User">
+            <EntityTypeMapping TypeName="ExponentPortalModel.M2M_Drone_User">
+              <MappingFragment StoreEntitySet="M2M_Drone_User">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

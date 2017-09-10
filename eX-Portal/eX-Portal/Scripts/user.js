@@ -58,7 +58,7 @@ function SubmitFileImage(file) {
     //Ajax events
     success: completeHandler = function (data) {
       if (data.status == 'success') {
-        document.forms[0]['User.PhotoUrl'].value = data.addFile[0].name;
+        document.forms[0]['PhotoUrl'].value = data.addFile[0].name;
         Elem.html("Completed...").hide();
       } else {
         Elem.html(HTML + ' - ' + data.message);

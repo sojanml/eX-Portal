@@ -1,4 +1,5 @@
-﻿@{
+﻿@model eX_Portal.exLogic.OrganisationAdminModel
+@{
 Layout = null;
 }
 
@@ -58,10 +59,20 @@ Layout = null;
   <div class="column column-1-of-3 dashboard-column">
     <div class="title">Profile Details</div>
     <div class="fixed-height">
-
+      <ul>
+        @foreach (var Item in @Model.OrganisationPilots) {
+          <li>
+            <div class="icon"><img src="@Item.PhotoUrl" /></div>
+            <div class="caption">
+              <a href="@Url.Action("PilotDetail", "Pilot", new { ID = Item.UserId})">@String.Concat(Item.FirstName, " ", Item.LastName)</a>
+            </div>
+            <div class="detail"><span>@(String.IsNullOrEmpty(Item.EmailId) ? "&nbsp;" : Item.EmailId)</span></div>
+          </li>
+        }
+      </ul>
     </div>
     <div class="toolbar">
-      
+      <a href="@Url.Action("Create", "Pilot")"><div class="button"><span class="icon">&#xf067;</span>Create Pilot</div></a>
     </div>
 
   </div>

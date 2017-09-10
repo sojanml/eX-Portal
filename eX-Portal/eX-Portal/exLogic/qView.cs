@@ -23,6 +23,7 @@ namespace eX_Portal.exLogic {
     private int _SortColumn = 0;
     private String _SortOrder = "desc";
 
+    public String ClassName { get; set; } = "report";
     public int SortColumn {
       get { return _SortColumn; }
       set { _SortColumn = value; }
@@ -289,7 +290,7 @@ namespace eX_Portal.exLogic {
       if (IsPrimaryKey) THead.Append("<th class=\"menu\">&nbsp;</th>");
       THead.AppendLine("</tr>");
 
-      Table.AppendLine("<table id=\"" + qDataTableID + "\" class=\"report\">");
+      Table.AppendLine($"<table id=\"{qDataTableID}\" class=\"{ClassName}\">");
       Table.AppendLine("<thead>");
       Table.Append(THead);
 

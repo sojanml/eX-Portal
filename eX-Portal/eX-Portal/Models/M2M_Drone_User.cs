@@ -12,12 +12,9 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class MSTR_TrafficMonitor
+    public partial class M2M_Drone_User
     {
-        public long MonitorID { get; set; }
-        public string UniqueID { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public string Remarks { get; set; }
-        public Nullable<int> FlightID { get; set; }
+        public int DroneID { get; set; }
+        public int UserID { get; set; }
     }
 }

@@ -13,6 +13,7 @@ using System.IO;
 using System.Xml;
 using System.Configuration;
 using Exponent;
+using System.Threading.Tasks;
 
 namespace eX_Portal.Controllers {
   public class DashBoardController : Controller {
@@ -334,12 +335,10 @@ namespace eX_Portal.Controllers {
       bool IsOrganisationAdmin = exLogic.User.hasAccess("ORGANIZATION.ADMIN");
       if (!IsOrganisationAdmin)
         return HttpNotFound();
-
       int userid = Util.getLoginUserID();
-      ViewBag.Title = String.Empty;
-      Util ut = new Util();
-      UserDashboardModel UserDashboard = ut.GetUserDetails(userid, true);
-      return View(UserDashboard);
+
+      OrganisationAdminModel ThisDashboard = OrganisationAdmin.GetOrganisationDashboard(userid);
+      return View(ThisDashboard);
 
     }
 

@@ -62,8 +62,9 @@
   </section>
   <section class="body-content">
     @if(!String.IsNullOrEmpty(ViewBag.Title)) { 
-    <div class="body-title">@ViewBag.Title</div>
+    <div class="body-title">@ViewBag.Title@RenderSection("toolbar", required: false)</div>
     }
+
     @RenderBody()
   </section>
 
