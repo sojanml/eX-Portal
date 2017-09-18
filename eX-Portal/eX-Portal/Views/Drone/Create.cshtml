@@ -20,10 +20,10 @@
           @Html.ValidationMessageFor(model => model.ManufactureID)
         </div>
         <div class="editor-field"  style="margin-bottom:0px;">
-          <input id="othermanu" value="1" name="OtherManufacturer" type="checkbox" />
+          <input id="othermanu" value="1" name="chkOtherManufacturer" type="checkbox" @(!String.IsNullOrEmpty(Model.OtherManufacturer) ? "checked":"")/>
           @Html.LabelFor(model => model.OtherManufacturer, "Other Manufacturer", htmlAttributes: new { @for = "othermanu", @class = "control -label col-md-2" })
         </div>
-        <div  class="editor-field" id="divManuDetails" style="display:none; margin-bottom:0px;">
+        <div  class="editor-field" id="divManuDetails" style="@(String.IsNullOrEmpty(Model.OtherManufacturer) ? "display:none;":""); margin-bottom:0px;">
           <div class="editor-field">
             @Html.EditorFor(model => model.OtherManufacturer, new { htmlAttributes = new { @class = "editor-label", @maxlength = "50" } })
             @Html.ValidationMessageFor(model => model.OtherManufacturer, "", new { @class = "text-danger" })
@@ -38,10 +38,10 @@
           @Html.ValidationMessageFor(model => model.RpasTypeId)
         </div>
         <div class="editor-field" style="margin-bottom:0px">
-          <input id="othertype" value="1" name="OtherRPASType" type="checkbox" />
+          <input id="othertype" value="1" name="chkOtherRPASType" type="checkbox" @(!String.IsNullOrEmpty(Model.OtherRPASType) ? "checked":"")/>
           @Html.LabelFor(model => model.OtherRPASType, "Other Type", htmlAttributes: new { @for = "othertype", @class = "control-label col-md-2" })
         </div>
-        <div class="editor-field" id="divOtherRPASType" style="display:none; margin-bottom:0px">
+        <div class="editor-field" id="divOtherRPASType" style="@(String.IsNullOrEmpty(Model.OtherRPASType) ? "display:none;":"") margin-bottom:0px">
           <div class="editor-field">
             @Html.EditorFor(model => model.OtherRPASType, new { htmlAttributes = new { @for= "othertype", @class = "editor -label", @maxlength = "50" } })
             @Html.ValidationMessageFor(model => model.OtherRPASType, "", new { @class = "text-danger" })

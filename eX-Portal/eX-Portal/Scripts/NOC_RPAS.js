@@ -28,7 +28,8 @@ $(document).ready(function () {
   NoFlyZone.setValues({ map: map });
 
   $('#NOCApplicationUser').on("change", NOCApplicationUserChanged);
-  $('#lat').on("change", SetLat);
+  $('#lat').on("change", SetLatLng);
+  $('#lng').on("change", SetLatLng);
 
   //****************************
   $("#submitButton").on("click", function (e) {
@@ -239,6 +240,10 @@ function updateCordinates() {
   var thisBounds = getBounds(BoundaryBox);
   map.fitBounds(thisBounds);
 
+  var Center = thisBounds.getCenter();
+  $('#lat').val(Center.lat().toFixed(6));
+  $('#lng').val(Center.lng().toFixed(6));
+
 }
 
 function getCoordinates() {
@@ -260,8 +265,8 @@ function setCoordinates1(Cord) {
   $('#GcaApproval_Coordinates').val(Cord);
   var thisBounds = getBounds(BoundaryBox);
   var Center = thisBounds.getCenter();
-  $('#lat').val(Center.lat());
-  $('#lng').val(Center.lng());
+  $('#lat').val(Center.lat().toFixed(6));
+  $('#lng').val(Center.lng().toFixed(6));
   //map.fitBounds(thisBounds);
 }
 
@@ -293,8 +298,9 @@ function getBoundary() {
 }
 
 
-function SetLat() {
+function SetLatLng() {
   var nLat = parseFloat($('#lat').val());
+  var nLng = parseFloat($('#lng').val());
   if (isNaN(nLat)) return;
 
   var bounds = new google.maps.LatLngBounds();
@@ -309,20 +315,24 @@ function SetLat() {
   var Center = bounds.getCenter();
   var cLat = Center.lat();
   var cLng = Center.lng();
+  var nBounds = new google.maps.LatLngBounds();
 
   var nPath = [];
-  for (var i = 0; i < paths.getLength(); i++) {
-    path = paths.getAt(i);
-    for (var j = 0; j < path.length; j++) {
-      var pPath = path.getAt(j);
-      var LatDiffCenter = cLat - pPath.lat();
-      var LatDiffPos = nLat - pPath.lat();
+  path = paths.getAt(0);
+  for (var j = 0; j < path.length; j++) {
+    var pPath = path.getAt(j);
+    var dLat = cLat - pPath.lat();
+    var dLng = cLng - pPath.lng();
 
-      var tLat = pPath.lat() + LatDiffCenter + LatDiffPos;
-      var tLng = pPath.lng();
-      nPath.push({ lat: tLat, lng: tLng });
-    }
+    var tLat = nLat + dLat;
+    var tLng = nLng + dLng;
+    console.log("dLat: " + dLat + ", lat: " + pPath.lat() + ", lng: " + pPath.lng() + ", tLat: " + tLat + ", tLng: " + tLng);
+    var LN = { lat: tLat, lng: tLng };
+    nPath.push(LN);
+    nBounds.extend(LN);
   }
   BoundaryBox.setPath(nPath);
-
+  google.maps.event.addListener(BoundaryBox.getPath(), 'set_at', setCoordinates);
+  google.maps.event.addListener(BoundaryBox.getPath(), 'insert_at', setCoordinates);
+  map.fitBounds(nBounds);
 }

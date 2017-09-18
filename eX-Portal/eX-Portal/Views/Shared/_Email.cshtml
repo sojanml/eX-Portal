@@ -5,8 +5,7 @@
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
   <title>Untitled 1</title>
   <style type="text/css">
-    .auto-style1 {
-      color: #FFFFFF;
+    body,html {      
       font-family: Arial, Helvetica, sans-serif;
       font-size: large;
     }
@@ -15,13 +14,14 @@
 
 <body>
 
-  <p><img alt="" height="62" src="cid:CompanyLogo" /></p>
-  <table cellpadding="5" cellspacing="0" style="background-color: #474747; width: 100%;">
+  <table cellpadding="0" cellspacing="0" style="width: 100%;">
     <tr>
-      <td class="auto-style1">@ViewBag.Title</td>
+      <td style="padding:0px 20px 0px 0px;"><img alt="" height="62" src="~/images/adsb-logo.png" /></td>
+      <td style="padding:0px 20px 0px 20px; border-left:2px gray solid;"><img src="~/Upload/Brand-Logo/dcaa-logo.png" /></td>
+      <td width="100%;" style="padding-left:30px; font-size:30px;">@ViewBag.Title</td>
     </tr>
   </table>
-  <p>&nbsp;</p>
+
   @RenderBody()
 
   <p>&nbsp;</p>
@@ -30,7 +30,8 @@
       <td valign="top">
         <p><strong>Exponent</strong></p>
         <p style="font-size:9pt;">
-          At EXPONENT, we invest time and passion into revamping everyday processes with creative 21st century solutions, using the latest tools and technology. The benefits of which,
+          At EXPONENT, we invest time and passion into revamping everyday processes with creative 
+          21st century solutions, using the latest tools and technology. The benefits of which,
           you will find, are "Exponential" to your business and its bottom line.
         </p>
       </td>

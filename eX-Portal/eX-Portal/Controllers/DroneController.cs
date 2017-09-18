@@ -640,6 +640,7 @@ namespace eX_Portal.Controllers {
         return RedirectToAction("NoAccess", "Home");
 
       var viewModel = new ViewModel.DroneCreateModel();
+      viewModel.CommissionDate = DateTime.Now;
       return View(viewModel);
     }
 
@@ -697,17 +698,29 @@ namespace eX_Portal.Controllers {
     public ActionResult Create(ViewModel.DroneCreateModel DroneView) {
       if (!exLogic.User.hasAccess("DRONE.CREATE"))
         return RedirectToAction("NoAccess", "Home");
-      if(DroneView.ManufactureID == 0 && String.IsNullOrEmpty(DroneView.OtherManufacturer)) {
-        ModelState.AddModelError("ManufactureID", "Please Select Manufacture or enter a new one.");
+      if (DroneView.ManufactureID == 0) {
+        if (String.IsNullOrEmpty(DroneView.OtherManufacturer)) {
+          ModelState.AddModelError("ManufactureID", "Please Select Manufacture or enter a new one.");
+        } else if(DroneView.OtherManufacturer.Length < 3) {
+          ModelState.AddModelError("ManufactureID", "Manufacture name should have minimum of 3 characters");
+        }
       }
-      if (DroneView.RpasTypeId == 0 && String.IsNullOrEmpty(DroneView.OtherRPASType)) {
-        ModelState.AddModelError("RpasTypeId", "Please Select RPAS Type or enter a new one.");
+      if (DroneView.RpasTypeId == 0) {
+        if (String.IsNullOrEmpty(DroneView.OtherRPASType)) {
+          ModelState.AddModelError("RpasTypeId", "Please Select RPAS Type or enter a new one.");
+        } else if (DroneView.OtherRPASType.Length < 3) {
+          ModelState.AddModelError("OtherRPASType", "RPAS Type name should have minimum of 3 characters");
+        }
       }
       if (DroneView.CommissionDate == null) {
         ModelState.AddModelError("CommissionDate", "Commission Date is Required.");
       }
       if(DroneView.CommissionDate > DateTime.Now.AddDays(-1)) {
         ModelState.AddModelError("CommissionDate", "Commission Date is Invalid.");
+      }
+
+      if (String.IsNullOrEmpty(DroneView.Description)) {
+        ModelState.AddModelError("Description", "Description must be valid.");
       }
 
       if (!ModelState.IsValid) {

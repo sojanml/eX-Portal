@@ -14,7 +14,7 @@ var _FlightBoundBox = null;
 var _FlightStartMarker = null;
 var _FlightEndMarker = null;
 var _FlightReplayPath = null;
-var _RPASIcon = null; dFormat
+var _RPASIcon = null; 
 
 var _ReplayIndex = -1;
 var _ReplayTimer = null;
@@ -27,8 +27,11 @@ $(document).ready(function () {
   LoadPolygons();
   InitChart();
   LoadMapData();
-  //InitVideos();
-  InitVideoJs()
+  if (IsLive)  {
+    InitVideos();
+  } else {
+    InitVideoJs();
+  }
   if (!IsLive) LoadChartSummaryData();
   $('#FlightReplay').on("click", StartFlightReplay);
 
@@ -122,7 +125,7 @@ function RpasReplayTimer() {
 
   var position = {
     lat: thisData.Lat,
-    lng: thisData.Lng,
+    lng: thisData.Lng
   };
 
 
@@ -224,7 +227,12 @@ function InitVideoJs() {
     return;
   } 
 
-  var player = videojs('FlightVideo');
+  var player = videojs('FlightVideo').on('error', function () {
+    console.log('The following error occurred:', this.error());
+    $('#VideoHolderColumn').addClass("NoVideo");
+    $('#FlightVideo').hide();
+  });
+
   player.ready(function () {
     _FlightVideoPlayer = this;
   });
@@ -268,7 +276,7 @@ function InitVideos() {
     VideoSetup.file = "rtmp:" + "//52.34.136.76/live/drone" + DroneID;
       //VideoSetup.file = "rtsp:" + "//192.168.1.123:554/main" ;
   } else {
-    VideoSetup.playlist = GetVideoPlaylist()
+    VideoSetup.playlist = GetVideoPlaylist();
   }
 
   jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";
@@ -312,7 +320,7 @@ function initializeMap() {
 
   var mapOptions = {
     zoom: 14,
-    mapTypeControl: false,
+    mapTypeControl: true,
     streetViewControl: false,
     center: MarkerPosition,
     styles: getADSBMapStyle()
@@ -366,7 +374,7 @@ function LoadMapData() {
         AddToTable(msg.Data);
         IsInitilized = true;
       } else {
-        _IsGetNextDataSet = IsDataLoadCompleted()
+        _IsGetNextDataSet = IsDataLoadCompleted();
       }
     },
     failure: function (msg) {
@@ -395,7 +403,7 @@ function InitilizeMapData() {
   _FlightStartMarker = new google.maps.Marker({
     position: {
       lat: _FlightData[0].Lat,
-      lng: _FlightData[0].Lng,
+      lng: _FlightData[0].Lng
     },
     icon: {
       url :'/images/flag-RpasStart.png',
@@ -409,7 +417,7 @@ function InitilizeMapData() {
   _FlightEndMarker = new google.maps.Marker({
     position: {
       lat: _FlightData[LastItem].Lat,
-      lng: _FlightData[LastItem].Lng,
+      lng: _FlightData[LastItem].Lng
     },
     icon: {
       url: '/images/flag-RpasEnd.png',
@@ -422,7 +430,7 @@ function InitilizeMapData() {
   _RPASIcon = new google.maps.Marker({
     position: {
       lat: _FlightData[LastItem].Lat,
-      lng: _FlightData[LastItem].Lng,
+      lng: _FlightData[LastItem].Lng
     },
     icon: {
       url: '/images/Drone.png',
@@ -449,7 +457,7 @@ function AddToTable(TheData) {
   var RowStartAt = TheData.length > MaxRows ? TheData.length - MaxRows : 0;
 
   for (var i = RowStartAt; i < TheData.length; i++) {
-    var DataItem = TheData[i]
+    var DataItem = TheData[i];
     var tDate = ToLocalTime(dtFromJSON(DataItem.FlightTime));
     var FlightTime = dFormat(tDate, true);
     //var FlightTime = dtConvFromJSON(DataItem.FlightTime, true);
@@ -494,7 +502,7 @@ function AddDataToMap(TheData) {
     }
   }
 
-  var LastPosition = { lat: LastDataItem.Lat, lng: LastDataItem.Lng };
+  //var LastPosition = { lat: LastDataItem.Lat, lng: LastDataItem.Lng };
   var LastPosition = new google.maps.LatLng(LastDataItem.Lat, LastDataItem.Lng);
   _FlightDataID = LastDataItem.FlightMapDataID;
   _FlightPath.setPath(_FlightCoordinates);
@@ -520,7 +528,7 @@ function ShowFlightInformation(TheDataItem) {
   var tDate = ToLocalTime(dtFromJSON(TheDataItem.FlightTime));
   var aDate = dFormat(tDate, true).split(' ');
   var Fdate = aDate[0];
-  var FTime = aDate[1];;
+  var FTime = aDate[1];
   $('#FlightInfo_FlightDate').html(Fdate);
   $('#FlightInfo_FlightTime').html(FTime);
 
@@ -553,9 +561,9 @@ function toHour(Seconds) {
   var sSeconds = '0' + RestSeconds;
   var sHour = '0' + Hours;
   if (sHour.length > 2)
-      sHour = sHour.substring(1)
+    sHour = sHour.substring(1);
   if (sSeconds.length > 2)
-      sSeconds = sSeconds.substring(1)
+    sSeconds = sSeconds.substring(1);
   return sHour + ':' + sSeconds;
 }
 
@@ -571,7 +579,7 @@ function DroneIcon(options, IconPos ) {
   this.setIconPos = function (newIconPos) {
     this.IconPos = newIconPos;
     this.draw();
-  }
+  };
 }
 
 DroneIcon.prototype = new google.maps.OverlayView;

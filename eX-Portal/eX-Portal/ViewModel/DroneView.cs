@@ -73,15 +73,16 @@ namespace eX_Portal.ViewModel {
     }
 
     public int CreateType(String TypeName, String TypeValue) {
-      int? typeid = db.MSTR_Drone
+      int? typeid = db.LUP_Drone
         .Where(w => w.Type == TypeName)
-        .OrderByDescending(u => u.DroneSerialNo)
-        .Select(e => e.DroneSerialNo)
+        .OrderByDescending(u => u.TypeId)
+        .Select(e => e.TypeId)
         .FirstOrDefault();
       typeid = typeid == null ? 1 : typeid + 1;
       string BinaryCode = exLogic.Util.DecToBin((int)typeid);
 
       LUP_Drone LuD = new LUP_Drone();
+      LuD.Type = TypeName;
       LuD.BinaryCode = BinaryCode;
       LuD.TypeId = typeid;
       LuD.Code = TypeValue.ToUpper().Substring(0,3);
@@ -89,6 +90,7 @@ namespace eX_Portal.ViewModel {
       LuD.Name = TypeValue;
       LuD.CreatedBy = exLogic.Util.getLoginUserID();
       LuD.CreatedOn = DateTime.Now;
+      LuD.GroupName = "MULTI-ROTOR";
       db.LUP_Drone.Add(LuD);
       db.SaveChanges();
 

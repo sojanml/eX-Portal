@@ -164,6 +164,18 @@
             </div>
           </div>
         </div>
+
+      <div class="two-column-form-group">
+        <div class="form-group">
+          <input type="radio" name="temp" checked id="t1" />
+          <label for="t1">Visal Line of Sight (VLOS)</label>
+        </div>
+        <div class="form-group">
+          <input type="radio" name="temp" id="t2" />
+          <label for="t2">Beyond Line of Sight (BLOS)</label>
+        </div>
+      </div>
+
         <div class="two-column-form-group">
           <div class="form-group">
             @Html.LabelFor(model => model.GcaApproval.IsUseCamara, "Use Camera?")
@@ -188,7 +200,7 @@
       <div id="polygonmap" class="form-group" style="visibility:visible;height:500px;width:auto;">
         <div id="map_canvas" style="width: 100%; height: 100%;"></div>
       </div>
-      @*
+
   <table>
     <tr>
       <td>Center Coordinates</td>
@@ -198,7 +210,7 @@
       <td><input type="text" name="lng" id="lng" value="" /></td>
     </tr>
   </table>
-      *@
+
     </div>
   </section>
 }
