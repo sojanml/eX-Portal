@@ -30,5 +30,6 @@ namespace eX_Portal.Models
         public Nullable<int> ApprovalID { get; set; }
         public Nullable<int> DroneID { get; set; }
         public Nullable<int> PilotID { get; set; }
+        public string Proximity { get; set; }
     }
 }

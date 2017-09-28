@@ -155,7 +155,7 @@ namespace eX_Portal.exLogic {
         RowCount++;
         Decimal FrameTime = RowCount * Interval * 60 * 1000;
         TrafficMonitor ThisData =
-          (from d in db.TrafficMonitors
+          (from d in db.TrafficMonitor
            where d.FlightID == FlightID && d.FrameTime >= FrameTime
            select d).FirstOrDefault();
         if (ThisData == null)
@@ -165,7 +165,7 @@ namespace eX_Portal.exLogic {
 
       //get the last data
       TrafficMonitor LastData =
-        (from d in db.TrafficMonitors
+        (from d in db.TrafficMonitor
          where d.FlightID == FlightID 
          orderby d.FrameTime descending
          select d).FirstOrDefault();

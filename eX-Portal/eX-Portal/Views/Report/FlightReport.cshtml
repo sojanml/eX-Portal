@@ -8,7 +8,7 @@
 
 <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-  <title>Untitled 1</title>
+  <title>Post Flight Report - #@Html.DisplayFor(Model => Model.ID)</title>
   <style type="text/css">
     @@font-face {
       font-family: 'GeneralText';
@@ -26,164 +26,84 @@
       font-style: normal;
     }
 
+    div.sub-heading {
+      font-size:16pt;
+      padding:0px 0px 0px 10px;
+      border-left:green 10px solid;
+      margin:10px 0px 10px 10px;
+    }
+
     body {
       font-family: GeneralText;
     }
 
-    span.refresh,
-    span.icon,
-    span.green_icon {
-      font-family: FontAwesome;
-      cursor: pointer;
-      color: gray;
-    }
-
-    div.warning {
-      border-bottom: 2px #fe9400 solid;
-      border-top: 2px #fe9400 solid;
-      margin-bottom: 10px;
-      line-height: 30px;
-      padding: 5px 0px 5px 10px;
-      background-color: rgba(254,148,0,0.2);
-    }
-
-      div.warning > span.icon {
-        color: #fe9400;
-        font-size: 30px;
-        float: left;
-        margin-right: 10px;
-      }
-
-    div.invalid {
-      border-bottom: 2px red solid;
-      border-top: 2px red solid;
-      padding: 5px;
-      margin-bottom: 10px;
-      line-height: 30px;
-      background-color: rgba(255,0,0,0.2);
-    }
-
-      div.invalid > span.icon {
-        color: red;
-        font-size: 30px;
-        float: left;
-        margin-right: 10px;
-      }
-
-    div.authorise {
-      border-bottom: 2px green solid;
-      border-top: 2px green solid;
-      padding: 5px;
-      margin-bottom: 10px;
-      line-height: 30px;
-      background-color: rgba(0,255,0,0.2);
-    }
-
-      div.authorise > span.icon {
-        color: green;
-        font-size: 30px;
-        float: left;
-        margin-right: 10px;
-      }
-
-
 
     th {
-      background-color: #ea050e;
-      color: white;
+      background-color: #c2c2c2;
+      color: black;
       text-align: left;
     }
 
+    h1 {
+      font-size:22pt;
+      margin:20px 0px 5px 0px;
+      padding:0px;
+    }
     h3 {
       padding: 0px 0px 0px 0px;
       margin: 0px 0px 10px 0px;
     }
 
     #GoogleMap {
-      width:640px;
-      height:400px;
+      width:700px;
+      max-width:100%;
+      height:500px;
     }
+    ul.proximity {
+      margin:0px;
+      padding:0px;
+      list-style:none;     
+    }
+      ul.proximity li {
+        margin: 0px;
+        padding: 0px;
+      }
+        ul.proximity li span {
+          color: rgb(255, 89, 0)
+        }
   </style>
 </head>
 <body>
-  <table style="width: 100%">
+  <table style="width: 100%;">
     <tr>
       <td valign="top"><img alt="" height="62" src="~/images/logo.png" /></td>
-      <td valign="top" align="right" color="#ea050e"><font size="12"><strong>Post Flight Report</strong></font></td>
-    </tr>
-  </table>
-  <p style="text-align:center">
-    <font color="#ea050e" size="6">@Html.DisplayFor(Model => Model.DroneName)</font><br />
-    <span>Flight ID: @ViewBag.FlightID</span>
-  </p>
-
-  <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
-    <tr>
-      <th>Basic Flight Information</th>
-    </tr>
-    <tr>
-      <td>
-
-
-        <table style="width: 100%">
-          <tr>
-            <td>
-              <table>
-                <tr>
-                  <td>ID</td>
-                  <td>:</td>
-                  <td>@Html.DisplayFor(Model => Model.ID)</td>
-                </tr>
-                <tr>
-                  <td>RPAS ID</td>
-                  <td>:</td>
-                  <td>@Html.DisplayFor(Model => Model.DroneName)</td>
-                </tr>
-              </table>
-            </td>
-            <td>
-              <table style="width: 100%">
-                <tr>
-                  <td>Pilot</td>
-                  <td>:</td>
-                  <td>@Html.DisplayFor(Model => Model.PilotName)</td>
-                </tr>
-                <tr>
-                  <td>Created On (UTC)</td>
-                  <td>:</td>
-                  <td>@Model.getCreatedOn() </td>
-                </tr>
-              </table>
-            </td>
-            <td>
-              <table style="width: 100%">
-                <tr>
-                  <td>Ground Staff</td>
-                  <td>:</td>
-                  <td>@Html.DisplayFor(Model => Model.GSCName)</td>
-                </tr>
-                <tr>
-                  <td>Flight Date (UTC)</td>
-                  <td>:</td>
-                  <td>@Model.getFlightDate() </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-
-
+      <td valign="top" align="right" color="#ea050e"><font size="5"><strong>Post Flight Report - #@Html.DisplayFor(Model => Model.ID)</strong></font><br />
+          <font color="#ea050e" size="3">@Html.DisplayFor(Model => Model.DroneName)</font><br />
       </td>
     </tr>
   </table>
-  <p>&nbsp;</p>
-  @if (Model.Info != null) {
-    <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
+  <div style="margin-top:10px; background-color:silver; height:2px; font-size:1px;">&nbsp;</div>
+
+  <h1>Basic Flight Information</h1>
+
+    <table style="width: 100%">
       <tr>
-        <th>Flight Summary</th>
+        <td>Pilot: @Html.DisplayFor(Model => Model.PilotName)</td>
+        <td>Ground Staff: @Html.DisplayFor(Model => Model.GSCName)</td>
+
       </tr>
       <tr>
-        <td>
+        <td>Created On (UTC)@Model.getCreatedOn()</td>
+        <td>Flight Date (UTC): @Model.getFlightDate() </td>
+      </tr>
+    </table>
+
+
+
+
+
+  @if (Model.Info != null) {
+    <h1>Flight Summary</h1>
           <table width="100%">
             <tr>
               <td valign="top">
@@ -212,11 +132,6 @@
                     <td>@Util.toFix(Model.Info.AvgSpeed)</td>
                   </tr>
                   <tr>
-                    <td>Minimum</td>
-                    <td>:</td>
-                    <td>@Util.toFix(Model.Info.MinSpeed)</td>
-                  </tr>
-                  <tr>
                     <td>Maximum</td>
                     <td>:</td>
                     <td>@Util.toFix(Model.Info.MaxSpeed)</td>
@@ -234,11 +149,6 @@
                     <td>@Util.toFix(Model.Info.AvgAltitude)</td>
                   </tr>
                   <tr>
-                    <td>Minimum</td>
-                    <td>:</td>
-                    <td>@Util.toFix(Model.Info.MinAltitude)</td>
-                  </tr>
-                  <tr>
                     <td>Maximum</td>
                     <td>:</td>
                     <td>@Util.toFix(Model.Info.MaxAltiude) </td>
@@ -252,11 +162,6 @@
               <td valign="top">
                 <b>Satellites</b>
                 <table>
-                  <tr>
-                    <td>Average</td>
-                    <td>:</td>
-                    <td>@Util.toFix(Model.Info.AvgSatellites)</td>
-                  </tr>
                   <tr>
                     <td>Minimum</td>
                     <td>:</td>
@@ -272,113 +177,76 @@
 
             </tr>
           </table>
-        </td>
-      </tr>
-    </table>
-    <p>&nbsp;</p>
   }
-  @if (Model.Info != null) {
-    <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
-      <tr>
-        <th>Flight Track</th>
-      </tr>
-      <tr>
-        <td>
-          <table cellpadding="0" cellspacing="0">
-            <tr>
-              <td valign="top">
-              <div id="GoogleMap"></div>
-                @*<img src="@Html.Action("GoogleMap", "Report", new { ID = ViewBag.FlightID, ApprovalID = Model.ApprovalID})" />*@              
-              </td>
-              <td valign="top">&nbsp;&nbsp;</td>
-              <td valign="top">
-                <p><b>Weahter</b></p>
-                <table>
-                  <tr>
-                    <td>Condition</td>
-                    <td>:</td>
-                    <td>@Model.Info.Condition</td>
-                  </tr>
-                  <tr>
-                    <td>Wind</td>
-                    <td>:</td>
-                    <td>@Util.toFix(Util.toDouble(Model.Info.WindSpeed)) kph</td>
-                  </tr>
-                  <tr>
-                    <td>Humidity</td>
-                    <td>:</td>
-                    <td>@Model.Info.Humidity %</td>
-                  </tr>
-                  <tr>
-                    <td>Visibility</td>
-                    <td>:</td>
-                    <td>@Util.toFix(Model.Info.Visibility) kilometers</td>
-                  </tr>
-                  <tr>
-                    <td>Pressure</td>
-                    <td>:</td>
-                    <td>@((int)Model.Info.Pressure) millibars </td>
-                  </tr>
-                  <tr>
-                    <td>Temperature</td>
-                    <td>:</td>
-                    <td>@Model.Info.Temperature &deg;C</td>
-                  </tr>
-                </table>
 
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-    <p>&nbsp;</p>
+
+
+  @if (Model.Info != null) {
+  <h1>Weather</h1>
+  <table cellpadding="4" cellspacing="0" style="width: 100%">
+  <tr>
+    <td>Condition: @Model.Info.Condition</td>
+    <td>Wind : @Util.toFix(Util.toDouble(Model.Info.WindSpeed)) kph</td>
+    <td>Humidity: @Model.Info.Humidity %</td>
+  </tr>
+
+  <tr>
+    <td>Visibility: @Util.toFix(Model.Info.Visibility) kilometers</td>
+    <td>Pressure: @((int)Model.Info.Pressure) millibars</td>
+    <td>Temperature: @Model.Info.Temperature Degree Celsius</td>
+  </tr>
+</table>
+
+    <h1>Flight Track</h1>
+
+
+    <div id="GoogleMap"></div>
+    @*<img src="@Html.Action("GoogleMap", "Report", new { ID = ViewBag.FlightID, ApprovalID = Model.ApprovalID})" />*@
+
+
+
   } @*if (Model.Info != null)*@
 
-  <table cellpadding="4" cellspacing="0" style="width: 100%" border="2" BORDERCOLOR="#ea050e">
+
+<div style="page-break-before: always;"></div>
+<h1>Flight Chart</h1>
+  <table>
     <tr>
-      <th>Flight Chart</th>
+      <td>
+        <div style="border-left-color:rgb(255, 89, 0);" class="sub-heading pitch">Pitch</div>
+        <img style="width:100%;" src="/Report/GetChart/@ViewBag.FlightID?ChartType=Ptich" />
+      </td>
+      <td>
+        <div style="border-left-color:rgb(153, 131, 199);" class="sub-heading roll">Roll</div>
+        <img style="width:100%; height:auto" src="/Report/GetChart/@ViewBag.FlightID?ChartType=Roll" />
+      </td>      
     </tr>
     <tr>
-      <td align="center">
-        <img src="/Report/GetChart/@ViewBag.FlightID" />
+      <td>
 
-        <table>
-          <tr>
-            <td style="background-color:rgb(219, 211, 1); width:20px;">&nbsp;</td>
-            <td>Altitude</td>
-
-            <td style="width:40px;">&nbsp;</td>
-            <td style="background-color:rgba(101, 186, 25,1); width:20px;">&nbsp;</td>
-            <td>Satellites</td>
-
-            <td style="width:40px;">&nbsp;</td>
-            <td style="background-color:rgba(255, 89, 0,1); width:20px;">&nbsp;</td>
-            <td>Pitch</td>
-
-            <td style="width:40px;">&nbsp;</td>
-            <td style="background-color:rgb(153, 131, 199); width:20px;">&nbsp;</td>
-            <td>Roll</td>
-
-            <td style="width:40px;">&nbsp;</td>
-            <td style="background-color:rgb(11, 144, 118); width:20px;">&nbsp;</td>
-            <td>Speed</td>
-
-
-            <td>&nbsp;</td>
-          </tr>
-        </table>
-
+        <div style="border-left-color:rgb(11, 144, 118);" class="sub-heading speed">Speed</div>
+        <img style="width:100%; height:auto" src="/Report/GetChart/@ViewBag.FlightID?ChartType=Speed" />
+      </td>
+      <td>
+        <div style="border-left-color:rgba(101, 186, 25,1);" class="sub-heading satellite">Satellite</div>
+        <img style="width:100%; height:auto" src="/Report/GetChart/@ViewBag.FlightID?ChartType=Satellite" />
       </td>
     </tr>
-
+    <tr>
+      <td>
+        <div style="border-left-color:rgb(219, 211, 1);" class="sub-heading altitude">Altitude</div>
+        <img style="width:100%; height:auto" src="/Report/GetChart/@ViewBag.FlightID?ChartType=Altitude" />
+      </td>
+      <td>&nbsp;</td>
+    </tr>
   </table>
-  @if (Model.PortalAlerts.Any() || Model.Videos.Any() || Model.Approvals.Any()) {
-    <div style="page-break-before: always;"></div>
-  }
+
+
+
+
   @if (Model.PortalAlerts.Count > 0) {
 
-    <h3>Warning/Alerts</h3>
+    <h1>Warning/Alerts</h1>
 
     <table width="100%" border="1" cellspacing="0" bordercolor="silver" style="border-collapse:collapse" cellpadding="5">
       <thead>
@@ -386,16 +254,37 @@
           <th>Date &amp; Time (UTC)</th>
           <th>Category</th>
           <th>Level</th>
-          <th>Description</th>
+          <th>Latitude</th>
+          <th>Longitude</th>
+          <th>Altitude (Meter)</th>
         </tr>
       </thead>
       @foreach (var element in Model.PortalAlerts) {
         <tr>
-          <td>@(((DateTime)(element.FlightReadTime)).ToString("dd-MMM-yyyy HH:mm"))</td>
+          <td>@(((DateTime)(element.FlightReadTime)).ToString("dd-MMM-yyyy HH:mm:ss"))</td>
           <td>@element.AlertCategory</td>
           <td>@element.AlertType</td>
-          <td>@element.AlertMessage</td>
+          <td>@(((Decimal)element.Latitude).ToString(element.Latitude > 0 ? "0.00000N" : "0.00000S"))</td>
+          <td>@(((Decimal)element.Longitude).ToString(element.Longitude > 0 ? "0.00000E" : "0.00000W"))</td>
+          <td>@element.Altitude</td>
         </tr>
+        if(!String.IsNullOrEmpty(element.Proximity)) {
+          ProximityInfo item = Newtonsoft.Json.JsonConvert.DeserializeObject<ProximityInfo>(element.Proximity);
+          <tr>
+            <td></td>
+            <td colspan="5">
+              <ul class="proximity">
+                <li><span>UAS:</span> @item.DroneName</li>
+                <li><span>Organization:</span> @item.AccountName</li>
+                <li><span>Pilot:</span> @item.PilotName</li>
+                <li><span>Location:</span> @item.Location</li>
+                <li><span>Altitude:</span> @item.Altitude Meter</li>
+                <li><span>Distance:</span> @item.Distance Meter</li>
+              </ul>
+              
+            </td>
+          </tr>
+        }
       }
     </table>
     <p>&nbsp;</p>
@@ -413,7 +302,7 @@
 
 
   @if (Model.Approvals.Count > 0) {
-    <h3>Zone Approvals</h3>
+    <h1>Zone Approvals</h1>
     <table width="100%" border="1" cellspacing="0" cellpadding="5" bordercolor="silver" style="border-collapse:collapse">
       <thead>
         <tr>
@@ -422,33 +311,33 @@
           <th>End Date</th>
           <th>Start Time</th>
           <th>End Name</th>
-          <th>Altitude (Min)</th>
-          <th>Altitude (Max)</th>
+          <th>Min Altitude</th>
+          <th>Max Altitude</th>
         </tr>
       </thead>
       <tbody>
         @foreach (var item in Model.Approvals) {
           <tr>
-            <td>
+            <td >
               @item.ApprovalName
-            @if (item.ApprovalID == Model.ApprovalID) {
-              <img src="~/bullet_green.png" width="10" height="10" />
-            }
-          </td>
-          <td>@(item.StartDate == null ? "N/A" : ((DateTime)(item.StartDate)).ToString("dd-MMM-yyyy"))</td>
-          <td>@(item.EndDate == null ? "N/A" : ((DateTime)(item.EndDate)).ToString("dd-MMM-yyyy"))</td>
-          <td>@item.StartTime</td>
-          <td>@item.EndTime</td>
-          <td>@(((int)(item.MinAltitude)).ToString("#0"))</td>
-          <td>@(((int)(item.MaxAltitude)).ToString("#0"))</td>
-        </tr>
+              @if (item.ApprovalID == Model.ApprovalID) {
+                <img src="~/bullet_green.png" width="10" height="10" />
+              }
+            </td>
+            <td style="white-space:nowrap">@(item.StartDate == null ? "N/A" : ((DateTime)(item.StartDate)).ToString("dd-MMM-yyyy"))</td>
+            <td style="white-space:nowrap">@(item.EndDate == null ? "N/A" : ((DateTime)(item.EndDate)).ToString("dd-MMM-yyyy"))</td>
+            <td style="white-space:nowrap">@item.StartTime</td>
+            <td style="white-space:nowrap">@item.EndTime</td>
+            <td style="white-space:nowrap">@(((int)(item.MinAltitude)).ToString("#0"))</td>
+            <td style="white-space:nowrap">@(((int)(item.MaxAltitude)).ToString("#0"))</td>
+          </tr>
         }
       </tbody>
     </table>
 
     <p>&nbsp;</p>
   }@*if (Model.PortalAlerts.Count > 0)*@
-  @{ 
+  @{
     String ApprovalOuterPath = Model.Approval == null ? "" : Model.Approval.InnerBoundaryCoord;
     String ApprovalInnerPath = Model.Approval == null ? "" : Model.Approval.Coordinates;
   }

@@ -38,6 +38,5 @@ namespace eX_Portal.Models
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public int FlightID { get; set; }
-        public string UniqueID { get; set; }
     }
 }

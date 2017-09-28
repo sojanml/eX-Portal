@@ -280,6 +280,7 @@
     <Compile Include="exLogic\Listing.cs" />
     <Compile Include="exLogic\FlyZone.cs" />
     <Compile Include="exLogic\OrganisationAdmin.cs" />
+    <Compile Include="exLogic\ProximityInfo.cs" />
     <Compile Include="exLogic\qDetailView.cs" />
     <Compile Include="exLogic\qView.cs" />
     <Compile Include="exLogic\Report.cs" />
@@ -441,6 +442,9 @@
     <Compile Include="Models\MSTR_RPAS_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MSTR_TrafficMonitor.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MSTR_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -451,6 +455,9 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MSTR_User_Pilot_ExponentUAS.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Nationality.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PayLoadData.cs">
