@@ -20,6 +20,7 @@ using iTextSharp.tool.xml;
 using Microsoft.Reporting.WebForms;
 
 namespace eX_Portal.Controllers {
+
   public class ReportController : Controller {
     public ExponentPortalEntities db = new ExponentPortalEntities();
     // GET: Report
@@ -356,6 +357,9 @@ namespace eX_Portal.Controllers {
           CreatedOn = n.CreatedOn,
           ApprovalID = n.ApprovalID
         }).ToList().FirstOrDefault();
+      if (FlightData == null)
+        return HttpNotFound();
+
       if (FlightData.FlightHours == null)
         FlightData.FlightHours = 0;
       FlightData.PilotName = (
@@ -386,7 +390,7 @@ namespace eX_Portal.Controllers {
       FlightData.Approval = thisApproval.FirstOrDefault();
 
       //set Alert message for Report
-      setReportMessages(FlightData.PortalAlerts, FlightData.Approval);
+      //setReportMessages(FlightData.PortalAlerts, FlightData.Approval);
 
       FlightData.MapData = (
         from n in db.FlightMapDatas
@@ -418,17 +422,18 @@ namespace eX_Portal.Controllers {
         from n in db.FlightInfoes
         where n.FlightID == FlightID
         select n).FirstOrDefault();
-
-      LatLng FirstPoint = FlightData.MapData.FirstOrDefault();
-      Exponent.WeatherAPI ReportWeather = new Exponent.WeatherAPI();      
-      Exponent.WeatherForcast Condition = ReportWeather.GetByLocation((Double)FirstPoint.Lat, (Double)FirstPoint.Lng);
-      FlightData.Info.Condition = Condition.Today.ConditionText;
-      FlightData.Info.WindSpeed = Condition.Today.WindSpeed.ToString("0.0");
-      FlightData.Info.Humidity = Condition.Today.Humidity.ToString("0");
-      FlightData.Info.Visibility = (Decimal)Condition.Today.Visibility;
-      FlightData.Info.Pressure = (Decimal)Condition.Today.Pressure;
-      FlightData.Info.Temperature = Condition.Today.Temperature.ToString("0.0");
-
+      if(FlightData.Info == null) {
+        FlightData.Info = new FlightInfo();
+        LatLng FirstPoint = FlightData.MapData.FirstOrDefault();
+        Exponent.WeatherAPI ReportWeather = new Exponent.WeatherAPI();      
+        Exponent.WeatherForcast Condition = ReportWeather.GetByLocation((Double)FirstPoint.Lat, (Double)FirstPoint.Lng);
+        FlightData.Info.Condition = Condition.Today.ConditionText;
+        FlightData.Info.WindSpeed = Condition.Today.WindSpeed.ToString("0.0");
+        FlightData.Info.Humidity = Condition.Today.Humidity.ToString("0");
+        FlightData.Info.Visibility = (Decimal)Condition.Today.Visibility;
+        FlightData.Info.Pressure = (Decimal)Condition.Today.Pressure;
+        FlightData.Info.Temperature = Condition.Today.Temperature.ToString("0.0");
+      }
       return View(FlightData);
     }
 
@@ -451,7 +456,8 @@ namespace eX_Portal.Controllers {
             Message.AlertMessage = "RPAS is outside approved perimeter at " + fmtGPS((Double)Message.Latitude, (Double)Message.Longitude);
             break;
           case "Proximity":
-            Message.AlertMessage = getProximityMessage(FlightInfo.OtherFlightIDs, (int)FlightInfo.FlightID);
+            //Message.AlertMessage = getProximityMessage(FlightInfo.OtherFlightIDs, (int)FlightInfo.FlightID);
+            Message.AlertMessage = "Proximity Error";
             break;
 
           }//switch
@@ -580,7 +586,64 @@ namespace eX_Portal.Controllers {
     }
 
 
-    private Byte[] Chart(int FlightID) {
+
+
+    public FileContentResult GetChart([Bind(Prefix = "ID")]int FlightID = 0, String ChartType="all") {
+      return File(Chart(FlightID, ChartType), "image/png");
+    }
+
+
+    private Byte[] Chart(int FlightID, String ChartType) {
+      var cWidth = 700;
+      var cHeight = 100;
+      var chart = new Chart {
+        Width = cWidth,
+        Height = cHeight,
+        RenderType = RenderType.ImageTag,
+        AntiAliasing = AntiAliasingStyles.All,
+        TextAntiAliasingQuality = TextAntiAliasingQuality.High,
+        
+      };
+
+      chart.ChartAreas.Add("");
+      chart.ChartAreas[0].BackColor = Color.White;
+
+      chart.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.Silver;
+      chart.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.Silver;
+      chart.ChartAreas[0].AxisX.IsMarginVisible = false;
+      chart.ChartAreas[0].AxisY.IsMarginVisible = false;
+      chart.ChartAreas[0].AxisX2.IsMarginVisible = false;
+      chart.ChartAreas[0].AxisY2.IsMarginVisible = false;
+      chart.ChartAreas[0].Position.X = 0;
+      chart.ChartAreas[0].Position.Width = 100;
+      chart.ChartAreas[0].Position.Height = 100;
+      chart.ChartAreas[0].Position.Y = 0;
+
+      foreach(var FildType in new String[]{ "Altitude", "Pitch", "Roll", "Speed", "Satellite"}) { 
+        chart.Series.Add(FildType);
+        chart.Series[FildType].ChartType = SeriesChartType.Line;
+        chart.Series[FildType].BorderWidth = 3;
+      }
+      switch (ChartType) {
+      case "Ptich":
+        chart.Series["Pitch"].Color = Color.FromArgb(255, 89, 0);
+        break;
+      case "Roll":
+        chart.Series["Roll"].Color = Color.FromArgb(153, 131, 199);
+        break;
+      case "Speed":
+        chart.Series["Speed"].Color = Color.FromArgb(11, 144, 118);
+        break;
+      case "Satellite":
+        chart.Series["Satellite"].Color = Color.FromArgb(101, 186, 25);
+        break;
+      case "Altitude":
+        chart.Series["Altitude"].Color = Color.FromArgb(219, 211, 1);
+        chart.ChartAreas[0].AxisX.Minimum = -1;
+        break;
+      }
+               
+
       var query = from o in db.FlightMapDatas
                   where o.FlightID == FlightID
                   orderby o.FlightMapDataID
@@ -592,46 +655,6 @@ namespace eX_Portal.Controllers {
                     ReadTime = o.ReadTime,
                     Pitch = o.Pitch
                   };
-
-
-      var chart = new Chart {
-        Width = 1000,
-        Height = 220,
-        RenderType = RenderType.ImageTag,
-        AntiAliasing = AntiAliasingStyles.All,
-        TextAntiAliasingQuality = TextAntiAliasingQuality.High
-      };
-
-
-      //chart.Titles.Add("Values");
-      //chart.Titles[0].Font = new Font("Arial", 16f);
-
-
-      chart.ChartAreas.Add("");
-      //chart.ChartAreas[0].AxisX.Title = "Time";
-      //chart.ChartAreas[0].AxisY.Title = "Value";
-      //chart.ChartAreas[0].AxisX.TitleFont = new Font("Arial", 12f);
-      //chart.ChartAreas[0].AxisY.TitleFont = new Font("Arial", 12f);
-      //chart.ChartAreas[0].AxisX.LabelStyle.Font = new Font("Arial", 10f);
-      //chart.ChartAreas[0].AxisX.LabelStyle.Angle = -90;
-      chart.ChartAreas[0].BackColor = Color.White;
-      chart.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.Silver;
-      chart.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.Silver;
-
-
-      String[] Series = { "Altitude", "Roll", "Pitch", "Satellites", "Speed" };
-      foreach (var Item in Series) {
-        chart.Series.Add(Item);
-        chart.Series[Item].ChartType = SeriesChartType.Line;
-        chart.Series[Item].BorderWidth = 2;
-      }
-
-      chart.Series["Altitude"].Color = Color.FromArgb(219, 211, 1);
-      chart.Series["Speed"].Color = Color.FromArgb(11, 144, 118);
-      chart.Series["Roll"].Color = Color.FromArgb(153, 131, 199);
-      chart.Series["Pitch"].Color = Color.FromArgb(255, 89, 0);
-      chart.Series["Satellites"].Color = Color.FromArgb(101, 186, 25);
-
       IList<FlightMapData> fl = query.ToList()
                                .Select(x => new FlightMapData() {
                                  Altitude = x.Altitude,
@@ -642,12 +665,24 @@ namespace eX_Portal.Controllers {
                                  ReadTime = x.ReadTime
                                }).ToList();
       for (int i = 0; i < fl.Count; i++) {
-        String Label = fl[i].ReadTime.Value.ToString("HH:mm");
-        chart.Series["Altitude"].Points.AddXY(Label, fl[i].Altitude);
-        chart.Series["Speed"].Points.AddXY(Label, fl[i].Speed);
-        chart.Series["Roll"].Points.AddXY(Label, fl[i].Roll);
-        chart.Series["Pitch"].Points.AddXY(Label, fl[i].Pitch);
-        chart.Series["Satellites"].Points.AddXY(Label, fl[i].Satellites);
+        String Label = fl[i].ReadTime.Value.ToString("HH:mm:ss");
+        switch (ChartType) {
+        case "Ptich":
+          chart.Series["Pitch"].Points.AddXY(Label, fl[i].Pitch);
+          break;
+        case "Roll":
+          chart.Series["Roll"].Points.AddXY(Label, fl[i].Roll);
+          break;
+        case "Speed":
+          chart.Series["Speed"].Points.AddXY(Label, fl[i].Speed);
+          break;
+        case "Satellite":
+          chart.Series["Satellite"].Points.AddXY(Label, fl[i].Satellites);
+          break;
+        case "Altitude":
+          chart.Series["Altitude"].Points.AddXY(Label, fl[i].Altitude);
+          break;
+        }
       }
       using (var chartimage = new MemoryStream()) {
         // chart.RenderControl();
@@ -656,11 +691,6 @@ namespace eX_Portal.Controllers {
         // returnImage.Save("samp.png");
         return chartimage.GetBuffer();
       }
-    }
-
-
-    public FileContentResult GetChart([Bind(Prefix = "ID")]int FlightID = 0) {
-      return File(Chart(FlightID), "image/png");
     }
 
     protected ActionResult Pdf() {

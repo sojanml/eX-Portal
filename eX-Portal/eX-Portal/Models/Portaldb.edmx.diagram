@@ -63,7 +63,6 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PayloadTraffic" Width="1.5" PointX="14.75" PointY="6.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxImage" Width="1.5" PointX="6.75" PointY="14.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxManagement" Width="1.5" PointX="14.75" PointY="8.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.TrafficMonitor" Width="1.5" PointX="8.75" PointY="14.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataRFID" Width="1.5" PointX="14.75" PointY="10.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.DCAA_PermitDetail" Width="1.5" PointX="12.75" PointY="14.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_CheckList_Drone" Width="1.5" PointX="14.75" PointY="14.75" IsExpanded="false" />
@@ -74,6 +73,9 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PayloadDataGridLines" Width="1.75" PointX="7.375" PointY="16.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="11.375" PointY="16.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.M2M_Drone_User" Width="1.5" PointX="13.375" PointY="16.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.TrafficMonitor" Width="1.5" PointX="15.375" PointY="16.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_TrafficMonitor" Width="1.5" PointX="17.375" PointY="6.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.Nationality" Width="1.5" PointX="17.375" PointY="9.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
