@@ -183,6 +183,13 @@ function initializeMap() {
 
   map = new google.maps.Map(document.getElementById('adsb_map'), mapOptions);
   _ADSBLayer = new ADSBOverlay({ map: map }, []);
+
+  var KmlUrl = 'http://dcaa.exponent-ts.com/Map/NoFlyzone';
+  var kmlOptions = {
+    preserveViewport: true,
+    map: map
+  };
+  NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
   
 }
 

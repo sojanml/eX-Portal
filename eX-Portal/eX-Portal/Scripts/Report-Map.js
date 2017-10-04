@@ -77,11 +77,22 @@ function initializeMap() {
   for (var i = 0; i < PolyPath.length; i++) {
     bounds.extend(PolyPath[i]);
   }
+  /*
   if (ApprovalInnerPath != "" && ApprovalOuterPath != "") {
     for (var i = 0; i < ApprovalOuterCoordinates.length; i++) {
       bounds.extend(ApprovalOuterCoordinates[i]);
     }
   }
+  */
   map.fitBounds(bounds);
-  
+
+  google.maps.event.addListenerOnce(map, 'idle', function () {
+    window.setTimeout(function () {
+      if (typeof (selectpdf) == "object") { selectpdf.start(); }
+      //alert('Map completly loaded')
+    }, 1000);
+  });
+
+
+
 }
