@@ -39,7 +39,8 @@ namespace eX_Portal.Controllers {
           Count(*) Over() as _TotalRecords,
           MSTR_User.UserID as _PKey
         FROM
-          MSTR_User";
+          MSTR_User
+        Where IsPilot=1";
 
       if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
         SQL += "\n WHERE MSTR_User.AccountID=" + Util.getAccountID();
