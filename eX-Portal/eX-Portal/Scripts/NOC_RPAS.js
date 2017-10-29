@@ -48,7 +48,7 @@ $(document).ready(function () {
       success: function (data) {
         var Rows = data.split("|");
         $("#frmDroneSetup :input").prop("disabled", false);
-        if (Rows[0] == 'OK') {
+        if (Rows[0] === 'OK') {
           showMsg("Data has been updated. ");
           top.location.href = Rows[1];
         } else {

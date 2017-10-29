@@ -248,6 +248,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\MapController.cs" />
+    <Compile Include="Controllers\nocController.cs" />
     <Compile Include="Controllers\OrganisaionAdminController.cs" />
     <Compile Include="Controllers\PartsController.cs" />
     <Compile Include="Controllers\PayloadController.cs" />
@@ -424,6 +425,9 @@
     <Compile Include="Models\MSTR_Menu.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MSTR_NOC.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MSTR_NoFlyZone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -458,6 +462,9 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Nationality.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NOC_Details.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PayLoadData.cs">
@@ -1210,6 +1217,7 @@
     <Content Include="Scripts\map.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\NOCApproval.js" />
+    <Content Include="Scripts\NOC_Register.js" />
     <Content Include="Scripts\NOC_RPAS.js" />
     <Content Include="Scripts\Payload-RFID.js" />
     <Content Include="Scripts\PayLoadMap.js" />
@@ -1349,6 +1357,7 @@
     <Content Include="Scripts\highcharts\themes\sand-signika.js.map" />
     <Content Include="Scripts\highcharts\themes\skies.js.map" />
     <Content Include="Scripts\highcharts\themes\sunset.js.map" />
+    <Content Include="sass\NOC_Register.scss" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\video.dev.js" />
     <Content Include="Scripts\video.js" />
@@ -1829,6 +1838,7 @@
     <Content Include="Views\Traffic\RTA.cshtml" />
     <Content Include="Views\DashBoard\OrganisationAdminDashboard.cshtml" />
     <Content Include="Views\Pilot\Drones.cshtml" />
+    <Content Include="Views\NOC\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

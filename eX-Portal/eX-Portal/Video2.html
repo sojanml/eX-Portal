@@ -1,0 +1,26 @@
+<video id="FlightVideo" class="video-js vjs-default-skin" style="width:100%; height:100%" controls preload="none">
+    <source src="http://52.34.136.76/live/drone31/index.m3u8" type="application/x-mpegURL" />
+  </video>
+<script src="/jwplayer/jwplayer.js"></script>
+<script type="text/javascript">
+
+    var _FlightVideoPlayer = null;
+
+    window.onload = function () {
+        var VideoSetup = {
+            width: '100%',
+            height: '100%',
+            description: 'Click on play to start video.',
+            mediaid: 'b669e4e759db46e996db1432cdff433c'
+        };
+
+
+        VideoSetup.file = "rtmp:" + "//52.34.136.76/live/evolo";
+
+
+        jwplayer.key = "vYTpeN5XOdY1qcyCv75ibloaO/VRGoOeHn6CsA==";
+        _FlightVideoPlayer = jwplayer("FlightVideo");
+        _FlightVideoPlayer.setup(VideoSetup);
+
+    };
+</script>

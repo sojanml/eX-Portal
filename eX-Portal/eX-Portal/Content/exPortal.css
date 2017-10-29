@@ -482,7 +482,7 @@ section div.column:last-child {
   section div.column div.title div.button {
     float: right;
     display: inline-block;
-    padding: 0px 8px 2px 8px;
+    padding: 1px 8px 1px 8px;
     background-color: #e5e5e5;
     color: black;
     margin-right: 10px;

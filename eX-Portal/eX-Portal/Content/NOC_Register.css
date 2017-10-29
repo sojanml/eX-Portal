@@ -1,0 +1,128 @@
+table.noc_table {
+  width: 100%;
+  border-spacing: 0px;
+  border-collapse: collapse;
+  padding: 0px;
+}
+table.noc_table td {
+  padding-right: 10px;
+  white-space: nowrap;
+}
+table.noc_table td:last-child {
+  padding-right: 0px;
+}
+table.noc_table td.colgap {
+  width: 30px;
+}
+table.noc_table td input.date-picker {
+  width: 120px;
+}
+table.noc_table td input.time-picker {
+  width: 80px;
+  cursor: pointer;
+}
+table.noc_table td input.altitude {
+  width: 80px;
+}
+table.noc_table td input[type=radio] {
+  margin-right: 5px;
+}
+table.noc_table td label {
+  margin-right: 10px;
+}
+
+section div.column div.title div.button {
+  background-color: rgba(0, 0, 0, 0.25);
+  color: rgba(192, 192, 192, 0.5);
+}
+section div.column div.title div.button span.icon {
+  margin-right: 3px;
+  color: rgba(192, 192, 192, 0.5);
+}
+section div.column div.title div.button:hover {
+  background-color: rgba(255, 255, 255, 0.7);
+  color: black;
+}
+section div.column div.title div.button:hover span.icon {
+  color: black;
+}
+section div.column div.title div.button:hover span.icon.delete {
+  color: #c30707;
+}
+section div.column div.title div.button:hover span.icon.add {
+  color: #199800;
+}
+section div.column div.title div.button:hover span.icon.gps {
+  color: #1845d7;
+}
+
+#GoogleMap {
+  width: 100%;
+  height: 400px;
+}
+
+table.GoogleMapTable {
+  width: 100%;
+}
+
+div.GoogleMapCoordinatesScroll {
+  height: 400px;
+  overflow: auto;
+}
+
+ul#NocSections {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+ul#NocSections li {
+  list-style: none;
+}
+ul#NocSections li.active div.title {
+  background-color: darkgreen;
+}
+
+table.GoogleMapCoordinates {
+  border-collapse: collapse;
+  width: 100%;
+}
+table.GoogleMapCoordinates tr span.icon {
+  color: silver;
+  cursor: pointer;
+}
+table.GoogleMapCoordinates tr:hover span.icon {
+  color: black;
+}
+table.GoogleMapCoordinates th, table.GoogleMapCoordinates td {
+  padding: 2px 0px 2px 5px;
+}
+table.GoogleMapCoordinates th input[type=text], table.GoogleMapCoordinates td input[type=text] {
+  width: 100%;
+}
+table.GoogleMapCoordinates th {
+  background-color: darkgreen;
+  margin: 0px;
+  font-family: Gobold_Light;
+  font-size: 12px;
+  color: #cacaca;
+}
+table.GoogleMapCoordinates td div.button {
+  background-color: #474747;
+  display: block;
+  float: right;
+  padding: 2px 10px 2px 10px;
+  font-size: 10px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+table.GoogleMapCoordinates td div.button:hover {
+  background-color: darkgreen;
+}
+table.GoogleMapCoordinates td span.icon.delete:hover {
+  color: #c30707;
+}
+table.GoogleMapCoordinates td span.icon.add:hover {
+  color: #199800;
+}

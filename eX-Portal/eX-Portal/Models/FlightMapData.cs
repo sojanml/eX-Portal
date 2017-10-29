@@ -56,5 +56,8 @@ namespace eX_Portal.Models
         public Nullable<decimal> voltage { get; set; }
         public string OtherFlightIDs { get; set; }
         public bool IsAdsbProcessed { get; set; }
+        public int BlackBoxID { get; set; }
+        public int BlackBoxSerial { get; set; }
+        public int BlackBoxCode { get; set; }
     }
 }

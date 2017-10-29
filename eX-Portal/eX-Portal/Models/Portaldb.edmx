@@ -267,6 +267,8 @@ warning 6002: The table/view 'DCAA.dbo.DCAA_PermitDetail' does not have a primar
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="Voltage" Type="nvarchar" MaxLength="25" />
           <Property Name="IsLogData" Type="bit" />
+          <Property Name="BlackBoxID" Type="int" Nullable="false" />
+          <Property Name="BlackBoxSerial" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -472,6 +474,9 @@ warning 6002: The table/view 'DCAA.dbo.DCAA_PermitDetail' does not have a primar
           <Property Name="voltage" Type="decimal" Precision="18" Scale="5" />
           <Property Name="OtherFlightIDs" Type="varchar" MaxLength="5000" />
           <Property Name="IsAdsbProcessed" Type="bit" Nullable="false" />
+          <Property Name="BlackBoxID" Type="int" Nullable="false" />
+          <Property Name="BlackBoxSerial" Type="int" Nullable="false" />
+          <Property Name="BlackBoxCode" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="GCA_Approval">
           <Key>
@@ -482,7 +487,7 @@ warning 6002: The table/view 'DCAA.dbo.DCAA_PermitDetail' does not have a primar
           <Property Name="ApprovalDate" Type="datetime" />
           <Property Name="StartDate" Type="datetime" />
           <Property Name="EndDate" Type="datetime" />
-          <Property Name="Coordinates" Type="nvarchar" MaxLength="750" />
+          <Property Name="Coordinates" Type="text" />
           <Property Name="Polygon" Type="geography" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="DroneID" Type="int" />
@@ -490,7 +495,7 @@ warning 6002: The table/view 'DCAA.dbo.DCAA_PermitDetail' does not have a primar
           <Property Name="EndTime" Type="nvarchar" MaxLength="10" />
           <Property Name="StartTime" Type="nvarchar" MaxLength="10" />
           <Property Name="InnerBoundary" Type="geography" />
-          <Property Name="InnerBoundaryCoord" Type="nvarchar(max)" />
+          <Property Name="InnerBoundaryCoord" Type="text" />
           <Property Name="BoundaryInMeters" Type="int" />
           <Property Name="MinAltitude" Type="int" />
           <Property Name="MaxAltitude" Type="int" />
@@ -508,6 +513,7 @@ warning 6002: The table/view 'DCAA.dbo.DCAA_PermitDetail' does not have a primar
           <Property Name="RpasApprovalRefNum" Type="int" Nullable="false" />
           <Property Name="ClientName" Type="varchar" MaxLength="250" />
           <Property Name="FlightTypeID" Type="int" />
+          <Property Name="notam" Type="nvarchar" MaxLength="250" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'DCAA.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -874,6 +880,20 @@ warning 6002: The table/view 'DCAA.dbo.ip2location' does not have a primary key 
           <Property Name="Visible" Type="bit" />
           <Property Name="PermissionId" Type="nvarchar" MaxLength="25" />
         </EntityType>
+        <EntityType Name="MSTR_NOC">
+          <Key>
+            <PropertyRef Name="NocApplicationID" />
+          </Key>
+          <Property Name="NocApplicationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FlightType" Type="varchar" MaxLength="120" />
+          <Property Name="FlightFor" Type="varchar" MaxLength="120" />
+          <Property Name="NocName" Type="varchar" MaxLength="240" />
+          <Property Name="PostFlightReportEmails" Type="varchar(max)" />
+          <Property Name="SMSNumbers" Type="varchar(max)" />
+          <Property Name="AccountID" Type="int" Nullable="false" />
+          <Property Name="CreateBy" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="MSTR_NoFlyZone">
           <Key>
             <PropertyRef Name="ID" />
@@ -1096,6 +1116,23 @@ warning 6002: The table/view 'DCAA.dbo.Nationality' does not have a primary key 
           <Property Name="Abbreviation" Type="nvarchar" MaxLength="5" />
           <Property Name="Adjective" Type="nvarchar" MaxLength="130" />
           <Property Name="Person" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="NOC_Details">
+          <Key>
+            <PropertyRef Name="NocID" />
+          </Key>
+          <Property Name="NocID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NocApplicationID" Type="int" Nullable="false" />
+          <Property Name="PilotID" Type="int" Nullable="false" />
+          <Property Name="DroneID" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="StartTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="EndTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="MinAltitude" Type="int" Nullable="false" />
+          <Property Name="MaxAltitude" Type="int" Nullable="false" />
+          <Property Name="LOS" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="IsUseCamara" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PayLoad_AutoFix">
           <Key>
@@ -1538,6 +1575,20 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_NocApplicationID">
+          <End Role="MSTR_NOC" Type="Self.MSTR_NOC" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="NOC_Details" Type="Self.NOC_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MSTR_NOC">
+              <PropertyRef Name="NocApplicationID" />
+            </Principal>
+            <Dependent Role="NOC_Details">
+              <PropertyRef Name="NocApplicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="ConvertFromBase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bigint">
           <Parameter Name="value" Type="varchar(max)" Mode="In" />
           <Parameter Name="base" Type="bigint" Mode="In" />
@@ -1630,6 +1681,7 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <EntitySet Name="MSTR_DroneCheckListItems" EntityType="Self.MSTR_DroneCheckListItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_DroneService" EntityType="Self.MSTR_DroneService" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Menu" EntityType="Self.MSTR_Menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MSTR_NOC" EntityType="Self.MSTR_NOC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_NoFlyZone" EntityType="Self.MSTR_NoFlyZone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Parts" EntityType="Self.MSTR_Parts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Pilot_Log" EntityType="Self.MSTR_Pilot_Log" Schema="dbo" store:Type="Tables" />
@@ -1640,6 +1692,7 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <EntitySet Name="MSTR_User_Pilot" EntityType="Self.MSTR_User_Pilot" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="Self.MSTR_User_Pilot_Certification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot_ExponentUAS" EntityType="Self.MSTR_User_Pilot_ExponentUAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NOC_Details" EntityType="Self.NOC_Details" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoad_AutoFix" EntityType="Self.PayLoad_AutoFix" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoadData" EntityType="Self.PayLoadData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoadDataGPS" EntityType="Self.PayLoadDataGPS" Schema="dbo" store:Type="Tables" />
@@ -1850,6 +1903,10 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
             <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
             <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NocApplicationID" Association="Self.FK_NocApplicationID">
+            <End Role="MSTR_NOC" EntitySet="MSTR_NOC" />
+            <End Role="NOC_Details" EntitySet="NOC_Details" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -2248,6 +2305,12 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <EntitySet Name="TrafficMonitor" EntityType="ExponentPortalModel.TrafficMonitor" />
           <EntitySet Name="MSTR_TrafficMonitor" EntityType="ExponentPortalModel.MSTR_TrafficMonitor" />
           <EntitySet Name="Nationality" EntityType="ExponentPortalModel.Nationality" />
+          <EntitySet Name="MSTR_NOC" EntityType="ExponentPortalModel.MSTR_NOC" />
+          <EntitySet Name="NOC_Details" EntityType="ExponentPortalModel.NOC_Details" />
+          <AssociationSet Name="FK_NocApplicationID" Association="ExponentPortalModel.FK_NocApplicationID">
+            <End Role="MSTR_NOC" EntitySet="MSTR_NOC" />
+            <End Role="NOC_Details" EntitySet="NOC_Details" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -3079,6 +3142,8 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="Voltage" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="IsLogData" Type="Boolean" />
+          <Property Name="BlackBoxID" Type="Int32" Nullable="false" />
+          <Property Name="BlackBoxSerial" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="FlightMapData">
           <Key>
@@ -3126,6 +3191,9 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <Property Name="voltage" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="OtherFlightIDs" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
           <Property Name="IsAdsbProcessed" Type="Boolean" Nullable="false" />
+          <Property Name="BlackBoxID" Type="Int32" Nullable="false" />
+          <Property Name="BlackBoxSerial" Type="Int32" Nullable="false" />
+          <Property Name="BlackBoxCode" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="LUP_Drone">
           <Key>
@@ -3457,7 +3525,7 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
           <Property Name="StartDate" Type="DateTime" Precision="3" />
           <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="Coordinates" Type="String" MaxLength="750" FixedLength="false" Unicode="true" />
+          <Property Name="Coordinates" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Polygon" Type="Geography" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="DroneID" Type="Int32" />
@@ -3465,7 +3533,7 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <Property Name="EndTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="StartTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="InnerBoundary" Type="Geography" />
-          <Property Name="InnerBoundaryCoord" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InnerBoundaryCoord" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="BoundaryInMeters" Type="Int32" />
           <Property Name="MinAltitude" Type="Int32" />
           <Property Name="MaxAltitude" Type="Int32" />
@@ -3483,6 +3551,7 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <Property Name="RpasApprovalRefNum" Type="Int32" Nullable="false" />
           <Property Name="ClientName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="FlightTypeID" Type="Int32" />
+          <Property Name="notam" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="M2M_Drone_User">
           <Key>
@@ -3541,6 +3610,44 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <Property Name="Adjective" Type="String" MaxLength="130" FixedLength="false" Unicode="true" />
           <Property Name="Person" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="MSTR_NOC">
+          <Key>
+            <PropertyRef Name="NocApplicationID" />
+          </Key>
+          <Property Name="NocApplicationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FlightType" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="FlightFor" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="NocName" Type="String" MaxLength="240" FixedLength="false" Unicode="false" />
+          <Property Name="PostFlightReportEmails" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SMSNumbers" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AccountID" Type="Int32" Nullable="false" />
+          <Property Name="CreateBy" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="NOC_Details" Relationship="ExponentPortalModel.FK_NocApplicationID" FromRole="MSTR_NOC" ToRole="NOC_Details" />
+        </EntityType>
+        <EntityType Name="NOC_Details">
+          <Key>
+            <PropertyRef Name="NocID" />
+          </Key>
+          <Property Name="NocID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PilotID" Type="Int32" Nullable="false" />
+          <Property Name="DroneID" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="EndTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="MinAltitude" Type="Int32" Nullable="false" />
+          <Property Name="MaxAltitude" Type="Int32" Nullable="false" />
+          <Property Name="LOS" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsUseCamara" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="MSTR_NOC" Relationship="ExponentPortalModel.FK_NocApplicationID" FromRole="NOC_Details" ToRole="MSTR_NOC" />
+        </EntityType>
+        <Association Name="FK_NocApplicationID">
+          <End Type="ExponentPortalModel.MSTR_NOC" Role="MSTR_NOC" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ExponentPortalModel.NOC_Details" Role="NOC_Details" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4637,6 +4744,8 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <EntitySetMapping Name="DroneDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneData">
               <MappingFragment StoreEntitySet="DroneData">
+                <ScalarProperty Name="BlackBoxSerial" ColumnName="BlackBoxSerial" />
+                <ScalarProperty Name="BlackBoxID" ColumnName="BlackBoxID" />
                 <ScalarProperty Name="IsLogData" ColumnName="IsLogData" />
                 <ScalarProperty Name="Voltage" ColumnName="Voltage" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -4670,6 +4779,9 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <EntitySetMapping Name="FlightMapDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.FlightMapData">
               <MappingFragment StoreEntitySet="FlightMapData">
+                <ScalarProperty Name="BlackBoxCode" ColumnName="BlackBoxCode" />
+                <ScalarProperty Name="BlackBoxSerial" ColumnName="BlackBoxSerial" />
+                <ScalarProperty Name="BlackBoxID" ColumnName="BlackBoxID" />
                 <ScalarProperty Name="IsAdsbProcessed" ColumnName="IsAdsbProcessed" />
                 <ScalarProperty Name="OtherFlightIDs" ColumnName="OtherFlightIDs" />
                 <ScalarProperty Name="voltage" ColumnName="voltage" />
@@ -5057,6 +5169,7 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
           <EntitySetMapping Name="GCA_Approval">
             <EntityTypeMapping TypeName="ExponentPortalModel.GCA_Approval">
               <MappingFragment StoreEntitySet="GCA_Approval">
+                <ScalarProperty Name="notam" ColumnName="notam" />
                 <ScalarProperty Name="FlightTypeID" ColumnName="FlightTypeID" />
                 <ScalarProperty Name="ClientName" ColumnName="ClientName" />
                 <ScalarProperty Name="RpasApprovalRefNum" ColumnName="RpasApprovalRefNum" />
@@ -5150,6 +5263,46 @@ warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_NOC">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_NOC">
+              <MappingFragment StoreEntitySet="MSTR_NOC">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="SMSNumbers" ColumnName="SMSNumbers" />
+                <ScalarProperty Name="PostFlightReportEmails" ColumnName="PostFlightReportEmails" />
+                <ScalarProperty Name="NocName" ColumnName="NocName" />
+                <ScalarProperty Name="FlightFor" ColumnName="FlightFor" />
+                <ScalarProperty Name="FlightType" ColumnName="FlightType" />
+                <ScalarProperty Name="NocApplicationID" ColumnName="NocApplicationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NOC_Details">
+            <EntityTypeMapping TypeName="ExponentPortalModel.NOC_Details">
+              <MappingFragment StoreEntitySet="NOC_Details">
+                <ScalarProperty Name="IsUseCamara" ColumnName="IsUseCamara" />
+                <ScalarProperty Name="LOS" ColumnName="LOS" />
+                <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
+                <ScalarProperty Name="MinAltitude" ColumnName="MinAltitude" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="PilotID" ColumnName="PilotID" />
+                <ScalarProperty Name="NocID" ColumnName="NocID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="FK_NocApplicationID" TypeName="ExponentPortalModel.FK_NocApplicationID" StoreEntitySet="NOC_Details">
+            <EndProperty Name="NOC_Details">
+              <ScalarProperty Name="NocID" ColumnName="NocID" />
+            </EndProperty>
+            <EndProperty Name="MSTR_NOC">
+              <ScalarProperty Name="NocApplicationID" ColumnName="NocApplicationID" />
+            </EndProperty>
+          </AssociationSetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

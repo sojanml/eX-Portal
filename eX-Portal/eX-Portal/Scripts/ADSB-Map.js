@@ -1,5 +1,5 @@
 ﻿function getADSBMapStyle() {
-  return [
+  var Options = [
     {
       "elementType": "geometry",
       "stylers": [
@@ -271,4 +271,6 @@
       ]
     }
   ];
+
+  return Options;
 }

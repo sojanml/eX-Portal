@@ -1,0 +1,227 @@
+﻿@model eX_Portal.Models.MSTR_NOC
+@using eX_Portal.exLogic;
+@{
+  ViewBag.Title = "NOC Application";
+  bool IsOrgAdmin = eX_Portal.exLogic.User.hasAccess("ORGANIZATION.ADMIN");
+  int AccountID = eX_Portal.exLogic.Util.getAccountID();
+  int UserID = 0;
+  if (Session["UserID"] != null) {
+    Int32.TryParse(Session["UserID"].ToString(), out UserID);
+  }
+  IEnumerable<SelectListItem>Pilots = DroneFlightSetup.getAllUsers(AccountID);
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Get, new { name = "frmNocAppliation", id = "frmNocAppliation" })) {
+  @Html.AntiForgeryToken()
+  <section class="top-space">
+    <div class="error" id="error-message" style="display:none; padding-top:10px; margin-bottom:10px;">
+      @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    </div>
+    <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px;">
+      <div class="title">
+        NOC Registration
+      </div>
+      <div class="form-group">
+        <table style="width:100%;" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="49%;">
+              Flight Type
+            </td>
+            <td style="width:2%">&nbsp;</td>
+            <td width="49%;">
+              For (Client Name)
+            </td>
+          </tr>
+          <tr>
+            <td width="49%;">
+              @Html.DropDownListFor(model => model.FlightType, Util.GetDropDowntList("FlightType", "Name", "Code", "usp_Portal_GetDroneDropDown"), new { @class = "form-control" })
+              <div id="Other_FlightType" style="display:none;">
+                @Html.EditorFor(model => model.FlightType, new { htmlAttributes = new { @class = "form-control" } })
+              </div>
+            </td>
+            <td style="width:2%">&nbsp;</td>
+            <td width="49%;">
+              @Html.EditorFor(model => model.FlightFor, new { htmlAttributes = new { @class = "form-control", @placeholder = "Client Name" } })
+              @Html.ValidationMessageFor(model => model.FlightFor, "", new { @class = "text-danger", })
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px">
+      <div class="title">
+        Notifications
+      </div>
+      <div class="form-group">
+        @Html.LabelFor(model => model.PostFlightReportEmails, "Post-Flight Report recipient addresses [separated by a comma (,)]")
+        <div class="col-md-10">
+          @Html.EditorFor(model => model.PostFlightReportEmails, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => model.PostFlightReportEmails, "", new { @class = "text-danger" })
+        </div>
+      </div>
+      <div class="form-group">
+        @Html.LabelFor(model => model.SMSNumbers, "SMS Numbers for Notification [separated by a comma (,)]")
+        <div class="col-md-10">
+          @Html.EditorFor(model => model.SMSNumbers, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => model.SMSNumbers, "", new { @class = "text-danger" })
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ul id="NocSections"></ul>
+
+  <input type="submit" value="Submit NOC" />
+}
+
+  <section id="NOCDetails" style="display:none;">
+    <div id="NocSection[#]" class="column form-horizontal NoBorder" style="width:100%; margin-bottom:5px;">
+      <div class="title">
+        <span class="hilite">[sl#]</span> NOC Information
+        <div id="" data-id="[#]" class="button btnSetCoordinates"><span class="icon gps">&#xf1cd;</span>Set Coordinates </div>
+        <div data-id="[#]" class="button btnAddNoc"><span class="icon add">&#xf055;</span>Add NOC Like this</div>
+        <div data-id="[#]" class="button btnDeleteNoc"><span class="icon delete">&#xf057;</span>Delete </div>
+      </div>
+
+      <table class="noc_table">
+        <tr>
+          <td>Start Date &amp; Time</td>
+          <td>End Date &amp; Time</td>
+          <td>Altitude Min &amp; Max (Meter)</td>
+          <td>Line of Sight</td>
+          <td>Camara in Use?</td>
+        </tr>
+        <tr>
+          <td>
+            <input class="first-field date-picker" readonly="readonly" name="StartDate[$]" id="StartDate[#]" type="datetime" value="">
+            <input class="time-picker" readonly="readonly" name="StartTime[$]" id="StartTime[#]" type="text" value="">
+          </td>
+          <td>
+            <input class="date-picker" readonly="readonly" name="EndDate[$]" id="EndDate[#]" type="datetime" value="">
+            <input class="time-picker" readonly="readonly" name="EndTime[$]" id="EndTime[#]" type="text" value="">
+          </td>
+
+          <td>
+            <input class="altitude" name="MinAltitude[$]" id="MinAltitude[#]" type="number" value="">
+            <input class="altitude" name="MaxAltitude[$]" id="MaxAltitude[#]" type="number" value="">
+          </td>
+          <td>
+            <input type="radio" name="LOS[$]" id="LOS[#]_VLOS" value="VLOS" checked /><label for="LOS[#]_VLOS">VLOS</label>
+            <input type="radio" name="LOS[$]" id="LOS[#]_BLOS" value="BLOS" /><label for="LOS[#]_BLOS">BLOS</label>
+          </td>
+          <td>
+            <input type="radio" name="IsUseCamara[$]" id="IsUseCamara[#]_v1" value="1" /><label for="IsUseCamara[#]_v1">Yes</label>
+            <input type="radio" name="IsUseCamara[$]" id="IsUseCamara[#]_v2" value="0" checked /><label for="IsUseCamara[#]_v2">No</label>
+          </td>
+
+        </tr>
+      </table>
+    </div>
+
+    <section>
+      @if (IsOrgAdmin) {
+        <div id="frm2" class="column column-half form-horizontal NoBorder" style="margin-bottom:5px;">
+          <div class="form-group">
+           NOC Application User
+            <select class="list-PilotID" data-id="[#]" name="PilotID[$]" id="PilotID[#]">
+              <option value="">--Select User from Organization--</option>
+              @foreach (SelectListItem item in Pilots) {
+                <option value="@item.Value">@item.Text</option>
+              }
+            </select>
+          </div>
+        </div>
+      }
+      
+      <div id="frm2" class="column column-half form-horizontal NoBorder" style="margin-bottom:5px;">
+        <div class="form-group">
+          RPAS Name
+          <select class="list-DroneID"  data-id="[#]" name="DroneID[$]" id="DroneID[#]">
+            <option value="">--Select Registered RPAS--</option>
+
+          </select>
+        </div>
+      </div>
+
+    </section>
+    <div class="toolbar">
+      <input type="hidden" style="width:100%; " class="Coordinates" type="text" name="Coordinates[$]" id="Coordinates[#]" value="" />
+    </div>
+
+  </section>
+
+
+<div id="GoogleMapLayer" class="" style="width:100%; margin-bottom:5px;">
+
+  <table class="GoogleMapTable" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td valign="top" style="width:80%;">
+        <div id="GoogleMap" style=""></div>
+      </td>
+      <td valign="top" style="width:20%;">
+        <div class="GoogleMapCoordinatesScroll">
+          <table id="GoogleMapCoordinates" class="GoogleMapCoordinates" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <th colspan="4">Center Coordinates</th>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>Lat:</td>
+              <td>Lng:</td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td><input type="text" name="lat" id="lat" value="" /></td>
+              <td><input type="text" name="lng" id="lng" value="" /></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="4"><div id="btnCenterLatLng" class="button">Apply</div></td>
+            </tr>
+            <tr>
+              <th colspan="4">Map Points</th>
+            </tr>
+            <tr>
+              <td>#</td>
+              <td>Lat:</td>
+              <td>Lng:</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tbody class="LatLng">
+              <tr class="LatLngRow">
+                <td>[#]</td>
+                <td><input type="text" name="lat_[#]" id="lat_[#]" value="" /></td>
+                <td><input type="text" name="lng_[#]" id="lng_[#]" value="" /></td>
+                <td><span data-id="[#]" class="icon delete">&#xf057;</span></td>
+              </tr>
+            </tbody>
+            <tr>
+              <td colspan="4">
+                <div id="btnLatLngPoints" class="button">Apply</div>
+                <div id="btnLatLngCancel" class="button">Cancel</div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+
+@section header {
+<link type="text/css" rel="stylesheet" href="~/Content/NOC_Register.css" />
+<link href="~/jquery-ui/jquery-ui.css" rel="stylesheet" />
+<link href="~/jquery-ui/jquery.ui.timepicker.css" rel="stylesheet" />
+}
+@section scripts {
+<script type="text/javascript">
+    var NOCDetails = @Html.Raw(new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(Model.NOC_Details));
+</script>
+
+<script src="~/jquery-ui/jquery.ui.timepicker.js"></script>
+<script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>
+<script src="~/Scripts/ADSB-Map.js"></script>
+<script type="text/javascript" src="~/Scripts/NOC_Register.js"></script>
+}

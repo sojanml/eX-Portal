@@ -45,5 +45,6 @@ namespace eX_Portal.Models
         public int RpasApprovalRefNum { get; set; }
         public string ClientName { get; set; }
         public Nullable<int> FlightTypeID { get; set; }
+        public string notam { get; set; }
     }
 }

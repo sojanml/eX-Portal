@@ -41,5 +41,7 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string Voltage { get; set; }
         public Nullable<bool> IsLogData { get; set; }
+        public int BlackBoxID { get; set; }
+        public int BlackBoxSerial { get; set; }
     }
 }

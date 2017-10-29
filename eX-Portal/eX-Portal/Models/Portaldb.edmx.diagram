@@ -63,19 +63,22 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PayloadTraffic" Width="1.5" PointX="14.75" PointY="6.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxImage" Width="1.5" PointX="6.75" PointY="14.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.AgriTraxManagement" Width="1.5" PointX="14.75" PointY="8.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataRFID" Width="1.5" PointX="14.75" PointY="10.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.DCAA_PermitDetail" Width="1.5" PointX="12.75" PointY="14.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_CheckList_Drone" Width="1.5" PointX="14.75" PointY="14.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_CheckListItems_Drone" Width="1.5" PointX="15.75" PointY="4.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataGP" Width="1.5" PointX="16.75" PointY="0.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayloadDataGrid" Width="2.625" PointX="1" PointY="16.875" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadData" Width="1.5" PointX="4.625" PointY="16.125" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayloadDataGridLines" Width="1.75" PointX="7.375" PointY="16.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="11.375" PointY="16.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.M2M_Drone_User" Width="1.5" PointX="13.375" PointY="16.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.TrafficMonitor" Width="1.5" PointX="15.375" PointY="16.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_TrafficMonitor" Width="1.5" PointX="17.375" PointY="6.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.Nationality" Width="1.5" PointX="17.375" PointY="9.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataRFID" Width="1.5" PointX="8.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.DCAA_PermitDetail" Width="1.5" PointX="14.75" PointY="10.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_CheckList_Drone" Width="1.5" PointX="10.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_CheckListItems_Drone" Width="1.5" PointX="14.75" PointY="12.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadDataGP" Width="1.5" PointX="12.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayloadDataGrid" Width="2.625" PointX="14.75" PointY="14.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadData" Width="1.5" PointX="15.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayloadDataGridLines" Width="1.75" PointX="16.75" PointY="0.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="0.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.M2M_Drone_User" Width="1.5" PointX="16.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.TrafficMonitor" Width="1.5" PointX="2.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_TrafficMonitor" Width="1.5" PointX="4.75" PointY="16.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.Nationality" Width="1.5" PointX="16.75" PointY="6.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_NOC" Width="1.5" PointX="7.375" PointY="17.125" />
+        <EntityTypeShape EntityType="ExponentPortalModel.NOC_Details" Width="1.5" PointX="9.625" PointY="17" />
+        <AssociationConnector Association="ExponentPortalModel.FK_NocApplicationID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
