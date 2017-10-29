@@ -1,7 +1,8 @@
 ﻿@using eX_Portal.exLogic;
 
 @{
-  int DroneID = ViewBag.DroneID;
+    int DroneID = ViewBag.DroneID;
+    var location = ViewBag.QRLocation;
 }
 @Html.Action("DroneDetail","Drone", new { ID = DroneID })
 <!-- Drone Images-->
@@ -34,10 +35,20 @@
   @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "UAT" })
   @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "Commission" })
 </div>
-  <div style="clear:both"></div>
+  <div style="clear:both">
+      <a  target="_blank" class="btn" href="@ViewBag.QRLocation"> Download QRCode </a>
+  </div>
+<div id="qrcode">
+    <img  src="@ViewBag.QRLocation"/>
 
+
+
+</div>
 @section scripts {
+<script src="~/Scripts/jquery-1.11.3.js"></script>
+
     <script type="text/javascript" src="~/Scripts/DroneImaging.js"></script>
+    
 }
 @section header{
 <link href="~/Content/black-box.css" rel="stylesheet" />
