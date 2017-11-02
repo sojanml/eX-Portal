@@ -19,5 +19,11 @@ namespace eX_Portal.Models
         public string Name { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string FillColour { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<System.TimeSpan> StartTime { get; set; }
+        public Nullable<System.TimeSpan> EndTime { get; set; }
+        public string ZoneDescription { get; set; }
+        public string DisplayType { get; set; }
     }
 }

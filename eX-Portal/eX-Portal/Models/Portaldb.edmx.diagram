@@ -74,11 +74,11 @@
         <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="0.75" PointY="16.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.M2M_Drone_User" Width="1.5" PointX="16.75" PointY="2.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.TrafficMonitor" Width="1.5" PointX="2.75" PointY="16.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_TrafficMonitor" Width="1.5" PointX="4.75" PointY="16.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.Nationality" Width="1.5" PointX="16.75" PointY="6.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_NOC" Width="1.5" PointX="7.375" PointY="17.125" />
         <EntityTypeShape EntityType="ExponentPortalModel.NOC_Details" Width="1.5" PointX="9.625" PointY="17" />
         <AssociationConnector Association="ExponentPortalModel.FK_NocApplicationID" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadTrafficData" Width="1.5" PointX="12.375" PointY="16.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.PortalAlert_User" Width="1.5" PointX="14.375" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

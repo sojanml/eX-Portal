@@ -355,6 +355,8 @@ function initializeMap() {
   };
   NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
   _DroneIcon = new DroneIcon({ map: map }, MarkerPosition);
+
+  if (IsLive) DynamicZone.Initilize(map);
 }
 
 function LoadMapData() {

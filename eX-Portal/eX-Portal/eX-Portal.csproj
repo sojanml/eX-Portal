@@ -273,6 +273,14 @@
     <Compile Include="exLogic\Drone.cs" />
     <Compile Include="exLogic\DroneCheckListForm.cs" />
     <Compile Include="exLogic\DroneFlightSetup.cs" />
+    <Compile Include="Models\NOC_DataAnnotationsHelper.cs" />
+    <Compile Include="Models\PayLoadTrafficData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PortalAlert_User.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\DynamicZone.cs" />
     <Compile Include="exLogic\ExifLib.cs" />
     <Compile Include="exLogic\FlightMap.cs" />
     <Compile Include="exLogic\GeoGrid.cs" />
@@ -446,9 +454,6 @@
     <Compile Include="Models\MSTR_RPAS_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MSTR_TrafficMonitor.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\MSTR_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -459,9 +464,6 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MSTR_User_Pilot_ExponentUAS.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Nationality.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NOC_Details.cs">
@@ -1046,6 +1048,7 @@
     <Content Include="Scripts\flightCreation.js" />
     <Content Include="Scripts\FlightHoursByAccount.js" />
     <Content Include="Scripts\FlightMap-Chart.js" />
+    <Content Include="Scripts\FlightMap-DynamicZone.js" />
     <Content Include="Scripts\FlightMap-Map.js" />
     <Content Include="Scripts\FlightSetup.js" />
     <Content Include="Scripts\Flight_Gps_Map.js" />
@@ -1839,6 +1842,7 @@
     <Content Include="Views\DashBoard\OrganisationAdminDashboard.cshtml" />
     <Content Include="Views\Pilot\Drones.cshtml" />
     <Content Include="Views\NOC\Register.cshtml" />
+    <Content Include="Views\NOC\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1873,6 +1877,10 @@
     <EmbeddedResource Include="ReportsManager\MSTR_Drone.rdlc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Clipper_Library\clipper_library.csproj">
+      <Project>{9b062971-a88e-4a3d-b3c9-12b78d15fa66}</Project>
+      <Name>clipper_library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Exponent.ADSB\ADSB\ADSB.csproj">
       <Project>{4c22df85-5a52-4d44-a2ff-4b40223d87f5}</Project>
       <Name>ADSB</Name>

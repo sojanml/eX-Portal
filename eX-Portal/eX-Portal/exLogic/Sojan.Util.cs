@@ -678,11 +678,26 @@ namespace eX_Portal.exLogic {
 
 
 
+
     public class GeoLocation {
       public Double Latitude { get; set; }
       public Double Longitude { get; set; }
     }
 
+    public static List<GeoLocation> ToGeoLocation(String Coordinates) {
+      List<GeoLocation> Location = new List<GeoLocation>();
+        String[] arrayLatLng = Coordinates.Split(',');
+        foreach (String sLatLng in arrayLatLng) {
+          String[] aLatLng = sLatLng.Split(' ');
+          if (aLatLng.Length == 2) {
+          Location.Add(new GeoLocation() {
+            Latitude = Double.Parse(aLatLng[0]),
+            Longitude = Double.Parse(aLatLng[1])
+            });
+          }
+        }
+      return Location;
+    }
 
     public static string gEncode(IEnumerable<GeoLocation> points) {
       var str = new StringBuilder();
@@ -704,7 +719,9 @@ namespace eX_Portal.exLogic {
       foreach (var point in points) {
         int lat = (int)Math.Round(point.Latitude * 1E5);
         int lng = (int)Math.Round(point.Longitude * 1E5);
-        if(lat != lastLat && lng != lastLng) { 
+        if(lat == lastLat && lng == lastLng) {
+          continue;
+        } else { 
           encodeDiff(lat - lastLat);
           encodeDiff(lng - lastLng);
         }

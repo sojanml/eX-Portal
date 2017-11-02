@@ -161,6 +161,35 @@ namespace eX_Portal.Controllers {
 
 
     [HttpGet]
+    public async System.Threading.Tasks.Task<ActionResult> DynamicZone() {
+      var Path = new List<DynamicZone>();
+
+      using (ExponentPortalEntities db = new ExponentPortalEntities()) {
+        DateTime Today = DateTime.UtcNow.Date;
+        //Convert the Time specifed to GMP
+        //It is in UAE (Dubai) Time zone in table
+        TimeSpan nowTime = DateTime.UtcNow.AddHours(+4).TimeOfDay;
+        var AllZone =
+          from m in db.MSTR_NoFlyZone
+          where
+            m.DisplayType == "Dynamic" &&
+            m.StartDate <= Today &&
+            m.EndDate >= Today &&
+            m.StartTime <= nowTime &&
+            m.EndTime >= nowTime
+          select m;
+        foreach (var Row in await AllZone.ToListAsync()) {
+          var Zone = new DynamicZone() {
+            ID = Row.ID
+          };
+          Zone.setPath(Row.Coordinates);
+          Path.Add(Zone);
+        }
+      }
+      return Json(Path, JsonRequestBehavior.AllowGet);
+    }
+
+    [HttpGet]
     public String NoFlyZone() {
       Response.ContentType = "application/vnd.google-earth.kml+xml";
       NoFlyZoneMap TheMap = new NoFlyZoneMap();

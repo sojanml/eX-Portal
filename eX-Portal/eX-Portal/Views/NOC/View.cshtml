@@ -1,0 +1,97 @@
+﻿@model eX_Portal.Models.MSTR_NOC
+@using eX_Portal.exLogic;
+@{
+  ViewBag.Title = $"NOC Application - #{Model.NocApplicationID}";
+}
+
+<section class="top-space">
+
+  <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px;">
+    <div class="title">
+      NOC Registration
+    </div>
+
+    <div class="form-group">
+      Flight Type:
+      <div class="field-value col-md-10">
+        @Model.FlightType
+      </div>
+    </div>
+    <div class="form-group">
+      For (Client Name):
+      <div class="field-value col-md-10">
+        @Model.FlightFor
+      </div>
+    </div>
+  </div>
+
+  <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px">
+    <div class="title">
+      Notifications
+    </div>
+    <div class="form-group">
+      Emails:
+      <div class="field-value col-md-10">
+        @(String.IsNullOrEmpty(Model.PostFlightReportEmails) ? "N/A" : Model.PostFlightReportEmails)
+      </div>
+    </div>
+    <div class="form-group">
+      SMS:
+      <div class="field-value col-md-10">
+        @(String.IsNullOrEmpty(Model.SMSNumbers) ? "N/A" : Model.SMSNumbers)
+      </div>
+    </div>
+  </div>
+</section>
+
+
+@foreach (eX_Portal.Models.NOC_Details noc in Model.NOC_Details) {
+  <section class="top-space top-border">
+    <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px;">
+      <ul class="noc-info">
+        <li>
+          Start Date &amp; Time:
+          <span class="field-value">
+            @noc.StartDate.ToString("dd-MMM-yyyy")
+            @noc.StartTime
+          </span>
+          <span class="field-info">(GMT +04:00)</span>
+        </li>
+        <li>
+          End Date &amp; Time:
+          <span class="field-value">
+            @noc.EndDate.ToString("dd-MMM-yyyy")
+            @noc.EndTime
+          </span>
+          <span class="field-info">(GMT +04:00)</span>
+        </li>
+        <li>
+          Altitude:
+          <span class="field-value">Minimum: @noc.MinAltitude, </span>
+          <span class="field-value">
+            Maximum: @noc.MaxAltitude
+          </span>
+          <span class="field-info">(In Meter)</span>
+        </li>
+        <li>
+          Line of Sight:          
+          <span class="field-value">@(noc.LOS == "VLOS" ? "Visual Line of Sight (VLOS)" : "Beyond Visual Line of Sight(BVLOS)")</span>
+        </li>
+        <li>
+          Is use camara:
+          <span class="field-value">@(noc.IsUseCamara ? "Yes" : "No")</span>
+        </li>
+      </ul>
+    </div>
+    <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px;">
+      <img width="567" height="300" src="@Html.Action("StaticGoogleMap", new { NocID = noc.NocID })" />
+    </div>
+  </section>
+}
+
+
+
+
+@section header {
+  <link type="text/css" rel="stylesheet" href="~/Content/NOC_Register.css" />
+}

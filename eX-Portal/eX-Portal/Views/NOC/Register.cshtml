@@ -9,10 +9,16 @@
     Int32.TryParse(Session["UserID"].ToString(), out UserID);
   }
   IEnumerable<SelectListItem>Pilots = DroneFlightSetup.getAllUsers(AccountID);
+  IEnumerable<SelectListItem> FlightType = DroneFlightSetup.GetFlightType(AccountID);
 }
 
-@using (Html.BeginForm(null, null, FormMethod.Get, new { name = "frmNocAppliation", id = "frmNocAppliation" })) {
+@using (Html.BeginForm(null, null, FormMethod.Post, new { name = "frmNocAppliation", id = "frmNocAppliation" })) {
   @Html.AntiForgeryToken()
+  if(ViewBag.DbErrors != "") {
+    <div class="DbErrors">
+      @Html.Raw(ViewBag.DbErrors)
+    </div>
+  }
   <section class="top-space">
     <div class="error" id="error-message" style="display:none; padding-top:10px; margin-bottom:10px;">
       @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -33,14 +39,23 @@
             </td>
           </tr>
           <tr>
-            <td width="49%;">
-              @Html.DropDownListFor(model => model.FlightType, Util.GetDropDowntList("FlightType", "Name", "Code", "usp_Portal_GetDroneDropDown"), new { @class = "form-control" })
-              <div id="Other_FlightType" style="display:none;">
-                @Html.EditorFor(model => model.FlightType, new { htmlAttributes = new { @class = "form-control" } })
-              </div>
+            <td width="49%;" valign="top">
+              <select class="form-control" data-val="true" 
+                      data-val-regex="Flight Type is required" 
+                      data-val-regex-pattern="^[0-9]*$" 
+                      data-val-required="The Flight Type field is required." 
+                      id="FlightType" name="FlightType">
+                <option value="">Please Select...</option>
+                @foreach (var flightType in FlightType) {
+                  <option value="@flightType.Value">"@flightType.Text</option>
+                }
+                <option value="0">Other (Please Specify)</option>
+              </select>
+
+              @Html.ValidationMessageFor(model => model.FlightType, "", new { @class = "text-danger", })
             </td>
             <td style="width:2%">&nbsp;</td>
-            <td width="49%;">
+            <td width="49%;"  valign="top">
               @Html.EditorFor(model => model.FlightFor, new { htmlAttributes = new { @class = "form-control", @placeholder = "Client Name" } })
               @Html.ValidationMessageFor(model => model.FlightFor, "", new { @class = "text-danger", })
             </td>
@@ -93,25 +108,25 @@
         </tr>
         <tr>
           <td>
-            <input class="first-field date-picker" readonly="readonly" name="StartDate[$]" id="StartDate[#]" type="datetime" value="">
-            <input class="time-picker" readonly="readonly" name="StartTime[$]" id="StartTime[#]" type="text" value="">
+            <input class="first-field date-picker" readonly="readonly" name="NOC_Details[$].StartDate" id="StartDate[#]" type="datetime" value="">
+            <input class="time-picker" readonly="readonly" name="NOC_Details[$].StartTime" id="StartTime[#]" type="text" value="">
           </td>
           <td>
-            <input class="date-picker" readonly="readonly" name="EndDate[$]" id="EndDate[#]" type="datetime" value="">
-            <input class="time-picker" readonly="readonly" name="EndTime[$]" id="EndTime[#]" type="text" value="">
+            <input class="date-picker" readonly="readonly" name="NOC_Details[$].EndDate" id="EndDate[#]" type="datetime" value="">
+            <input class="time-picker" readonly="readonly" name="NOC_Details[$].EndTime" id="EndTime[#]" type="text" value="">
           </td>
 
           <td>
-            <input class="altitude" name="MinAltitude[$]" id="MinAltitude[#]" type="number" value="">
-            <input class="altitude" name="MaxAltitude[$]" id="MaxAltitude[#]" type="number" value="">
+            <input class="altitude" name="NOC_Details[$].MinAltitude" id="MinAltitude[#]" type="number" value="">
+            <input class="altitude" name="NOC_Details[$].MaxAltitude" id="MaxAltitude[#]" type="number" value="">
           </td>
           <td>
-            <input type="radio" name="LOS[$]" id="LOS[#]_VLOS" value="VLOS" checked /><label for="LOS[#]_VLOS">VLOS</label>
-            <input type="radio" name="LOS[$]" id="LOS[#]_BLOS" value="BLOS" /><label for="LOS[#]_BLOS">BLOS</label>
+            <input type="radio" name="NOC_Details[$].LOS" id="LOS[#]_VLOS" value="VLOS" checked /><label for="LOS[#]_VLOS">VLOS</label>
+            <input type="radio" name="NOC_Details[$].LOS" id="LOS[#]_BVLOS" value="BVLOS" /><label for="LOS[#]_BVLOS">BVLOS</label>
           </td>
           <td>
-            <input type="radio" name="IsUseCamara[$]" id="IsUseCamara[#]_v1" value="1" /><label for="IsUseCamara[#]_v1">Yes</label>
-            <input type="radio" name="IsUseCamara[$]" id="IsUseCamara[#]_v2" value="0" checked /><label for="IsUseCamara[#]_v2">No</label>
+            <input type="radio" name="NOC_Details[$].IsUseCamara" id="IsUseCamara[#]_v1" value="true" /><label for="IsUseCamara[#]_v1">Yes</label>
+            <input type="radio" name="NOC_Details[$].IsUseCamara" id="IsUseCamara[#]_v0" value="false" checked /><label for="IsUseCamara[#]_v2">No</label>
           </td>
 
         </tr>
@@ -123,12 +138,17 @@
         <div id="frm2" class="column column-half form-horizontal NoBorder" style="margin-bottom:5px;">
           <div class="form-group">
            NOC Application User
-            <select class="list-PilotID" data-id="[#]" name="PilotID[$]" id="PilotID[#]">
-              <option value="">--Select User from Organization--</option>
-              @foreach (SelectListItem item in Pilots) {
-                <option value="@item.Value">@item.Text</option>
-              }
-            </select>
+            <select class="form-control list-PilotID"                     
+                    data-id="[#]"
+                    data-val-required="Pilot is required."
+                    id="PilotID[#]" name="NOC_Details[$].PilotID">
+                <option value="">--Select User from Organization--</option>
+                @foreach (SelectListItem item in Pilots) {
+                  <option value="@item.Value">@item.Text</option>
+                }
+              </select>
+            <span style="display:none" class="text-danger field-validation-error" 
+                  id="val-PilotID[#]" data-valmsg-replace="true">You need to select a Pilot...</span>
           </div>
         </div>
       }
@@ -136,16 +156,19 @@
       <div id="frm2" class="column column-half form-horizontal NoBorder" style="margin-bottom:5px;">
         <div class="form-group">
           RPAS Name
-          <select class="list-DroneID"  data-id="[#]" name="DroneID[$]" id="DroneID[#]">
+          <select class="list-DroneID"  
+                  data-id="[#]" name="NOC_Details[$].DroneID" id="DroneID[#]">
             <option value="">--Select Registered RPAS--</option>
-
           </select>
+          <span style="display:none" class="text-danger field-validation-error"
+                id="val-DroneID[#]" data-valmsg-replace="true">Please select an RPAS...</span>
+
         </div>
       </div>
 
     </section>
     <div class="toolbar">
-      <input type="hidden" style="width:100%; " class="Coordinates" type="text" name="Coordinates[$]" id="Coordinates[#]" value="" />
+      <input type="hidden" style="width:100%; " class="Coordinates"  name="NOC_Details[$].Coordinates" id="Coordinates[#]" value="" />
     </div>
 
   </section>
@@ -217,7 +240,14 @@
 }
 @section scripts {
 <script type="text/javascript">
-    var NOCDetails = @Html.Raw(new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(Model.NOC_Details));
+  @{ 
+    var Details = Model.NOC_Details;
+    foreach(var Detail in Details) {
+      Detail.MSTR_NOC = null;
+    }
+  }
+  var NOCDetails = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Details));
+  var IsOrgAdmin = @(IsOrgAdmin ? "true" : "false");
 </script>
 
 <script src="~/jquery-ui/jquery.ui.timepicker.js"></script>

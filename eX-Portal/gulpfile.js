@@ -1,4 +1,4 @@
-/// <binding ProjectOpened='default' />
+/// <binding />
 var gulp = require('gulp');
 var compass = require('gulp-compass');
 var plumber = require('gulp-plumber');

@@ -40,7 +40,21 @@ namespace eX_Portal.exLogic {
 
     }
 
+    public static IEnumerable<SelectListItem> GetFlightType(int AccountID) {
+      var ctx = new ExponentPortalEntities();
+      var query = from t in ctx.LUP_Drone
+                  where
+                    t.Type == "FlightType" &&
+                    t.Name != "Other"
+                  orderby
+                    t.Name
+                  select new SelectListItem {
+                    Text = t.Name,
+                    Value = t.TypeId.ToString()
+                  };
 
+      return query.ToList();
+    }
 
     public static IEnumerable<SelectListItem> getAllUsers(Object accountid) {
 

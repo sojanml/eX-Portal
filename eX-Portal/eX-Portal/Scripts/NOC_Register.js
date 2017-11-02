@@ -24,6 +24,7 @@
   
 
   $(document).on("change", "select.list-PilotID", Ajax.OnUserChange);
+  $(document).on("change", "select.list-DroneID", Ajax.OnDroneChange);
 
   $('#btnCenterLatLng').on("click", function () {
     NOCMap.MovePolygonByCenter();
@@ -39,9 +40,10 @@
     NOCMap.SetNOCCoordinates(true);
   });
 
+  $('#frmNocAppliation').on("submit", frmValidator.OnSubmit)
 
 
-  NOC.InitilizeForm();
+  NOC.InitilizeForm(IsOrgAdmin);
 
 
 });//$(document).ready()
@@ -50,13 +52,18 @@
 var NOC = function () {
   var LastIndex = 0;
   var ActiveIndex = 0;
+  var _isOrgAdmin = false;
 
-  var _initilizeForm = function () {
+
+  var _initilizeForm = function (IsOrgAdmin) {
+
+    _isOrgAdmin = IsOrgAdmin;
+
     NOCMap.InitilizeMap();
 
     if (NOCDetails.length === 0) {
       NOCDetails = _getNocDefaults();
-    } 
+    }
 
     for (var i = 0; i < NOCDetails.length; i++) {
       _setNocDefault(i);
@@ -78,7 +85,7 @@ var NOC = function () {
   }
 
   var _getNocDefaults = function () {
-    var Defaults =  [{
+    var Defaults = [{
       "NocID": 0,
       "PilotID": 0,
       "DroneID": 0,
@@ -96,7 +103,7 @@ var NOC = function () {
       _EndDate: fnDate.Tomorrow,
       _StartTime: '06:00',
       _EndTime: '18:00'
-    }];    
+    }];
   }
   var _getDataFromRow = function (RowIndex) {
     var Data = {
@@ -123,7 +130,7 @@ var NOC = function () {
       Data: _getDataFromRow(id),
       Index: LastIndex
     });
-   
+
   }
 
   var _moveGoogleMapTo = function (Button) {
@@ -147,7 +154,7 @@ var NOC = function () {
     HTML = HTML.replace(/\[\$\]/g, '[' + ID + ']');
     HTML = HTML.replace(/\[sl#\]/g, '[' + (ID + 1) + ']');
     HTML = HTML.replace(/hasDatepicker/g, "");
-    var LI = $('<LI id="NOCDetail_' + ID + '"></LI>').append(HTML);
+    var LI = $('<LI id="NOCDetail_' + ID + '" data-id="' + ID + '"></LI>').append(HTML);
     LI.appendTo('#NocSections');
 
     LI.find('#StartDate_' + ID).val(Data._StartDate);
@@ -159,11 +166,11 @@ var NOC = function () {
     LI.find('#Coordinates_' + ID).val(Data.Coordinates);
     if (Data.PilotID !== 0) {
       LI.find('#PilotID_' + ID).val(Data.PilotID);
-      LI.find('#PilotID_' + ID).trigger("change", [Data.DroneID]);
+      LI.find('#PilotID_' + ID).trigger("change", [Data.DroneID + '']);
     }
-   
+
     if (Data.LOS === 'BLOS') {
-      LI.find('#LOS_' + ID + '_BLOS').attr({ checked: 'checked' });
+      LI.find('#LOS_' + ID + '_BVLOS').attr({ checked: 'checked' });
     } else {
       LI.find('#LOS_' + ID + '_VLOS').attr({ checked: 'checked' });
     }
@@ -178,12 +185,12 @@ var NOC = function () {
     $('#GoogleMapLayer').appendTo(LI);
     $('#NocSections LI').removeClass("active");
     LI.addClass("active")
- 
+
     if (ID !== 0) LI.find('input.first-field').focus();
 
     NOCMap.SetCoordinatesTo(Data.Coordinates);
     return LI;
-    
+
   };
 
   var _deleteNOCRow = function (Button) {
@@ -218,7 +225,7 @@ var NOC = function () {
         InputName = InputName.replace(/\[\d+\]$/, '[' + RowIndex + ']')
         console.log(Input.attr('id') + ' -> ' + Input.attr('name') + ' -> ' + InputName);
       });
-      
+
     });
 
   }
@@ -231,11 +238,16 @@ var NOC = function () {
     return n;
   }
 
+  _isOrgAdminfn = function () {
+    return _isOrgAdmin;
+  }
+
   return {
     InitilizeForm: _initilizeForm,
     AddNoc: _addNocFromButton,
     MoveGoogleMapTo: _moveGoogleMapTo,
-    DeleteNocRow: _deleteNOCRow
+    DeleteNocRow: _deleteNOCRow,
+    IsOrgAdmin: _isOrgAdminfn
   };
 
 }();
@@ -466,16 +478,23 @@ var NOCMap = function () {
 
 var Ajax = function () {
 
-  var _onUserChange = function (e, DroneID) {    
+  var _onUserChange = function (e, DroneID) {
     var SelectBox = $(this);
     var UserID = SelectBox.val();
-    if (UserID === '') return;
-
     var ID = toID(SelectBox.attr('data-id'));
 
     var TheList = document.getElementById('DroneID_' + ID);
     TheList.options.length = 1;
     TheList.options[0].text = "Reading...";
+
+    if (UserID === '') {
+      $('#val-PilotID_' + ID).fadeIn();
+      TheList.options[0].text = "Please Select a UAS...";
+      return;
+    } else {
+      $('#val-PilotID_' + ID).fadeOut();
+    }
+
 
     $.ajax({
       type: 'GET',
@@ -490,14 +509,25 @@ var Ajax = function () {
           if (typeof DroneID === 'string') TheList.value = DroneID;
         }
         TheList.options[0].text = "Please Select a UAS...";
-        
+
       },
       error: function () {
 
       }
     });
 
+  };
 
+  var _onDroneChange = function () {
+    var SelectBox = $(this);
+    var DroneID = SelectBox.val();
+    var ID = toID(SelectBox.attr('data-id'));
+
+    if (DroneID === '') {
+      $('#val-DroneID_' + ID).fadeIn();
+    } else {
+      $('#val-DroneID_' + ID).fadeOut();
+    }
   }
 
   function toID(Index) {
@@ -508,7 +538,8 @@ var Ajax = function () {
   };
 
   return {
-    OnUserChange: _onUserChange
+    OnUserChange: _onUserChange,
+    OnDroneChange: _onDroneChange
   };
 
 }();
@@ -554,9 +585,16 @@ var fnDate = function () {
 
   var _ToTime = function (timeObj) {
     //"Hours": 6, "Minutes": 0, "Seconds": 0, 
-    var H = (timeObj.Hours <= 9 ? '0' : '') + timeObj.Hours;
-    var M = (timeObj.Minutes <= 9 ? '0' : '') + timeObj.Minutes;
-    return H + ':' + M;
+    var Time = '00:00';
+    if (timeObj.Hours && timeObj.Minutes) {
+      var H = (timeObj.Hours <= 9 ? '0' : '') + timeObj.Hours;
+      var M = (timeObj.Minutes <= 9 ? '0' : '') + timeObj.Minutes;
+      Time = H + ':' + M;
+    } else if (timeObj.length === 8){
+      Time = timeObj.substring(0, 5);
+    }
+    return Time;
+    
   };
 
   var _ToString = function (objDate) {
@@ -580,5 +618,43 @@ var fnDate = function () {
     ToDate: _ToDate,
     ToTime: _ToTime
   }
+
+}();
+
+
+var frmValidator = function () {
+
+  var _validate = function (e) {
+    //e.preventDefault();
+    var ErrorFields = 0;
+
+    $('#NocSections').children('LI').each(function () {
+      var LI = $(this);
+      var ID = LI.attr('data-id');
+      
+      if (NOC.IsOrgAdmin() && $('#PilotID_' + ID).val() === '') {
+        $('#val-PilotID_' + ID).fadeIn();
+        ErrorFields++;
+      }
+
+      if ($('#DroneID_' + ID).val() === '') {
+        $('#val-DroneID_' + ID).fadeIn();
+        ErrorFields++;
+      }
+
+    });
+
+
+
+    if (ErrorFields > 0)
+      return false;
+
+    return true;
+
+  };
+
+  return {
+    OnSubmit: _validate
+  };
 
 }();
