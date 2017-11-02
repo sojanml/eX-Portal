@@ -35,7 +35,7 @@ $(document).ready(function () {
   }
   if (!IsLive) LoadChartSummaryData();
   $('#FlightReplay').on("click", StartFlightReplay);
-
+  if (IsLive) DynamicZone.Initilize(map);
 });
 
 
