@@ -110,7 +110,7 @@ namespace eX_Portal.Controllers {
       return Json(SuccessObj, JsonRequestBehavior.AllowGet);
     }
 
-    [HttpPost ValidateInput(false)]
+    [HttpPost, ValidateInput(false)]
     public ActionResult CMSCreate(ContentManagement CMS) {
       if(!exLogic.User.hasAccess("CMS.CREATE"))
         return RedirectToAction("NoAccess", "Home");
@@ -139,7 +139,7 @@ namespace eX_Portal.Controllers {
     }
 
 
-    [HttpPost ValidateInput(false)]
+    [HttpPost, ValidateInput(false)]
     public ActionResult CmsEdit(ContentManagement CMS) {
       if(!exLogic.User.hasAccess("CMS.CREATE"))
         return RedirectToAction("NoAccess", "Home");

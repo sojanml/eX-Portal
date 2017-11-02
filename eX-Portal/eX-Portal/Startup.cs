@@ -1,7 +1,8 @@
-﻿using Microsoft.Owin;
+﻿
+using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(eX_Portal.Startup))]
+//[assembly: OwinStartupAttribute(typeof(eX_Portal.Startup))]
 namespace eX_Portal
 {
     public partial class Startup
