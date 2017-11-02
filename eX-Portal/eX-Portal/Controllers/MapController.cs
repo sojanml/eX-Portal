@@ -197,7 +197,9 @@ namespace eX_Portal.Controllers {
       using (ExponentPortalEntities db = new ExponentPortalEntities()) { 
         var AllZone =
           from m in db.MSTR_NoFlyZone
-          select m;
+          where m.DisplayType=="FIXED"
+          select m
+          ;
         foreach(var Row in AllZone) {
           var Zone = new FlyZone(Row.FillColour, Row.Coordinates);
           TheMap.NoFlyZone.Add(Zone);

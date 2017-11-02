@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eX_Portal.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace eX_Portal.Controllers {
   public class AdsbController : Controller {
     // GET: Adsb
     private String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ADSB_DB"].ToString();
-
+        public ExponentPortalEntities ctx = new ExponentPortalEntities();
     [OutputCache(Duration = 2)]
     public JsonResult Index(Exponent.ADSB.ADSBQuery QueryData) {
       var ADSB = new Exponent.ADSB.Live();
@@ -50,7 +51,48 @@ namespace eX_Portal.Controllers {
 
       return View(Params);
     }
-  }
+
+    [HttpGet]
+    public ActionResult NoFlyZone()
+    {
+
+            List<MSTR_NoFlyZone> NoFlyZoneList = ctx.MSTR_NoFlyZone.Where(x=>x.DisplayType=="Dynamic").ToList();
+
+        return Json(NoFlyZoneList, JsonRequestBehavior.AllowGet);
+    }
+
+    [HttpPost]
+    public JsonResult SaveZone(MSTR_NoFlyZone Zone)
+    {
+            MSTR_NoFlyZone ezone = new MSTR_NoFlyZone();
+            if (Zone.ID != 0)
+            { 
+                 ezone = ctx.MSTR_NoFlyZone.Where(x => x.ID == Zone.ID).FirstOrDefault();
+                 ezone.Name = Zone.Name;
+                ezone.Coordinates = Zone.Coordinates;
+                ezone.FillColour = "Orange";
+                ezone.StartDate = Zone.StartDate;
+                ezone.EndDate = Zone.EndDate;
+                ezone.StartTime = Zone.StartTime;
+                ezone.EndTime = Zone.EndTime;
+                ezone.ZoneDescription = Zone.ZoneDescription;
+                ezone.DisplayType = "Dynamic";
+                ctx.SaveChanges();
+            }
+            else
+            {
+                ezone = Zone;
+                ezone.FillColour = "Orange";
+                ezone.DisplayType = "Dynamic";
+                ctx.MSTR_NoFlyZone.Add(ezone);
+                ctx.SaveChanges();
+            }
+            List<MSTR_NoFlyZone> NoFlyZoneList = ctx.MSTR_NoFlyZone.ToList();
+
+            return Json(ezone.ID, JsonRequestBehavior.AllowGet);
+
+        }
+    }
 
 
 }
