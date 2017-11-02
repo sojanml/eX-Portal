@@ -102,11 +102,11 @@ namespace eX_Portal.Models
         public virtual DbSet<PayloadDataGridLines> PayloadDataGridLines { get; set; }
         public virtual DbSet<GCA_Approval> GCA_Approval { get; set; }
         public virtual DbSet<M2M_Drone_User> M2M_Drone_User { get; set; }
-        public virtual DbSet<TrafficMonitor> TrafficMonitor { get; set; }
-        public virtual DbSet<MSTR_TrafficMonitor> MSTR_TrafficMonitor { get; set; }
-        public virtual DbSet<Nationality> Nationality { get; set; }
         public virtual DbSet<MSTR_NOC> MSTR_NOC { get; set; }
         public virtual DbSet<NOC_Details> NOC_Details { get; set; }
+        public virtual DbSet<MSTR_TrafficMonitor> MSTR_TrafficMonitor { get; set; }
+        public virtual DbSet<Nationality> Nationality { get; set; }
+        public virtual DbSet<TrafficMonitor> TrafficMonitor { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {
@@ -344,6 +344,54 @@ namespace eX_Portal.Models
                 new ObjectParameter("IsAccess", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Portal_GetPilotChartData", accountIDParameter, isAccessParameter);
+        }
+    
+        public virtual ObjectResult<FlightMapDelayReport_Result> FlightMapDelayReport(Nullable<int> flightID)
+        {
+            var flightIDParameter = flightID.HasValue ?
+                new ObjectParameter("FlightID", flightID) :
+                new ObjectParameter("FlightID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FlightMapDelayReport_Result>("FlightMapDelayReport", flightIDParameter);
+        }
+    
+        public virtual ObjectResult<Report_FlightHours_By_Account_Result> Report_FlightHours_By_Account(string accountID, Nullable<int> isAccess)
+        {
+            var accountIDParameter = accountID != null ?
+                new ObjectParameter("AccountID", accountID) :
+                new ObjectParameter("AccountID", typeof(string));
+    
+            var isAccessParameter = isAccess.HasValue ?
+                new ObjectParameter("IsAccess", isAccess) :
+                new ObjectParameter("IsAccess", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Report_FlightHours_By_Account_Result>("Report_FlightHours_By_Account", accountIDParameter, isAccessParameter);
+        }
+    
+        public virtual int usp_Portal_GetAlertChartData(string accountID, Nullable<int> isAccess)
+        {
+            var accountIDParameter = accountID != null ?
+                new ObjectParameter("AccountID", accountID) :
+                new ObjectParameter("AccountID", typeof(string));
+    
+            var isAccessParameter = isAccess.HasValue ?
+                new ObjectParameter("IsAccess", isAccess) :
+                new ObjectParameter("IsAccess", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Portal_GetAlertChartData", accountIDParameter, isAccessParameter);
+        }
+    
+        public virtual int usp_Portal_GetPilotData(string accountID, Nullable<int> isAccess)
+        {
+            var accountIDParameter = accountID != null ?
+                new ObjectParameter("AccountID", accountID) :
+                new ObjectParameter("AccountID", typeof(string));
+    
+            var isAccessParameter = isAccess.HasValue ?
+                new ObjectParameter("IsAccess", isAccess) :
+                new ObjectParameter("IsAccess", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Portal_GetPilotData", accountIDParameter, isAccessParameter);
         }
     }
 }
