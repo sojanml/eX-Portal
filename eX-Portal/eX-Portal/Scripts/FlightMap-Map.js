@@ -21,6 +21,7 @@ var _ReplayTimer = null;
 var _IsGetNextDataSet = true;
 var _DroneIcon = null;
 var _RPASIconData = null;
+var dismarkers = [];
 
 $(document).ready(function () {
   initializeMap();
@@ -316,47 +317,175 @@ function GetVideoPlaylistJS() {
 }
 
 function initializeMap() {
-  var MarkerPosition = new google.maps.LatLng(25.0955354, 55.1527025);
 
-  var mapOptions = {
-    zoom: 14,
-    mapTypeControl: true,
-    streetViewControl: false,
-    center: MarkerPosition,
-    styles: getADSBMapStyle()
-  };
+    var rulerploy;
+    var length_in_km = 0;
+  
 
-  map = new google.maps.Map(document.getElementById('flightmap'), mapOptions);
-  map.setTilt(45);
+    var DistanceDiv = document.createElement('div');
+    var controlText = document.createElement('div');
+    var rulermarkercount = 0;
+    var MarkerPosition = new google.maps.LatLng(25.0955354, 55.1527025);
 
-  _FlightPath = new google.maps.Polyline({
-    path: [],
-    geodesic: true,
-    strokeColor: '#12ffaf',
-    strokeOpacity: 1.0,
-    strokeWeight: 2,
-    map: map
-  });
-  _FlightBoundBox = new google.maps.LatLngBounds();
+    var mapOptions = {
+        zoom: 14,
+        mapTypeControl: true,
+        streetViewControl: false,
+        center: MarkerPosition,
+        styles: getADSBMapStyle()
+    };
 
-  _FlightReplayPath = new google.maps.Polyline({
-    path: [],
-    geodesic: true,
-    strokeColor: 'red',
-    strokeOpacity: 1.0,
-    strokeWeight: 2,
-    map: map
-  });
+    map = new google.maps.Map(document.getElementById('flightmap'), mapOptions);
+    map.setTilt(45);
 
-  var KmlUrl = 'http://dcaa.exponent-ts.com/Map/NoFlyzone';
-  var kmlOptions = {
-    preserveViewport: true,
-    map: map
-  };
-  NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
-  _DroneIcon = new DroneIcon({ map: map }, MarkerPosition);
+    _FlightPath = new google.maps.Polyline({
+        path: [],
+        geodesic: true,
+        strokeColor: '#12ffaf',
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+        map: map
+    });
+    _FlightBoundBox = new google.maps.LatLngBounds();
 
-  if (IsLive) DynamicZone.Initilize(map);
+    _FlightReplayPath = new google.maps.Polyline({
+        path: [],
+        geodesic: true,
+        strokeColor: 'red',
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+        map: map
+    });
+
+    var KmlUrl = 'http://dcaa.exponent-ts.com/Map/NoFlyzone';
+    var kmlOptions = {
+        preserveViewport: true,
+        map: map
+    };
+    NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
+    _DroneIcon = new DroneIcon({ map: map }, MarkerPosition);
+
+    rulerpoly = new google.maps.Polyline({
+        strokeColor: '#000000',
+        strokeOpacity: 1.0,
+        strokeWeight: 3
+    });
+    rulerpoly.setMap(map);
+    // Add a listener for the click event
+    map.addListener('click', addLatLng);
+    
+    // Handles click events on a map, and adds a new point to the Polyline.
+    function addLatLng(event) {
+        
+        var path = rulerpoly.getPath();
+
+        // Because path is an MVCArray, we can simply append a new coordinate
+        // and it will automatically appear.
+        path.push(event.latLng);
+
+        // Add a new marker at the new plotted point on the polyline.
+        var marker = new google.maps.Marker({
+            position: event.latLng,
+            title: '#' + path.getLength(),
+            map: map
+        });
+        dismarkers.push(marker);
+        length_in_km = (rulerpoly.inKm() * 1000).toFixed(2);;
+        setdistancediv(DistanceDiv, map, length_in_km, controlText)
+        if (path.getLength() <=1)
+        {
+            SetClearMarkersDiv(map, path, rulerpoly,controlText);
+        }
+    }
+
+    google.maps.LatLng.prototype.kmTo = function (a) {
+        var e = Math, ra = e.PI / 180;
+        var b = this.lat() * ra, c = a.lat() * ra, d = b - c;
+        var g = this.lng() * ra - a.lng() * ra;
+        var f = 2 * e.asin(e.sqrt(e.pow(e.sin(d / 2), 2) + e.cos(b) * e.cos
+            (c) * e.pow(e.sin(g / 2), 2)));
+        return f * 6378.137;
+    }
+
+    google.maps.Polyline.prototype.inKm = function (n) {
+        var a = this.getPath(n), len = a.getLength(), dist = 0;
+        for (var i = 0; i < len - 1; i++) {
+            dist += a.getAt(i).kmTo(a.getAt(i + 1));
+        }
+        return dist;
+    }
+    
+   
+    var distanceControl = new CenterControl(DistanceDiv, map, length_in_km, controlText);
+
+    DistanceDiv.index = 1;
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(DistanceDiv);
+}
+
+function setMapOnAll(map) {
+    for (var i = 0; i < dismarkers.length; i++) {
+        dismarkers[i].setMap(map);
+    }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+    setMapOnAll(null);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+    clearMarkers();
+    dismarkers = [];
+}
+
+function setdistancediv(controlDiv, map, length_in_km, controlText)
+{
+    controlText.innerHTML = length_in_km;
+   
+}
+function SetClearMarkersDiv(map, path, rulerpoly, controlText)
+{
+    var ClearDiv = document.createElement('div');
+    var ClearTextDiv = document.createElement('div');
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(ClearDiv);
+    CenterControl(ClearDiv, map, 'CLEAR', ClearTextDiv);
+    // Setup the click event listeners: simply set the map to Chicago.
+    ClearTextDiv.addEventListener('click', function () {
+        path.clear();
+        deleteMarkers();
+        map.controls[google.maps.ControlPosition.TOP_CENTER].pop();
+        controlText.innerHTML = '0';
+    });
+
+}
+function CenterControl(controlDiv, map, length_in_km, controlText) {
+
+    // Set CSS for the control border.
+    var controlUI = document.createElement('div');
+    controlUI.style.backgroundColor = '#fff';
+    controlUI.style.border = '2px solid #fff';
+    controlUI.style.borderRadius = '3px';
+    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    controlUI.style.cursor = 'pointer';
+    controlUI.style.marginBottom = '22px';
+    controlUI.style.textAlign = 'center';
+    controlUI.style.width = '100px';
+    controlUI.title = '';
+    controlDiv.appendChild(controlUI);
+
+    // Set CSS for the control interior.
+    controlText.style.color = 'rgb(25,25,25)';
+    controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+    controlText.style.fontSize = '16px';
+    controlText.style.lineHeight = '38px';
+    controlText.style.paddingLeft = '5px';
+    controlText.style.paddingRight = '5px';
+    controlText.innerHTML = length_in_km;
+    controlUI.appendChild(controlText);
+
+    
+
 }
 
 function LoadMapData() {
@@ -402,6 +531,7 @@ function IsDataLoadCompleted() {
 }
 
 function InitilizeMapData() {
+
   _FlightStartMarker = new google.maps.Marker({
     position: {
       lat: _FlightData[0].Lat,
@@ -441,6 +571,8 @@ function InitilizeMapData() {
     },
     map: null
   });
+
+ 
 }
 
 function AddToTable(TheData) {
