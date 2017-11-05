@@ -25,5 +25,6 @@ namespace eX_Portal.Models
         public Nullable<System.TimeSpan> EndTime { get; set; }
         public string ZoneDescription { get; set; }
         public string DisplayType { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     }
 }
