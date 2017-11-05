@@ -192,7 +192,7 @@ function _ToDate (strDate) {
     return _ToString(nDate);
 }
 function _ToTime(timeObj) {
-    if (typeof timeObj == "string") return timeObj;
+    if (typeof timeObj === "string") return timeObj;
     //"Hours": 6, "Minutes": 0, "Seconds": 0, 
     var H = (timeObj.Hours <= 9 ? '0' : '') + timeObj.Hours;
     var M = (timeObj.Minutes <= 9 ? '0' : '') + timeObj.Minutes;
@@ -285,7 +285,7 @@ function SaveZone(zone) {
         success: function (data) {
             //AllZones = data;
             var newpath = ToPath(zone.Coordinates);
-            if (zone.ID == 0)
+            if (zone.ID === 0)
                 {
             zone.ID = data;
             
@@ -350,9 +350,9 @@ function DrawPolygons(zone,map,index)
         if (InnerPolyPath.length !== 0)
             {
         var fcolor = '';
-        if (zone.FillColour == 'Red')
+        if (zone.FillColour === 'Red')
             fcolor = 'rgb(255, 0, 0)';
-        else if (zone.FillColour == 'Green')
+        else if (zone.FillColour === 'Green')
             fcolor = 'rgb(0, 160, 0)';
         else
             fcolor = 'rgb(255,165,0)';
@@ -490,7 +490,7 @@ function ToPath(Coordinates) {
 function RemovezonePolygon()
 {
     for (var i = 0; i < zonespoly.length; i++) {
-        if (EditZone.ID == zonespoly[i].mapid)
+        if (EditZone.ID === zonespoly[i].mapid)
         {
             zonespoly.splice($.inArray(zonespoly[i], zonespoly), 1);
             AllZones.splice($.inArray(EditZone, AllZones), 1);

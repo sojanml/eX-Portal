@@ -420,73 +420,12 @@ function initializeMap() {
 
     DistanceDiv.index = 1;
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(DistanceDiv);
+    AddScale(map);
 }
 
-function setMapOnAll(map) {
-    for (var i = 0; i < dismarkers.length; i++) {
-        dismarkers[i].setMap(map);
-    }
-}
 
-// Removes the markers from the map, but keeps them in the array.
-function clearMarkers() {
-    setMapOnAll(null);
-}
 
-// Deletes all markers in the array by removing references to them.
-function deleteMarkers() {
-    clearMarkers();
-    dismarkers = [];
-}
 
-function setdistancediv(controlDiv, map, length_in_km, controlText)
-{
-    controlText.innerHTML = length_in_km;
-   
-}
-function SetClearMarkersDiv(map, path, rulerpoly, controlText)
-{
-    var ClearDiv = document.createElement('div');
-    var ClearTextDiv = document.createElement('div');
-    map.controls[google.maps.ControlPosition.TOP_CENTER].push(ClearDiv);
-    CenterControl(ClearDiv, map, 'CLEAR', ClearTextDiv);
-    // Setup the click event listeners: simply set the map to Chicago.
-    ClearTextDiv.addEventListener('click', function () {
-        path.clear();
-        deleteMarkers();
-        map.controls[google.maps.ControlPosition.TOP_CENTER].pop();
-        controlText.innerHTML = '0';
-    });
-
-}
-function CenterControl(controlDiv, map, length_in_km, controlText) {
-
-    // Set CSS for the control border.
-    var controlUI = document.createElement('div');
-    controlUI.style.backgroundColor = '#fff';
-    controlUI.style.border = '2px solid #fff';
-    controlUI.style.borderRadius = '3px';
-    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-    controlUI.style.cursor = 'pointer';
-    controlUI.style.marginBottom = '22px';
-    controlUI.style.textAlign = 'center';
-    controlUI.style.width = '100px';
-    controlUI.title = '';
-    controlDiv.appendChild(controlUI);
-
-    // Set CSS for the control interior.
-    controlText.style.color = 'rgb(25,25,25)';
-    controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-    controlText.style.fontSize = '16px';
-    controlText.style.lineHeight = '38px';
-    controlText.style.paddingLeft = '5px';
-    controlText.style.paddingRight = '5px';
-    controlText.innerHTML = length_in_km;
-    controlUI.appendChild(controlText);
-
-    
-
-}
 
 function LoadMapData() {
   $.ajax({
@@ -735,3 +674,94 @@ DroneIcon.prototype.draw = function () {
   theIcon.clearQueue();
   theIcon.animate({ left: IconLocation.x, top: IconLocation.y });
 };
+
+function setdistancediv(controlDiv, map, length_in_km, controlText) {
+    controlText.innerHTML = length_in_km;
+
+}
+function SetClearMarkersDiv(map, path, rulerpoly, controlText) {
+    var ClearDiv = document.createElement('div');
+    var ClearTextDiv = document.createElement('div');
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(ClearDiv);
+    CenterControl(ClearDiv, map, 'CLEAR', ClearTextDiv);
+    // Setup the click event listeners: simply set the map to Chicago.
+    ClearTextDiv.addEventListener('click', function () {
+        path.clear();
+        deleteMarkers();
+        map.controls[google.maps.ControlPosition.TOP_CENTER].pop();
+        controlText.innerHTML = '0';
+    });
+
+}
+function CenterControl(controlDiv, map, length_in_km, controlText) {
+
+    // Set CSS for the control border.
+    var controlUI = document.createElement('div');
+    controlUI.style.backgroundColor = '#fff';
+    controlUI.style.border = '2px solid #fff';
+    controlUI.style.borderRadius = '3px';
+    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    controlUI.style.cursor = 'pointer';
+    controlUI.style.marginBottom = '22px';
+    controlUI.style.textAlign = 'center';
+    controlUI.style.width = '100px';
+    controlUI.title = '';
+    controlDiv.appendChild(controlUI);
+
+    // Set CSS for the control interior.
+    controlText.style.color = 'rgb(25,25,25)';
+    controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+    controlText.style.fontSize = '16px';
+    controlText.style.lineHeight = '38px';
+    controlText.style.paddingLeft = '5px';
+    controlText.style.paddingRight = '5px';
+    controlText.innerHTML = length_in_km;
+    controlUI.appendChild(controlText);
+
+
+
+}
+
+function AddScale(map)
+{
+    // Set CSS for the control border.
+
+    var ScaleDiv = document.createElement('div');
+    var controlUI = document.createElement('div');
+    var controlText = document.createElement('div');
+
+    controlUI.style.backgroundColor = '#fff';
+    controlUI.style.border = '2px solid #fff';
+    controlUI.style.borderRadius = '3px';
+    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    controlUI.style.cursor = 'pointer';
+    controlUI.style.marginBottom = '22px';
+    controlUI.style.textAlign = 'center';
+    controlUI.style.width = '100px';
+    controlUI.title = '';
+    ScaleDiv.appendChild(controlUI);
+
+    // Set CSS for the control interior.
+    controlText.style = '\images\ruler.ico';
+    controlUI.appendChild(controlText);
+    
+    
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(ScaleDiv);
+}
+
+function setMapOnAll(map) {
+    for (var i = 0; i < dismarkers.length; i++) {
+        dismarkers[i].setMap(map);
+    }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+    setMapOnAll(null);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+    clearMarkers();
+    dismarkers = [];
+}
