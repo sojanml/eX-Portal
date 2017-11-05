@@ -56,7 +56,7 @@ namespace eX_Portal.Controllers {
     public ActionResult NoFlyZone()
     {
 
-            List<MSTR_NoFlyZone> NoFlyZoneList = ctx.MSTR_NoFlyZone.Where(x=>x.DisplayType=="Dynamic").ToList();
+            List<MSTR_NoFlyZone> NoFlyZoneList = ctx.MSTR_NoFlyZone.Where(x=>x.DisplayType=="Dynamic" && x.IsDeleted==false).ToList();
 
         return Json(NoFlyZoneList, JsonRequestBehavior.AllowGet);
     }
@@ -88,6 +88,23 @@ namespace eX_Portal.Controllers {
                 ctx.SaveChanges();
             }
             List<MSTR_NoFlyZone> NoFlyZoneList = ctx.MSTR_NoFlyZone.ToList();
+
+            return Json(ezone.ID, JsonRequestBehavior.AllowGet);
+
+        }
+
+        [HttpPost]
+        public JsonResult RemoveZone(MSTR_NoFlyZone Zone)
+        {
+            MSTR_NoFlyZone ezone = new MSTR_NoFlyZone();
+            if (Zone.ID != 0)
+            {
+                ezone = ctx.MSTR_NoFlyZone.Where(x => x.ID == Zone.ID).FirstOrDefault();
+                ezone.IsDeleted = true;
+                ctx.SaveChanges();
+            }
+           
+          
 
             return Json(ezone.ID, JsonRequestBehavior.AllowGet);
 

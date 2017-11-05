@@ -7,7 +7,7 @@ var IsQueryChanged = 0;
 var timeZoneOffset = 0; //(new Date()).getTimezoneOffset();
 var TheChartObject = null;
 var zonespoly = [];
-var EditZone = { ID:0, Name: "", Coordinates: "", FillColour: "", StartDate: "", EndDate:"", StartTime:"", EndTime:"", ZoneDescription:"", DisplayType:""};
+var EditZone = { ID: 0, Name: "", Coordinates: "", FillColour: "", StartDate: "", EndDate: "", StartTime: "", EndTime: "", ZoneDescription: "", DisplayType: "", IsDeleted: 0};
 var editzonepoly = new google.maps.Polygon({});
 var DefaultZonesPoly = [];
 var newzonepoly = new google.maps.Polygon({});
@@ -44,12 +44,19 @@ $(document).ready(function () {
       //newzonepoly.setMap(null);
       var cord = ToPath(EditZone.Coordinates);
       editzonepoly.setPath(cord);
-      EditZone = { Name: "", Coordinates: "", FillColour: "", StartDate: "", EndDate: "", StartTime: "", EndTime: "", ZoneDescription: "", DisplayType: "" };
+      EditZone = { Name: "", Coordinates: "", FillColour: "", StartDate: "", EndDate: "", StartTime: "", EndTime: "", ZoneDescription: "", DisplayType: "",IsDeleted:0 };
       SetEditable(-1, false);
       AddPolyClicks();
       $("#AddDiv").show();
       $("#DetailDiv").hide();
   });
+
+  $("#RemoveZone").click(function () {
+      SetZoneValues();
+      RemoveZone(EditZone);
+     
+  });
+
  // Timers['getADSB'] = window.setTimeout(getADSB, 100, _ADSBLayer);
   
 });
@@ -60,7 +67,6 @@ function ReGetAdsb() {
   if (Timers['getADSB']) window.clearTimeout(Timers['getADSB']);
   Timers['getADSB'] = window.setTimeout(getADSB, 400, _ADSBLayer);
 }
-
 
 function RequestFilterData() {
   //console.log("Running Timer ID : " + RefreshTimer);
@@ -97,6 +103,7 @@ function initializeMap() {
       addnewPolygon(map, event.latLng);
       $("#DetailDiv").show();
       $("#AddDiv").hide();
+      $("#RemoveZone").hide();
       RemovePolyClicks();
 
   });
@@ -184,8 +191,6 @@ function _ToDate (strDate) {
 
     return _ToString(nDate);
 }
-
-
 function _ToTime(timeObj) {
     if (typeof timeObj == "string") return timeObj;
     //"Hours": 6, "Minutes": 0, "Seconds": 0, 
@@ -292,13 +297,17 @@ function SaveZone(zone) {
                 fillOpacity: 0.9,
                 zIndex: 1,
                 content:  zone.Name,
-                mapid: zone.ID
+                mapid: zone.ID,
+                edit: false,
+                draggable: false
             });
             zonespoly.push(editzonepoly);
             AllZones.push(zone);
             }
             else {
                 editzonepoly.setPath(newpath);
+                editzonepoly.setDraggable(false);
+                editzonepoly.setEditable(false);
             }
         
             editzonepoly = new google.maps.Polygon({});
@@ -314,10 +323,25 @@ function SaveZone(zone) {
         }
     });
 }
-
-
-
-
+function RemoveZone(zone) {
+    $.ajax({
+        type: 'POST',
+        url: '/ADSB/RemoveZone',
+        dataType: "json",
+        async: true,
+        data: zone,
+        success: function (data) {
+            RemovezonePolygon();
+            editzonepoly.setMap(null);
+            EditZone = { Name: "", Coordinates: "", FillColour: "", StartDate: "", EndDate: "", StartTime: "", EndTime: "", ZoneDescription: "", DisplayType: "", IsDeleted: 0 };
+            SetEditable(-1, false);
+            AddPolyClicks();
+            $("#AddDiv").show();
+            $("#DetailDiv").hide();
+            
+        }
+    });
+}
 function DrawPolygons(zone,map,index)
 {
    
@@ -351,6 +375,7 @@ function DrawPolygons(zone,map,index)
             EditZone = zone;
             $("#DetailDiv").show();
             $("#AddDiv").hide();
+            $("#RemoveZone").show();
         });
         zonespoly.push(InnerPoly);
         google.maps.event.addListener(InnerPoly.getPath(), 'set_at', setCoordinates);
@@ -373,7 +398,7 @@ function getBoundary() {
     var Bounds = editzonepoly.getPath().getArray();
     var LatLng = '';
     for (var i = 0; i < Bounds.length; i++) {
-        if (LatLng != '') LatLng += ',';
+        if (LatLng !== '') LatLng += ',';
         var Lat = Bounds[i].lat();
         var Lng = Bounds[i].lng();
         LatLng = LatLng + Lat.toFixed(5) + ' ' + Lng.toFixed(5);
@@ -383,7 +408,7 @@ function getBoundary() {
 
 function getCoordinates() {
     var Cordinates = $('#ZoneCoordinates').val();
-    if (Cordinates == "") {
+    if (Cordinates === "") {
         Cordinates = getDefaultCoordinates();
         $('#ZoneCoordinates').val(Cordinates);
     }
@@ -399,12 +424,12 @@ function SetEditable(mapid,status)
     for (var i = 0; i < zonespoly.length; i++)
     {
         var p = zonespoly[i].mapid;
-        if (mapid == -1 || p != mapid)
+        if (mapid === -1 || p !== mapid)
         {
            
             zonespoly[i].setEditable(status);
             zonespoly[i].setDraggable(status);
-            if(i!=-1)
+            if(i!==-1)
              google.maps.event.clearListeners(zonespoly[i], 'click'); 
         }
         else
@@ -441,10 +466,9 @@ function SetPolyClicks(zone,mapid,poly)
         EditZone = zone;
         $("#DetailDiv").show();
         $("#AddDiv").hide();
+        $("#RemoveZone").show();
     });
 }
-
-
 
 function ToPath(Coordinates) {
     var Path = [];
@@ -463,3 +487,15 @@ function ToPath(Coordinates) {
     }
 }
 
+function RemovezonePolygon()
+{
+    for (var i = 0; i < zonespoly.length; i++) {
+        if (EditZone.ID == zonespoly[i].mapid)
+        {
+            zonespoly.splice($.inArray(zonespoly[i], zonespoly), 1);
+            AllZones.splice($.inArray(EditZone, AllZones), 1);
+            
+            break;
+        }
+    }
+}
