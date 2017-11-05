@@ -85,6 +85,15 @@ namespace eX_Portal.Controllers {
     }
 
     [HttpGet]
+    [ActionName("3D")]
+    public ActionResult ViewNocApplication3D([Bind(Prefix = "ID")]int NocApplicationID = 0) {
+      Models.MSTR_NOC NOC = ctx.MSTR_NOC.Where(w => w.NocApplicationID == NocApplicationID).FirstOrDefault();
+      if (NOC == null)
+        return HttpNotFound();
+      return View(NOC);
+    }
+
+    [HttpGet]
     [ChildActionOnly]
     public ActionResult StaticGoogleMap(int NocID = 0) {
       var NOC = ctx.NOC_Details.Where(w => w.NocID == NocID).FirstOrDefault();

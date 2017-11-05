@@ -187,3 +187,22 @@ section.top-border {
     }
   }
 }
+
+#cesiumContainer  {
+  position:relative;
+}
+
+#ToolBarSelect {
+  background-color: #1d1c1c;
+  color: white;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 5;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size:12px;
+
+  option {
+    background-color: #1d1c1c;
+  }
+}

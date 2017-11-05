@@ -1,0 +1,71 @@
+﻿@model eX_Portal.Models.MSTR_NOC
+@using eX_Portal.exLogic;
+@{
+  ViewBag.Title = $"NOC Application - #{Model.NocApplicationID}";
+}
+
+<section class="top-space">
+
+  <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px;">
+    <div class="title">
+      NOC Registration
+    </div>
+
+    <div class="form-group">
+      Flight Type:
+      <div class="field-value col-md-10">
+        @Model.FlightType
+      </div>
+    </div>
+    <div class="form-group">
+      For (Client Name):
+      <div class="field-value col-md-10">
+        @Model.FlightFor
+      </div>
+    </div>
+  </div>
+
+  <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px">
+    <div class="title">
+      Notifications
+    </div>
+    <div class="form-group">
+      Emails:
+      <div class="field-value col-md-10">
+        @(String.IsNullOrEmpty(Model.PostFlightReportEmails) ? "N/A" : Model.PostFlightReportEmails)
+      </div>
+    </div>
+    <div class="form-group">
+      SMS:
+      <div class="field-value col-md-10">
+        @(String.IsNullOrEmpty(Model.SMSNumbers) ? "N/A" : Model.SMSNumbers)
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="cesiumContainer"></div>
+
+
+@section header {
+  <link type="text/css" rel="stylesheet" href="~/Content/NOC_Register.css" />
+  <link type="text/css" rel="stylesheet" href="~/Cesium/Widgets/widgets.css" />
+}
+
+
+@section scripts {
+<script type="text/javascript">
+  var NOCDetails = [
+    @foreach (var NOC in Model.NOC_Details) {
+      @Html.Raw("{")
+      @Html.Raw($"\"Coordinates\":\"{NOC.Coordinates}\",")
+      @Html.Raw($"\"OuterCoordinates\":\"{NOC.OuterCoordinates}\",")
+      @Html.Raw($"\"Altitude\":\"{NOC.MaxAltitude}\",")
+      @Html.Raw($"\"Toolbar\":\"{NOC.StartDate.ToString("dd-MMM-yyyy")} {NOC.StartTime.ToString().Substring(0, 5)} to {NOC.EndDate.ToString("dd-MMM-yyyy")} {NOC.EndTime.ToString().Substring(0, 5)}\",")
+      @Html.Raw("},")
+    }
+  ]
+</script>
+  <script src="~/Cesium/Cesium.js"></script>
+  <script src="~/Scripts/NOC_3D.js"></script>
+}
