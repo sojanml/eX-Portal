@@ -974,6 +974,12 @@ div.form-horizontal {
     min-height: 150px;
   }
 
+  
+}
+
+
+div.form-horizontal,
+div.form-toolbar {
   input[type=submit] {
     padding: 3px 15px 3px 15px;
     color: $TitleTextColor;
@@ -982,9 +988,8 @@ div.form-horizontal {
     text-transform: uppercase;
     background-color: $ReportHeadBackground;
     border: 1px silver outset;
-  }
+  } 
 }
-
 
 table.infoTable {
   width: 100%;

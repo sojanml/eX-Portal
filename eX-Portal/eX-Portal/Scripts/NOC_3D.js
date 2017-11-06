@@ -17,7 +17,7 @@ var NOC_3D = function () {
       polygon: {
         material: Cesium.Color.GREEN,
         hierarchy: InnerCoordinates,
-        extrudedHeight: Coordinates.Altitude,
+        extrudedHeight: 0,
         perPositionHeight: true,
         material: Cesium.Color.GREEN.withAlpha(0.7),
         outline: true,
@@ -36,7 +36,7 @@ var NOC_3D = function () {
             positions: InnerCoordinates
           }]
         },
-        extrudedHeight: Coordinates.Altitude,
+        extrudedHeight: 0,
         perPositionHeight: true,
         material: Cesium.Color.ORANGE.withAlpha(0.7),
         outline: true,

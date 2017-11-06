@@ -812,7 +812,9 @@ div.form-horizontal button {
 div.form-horizontal textarea {
   min-height: 150px;
 }
-div.form-horizontal input[type=submit] {
+
+div.form-horizontal input[type=submit],
+div.form-toolbar input[type=submit] {
   padding: 3px 15px 3px 15px;
   color: #ff9b9b;
   font-family: Gobold_Light;

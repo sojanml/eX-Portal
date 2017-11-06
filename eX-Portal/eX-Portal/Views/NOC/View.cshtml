@@ -95,3 +95,9 @@
 @section header {
   <link type="text/css" rel="stylesheet" href="~/Content/NOC_Register.css" />
 }
+
+@section toolbar {
+  <ul class="toolbar">
+    <li><a href="@Url.Action("3D", new { ID = Model.NocApplicationID})">3D View</a></li>
+  </ul>
+  }

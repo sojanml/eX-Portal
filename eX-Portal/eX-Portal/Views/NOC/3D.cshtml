@@ -45,7 +45,11 @@
 </section>
 
 <div id="cesiumContainer"></div>
-
+@section toolbar {
+  <ul class="toolbar">
+    <li><a href="@Url.Action("View", new { ID = Model.NocApplicationID})">2D View</a></li>
+  </ul>
+}
 
 @section header {
   <link type="text/css" rel="stylesheet" href="~/Content/NOC_Register.css" />
@@ -60,7 +64,7 @@
       @Html.Raw("{")
       @Html.Raw($"\"Coordinates\":\"{NOC.Coordinates}\",")
       @Html.Raw($"\"OuterCoordinates\":\"{NOC.OuterCoordinates}\",")
-      @Html.Raw($"\"Altitude\":\"{NOC.MaxAltitude}\",")
+      @Html.Raw($"\"Altitude\": {NOC.MaxAltitude},")
       @Html.Raw($"\"Toolbar\":\"{NOC.StartDate.ToString("dd-MMM-yyyy")} {NOC.StartTime.ToString().Substring(0, 5)} to {NOC.EndDate.ToString("dd-MMM-yyyy")} {NOC.EndTime.ToString().Substring(0, 5)}\",")
       @Html.Raw("},")
     }

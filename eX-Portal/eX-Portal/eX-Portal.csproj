@@ -2097,6 +2097,7 @@
     <Content Include="Views\NOC\Register.cshtml" />
     <Content Include="Views\NOC\View.cshtml" />
     <Content Include="Views\NOC\3D.cshtml" />
+    <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
