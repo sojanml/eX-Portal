@@ -36,11 +36,11 @@ $(document).ready(function () {
     LastProcessedID = 0;
     timeZoneOffset = ($(this).val() == "utc" ? 0 : d.getTimezoneOffset());
     if (Timers['getChartData']) window.clearTimeout(Timers['getChartData']);
-    Timers['getChartData'] = window.setTimeout(getChartData, 100);    
+    Timers['getChartData'] = window.setTimeout(getChartData, 100);
   });
-  
 
-  
+
+
   Timers['getADSB'] = window.setTimeout(getADSB, 100, _ADSBLayer);
   //Timers['getStatus'] = window.setTimeout(getStatus, UpdateDelay, _ADSBLayer);
   Timers['getChartData'] = window.setTimeout(getChartData, 100);
@@ -50,22 +50,20 @@ $(document).ready(function () {
 
 function InitSliders() {
 
-  $("#SliderAltitude").slider(
-    {
-      range: true,
-      values: [InitQuery.minAltitude, InitQuery.maxAltitude],
-      min: 0,
-      max: 6000,
-      step:1,
-      slide: function (event, ui) {
-        $('#span_minAltitude').html(ui.values[0]);
-        $('#span_maxAltitude').html(ui.values[1]);
-        $('#minAltitude').val(ui.values[0]);
-        $('#maxAltitude').val(ui.values[1]);
-        ReGetAdsb();
-      }
+  $("#SliderAltitude").slider({
+    range: true,
+    values: [InitQuery.minAltitude, InitQuery.maxAltitude],
+    min: 0,
+    max: 6000,
+    step: 1,
+    slide: function (event, ui) {
+      $('#span_minAltitude').html(ui.values[0]);
+      $('#span_maxAltitude').html(ui.values[1]);
+      $('#minAltitude').val(ui.values[0]);
+      $('#maxAltitude').val(ui.values[1]);
+      ReGetAdsb();
     }
-  );
+  });
 
   $("#SliderSpeed").slider({
     range: true,
@@ -77,7 +75,7 @@ function InitSliders() {
       $('#span_minSpeed').html(ui.values[0].toFixed(1));
       $('#span_maxSpeed').html(ui.values[1].toFixed(1));
       $('#minSpeed').val(ui.values[0]);
-      $('#maxSpeed').val(ui.values[1]);     
+      $('#maxSpeed').val(ui.values[1]);
       ReGetAdsb();
     }
   });
@@ -103,37 +101,39 @@ function AutoUpdateZone(Elem) {
       $('#hAlert').val((Value * AlertPercentage / 100).toFixed(1));
       $('#hBreach').val((Value * BreachPercentage / 100).toFixed(1));
       break;
-      case 'hAlert':
-          if (Value == 0) Value = 8;
-          var Safe = Value * (1 / AlertPercentage) * 100;
-          var Breach = Safe * BreachPercentage / 100;
-          $('#hSafe').val(Safe.toFixed(1));
-          $('#hBreach').val(Breach.toFixed(1));
-          break;
-      case 'hBreach':
-          if (Value == 0) Value = 5;
-          var Safe = Value * (1 / BreachPercentage) * 100;
-          var Alert = Safe * AlertPercentage / 100;
-          $('#hSafe').val(Safe.toFixed(1));
-          $('#hAlert').val(Alert.toFixed(1));
-          break;
-      case 'vSafe':
-          if (Value == 0) Value = 10;
-          $('#vAlert').val((Value * AlertPercentage / 100).toFixed(1));
-          $('#vBreach').val((Value * BreachPercentage / 100).toFixed(1));
-          break;
-      case 'vAlert':
-          if (Value == 0) Value = 8;
-          var Safe = Value * (1 / AlertPercentage) * 100;
-          var Breach = Safe * BreachPercentage / 100;
-          $('#vSafe').val(Safe.toFixed(1));
-          $('#vBreach').val(Breach.toFixed(1));
-      case 'vBreach':
-          if (Value == 0) Value = 5;
-          var Safe = Value * (1 / BreachPercentage) * 100;
-          var Alert = Safe * AlertPercentage / 100;
-          $('#vSafe').val(Safe.toFixed(1));
-          $('#vAlert').val(Alert.toFixed(1));
+    case 'hAlert':
+      if (Value == 0) Value = 8;
+      var Safe = Value * (1 / AlertPercentage) * 100;
+      var Breach = Safe * BreachPercentage / 100;
+      $('#hSafe').val(Safe.toFixed(1));
+      $('#hBreach').val(Breach.toFixed(1));
+      break;
+    case 'hBreach':
+      if (Value == 0) Value = 5;
+      var Safe = Value * (1 / BreachPercentage) * 100;
+      var Alert = Safe * AlertPercentage / 100;
+      $('#hSafe').val(Safe.toFixed(1));
+      $('#hAlert').val(Alert.toFixed(1));
+      break;
+    case 'vSafe':
+      if (Value == 0) Value = 10;
+      $('#vAlert').val((Value * AlertPercentage / 100).toFixed(1));
+      $('#vBreach').val((Value * BreachPercentage / 100).toFixed(1));
+      break;
+    case 'vAlert':
+      if (Value == 0) Value = 8;
+      var Safe = Value * (1 / AlertPercentage) * 100;
+      var Breach = Safe * BreachPercentage / 100;
+      $('#vSafe').val(Safe.toFixed(1));
+      $('#vBreach').val(Breach.toFixed(1));
+      break;
+    case 'vBreach':
+      if (Value == 0) Value = 5;
+      var Safe = Value * (1 / BreachPercentage) * 100;
+      var Alert = Safe * AlertPercentage / 100;
+      $('#vSafe').val(Safe.toFixed(1));
+      $('#vAlert').val(Alert.toFixed(1));
+      break;
   }
 }
 
@@ -166,13 +166,13 @@ function RequestFilterData() {
   //console.log("Running Timer ID : " + RefreshTimer);
   if (RefreshTimer) window.clearTimeout(RefreshTimer);
   RefreshTimer = null;
-  
+
   //getStatus(_ADSBLayer);
 }
 
 function initializeMap() {
   var MarkerPosition = { lat: 25.2532, lng: 55.3657 };
-  
+
   var mapOptions = {
     zoom: 10,
     mapTypeControl: true,
@@ -190,7 +190,12 @@ function initializeMap() {
     map: map
   };
   NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
-  
+  /*
+  map.addListener('click', function (e) {
+    _InfoWindowKey = '';
+    _ADSBLayer.hideInfoLayer();
+  });
+  */
 }
 
 function setLiveSummary(ChartData) {
@@ -233,7 +238,7 @@ function getChartData() {
     }, //succes
     complete: function () {
       Timers['getChartData'] = window.setTimeout(getChartData, 10 * 1000);
-    }    
+    }
   });//$.ajax
 }
 
@@ -247,7 +252,7 @@ function InitChart() {
 
   theChart = $('#BarGraph').highcharts({
     chart: {
-      spacing: [5,0,0,0],
+      spacing: [5, 0, 0, 0],
       renderTo: 'container',
       backgroundColor: 'white',
       events: {
@@ -321,7 +326,7 @@ function InitChart() {
       opposite: true,
       gridLineColor: '#6c8393',
       gridLineWidth: 0
-        }    ],
+    }],
 
     tooltip: {
       shared: true
@@ -331,20 +336,20 @@ function InitChart() {
     },
 
 
-    series: [ {
+    series: [{
       name: 'Alerts',
       type: 'areaspline',
       data: [],
       color: '#ff4e00',
       lineWidth: 1,
-     // fillOpacity: 0.5
+      // fillOpacity: 0.5
     }, {
       name: 'Breaches',
       type: 'areaspline',
       data: [],
       color: '#fe0000',
       lineWidth: 1,
-    //  fillOpacity: 0.5
+      //  fillOpacity: 0.5
 
     }]
   });

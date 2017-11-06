@@ -24,6 +24,8 @@ $(document).ready(function () {
   });
   _ADSBLayer = new ADSBOverlay({ map: map }, []);
 
+
+
   Timers['getADSB'] = window.setTimeout(getADSB, UpdateDelay, _ADSBLayer);
 });
 var StatusInfo = {
@@ -585,5 +587,7 @@ function ShowInfoWindow(t) {
   _InfoWindow.setPosition(myLatlng);
   _InfoWindow.setContent(Content);
   _InfoWindow.open(map);
+
+
 
 }

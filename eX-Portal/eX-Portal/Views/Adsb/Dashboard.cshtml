@@ -293,7 +293,7 @@
 
 </section>
 <p>&nbsp;</p>
-@section scripts {
+@section scripts {  
   <script type="text/javascript">
     var InitQuery = @Html.Raw(Json.Encode(Model));
   </script>
@@ -307,3 +307,30 @@
   <script src="~/Scripts/ADSBDashboard.js" type="text/javascript"></script>
 }
 
+@section header {
+  <style type="text/css">
+    #infoLayer {
+      display: block;
+      position: absolute;
+      border: 1px solid #222222;
+      background-color: rgba(34, 34, 34, 0.66);
+      color:white;
+      left:30px;
+      top:30px;
+      padding:5px;
+      white-space:nowrap;
+    }
+    #infoLayerClose {
+      position:absolute;
+      top:3px;
+      right: 3px;
+      color: silver;
+      cursor:pointer;
+      font-size:16px;
+    }
+    #infoLayer:hover span.icon {
+      color:#ff6a00
+    }
+
+  </style>
+  }

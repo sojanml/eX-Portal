@@ -4,17 +4,25 @@ var BreachRef = {}
 var _InfoWindow = null;
 
 $(document).ready(function () {
-  $(document).on("click", "div.adsb-point", function () {
+  $(document).on("click", "div.adsb-point", function (e) {
+    //e.stopPropagation();
     var t = $(this);
     _InfoWindowKey = t.attr('id');
     ShowInfoWindow();
   });
+  $(document).on("click", "#infoLayerClose", function () {
+    _InfoWindowKey = '';
+    _ADSBLayer.hideInfoLayer();
+  });
+
+  
+
 
   $('input#BreachLine').on("change", ShowHideLines);
   $('input#AlertLine').on("change", ShowHideLines);
 
-  $(document).on("mouseenter", 'span.SkyCommander', function () { _ADSBLayer.ShowCircles($(this))});
-  $(document).on("mouseleave", 'span.SkyCommander', function () { _ADSBLayer.HideCircles($(this))});
+  $(document).on("mouseenter", 'span.SkyCommander', function () { _ADSBLayer.ShowCircles($(this)) });
+  $(document).on("mouseleave", 'span.SkyCommander', function () { _ADSBLayer.HideCircles($(this)) });
 
   _InfoWindow = new google.maps.InfoWindow({
     content: '<div id="InfoWindowContent">...</div>'
@@ -22,6 +30,9 @@ $(document).ready(function () {
   google.maps.event.addListener(_InfoWindow, 'closeclick', function () {
     _InfoWindowKey = '';
   });
+
+
+
 
 });
 
@@ -177,6 +188,10 @@ function toDate(JsonDate) {
 function ADSBOverlay(options, ADSBData) {
   this.setValues(options);
   this.markerLayer = $('<div />').addClass('overlay');
+  this.infoLayer = $('<div id="infoLayer">' +
+    '<div id="infoLayerContent"></div>' +
+    '<div id="infoLayerClose"><span class="icon red">&#xf057;</icon></div>' +
+    '</div > ');
   this.ADSBData = ADSBData;
   this.FlightsOnMap = {};
   this.FlightsBeforeDrawing = {};
@@ -185,6 +200,33 @@ function ADSBOverlay(options, ADSBData) {
   this.Circles = {};
   this.BreachLineReference = [];
   this.AlertLineReference = [];
+
+  this.hideInfoLayer = function() {
+    $('#infoLayer').fadeOut();
+  };
+
+  this.showInfoLayer = function (Content) {
+    var projection = this.getProjection();
+    if (!projection) return false;
+
+    var HexCode = _InfoWindowKey.replace('adsb-', '');
+    var Data = this.GetData(HexCode);
+    var FlightID = (Data.FlightID ? Data.FlightID : "");
+
+    var lat = Data.Lat;
+    var lng = Data.Lon;
+
+    var IconGeoPos = new google.maps.LatLng(lat, lng)
+    var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
+
+    $('#infoLayerContent')
+      .html(Content);
+
+    $('#infoLayer')
+      .animate({ left: IconLocation.x, top: IconLocation.y })
+      .show();
+
+  };
 
   this.setADSB = function (ADSBData) {
     this.ADSBData = ADSBData;
@@ -251,7 +293,7 @@ function ADSBOverlay(options, ADSBData) {
     return Icon;
   }
 
-}
+};
 
 ADSBOverlay.prototype = new google.maps.OverlayView;
 
@@ -335,10 +377,12 @@ ADSBOverlay.prototype.DrawLinesTo = function (DroneID) {
 ADSBOverlay.prototype.onAdd = function () {
   var $pane = $(this.getPanes().overlayImage); // Pane 3  
   $pane.append(this.markerLayer);
+  $pane.append(this.infoLayer);
 };
 
 ADSBOverlay.prototype.onRemove = function () {
   this.markerLayer.remove();
+  this.infoLayer.remove();
 };
 
 ADSBOverlay.prototype.SetReverseReference = function (DroneID) {
@@ -561,12 +605,93 @@ function lineToAngle(x1, y1, length, angle) {
   return { x: x2, y: y2 };
 }
 
-
 function ShowInfoWindow() {
+  if (_InfoWindowKey == '') return;
+
+  var HexCode = _InfoWindowKey.replace('adsb-', '');
+  var Data = _ADSBLayer.GetData(HexCode);
+  if (Data == null) return;
+  var FlightID = (Data.FlightID ? Data.FlightID : "");
+
+  var InfoTitle = '';
+  var BreachInfo = '';
+  var AlertInfo = '';
+
+  var AircraftCode = FlightID.substr(0, 3).toUpperCase();
+  if (AircraftDB[AircraftCode])
+    InfoTitle =
+      '<div class="BigTitle">' + AircraftDB[AircraftCode]["IATA"] + ' ' + FlightID.substr(3).toUpperCase() +
+      '<span>' + AircraftDB[AircraftCode]["Name"] + '</span>' +
+      '</div>';
+      //'<div class="SubTitle">' + AircraftDB[AircraftCode]["Country"] + '</div>';
+  else
+    InfoTitle = '<div class="BigTitle">' + FlightID.toUpperCase() + '</div>';
+
+  var alt = Data.Altitude;
+  var lt = Data.Lat;
+  var lg = Data.Lon;
+  var FeetToMeter = 0.3048;
+  var MeterToFeet = 3.28084;
+  var FlightLink = '';
+  if (Data.FlightSource == 'SkyCommander') {
+    var DroneFlightID = FlightID.substr(3);
+    FlightLink = '<div class="Link"><a href="/FlightMap/Map/' + DroneFlightID + '">View Flight</a></div>\n';
+  }
+  if (Data.FlightSource != 'SkyCommander' && Data.BreachToFlights.length > 0) {
+    BreachInfo = '';
+    for (var i = 0; i < Data.BreachToFlights.length; i++) {
+      var FlightHexCode = Data.BreachToFlights[i];
+      var FlightData = _ADSBLayer.GetData(FlightHexCode);
+      if (FlightData != null) {
+        var vDist = alt - (FlightData.Altitude * MeterToFeet);
+        var hDist = getDistance({ lat: lt, lng: lg }, { lat: FlightData.Lat, lng: FlightData.Lon });
+        BreachInfo = BreachInfo +
+          '<div class="BreachInfo">\n' +
+          '<div class="BreachFlight">' + FlightData.FlightID + '</div>\n' +
+          '<div class="vDist">Vertical Seperation (Altitude):<span class="feet">' + vDist.toFormatted(0) + ' Feet</span><span class="meter">(' + (vDist * FeetToMeter).toFormatted(0) + ' Meter)</span></div>\n' +
+          '<div class="hDist">Horizondal Seperation:<span class="meter">' + (hDist / 1000).toFormatted(2) + ' KM</span><span class="feet">(' + (hDist * MeterToFeet).toFormatted(0) + ' Feet)</span></div>\n' +
+          '</div>\n';
+      }
+    }
+  }
+
+  if (Data.FlightSource != 'SkyCommander' && Data.AlertToFlights.length > 0) {
+    AlertInfo = '';
+    for (var i = 0; i < Data.AlertToFlights.length; i++) {
+      var FlightHexCode = Data.AlertToFlights[i];
+      var FlightData = _ADSBLayer.GetData(FlightHexCode);
+      if (FlightData != null) {
+        var vDist = alt - (FlightData.Altitude * MeterToFeet);
+        var hDist = getDistance({ lat: lt, lng: lg }, { lat: FlightData.Lat, lng: FlightData.Lon });
+        AlertInfo = AlertInfo +
+          '<div class="AlertInfo">\n' +
+          '<div class="AlertFlight">' + FlightData.FlightID + '</div>\n' +
+          '<div class="vDist">Vertical Separation (Altitude):<span class="feet">' + vDist.toFormatted(0) + ' Feet</span><span class="meter">(' + (vDist * FeetToMeter).toFormatted(0) + ' Meter)</span></div>\n' +
+          '<div class="hDist">Horizontal Separation:<span class="meter">' + (hDist / 1000).toFormatted(2) + ' KM</span><span class="feet">(' + (hDist * MeterToFeet).toFormatted(0) + ' Feet)</span></div>\n' +
+          '</div>\n';
+      }
+    }
+  }
+
+  var Content =
+    '<div class="InfoWindow">' +
+    '<div class="Header">' + InfoTitle + '</div>' +
+    '<div class="Location">Location: <span>' + lt.toFormatted(4) + '&deg;N, ' + lg.toFormatted(4) + '&deg;E</span></div>\n' +
+    '<div class="Altitude">Altitude:<span class="feet">' + alt.toFormatted(0) + ' Feet</span><span class="meter">(' + (alt * FeetToMeter).toFormatted(0) + ' Meter)</span></div>\n' +
+    BreachInfo +
+    AlertInfo +
+    FlightLink +
+    '</div>';
+
+  _ADSBLayer.showInfoLayer(Content);
+
+}
+
+function ShowInfoWindow_old() {
   if (_InfoWindowKey == '') return;
   var HexCode = _InfoWindowKey.replace('adsb-', '');
   var Data = _ADSBLayer.GetData(HexCode);
-  var FlightID = Data.FlightID;
+  var FlightID = (Data.FlightID ? Data.FlightID : "");
   if (Data == null) return;
 
 
