@@ -99,7 +99,7 @@ function initializeMap() {
                // NoFlyZone.setValues({ map: map });
   //_ADSBLayer = new ADSBOverlay({ map: map }, []);
  // CenterControl(AddbtnDiv, map, btnctrlText, 'add new zone');
-  addzone.addEventListener('click', function () {
+  $('#addzone').on('click', function () {
       addnewPolygon(map, event.latLng);
       $("#DetailDiv").show();
       $("#AddDiv").hide();

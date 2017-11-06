@@ -814,7 +814,9 @@ div.form-horizontal textarea {
 }
 
 div.form-horizontal input[type=submit],
-div.form-toolbar input[type=submit] {
+div.form-horizontal input[type=button],
+div.form-toolbar input[type=submit],
+div.form-toolbar input[type=button] {
   padding: 3px 15px 3px 15px;
   color: #ff9b9b;
   font-family: Gobold_Light;

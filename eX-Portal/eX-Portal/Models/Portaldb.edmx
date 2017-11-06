@@ -909,6 +909,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="EndTime" Type="time" Precision="7" />
           <Property Name="ZoneDescription" Type="nvarchar" MaxLength="500" />
           <Property Name="DisplayType" Type="nvarchar" MaxLength="10" />
+          <Property Name="IsDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="MSTR_Parts">
           <Key>
@@ -3323,6 +3324,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="EndTime" Type="Time" Precision="7" />
           <Property Name="ZoneDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="DisplayType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="ip2location">
           <Key>
@@ -4964,6 +4966,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="MSTR_NoFlyZone">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_NoFlyZone">
               <MappingFragment StoreEntitySet="MSTR_NoFlyZone">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="DisplayType" ColumnName="DisplayType" />
                 <ScalarProperty Name="ZoneDescription" ColumnName="ZoneDescription" />
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />

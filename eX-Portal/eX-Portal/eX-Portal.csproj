@@ -251,6 +251,11 @@
     <Compile Include="Models\PortalAlert_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\DynamicZone.cs" />
     <Compile Include="exLogic\ExifLib.cs" />
     <Compile Include="exLogic\FlightMap.cs" />
@@ -1455,6 +1460,10 @@
     <Content Include="Cesium\Assets\IAU2006_XYS\IAU2006_XYS_7.json" />
     <Content Include="Cesium\Assets\IAU2006_XYS\IAU2006_XYS_8.json" />
     <Content Include="Cesium\Assets\IAU2006_XYS\IAU2006_XYS_9.json" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
@@ -2097,7 +2106,6 @@
     <Content Include="Views\NOC\Register.cshtml" />
     <Content Include="Views\NOC\View.cshtml" />
     <Content Include="Views\NOC\3D.cshtml" />
-    <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
