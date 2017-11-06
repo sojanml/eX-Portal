@@ -196,6 +196,7 @@ function initializeMap() {
     _ADSBLayer.hideInfoLayer();
   });
   */
+  DynamicZone.Initilize(map);
 }
 
 function setLiveSummary(ChartData) {
