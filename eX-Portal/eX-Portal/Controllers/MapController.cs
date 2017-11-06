@@ -176,7 +176,8 @@ namespace eX_Portal.Controllers {
             m.StartDate <= Today &&
             m.EndDate >= Today &&
             m.StartTime <= nowTime &&
-            m.EndTime >= nowTime
+            m.EndTime >= nowTime &&
+            m.IsDeleted != true
           select m;
         foreach (var Row in await AllZone.ToListAsync()) {
           var Zone = new DynamicZone() {
