@@ -1073,3 +1073,19 @@ div.InfoWindow div.Link a:hover {
   text-decoration: underline;
   color: #018aff;
 }
+
+div.InfoWindowUpdate {
+  padding-right: 16px;
+}
+div.InfoWindowUpdate div.Header {
+  border-bottom: 1px solid white;
+  padding: 2px 0px 2px 0px;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+div.InfoWindowUpdate div.Location {
+  color: #018aff;
+}
+div.InfoWindowUpdate div.Altitude {
+  color: #53a100;
+}
