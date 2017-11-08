@@ -77,6 +77,7 @@ namespace eX_Portal.Controllers {
                 ezone.EndTime = Zone.EndTime;
                 ezone.ZoneDescription = Zone.ZoneDescription;
                 ezone.DisplayType = "Dynamic";
+                ezone.Message = Zone.Message;
                 ezone.IsDeleted = false;
                 ctx.SaveChanges();
             }
@@ -86,6 +87,7 @@ namespace eX_Portal.Controllers {
                 ezone.FillColour = "Orange";
                 ezone.DisplayType = "Dynamic";
                 ezone.IsDeleted = false;
+               
                 ctx.MSTR_NoFlyZone.Add(ezone);
                 ctx.SaveChanges();
             }

@@ -21,6 +21,7 @@ var _ReplayTimer = null;
 var _IsGetNextDataSet = true;
 var _DroneIcon = null;
 var _RPASIconData = null;
+/*
 var dismarkers = [];
 var DistanceToggler = 0;
 var KmlUrl = '';
@@ -31,6 +32,7 @@ var ClearDiv = document.createElement('div');
 var length_in_km = 0;
 var rulerpoly;
 var IsClearAdded = 0;
+*/
 $(document).ready(function () {
   initializeMap();
   LoadPolygons();
@@ -44,6 +46,7 @@ $(document).ready(function () {
   if (!IsLive) LoadChartSummaryData();
   $('#FlightReplay').on("click", StartFlightReplay);
   if (IsLive) DynamicZone.Initilize(map);
+  MapScale.InitializeScale(map);
 });
 
 
@@ -330,11 +333,6 @@ function GetVideoPlaylistJS() {
 function initializeMap() {
 
   
-   
-  
-
-  
-    var rulermarkercount = 0;
     var MarkerPosition = new google.maps.LatLng(25.0955354, 55.1527025);
 
     var mapOptions = {
@@ -377,67 +375,16 @@ function initializeMap() {
     NoFlyZone = new google.maps.KmlLayer(KmlUrl, kmlOptions);
     _DroneIcon = new DroneIcon({ map: map }, MarkerPosition);
 
-    rulerpoly = new google.maps.Polyline({
+    /*
+   rulerpoly = new google.maps.Polyline({
         strokeColor: '#000000',
         strokeOpacity: 1.0,
         strokeWeight: 3
     });
-    rulerpoly.setMap(map);
+  rulerpoly.setMap(map);
     // Add a listener for the click event
   
-   // map.addListener('click',addLatLng);
-    // Handles click events on a map, and adds a new point to the Polyline.
-    //function addLatLng(event) {
-        
-    //    var path = rulerpoly.getPath();
-
-    //    // Because path is an MVCArray, we can simply append a new coordinate
-    //    // and it will automatically appear.
-    //    path.push(event.latLng);
-
-    //    // Add a new marker at the new plotted point on the polyline.
-    //    var marker = new google.maps.Marker({
-    //        position: event.latLng,
-    //        title: '#' + path.getLength(),
-    //        map: map,
-    //        overlay: true
-    //    });
-    //    dismarkers.push(marker);
-
-    //    length_in_km = (rulerpoly.inKm() * 1000).toFixed(2);;
-    //    setdistancediv(DistanceDiv, map, length_in_km, controlText)
-    //    if (path.getLength() <=1)
-    //    {
-    //        SetClearMarkersDiv(map, path, rulerpoly,controlText);
-    //    }
-    //}
-
-   
-   //var  addLatLng = function(event) {
-        
-   //     var path = rulerpoly.getPath();
-
-   //     // Because path is an MVCArray, we can simply append a new coordinate
-   //     // and it will automatically appear.
-   //     path.push(event.latLng);
-
-   //     // Add a new marker at the new plotted point on the polyline.
-   //     var marker = new google.maps.Marker({
-   //         position: event.latLng,
-   //         title: '#' + path.getLength(),
-   //         map: map,
-   //         overlay: true
-   //     });
-   //     dismarkers.push(marker);
-
-   //     length_in_km = (rulerpoly.inKm() * 1000).toFixed(2);;
-   //     setdistancediv(DistanceDiv, map, length_in_km, controlText)
-   //     if (path.getLength() <=1)
-   //     {
-   //         SetClearMarkersDiv(map, path, rulerpoly,controlText);
-   //     }
-   // }
-
+  
     google.maps.LatLng.prototype.kmTo = function (a) {
         var e = Math, ra = e.PI / 180;
         var b = this.lat() * ra, c = a.lat() * ra, d = b - c;
@@ -463,9 +410,10 @@ function initializeMap() {
     DistanceDiv.hidden = true;
    
     AddScale(map);
-    //AddMarkers();
+    //AddMarkers();*/
 }
 
+/*
 function AddMarkers()
 {
     map.addListener('click', addLatLng);
@@ -492,7 +440,7 @@ function addLatLng(event) {
 
     length_in_km = (rulerpoly.inKm() * 1000).toFixed(2);;
     setdistancediv(DistanceDiv, map, length_in_km, controlText)
-    if (IsClearAdded==0) {
+    if (IsClearAdded===0) {
         SetClearMarkersDiv(map, path, rulerpoly, controlText);
         IsClearAdded = 1;
     } else
@@ -500,7 +448,7 @@ function addLatLng(event) {
         ClearDiv.hidden = false;
     }
 }
-
+*/
 function LoadMapData() {
   $.ajax({
     type: "GET",
@@ -748,7 +696,7 @@ DroneIcon.prototype.draw = function () {
   theIcon.clearQueue();
   theIcon.animate({ left: IconLocation.x, top: IconLocation.y });
 };
-
+/*Scale
 function setdistancediv(controlDiv, map, length_in_km, controlText) {
     controlText.innerHTML = length_in_km +' m';
 
@@ -879,3 +827,4 @@ function deleteMarkers() {
 
 }
 
+*/

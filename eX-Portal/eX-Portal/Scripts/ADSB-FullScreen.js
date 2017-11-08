@@ -7,7 +7,7 @@ var IsQueryChanged = 0;
 var timeZoneOffset = 0; //(new Date()).getTimezoneOffset();
 var TheChartObject = null;
 var zonespoly = [];
-var EditZone = { ID: 0, Name: "", Coordinates: "", FillColour: "", StartDate: "", EndDate: "", StartTime: "", EndTime: "", ZoneDescription: "", DisplayType: "", IsDeleted: 0};
+var EditZone = { ID: 0, Name: "", Coordinates: "", FillColour: "", StartDate: "", EndDate: "", StartTime: "", EndTime: "", ZoneDescription: "", DisplayType: "", IsDeleted: 0, Message:""};
 var editzonepoly = new google.maps.Polygon({});
 var DefaultZonesPoly = [];
 var newzonepoly = new google.maps.Polygon({});
@@ -159,7 +159,7 @@ function DetailControls(zone)
     $("#starttime").val(_ToTime(zone.StartTime));
     $("#endtime").val(_ToTime(zone.EndTime));
     $("#desc").val(zone.ZoneDescription);
-
+    $("#ZoneMessage").val(zone.Message);
 }
 function ClearControls()
 {
@@ -171,6 +171,8 @@ function ClearControls()
     $("#starttime").val('');
     $("#endtime").val('');
     $("#desc").val('');
+    $("#ZoneMessage").val('');
+    
 }
 var _today = function () {
     var today = new Date();
@@ -227,9 +229,10 @@ function addnewPolygon(map) {
     BoundaryBox.setMap(map);
 
     editzonepoly = BoundaryBox;
-    EditZone = { ID: 0, Name: "", Coordinates: "", FillColour: "", StartDate: "", EndDate: "", StartTime: "", EndTime: "", ZoneDescription: "", DisplayType: "" };
+    EditZone = { ID: 0, Name: "", Coordinates: "", FillColour: "", StartDate: "", EndDate: "", StartTime: "", EndTime: "", ZoneDescription: "", DisplayType: "", Message:"" };
     google.maps.event.addListener(BoundaryBox.getPath(), 'set_at', setCoordinates);
     google.maps.event.addListener(BoundaryBox.getPath(), 'insert_at', setCoordinates);
+   
     setCoordinates();
 }
 
@@ -270,6 +273,7 @@ function SetZoneValues()
     EditZone.StartTime = $("#starttime").val();
     EditZone.EndTime = $("#endtime").val();
     EditZone.ZoneDescription = $("#desc").val();
+    EditZone.Message = $("#ZoneMessage").val();
   //  EditZone.DisplayType=
    // EditZone.
 }
@@ -301,6 +305,8 @@ function SaveZone(zone) {
                 edit: false,
                 draggable: false
             });
+            google.maps.event.addListener(editzonepoly.getPath(), 'set_at', setCoordinates);
+            google.maps.event.addListener(editzonepoly.getPath(), 'insert_at', setCoordinates);
             zonespoly.push(editzonepoly);
             AllZones.push(zone);
             }
@@ -464,6 +470,7 @@ function SetPolyClicks(zone,mapid,poly)
         DetailControls(zone);
         SetEditable(mapid, false);
         EditZone = zone;
+        editzonepoly = poly;
         $("#DetailDiv").show();
         $("#AddDiv").hide();
         $("#RemoveZone").show();

@@ -26,5 +26,6 @@ namespace eX_Portal.Models
         public string ZoneDescription { get; set; }
         public string DisplayType { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
+        public string Message { get; set; }
     }
 }
