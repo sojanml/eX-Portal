@@ -76,3 +76,58 @@
   };
 
 }();
+
+
+var DynamicZoneNotify = function (MessageContainer, FlightID) {
+  var _container = {};
+  var _messageTimer = null;
+  var _flightID = 0;
+  var _messagesList = $('<ul class="_ZoneNotifications"></ul>');
+  var _activeNotifications = {};
+  var _loadCounter = 0;
+
+  var _initilize = function () {
+    if (!(MessageContainer instanceof jQuery)) return false;
+    _flightID = FlightID;
+    _container = MessageContainer;
+    _container.append(_messagesList);
+    _messageTimer = window.setTimeout(_loadZoneNotifications, 5000);
+  };
+
+  var _loadZoneNotifications = function () {
+    $.ajax({
+      type: "GET",
+      url: '/Map/DynamicZoneNotification/' + _flightID,
+      contentType: "application/json;charset=utf-8",
+      dataType: "json",
+      success: _processZoneNotifications,
+      failure: function (msg) {
+        alert('Live Drone Position Error' + msg);
+      },
+      complete: function (msg) {
+      }
+    });
+  };
+
+  var _processZoneNotifications = function (data) {
+    var OldClassName = 'display-of-' + _loadCounter;
+    _loadCounter++;
+    var NewClassName = 'display-of-' + _loadCounter;
+    for (var i = 0; i < data.length; i++) {
+      var zID = '_ZoneNotifications_' + data[i].ID;
+      var LI = $('#' + ID);
+      if (LI.length <= 0) {
+        LI = $('<li id="' + ID + '"></li>');
+        _messagesList.append(LI);
+      }
+      LI.attr({ 'class': NewClassName });
+    }
+    $('LI.' + OldClassName).remove();
+    if (_messagesList.children().length <= 0) {
+      _messagesList.hide();
+    } else {
+      _messagesList.show();
+    }
+  }
+
+}();

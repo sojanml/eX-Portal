@@ -170,3 +170,7 @@ section.top-border ul.noc-info li {
 #ToolBarSelect option {
   background-color: #1d1c1c;
 }
+
+div.cesium-viewer-bottom {
+  display: none !important;
+}

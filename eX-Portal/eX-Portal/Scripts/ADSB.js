@@ -113,9 +113,6 @@ var StatusInfo = {
     }
     return Names.join(", ");
   }
-
-
-
 }
 
 function getADSB(ADSBObj) {
@@ -188,7 +185,7 @@ function toDate(JsonDate) {
 function ADSBOverlay(options, ADSBData) {
   this.setValues(options);
   this.markerLayer = $('<div />').addClass('overlay');
-  this.infoLayer = $('<div id="infoLayer">' +
+  this.infoLayer = $('<div style="display:none;" id="infoLayer">' +
     '<div id="infoLayerContent"></div>' +
     '<div id="infoLayerClose"><span class="icon red">&#xf057;</icon></div>' +
     '</div > ');
@@ -618,14 +615,21 @@ function ShowInfoWindow() {
   var AlertInfo = '';
 
   var AircraftCode = FlightID.substr(0, 3).toUpperCase();
-  if (AircraftDB[AircraftCode])
-    InfoTitle =
-      '<div class="BigTitle">' + AircraftDB[AircraftCode]["IATA"] + ' ' + FlightID.substr(3).toUpperCase() +
-      '<span>' + AircraftDB[AircraftCode]["Name"] + '</span>' +
-      '</div>';
-      //'<div class="SubTitle">' + AircraftDB[AircraftCode]["Country"] + '</div>';
-  else
+
+  if (AircraftDB[AircraftCode]) {
+    /*
+  InfoTitle =
+    '<div class="BigTitle">' + AircraftDB[AircraftCode]["IATA"] + ' ' + FlightID.substr(3).toUpperCase() +
+    '<span>' + AircraftDB[AircraftCode]["Name"] + '</span>' +
+    '</div>';
+    //'<div class="SubTitle">' + AircraftDB[AircraftCode]["Country"] + '</div>';
+    */
+    InfoTitle = AircraftDB[AircraftCode]["IATA"] + ' ' + FlightID.substr(3).toUpperCase() +
+      ' (' + AircraftDB[AircraftCode]["Name"] + ')';
+  } else {
     InfoTitle = '<div class="BigTitle">' + FlightID.toUpperCase() + '</div>';
+  }
+  
 
   var alt = Data.Altitude;
   var lt = Data.Lat;
@@ -674,10 +678,10 @@ function ShowInfoWindow() {
   }
 
   var Content =
-    '<div class="InfoWindow">' +
+    '<div class="InfoWindowUpdate">' +
     '<div class="Header">' + InfoTitle + '</div>' +
-    '<div class="Location">Location: <span>' + lt.toFormatted(4) + '&deg;N, ' + lg.toFormatted(4) + '&deg;E</span></div>\n' +
-    '<div class="Altitude">Altitude:<span class="feet">' + alt.toFormatted(0) + ' Feet</span><span class="meter">(' + (alt * FeetToMeter).toFormatted(0) + ' Meter)</span></div>\n' +
+    '<div class="Location"><span>' + lt.toFormatted(4) + '&deg;N, ' + lg.toFormatted(4) + '&deg;E</span></div>\n' +
+    '<div class="Altitude"><span class="feet">' + alt.toFormatted(0) + ' Feet</span><span class="meter">(' + (alt * FeetToMeter).toFormatted(0) + ' Meter)</span></div>\n' +
     BreachInfo +
     AlertInfo +
     FlightLink +

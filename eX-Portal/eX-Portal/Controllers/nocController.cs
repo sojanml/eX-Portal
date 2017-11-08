@@ -93,6 +93,45 @@ namespace eX_Portal.Controllers {
       return View(NOC);
     }
 
+
+
+    public class NocZone
+    {
+      public String Coordinates { get; set; }
+      public String Color { get; set; }
+    }
+
+    [HttpGet]
+    public ActionResult NoFlyZone(){
+      List<NocZone> AllZones = new List<NocZone>();
+      var FixedZones = ctx.MSTR_NoFlyZone
+        .Where(w => w.DisplayType == "Fixed" && w.IsDeleted == false)
+        .Select(s => new NocZone{
+          Coordinates = s.Coordinates,
+          Color = s.FillColour
+        });
+      AllZones.AddRange(FixedZones.ToList());
+
+      DateTime Today = DateTime.UtcNow.Date;
+      TimeSpan nowTime = DateTime.UtcNow.AddHours(+4).TimeOfDay;
+      var DynamicZone =
+        from m in ctx.MSTR_NoFlyZone
+        where
+          m.DisplayType == "Dynamic" &&
+          m.StartDate <= Today &&
+          m.EndDate >= Today &&
+          m.StartTime <= nowTime &&
+          m.EndTime >= nowTime &&
+          m.IsDeleted != true
+        select new NocZone{
+          Coordinates = m.Coordinates,
+          Color = m.FillColour
+        };
+      AllZones.AddRange(DynamicZone.ToList());
+
+      return Json(AllZones, JsonRequestBehavior.AllowGet);
+    }
+
     [HttpGet]
     [ChildActionOnly]
     public ActionResult StaticGoogleMap(int NocID = 0) {

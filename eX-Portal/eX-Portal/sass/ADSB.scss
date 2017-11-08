@@ -1228,3 +1228,22 @@ div.InfoWindow {
     }
   }
 }
+
+div.InfoWindowUpdate {
+  padding-right: 16px;
+  
+  div.Header {
+    border-bottom: 1px solid white;
+    padding: 2px 0px 2px 0px;
+    font-weight: bold;
+    margin-bottom:2px;
+  }
+
+  div.Location {
+    color: $FilterColor;
+  }
+
+  div.Altitude {
+    color: $SafeColor
+  }
+}

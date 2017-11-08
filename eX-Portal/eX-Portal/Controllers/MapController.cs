@@ -159,7 +159,6 @@ namespace eX_Portal.Controllers {
       return GridInfo.ToString();
     }
 
-
     [HttpGet]
     public async System.Threading.Tasks.Task<ActionResult> DynamicZone() {
       var Path = new List<DynamicZone>();
@@ -207,6 +206,11 @@ namespace eX_Portal.Controllers {
         }
       }
       return TheMap.GetKML().ToString();
+    }
+
+    [HttpGet]
+    public async System.Threading.Tasks.Task<ActionResult> DynamicZoneNotification([Bind(Prefix ="ID")]int FlightID = 0){
+      return View();
     }
 
     public String RFID([Bind(Prefix = "ID")]String RFID = "") {
