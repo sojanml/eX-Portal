@@ -1550,3 +1550,24 @@ div.UAV_Selection ul li div.caption {
   font-size: 14pt;
   font-weight: bold;
 }
+
+#DynamicZoneNotifications {
+  display: none;
+  padding: 5px;
+  width: 100%;
+  border: 1px #fe0000 solid;
+  background-color: rgba(254, 0, 0, 0.2);
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+#DynamicZoneNotifications > ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+#DynamicZoneNotifications > ul li {
+  padding-bottom: 10px;
+}
+#DynamicZoneNotifications > ul li:last-child {
+  padding-bottom: 0px;
+}

@@ -12,13 +12,13 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TrafficMonitor
+    public partial class MSTR_TrafficMonitor
     {
-        public int TrafficMonitorID { get; set; }
-        public int DroneID { get; set; }
-        public int FrameNumber { get; set; }
-        public decimal FrameTime { get; set; }
-        public int FrameVehicle { get; set; }
+        public int MonitorID { get; set; }
+        public string UniqueID { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public string Remarks { get; set; }
+        public Nullable<int> FlightID { get; set; }
         public int DD { get; set; }
         public int DR { get; set; }
         public int DU { get; set; }
@@ -35,9 +35,5 @@ namespace eX_Portal.Models
         public int LR { get; set; }
         public int LU { get; set; }
         public int LL { get; set; }
-        public Nullable<int> CreatedBy { get; set; }
-        public Nullable<System.DateTime> CreatedOn { get; set; }
-        public int FlightID { get; set; }
-        public string UniqueID { get; set; }
     }
 }

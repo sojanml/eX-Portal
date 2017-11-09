@@ -209,8 +209,19 @@ namespace eX_Portal.Controllers {
     }
 
     [HttpGet]
-    public async System.Threading.Tasks.Task<ActionResult> DynamicZoneNotification([Bind(Prefix ="ID")]int FlightID = 0){
-      return View();
+    public async System.Threading.Tasks.Task<ActionResult> DynamicZoneNotification([Bind(Prefix = "ID")]int FlightID = 0) {
+      using (ExponentPortalEntities db = new ExponentPortalEntities()) {
+        var Alerts =
+          from m in db.PortalAlerts
+          where 
+            m.FlightID == FlightID &&
+            m.AlertCategory == "NoFlyZone"
+          select new {
+            ID = m.AlertID,
+            Description = m.AlertMessage
+          };
+        return Json(await Alerts.ToListAsync(), JsonRequestBehavior.AllowGet);
+      }      
     }
 
     public String RFID([Bind(Prefix = "ID")]String RFID = "") {

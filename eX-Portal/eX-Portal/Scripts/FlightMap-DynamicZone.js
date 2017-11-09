@@ -78,7 +78,7 @@
 }();
 
 
-var DynamicZoneNotify = function (MessageContainer, FlightID) {
+var DynamicZoneNotify = function () {
   var _container = {};
   var _messageTimer = null;
   var _flightID = 0;
@@ -86,7 +86,7 @@ var DynamicZoneNotify = function (MessageContainer, FlightID) {
   var _activeNotifications = {};
   var _loadCounter = 0;
 
-  var _initilize = function () {
+  var _initilize = function (MessageContainer, FlightID) {
     if (!(MessageContainer instanceof jQuery)) return false;
     _flightID = FlightID;
     _container = MessageContainer;
@@ -114,20 +114,28 @@ var DynamicZoneNotify = function (MessageContainer, FlightID) {
     _loadCounter++;
     var NewClassName = 'display-of-' + _loadCounter;
     for (var i = 0; i < data.length; i++) {
-      var zID = '_ZoneNotifications_' + data[i].ID;
+      var ID = '_ZoneNotifications_' + data[i].ID;
       var LI = $('#' + ID);
       if (LI.length <= 0) {
-        LI = $('<li id="' + ID + '"></li>');
+        LI = $('<li id="' + ID + '">' + data[i].Description +  '</li>');
         _messagesList.append(LI);
       }
       LI.attr({ 'class': NewClassName });
     }
     $('LI.' + OldClassName).remove();
     if (_messagesList.children().length <= 0) {
-      _messagesList.hide();
+      _container.hide();
     } else {
-      _messagesList.show();
+      _container.show();
     }
+
+    //Load the next messages
+    _messageTimer = window.setTimeout(_loadZoneNotifications, 5000);
   }
+
+
+  return {
+    Initilize: _initilize
+  };
 
 }();

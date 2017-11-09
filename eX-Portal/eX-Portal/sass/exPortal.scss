@@ -1850,3 +1850,25 @@ div.UAV_Selection {
     }
   }
 }
+
+#DynamicZoneNotifications {
+  display: none;
+  padding: 5px;
+  width: 100%;
+  border: 1px $BreachColor solid;
+  background-color: rgba($BreachColor, 0.2 );
+  box-sizing: border-box;
+  border-radius: 5px;
+
+  & > ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    li {
+      padding-bottom:10px;
+      &:last-child {
+        padding-bottom:0px;
+      }
+    }
+  }
+}

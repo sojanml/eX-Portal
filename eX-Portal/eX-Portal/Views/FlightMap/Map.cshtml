@@ -1,4 +1,9 @@
 ﻿@model eX_Portal.exLogic.FlightMap
+
+<section>
+  <div id="DynamicZoneNotifications"></div>
+</section>
+
 <section class="top-space">
   <div id="f" class="column column-half  @( eX_Portal.exLogic.User.hasAccess("FLIGHT.VIDEO") &&  (Model.IsLive || Model.Videos.Count() > 0)? "" : "NoVideo")">
     <div class="title">Flight Information
@@ -138,9 +143,10 @@
         <div id="FlightDataExport" class="button"><a href="@Url.Action("Export", new { ID = Model.FlightID })">Export</a></div>
       </div>
       <div id="flightmap"></div>
-      <div id="DynamicZoneNotifications"></div>
+
     </div>
   </section>
+
 
 
   <p>&nbsp;</p>

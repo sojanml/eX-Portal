@@ -45,7 +45,10 @@ $(document).ready(function () {
   }
   if (!IsLive) LoadChartSummaryData();
   $('#FlightReplay').on("click", StartFlightReplay);
-  if (IsLive) DynamicZone.Initilize(map);
+  if (IsLive) {
+    DynamicZone.Initilize(map);
+    DynamicZoneNotify.Initilize($('#DynamicZoneNotifications'), FlightID);
+  }
   MapScale.InitializeScale(map);
 });
 
