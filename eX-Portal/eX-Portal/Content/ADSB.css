@@ -242,7 +242,6 @@ header div.right-section {
 }
 header div.logo img {
   width: auto;
-  height: 72px;
 }
 header:after {
   clear: both;
