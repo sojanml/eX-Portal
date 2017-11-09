@@ -53,13 +53,14 @@ namespace eX_Portal.ViewModel {
       this.DOE_RPASPermit = mSTR_User.DOE_RPASPermit;
       this.UserDescription = mSTR_User.UserDescription;
       this.Nationality = mSTR_User.Nationality;
-      
+            this.AccountID = mSTR_User.AccountId.Value;
       MSTR_User_Pilot mSTR_User_Pilot = db.MSTR_User_Pilot.Find(UserId);
       if(mSTR_User_Pilot != null) { 
         this.Department = mSTR_User_Pilot.Department;
         this.PassportNo = mSTR_User_Pilot.PassportNo;
         this.DateOfExpiry = mSTR_User_Pilot.DateOfExpiry;
-      }
+                this.EmiratesID = mSTR_User_Pilot.EmiratesId;
+            }
 
       this.LinkedDroneID = db.M2M_Drone_User
         .Where(w => w.UserID == UserId)
@@ -84,8 +85,9 @@ namespace eX_Portal.ViewModel {
 
 
     public int UserId { get; set; }
+    public int AccountID { get; set; }
 
-    [Required(ErrorMessage = "Please Enter the User Name")]
+        [Required(ErrorMessage = "Please Enter the User Name")]
     [Display(Name = "User Name")]
     public string UserName { get; set; }
 
