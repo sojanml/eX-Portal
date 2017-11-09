@@ -246,6 +246,9 @@
     <Compile Include="exLogic\DroneCheckListForm.cs" />
     <Compile Include="exLogic\DroneFlightSetup.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MSTR_TrafficMonitor.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\NOC_DataAnnotationsHelper.cs" />
     <Compile Include="Models\PayLoadTrafficData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
