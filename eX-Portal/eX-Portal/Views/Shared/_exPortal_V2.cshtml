@@ -22,8 +22,8 @@
           <img src="~/images/adsb-logo.png" />
 
           @if (!String.IsNullOrEmpty(BrandLogo)) {
-            <img src="~/images/adsb-logo-sep.png" />
-            <img src="@BrandLogo" />
+            @*<img src="~/images/adsb-logo-sep.png" />*@
+            <img style="margin-left:10px;" src="@BrandLogo" />
           }
         </div>
       </div>

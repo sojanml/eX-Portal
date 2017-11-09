@@ -1649,6 +1649,7 @@
     <Content Include="stylesheets\screen.css" />
     <Content Include="temp\temp.html" />
     <Content Include="test.txt" />
+    <Content Include="Upload\Brand-Logo\adsb-logo.png" />
     <Content Include="Upload\Brand-Logo\dcaa-logo.png" />
     <Content Include="Upload\Brand-Logo\dcca-logo-02.png" />
     <Content Include="Upload\Brand-Logo\dcca-logo-03.png" />
@@ -2142,10 +2143,6 @@
     <EmbeddedResource Include="ReportsManager\MSTR_Drone.rdlc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Clipper_Library\clipper_library.csproj">
-      <Project>{9b062971-a88e-4a3d-b3c9-12b78d15fa66}</Project>
-      <Name>clipper_library</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Exponent.ADSB\ADSB\ADSB.csproj">
       <Project>{4c22df85-5a52-4d44-a2ff-4b40223d87f5}</Project>
       <Name>ADSB</Name>
