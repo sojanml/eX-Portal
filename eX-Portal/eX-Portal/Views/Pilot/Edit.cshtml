@@ -100,7 +100,7 @@
         </div>
       </div>
 
-      @Html.Action("Drones", "Pilot", new { PilotID = Model.UserId })
+      @Html.Action("AccountDrones", "Pilot", new { PilotID = Model.UserId, AccountID =Model.AccountID})
 
    
 

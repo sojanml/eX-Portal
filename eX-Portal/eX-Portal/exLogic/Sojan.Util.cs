@@ -178,9 +178,38 @@ namespace eX_Portal.exLogic {
         } catch {
 
         }
+        if (!isSuccess)
+            try
+            {
+                dt = DateTime.ParseExact(StrDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                isSuccess = true;
+            }
+            catch
+            {
 
+            }
+            if (!isSuccess)
+                try
+                {
+                    dt = DateTime.ParseExact(StrDate, "M/d/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+                    isSuccess = true;
+                }
+                catch
+                {
 
-      return dt;
+                }
+            if (!isSuccess)
+                try
+                {
+                    dt = DateTime.ParseExact(StrDate, "dd MMM yyyy", CultureInfo.InvariantCulture);
+                    isSuccess = true;
+                }
+                catch
+                {
+
+                }
+
+            return dt;
     }
 
     public static decimal toDecimal(String Num) {

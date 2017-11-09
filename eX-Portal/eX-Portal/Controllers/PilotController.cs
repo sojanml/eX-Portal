@@ -434,8 +434,41 @@ namespace eX_Portal.Controllers {
       return null;
 
     }
+        [ChildActionOnly]
+        public ActionResult AccountDrones(int PilotID = 0,int AccountID=0)
+        {
+            if (!exLogic.User.hasAccess("ORGANIZATION.ADMIN"))
+                return null;
 
-    public ActionResult Delete([Bind(Prefix = "ID")]int UserID = 0) {
+          //  int AccountID = Util.getAccountID();
+            var Query = from d in db.MSTR_Drone
+                        where d.AccountID == AccountID
+                        join m in db.LUP_Drone.Where(e => e.Type == "Manufacturer") on
+                          d.ManufactureId equals m.TypeId into m1
+                        from m2 in m1.DefaultIfEmpty()
+                        join u in db.LUP_Drone.Where(e => e.Type == "UAVType") on
+                          d.UavTypeId equals u.TypeId into u1
+                        from u2 in u1.DefaultIfEmpty()
+                        join p in db.M2M_Drone_User.Where(e => e.UserID == PilotID) on
+                          d.DroneId equals p.DroneID into p1
+                        from p2 in p1.DefaultIfEmpty()
+                        select new UserDones
+                        {
+                            DroneID = d.DroneId,
+                            DroneName = d.DroneName,
+                            Manufacture = m2.Name,
+                            UavTypeGroup = u2.GroupName,
+                            UavType = u2.Name,
+                            LinkDroneID = p2.DroneID
+                        };
+            if (Query.Any())
+                return View("Drones",Query.ToList());
+
+            return null;
+
+        }
+
+        public ActionResult Delete([Bind(Prefix = "ID")]int UserID = 0) {
       Response.ContentType = "text/json";
 
       if (exLogic.User.hasAccess("PILOTS.DELETE") && exLogic.User.hasAccess("ORGANIZATION.ADMIN")) {
