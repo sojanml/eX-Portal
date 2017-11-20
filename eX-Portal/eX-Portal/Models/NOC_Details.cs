@@ -23,13 +23,14 @@ namespace eX_Portal.Models
         public System.TimeSpan EndTime { get; set; }
         public int MinAltitude { get; set; }
         public int MaxAltitude { get; set; }
-        public string LOS { get; set; }
-        public bool IsUseCamara { get; set; }
         public string Coordinates { get; set; }
         public string OuterCoordinates { get; set; }
+        public string LOS { get; set; }
+        public bool IsUseCamara { get; set; }
         public string Status { get; set; }
         public System.DateTime StatusChangedOn { get; set; }
         public int StatusChangedBy { get; set; }
+        public int NocBuffer { get; set; }
     
         public virtual MSTR_NOC MSTR_NOC { get; set; }
     }

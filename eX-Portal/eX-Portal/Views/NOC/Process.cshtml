@@ -1,0 +1,142 @@
+﻿@model eX_Portal.ViewModel.MSTR_NOC_Ext
+@using eX_Portal.exLogic;
+@{
+  ViewBag.Title = $"NOC #{Model.NocApplicationID} by {Model.AccountName}";
+  int Row = 0;
+}
+
+
+<form method="post" action="@Url.Action("Process", "NOC", new { ID = Model.NocApplicationID })">
+  <section class="top-space">
+    <div class="noc-header">
+      <div class="noc-status">
+        <ul>
+          <li class="New">@Model.CountNew New</li>
+          <li class="Approved">@Model.CountApproved Approved</li>
+          <li class="Rejected">@Model.CountRejected Rejected</li>
+          <li class="Amended">@Model.CountAmended Amended</li>
+        </ul>
+      </div>
+      <div class="title">@Model.AccountName</div>
+      <div class="sub-title">@Model.FlightType for @Model.FlightFor</div>
+      <div class="sub-sub-title">@Model.sStartDate - @Model.sEndDate</div>
+    </div>
+  </section>
+
+  @foreach (var noc in Model.NOC_Details_Ext) {
+
+    <section class="noc-detail top-space">
+
+      <div id="noc_detail_@noc.NocID" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px;">
+        <div class="noc-detail-header">
+          <h1>@noc.DroneName</h1>
+          <div>@noc.PilotName</div>
+        </div>
+        <table class="noc_table">
+          <tr>
+            <td>Start Date &amp; Time:</td>
+            <td>
+              @noc.StartDate.ToString("dd-MMM-yyyy")
+              @noc.StartTime.ToString().Substring(0, 5)
+            </td>
+          </tr>
+          <tr>
+            <td>End Date &amp; Time:</td>
+            <td>
+              @noc.EndDate.ToString("dd-MMM-yyyy")
+              @noc.EndTime.ToString().Substring(0, 5)
+            </td>
+          </tr>
+          <tr>
+            <td>Altitude: </td>
+            <td>
+              Min: @noc.MinAltitude Meter,
+              Max: @noc.MaxAltitude Meter
+            </td>
+          </tr>
+          <tr>
+            <td>Line of Sight:</td>
+            <td>
+              @(noc.LOS == "BVLOS" ? "Beyond" : "") Visual Line of Sight (@noc.LOS)
+            </td>
+          </tr>
+          <tr>
+            <td>Camara in Use?</td>
+            <td>
+              @(noc.IsUseCamara ? "Yes" : "No")
+            </td>
+          </tr>
+        </table>
+
+        <table>
+          <tr>
+            <td>Altitude:</td>
+            <td><div class="slider" id="slider-altitude-@noc.NocID"></div></td>
+            <td><div id="slider-altitude-@noc.NocID-label">@noc.MaxAltitude</div></td>
+            <td>Meter</td>
+          </tr>
+          <tr>
+            <td>Buffer:</td>
+            <td><div class="slider" id="slider-buffer-@noc.NocID"></div></td>
+            <td><div id="slider-buffer-@noc.NocID-label">@noc.NocBuffer</div></td>
+            <td>Meter</td>
+          </tr>
+        </table>
+
+        <div class="noc-actions">
+          
+          <input @(noc.Status.Trim().Equals("Approved") || noc.Status.Trim().Equals("New") ?  "checked" :"") type="radio" name="NocDetails[@Row].Status" id="noc-status-@noc.NocID-Approved" value="Approved" /><label class="Approved" for="noc-status-@noc.NocID-Approved">Approved</label>
+          <input @(noc.Status.Trim().Equals("Amended") ? "checked" :"") type="radio" name="NocDetails[@Row].Status" id="noc-status-@noc.NocID-Amended" value="Amended" /><label class="Amended" for="noc-status-@noc.NocID-Amended">Amended</label>
+          <input @(noc.Status.Trim().Equals("Rejected") ? "checked" :"")  type="radio" name="NocDetails[@Row].Status" id="noc-status-@noc.NocID-Rejected" value="Rejected" /><label class="Rejected" for="noc-status-@noc.NocID-Rejected">Rejected</label>
+        </div>
+      </div>
+
+      <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px">
+        <div class="map_layer" id="GoogleMapLayer_@noc.NocID"></div>
+      </div>
+
+
+    </section>
+
+
+    <input type="hidden" name="NocDetails[@Row].NocID" id="noc-nocid-@noc.NocID" value="@noc.NocID" />
+    <input type="hidden" name="NocDetails[@Row].NocBuffer" id="noc-nocbuffer-@noc.NocID" value="@noc.NocBuffer" />
+    <input type="hidden" name="NocDetails[@Row].Coordinates" id="noc-coordinates-@noc.NocID" value="@noc.Coordinates" />
+    <input type="hidden" name="NocDetails[@Row].MaxAltitude" id="noc-maxaltitude-@noc.NocID" value="@noc.MaxAltitude" />
+
+    Row++;
+  }
+
+  <div style="padding:10px 0px 20px 0px" class="form-toolbar">
+    <input type="submit" value="Submit NOC">
+  </div>
+
+</form>
+
+
+
+@section header {
+  <link type="text/css" rel="stylesheet" href="~/Content/NOC_Process.css" />
+  <link href="~/jquery-ui/jquery-ui.css" rel="stylesheet" />
+  <link href="~/jquery-ui/jquery.ui.timepicker.css" rel="stylesheet" />
+}
+@section scripts {
+  <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>
+  <script src="~/Scripts/ADSB-Map.js"></script>
+<script src="~/Scripts/NOC-Process.js"></script>
+  <script type="text/javascript">
+
+    $(document).ready(function () {
+      NOCProcess.init(
+        @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+          Model.NOC_Details.Select(s =>new {
+            id = s.NocID,
+            coordinates = s.Coordinates,
+            outerCoordinates = s.OuterCoordinates,
+            alt = s.MaxAltitude,
+            buffer = s.NocBuffer
+          }
+        ).ToList()))
+    )});
+  </script>
+}

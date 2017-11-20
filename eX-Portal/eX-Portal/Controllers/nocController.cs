@@ -10,9 +10,52 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace eX_Portal.Controllers {
+
   public class nocController : Controller {
     public ExponentPortalEntities ctx = new ExponentPortalEntities();
-    public ViewModel.latlng somehting;
+
+
+    [HttpGet]
+    public ActionResult Process(int ID = 0) {
+      Models.MSTR_NOC NOC = ctx.MSTR_NOC.Where(w => w.NocApplicationID == ID).FirstOrDefault();      
+      if (NOC == null)
+        return HttpNotFound();
+      ViewModel.MSTR_NOC_Ext _noc = new ViewModel.MSTR_NOC_Ext(NOC);
+      return View(_noc);      
+    }
+
+    [HttpPost]
+    public ActionResult Process(int ID, List<NOC_Details> NocDetails) {
+      Models.MSTR_NOC NOC = ctx.MSTR_NOC.Where(w => w.NocApplicationID == ID).FirstOrDefault();
+      if (NOC == null)
+        return HttpNotFound();
+
+      foreach(Models.NOC_Details Details in NocDetails) {
+        NOC_Details dbNocDetails = ctx.NOC_Details.Where(w => w.NocID == Details.NocID).FirstOrDefault();
+        if(dbNocDetails != null) {
+          dbNocDetails.MaxAltitude = Details.MaxAltitude;
+          dbNocDetails.NocBuffer = Details.NocBuffer;
+          dbNocDetails.Status = Details.Status.Trim();
+          dbNocDetails.StatusChangedBy = Util.getLoginUserID();
+          dbNocDetails.StatusChangedOn = DateTime.UtcNow;
+          ctx.Entry(dbNocDetails).State = System.Data.Entity.EntityState.Modified;
+          ctx.SaveChanges();
+        }
+      }
+
+      NOC.StartDate = NOC.NOC_Details.Min(m => m.StartDate);
+      NOC.EndDate = NOC.NOC_Details.Max(m => m.EndDate);
+      NOC.CountAmended = NOC.NOC_Details.Where(w => w.Status == "Amended").Count();
+      NOC.CountApproved = NOC.NOC_Details.Where(w => w.Status == "Approved").Count();
+      NOC.CountRejected = NOC.NOC_Details.Where(w => w.Status == "Rejected").Count();
+      NOC.CountNew = NOC.NOC_Details.Where(w => w.Status == "New").Count();
+
+      ctx.Entry(NOC).State = System.Data.Entity.EntityState.Modified;
+      ctx.SaveChanges();
+
+      return RedirectToAction("View", new { ID = ID });
+    }
+
     // GET: NOC
     public ActionResult Register(int ID = 0) {
       ViewBag.DbErrors = "";
@@ -44,7 +87,7 @@ namespace eX_Portal.Controllers {
       NOC.CreateBy = Util.getLoginUserID();
       NOC.CreatedOn = DateTime.UtcNow;
       NOC.NocName = NOC.FlightType + " for " + NOC.FlightFor;
-
+      NOC.AccountID = Util.getAccountID();
       foreach (var noc in NOC.NOC_Details) {
         noc.Status = "New";
         noc.StatusChangedBy = Util.getLoginUserID();
@@ -52,6 +95,17 @@ namespace eX_Portal.Controllers {
         noc.OuterCoordinates = noc.Coordinates;
       }
       NOC.CreatedOn = DateTime.UtcNow;
+
+      //find out total count and update the master
+      var NocCount = NOC.NOC_Details.Count();
+      NOC.CountTotal = NocCount;
+      NOC.CountNew = NocCount;
+      NOC.CountApproved = 0;
+      NOC.CountRejected = 0;
+      NOC.CountAmended = 0;
+      NOC.StartDate = NOC.NOC_Details.Min(m => m.StartDate);
+      NOC.EndDate = NOC.NOC_Details.Max(m => m.EndDate);
+
       try {
         ctx.MSTR_NOC.Add(NOC);
         ctx.SaveChanges();
@@ -59,7 +113,7 @@ namespace eX_Portal.Controllers {
         foreach (var eve in e.EntityValidationErrors) {
           SB.AppendLine($"Entity of type '{eve.Entry.Entity.GetType().Name}' in state '{eve.Entry.State}'<br>");
           foreach (var ve in eve.ValidationErrors) {
-            SB.AppendLine($" - '{eve.Entry.Entity.GetType().Name}' in state '{eve.Entry.State}'<br>");
+            SB.AppendLine($" - '{ve.PropertyName}' -> '{ve.ErrorMessage}'<br>");
           }
         }
       } catch (DbUpdateException e) {
@@ -94,6 +148,13 @@ namespace eX_Portal.Controllers {
     }
 
 
+    public ActionResult ExtentCoordinates(String Coordinates, int Distance = 50) {
+      String SQL = $"SELECT [dbo].[ExtentPolygon] ('{Coordinates}',{Distance})";
+      String NewCoordinates = Util.getDBVal(SQL);
+      ViewModel.DynamicZone Zone = new ViewModel.DynamicZone();
+      Zone.setPath(NewCoordinates);
+      return Json(Zone, JsonRequestBehavior.AllowGet);
+    }
 
     public class NocZone
     {

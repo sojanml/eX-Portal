@@ -11,7 +11,6 @@ namespace eX_Portal.Models {
 
   public class MSTR_NOC_DataAnnotationsHelper {
     [Required]
-    [RegularExpression("^[0-9]*$", ErrorMessage = "Flight Type is required")]
     [Display(Name ="Flight Type")]
     public string FlightType { get; set; }
     [Required]
