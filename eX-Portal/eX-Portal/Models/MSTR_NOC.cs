@@ -29,6 +29,13 @@ namespace eX_Portal.Models
         public int AccountID { get; set; }
         public int CreateBy { get; set; }
         public System.DateTime CreatedOn { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime EndDate { get; set; }
+        public int CountApproved { get; set; }
+        public int CountRejected { get; set; }
+        public int CountNew { get; set; }
+        public int CountTotal { get; set; }
+        public int CountAmended { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NOC_Details> NOC_Details { get; set; }

@@ -246,10 +246,16 @@
     <Compile Include="exLogic\DroneCheckListForm.cs" />
     <Compile Include="exLogic\DroneFlightSetup.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MSTR_NOC.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MSTR_TrafficMonitor.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NOC_DataAnnotationsHelper.cs" />
+    <Compile Include="Models\NOC_Details.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PayLoadTrafficData.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -413,9 +419,6 @@
     <Compile Include="Models\MSTR_Menu.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MSTR_NOC.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\MSTR_NoFlyZone.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -444,9 +447,6 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MSTR_User_Pilot_ExponentUAS.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\NOC_Details.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PayLoadData.cs">
@@ -603,6 +603,7 @@
     <Compile Include="ViewModel\GeoTagReport.cs" />
     <Compile Include="ViewModel\ListViewModel.cs" />
     <Compile Include="ViewModel\MenuModel.cs" />
+    <Compile Include="ViewModel\MSTR_NOC_Ext.cs" />
     <Compile Include="ViewModel\S3Upload.cs" />
     <Compile Include="ViewModel\Summary.cs" />
     <Compile Include="ViewModel\TrafficViewModel.cs" />
@@ -1469,6 +1470,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="sass\NOC_Process.scss" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
@@ -1486,9 +1488,9 @@
     <Content Include="Scripts\map-replay-v02_keep.js" />
     <Content Include="Scripts\map-replay.js" />
     <Content Include="Scripts\map.js" />
+    <Content Include="Scripts\NOC-Process.js" />
     <Content Include="Scripts\NOCApproval.js" />
     <Content Include="Scripts\NOC_3D.js" />
-    <Content Include="Scripts\NOC_Register.js" />
     <Content Include="Scripts\NOC_RPAS.js" />
     <Content Include="Scripts\Payload-RFID.js" />
     <Content Include="Scripts\PayLoadMap.js" />
@@ -2113,6 +2115,7 @@
     <Content Include="Views\NOC\View.cshtml" />
     <Content Include="Views\NOC\3D.cshtml" />
     <Content Include="tsconfig.json" />
+    <Content Include="Views\NOC\Process.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

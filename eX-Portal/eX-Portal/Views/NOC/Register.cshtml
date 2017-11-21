@@ -42,12 +42,11 @@
             <td width="49%;" valign="top">
               <select class="form-control" data-val="true" 
                       data-val-regex="Flight Type is required" 
-                      data-val-regex-pattern="^[0-9]*$" 
                       data-val-required="The Flight Type field is required." 
                       id="FlightType" name="FlightType">
                 <option value="">Please Select...</option>
                 @foreach (var flightType in FlightType) {
-                  <option value="@flightType.Value">"@flightType.Text</option>
+                  <option value="@flightType.Text">@flightType.Text</option>
                 }
                 <option value="0">Other (Please Specify)</option>
               </select>

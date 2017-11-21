@@ -1,0 +1,121 @@
+﻿$BreachColor: #fe0000;
+$AlertColor: #f2a003;
+$SafeColor: #53a100;
+$FilterColor: #018aff;
+
+div.noc-header {
+  div.noc-status {
+    ul {
+      margin: 0px;
+      padding: 0px;
+      list-style: none;
+      float: right;
+
+      li {
+        margin: 0px 0px 0px 10px;
+        display: inline-block;
+        padding: 3px 10px 3px 10px;
+        border-radius: 5px;
+        color: white;
+        font-size: 8pt;
+
+        &.New {
+          background-color: $FilterColor;
+        }
+
+        &.Approved {
+          background-color: $SafeColor;
+        }
+
+        &.Rejected {
+          background-color: $BreachColor;
+        }
+
+        &.Amended {
+          background-color: $AlertColor;
+        }
+      }
+    }
+  }
+
+  div.title {
+    color: $FilterColor;
+    font-size: 18pt;
+    font-weight: bold;
+  }
+
+  div.sub-title {
+    font-size: 12pt;
+  }
+
+  div.sub-sub-title {
+    font-size: 10pt;
+  }
+}
+
+div.noc-detail-header {
+  h1 {
+    font-size: 16pt;
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    color: $AlertColor
+  }
+
+  & > div {
+    margin: 0px 0px 10px 0px;
+    padding: 0px;
+    color: $SafeColor;
+  }
+}
+
+section.noc-detail {
+  border-bottom: 1px solid silver;
+}
+
+div.map_layer {
+  width:100%;
+  height:300px;
+}
+
+ul.noc-actions {
+  list-style: none;
+}
+
+div.noc-actions {
+  margin-top:10px;
+  input {
+    display: none;
+  }
+
+  label {
+    cursor: pointer;
+    border: 1px silver solid;
+    border-radius: 5px;
+    padding: 0px 10px 4px 10px;
+    color: black;
+  }
+
+  input:checked + label.Approved,
+  label.Approved:hover {
+    background-color: $SafeColor;
+    color: white;
+  }
+
+  input:checked + label.Amended,
+  label.Amended:hover {
+    background-color: $AlertColor;
+    color: white;
+  }
+
+  input:checked + label.Rejected,
+  label.Rejected:hover {
+    background-color: $BreachColor;
+    color: white;
+  }
+}
+
+div.slider {
+  width:250px;
+  margin-left:10px;
+  margin-right:10px;
+}

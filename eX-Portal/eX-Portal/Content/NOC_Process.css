@@ -1,0 +1,97 @@
+div.noc-header div.noc-status ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  float: right;
+}
+div.noc-header div.noc-status ul li {
+  margin: 0px 0px 0px 10px;
+  display: inline-block;
+  padding: 3px 10px 3px 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 8pt;
+}
+div.noc-header div.noc-status ul li.New {
+  background-color: #018aff;
+}
+div.noc-header div.noc-status ul li.Approved {
+  background-color: #53a100;
+}
+div.noc-header div.noc-status ul li.Rejected {
+  background-color: #fe0000;
+}
+div.noc-header div.noc-status ul li.Amended {
+  background-color: #f2a003;
+}
+div.noc-header div.title {
+  color: #018aff;
+  font-size: 18pt;
+  font-weight: bold;
+}
+div.noc-header div.sub-title {
+  font-size: 12pt;
+}
+div.noc-header div.sub-sub-title {
+  font-size: 10pt;
+}
+
+div.noc-detail-header h1 {
+  font-size: 16pt;
+  margin: 0px 0px 0px 0px;
+  padding: 0px;
+  color: #f2a003;
+}
+div.noc-detail-header > div {
+  margin: 0px 0px 10px 0px;
+  padding: 0px;
+  color: #53a100;
+}
+
+section.noc-detail {
+  border-bottom: 1px solid silver;
+}
+
+div.map_layer {
+  width: 100%;
+  height: 300px;
+}
+
+ul.noc-actions {
+  list-style: none;
+}
+
+div.noc-actions {
+  margin-top: 10px;
+}
+div.noc-actions input {
+  display: none;
+}
+div.noc-actions label {
+  cursor: pointer;
+  border: 1px silver solid;
+  border-radius: 5px;
+  padding: 0px 10px 4px 10px;
+  color: black;
+}
+div.noc-actions input:checked + label.Approved,
+div.noc-actions label.Approved:hover {
+  background-color: #53a100;
+  color: white;
+}
+div.noc-actions input:checked + label.Amended,
+div.noc-actions label.Amended:hover {
+  background-color: #f2a003;
+  color: white;
+}
+div.noc-actions input:checked + label.Rejected,
+div.noc-actions label.Rejected:hover {
+  background-color: #fe0000;
+  color: white;
+}
+
+div.slider {
+  width: 250px;
+  margin-left: 10px;
+  margin-right: 10px;
+}

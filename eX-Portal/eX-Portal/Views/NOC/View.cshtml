@@ -82,6 +82,8 @@
           <span class="field-value">@(noc.IsUseCamara ? "Yes" : "No")</span>
         </li>
       </ul>
+
+      <div class="noc-status @noc.Status">@noc.Status</div>
     </div>
     <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px;">
       <img width="567" height="300" src="@Html.Action("StaticGoogleMap", new { NocID = noc.NocID })" />
