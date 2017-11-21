@@ -746,14 +746,15 @@ namespace eX_Portal.exLogic {
       int lastLat = 0;
       int lastLng = 0;
       foreach (var point in points) {
+
         int lat = (int)Math.Round(point.Latitude * 1E5);
         int lng = (int)Math.Round(point.Longitude * 1E5);
-        if(lat == lastLat && lng == lastLng) {
+        if(lat == lastLat && lng == lastLng) 
           continue;
-        } else { 
-          encodeDiff(lat - lastLat);
-          encodeDiff(lng - lastLng);
-        }
+       
+        encodeDiff(lat - lastLat);
+        encodeDiff(lng - lastLng);
+       
         lastLat = lat;
         lastLng = lng;
       }

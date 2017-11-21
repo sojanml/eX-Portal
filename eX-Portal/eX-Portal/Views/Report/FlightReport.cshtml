@@ -57,8 +57,8 @@
 
     #GoogleMap {
       width: 100%;
-      min-width: 800px;
-      height: 700px;
+      height: 600px;
+      display:block;
     }
 
     ul.proximity {
@@ -205,10 +205,8 @@
     <h1>Flight Track</h1>
 
 
-    <div id="GoogleMap"></div>
-    @*<img src="@Html.Action("GoogleMap", "Report", new { ID = ViewBag.FlightID, ApprovalID = Model.ApprovalID})" />*@
-
-
+    @*<div id="GoogleMap"></div>*@
+    <img src="@Html.Action("GoogleMap", "Report", new { ID = ViewBag.FlightID, ApprovalID = Model.ApprovalID})" />
 
   } @*if (Model.Info != null)*@
 
@@ -345,17 +343,6 @@
 
     <p>&nbsp;</p>
   }@*if (Model.PortalAlerts.Count > 0)*@
-  @{
-    String ApprovalOuterPath = Model.Approval == null ? "" : Model.Approval.InnerBoundaryCoord;
-    String ApprovalInnerPath = Model.Approval == null ? "" : Model.Approval.Coordinates;
-  }
-  <script type="text/javascript">
-    var PolyPath = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MapData).ToLower());
-    var ApprovalOuterPath = '@Html.Raw(ApprovalOuterPath)';
-    var ApprovalInnerPath = '@Html.Raw(ApprovalInnerPath)';
-  </script>
-  <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyDY6IHXH4-fUAzYq6HBR_ndu_lnyyopcTs"></script>
-  <script type="text/javascript" src="~/Scripts/Report-Map.js"></script>
 </body>
 
 </html>

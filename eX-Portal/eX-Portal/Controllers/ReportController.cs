@@ -238,10 +238,9 @@ namespace eX_Portal.Controllers {
         var FirstPoint = GeoPoints.First();
         GoogleURL = "https://maps.googleapis.com/maps/api/staticmap" +
         "?key=" + GoogleAPI +
-        "&center=" + FirstPoint.Latitude + "," + FirstPoint.Longitude +
-        "&size=640x400" +
-        getGoogleBoundary(FlightID, ApprovalID) +
-        "&path=color:0x000000|weight:1|enc:" + gEncode(GeoPoints);
+        "&size=640x480" +
+        /*getGoogleBoundary(FlightID, ApprovalID) +*/
+        "&path=color:0xFF0000FF|weight:1|enc:" + gEncode(GeoPoints);
       }
 
       return GoogleURL;
