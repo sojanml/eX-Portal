@@ -93,6 +93,7 @@ namespace eX_Portal.Controllers {
         noc.StatusChangedBy = Util.getLoginUserID();
         noc.StatusChangedOn = DateTime.UtcNow;
         noc.OuterCoordinates = noc.Coordinates;
+        noc.NocBuffer = 50;
       }
       NOC.CreatedOn = DateTime.UtcNow;
 

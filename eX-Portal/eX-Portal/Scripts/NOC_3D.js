@@ -20,8 +20,8 @@ var NOC_3D = function () {
       infoBox: false,
       timeline: false
     });
-    var InnerCoordinates = GPS.ToCesium(Coordinates.Coordinates, Coordinates.Altitude);
-    var OuterCoordinates = GPS.ToCesium(Coordinates.OuterCoordinates, Coordinates.Altitude);
+    var InnerCoordinates = GPS.ToCesium(Coordinates.Coordinates, Coordinates.Altitude, true);
+    var OuterCoordinates = GPS.ToCesium(Coordinates.OuterCoordinates, Coordinates.Altitude, false);
     var InnerPolygon = new Cesium.Entity({
       id: 'InnerPolygon',
       polygon: {
@@ -38,7 +38,8 @@ var NOC_3D = function () {
     var OuterPolygon = new Cesium.Entity({
       id: 'OuterPolygon',
       polygon: {
-        hierarchy: {
+        hierarchy: 
+        {
           positions: OuterCoordinates,
           holes: [{
             positions: InnerCoordinates
@@ -113,9 +114,9 @@ var NOC_3D = function () {
     AddedInnerPolygon.polygon.hierarchy = InnerCoordinates;
     AddedOuterPolygon.polygon.hierarchy = {
       positions: OuterCoordinates,
-      holes: [{
+      /*holes: [{
         positions: InnerCoordinates
-      }]
+      }]*/
     };
 
     viewer.zoomTo(AddedOuterPolygon)
@@ -146,7 +147,7 @@ var NOC_3D = function () {
 
 var GPS = function () {
 
-  var _toCesiumCartesian3 = function (Coordinates, Altitude) {
+  var _toCesiumCartesian3 = function (Coordinates, Altitude, IsClosePolygon) {
     if (Altitude + '' == 'undefiend') Altitude = 50;
     var CesiumCoordinates = [];
     var aCoordinates = Coordinates.split(',');
@@ -155,6 +156,12 @@ var GPS = function () {
       var Lat = parseFloat(LatLng[0]);
       var Lng = parseFloat(LatLng[1]);
       CesiumCoordinates.push(Lng, Lat, Altitude);
+    }
+    if (IsClosePolygon) {
+      var fLng = CesiumCoordinates[0];
+      var fLat = CesiumCoordinates[1];
+      var fAlt = CesiumCoordinates[2];
+      CesiumCoordinates.push(fLng, fLat, fAlt);
     }
     return Cesium.Cartesian3.fromDegreesArrayHeights(CesiumCoordinates);
   };
