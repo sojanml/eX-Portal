@@ -25,7 +25,7 @@ namespace eX_Portal.exLogic {
       StringBuilder SQLString = new StringBuilder("SELECT\n");
       for(int m = 0; m < 12; m++) {
         String sDate = StartAt.AddMonths(m).ToString("yyyy-MM-dd");
-        SQLString.AppendLine($"Sum(CASE WHEN DroneFlight.FlightDate < '{sDate}' THEN DroneFlight.FlightHours ELSE 0 END) As M{m},");
+        SQLString.AppendLine($"Sum(CASE WHEN DroneFlight.FlightDate < '{sDate}' THEN CAST(DroneFlight.FlightHours as Numeric(12,2)) ELSE 0 END) As M{m},");
       }
       SQLString.AppendLine(@"
         MSTR_Drone.AccountID
@@ -48,18 +48,18 @@ namespace eX_Portal.exLogic {
             AllChartData.Add(new ChartViewModel() {
               AccountID = RS.GetInt32(RS.GetOrdinal("AccountID")),
               AccountName = AccountName,
-              M1 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M0"))) / 60, 2),
-              M2 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M1"))) / 60, 2),
-              M3 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M2"))) / 60, 2),
-              M4 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M3"))) / 60, 2),
-              M5 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M4"))) / 60, 2),
-              M6 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M5"))) / 60, 2),
-              M7 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M6"))) / 60, 2),
-              M8 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M7"))) / 60, 2),
-              M9 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M8"))) / 60, 2),
-              M10 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M9"))) / 60, 2),
-              M11 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M10"))) / 60, 2),
-              M12 = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("M11"))) / 60, 2)
+              M1 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M0"))) / 60, 2),
+              M2 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M1"))) / 60, 2),
+              M3 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M2"))) / 60, 2),
+              M4 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M3"))) / 60, 2),
+              M5 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M4"))) / 60, 2),
+              M6 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M5"))) / 60, 2),
+              M7 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M6"))) / 60, 2),
+              M8 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M7"))) / 60, 2),
+              M9 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M8"))) / 60, 2),
+              M10 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M9"))) / 60, 2),
+              M11 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M10"))) / 60, 2),
+              M12 = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("M11"))) / 60, 2)
             });
           }//while(RS.Read())
         }//using(var RS)
@@ -77,19 +77,19 @@ namespace eX_Portal.exLogic {
         v.AccountID,
         v.DroneName,
         IsNull((
-          SELECT TOP 1 ISNULL(a.flighthours,0)
+          SELECT TOP 1 CAST(ISNULL(a.flighthours,0.0) as Numeric(12,2))
           FROM droneflight a
           WHERE a.DroneId = v.DroneID
           ORDER BY a.FlightDate DESC
           ),0) AS LastFlightHours,
         IsNull((
-          SELECT Sum(ISNULL(b.flighthours,0))
+          SELECT Sum(CAST(ISNULL(b.flighthours ,0) as Numeric(12,2)))
           FROM droneflight b
           WHERE b.DroneId = v.DroneID
             AND b.FlightDate >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)
           ),0) AS LastMonthHours,
         IsNull((
-          SELECT Sum(ISNULL(b.flighthours,0))
+          SELECT Sum(CAST(ISNULL(b.flighthours ,0) as Numeric(12,2)))
           FROM droneflight b
           WHERE b.DroneId = v.DroneID
           ),0) AS TotalFlightHours
@@ -111,9 +111,9 @@ namespace eX_Portal.exLogic {
               AccountID = RS.GetInt32(RS.GetOrdinal("AccountID")),
               AccountName = RS["NAME"].ToString(),
               ChartColor = RS["ChartColor"].ToString(),
-              TotalFightTime = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("TotalFlightHours"))) / 60,2),
-              CurrentFlightTime = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("LastMonthHours"))) / 60,2),
-              LastFlightTime = Math.Round((Double)(RS.GetInt32(RS.GetOrdinal("LastFlightHours"))) / 60,2)
+              TotalFightTime = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("TotalFlightHours"))) / 60,2),
+              CurrentFlightTime = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("LastMonthHours"))) / 60,2),
+              LastFlightTime = Math.Round((Double)(RS.GetDecimal(RS.GetOrdinal("LastFlightHours"))) / 60,2)
             });
           }//while(RS.Read())
         }//using(var RS)
