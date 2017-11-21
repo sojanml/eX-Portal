@@ -1489,9 +1489,12 @@
     <Content Include="Scripts\map-replay-v02_keep.js" />
     <Content Include="Scripts\map-replay.js" />
     <Content Include="Scripts\map.js" />
+    <Content Include="Scripts\Map_Scale.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\NOC-Process.js" />
     <Content Include="Scripts\NOCApproval.js" />
     <Content Include="Scripts\NOC_3D.js" />
+    <Content Include="Scripts\NOC_Register.js" />
     <Content Include="Scripts\NOC_RPAS.js" />
     <Content Include="Scripts\Payload-RFID.js" />
     <Content Include="Scripts\PayLoadMap.js" />
