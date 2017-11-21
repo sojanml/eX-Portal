@@ -80,7 +80,7 @@
 <body>
   <table style="width: 100%;">
     <tr>
-      <td valign="top"><img alt="" height="62" src="~/images/logo.png" /></td>
+      <td valign="top"><img alt="" height="62" src="~/images/adsb-logo.png" /></td>
       <td valign="top" align="right" color="#ea050e">
         <font size="5"><strong>Post Flight Report - #@Html.DisplayFor(Model => Model.ID)</strong></font><br />
         <font color="#ea050e" size="3">@Html.DisplayFor(Model => Model.DroneName)</font><br />
@@ -206,12 +206,12 @@
 
 
     @*<div id="GoogleMap"></div>*@
-    <img src="@Html.Action("GoogleMap", "Report", new { ID = ViewBag.FlightID, ApprovalID = Model.ApprovalID})" />
-
+    <img width="640" height="480" src="@Html.Action("GoogleMap", "Report", new { ID = ViewBag.FlightID, ApprovalID = Model.ApprovalID})" />
+    <div style="page-break-after: always;"></div>
   } @*if (Model.Info != null)*@
 
 
-  <div style="page-break-before: always;"></div>
+  
   <h1>Flight Chart</h1>
   <table width="100%" style="width:100%;">
     <tr>
