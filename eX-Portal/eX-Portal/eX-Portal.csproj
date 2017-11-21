@@ -1655,7 +1655,6 @@
     <Content Include="stylesheets\screen.css" />
     <Content Include="temp\temp.html" />
     <Content Include="test.txt" />
-    <Content Include="Upload\Brand-Logo\adsb-logo.png" />
     <Content Include="Upload\Brand-Logo\dcaa-logo.png" />
     <Content Include="Upload\Brand-Logo\dcca-logo-02.png" />
     <Content Include="Upload\Brand-Logo\dcca-logo-03.png" />
@@ -2120,6 +2119,8 @@
     <Content Include="Views\NOC\3D.cshtml" />
     <Content Include="tsconfig.json" />
     <Content Include="Views\NOC\Process.cshtml" />
+    <Content Include="Views\NOC\Index.cshtml" />
+    <Content Include="Views\NOC\History.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

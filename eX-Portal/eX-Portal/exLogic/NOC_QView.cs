@@ -450,10 +450,12 @@ namespace eX_Portal.exLogic
                     ScriptColumns.Append("\n var Rejected = values[1].split(\" \");");
                     ScriptColumns.Append("\n var Amended = values[2].split(\" \");");
                     ScriptColumns.Append("\n var New = values[3].split(\" \");");
-                    ScriptColumns.Append("\n if (parseInt(Approved[0])>0 ) \n {return '<span style=\"background-color:Green\">'+Approved[0]+' Approved </span>';} \n else {return ' ';}");
-                    ScriptColumns.Append("\n if (parseInt(Rejected[0])>0 ) \n {return '<span style=\"background-color:Red\">'+Rejected[0]+' Rejected </span>';} \n else {return ' ';}");
-                    ScriptColumns.Append("\n if (parseInt(New[0])>0 ) \n {return '<span style=\"background-color:Yellow\">'+New[0]+' New</span>';} \n else {return ' ';}");
-
+                    ScriptColumns.Append("\n var returnvlue='';");
+                    ScriptColumns.Append("\n if (parseInt(Approved[0])>0 ) \n {returnvlue=returnvlue+ '<span class=\"noc-status Approved\">'+Approved[0]+' Approved </span><br />';} \n ");
+                    ScriptColumns.Append("\n if (parseInt(Rejected[0])>0 ) \n {returnvlue=returnvlue+ '<span class=\"noc-status Rejected\">'+Rejected[0]+' Rejected </span><br />';} \n ");
+                    ScriptColumns.Append("\n if (parseInt(Amended[0])>0 ) \n {returnvlue=returnvlue+ '<span class=\"noc-status Amended\">'+Amended[0]+' Amended</span><br />';} \n ");
+                    ScriptColumns.Append("\n if (parseInt(New[0])>0 ) \n {returnvlue= returnvlue+'<span class=\"noc-status New\">'+New[0]+' New</span><br />';} \n ");
+                    ScriptColumns.Append("\n return returnvlue;");
                     ScriptColumns.Append("}");
                 }
                 ScriptColumns.Append("}");

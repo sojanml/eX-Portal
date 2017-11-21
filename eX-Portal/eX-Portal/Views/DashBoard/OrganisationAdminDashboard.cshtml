@@ -123,9 +123,18 @@ Layout = null;
       <a href="@Url.Action("NOCRegister", "Rpas")">
         <div class="button">
           <span class="icon">&#xf067;</span>
-          Apply for NOC
+          Single NOC
         </div>
       </a>
+@if (eX_Portal.exLogic.User.hasAccess("NOC.MULTIPLE"))
+{
+        <a href="@Url.Action("Register", "NOC")">
+            <div class="button">
+                <span class="icon">&#xf067;</span>
+                Multiple NOC
+            </div>
+        </a>
+}
     </div>
 
   </div>

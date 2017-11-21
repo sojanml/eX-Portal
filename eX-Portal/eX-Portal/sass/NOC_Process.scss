@@ -119,3 +119,28 @@ div.slider {
   margin-left:10px;
   margin-right:10px;
 }
+
+span.noc-status {
+    margin: 0px 0px 0px 10px;
+    display: inline-block;
+    padding: 3px 10px 3px 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 8pt;
+
+    &.New {
+        background-color: $FilterColor;
+    }
+
+    &.Approved {
+        background-color: $SafeColor;
+    }
+
+    &.Rejected {
+        background-color: $BreachColor;
+    }
+
+    &.Amended {
+        background-color: $AlertColor;
+    }
+}

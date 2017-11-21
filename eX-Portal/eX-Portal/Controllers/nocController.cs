@@ -219,16 +219,18 @@ namespace eX_Portal.Controllers {
       
         public ActionResult Index()
         {
-            //if (!exLogic.User.hasAccess("DRONE"))
+            //if (!exLogic.User.hasAccess("NOC"))
             //    return RedirectToAction("NoAccess", "Home");
-            string style= "'<span style=\"color:red\"> '+";
-            String SQL = $@"SELECT  
-                            [MSTR_Account].[name],
-                            Firstname + ' ' + MiddleName + ' ' + LastName as Createdby,
-                            [NocName],
+            String SQL = "";
+
+            if (exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
+                SQL = $@"SELECT  
+                            [MSTR_Account].[name] as [Organization],
+                            Firstname + ' ' + MiddleName + ' ' + LastName as [User],
+                            [NOCName],
                             [StartDate],
                             [EndDate],
-                            [CountTotal] as [Total],
 	                        CAST([CountApproved] as varchar(10))+  ' Approved'
 	                        + CHAR(13) + CHAR(10)+
                             CAST([CountRejected] as varchar(20)) +' Rejected'
@@ -238,12 +240,49 @@ namespace eX_Portal.Controllers {
                             CAST([CountNew] as varchar(20)) +' New' +'' as Status,
                             Count(*) Over() as _TotalRecords,
                             [NocApplicationID] as _PKey
-                            FROM[DCAAPortal].[dbo].[MSTR_NOC]
+                            FROM [MSTR_NOC]
                             LEFT OUTER JOIN MSTR_Account
                             ON MSTR_Account.AccountId = [MSTR_NOC].AccountID
                             LEFT OUTER JOIN MSTR_User
-                            ON MSTR_User.UserId=[CreateBy]";
+                            ON MSTR_User.UserId=[CreateBy]
+                            where enddate>=getdate() ";
+            }
+            else { 
+                int Accountid = Util.getAccountID();
+            SQL = $@"SELECT  
+                            Firstname + ' ' + MiddleName + ' ' + LastName as [User],
+                            [NOCName],
+                            [StartDate],
+                            [EndDate],
+	                        CAST([CountApproved] as varchar(10))+  ' Approved'
+	                        + CHAR(13) + CHAR(10)+
+                            CAST([CountRejected] as varchar(20)) +' Rejected'
+	                        + CHAR(13) + CHAR(10)+
+                            CAST([CountAmended] as varchar(20)) +' Amended'
+	                        +  CHAR(13) + CHAR(10)+ 
+                            CAST([CountNew] as varchar(20)) +' New' +'' as Status,
+                            Count(*) Over() as _TotalRecords,
+                            [NocApplicationID] as _PKey
+                            FROM [MSTR_NOC]
+                            LEFT OUTER JOIN MSTR_User
+                            ON MSTR_User.UserId=[CreateBy]
+                            where enddate>getdate()  and [MSTR_NOC].Accountid= " +Accountid;
+
+            }
+
+           
+
             NOC_QView nView = new NOC_QView(SQL);
+            if (exLogic.User.hasAccess("NOC.VIEW"))
+                nView.addMenu("View", Url.Action("View", new { ID = "_Pkey" }));
+            if (exLogic.User.hasAccess("NOC.PROCESS"))
+            {
+                nView.addMenu("Process", Url.Action("Process", new { ID = "_Pkey" }));
+            }
+            if (exLogic.User.hasAccess("NOC.3D"))
+            {
+                nView.addMenu("3D", Url.Action("3D", new { ID = "_Pkey" }));
+            }
             if (Request.IsAjaxRequest())
             {
                 Response.ContentType = "text/javascript";
@@ -254,5 +293,81 @@ namespace eX_Portal.Controllers {
                 return View(nView);
             }//if(IsAjaxRequest)
         }
+
+        public ActionResult History()
+        {
+            //if (!exLogic.User.hasAccess("NOC"))
+            //    return RedirectToAction("NoAccess", "Home");
+            String SQL = "";
+
+            if (exLogic.User.hasAccess("DRONE.MANAGE"))
+            {
+                SQL = $@"SELECT  
+                            [MSTR_Account].[name] as [Organization],
+                            Firstname + ' ' + MiddleName + ' ' + LastName as [User],
+                            [NOCName],
+                            [StartDate],
+                            [EndDate],
+	                        CAST([CountApproved] as varchar(10))+  ' Approved'
+	                        + CHAR(13) + CHAR(10)+
+                            CAST([CountRejected] as varchar(20)) +' Rejected'
+	                        + CHAR(13) + CHAR(10)+
+                            CAST([CountAmended] as varchar(20)) +' Amended'
+	                        +  CHAR(13) + CHAR(10)+ 
+                            CAST([CountNew] as varchar(20)) +' New' +'' as Status,
+                            Count(*) Over() as _TotalRecords,
+                            [NocApplicationID] as _PKey
+                            FROM [MSTR_NOC]
+                            LEFT OUTER JOIN MSTR_Account
+                            ON MSTR_Account.AccountId = [MSTR_NOC].AccountID
+                            LEFT OUTER JOIN MSTR_User
+                            ON MSTR_User.UserId=[CreateBy]
+                            where enddate<getdate() ";
+            }
+            else
+            {
+                int Accountid = Util.getAccountID();
+                SQL = $@"SELECT  
+                            Firstname + ' ' + MiddleName + ' ' + LastName as [User],
+                            [NOCName],
+                            [StartDate],
+                            [EndDate],
+	                        CAST([CountApproved] as varchar(10))+  ' Approved'
+	                        + CHAR(13) + CHAR(10)+
+                            CAST([CountRejected] as varchar(20)) +' Rejected'
+	                        + CHAR(13) + CHAR(10)+
+                            CAST([CountAmended] as varchar(20)) +' Amended'
+	                        +  CHAR(13) + CHAR(10)+ 
+                            CAST([CountNew] as varchar(20)) +' New' +'' as Status,
+                            Count(*) Over() as _TotalRecords,
+                            [NocApplicationID] as _PKey
+                            FROM [MSTR_NOC]
+                            LEFT OUTER JOIN MSTR_User
+                            ON MSTR_User.UserId=[CreateBy]
+                            where enddate<getdate() and [MSTR_NOC].Accountid= " + Accountid;
+
+            }
+
+
+
+            NOC_QView nView = new NOC_QView(SQL);
+            if (exLogic.User.hasAccess("NOC.VIEW"))
+                nView.addMenu("View", Url.Action("View", new { ID = "_Pkey" }));
+            
+            if (exLogic.User.hasAccess("NOC.3D"))
+            {
+                nView.addMenu("3D", Url.Action("3D", new { ID = "_Pkey" }));
+            }
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("NOC_qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }
+
     }//public class nocController
 }//namespace eX_Portal.Controllers
