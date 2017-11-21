@@ -154,5 +154,43 @@ namespace eX_Portal.Controllers {
       return Content(GoogleMapURL);
     }
 
-  }//public class nocController
+      
+        public ActionResult Index()
+        {
+            //if (!exLogic.User.hasAccess("DRONE"))
+            //    return RedirectToAction("NoAccess", "Home");
+            string style= "'<span style=\"color:red\"> '+";
+            String SQL = $@"SELECT  
+                            [MSTR_Account].[name],
+                            Firstname + ' ' + MiddleName + ' ' + LastName as Createdby,
+                            [NocName],
+                            [StartDate],
+                            [EndDate],
+                            [CountTotal] as [Total],
+	                        CAST([CountApproved] as varchar(10))+  ' Approved'
+	                        + CHAR(13) + CHAR(10)+
+                            CAST([CountRejected] as varchar(20)) +' Rejected'
+	                        + CHAR(13) + CHAR(10)+
+                            CAST([CountAmended] as varchar(20)) +' Amended'
+	                        +  CHAR(13) + CHAR(10)+ 
+                            CAST([CountNew] as varchar(20)) +' New' +'' as Status,
+                            Count(*) Over() as _TotalRecords,
+                            [NocApplicationID] as _PKey
+                            FROM[DCAAPortal].[dbo].[MSTR_NOC]
+                            LEFT OUTER JOIN MSTR_Account
+                            ON MSTR_Account.AccountId = [MSTR_NOC].AccountID
+                            LEFT OUTER JOIN MSTR_User
+                            ON MSTR_User.UserId=[CreateBy]";
+            NOC_QView nView = new NOC_QView(SQL);
+            if (Request.IsAjaxRequest())
+            {
+                Response.ContentType = "text/javascript";
+                return PartialView("NOC_qViewData", nView);
+            }
+            else
+            {
+                return View(nView);
+            }//if(IsAjaxRequest)
+        }
+    }//public class nocController
 }//namespace eX_Portal.Controllers
