@@ -349,13 +349,14 @@ namespace eX_Portal.Controllers {
       WHERE 
         a.userid =  {UserID}";
 
+      /*
       if (exLogic.User.hasAccess("PILOT") || 
           exLogic.User.hasAccess("DRONE.VIEWALL")) {
         //nothing
       } else {
         SQL += " AND a.AccountID=" + Util.getAccountID();
       }
-      
+      */
       using (var ctx = new ExponentPortalEntities()) {
         ctx.Database.Connection.Open();
         using (var cmd = ctx.Database.Connection.CreateCommand()) {

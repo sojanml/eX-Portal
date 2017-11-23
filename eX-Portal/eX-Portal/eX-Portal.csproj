@@ -1073,6 +1073,7 @@
     <Content Include="images\mCSB_buttons.png" />
     <Content Include="images\menu-drop-down.png" />
     <Content Include="images\PilotImage.png" />
+    <Content Include="images\QR-Code.png" />
     <Content Include="images\rpas.png" />
     <Content Include="images\RpasStartEnd.png" />
     <Content Include="images\rta-logo.png" />
@@ -1472,6 +1473,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Content Include="sass\NOC_Process.scss" />
+    <Content Include="sass\DroneDetail.scss" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
@@ -1489,9 +1491,12 @@
     <Content Include="Scripts\map-replay-v02_keep.js" />
     <Content Include="Scripts\map-replay.js" />
     <Content Include="Scripts\map.js" />
+    <Content Include="Scripts\Map_Scale.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\NOC-Process.js" />
     <Content Include="Scripts\NOCApproval.js" />
     <Content Include="Scripts\NOC_3D.js" />
+    <Content Include="Scripts\NOC_Register.js" />
     <Content Include="Scripts\NOC_RPAS.js" />
     <Content Include="Scripts\Payload-RFID.js" />
     <Content Include="Scripts\PayLoadMap.js" />
@@ -2118,12 +2123,14 @@
     <Content Include="Views\NOC\Process.cshtml" />
     <Content Include="Views\NOC\Index.cshtml" />
     <Content Include="Views\NOC\History.cshtml" />
+    <Content Include="Views\NOC\NOCDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="sass-css\" />
     <Folder Include="Upload\BlackBox\" />
     <Folder Include="Upload\Drone\" />
+    <Folder Include="Upload\QRCode\" />
     <Folder Include="Upload\temp\" />
     <Folder Include="Views\OrganisaionAdmin\" />
     <Folder Include="Views\UserLogin\" />

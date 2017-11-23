@@ -67,7 +67,7 @@ namespace eX_Portal.ViewModel {
     public IList<LatLng> MapData { get; set; }
     public GCA_Approval Approval { get; set; }
 
-    public FlightInfo Info { get; set; }
+    public Models.FlightInfo Info { get; set; }
     public Decimal? FlightDistance { get; internal set; }
 
     public String getCreatedOn() {

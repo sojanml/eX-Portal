@@ -1,0 +1,61 @@
+﻿@model eX_Portal.ViewModel.NOC_Details_Ext
+@{
+  Layout = null;
+}
+
+<div class="noc-detail-header">
+  <div class="noc-drone-info">
+    <div class="QRCode"><img src="@Model.DroneInfo.QRCode" width="50" height="50"/></div>
+    <div class="DroneGroup"><img src="~/images/FlightType-@(Model.DroneInfo.UAVGroup).png" width="50" height="50" /></div>
+    <div class="info-title">@Model.DroneName</div>
+    <div class="info-sub-title">@Model.DroneInfo.DroneRefName <span>(@Model.DroneInfo.Manufacturer @Model.DroneInfo.UAVType)</span></div>
+    <div style="clear:both"></div>
+  </div>
+  <div class="noc-pilot-info">
+    <div class="pilot-image" style="background-image: url('@Model.PilotInfo.PhotoUrl')"></div>
+    <div class="info-title">@Model.PilotInfo.FullName</div>
+    <div class="info-sub-title">@Model.PilotInfo.EmailId</div>
+    <div class="info-registration">
+      @Model.PilotInfo.RPASPermitNo (<span>Issue: @Model.PilotInfo.IssueDate</span>,
+      <span>Expiry: @Model.PilotInfo.ExpiryDate</span>)
+    </div>    
+    <div style="clear:both"></div>
+  </div>
+</div>
+<div style="float:right;"><span class="noc-status @Model.Status">@Model.Status</span></div>
+<table class="noc_table">
+  <tr>
+    <td>Start Date &amp; Time:</td>
+    <td>
+      @Model.StartDate.ToString("dd-MMM-yyyy")
+      @Model.StartTime.ToString().Substring(0, 5)
+    </td>
+  </tr>
+  <tr>
+    <td>End Date &amp; Time:</td>
+    <td>
+      @Model.EndDate.ToString("dd-MMM-yyyy")
+      @Model.EndTime.ToString().Substring(0, 5)
+    </td>
+  </tr>
+  <tr>
+    <td>Altitude: </td>
+    <td>
+      Min: @Model.MinAltitude Meter,
+      Max: @Model.MaxAltitude Meter
+    </td>
+  </tr>
+  <tr>
+    <td>Operation Type:</td>
+    <td>
+      @(Model.LOS == "BVLOS" ? "Beyond" : "") Visual Line of Sight (@Model.LOS)
+    </td>
+  </tr>
+  <tr>
+    <td>Camara in Use?</td>
+    <td>
+      @(Model.IsUseCamara ? "Yes" : "No")
+    </td>
+  </tr>
+</table>
+

@@ -422,7 +422,7 @@ namespace eX_Portal.Controllers {
         where n.FlightID == FlightID
         select n).FirstOrDefault();
       if(FlightData.Info == null) {
-        FlightData.Info = new FlightInfo();
+        FlightData.Info = new Models.FlightInfo();
         LatLng FirstPoint = FlightData.MapData.FirstOrDefault();
         Exponent.WeatherAPI ReportWeather = new Exponent.WeatherAPI();      
         Exponent.WeatherForcast Condition = ReportWeather.GetByLocation((Double)FirstPoint.Lat, (Double)FirstPoint.Lng);

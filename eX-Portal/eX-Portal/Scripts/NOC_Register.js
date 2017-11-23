@@ -254,7 +254,7 @@ var NOC = function () {
 
 
 var NOCMap = function () {
-  var _DefaultCoordinates = '25.05569 55.44882,25.12533 55.52759,25.16790 55.50150,25.09580 55.41586';
+  var _DefaultCoordinates = '25.1567281 55.4912204,25.1624695 55.5054457,25.1699197 55.4994401,25.1657354 55.4874428';
   var _MapCoordinates = '';
   var BoundaryBox = {};
   var map = {};

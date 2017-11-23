@@ -8,6 +8,90 @@ using System.Web.Mvc;
 
 namespace eX_Portal.ViewModel {
 
+  public class DroneDetailView {
+    private ExponentPortalEntities db = new ExponentPortalEntities();
+    public DroneInfo DroneInfo;
+    public AccountInfo AccountInfo;
+    public List<FlightInfo> FlightInfo ;
+    public List<PilotInfo> PilotInfo;
+
+    public DroneDetailView(int DroneID) {
+      DroneInfo = new DroneInfo(DroneID);
+      AccountInfo = new AccountInfo(DroneInfo.AccountID);
+
+      FlightInfo = db
+        .DroneFlights
+        .Where(w => w.DroneID == DroneID && w.MaxAltitude > 5)
+        .OrderBy(o => o.ID)
+        .Select(s => new FlightInfo {
+          ID = s.ID,
+          FlightDate  = (DateTime)s.FlightDate,
+          FlightDistance = (int)s.FlightDistance,
+          FlightHours = (int)s.FlightHours,
+          MaxAltitude = (int)s.MaxAltitude,
+          PilotID = (int)s.PilotID
+        })
+        .Take(5)
+        .ToList();
+
+       
+      var PilotIDs = db
+        .M2M_Drone_User
+        .Where(w => w.DroneID == DroneID)
+        .OrderBy(o => o.DroneID)
+        .Select(s => s.UserID)
+        .ToList();
+      PilotInfo = new List<ViewModel.PilotInfo>();
+      foreach (var PilotID in PilotIDs) {
+        PilotInfo.Add(new ViewModel.PilotInfo(PilotID));
+      }
+    }
+  }
+
+
+  public class AccountInfo : MSTR_Account {
+    private ExponentPortalEntities db = new ExponentPortalEntities();
+
+    public AccountInfo(int AccountID = 0) {
+      var account = db.MSTR_Account.Where(w => w.AccountId == AccountID).FirstOrDefault();
+      if (account != null) {
+        this.Name = account.Name;
+        this.EmailId = account.EmailId;
+        this.MobileNo = account.MobileNo;
+      }
+    }
+  }
+
+
+  public class FlightInfo {
+    private String _Duration;
+
+    private ExponentPortalEntities db = new ExponentPortalEntities();
+    int _PilotID = 0;
+    public int PilotID {
+      get { return _PilotID; }
+      set {
+        _PilotID = value;
+        PilotInfo = new PilotInfo(_PilotID);
+      }
+    }
+
+    public int ID { get; set; }
+    public DateTime FlightDate { get; set; }
+    public int FlightDistance { get; set; }
+    public int FlightHours { get; set; }
+    public int MaxAltitude { get; set; }
+    public PilotInfo PilotInfo;
+
+    public String Duration {
+      get {
+        TimeSpan t = TimeSpan.FromSeconds(FlightHours);        
+        return t.ToString(@"hh\:mm");
+      }
+    }
+
+  }
+
   public class DroneCreateModel {
     private ExponentPortalEntities db = new ExponentPortalEntities();
 
@@ -31,10 +115,10 @@ namespace eX_Portal.ViewModel {
     public MSTR_Drone Create() {
       int? DroneSerialNo = db.MSTR_Drone.OrderByDescending(u => u.DroneSerialNo).Select(e => e.DroneSerialNo).FirstOrDefault();
 
-      if(RpasTypeId == 0 && !String.IsNullOrEmpty(OtherRPASType)) {
+      if (RpasTypeId == 0 && !String.IsNullOrEmpty(OtherRPASType)) {
         RpasTypeId = CreateType("UAVType", OtherRPASType);
       }
-      if(ManufactureID == 0 && !String.IsNullOrEmpty(OtherManufacturer)) {
+      if (ManufactureID == 0 && !String.IsNullOrEmpty(OtherManufacturer)) {
         ManufactureID = CreateType("Manufacturer", OtherManufacturer);
       }
             DroneSerialNo = DroneSerialNo + 1;
@@ -87,7 +171,7 @@ namespace eX_Portal.ViewModel {
       LuD.Type = TypeName;
       LuD.BinaryCode = BinaryCode;
       LuD.TypeId = typeid;
-      LuD.Code = TypeValue.ToUpper().Substring(0,3);
+      LuD.Code = TypeValue.ToUpper().Substring(0, 3);
       LuD.IsActive = true;
       LuD.Name = TypeValue;
       LuD.CreatedBy = exLogic.Util.getLoginUserID();
@@ -102,7 +186,7 @@ namespace eX_Portal.ViewModel {
 
   }
 
- 
+
 
 
   public class DroneView {
@@ -116,7 +200,7 @@ namespace eX_Portal.ViewModel {
 
     public IEnumerable<SelectListItem> OwnerList { get; set; }
     [AllowHtml]
-    public MSTR_Drone Drone { get; set; }   
+    public MSTR_Drone Drone { get; set; }
     public IEnumerable<SelectListItem> ManufactureList { get; set; }
     public IEnumerable<SelectListItem> UAVTypeList { get; set; }
     public IEnumerable<SelectListItem> PartsGroupList { get; set; }
@@ -124,16 +208,16 @@ namespace eX_Portal.ViewModel {
     public IEnumerable<string> SelectItemsForParts { set; get; }
     public MSTR_Parts DroneParts { get; set; }
     [AllowHtml]
-        [MinLength(3,ErrorMessage ="Please enter minimum of 3 characters.")]
-        
-        public string Name {get;set;}
+    [MinLength(3, ErrorMessage = "Please enter minimum of 3 characters.")]
+
+    public string Name { get; set; }
     public IEnumerable<SelectListItem> RegistrationAuthority {
       get {
         return SelectListItems;
       }
     }
-        public string AccountName { get; set; }
-        public string TypeName { get; set; }
+    public string AccountName { get; set; }
+    public string TypeName { get; set; }
   }
 
 }

@@ -53,20 +53,7 @@ div.noc-header {
   }
 }
 
-div.noc-detail-header {
-  h1 {
-    font-size: 16pt;
-    margin: 0px 0px 0px 0px;
-    padding: 0px;
-    color: $AlertColor
-  }
 
-  & > div {
-    margin: 0px 0px 10px 0px;
-    padding: 0px;
-    color: $SafeColor;
-  }
-}
 
 section.noc-detail {
   border-bottom: 1px solid silver;
@@ -121,26 +108,80 @@ div.slider {
 }
 
 span.noc-status {
-    margin: 0px 0px 0px 10px;
-    display: inline-block;
-    padding: 3px 10px 3px 10px;
-    border-radius: 5px;
-    color: white;
-    font-size: 8pt;
 
-    &.New {
-        background-color: $FilterColor;
-    }
+}
 
-    &.Approved {
-        background-color: $SafeColor;
-    }
+span.noc-status {
+  margin: 0px 0px 0px 10px;
+  display: inline-block;
+  padding: 3px 10px 3px 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 8pt;
 
-    &.Rejected {
-        background-color: $BreachColor;
-    }
+  &.New {
+    background-color: $FilterColor;
+  }
 
-    &.Amended {
-        background-color: $AlertColor;
-    }
+  &.Approved {
+    background-color: $SafeColor;
+  }
+
+  &.Rejected {
+    background-color: $BreachColor;
+  }
+
+  &.Amended {
+    background-color: $AlertColor;
+  }
+}
+
+
+
+div.noc-detail-header {
+  margin-bottom:10px;
+}
+div.noc-drone-info {
+  div.QRCode {
+    float: right;
+    margin-bottom: 5px;
+  }
+
+  div.DroneGroup {
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 5px;
+  }
+
+  div.info-title {
+    font-size: 14pt;
+    color: $AlertColor;
+    font-weight: bold;
+  }
+
+  div.info-sub-title {
+    color: #797979;
+  }
+}
+
+div.noc-pilot-info {
+  div.pilot-image {
+    float: right;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px silver solid;
+    background-size: cover;
+    margin-bottom: 5px;
+  }
+
+  div.info-title {
+    font-size: 14pt;
+    color: $SafeColor;
+    font-weight: bold;
+  }
+
+  div.info-sub-title {
+    color: #797979;
+  }
 }

@@ -1,0 +1,105 @@
+﻿$BreachColor: #fe0000;
+$AlertColor: #f2a003;
+$SafeColor: #53a100;
+$FilterColor: #018aff;
+
+
+div.RpasGroupIcon {
+  width: 40px;
+  height: 40px;
+  float: right;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin:5px 5px 0px 0px;
+}
+
+ul.list-info {
+  margin: 10px 0px 0px 10px;
+  padding: 0px;
+  list-style: none;
+
+  li {
+    margin: 0px 0px 5px 0px;
+    padding: 0px;
+    list-style: none;
+
+    span {
+      color: $SafeColor;
+    }
+
+    b {
+      color: $FilterColor
+    }
+  }
+}
+
+section.top_space {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 15px;
+
+  & > div.column {
+    grid-row: 1;
+    margin-right: 0px;
+  }
+}
+
+ul.flight-info {
+  margin: 10px 0px 10px 10px;
+  padding: 0px;
+  list-style: none;
+
+  li {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+
+    span {
+      color: $SafeColor;
+    }
+
+    b {
+      color: $AlertColor
+    }
+  }
+}
+
+div.PilotImageIcon {
+  width: 50px;
+  height: 50px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  float: right;
+  margin-right: 20px;
+  margin-top: 10px;
+  border-radius: 50%;
+  border: 1px solid $AlertColor;
+}
+
+
+div.pilot-info {
+  margin: 10px 0px 20px 20px;
+
+  div.pilot-image {
+    float: right;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px $SafeColor solid;
+    background-size: cover;
+    margin-bottom: 5px;
+    margin-right: 20px;
+  }
+
+  div.info-title {
+    font-size: 14pt;
+    color: $SafeColor;
+    font-weight: bold;
+  }
+
+  div.info-sub-title {
+    color: #797979;
+  }
+}

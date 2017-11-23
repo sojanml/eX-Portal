@@ -81,6 +81,7 @@ var NOCDetail = function () {
       var Distance = $('#noc-nocbuffer-' + _id).val();
       _ajaxBoundary.Run(_poly, Distance, OnBoundaryUpdate);
       setAmmended();
+      $('#noc-coordinates-' + _id).val(_ajaxBoundary.getLatLng(_poly));
     }, 100);
   }
 

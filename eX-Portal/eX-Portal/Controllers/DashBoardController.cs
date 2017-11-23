@@ -318,6 +318,8 @@ namespace eX_Portal.Controllers {
 
     public ActionResult UserDashboard() {
       int userid = Util.getLoginUserID();
+      if (userid == 0)
+        return new HttpNotFoundResult("User timed out. Please try to login again...");
       ViewBag.Title = String.Empty;
       Util ut = new Util();
       UserDashboardModel UserDashboard = ut.GetUserDetails(userid);
