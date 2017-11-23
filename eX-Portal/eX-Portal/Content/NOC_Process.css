@@ -36,18 +36,6 @@ div.noc-header div.sub-sub-title {
   font-size: 10pt;
 }
 
-div.noc-detail-header h1 {
-  font-size: 16pt;
-  margin: 0px 0px 0px 0px;
-  padding: 0px;
-  color: #f2a003;
-}
-div.noc-detail-header > div {
-  margin: 0px 0px 10px 0px;
-  padding: 0px;
-  color: #53a100;
-}
-
 section.noc-detail {
   border-bottom: 1px solid silver;
 }
@@ -115,4 +103,44 @@ span.noc-status.Rejected {
 }
 span.noc-status.Amended {
   background-color: #f2a003;
+}
+
+div.noc-detail-header {
+  margin-bottom: 10px;
+}
+
+div.noc-drone-info div.QRCode {
+  float: right;
+  margin-bottom: 5px;
+}
+div.noc-drone-info div.DroneGroup {
+  float: right;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+div.noc-drone-info div.info-title {
+  font-size: 14pt;
+  color: #f2a003;
+  font-weight: bold;
+}
+div.noc-drone-info div.info-sub-title {
+  color: #797979;
+}
+
+div.noc-pilot-info div.pilot-image {
+  float: right;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px silver solid;
+  background-size: cover;
+  margin-bottom: 5px;
+}
+div.noc-pilot-info div.info-title {
+  font-size: 14pt;
+  color: #53a100;
+  font-weight: bold;
+}
+div.noc-pilot-info div.info-sub-title {
+  color: #797979;
 }

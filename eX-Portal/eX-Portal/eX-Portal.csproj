@@ -1073,6 +1073,7 @@
     <Content Include="images\mCSB_buttons.png" />
     <Content Include="images\menu-drop-down.png" />
     <Content Include="images\PilotImage.png" />
+    <Content Include="images\QR-Code.png" />
     <Content Include="images\rpas.png" />
     <Content Include="images\RpasStartEnd.png" />
     <Content Include="images\rta-logo.png" />
@@ -2121,12 +2122,14 @@
     <Content Include="Views\NOC\Process.cshtml" />
     <Content Include="Views\NOC\Index.cshtml" />
     <Content Include="Views\NOC\History.cshtml" />
+    <Content Include="Views\NOC\NOCDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="sass-css\" />
     <Folder Include="Upload\BlackBox\" />
     <Folder Include="Upload\Drone\" />
+    <Folder Include="Upload\QRCode\" />
     <Folder Include="Upload\temp\" />
     <Folder Include="Views\OrganisaionAdmin\" />
     <Folder Include="Views\UserLogin\" />

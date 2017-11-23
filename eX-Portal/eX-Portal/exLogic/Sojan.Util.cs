@@ -139,7 +139,10 @@ namespace eX_Portal.exLogic {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
           ctx.Database.Connection.Open();
           cmd.CommandText = SQL;
-          var oResult = cmd.ExecuteScalar();
+          object oResult = null;
+          try {
+            oResult = cmd.ExecuteScalar();
+          } catch { }
           if (oResult != null)
             Result = oResult.ToString();
         }

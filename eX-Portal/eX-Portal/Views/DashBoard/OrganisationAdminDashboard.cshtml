@@ -51,8 +51,13 @@ Layout = null;
           <div class="detail">@Model.Pilot.EmailId</div>
         </li>
       </ul>
+
+      <div class="toolbar">
+        <a href="@Url.Action("Edit", "Pilot", new  { ID = @Model.Pilot.UserId })"> <div class="button">Edit Profile</div></a>
+      </div>
       </div>
     </div>
+
 </section>
 
 <section class="top-space">

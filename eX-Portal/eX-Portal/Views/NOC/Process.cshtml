@@ -5,7 +5,6 @@
   int Row = 0;
 }
 
-
 <form method="post" action="@Url.Action("Process", "NOC", new { ID = Model.NocApplicationID })">
   <section class="top-space">
     <div class="noc-header">
@@ -28,46 +27,7 @@
     <section class="noc-detail top-space">
 
       <div id="noc_detail_@noc.NocID" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px;">
-        <div class="noc-detail-header">
-          <h1>@noc.DroneName</h1>
-          <div>@noc.PilotName</div>
-        </div>
-        <table class="noc_table">
-          <tr>
-            <td>Start Date &amp; Time:</td>
-            <td>
-              @noc.StartDate.ToString("dd-MMM-yyyy")
-              @noc.StartTime.ToString().Substring(0, 5)
-            </td>
-          </tr>
-          <tr>
-            <td>End Date &amp; Time:</td>
-            <td>
-              @noc.EndDate.ToString("dd-MMM-yyyy")
-              @noc.EndTime.ToString().Substring(0, 5)
-            </td>
-          </tr>
-          <tr>
-            <td>Altitude: </td>
-            <td>
-              Min: @noc.MinAltitude Meter,
-              Max: @noc.MaxAltitude Meter
-            </td>
-          </tr>
-          <tr>
-            <td>Line of Sight:</td>
-            <td>
-              @(noc.LOS == "BVLOS" ? "Beyond" : "") Visual Line of Sight (@noc.LOS)
-            </td>
-          </tr>
-          <tr>
-            <td>Camara in Use?</td>
-            <td>
-              @(noc.IsUseCamara ? "Yes" : "No")
-            </td>
-          </tr>
-        </table>
-
+      @Html.Action("NocDetail", new { ID = noc.NocID })
         <table>
           <tr>
             <td>Altitude:</td>
@@ -85,9 +45,9 @@
 
         <div class="noc-actions">
           
-          <input @(noc.Status.Trim().Equals("Approved") || noc.Status.Trim().Equals("New") ?  "checked" :"") type="radio" name="NocDetails[@Row].Status" id="noc-status-@noc.NocID-Approved" value="Approved" /><label class="Approved" for="noc-status-@noc.NocID-Approved">Approved</label>
-          <input @(noc.Status.Trim().Equals("Amended") ? "checked" :"") type="radio" name="NocDetails[@Row].Status" id="noc-status-@noc.NocID-Amended" value="Amended" /><label class="Amended" for="noc-status-@noc.NocID-Amended">Amended</label>
-          <input @(noc.Status.Trim().Equals("Rejected") ? "checked" :"")  type="radio" name="NocDetails[@Row].Status" id="noc-status-@noc.NocID-Rejected" value="Rejected" /><label class="Rejected" for="noc-status-@noc.NocID-Rejected">Rejected</label>
+          <input @(noc.Status.Trim().Equals("Approved") || noc.Status.Trim().Equals("New") ?  "checked" :"") type="radio" name="NocDetails[@Row].Status" id="noc-status-@noc.NocID-Approved" value="Approved" /><label class="Approved" for="noc-status-@noc.NocID-Approved">Approve</label>
+          <input @(noc.Status.Trim().Equals("Amended") ? "checked" :"") type="radio" name="NocDetails[@Row].Status" id="noc-status-@noc.NocID-Amended" value="Amended" /><label class="Amended" for="noc-status-@noc.NocID-Amended">Amend</label>
+          <input @(noc.Status.Trim().Equals("Rejected") ? "checked" :"")  type="radio" name="NocDetails[@Row].Status" id="noc-status-@noc.NocID-Rejected" value="Rejected" /><label class="Rejected" for="noc-status-@noc.NocID-Rejected">Reject</label>
         </div>
       </div>
 
@@ -101,14 +61,14 @@
 
     <input type="hidden" name="NocDetails[@Row].NocID" id="noc-nocid-@noc.NocID" value="@noc.NocID" />
     <input type="hidden" name="NocDetails[@Row].NocBuffer" id="noc-nocbuffer-@noc.NocID" value="@noc.NocBuffer" />
-    <input type="hidden" name="NocDetails[@Row].Coordinates" id="noc-coordinates-@noc.NocID" value="@noc.Coordinates" />
+    <input style="width:100%;" type="text" name="NocDetails[@Row].Coordinates" id="noc-coordinates-@noc.NocID" value="@noc.Coordinates" />
     <input type="hidden" name="NocDetails[@Row].MaxAltitude" id="noc-maxaltitude-@noc.NocID" value="@noc.MaxAltitude" />
 
     Row++;
   }
 
   <div style="padding:10px 0px 20px 0px" class="form-toolbar">
-    <input type="submit" value="Submit NOC">
+    <input type="submit" value="Submit">
   </div>
 
 </form>

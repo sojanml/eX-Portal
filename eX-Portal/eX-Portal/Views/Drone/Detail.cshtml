@@ -1,60 +1,15 @@
 ﻿@using eX_Portal.exLogic;
 
-@{
-    int DroneID = ViewBag.DroneID;
-    var location = ViewBag.QRLocation;
-}
-@Html.Action("DroneDetail","Drone", new { ID = DroneID })
-<!-- Drone Images-->
-@Html.Action("DroneImaging", "Drone", new { ID = DroneID, Actions = "View" })
-
-<!-- Recent Flights-->
-@if (eX_Portal.exLogic.User.hasAccess("FLIGHT.ARCHIVE"))
-{
-@Html.Action("ByDrone", "DroneFlight", new { ID = DroneID })
-}
-<!-- Recent Service -->
-@Html.Action("ByDrone", "DroneService", new { ID = DroneID })
-
-@Html.Action("getDroneParts", "Drone", new { ID = DroneID })
-
-<!--
-@if (eX_Portal.exLogic.User.hasAccess("CHECKLIST.SETUP")) { 
-  <h2>Checklist Set-Up</h2>
-  @Html.Action("ValidationList", "DroneCheckList", new { DroneID = DroneID })
-}
--->
-
-<div class="col-3-in-row">
-  @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "Decommission" })
-  @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "Reassign" })
-</div>
-<div style="clear:both"></div>
-<div class="col-3-in-row">
-  @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "Incident" })
-  @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "UAT" })
-  @Html.Action("FileDetail", "Drone", new { ID = DroneID, DocumentType = "Commission" })
-</div>
-  <div style="clear:both">
-      <a  target="_blank" class="btn" href="@ViewBag.QRLocation"> Download QRCode </a>
+<section class="top_space">
+  <div class="column column-1-of-3 dashboard-column">
+    Column 1
   </div>
-<div id="qrcode">
-    <img  src="@ViewBag.QRLocation"/>
 
+  <div class="column column-1-of-3 dashboard-column">
+    Column 2
+  </div>
+  <div class="column column-1-of-3 dashboard-column">
+    Column 3
+  </div>
 
-
-</div>
-@section scripts {
-<script src="~/Scripts/jquery-1.11.3.js"></script>
-
-    <script type="text/javascript" src="~/Scripts/DroneImaging.js"></script>
-    
-}
-@section header{
-<link href="~/Content/black-box.css" rel="stylesheet" />
-  <style type="text/css">
-    #dialog {
-      overflow:hidden;
-    }
-  </style>
-}
+</section>

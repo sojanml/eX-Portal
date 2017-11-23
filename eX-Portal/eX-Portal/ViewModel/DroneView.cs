@@ -31,15 +31,17 @@ namespace eX_Portal.ViewModel {
     public int Create() {
       int? DroneSerialNo = db.MSTR_Drone.OrderByDescending(u => u.DroneSerialNo).Select(e => e.DroneSerialNo).FirstOrDefault();
 
-      if(RpasTypeId == 0 && !String.IsNullOrEmpty(OtherRPASType)) {
+      if (RpasTypeId == 0 && !String.IsNullOrEmpty(OtherRPASType)) {
         RpasTypeId = CreateType("UAVType", OtherRPASType);
       }
-      if(ManufactureID == 0 && !String.IsNullOrEmpty(OtherManufacturer)) {
+      if (ManufactureID == 0 && !String.IsNullOrEmpty(OtherManufacturer)) {
         ManufactureID = CreateType("Manufacturer", OtherManufacturer);
       }
 
-      if (DroneSerialNo == null) DroneSerialNo = 1;
-      if (DroneSerialNo < 1000) DroneSerialNo += 1000;
+      if (DroneSerialNo == null)
+        DroneSerialNo = 1;
+      if (DroneSerialNo < 1000)
+        DroneSerialNo += 1000;
 
       MSTR_Drone Drone = new MSTR_Drone {
         AccountID = AccountID,
@@ -85,7 +87,7 @@ namespace eX_Portal.ViewModel {
       LuD.Type = TypeName;
       LuD.BinaryCode = BinaryCode;
       LuD.TypeId = typeid;
-      LuD.Code = TypeValue.ToUpper().Substring(0,3);
+      LuD.Code = TypeValue.ToUpper().Substring(0, 3);
       LuD.IsActive = true;
       LuD.Name = TypeValue;
       LuD.CreatedBy = exLogic.Util.getLoginUserID();
@@ -100,7 +102,7 @@ namespace eX_Portal.ViewModel {
 
   }
 
- 
+
 
 
   public class DroneView {
@@ -114,7 +116,7 @@ namespace eX_Portal.ViewModel {
 
     public IEnumerable<SelectListItem> OwnerList { get; set; }
     [AllowHtml]
-    public MSTR_Drone Drone { get; set; }   
+    public MSTR_Drone Drone { get; set; }
     public IEnumerable<SelectListItem> ManufactureList { get; set; }
     public IEnumerable<SelectListItem> UAVTypeList { get; set; }
     public IEnumerable<SelectListItem> PartsGroupList { get; set; }
@@ -122,16 +124,16 @@ namespace eX_Portal.ViewModel {
     public IEnumerable<string> SelectItemsForParts { set; get; }
     public MSTR_Parts DroneParts { get; set; }
     [AllowHtml]
-        [MinLength(3,ErrorMessage ="Please enter minimum of 3 characters.")]
-        
-        public string Name {get;set;}
+    [MinLength(3, ErrorMessage = "Please enter minimum of 3 characters.")]
+
+    public string Name { get; set; }
     public IEnumerable<SelectListItem> RegistrationAuthority {
       get {
         return SelectListItems;
       }
     }
-        public string AccountName { get; set; }
-        public string TypeName { get; set; }
+    public string AccountName { get; set; }
+    public string TypeName { get; set; }
   }
 
 }

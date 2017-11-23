@@ -17,11 +17,11 @@ namespace eX_Portal.Controllers {
 
     [HttpGet]
     public ActionResult Process(int ID = 0) {
-      Models.MSTR_NOC NOC = ctx.MSTR_NOC.Where(w => w.NocApplicationID == ID).FirstOrDefault();      
+      Models.MSTR_NOC NOC = ctx.MSTR_NOC.Where(w => w.NocApplicationID == ID).FirstOrDefault();
       if (NOC == null)
         return HttpNotFound();
       ViewModel.MSTR_NOC_Ext _noc = new ViewModel.MSTR_NOC_Ext(NOC);
-      return View(_noc);      
+      return View(_noc);
     }
 
     [HttpPost]
@@ -30,14 +30,15 @@ namespace eX_Portal.Controllers {
       if (NOC == null)
         return HttpNotFound();
 
-      foreach(Models.NOC_Details Details in NocDetails) {
+      foreach (Models.NOC_Details Details in NocDetails) {
         NOC_Details dbNocDetails = ctx.NOC_Details.Where(w => w.NocID == Details.NocID).FirstOrDefault();
-        if(dbNocDetails != null) {
+        if (dbNocDetails != null) {
           dbNocDetails.MaxAltitude = Details.MaxAltitude;
           dbNocDetails.NocBuffer = Details.NocBuffer;
           dbNocDetails.Status = Details.Status.Trim();
           dbNocDetails.StatusChangedBy = Util.getLoginUserID();
           dbNocDetails.StatusChangedOn = DateTime.UtcNow;
+          dbNocDetails.Coordinates = Details.Coordinates;
           ctx.Entry(dbNocDetails).State = System.Data.Entity.EntityState.Modified;
           ctx.SaveChanges();
         }
@@ -65,18 +66,19 @@ namespace eX_Portal.Controllers {
         return RedirectToAction("NoAccess", "Home");
 
       var NOC = new Models.MSTR_NOC();
-      if(ID != 0) {
+      if (ID != 0) {
         NOC = ctx.MSTR_NOC.Where(w => w.NocApplicationID == ID).FirstOrDefault();
       }
 
-      if(NOC.NOC_Details.Count == 0) NOC.NOC_Details.Add(new Models.NOC_Details() {
-        StartDate = DateTime.Now,
-        EndDate = DateTime.Now,
-        StartTime = new TimeSpan(6,0,0),
-        EndTime = new TimeSpan(18, 0, 0),
-        MaxAltitude = 40,
-        MinAltitude = 0
-      });
+      if (NOC.NOC_Details.Count == 0)
+        NOC.NOC_Details.Add(new Models.NOC_Details() {
+          StartDate = DateTime.Now,
+          EndDate = DateTime.Now,
+          StartTime = new TimeSpan(6, 0, 0),
+          EndTime = new TimeSpan(18, 0, 0),
+          MaxAltitude = 40,
+          MinAltitude = 0
+        });
       return View(NOC);
     }
 
@@ -123,7 +125,7 @@ namespace eX_Portal.Controllers {
         }
       }
 
-      if(SB.Length > 0) {
+      if (SB.Length > 0) {
         ViewBag.DbErrors = SB.ToString();
         return View(NOC);
       }
@@ -136,7 +138,7 @@ namespace eX_Portal.Controllers {
       Models.MSTR_NOC NOC = ctx.MSTR_NOC.Where(w => w.NocApplicationID == NocApplicationID).FirstOrDefault();
       if (NOC == null)
         return HttpNotFound();
-      return View(NOC);
+      return View(new ViewModel.MSTR_NOC_Ext(NOC));
     }
 
     [HttpGet]
@@ -148,7 +150,6 @@ namespace eX_Portal.Controllers {
       return View(NOC);
     }
 
-
     public ActionResult ExtentCoordinates(String Coordinates, int Distance = 50) {
       String SQL = $"SELECT [dbo].[ExtentPolygon] ('{Coordinates}',{Distance})";
       String NewCoordinates = Util.getDBVal(SQL);
@@ -157,18 +158,17 @@ namespace eX_Portal.Controllers {
       return Json(Zone, JsonRequestBehavior.AllowGet);
     }
 
-    public class NocZone
-    {
+    public class NocZone {
       public String Coordinates { get; set; }
       public String Color { get; set; }
     }
 
     [HttpGet]
-    public ActionResult NoFlyZone(){
+    public ActionResult NoFlyZone() {
       List<NocZone> AllZones = new List<NocZone>();
       var FixedZones = ctx.MSTR_NoFlyZone
         .Where(w => w.DisplayType == "Fixed" && w.IsDeleted == false)
-        .Select(s => new NocZone{
+        .Select(s => new NocZone {
           Coordinates = s.Coordinates,
           Color = s.FillColour
         });
@@ -185,7 +185,7 @@ namespace eX_Portal.Controllers {
           m.StartTime <= nowTime &&
           m.EndTime >= nowTime &&
           m.IsDeleted != true
-        select new NocZone{
+        select new NocZone {
           Coordinates = m.Coordinates,
           Color = m.FillColour
         };
@@ -211,21 +211,31 @@ namespace eX_Portal.Controllers {
         "&style=feature:landscape|element:geometry|saturation:-50" +
         "&style=feature:water|saturation:-50|invert_lightness:true" +
         "&path=" + HttpUtility.UrlEncode("fillcolor:0x00ff00|weight:0|enc:") + Util.gEncode(Coordinates) +
-        "&path=" + HttpUtility.UrlEncode("color:0xff0000|weight:5|enc:") + Util.gEncode(OuterCoordinates);
+        "&path=" + HttpUtility.UrlEncode("color:0xff0000ff|weight:1|enc:") + Util.gEncode(OuterCoordinates);
 
       return Content(GoogleMapURL);
     }
 
-      
-        public ActionResult Index()
-        {
-            //if (!exLogic.User.hasAccess("NOC"))
-            //    return RedirectToAction("NoAccess", "Home");
-            String SQL = "";
+    [HttpGet]
+    [ChildActionOnly]
+    public ActionResult NOCDetail(int ID = 0) {
+      var TheDetail = ctx.NOC_Details.Where(w => w.NocID == ID).FirstOrDefault();
+      if (TheDetail == null) { 
+        var c = new ContentResult();
+        c.Content = "404 - NOC Detail is not found.";
+        return c;
+      }
+      return View(new ViewModel.NOC_Details_Ext(TheDetail));
+    }
 
-            if (exLogic.User.hasAccess("DRONE.MANAGE"))
-            {
-                SQL = $@"SELECT  
+
+    public ActionResult Index() {
+      //if (!exLogic.User.hasAccess("NOC"))
+      //    return RedirectToAction("NoAccess", "Home");
+      String SQL = "";
+
+      if (exLogic.User.hasAccess("DRONE.MANAGE")) {
+        SQL = $@"SELECT  
                             [MSTR_Account].[name] as [Organization],
                             Firstname + ' ' + MiddleName + ' ' + LastName as [User],
                             [NOCName],
@@ -246,10 +256,9 @@ namespace eX_Portal.Controllers {
                             LEFT OUTER JOIN MSTR_User
                             ON MSTR_User.UserId=[CreateBy]
                             where enddate>=getdate() ";
-            }
-            else { 
-                int Accountid = Util.getAccountID();
-            SQL = $@"SELECT  
+      } else {
+        int Accountid = Util.getAccountID();
+        SQL = $@"SELECT  
                             Firstname + ' ' + MiddleName + ' ' + LastName as [User],
                             [NOCName],
                             [StartDate],
@@ -266,43 +275,36 @@ namespace eX_Portal.Controllers {
                             FROM [MSTR_NOC]
                             LEFT OUTER JOIN MSTR_User
                             ON MSTR_User.UserId=[CreateBy]
-                            where enddate>getdate()  and [MSTR_NOC].Accountid= " +Accountid;
+                            where enddate>getdate()  and [MSTR_NOC].Accountid= " + Accountid;
 
-            }
+      }
 
-           
 
-            NOC_QView nView = new NOC_QView(SQL);
-            if (exLogic.User.hasAccess("NOC.VIEW"))
-                nView.addMenu("View", Url.Action("View", new { ID = "_Pkey" }));
-            if (exLogic.User.hasAccess("NOC.PROCESS"))
-            {
-                nView.addMenu("Process", Url.Action("Process", new { ID = "_Pkey" }));
-            }
-            if (exLogic.User.hasAccess("NOC.3D"))
-            {
-                nView.addMenu("3D", Url.Action("3D", new { ID = "_Pkey" }));
-            }
-            if (Request.IsAjaxRequest())
-            {
-                Response.ContentType = "text/javascript";
-                return PartialView("NOC_qViewData", nView);
-            }
-            else
-            {
-                return View(nView);
-            }//if(IsAjaxRequest)
-        }
 
-        public ActionResult History()
-        {
-            //if (!exLogic.User.hasAccess("NOC"))
-            //    return RedirectToAction("NoAccess", "Home");
-            String SQL = "";
+      NOC_QView nView = new NOC_QView(SQL);
+      if (exLogic.User.hasAccess("NOC.VIEW"))
+        nView.addMenu("View", Url.Action("View", new { ID = "_Pkey" }));
+      if (exLogic.User.hasAccess("NOC.PROCESS")) {
+        nView.addMenu("Process", Url.Action("Process", new { ID = "_Pkey" }));
+      }
+      if (exLogic.User.hasAccess("NOC.3D")) {
+        nView.addMenu("3D", Url.Action("3D", new { ID = "_Pkey" }));
+      }
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("NOC_qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
+    }
 
-            if (exLogic.User.hasAccess("DRONE.MANAGE"))
-            {
-                SQL = $@"SELECT  
+    public ActionResult History() {
+      //if (!exLogic.User.hasAccess("NOC"))
+      //    return RedirectToAction("NoAccess", "Home");
+      String SQL = "";
+
+      if (exLogic.User.hasAccess("DRONE.MANAGE")) {
+        SQL = $@"SELECT  
                             [MSTR_Account].[name] as [Organization],
                             Firstname + ' ' + MiddleName + ' ' + LastName as [User],
                             [NOCName],
@@ -323,11 +325,9 @@ namespace eX_Portal.Controllers {
                             LEFT OUTER JOIN MSTR_User
                             ON MSTR_User.UserId=[CreateBy]
                             where enddate<getdate() ";
-            }
-            else
-            {
-                int Accountid = Util.getAccountID();
-                SQL = $@"SELECT  
+      } else {
+        int Accountid = Util.getAccountID();
+        SQL = $@"SELECT  
                             Firstname + ' ' + MiddleName + ' ' + LastName as [User],
                             [NOCName],
                             [StartDate],
@@ -346,28 +346,23 @@ namespace eX_Portal.Controllers {
                             ON MSTR_User.UserId=[CreateBy]
                             where enddate<getdate() and [MSTR_NOC].Accountid= " + Accountid;
 
-            }
+      }
 
 
+      NOC_QView nView = new NOC_QView(SQL);
+      if (exLogic.User.hasAccess("NOC.VIEW"))
+        nView.addMenu("View", Url.Action("View", new { ID = "_Pkey" }));
 
-            NOC_QView nView = new NOC_QView(SQL);
-            if (exLogic.User.hasAccess("NOC.VIEW"))
-                nView.addMenu("View", Url.Action("View", new { ID = "_Pkey" }));
-            
-            if (exLogic.User.hasAccess("NOC.3D"))
-            {
-                nView.addMenu("3D", Url.Action("3D", new { ID = "_Pkey" }));
-            }
-            if (Request.IsAjaxRequest())
-            {
-                Response.ContentType = "text/javascript";
-                return PartialView("NOC_qViewData", nView);
-            }
-            else
-            {
-                return View(nView);
-            }//if(IsAjaxRequest)
-        }
+      if (exLogic.User.hasAccess("NOC.3D")) {
+        nView.addMenu("3D", Url.Action("3D", new { ID = "_Pkey" }));
+      }
+      if (Request.IsAjaxRequest()) {
+        Response.ContentType = "text/javascript";
+        return PartialView("NOC_qViewData", nView);
+      } else {
+        return View(nView);
+      }//if(IsAjaxRequest)
+    }
 
-    }//public class nocController
+  }//public class nocController
 }//namespace eX_Portal.Controllers

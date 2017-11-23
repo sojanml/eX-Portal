@@ -5,11 +5,131 @@ using System.Linq;
 using System.Web;
 
 namespace eX_Portal.ViewModel {
+
+  public class PilotInfo : MSTR_User {
+
+    private ExponentPortalEntities ctx = new ExponentPortalEntities();
+
+
+    public PilotInfo(int PilotID = 0) {
+      var Usr = ctx.MSTR_User.Where(w => w.UserId == PilotID).FirstOrDefault();
+      if (Usr != null) {
+        if (String.IsNullOrEmpty(Usr.PhotoUrl)) {
+          this.PhotoUrl = "/images/PilotImage.png";
+        } else {
+          Usr.PhotoUrl = $"/Upload/User/{Usr.UserId}/{Usr.PhotoUrl}";
+          if (!System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath(Usr.PhotoUrl)))
+            this.PhotoUrl = "/images/PilotImage.png";
+        }
+        this.FirstName = Usr.FirstName;
+        this.LastName = Usr.LastName;
+        this.UserId = Usr.UserId;
+        this.EmailId = Usr.EmailId;
+        this.RPASPermitNo = Usr.RPASPermitNo;
+        this.DOE_RPASPermit = Usr.DOE_RPASPermit;
+        this.DOI_RPASPermit = Usr.DOI_RPASPermit;
+      }
+    }
+
+    public String FullName { get { return String.Concat(FirstName, " ", LastName); } }
+    public String IssueDate { get { return DOI_RPASPermit == null ? "Invalid" : ((DateTime)DOI_RPASPermit).ToString("dd-MMM-yyyy"); } }
+    public String ExpiryDate { get { return DOE_RPASPermit == null ? "Invalid" : ((DateTime)DOE_RPASPermit).ToString("dd-MMM-yyyy"); } }
+  }
+
+  public class DroneInfo {
+    private String _DroneRefName;
+    private String _Manufacturer;
+    private String _UAVType;
+    private String _QRCode;
+    private String _UAVGroup;
+
+    private int DroneID = 0;
+    
+    private ExponentPortalEntities ctx = new ExponentPortalEntities();
+
+    public DroneInfo(int DroneID = 0) {
+      this.DroneID = DroneID;
+      var DroneInfo = ctx.MSTR_Drone.Where(w => w.DroneId == DroneID).FirstOrDefault();
+      if(DroneInfo != null) {
+        _DroneRefName = DroneInfo.RefName;
+        if (String.IsNullOrWhiteSpace(_DroneRefName))
+          _DroneRefName = DroneInfo.ModelName;
+        _Manufacturer = ctx.LUP_Drone
+          .Where(w => w.Type == "Manufacturer" && w.TypeId == DroneInfo.ManufactureId)
+          .Select(s => s.Name)
+          .FirstOrDefault();
+        var xUAVType = ctx.LUP_Drone
+          .Where(w => w.Type == "UAVType" && w.TypeId == DroneInfo.UavTypeId)
+          .Select(s => new {
+           Name = s.Name,
+           Group = s.GroupName
+          })
+          .FirstOrDefault();
+
+        if(xUAVType != null) {
+          _UAVType = xUAVType.Name;
+          _UAVGroup = xUAVType.Group;
+        }
+
+        String QRCodePath = System.Web.Hosting.HostingEnvironment.MapPath("/Upload/QRCode");
+        String QRImagePath = $"{QRCodePath}//{DroneID}.png";
+        if (System.IO.File.Exists(QRImagePath)) {
+          _QRCode = $"/Upload/QRCode/{DroneID}.png";
+        } else {
+          _QRCode = $"/Images/QR-Code.png";
+        }
+      }
+    }
+
+    public String DroneRefName {
+      get { return _DroneRefName; }
+    }
+
+    public String Manufacturer {
+      get { return _Manufacturer; }
+    }
+    public String UAVType {
+      get { return _UAVType; }
+    }
+    public String QRCode {
+      get { return _QRCode; }
+    }
+    public String UAVGroup {
+      get { return _UAVGroup; }
+    }
+  }
+
+
   public class NOC_Details_Ext: Models.NOC_Details {
     private ExponentPortalEntities ctx = new ExponentPortalEntities();
     private String _droneName;
     private String _pilotName;
     private String _droneIcon;
+    public DroneInfo DroneInfo;
+    public PilotInfo PilotInfo;
+
+    public NOC_Details_Ext(NOC_Details det) {
+      this.DroneID = det.DroneID;
+      this.Coordinates = det.Coordinates;
+      this.EndDate = det.EndDate;
+      this.EndTime = det.EndTime;
+      this.IsUseCamara = det.IsUseCamara;
+      this.LOS = det.LOS;
+      this.MaxAltitude = det.MaxAltitude;
+      this.MinAltitude = det.MinAltitude;
+      this.NocID = det.NocID;
+      this.OuterCoordinates = det.OuterCoordinates;
+      this.PilotID = det.PilotID;
+      this.StartDate = det.StartDate;
+      this.StartTime = det.StartTime;
+      this.Status = det.Status;
+      this.StatusChangedBy = det.StatusChangedBy;
+      this.StatusChangedOn = det.StatusChangedOn;
+      this.NocBuffer = det.NocBuffer;
+
+      DroneInfo = new DroneInfo(det.DroneID);
+      PilotInfo = new PilotInfo(det.PilotID);
+    }
 
     public String DroneName {
       get {
@@ -35,6 +155,8 @@ namespace eX_Portal.ViewModel {
         return _pilotName;
       }
     }
+
+    
   }
 
   public class MSTR_NOC_Ext: Models.MSTR_NOC {
@@ -54,30 +176,12 @@ namespace eX_Portal.ViewModel {
       this.FlightType = noc.FlightType;
       this.NocApplicationID = noc.NocApplicationID;
       this.AccountID = noc.AccountID;
-
+      this.CreateBy = noc.CreateBy;
 
       this.NOC_Details = noc.NOC_Details;
 
       foreach(var det in noc.NOC_Details) {
-        NOC_Details_Ext NocDetail = new NOC_Details_Ext {
-          DroneID = det.DroneID,
-          Coordinates = det.Coordinates,
-          EndDate = det.EndDate,
-          EndTime = det.EndTime,
-          IsUseCamara = det.IsUseCamara,
-          LOS = det.LOS,
-          MaxAltitude = det.MaxAltitude,
-          MinAltitude = det.MinAltitude,
-          NocID = det.NocID,
-          OuterCoordinates = det.OuterCoordinates,
-          PilotID = det.PilotID,
-          StartDate = det.StartDate,
-          StartTime = det.StartTime,
-          Status = det.Status,
-          StatusChangedBy = det.StatusChangedBy,
-          StatusChangedOn = det.StatusChangedOn,
-          NocBuffer = det.NocBuffer
-        };
+        NOC_Details_Ext NocDetail = new NOC_Details_Ext(det);
         _NOC_Details_Ext.Add(NocDetail);
       }
     }
