@@ -28,7 +28,7 @@ namespace eX_Portal.ViewModel {
     private int DroneSerialNumber = 0;
     private int AccountID = 0;
     private int LoginUserID = 0;
-    public int Create() {
+    public MSTR_Drone Create() {
       int? DroneSerialNo = db.MSTR_Drone.OrderByDescending(u => u.DroneSerialNo).Select(e => e.DroneSerialNo).FirstOrDefault();
 
       if(RpasTypeId == 0 && !String.IsNullOrEmpty(OtherRPASType)) {
@@ -37,7 +37,7 @@ namespace eX_Portal.ViewModel {
       if(ManufactureID == 0 && !String.IsNullOrEmpty(OtherManufacturer)) {
         ManufactureID = CreateType("Manufacturer", OtherManufacturer);
       }
-
+            DroneSerialNo = DroneSerialNo + 1;
       if (DroneSerialNo == null) DroneSerialNo = 1;
       if (DroneSerialNo < 1000) DroneSerialNo += 1000;
 
@@ -67,8 +67,10 @@ namespace eX_Portal.ViewModel {
       };
       db.M2M_Drone_User.Add(UserDrone);
       db.SaveChanges();
-
-      return Drone.DroneId;
+          //  db.Entry(Drone).GetDatabaseValues();
+            //  MSTR_Drone NewDrone = db.MSTR_Drone.Where(l => l.DroneId == Drone.DroneId).Select(l=>l).FirstOrDefault();
+            db.Entry(Drone).Reload();
+            return Drone;
 
     }
 

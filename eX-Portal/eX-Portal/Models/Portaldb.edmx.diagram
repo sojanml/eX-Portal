@@ -43,7 +43,7 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PortalAlertRegistration" Width="1.5" PointX="11.75" PointY="4.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.FlightInfo" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_RPAS_User" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone" Width="1.5" PointX="12.75" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone" Width="1.5" PointX="12.75" PointY="2.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxCost" Width="1.5" PointX="2.75" PointY="12.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.ApproalDetail1" Width="1.5" PointX="17.375" PointY="22.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxLog1" Width="1.5" PointX="4.75" PointY="12.75" IsExpanded="false" />
