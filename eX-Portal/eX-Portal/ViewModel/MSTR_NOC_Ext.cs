@@ -36,6 +36,8 @@ namespace eX_Portal.ViewModel {
     public String ExpiryDate { get { return DOE_RPASPermit == null ? "Invalid" : ((DateTime)DOE_RPASPermit).ToString("dd-MMM-yyyy"); } }
   }
 
+
+
   public class DroneInfo {
     private String _DroneRefName;
     private String _Manufacturer;
@@ -44,29 +46,31 @@ namespace eX_Portal.ViewModel {
     private String _UAVGroup;
 
     private int DroneID = 0;
-    
+    private MSTR_Drone _droneinfo = null;
+
+
     private ExponentPortalEntities ctx = new ExponentPortalEntities();
 
     public DroneInfo(int DroneID = 0) {
       this.DroneID = DroneID;
-      var DroneInfo = ctx.MSTR_Drone.Where(w => w.DroneId == DroneID).FirstOrDefault();
-      if(DroneInfo != null) {
-        _DroneRefName = DroneInfo.RefName;
+      _droneinfo = ctx.MSTR_Drone.Where(w => w.DroneId == DroneID).FirstOrDefault();
+      if (_droneinfo != null) {
+        _DroneRefName = _droneinfo.RefName;
         if (String.IsNullOrWhiteSpace(_DroneRefName))
-          _DroneRefName = DroneInfo.ModelName;
+          _DroneRefName = _droneinfo.ModelName;
         _Manufacturer = ctx.LUP_Drone
-          .Where(w => w.Type == "Manufacturer" && w.TypeId == DroneInfo.ManufactureId)
+          .Where(w => w.Type == "Manufacturer" && w.TypeId == _droneinfo.ManufactureId)
           .Select(s => s.Name)
           .FirstOrDefault();
         var xUAVType = ctx.LUP_Drone
-          .Where(w => w.Type == "UAVType" && w.TypeId == DroneInfo.UavTypeId)
+          .Where(w => w.Type == "UAVType" && w.TypeId == _droneinfo.UavTypeId)
           .Select(s => new {
-           Name = s.Name,
-           Group = s.GroupName
+            Name = s.Name,
+            Group = s.GroupName
           })
           .FirstOrDefault();
 
-        if(xUAVType != null) {
+        if (xUAVType != null) {
           _UAVType = xUAVType.Name;
           _UAVGroup = xUAVType.Group;
         }
@@ -96,6 +100,15 @@ namespace eX_Portal.ViewModel {
     }
     public String UAVGroup {
       get { return _UAVGroup; }
+    }
+    public int AccountID {
+      get { return _droneinfo == null ? 0 : (int)_droneinfo.AccountID; }
+    }
+    public String CommissionDate {
+      get { return _droneinfo == null ? "Invalid" : ((DateTime)_droneinfo.CommissionDate).ToString("dd-MMM-yyyy"); }
+    }
+    public String DroneName { 
+      get { return _droneinfo == null ? "Invalid" : _droneinfo.DroneName; }
     }
   }
 

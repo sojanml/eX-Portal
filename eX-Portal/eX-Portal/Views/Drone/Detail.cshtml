@@ -1,15 +1,57 @@
-﻿@using eX_Portal.exLogic;
+﻿@model eX_Portal.ViewModel.DroneDetailView
+@using eX_Portal.exLogic;
 
 <section class="top_space">
   <div class="column column-1-of-3 dashboard-column">
-    Column 1
+    <div class="RpasGroupIcon" style="background-image:url('/images/FlightType-@(Model.DroneInfo.UAVGroup).png')"></div>
+    <ul class="list-info">
+      <li><b>@Model.DroneInfo.DroneName</b></li>
+      <li>Reference: <span>@Model.DroneInfo.DroneRefName</span></li>
+      <li>Commission Date: <span>@Model.DroneInfo.CommissionDate</span></li>
+      <li>Manufacture: <span>@Model.DroneInfo.Manufacturer</span></li>
+      <li>RPAS Type: <span>@Model.DroneInfo.UAVType</span></li>
+    </ul>
+
+    <ul style="margin-top:20px;" class="list-info">
+      <li><b>@Model.AccountInfo.Name</b></li>
+      <li><span>@Model.AccountInfo.EmailId</span></li>
+      <li><span>@Model.AccountInfo.MobileNo</span></li>
+    </ul>
+
+    <div style="text-align:center; padding:20px; height:200px;"><img 
+      style="width:200px; height:200px;" src="@Model.DroneInfo.QRCode" /></div>
+    	
   </div>
 
   <div class="column column-1-of-3 dashboard-column">
-    Column 2
+    @foreach(var Flight in Model.FlightInfo) {
+      <div class="PilotImageIcon" style="background-image:url('@Flight.PilotInfo.PhotoUrl')"></div>
+      <ul class="flight-info">
+        <li><b># @Flight.ID on @Flight.FlightDate.ToString("dd-MMM-yyyy HH:mm")</b></li>
+        <li>Pilot: <span>@Flight.PilotInfo.FullName</span></li>
+        <li>Duration: <span>@Flight.Duration </span> (hh:mm)</li>
+        <li>Altitude: <span>@Flight.MaxAltitude.ToString("###,###")</span> Meter</li>
+        <li>Distance: <span>@Flight.FlightDistance.ToString("###,###")</span> Meter</li>
+      </ul>
+    }
   </div>
-  <div class="column column-1-of-3 dashboard-column">
-    Column 3
+  <div class="column column-1-of-3 dashboard-column"> 
+    @foreach (var Pilot in Model.PilotInfo.OrderBy( o => o.FullName)) {
+      <div class="pilot-info">
+        <div class="pilot-image" style="background-image: url('@Pilot.PhotoUrl')"></div>
+        <div class="info-title">@Pilot.FullName</div>
+        <div class="info-sub-title">@Pilot.EmailId</div>
+        <div class="info-registration">@Pilot.RPASPermitNo</div>
+        <div><span>Issue: @Pilot.IssueDate</span>,
+          <span>Expiry: @Pilot.ExpiryDate</span>
+        </div>
+        <div style="clear:both"></div>
+      </div>
+    }
   </div>
 
 </section>
+
+@section header {
+  <link href="~/Content/DroneDetail.css" rel="stylesheet" />
+}

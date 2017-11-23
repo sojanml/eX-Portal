@@ -8,6 +8,90 @@ using System.Web.Mvc;
 
 namespace eX_Portal.ViewModel {
 
+  public class DroneDetailView {
+    private ExponentPortalEntities db = new ExponentPortalEntities();
+    public DroneInfo DroneInfo;
+    public AccountInfo AccountInfo;
+    public List<FlightInfo> FlightInfo ;
+    public List<PilotInfo> PilotInfo;
+
+    public DroneDetailView(int DroneID) {
+      DroneInfo = new DroneInfo(DroneID);
+      AccountInfo = new AccountInfo(DroneInfo.AccountID);
+
+      FlightInfo = db
+        .DroneFlights
+        .Where(w => w.DroneID == DroneID && w.MaxAltitude > 5)
+        .OrderBy(o => o.ID)
+        .Select(s => new FlightInfo {
+          ID = s.ID,
+          FlightDate  = (DateTime)s.FlightDate,
+          FlightDistance = (int)s.FlightDistance,
+          FlightHours = (int)s.FlightHours,
+          MaxAltitude = (int)s.MaxAltitude,
+          PilotID = (int)s.PilotID
+        })
+        .Take(5)
+        .ToList();
+
+       
+      var PilotIDs = db
+        .M2M_Drone_User
+        .Where(w => w.DroneID == DroneID)
+        .OrderBy(o => o.DroneID)
+        .Select(s => s.UserID)
+        .ToList();
+      PilotInfo = new List<ViewModel.PilotInfo>();
+      foreach (var PilotID in PilotIDs) {
+        PilotInfo.Add(new ViewModel.PilotInfo(PilotID));
+      }
+    }
+  }
+
+
+  public class AccountInfo : MSTR_Account {
+    private ExponentPortalEntities db = new ExponentPortalEntities();
+
+    public AccountInfo(int AccountID = 0) {
+      var account = db.MSTR_Account.Where(w => w.AccountId == AccountID).FirstOrDefault();
+      if (account != null) {
+        this.Name = account.Name;
+        this.EmailId = account.EmailId;
+        this.MobileNo = account.MobileNo;
+      }
+    }
+  }
+
+
+  public class FlightInfo {
+    private String _Duration;
+
+    private ExponentPortalEntities db = new ExponentPortalEntities();
+    int _PilotID = 0;
+    public int PilotID {
+      get { return _PilotID; }
+      set {
+        _PilotID = value;
+        PilotInfo = new PilotInfo(_PilotID);
+      }
+    }
+
+    public int ID { get; set; }
+    public DateTime FlightDate { get; set; }
+    public int FlightDistance { get; set; }
+    public int FlightHours { get; set; }
+    public int MaxAltitude { get; set; }
+    public PilotInfo PilotInfo;
+
+    public String Duration {
+      get {
+        TimeSpan t = TimeSpan.FromSeconds(FlightHours);        
+        return t.ToString(@"hh\:mm");
+      }
+    }
+
+  }
+
   public class DroneCreateModel {
     private ExponentPortalEntities db = new ExponentPortalEntities();
 

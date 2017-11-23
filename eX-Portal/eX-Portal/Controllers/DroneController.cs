@@ -490,11 +490,11 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasDrone(DroneID))
         return RedirectToAction("NoAccess", "Home");
 
-      ViewBag.Title = Util.getDroneName(DroneID);
-      ViewBag.DroneID = DroneID;
-      String UploadPath = Server.MapPath(Url.Content(QRCodeUploadDir));
-      ViewBag.QRLocation = "/Upload/QRCode/" + DroneID + ".jpeg";
-      return View();
+      
+      var DroneDetail = new ViewModel.DroneDetailView(DroneID);
+      ViewBag.Title = DroneDetail.DroneInfo.DroneName;
+
+      return View(DroneDetail);
     }
 
     public ActionResult DroneView([Bind(Prefix = "ID")] int DroneID) {

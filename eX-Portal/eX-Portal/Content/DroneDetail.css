@@ -1,0 +1,88 @@
+div.RpasGroupIcon {
+  width: 40px;
+  height: 40px;
+  float: right;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 5px 5px 0px 0px;
+}
+
+ul.list-info {
+  margin: 10px 0px 0px 10px;
+  padding: 0px;
+  list-style: none;
+}
+ul.list-info li {
+  margin: 0px 0px 5px 0px;
+  padding: 0px;
+  list-style: none;
+}
+ul.list-info li span {
+  color: #53a100;
+}
+ul.list-info li b {
+  color: #018aff;
+}
+
+section.top_space {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 15px;
+}
+section.top_space > div.column {
+  grid-row: 1;
+  margin-right: 0px;
+}
+
+ul.flight-info {
+  margin: 10px 0px 10px 10px;
+  padding: 0px;
+  list-style: none;
+}
+ul.flight-info li {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+ul.flight-info li span {
+  color: #53a100;
+}
+ul.flight-info li b {
+  color: #f2a003;
+}
+
+div.PilotImageIcon {
+  width: 50px;
+  height: 50px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  float: right;
+  margin-right: 20px;
+  margin-top: 10px;
+  border-radius: 50%;
+  border: 1px solid #f2a003;
+}
+
+div.pilot-info {
+  margin: 10px 0px 20px 20px;
+}
+div.pilot-info div.pilot-image {
+  float: right;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px #53a100 solid;
+  background-size: cover;
+  margin-bottom: 5px;
+  margin-right: 20px;
+}
+div.pilot-info div.info-title {
+  font-size: 14pt;
+  color: #53a100;
+  font-weight: bold;
+}
+div.pilot-info div.info-sub-title {
+  color: #797979;
+}
