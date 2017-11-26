@@ -1088,3 +1088,14 @@ div.InfoWindowUpdate div.Location {
 div.InfoWindowUpdate div.Altitude {
   color: #53a100;
 }
+div.InfoWindowUpdate div.Link {
+  margin-top: 10px;
+}
+div.InfoWindowUpdate div.Link a {
+  text-decoration: none;
+  color: white;
+}
+div.InfoWindowUpdate div.Link a:hover {
+  text-decoration: underline;
+  color: floralwhite;
+}
