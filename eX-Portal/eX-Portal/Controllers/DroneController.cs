@@ -17,8 +17,11 @@ namespace eX_Portal.Controllers {
   public class DroneController : Controller {
     public ExponentPortalEntities ctx = new ExponentPortalEntities();
     static String RootUploadDir = "~/Upload/Drone/";
-    static String QRCodeUploadDir = "~/Upload/QRCode/";
-    public ActionResult Live() {
+        static String QRCodeUploadDir = "~/Upload/QRCode/";
+        static String QRDir50 = "~/Upload/QRCode/By50/";
+        static String QRDir100= "~/Upload/QRCode/By100/";
+        static String QRDir250 = "~/Upload/QRCode/By250/";
+        public ActionResult Live() {
       if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Live RPAS";
@@ -497,40 +500,16 @@ namespace eX_Portal.Controllers {
       return View(DroneDetail);
     }
 
-    public ActionResult DroneView([Bind(Prefix = "ID")] int DroneID) {
-      ViewBag.Title = Util.getDroneName(DroneID);
-      ViewBag.DroneID = DroneID;
-      String SQL = "SELECT \n" +
-      "  D.[DroneName] as RPAS,\n" +
-      "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
-      "  D.[DroneSerialNo] as [RPAS S.no],\n" +
-      "  O.Name as Organisation,\n" +
-      "  M.Name as ManufactureName,\n" +
-      "  U.Name as RPASType\n" +
-      //"  D.[DroneIdHexa] as RPASHexaId,\n" +
-      //"  D.[ModelName] as Description,\n" +
-      //"  RegistrationAuthority as RegistrationAuthority\n" +
-      "FROM\n" +
-      "  [MSTR_Drone] D\n" +
-      "Left join MSTR_Account  O on\n" +
-      "  D.AccountID = O.AccountID\n" +
-      "Left join LUP_Drone M on\n" +
-      "  ManufactureID = M.TypeID and\n" +
-      "  M.Type='Manufacturer' " +
-      "Left join LUP_Drone U on\n" +
-      "  UAVTypeID = U.TypeID and\n" +
-      "  U.Type= 'UAVType'\n" +
-      "WHERE\n" +
-      "  D.[DroneId]=" + DroneID;
-      qDetailView nView = new qDetailView(SQL);
-      //this part for adding link to requred fields in the details
-      //  OwnerId = Util.GetAccountIDFromDrone(DroneID);
-
-      //OwnerFormat = "<a  href='/Admin/AccountDetail/" + OwnerId + "'>$OwnerName$</a>";//url
-      //nView.FormatCols.Add("OwnerName", OwnerFormat); //Adding the Column required for formatting  
-
-
-      return View(nView);
+    public ActionResult DroneView([Bind(Prefix = "ID")] string  DroneName) {
+    
+      ViewBag.DroneName = DroneName;
+    
+        var DroneDetail = new ViewModel.DroneDetailView(DroneName);
+            if (DroneDetail.DroneInfo.DroneName != "Invalid")
+                ViewBag.Title ="";
+            else
+                ViewBag.Title = "";
+        return View(DroneDetail);
     }
 
 
@@ -738,7 +717,7 @@ namespace eX_Portal.Controllers {
     // POST: Drone/Create
     [HttpPost]
     [ValidateInput(false)]
-    public ActionResult Create(ViewModel.DroneCreateModel DroneView) {
+    public ActionResult Create(ViewModel.DroneCreateModel DroneView)                        {
       if (!exLogic.User.hasAccess("DRONE.CREATE"))
         return RedirectToAction("NoAccess", "Home");
       if (DroneView.ManufactureID == 0) {
@@ -758,7 +737,7 @@ namespace eX_Portal.Controllers {
       if (DroneView.CommissionDate == null) {
         ModelState.AddModelError("CommissionDate", "Commission Date is Required.");
       }
-      if (DroneView.CommissionDate > DateTime.Now.AddDays(-1)) {
+      if(DroneView.CommissionDate.Date>DateTime.Now.Date) {
         ModelState.AddModelError("CommissionDate", "Commission Date is Invalid.");
       }
 
@@ -770,36 +749,54 @@ namespace eX_Portal.Controllers {
         return View(DroneView);
       }
 
-      int DroneId = DroneView.Create();
-      SaveQRCode(DroneId);
-      MoveDroneUploadFileTo(DroneId);
+      MSTR_Drone Drone = DroneView.Create();
+            SaveQRCode(Drone.DroneName);
+      MoveDroneUploadFileTo(Drone.DroneId);
       if (exLogic.User.hasAccess("DRONE.MANAGE"))
-        return RedirectToAction("Manage", new { ID = DroneId });
+        return RedirectToAction("Manage", new { ID = Drone.DroneId });
       else
         return RedirectToAction("index", "Home");
     }
 
-    private void SaveQRCode(int ID) {
-      string level = "L";
-      Url generator = new Url("http://www.exponent-ts.com/");
-      string payload = generator.ToString();
-      String UploadPath = Server.MapPath(Url.Content(QRCodeUploadDir));
-      QRCodeGenerator.ECCLevel eccLevel = (QRCodeGenerator.ECCLevel)(level == "L" ? 0 : level == "M" ? 1 : level == "Q" ? 2 : 3);
-      using (QRCodeGenerator qrGenerator = new QRCodeGenerator()) {
+        private void SaveQRCode(string DroneName)
+        {
+            string level = "L";
+            Url generator = new Url("http://dcaa.exponent-ts.com/Drone/DroneView/"+ DroneName);
+            string payload = generator.ToString();
+            String UploadPath = Server.MapPath(Url.Content(QRCodeUploadDir));
+            String PathBy50 = Server.MapPath(Url.Content(QRDir50));
+            String PathBy100 = Server.MapPath(Url.Content(QRDir100));
+            String PathBy250 = Server.MapPath(Url.Content(QRDir250));
 
-        using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload, eccLevel)) {
-          using (QRCode qrCode = new QRCode(qrCodeData)) {
-            Bitmap img = qrCode.GetGraphic(20, Color.Black, Color.White,
-                null, (int)1);
-            ImageFormat imageFormat = ImageFormat.Jpeg;
+            QRCodeGenerator.ECCLevel eccLevel = (QRCodeGenerator.ECCLevel)(level == "L" ? 0 : level == "M" ? 1 : level == "Q" ? 2 : 3);
+            using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
+            {
 
-            img.Save(UploadPath + ID + ".jpeg", imageFormat);
+                using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload, eccLevel))
+                {
+                    using (QRCode qrCode = new QRCode(qrCodeData))
+                    {
+                       // Bitmap img = qrCode.GetGraphic(5, Color.Black, Color.White,
+                         //   null,0,0,false);
 
-          }
+                        Bitmap img50 = qrCode.GetGraphic(2, Color.Black, Color.White,
+                            null, 0, 0, false);
+                        Bitmap img100 = qrCode.GetGraphic(4, Color.Black, Color.White,
+                            null, 0, 0, false);
+                        Bitmap img250 = qrCode.GetGraphic(15, Color.Black, Color.White,
+                            null, 0, 0, false);
+                        ImageFormat imageFormat = ImageFormat.Png;
+                       
+                       // img.Save(UploadPath + DroneName+".png", imageFormat);
+                        img50.Save(PathBy50 + DroneName + ".png", imageFormat);
+                        img100.Save(PathBy100 + DroneName + ".png", imageFormat);
+                        img250.Save(PathBy250 + DroneName + ".png", imageFormat);
+
+                    }
+                }
+            }
         }
-      }
-    }
-    public ActionResult ReAssign(int id) {
+        public ActionResult ReAssign(int id) {
       if (!exLogic.User.hasAccess("DRONE.MANAGE"))
         return RedirectToAction("NoAccess", "Home");
       ViewBag.DroneId = id;

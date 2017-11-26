@@ -95,7 +95,7 @@
       <div class="title">
         <span class="hilite">[sl#]</span> NOC Information
         <div id="" data-id="[#]" class="button btnSetCoordinates"><span class="icon gps">&#xf1cd;</span>Set Coordinates </div>
-        <div data-id="[#]" class="button btnAddNoc"><span class="icon add">&#xf055;</span>Add NOC Like this</div>
+        <div data-id="[#]" class="button btnAddNoc"><span class="icon add">&#xf055;</span>Add Duplicate NOC</div>
         <div data-id="[#]" class="button btnDeleteNoc"><span class="icon delete">&#xf057;</span>Delete </div>
       </div>
 
@@ -104,7 +104,7 @@
           <td>Start Date &amp; Time</td>
           <td>End Date &amp; Time</td>
           <td>Altitude Min &amp; Max (Meter)</td>
-          <td>Line of Sight</td>
+          <td>Operation Type</td>
           <td>Camara in Use?</td>
         </tr>
         <tr>
@@ -138,7 +138,7 @@
       @if (IsOrgAdmin) {
         <div id="frm2" class="column column-half form-horizontal NoBorder" style="margin-bottom:5px;">
           <div class="form-group">
-           NOC Application User
+           Pilot
             <select class="form-control list-PilotID"                     
                     data-id="[#]"
                     data-val-required="Pilot is required."

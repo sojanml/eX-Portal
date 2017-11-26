@@ -752,7 +752,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="ManufactureId" Type="int" />
           <Property Name="UavTypeId" Type="int" />
           <Property Name="PartsGroupId" Type="int" />
-          <Property Name="DroneName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DroneName" Type="nvarchar" MaxLength="50" StoreGeneratedPattern="Computed" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="ModifiedBy" Type="int" />
@@ -3011,7 +3011,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="ManufactureId" Type="Int32" />
           <Property Name="UavTypeId" Type="Int32" />
           <Property Name="PartsGroupId" Type="Int32" />
-          <Property Name="DroneName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DroneName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="ModifiedBy" Type="Int32" />
