@@ -14,13 +14,6 @@ namespace eX_Portal.ViewModel {
     public PilotInfo(int PilotID = 0) {
       var Usr = ctx.MSTR_User.Where(w => w.UserId == PilotID).FirstOrDefault();
       if (Usr != null) {
-        if (String.IsNullOrEmpty(Usr.PhotoUrl)) {
-          this.PhotoUrl = "/images/PilotImage.png";
-        } else {
-          Usr.PhotoUrl = $"/Upload/User/{Usr.UserId}/{Usr.PhotoUrl}";
-          if (!System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath(Usr.PhotoUrl)))
-            this.PhotoUrl = "/images/PilotImage.png";
-        }
         this.FirstName = Usr.FirstName;
         this.LastName = Usr.LastName;
         this.UserId = Usr.UserId;
@@ -28,6 +21,15 @@ namespace eX_Portal.ViewModel {
         this.RPASPermitNo = Usr.RPASPermitNo;
         this.DOE_RPASPermit = Usr.DOE_RPASPermit;
         this.DOI_RPASPermit = Usr.DOI_RPASPermit;
+        this.PhotoUrl = Usr.PhotoUrl;
+
+        if (String.IsNullOrEmpty(this.PhotoUrl)) {
+          this.PhotoUrl = "/images/PilotImage.png";
+        } else {
+          this.PhotoUrl = $"/Upload/User/{Usr.UserId}/{Usr.PhotoUrl}";
+          if (!System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath(this.PhotoUrl)))
+            this.PhotoUrl = "/images/PilotImage.png";
+        }
       }
     }
 
@@ -76,9 +78,9 @@ namespace eX_Portal.ViewModel {
         }
 
         String QRCodePath = System.Web.Hosting.HostingEnvironment.MapPath("/Upload/QRCode");
-        String QRImagePath = $"{QRCodePath}//{DroneID}.png";
+        String QRImagePath = $"{QRCodePath}/By100/{_droneinfo.DroneName}.png";
         if (System.IO.File.Exists(QRImagePath)) {
-          _QRCode = $"/Upload/QRCode/{DroneID}.png";
+          _QRCode = $"/Upload/QRCode/By100/{_droneinfo.DroneName}.png";
         } else {
           _QRCode = $"/Images/QR-Code.png";
         }

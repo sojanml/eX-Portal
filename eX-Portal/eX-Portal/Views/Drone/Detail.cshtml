@@ -25,7 +25,6 @@
 
   <div class="column column-1-of-3 dashboard-column">
     @foreach(var Flight in Model.FlightInfo) {
-      <div class="PilotImageIcon" style="background-image:url('@Flight.PilotInfo.PhotoUrl')"></div>
       <ul class="flight-info">
         <li><b># @Flight.ID on @Flight.FlightDate.ToString("dd-MMM-yyyy HH:mm")</b></li>
         <li>Pilot: <span>@Flight.PilotInfo.FullName</span></li>
