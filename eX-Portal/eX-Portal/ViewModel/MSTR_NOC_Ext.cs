@@ -13,21 +13,24 @@ namespace eX_Portal.ViewModel {
 
     public PilotInfo(int PilotID = 0) {
       var Usr = ctx.MSTR_User.Where(w => w.UserId == PilotID).FirstOrDefault();
+
+      this.FirstName = Usr.FirstName;
+      this.LastName = Usr.LastName;
+      this.UserId = Usr.UserId;
+      this.EmailId = Usr.EmailId;
+      this.RPASPermitNo = Usr.RPASPermitNo;
+      this.DOE_RPASPermit = Usr.DOE_RPASPermit;
+      this.DOI_RPASPermit = Usr.DOI_RPASPermit;
+      this.PhotoUrl = Usr.PhotoUrl;
+
       if (Usr != null) {
-        if (String.IsNullOrEmpty(Usr.PhotoUrl)) {
+        if (String.IsNullOrEmpty(this.PhotoUrl)) {
           this.PhotoUrl = "/images/PilotImage.png";
         } else {
-          Usr.PhotoUrl = $"/Upload/User/{Usr.UserId}/{Usr.PhotoUrl}";
-          if (!System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath(Usr.PhotoUrl)))
+          this.PhotoUrl = $"/Upload/User/{Usr.UserId}/{this.PhotoUrl}";
+          if (!System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath(this.PhotoUrl)))
             this.PhotoUrl = "/images/PilotImage.png";
         }
-        this.FirstName = Usr.FirstName;
-        this.LastName = Usr.LastName;
-        this.UserId = Usr.UserId;
-        this.EmailId = Usr.EmailId;
-        this.RPASPermitNo = Usr.RPASPermitNo;
-        this.DOE_RPASPermit = Usr.DOE_RPASPermit;
-        this.DOI_RPASPermit = Usr.DOI_RPASPermit;
       }
     }
 
@@ -84,47 +87,42 @@ namespace eX_Portal.ViewModel {
         }
       }
     }
-        public DroneInfo(string DroneName = "")
-        {
-          //  this._droneinfo.DroneName = DroneName;
-            _droneinfo = ctx.MSTR_Drone.Where(w => w.DroneName == DroneName).FirstOrDefault();
-            if (_droneinfo != null)
-            {
-                _DroneRefName = _droneinfo.RefName;
-                if (String.IsNullOrWhiteSpace(_DroneRefName))
-                    _DroneRefName = _droneinfo.ModelName;
-                _Manufacturer = ctx.LUP_Drone
-                  .Where(w => w.Type == "Manufacturer" && w.TypeId == _droneinfo.ManufactureId)
-                  .Select(s => s.Name)
-                  .FirstOrDefault();
-                var xUAVType = ctx.LUP_Drone
-                  .Where(w => w.Type == "UAVType" && w.TypeId == _droneinfo.UavTypeId)
-                  .Select(s => new {
-                      Name = s.Name,
-                      Group = s.GroupName
-                  })
-                  .FirstOrDefault();
 
-                if (xUAVType != null)
-                {
-                    _UAVType = xUAVType.Name;
-                    _UAVGroup = xUAVType.Group;
-                }
+    public DroneInfo(string DroneName = "") {
+      //  this._droneinfo.DroneName = DroneName;
+      _droneinfo = ctx.MSTR_Drone.Where(w => w.DroneName == DroneName).FirstOrDefault();
+      if (_droneinfo != null) {
+        _DroneRefName = _droneinfo.RefName;
+        if (String.IsNullOrWhiteSpace(_DroneRefName))
+          _DroneRefName = _droneinfo.ModelName;
+        _Manufacturer = ctx.LUP_Drone
+          .Where(w => w.Type == "Manufacturer" && w.TypeId == _droneinfo.ManufactureId)
+          .Select(s => s.Name)
+          .FirstOrDefault();
+        var xUAVType = ctx.LUP_Drone
+          .Where(w => w.Type == "UAVType" && w.TypeId == _droneinfo.UavTypeId)
+          .Select(s => new {
+            Name = s.Name,
+            Group = s.GroupName
+          })
+          .FirstOrDefault();
 
-                String QRCodePath = System.Web.Hosting.HostingEnvironment.MapPath("/Upload/QRCode");
-                String QRImagePath = $"{QRCodePath}//{DroneName}.png";
-                if (System.IO.File.Exists(QRImagePath))
-                {
-                    _QRCode = $"/Upload/QRCode/By100/{DroneName}.png";
-                }
-                else
-                {
-                    _QRCode = $"/Images/QRCode.png";
-                }
-            }
+        if (xUAVType != null) {
+          _UAVType = xUAVType.Name;
+          _UAVGroup = xUAVType.Group;
         }
 
-        public String DroneRefName {
+        String QRCodePath = System.Web.Hosting.HostingEnvironment.MapPath("/Upload/QRCode");
+        String QRImagePath = $"{QRCodePath}//{DroneName}.png";
+        if (System.IO.File.Exists(QRImagePath)) {
+          _QRCode = $"/Upload/QRCode/By100/{DroneName}.png";
+        } else {
+          _QRCode = $"/Images/QRCode.png";
+        }
+      }
+    }
+
+    public String DroneRefName {
       get { return _DroneRefName; }
     }
 
