@@ -43,7 +43,7 @@ namespace eX_Portal.Controllers {
         Where IsPilot=1";
 
       if (!exLogic.User.hasAccess("DRONE.VIEWALL")) {
-        SQL += "\n WHERE MSTR_User.AccountID=" + Util.getAccountID();
+        SQL += "\n  and MSTR_User.AccountID=" + Util.getAccountID();
       }
 
       qView nView = new qView(SQL);

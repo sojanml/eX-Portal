@@ -1871,3 +1871,19 @@ div.UAV_Selection {
     }
   }
 }
+
+div.outer {
+    overflow: hidden;
+}
+
+div.center-helper {
+    float: left;
+    position: relative;
+    left: 50%;
+}
+
+div.inner {
+    float: left;
+    position: relative;
+    left: -50%;
+}

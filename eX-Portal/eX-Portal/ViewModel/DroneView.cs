@@ -46,6 +46,11 @@ namespace eX_Portal.ViewModel {
         PilotInfo.Add(new ViewModel.PilotInfo(PilotID));
       }
     }
+    public DroneDetailView(string DroneName)
+    {
+            DroneInfo = new DroneInfo(DroneName);
+            AccountInfo = new AccountInfo(DroneInfo.AccountID);
+    }
   }
 
 

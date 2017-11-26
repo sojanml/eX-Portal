@@ -76,16 +76,55 @@ namespace eX_Portal.ViewModel {
         }
 
         String QRCodePath = System.Web.Hosting.HostingEnvironment.MapPath("/Upload/QRCode");
-        String QRImagePath = $"{QRCodePath}//{DroneID}.png";
+        String QRImagePath = $"{QRCodePath}//{DroneName}.png";
         if (System.IO.File.Exists(QRImagePath)) {
-          _QRCode = $"/Upload/QRCode/{DroneID}.png";
+          _QRCode = $"/Upload/QRCode/By100/{DroneName}.png";
         } else {
-          _QRCode = $"/Images/QR-Code.png";
+          _QRCode = $"/Images/QRCode.png";
         }
       }
     }
+        public DroneInfo(string DroneName = "")
+        {
+          //  this._droneinfo.DroneName = DroneName;
+            _droneinfo = ctx.MSTR_Drone.Where(w => w.DroneName == DroneName).FirstOrDefault();
+            if (_droneinfo != null)
+            {
+                _DroneRefName = _droneinfo.RefName;
+                if (String.IsNullOrWhiteSpace(_DroneRefName))
+                    _DroneRefName = _droneinfo.ModelName;
+                _Manufacturer = ctx.LUP_Drone
+                  .Where(w => w.Type == "Manufacturer" && w.TypeId == _droneinfo.ManufactureId)
+                  .Select(s => s.Name)
+                  .FirstOrDefault();
+                var xUAVType = ctx.LUP_Drone
+                  .Where(w => w.Type == "UAVType" && w.TypeId == _droneinfo.UavTypeId)
+                  .Select(s => new {
+                      Name = s.Name,
+                      Group = s.GroupName
+                  })
+                  .FirstOrDefault();
 
-    public String DroneRefName {
+                if (xUAVType != null)
+                {
+                    _UAVType = xUAVType.Name;
+                    _UAVGroup = xUAVType.Group;
+                }
+
+                String QRCodePath = System.Web.Hosting.HostingEnvironment.MapPath("/Upload/QRCode");
+                String QRImagePath = $"{QRCodePath}//{DroneName}.png";
+                if (System.IO.File.Exists(QRImagePath))
+                {
+                    _QRCode = $"/Upload/QRCode/By100/{DroneName}.png";
+                }
+                else
+                {
+                    _QRCode = $"/Images/QRCode.png";
+                }
+            }
+        }
+
+        public String DroneRefName {
       get { return _DroneRefName; }
     }
 

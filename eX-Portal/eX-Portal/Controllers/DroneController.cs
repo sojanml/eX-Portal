@@ -500,40 +500,16 @@ namespace eX_Portal.Controllers {
       return View(DroneDetail);
     }
 
-    public ActionResult DroneView([Bind(Prefix = "ID")] int DroneID) {
-      ViewBag.Title = Util.getDroneName(DroneID);
-      ViewBag.DroneID = DroneID;
-      String SQL = "SELECT \n" +
-      "  D.[DroneName] as RPAS,\n" +
-      "  Convert(varchar(12), D.[CommissionDate], 6) As [Date],\n" +
-      "  D.[DroneSerialNo] as [RPAS S.no],\n" +
-      "  O.Name as Organisation,\n" +
-      "  M.Name as ManufactureName,\n" +
-      "  U.Name as RPASType\n" +
-      //"  D.[DroneIdHexa] as RPASHexaId,\n" +
-      //"  D.[ModelName] as Description,\n" +
-      //"  RegistrationAuthority as RegistrationAuthority\n" +
-      "FROM\n" +
-      "  [MSTR_Drone] D\n" +
-      "Left join MSTR_Account  O on\n" +
-      "  D.AccountID = O.AccountID\n" +
-      "Left join LUP_Drone M on\n" +
-      "  ManufactureID = M.TypeID and\n" +
-      "  M.Type='Manufacturer' " +
-      "Left join LUP_Drone U on\n" +
-      "  UAVTypeID = U.TypeID and\n" +
-      "  U.Type= 'UAVType'\n" +
-      "WHERE\n" +
-      "  D.[DroneId]=" + DroneID;
-      qDetailView nView = new qDetailView(SQL);
-      //this part for adding link to requred fields in the details
-      //  OwnerId = Util.GetAccountIDFromDrone(DroneID);
-
-      //OwnerFormat = "<a  href='/Admin/AccountDetail/" + OwnerId + "'>$OwnerName$</a>";//url
-      //nView.FormatCols.Add("OwnerName", OwnerFormat); //Adding the Column required for formatting  
-
-
-      return View(nView);
+    public ActionResult DroneView([Bind(Prefix = "ID")] string  DroneName) {
+    
+      ViewBag.DroneName = DroneName;
+    
+        var DroneDetail = new ViewModel.DroneDetailView(DroneName);
+            if (DroneDetail.DroneInfo.DroneName != "Invalid")
+                ViewBag.Title ="";
+            else
+                ViewBag.Title = "";
+        return View(DroneDetail);
     }
 
 

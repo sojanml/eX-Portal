@@ -1,14 +1,36 @@
 ﻿
-@model eX_Portal.exLogic.qDetailView
+@model eX_Portal.ViewModel.DroneDetailView
+@using eX_Portal.exLogic;
 
-@{
-    Layout = "~/Views/Shared/_eXPortalBeforeLogin.cshtml";
-}
+@if(Model.DroneInfo.DroneName != "Invalid")
+{ 
+<section class="top_space">
+    <div class="outer">
+        
+        <div class="center-helper">
+            <div class="inner column column-1-of-3 dashboard-column">
+                <div class="RpasGroupIcon" style="background-image:url('/images/FlightType-@(Model.DroneInfo.UAVGroup).png')"></div>
+                <div class="title"><b>@Model.DroneInfo.DroneName</b></div>
+                <ul class="list-info">
+                    
+                    <li>Reference: <span>@Model.DroneInfo.DroneRefName</span></li>
+                    <li>Commission Date: <span>@Model.DroneInfo.CommissionDate</span></li>
+                    <li>Manufacture: <span>@Model.DroneInfo.Manufacturer</span></li>
+                    <li>RPAS Type: <span>@Model.DroneInfo.UAVType</span></li>
+                </ul>
 
-@Html.Raw(Model.getTable())
+                <ul style="margin-top:20px;" class="list-info">
+                    <li><b>@Model.AccountInfo.Name</b></li>
+                    <li><span>@Model.AccountInfo.EmailId</span></li>
+                    <li><span>@Model.AccountInfo.MobileNo</span></li>
+                </ul>
 
-@section scripts {
-    <script type="text/javascript">
+                <div style="text-align:center; padding:20px; height:200px;">
+                    <img style="width:200px; height:200px;" src="@Model.DroneInfo.QRCode" />
+                </div>
 
-    </script>
+            </div>
+        </div>
+    </div>
+</section>
 }
