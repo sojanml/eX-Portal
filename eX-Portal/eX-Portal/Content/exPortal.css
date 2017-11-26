@@ -1,14 +1,14 @@
 @font-face {
   font-family: "FontAwesome";
-  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1470292567') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1470292567') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1470292567') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1470292567') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1470292567') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1470292567') format('woff2');
+  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
 }
 @font-face {
   font-family: "OpenSans";
-  src: url('../fonts/../fonts/OpenSans.ttf?1479187204') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1479187204') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1479187204') format('svg'), url('../fonts/../fonts/OpenSans.woff?1479187204') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1479187204') format('woff2');
+  src: url('../fonts/../fonts/OpenSans.ttf?1478508894') format('truetype'), url('../fonts/../fonts/OpenSans.eot?1478508894') format('embedded-opentype'), url('../fonts/../fonts/OpenSans.svg?1478508894') format('svg'), url('../fonts/../fonts/OpenSans.woff?1478508894') format('woff'), url('../fonts/../fonts/OpenSans.woff2?1478508894') format('woff2');
 }
 @font-face {
   font-family: "Gobold_Light";
-  src: url('../fonts/../fonts/GoboldThinLight.ttf?1479187204') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1479187204') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1479187204') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1479187204') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1479187204') format('woff2');
+  src: url('../fonts/../fonts/GoboldThinLight.ttf?1478593771') format('truetype'), url('../fonts/../fonts/GoboldThinLight.eot?1478593771') format('embedded-opentype'), url('../fonts/../fonts/GoboldThinLight.svg?1478593771') format('svg'), url('../fonts/../fonts/GoboldThinLight.woff?1478593771') format('woff'), url('../fonts/../fonts/GoboldThinLight.woff2?1478593771') format('woff2');
 }
 @-moz-keyframes spin {
   100% {
@@ -1031,6 +1031,7 @@ div.dashboard-column div.fixed-height {
 div.dashboard-column div.fixed-height-organisation {
   height: 125px;
   overflow: hidden;
+  position: relative;
 }
 div.dashboard-column div.fixed-height,
 div.dashboard-column div.fixed-height-organisation {
@@ -1140,6 +1141,11 @@ div.dashboard-column div.fixed-height-organisation ul.single-line li div.detail 
 div.dashboard-column div.toolbar {
   height: 20px;
   padding: 0px 0px 10px 0px;
+}
+div.dashboard-column div.toolbar.fixed {
+  position: absolute;
+  top: 10px;
+  right: 0px;
 }
 div.dashboard-column div.toolbar div.button {
   float: right;
@@ -1585,4 +1591,16 @@ div.inner {
   float: left;
   position: relative;
   left: -50%;
+}
+
+div.PilotImage {
+  width: 40px;
+  height: 40px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+  border-radius: 50%;
+  border: 1px silver solid;
+  float: left;
+  margin-right: 10px;
 }

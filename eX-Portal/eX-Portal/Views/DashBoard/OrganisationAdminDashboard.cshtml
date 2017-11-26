@@ -6,6 +6,9 @@ Layout = null;
 <section class="top_space">
   <div class="column column-1-of-3 dashboard-column">
     <div class="fixed-height-organisation">
+      <div class="toolbar fixed">
+        <a href="@Url.Action("Edit", "Pilot", new  { ID = @Model.Pilot.UserId })"> <div class="button">Edit Profile</div></a>
+      </div>
       <div class="SummaryImage" style="background-image:url('@Model.Pilot.PilotImage')"></div>
       <div class="SummaryCaption">
         @Model.Pilot.FirstName @Model.Pilot.MiddleName @Model.Pilot.LastName
@@ -56,22 +59,20 @@ Layout = null;
           </li>
       </ul>
 
-      <div class="toolbar">
-        <a href="@Url.Action("Edit", "Pilot", new  { ID = @Model.Pilot.UserId })"> <div class="button">Edit Profile</div></a>
-      </div>
+
       </div>
     </div>
 
 </section>
 
-<section class="top-space">
+<section class="top-space" style="margin-top:0px;">
   <div class="column column-1-of-3 dashboard-column">
     <div class="title">Profile Details</div>
     <div class="fixed-height">
       <ul>
         @foreach (var Item in @Model.OrganisationPilots) {
           <li>
-            <div class="icon"><img src="@Item.PhotoUrl" /></div>
+            <div class="PilotImage" style="background-image:url('@Item.PhotoUrl')"></div>
             <div class="caption">
               <a href="@Url.Action("PilotDetail", "Pilot", new { ID = Item.UserId})">@Item.RPASPermitNo</a>
             </div>

@@ -1234,6 +1234,7 @@ div.dashboard-column {
   div.fixed-height-organisation {
     height: 125px;
     overflow: hidden;
+    position:relative;
   }
 
   div.fixed-height,
@@ -1342,6 +1343,12 @@ div.dashboard-column {
   div.toolbar {
     height: 20px;
     padding: 0px 0px 10px 0px;
+
+    &.fixed {
+      position:absolute;
+      top:10px;
+      right:0px;
+    }
 
     div.button {
       float: right;
@@ -1885,5 +1892,18 @@ div.center-helper {
 div.inner {
     float: left;
     position: relative;
-    left: -50%;
+    left: -50%; 
+}
+
+
+div.PilotImage {
+  width: 40px;
+  height: 40px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+  border-radius: 50%;
+  border:1px silver solid;
+  float: left;
+  margin-right:10px;
 }
