@@ -61,7 +61,7 @@
         @foreach (var Item in @Model.RPASList) {
           <li>
             <div class="icon"><img src="~/images/FlightType-@(Item.UavTypeName).png" /></div>
-            <div class="caption">@Item.DroneName</div>
+            <div class="caption"><a href="@Url.Action("Detail", "Drone", new { ID = Item.DroneId})">@Item.DroneName</a></div>
             <div class="detail"><span>@Item.ManufactureName</span></div>
               <div class="detail"><span>@Html.Raw(Item.LiveStatus)</span></div>
           </li>

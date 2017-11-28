@@ -31,7 +31,7 @@ namespace eX_Portal.ViewModel {
           MaxAltitude = (int)s.MaxAltitude,
           PilotID = (int)s.PilotID
         })
-        .Take(5)
+        .Take(5).OrderByDescending(x=>x.ID)
         .ToList();
 
        
