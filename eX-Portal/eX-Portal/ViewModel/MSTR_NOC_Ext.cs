@@ -10,7 +10,6 @@ namespace eX_Portal.ViewModel {
 
     private ExponentPortalEntities ctx = new ExponentPortalEntities();
 
-
     public PilotInfo(int PilotID = 0) {
       var Usr = ctx.MSTR_User.Where(w => w.UserId == PilotID).FirstOrDefault();
 
@@ -39,8 +38,6 @@ namespace eX_Portal.ViewModel {
     public String ExpiryDate { get { return DOE_RPASPermit == null ? "Invalid" : ((DateTime)DOE_RPASPermit).ToString("dd-MMM-yyyy"); } }
   }
 
-
-
   public class DroneInfo {
     private String _DroneRefName;
     private String _Manufacturer;
@@ -50,7 +47,6 @@ namespace eX_Portal.ViewModel {
 
     private int DroneID = 0;
     private MSTR_Drone _droneinfo = null;
-
 
     private ExponentPortalEntities ctx = new ExponentPortalEntities();
 

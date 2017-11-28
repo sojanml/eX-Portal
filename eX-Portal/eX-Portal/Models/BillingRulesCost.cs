@@ -12,9 +12,17 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PortalAlert_User
+    public partial class BillingRulesCost
     {
-        public int AlertID { get; set; }
-        public int UserID { get; set; }
+        public int CostID { get; set; }
+        public int RuleID { get; set; }
+        public int GroupID { get; set; }
+        public Nullable<decimal> CostMultipliedBy { get; set; }
+        public Nullable<decimal> CostDividedBy { get; set; }
+        public Nullable<byte> IsSkipRest { get; set; }
+        public int Seq { get; set; }
+    
+        public virtual BillingRules BillingRules { get; set; }
+        public virtual BillingRulesGroup BillingRulesGroup { get; set; }
     }
 }

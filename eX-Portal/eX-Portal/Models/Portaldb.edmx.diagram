@@ -43,7 +43,7 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PortalAlertRegistration" Width="1.5" PointX="11.75" PointY="4.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.FlightInfo" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.MSTR_RPAS_User" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone" Width="1.5" PointX="12.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Drone" Width="1.5" PointX="12.75" PointY="2.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxCost" Width="1.5" PointX="2.75" PointY="12.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.ApproalDetail1" Width="1.5" PointX="17.375" PointY="22.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.BlackBoxLog1" Width="1.5" PointX="4.75" PointY="12.75" IsExpanded="false" />
@@ -73,12 +73,16 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PayloadDataGridLines" Width="1.75" PointX="16.75" PointY="0.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.GCA_Approval" Width="1.5" PointX="0.75" PointY="16.75" IsExpanded="false" />
         <EntityTypeShape EntityType="ExponentPortalModel.M2M_Drone_User" Width="1.5" PointX="16.75" PointY="2.75" IsExpanded="false" />
-        <EntityTypeShape EntityType="ExponentPortalModel.TrafficMonitor" Width="1.5" PointX="2.75" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_TrafficMonitor" Width="1.5" PointX="12.375" PointY="16.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PayLoadTrafficData" Width="1.5" PointX="14.375" PointY="16.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.PortalAlert_User" Width="1.5" PointX="16.375" PointY="16.75" />
-        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_NOC" Width="1.5" PointX="5.375" PointY="17" />
-        <EntityTypeShape EntityType="ExponentPortalModel.NOC_Details" Width="1.5" PointX="7.625" PointY="17" />
+        <EntityTypeShape EntityType="ExponentPortalModel.BillingRules" Width="1.5" PointX="17.375" PointY="7.25" />
+        <EntityTypeShape EntityType="ExponentPortalModel.BillingRulesCost" Width="1.5" PointX="19.625" PointY="7" />
+        <EntityTypeShape EntityType="ExponentPortalModel.BillingRulesGroup" Width="1.5" PointX="17.375" PointY="10.5" />
+        <EntityTypeShape EntityType="ExponentPortalModel.Nationality" Width="1.5" PointX="18.375" PointY="13.75" />
+        <AssociationConnector Association="ExponentPortalModel.fk_RuleID" />
+        <AssociationConnector Association="ExponentPortalModel.fk_GroupID" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_NOC" Width="1.5" PointX="3.375" PointY="17.25" />
+        <EntityTypeShape EntityType="ExponentPortalModel.NOC_Details" Width="1.5" PointX="5.625" PointY="17" />
+        <EntityTypeShape EntityType="ExponentPortalModel.TrafficMonitor" Width="1.5" PointX="8.375" PointY="16.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_TrafficMonitor" Width="1.5" PointX="10.375" PointY="16.75" />
         <AssociationConnector Association="ExponentPortalModel.FK_NocApplicationID" />
       </Diagram>
     </edmx:Diagrams>

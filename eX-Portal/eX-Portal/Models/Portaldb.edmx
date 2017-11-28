@@ -93,6 +93,35 @@
           <Property Name="AirtraficImpact" Type="varchar" MaxLength="200" />
           <Property Name="Comments" Type="nvarchar" MaxLength="300" />
         </EntityType>
+        <EntityType Name="BillingRules">
+          <Key>
+            <PropertyRef Name="RuleID" />
+          </Key>
+          <Property Name="RuleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RuleName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="RuleDescription" Type="text" />
+          <Property Name="CalculateField" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="ApplyCondition" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BillingRulesCost">
+          <Key>
+            <PropertyRef Name="CostID" />
+          </Key>
+          <Property Name="CostID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RuleID" Type="int" Nullable="false" />
+          <Property Name="GroupID" Type="int" Nullable="false" />
+          <Property Name="CostMultipliedBy" Type="numeric" Precision="12" Scale="5" />
+          <Property Name="CostDividedBy" Type="numeric" Precision="12" Scale="5" />
+          <Property Name="IsSkipRest" Type="tinyint" />
+          <Property Name="Seq" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BillingRulesGroup">
+          <Key>
+            <PropertyRef Name="GroupID" />
+          </Key>
+          <Property Name="GroupID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GroupName" Type="varchar" MaxLength="256" Nullable="false" />
+        </EntityType>
         <EntityType Name="BlackBoxCost">
           <Key>
             <PropertyRef Name="CostID" />
@@ -107,7 +136,7 @@
           <Property Name="RentDays" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.BlackBoxData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BlackBoxData">
           <Key>
             <PropertyRef Name="BlackBoxDataID" />
@@ -189,7 +218,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="MenuTitle" Type="varchar" MaxLength="120" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.DCAA_PermitDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.DCAA_PermitDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="DCAA_PermitDetail">
           <Key>
             <PropertyRef Name="ID" />
@@ -483,7 +512,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.DCAA_PermitDetail' does not have a 
             <PropertyRef Name="ApprovalID" />
           </Key>
           <Property Name="ApprovalID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ApprovalName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApprovalName" Type="nvarchar" MaxLength="250" />
           <Property Name="ApprovalDate" Type="datetime" />
           <Property Name="StartDate" Type="datetime" />
           <Property Name="EndDate" Type="datetime" />
@@ -511,12 +540,12 @@ warning 6002: The table/view 'DCAAPortal.dbo.DCAA_PermitDetail' does not have a 
           <Property Name="NotificationEmails" Type="nvarchar" MaxLength="300" />
           <Property Name="CameraId" Type="int" />
           <Property Name="RpasApprovalRefNum" Type="int" Nullable="false" />
-          <Property Name="ClientName" Type="varchar" MaxLength="100" />
+          <Property Name="ClientName" Type="varchar" MaxLength="250" />
           <Property Name="FlightTypeID" Type="int" />
-          <Property Name="notam" Type="nvarchar" MaxLength="1000" />
+          <Property Name="notam" Type="nvarchar" MaxLength="250" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.ip2location' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ip2location">
           <Key>
             <PropertyRef Name="ip_from" />
@@ -1015,31 +1044,17 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedOn" Type="datetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DCAA.dbo.MSTR_TrafficMonitor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="MSTR_TrafficMonitor">
           <Key>
             <PropertyRef Name="MonitorID" />
+            <PropertyRef Name="CreatedDate" />
           </Key>
-          <Property Name="MonitorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MonitorID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UniqueID" Type="nvarchar" MaxLength="20" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
-          <Property Name="FlightID" Type="int" />
-          <Property Name="DD" Type="int" Nullable="false" />
-          <Property Name="DR" Type="int" Nullable="false" />
-          <Property Name="DU" Type="int" Nullable="false" />
-          <Property Name="DL" Type="int" Nullable="false" />
-          <Property Name="RD" Type="int" Nullable="false" />
-          <Property Name="RR" Type="int" Nullable="false" />
-          <Property Name="RU" Type="int" Nullable="false" />
-          <Property Name="RL" Type="int" Nullable="false" />
-          <Property Name="UD" Type="int" Nullable="false" />
-          <Property Name="UR" Type="int" Nullable="false" />
-          <Property Name="UU" Type="int" Nullable="false" />
-          <Property Name="UL" Type="int" Nullable="false" />
-          <Property Name="LD" Type="int" Nullable="false" />
-          <Property Name="LR" Type="int" Nullable="false" />
-          <Property Name="LU" Type="int" Nullable="false" />
-          <Property Name="LL" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="MSTR_User">
           <Key>
@@ -1134,6 +1149,18 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DCAA.dbo.Nationality' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Nationality">
+          <Key>
+            <PropertyRef Name="NationalityID" />
+          </Key>
+          <Property Name="NationalityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="Abbreviation" Type="nvarchar" MaxLength="5" />
+          <Property Name="Adjective" Type="nvarchar" MaxLength="130" />
+          <Property Name="Person" Type="nvarchar" MaxLength="60" />
+        </EntityType>
         <EntityType Name="NOC_Details">
           <Key>
             <PropertyRef Name="NocID" />
@@ -1203,6 +1230,8 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="Satellite" Type="int" />
           <Property Name="IsSend" Type="tinyint" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DCAA.dbo.PayloadDataGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayloadDataGrid">
           <Key>
             <PropertyRef Name="ID" />
@@ -1241,7 +1270,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="RadMaxDate" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PayLoadFlight' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadFlight">
           <Key>
             <PropertyRef Name="PayLoadFlightID" />
@@ -1259,7 +1288,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayLoadFlight' does not have a prim
           <Property Name="PayLoadDroneID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PayLoadImageData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadImageData">
           <Key>
             <PropertyRef Name="PayLoadImageDataID" />
@@ -1278,7 +1307,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayLoadImageData' does not have a p
           <Property Name="LogFilePath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PayLoadMapData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadMapData">
           <Key>
             <PropertyRef Name="PayLoadDataMapID" />
@@ -1326,7 +1355,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayLoadMapData' does not have a pri
           <Property Name="GridLng" Type="numeric" Precision="18" Scale="6" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PayloadTraffic' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PayloadTraffic' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayloadTraffic">
           <Key>
             <PropertyRef Name="PTid" />
@@ -1342,11 +1371,9 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayloadTraffic' does not have a pri
           <Property Name="PTid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="VideoTime" Type="int" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'DCAA.dbo.PayLoadTrafficData' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="PayLoadTrafficData">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FrameNumber" Type="int" />
           <Property Name="VehicleCount" Type="int" />
           <Property Name="TimeFrame" Type="decimal" Precision="18" Scale="12" />
@@ -1354,7 +1381,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayloadTraffic' does not have a pri
           <Property Name="FlightID" Type="int" />
           <Property Name="IsProcessed" Type="int" />
           <Property Name="CreatedTimestamp" Type="datetime" />
-        </EntityType>
+        </EntityType>-->
         <EntityType Name="PayLoadYard">
           <Key>
             <PropertyRef Name="YardID" />
@@ -1377,7 +1404,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayloadTraffic' does not have a pri
           <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.PayLoadYardGrid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PayLoadYardGrid">
           <Key>
             <PropertyRef Name="CellID" />
@@ -1423,14 +1450,12 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayLoadYardGrid' does not have a pr
           <Property Name="Proximity" Type="varchar" MaxLength="2500" />
           <Property Name="ZoneID" Type="int" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'DCAA.dbo.PortalAlert_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="PortalAlert_User">
-          <Key>
-            <PropertyRef Name="AlertID" />
-            <PropertyRef Name="UserID" />
-          </Key>
-          <Property Name="AlertID" Type="int" Nullable="false" />
-          <Property Name="UserID" Type="int" Nullable="false" />
-        </EntityType>
+          <Property Name="AlertID" Type="int" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>-->
         <EntityType Name="PortalAlertEmail">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -1523,7 +1548,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.PayLoadYardGrid' does not have a pr
           <Property Name="CellReference" Type="varchar" MaxLength="120" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DCAA.dbo.sysdiagrams' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="sysdiagrams">
           <Key>
             
@@ -1572,7 +1597,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="FlightID" Type="int" Nullable="false" />
-          <Property Name="UniqueID" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="UserLog">
           <Key>
@@ -1590,6 +1614,18 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="IsSessionEnd" Type="bit" />
           <Property Name="ApplicationID" Type="varchar" MaxLength="50" />
         </EntityType>
+        <Association Name="fk_GroupID">
+          <End Role="BillingRulesGroup" Type="Self.BillingRulesGroup" Multiplicity="1" />
+          <End Role="BillingRulesCost" Type="Self.BillingRulesCost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BillingRulesGroup">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="BillingRulesCost">
+              <PropertyRef Name="GroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
           <End Role="M2M_DroneServiceParts" Type="Self.M2M_DroneServiceParts" Multiplicity="1" />
           <End Role="M2M_DroneServiceParts1" Type="Self.M2M_DroneServiceParts" Multiplicity="0..1" />
@@ -1613,6 +1649,18 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
             </Principal>
             <Dependent Role="NOC_Details">
               <PropertyRef Name="NocApplicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_RuleID">
+          <End Role="BillingRules" Type="Self.BillingRules" Multiplicity="1" />
+          <End Role="BillingRulesCost" Type="Self.BillingRulesCost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BillingRules">
+              <PropertyRef Name="RuleID" />
+            </Principal>
+            <Dependent Role="BillingRulesCost">
+              <PropertyRef Name="RuleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1673,6 +1721,9 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="AgriTraxImages" EntityType="Self.AgriTraxImages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AgriTraxManagement" EntityType="Self.AgriTraxManagement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApproalDetail" EntityType="Self.ApproalDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BillingRules" EntityType="Self.BillingRules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BillingRulesCost" EntityType="Self.BillingRulesCost" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BillingRulesGroup" EntityType="Self.BillingRulesGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxCost" EntityType="Self.BlackBoxCost" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxLog" EntityType="Self.BlackBoxLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxTransaction" EntityType="Self.BlackBoxTransaction" Schema="dbo" store:Type="Tables" />
@@ -1715,7 +1766,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="MSTR_Product" EntityType="Self.MSTR_Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Profile" EntityType="Self.MSTR_Profile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_RPAS_User" EntityType="Self.MSTR_RPAS_User" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MSTR_TrafficMonitor" EntityType="Self.MSTR_TrafficMonitor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User" EntityType="Self.MSTR_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot" EntityType="Self.MSTR_User_Pilot" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="Self.MSTR_User_Pilot_Certification" Schema="dbo" store:Type="Tables" />
@@ -1724,13 +1774,10 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="PayLoad_AutoFix" EntityType="Self.PayLoad_AutoFix" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoadData" EntityType="Self.PayLoadData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoadDataGPS" EntityType="Self.PayLoadDataGPS" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PayloadDataGrid" EntityType="Self.PayloadDataGrid" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayloadDataGridLines" EntityType="Self.PayloadDataGridLines" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoadDataRFID" EntityType="Self.PayLoadDataRFID" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PayLoadTrafficData" EntityType="Self.PayLoadTrafficData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayLoadYard" EntityType="Self.PayLoadYard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortalAlert" EntityType="Self.PortalAlert" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PortalAlert_User" EntityType="Self.PortalAlert_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortalAlertEmail" EntityType="Self.PortalAlertEmail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortalAlertRegistration" EntityType="Self.PortalAlertRegistration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PortalAuth" EntityType="Self.PortalAuth" Schema="dbo" store:Type="Tables" />
@@ -1785,6 +1832,32 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
     [ip2location].[country_code] AS [country_code], 
     [ip2location].[country_name] AS [country_name]
     FROM [dbo].[ip2location] AS [ip2location]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="MSTR_TrafficMonitor" EntityType="Self.MSTR_TrafficMonitor" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MSTR_TrafficMonitor].[MonitorID] AS [MonitorID], 
+    [MSTR_TrafficMonitor].[UniqueID] AS [UniqueID], 
+    [MSTR_TrafficMonitor].[CreatedDate] AS [CreatedDate], 
+    [MSTR_TrafficMonitor].[Remarks] AS [Remarks]
+    FROM [dbo].[MSTR_TrafficMonitor] AS [MSTR_TrafficMonitor]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Nationality" EntityType="Self.Nationality" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Nationality].[NationalityID] AS [NationalityID], 
+    [Nationality].[Country] AS [Country], 
+    [Nationality].[Abbreviation] AS [Abbreviation], 
+    [Nationality].[Adjective] AS [Adjective], 
+    [Nationality].[Person] AS [Person]
+    FROM [dbo].[Nationality] AS [Nationality]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PayloadDataGrid" EntityType="Self.PayloadDataGrid" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PayloadDataGrid].[ID] AS [ID], 
+    [PayloadDataGrid].[FlightUniqueID] AS [FlightUniqueID], 
+    [PayloadDataGrid].[SlNo] AS [SlNo], 
+    [PayloadDataGrid].[Lat] AS [Lat], 
+    [PayloadDataGrid].[Lng] AS [Lng]
+    FROM [dbo].[PayloadDataGrid] AS [PayloadDataGrid]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLoadFlight" EntityType="Self.PayLoadFlight" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1905,6 +1978,10 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
     [sysdiagrams].[definition] AS [definition]
     FROM [dbo].[sysdiagrams] AS [sysdiagrams]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="fk_GroupID" Association="Self.fk_GroupID">
+            <End Role="BillingRulesGroup" EntitySet="BillingRulesGroup" />
+            <End Role="BillingRulesCost" EntitySet="BillingRulesCost" />
+          </AssociationSet>
           <AssociationSet Name="FK_M2M_DroneServiceParts_M2M_DroneServiceParts" Association="Self.FK_M2M_DroneServiceParts_M2M_DroneServiceParts">
             <End Role="M2M_DroneServiceParts" EntitySet="M2M_DroneServiceParts" />
             <End Role="M2M_DroneServiceParts1" EntitySet="M2M_DroneServiceParts" />
@@ -1912,6 +1989,10 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <AssociationSet Name="FK_NocApplicationID" Association="Self.FK_NocApplicationID">
             <End Role="MSTR_NOC" EntitySet="MSTR_NOC" />
             <End Role="NOC_Details" EntitySet="NOC_Details" />
+          </AssociationSet>
+          <AssociationSet Name="fk_RuleID" Association="Self.fk_RuleID">
+            <End Role="BillingRules" EntitySet="BillingRules" />
+            <End Role="BillingRulesCost" EntitySet="BillingRulesCost" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -2307,12 +2388,22 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="PayloadDataGridLines" EntityType="ExponentPortalModel.PayloadDataGridLines" />
           <EntitySet Name="GCA_Approval" EntityType="ExponentPortalModel.GCA_Approval" />
           <EntitySet Name="M2M_Drone_User" EntityType="ExponentPortalModel.M2M_Drone_User" />
-          <EntitySet Name="TrafficMonitor" EntityType="ExponentPortalModel.TrafficMonitor" />
-          <EntitySet Name="MSTR_TrafficMonitor" EntityType="ExponentPortalModel.MSTR_TrafficMonitor" />
-          <EntitySet Name="PayLoadTrafficData" EntityType="ExponentPortalModel.PayLoadTrafficData" />
-          <EntitySet Name="PortalAlert_User" EntityType="ExponentPortalModel.PortalAlert_User" />
+          <EntitySet Name="BillingRules" EntityType="ExponentPortalModel.BillingRules" />
+          <EntitySet Name="BillingRulesCost" EntityType="ExponentPortalModel.BillingRulesCost" />
+          <EntitySet Name="BillingRulesGroup" EntityType="ExponentPortalModel.BillingRulesGroup" />
+          <EntitySet Name="Nationality" EntityType="ExponentPortalModel.Nationality" />
+          <AssociationSet Name="fk_RuleID" Association="ExponentPortalModel.fk_RuleID">
+            <End Role="BillingRules" EntitySet="BillingRules" />
+            <End Role="BillingRulesCost" EntitySet="BillingRulesCost" />
+          </AssociationSet>
+          <AssociationSet Name="fk_GroupID" Association="ExponentPortalModel.fk_GroupID">
+            <End Role="BillingRulesGroup" EntitySet="BillingRulesGroup" />
+            <End Role="BillingRulesCost" EntitySet="BillingRulesCost" />
+          </AssociationSet>
           <EntitySet Name="MSTR_NOC" EntityType="ExponentPortalModel.MSTR_NOC" />
           <EntitySet Name="NOC_Details" EntityType="ExponentPortalModel.NOC_Details" />
+          <EntitySet Name="TrafficMonitor" EntityType="ExponentPortalModel.TrafficMonitor" />
+          <EntitySet Name="MSTR_TrafficMonitor" EntityType="ExponentPortalModel.MSTR_TrafficMonitor" />
           <AssociationSet Name="FK_NocApplicationID" Association="ExponentPortalModel.FK_NocApplicationID">
             <End Role="MSTR_NOC" EntitySet="MSTR_NOC" />
             <End Role="NOC_Details" EntitySet="NOC_Details" />
@@ -3536,7 +3627,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
             <PropertyRef Name="ApprovalID" />
           </Key>
           <Property Name="ApprovalID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ApprovalName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovalName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
           <Property Name="StartDate" Type="DateTime" Precision="3" />
           <Property Name="EndDate" Type="DateTime" Precision="3" />
@@ -3564,9 +3655,9 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="NotificationEmails" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="CameraId" Type="Int32" />
           <Property Name="RpasApprovalRefNum" Type="Int32" Nullable="false" />
-          <Property Name="ClientName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ClientName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="FlightTypeID" Type="Int32" />
-          <Property Name="notam" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="notam" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="M2M_Drone_User">
           <Key>
@@ -3575,6 +3666,119 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           </Key>
           <Property Name="DroneID" Type="Int32" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BillingRules">
+          <Key>
+            <PropertyRef Name="RuleID" />
+          </Key>
+          <Property Name="RuleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RuleName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="RuleDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CalculateField" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="ApplyCondition" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BillingRulesCost" Relationship="ExponentPortalModel.fk_RuleID" FromRole="BillingRules" ToRole="BillingRulesCost" />
+        </EntityType>
+        <EntityType Name="BillingRulesCost">
+          <Key>
+            <PropertyRef Name="CostID" />
+          </Key>
+          <Property Name="CostID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RuleID" Type="Int32" Nullable="false" />
+          <Property Name="GroupID" Type="Int32" Nullable="false" />
+          <Property Name="CostMultipliedBy" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="CostDividedBy" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="IsSkipRest" Type="Byte" />
+          <Property Name="Seq" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="BillingRules" Relationship="ExponentPortalModel.fk_RuleID" FromRole="BillingRulesCost" ToRole="BillingRules" />
+          <NavigationProperty Name="BillingRulesGroup" Relationship="ExponentPortalModel.fk_GroupID" FromRole="BillingRulesCost" ToRole="BillingRulesGroup" />
+        </EntityType>
+        <EntityType Name="BillingRulesGroup">
+          <Key>
+            <PropertyRef Name="GroupID" />
+          </Key>
+          <Property Name="GroupID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GroupName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BillingRulesCost" Relationship="ExponentPortalModel.fk_GroupID" FromRole="BillingRulesGroup" ToRole="BillingRulesCost" />
+        </EntityType>
+        <EntityType Name="Nationality">
+          <Key>
+            <PropertyRef Name="NationalityID" />
+          </Key>
+          <Property Name="NationalityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Abbreviation" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Adjective" Type="String" MaxLength="130" FixedLength="false" Unicode="true" />
+          <Property Name="Person" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="fk_RuleID">
+          <End Type="ExponentPortalModel.BillingRules" Role="BillingRules" Multiplicity="1" />
+          <End Type="ExponentPortalModel.BillingRulesCost" Role="BillingRulesCost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BillingRules">
+              <PropertyRef Name="RuleID" />
+            </Principal>
+            <Dependent Role="BillingRulesCost">
+              <PropertyRef Name="RuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_GroupID">
+          <End Type="ExponentPortalModel.BillingRulesGroup" Role="BillingRulesGroup" Multiplicity="1" />
+          <End Type="ExponentPortalModel.BillingRulesCost" Role="BillingRulesCost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BillingRulesGroup">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="BillingRulesCost">
+              <PropertyRef Name="GroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MSTR_NOC">
+          <Key>
+            <PropertyRef Name="NocApplicationID" />
+          </Key>
+          <Property Name="NocApplicationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FlightType" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="FlightFor" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="NocName" Type="String" MaxLength="240" FixedLength="false" Unicode="false" />
+          <Property Name="PostFlightReportEmails" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SMSNumbers" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AccountID" Type="Int32" Nullable="false" />
+          <Property Name="CreateBy" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="CountApproved" Type="Int32" Nullable="false" />
+          <Property Name="CountRejected" Type="Int32" Nullable="false" />
+          <Property Name="CountNew" Type="Int32" Nullable="false" />
+          <Property Name="CountTotal" Type="Int32" Nullable="false" />
+          <Property Name="CountAmended" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="NOC_Details" Relationship="ExponentPortalModel.FK_NocApplicationID" FromRole="MSTR_NOC" ToRole="NOC_Details" />
+        </EntityType>
+        <EntityType Name="NOC_Details">
+          <Key>
+            <PropertyRef Name="NocID" />
+          </Key>
+          <Property Name="NocID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NocApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="PilotID" Type="Int32" Nullable="false" />
+          <Property Name="DroneID" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="EndTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="MinAltitude" Type="Int32" Nullable="false" />
+          <Property Name="MaxAltitude" Type="Int32" Nullable="false" />
+          <Property Name="Coordinates" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OuterCoordinates" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LOS" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="IsUseCamara" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="StatusChangedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StatusChangedBy" Type="Int32" Nullable="false" />
+          <Property Name="NocBuffer" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="MSTR_NOC" Relationship="ExponentPortalModel.FK_NocApplicationID" FromRole="NOC_Details" ToRole="MSTR_NOC" />
         </EntityType>
         <EntityType Name="TrafficMonitor">
           <Key>
@@ -3604,105 +3808,30 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="FlightID" Type="Int32" Nullable="false" />
-          <Property Name="UniqueID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MSTR_TrafficMonitor">
           <Key>
             <PropertyRef Name="MonitorID" />
+            <PropertyRef Name="CreatedDate" />
           </Key>
-          <Property Name="MonitorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MonitorID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UniqueID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FlightID" Type="Int32" />
-          <Property Name="DD" Type="Int32" Nullable="false" />
-          <Property Name="DR" Type="Int32" Nullable="false" />
-          <Property Name="DU" Type="Int32" Nullable="false" />
-          <Property Name="DL" Type="Int32" Nullable="false" />
-          <Property Name="RD" Type="Int32" Nullable="false" />
-          <Property Name="RR" Type="Int32" Nullable="false" />
-          <Property Name="RU" Type="Int32" Nullable="false" />
-          <Property Name="RL" Type="Int32" Nullable="false" />
-          <Property Name="UD" Type="Int32" Nullable="false" />
-          <Property Name="UR" Type="Int32" Nullable="false" />
-          <Property Name="UU" Type="Int32" Nullable="false" />
-          <Property Name="UL" Type="Int32" Nullable="false" />
-          <Property Name="LD" Type="Int32" Nullable="false" />
-          <Property Name="LR" Type="Int32" Nullable="false" />
-          <Property Name="LU" Type="Int32" Nullable="false" />
-          <Property Name="LL" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PayLoadTrafficData">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FrameNumber" Type="Int32" />
-          <Property Name="VehicleCount" Type="Int32" />
-          <Property Name="TimeFrame" Type="Decimal" Precision="18" Scale="12" />
-          <Property Name="FlightVideoID" Type="Int32" />
-          <Property Name="FlightID" Type="Int32" />
-          <Property Name="IsProcessed" Type="Int32" />
-          <Property Name="CreatedTimestamp" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="PortalAlert_User">
-          <Key>
-            <PropertyRef Name="AlertID" />
-            <PropertyRef Name="UserID" />
-          </Key>
-          <Property Name="AlertID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="MSTR_NOC">
-          <Key>
-            <PropertyRef Name="NocApplicationID" />
-          </Key>
-          <Property Name="NocApplicationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FlightType" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
-          <Property Name="FlightFor" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
-          <Property Name="NocName" Type="String" MaxLength="240" FixedLength="false" Unicode="false" />
-          <Property Name="PostFlightReportEmails" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="SMSNumbers" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="AccountID" Type="Int32" Nullable="false" />
-          <Property Name="CreateBy" Type="Int32" Nullable="false" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="CountApproved" Type="Int32" Nullable="false" />
-          <Property Name="CountRejected" Type="Int32" Nullable="false" />
-          <Property Name="CountNew" Type="Int32" Nullable="false" />
-          <Property Name="CountTotal" Type="Int32" Nullable="false" />
-          <Property Name="CountAmended" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="NOC_Details" Relationship="ExponentPortalModel.FK_NocApplicationID" FromRole="MSTR_NOC" ToRole="NOC_Details" />
-        </EntityType>
-        <EntityType Name="NOC_Details">
-          <Key>
-            <PropertyRef Name="NocID" />
-          </Key>
-          <Property Name="NocID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PilotID" Type="Int32" Nullable="false" />
-          <Property Name="DroneID" Type="Int32" Nullable="false" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="EndTime" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="MinAltitude" Type="Int32" Nullable="false" />
-          <Property Name="MaxAltitude" Type="Int32" Nullable="false" />
-          <Property Name="Coordinates" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="OuterCoordinates" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="LOS" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
-          <Property Name="IsUseCamara" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
-          <Property Name="StatusChangedOn" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="StatusChangedBy" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="MSTR_NOC" Relationship="ExponentPortalModel.FK_NocApplicationID" FromRole="NOC_Details" ToRole="MSTR_NOC" />
-          <Property Name="NocBuffer" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_NocApplicationID">
           <End Type="ExponentPortalModel.MSTR_NOC" Role="MSTR_NOC" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="ExponentPortalModel.NOC_Details" Role="NOC_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MSTR_NOC">
+              <PropertyRef Name="NocApplicationID" />
+            </Principal>
+            <Dependent Role="NOC_Details">
+              <PropertyRef Name="NocApplicationID" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -5277,83 +5406,46 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TrafficMonitor">
-            <EntityTypeMapping TypeName="ExponentPortalModel.TrafficMonitor">
-              <MappingFragment StoreEntitySet="TrafficMonitor">
-                <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
-                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="LL" ColumnName="LL" />
-                <ScalarProperty Name="LU" ColumnName="LU" />
-                <ScalarProperty Name="LR" ColumnName="LR" />
-                <ScalarProperty Name="LD" ColumnName="LD" />
-                <ScalarProperty Name="UL" ColumnName="UL" />
-                <ScalarProperty Name="UU" ColumnName="UU" />
-                <ScalarProperty Name="UR" ColumnName="UR" />
-                <ScalarProperty Name="UD" ColumnName="UD" />
-                <ScalarProperty Name="RL" ColumnName="RL" />
-                <ScalarProperty Name="RU" ColumnName="RU" />
-                <ScalarProperty Name="RR" ColumnName="RR" />
-                <ScalarProperty Name="RD" ColumnName="RD" />
-                <ScalarProperty Name="DL" ColumnName="DL" />
-                <ScalarProperty Name="DU" ColumnName="DU" />
-                <ScalarProperty Name="DR" ColumnName="DR" />
-                <ScalarProperty Name="DD" ColumnName="DD" />
-                <ScalarProperty Name="FrameVehicle" ColumnName="FrameVehicle" />
-                <ScalarProperty Name="FrameTime" ColumnName="FrameTime" />
-                <ScalarProperty Name="FrameNumber" ColumnName="FrameNumber" />
-                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
-                <ScalarProperty Name="TrafficMonitorID" ColumnName="TrafficMonitorID" />
+          <EntitySetMapping Name="BillingRules">
+            <EntityTypeMapping TypeName="ExponentPortalModel.BillingRules">
+              <MappingFragment StoreEntitySet="BillingRules">
+                <ScalarProperty Name="ApplyCondition" ColumnName="ApplyCondition" />
+                <ScalarProperty Name="CalculateField" ColumnName="CalculateField" />
+                <ScalarProperty Name="RuleDescription" ColumnName="RuleDescription" />
+                <ScalarProperty Name="RuleName" ColumnName="RuleName" />
+                <ScalarProperty Name="RuleID" ColumnName="RuleID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MSTR_TrafficMonitor">
-            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_TrafficMonitor">
-              <MappingFragment StoreEntitySet="MSTR_TrafficMonitor">
-                <ScalarProperty Name="LL" ColumnName="LL" />
-                <ScalarProperty Name="LU" ColumnName="LU" />
-                <ScalarProperty Name="LR" ColumnName="LR" />
-                <ScalarProperty Name="LD" ColumnName="LD" />
-                <ScalarProperty Name="UL" ColumnName="UL" />
-                <ScalarProperty Name="UU" ColumnName="UU" />
-                <ScalarProperty Name="UR" ColumnName="UR" />
-                <ScalarProperty Name="UD" ColumnName="UD" />
-                <ScalarProperty Name="RL" ColumnName="RL" />
-                <ScalarProperty Name="RU" ColumnName="RU" />
-                <ScalarProperty Name="RR" ColumnName="RR" />
-                <ScalarProperty Name="RD" ColumnName="RD" />
-                <ScalarProperty Name="DL" ColumnName="DL" />
-                <ScalarProperty Name="DU" ColumnName="DU" />
-                <ScalarProperty Name="DR" ColumnName="DR" />
-                <ScalarProperty Name="DD" ColumnName="DD" />
-                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
-                <ScalarProperty Name="MonitorID" ColumnName="MonitorID" />
+          <EntitySetMapping Name="BillingRulesCost">
+            <EntityTypeMapping TypeName="ExponentPortalModel.BillingRulesCost">
+              <MappingFragment StoreEntitySet="BillingRulesCost">
+                <ScalarProperty Name="Seq" ColumnName="Seq" />
+                <ScalarProperty Name="IsSkipRest" ColumnName="IsSkipRest" />
+                <ScalarProperty Name="CostDividedBy" ColumnName="CostDividedBy" />
+                <ScalarProperty Name="CostMultipliedBy" ColumnName="CostMultipliedBy" />
+                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+                <ScalarProperty Name="RuleID" ColumnName="RuleID" />
+                <ScalarProperty Name="CostID" ColumnName="CostID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PayLoadTrafficData">
-            <EntityTypeMapping TypeName="ExponentPortalModel.PayLoadTrafficData">
-              <MappingFragment StoreEntitySet="PayLoadTrafficData">
-                <ScalarProperty Name="CreatedTimestamp" ColumnName="CreatedTimestamp" />
-                <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
-                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
-                <ScalarProperty Name="FlightVideoID" ColumnName="FlightVideoID" />
-                <ScalarProperty Name="TimeFrame" ColumnName="TimeFrame" />
-                <ScalarProperty Name="VehicleCount" ColumnName="VehicleCount" />
-                <ScalarProperty Name="FrameNumber" ColumnName="FrameNumber" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
+          <EntitySetMapping Name="BillingRulesGroup">
+            <EntityTypeMapping TypeName="ExponentPortalModel.BillingRulesGroup">
+              <MappingFragment StoreEntitySet="BillingRulesGroup">
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PortalAlert_User">
-            <EntityTypeMapping TypeName="ExponentPortalModel.PortalAlert_User">
-              <MappingFragment StoreEntitySet="PortalAlert_User">
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="AlertID" ColumnName="AlertID" />
+          <EntitySetMapping Name="Nationality">
+            <EntityTypeMapping TypeName="ExponentPortalModel.Nationality">
+              <MappingFragment StoreEntitySet="Nationality">
+                <ScalarProperty Name="Person" ColumnName="Person" />
+                <ScalarProperty Name="Adjective" ColumnName="Adjective" />
+                <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="NationalityID" ColumnName="NationalityID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5398,18 +5490,51 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="DroneID" ColumnName="DroneID" />
                 <ScalarProperty Name="PilotID" ColumnName="PilotID" />
+                <ScalarProperty Name="NocApplicationID" ColumnName="NocApplicationID" />
                 <ScalarProperty Name="NocID" ColumnName="NocID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="FK_NocApplicationID" TypeName="ExponentPortalModel.FK_NocApplicationID" StoreEntitySet="NOC_Details">
-            <EndProperty Name="NOC_Details">
-              <ScalarProperty Name="NocID" ColumnName="NocID" />
-            </EndProperty>
-            <EndProperty Name="MSTR_NOC">
-              <ScalarProperty Name="NocApplicationID" ColumnName="NocApplicationID" />
-            </EndProperty>
-          </AssociationSetMapping>
+          <EntitySetMapping Name="TrafficMonitor">
+            <EntityTypeMapping TypeName="ExponentPortalModel.TrafficMonitor">
+              <MappingFragment StoreEntitySet="TrafficMonitor">
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="LL" ColumnName="LL" />
+                <ScalarProperty Name="LU" ColumnName="LU" />
+                <ScalarProperty Name="LR" ColumnName="LR" />
+                <ScalarProperty Name="LD" ColumnName="LD" />
+                <ScalarProperty Name="UL" ColumnName="UL" />
+                <ScalarProperty Name="UU" ColumnName="UU" />
+                <ScalarProperty Name="UR" ColumnName="UR" />
+                <ScalarProperty Name="UD" ColumnName="UD" />
+                <ScalarProperty Name="RL" ColumnName="RL" />
+                <ScalarProperty Name="RU" ColumnName="RU" />
+                <ScalarProperty Name="RR" ColumnName="RR" />
+                <ScalarProperty Name="RD" ColumnName="RD" />
+                <ScalarProperty Name="DL" ColumnName="DL" />
+                <ScalarProperty Name="DU" ColumnName="DU" />
+                <ScalarProperty Name="DR" ColumnName="DR" />
+                <ScalarProperty Name="DD" ColumnName="DD" />
+                <ScalarProperty Name="FrameVehicle" ColumnName="FrameVehicle" />
+                <ScalarProperty Name="FrameTime" ColumnName="FrameTime" />
+                <ScalarProperty Name="FrameNumber" ColumnName="FrameNumber" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="TrafficMonitorID" ColumnName="TrafficMonitorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_TrafficMonitor">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_TrafficMonitor">
+              <MappingFragment StoreEntitySet="MSTR_TrafficMonitor">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
+                <ScalarProperty Name="MonitorID" ColumnName="MonitorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -5425,7 +5550,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>

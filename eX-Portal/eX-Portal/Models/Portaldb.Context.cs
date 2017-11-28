@@ -102,12 +102,14 @@ namespace eX_Portal.Models
         public virtual DbSet<PayloadDataGridLines> PayloadDataGridLines { get; set; }
         public virtual DbSet<GCA_Approval> GCA_Approval { get; set; }
         public virtual DbSet<M2M_Drone_User> M2M_Drone_User { get; set; }
-        public virtual DbSet<TrafficMonitor> TrafficMonitor { get; set; }
-        public virtual DbSet<MSTR_TrafficMonitor> MSTR_TrafficMonitor { get; set; }
-        public virtual DbSet<PayLoadTrafficData> PayLoadTrafficData { get; set; }
-        public virtual DbSet<PortalAlert_User> PortalAlert_User { get; set; }
+        public virtual DbSet<BillingRules> BillingRules { get; set; }
+        public virtual DbSet<BillingRulesCost> BillingRulesCost { get; set; }
+        public virtual DbSet<BillingRulesGroup> BillingRulesGroup { get; set; }
+        public virtual DbSet<Nationality> Nationality { get; set; }
         public virtual DbSet<MSTR_NOC> MSTR_NOC { get; set; }
         public virtual DbSet<NOC_Details> NOC_Details { get; set; }
+        public virtual DbSet<TrafficMonitor> TrafficMonitor { get; set; }
+        public virtual DbSet<MSTR_TrafficMonitor> MSTR_TrafficMonitor { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

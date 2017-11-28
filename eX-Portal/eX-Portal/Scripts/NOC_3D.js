@@ -76,8 +76,8 @@ var NOC_3D = function () {
 
   var _drawNoFlyZone = function (data) {
     for (var i = 0; i < data.length; i++) {
-      if (data[i].Coordinates == null) continue;
-      var Coordinates = GPS.ToCesium(data[i].Coordinates, 120);
+      if (data[i].Coordinates === null) continue;
+      var Coordinates = GPS.ToCesium(data[i].Coordinates, 1200);
       var id = 'NoFlyZone' + i;
       var Color = Cesium.Color.BLUE.withAlpha(0.3);
       switch (data[i].Color.toLowerCase()) {
@@ -148,7 +148,7 @@ var NOC_3D = function () {
 var GPS = function () {
 
   var _toCesiumCartesian3 = function (Coordinates, Altitude, IsClosePolygon) {
-    if (Altitude + '' == 'undefiend') Altitude = 50;
+    if (Altitude + '' === 'undefiend') Altitude = 50;
     var CesiumCoordinates = [];
     var aCoordinates = Coordinates.split(',');
     for (var i = 0; i < aCoordinates.length; i++) {

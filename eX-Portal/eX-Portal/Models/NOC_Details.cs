@@ -15,6 +15,7 @@ namespace eX_Portal.Models
     public partial class NOC_Details
     {
         public int NocID { get; set; }
+        public int NocApplicationID { get; set; }
         public int PilotID { get; set; }
         public int DroneID { get; set; }
         public System.DateTime StartDate { get; set; }

@@ -12,15 +12,12 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PayLoadTrafficData
+    public partial class Nationality
     {
-        public long ID { get; set; }
-        public Nullable<int> FrameNumber { get; set; }
-        public Nullable<int> VehicleCount { get; set; }
-        public Nullable<decimal> TimeFrame { get; set; }
-        public Nullable<int> FlightVideoID { get; set; }
-        public Nullable<int> FlightID { get; set; }
-        public Nullable<int> IsProcessed { get; set; }
-        public Nullable<System.DateTime> CreatedTimestamp { get; set; }
+        public int NationalityID { get; set; }
+        public string Country { get; set; }
+        public string Abbreviation { get; set; }
+        public string Adjective { get; set; }
+        public string Person { get; set; }
     }
 }
