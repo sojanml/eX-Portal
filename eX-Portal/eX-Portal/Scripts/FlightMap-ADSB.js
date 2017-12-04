@@ -61,7 +61,7 @@ function getADSB(ADSBObj) {
   if (IsLive) {
     ADSBURL = "/FlightMap/ADSBData"
   } else {
-    if (_RPASIconData == null) {
+    if (_RPASIconData === null) {
       Timers['getADSB'] = window.setTimeout(getADSB, UpdateDelay, ADSBObj);
       return;
     }
@@ -120,7 +120,7 @@ function ADSBOverlay(options, ADSBData) {
   this.ADSBActive = [];
 
   this.getIconFor = function (FlightID, Angle) {
-    var IsDrone = (FlightID.substr(0, 3) == 'SC0');
+    var IsDrone = (FlightID.substr(0, 3) === 'SC0');
     var ReturnHTML = '';
     var Icon = '/images/Airline.png';
 

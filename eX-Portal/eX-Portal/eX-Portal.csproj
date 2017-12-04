@@ -206,6 +206,8 @@
     <Compile Include="Controllers\AgricultureController.cs" />
     <Compile Include="Controllers\ApprovalController.cs" />
     <Compile Include="Controllers\AutoCompleteController.cs" />
+    <Compile Include="Controllers\BillingController.cs" />
+    <Compile Include="Controllers\BillingRulesController.cs" />
     <Compile Include="Controllers\BlackBoxController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
     <Compile Include="Controllers\DesignController.cs" />
@@ -2134,6 +2136,12 @@
     <Content Include="Views\NOC\History.cshtml" />
     <Content Include="Views\NOC\NOCDetail.cshtml" />
     <Content Include="Views\Drone\DroneView.cshtml" />
+    <Content Include="Views\Billing\Rules.cshtml" />
+    <Content Include="Views\BillingRules\Create.cshtml" />
+    <Content Include="Views\BillingRules\Delete.cshtml" />
+    <Content Include="Views\BillingRules\Details.cshtml" />
+    <Content Include="Views\BillingRules\Edit.cshtml" />
+    <Content Include="Views\BillingRules\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
