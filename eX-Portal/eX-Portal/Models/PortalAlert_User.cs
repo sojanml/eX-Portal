@@ -12,12 +12,9 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Nationality
+    public partial class PortalAlert_User
     {
-        public int NationalityID { get; set; }
-        public string Country { get; set; }
-        public string Abbreviation { get; set; }
-        public string Adjective { get; set; }
-        public string Person { get; set; }
+        public int AlertID { get; set; }
+        public int UserID { get; set; }
     }
 }

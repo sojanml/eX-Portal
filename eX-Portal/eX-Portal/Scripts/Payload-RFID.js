@@ -6,6 +6,7 @@ var Markers = [];
 var GridLines = [];
 var infowindow = null;
 var _RFIDOverlay = {};
+var _GPSPath = {};
 
 $(document).ready(function () {
   initializeMap();
@@ -36,6 +37,14 @@ function initializeMap() {
 
   map = new google.maps.Map(document.getElementById('adsb_map'), mapOptions);
 
+  _GPSPath = new google.maps.Polyline({
+    strokeColor: '#00FF00',
+    strokeOpacity: 1.0,
+    strokeWeight: 3,
+    map: map
+  });
+
+
   FlightPath = new google.maps.Polyline({
     strokeColor: '#FF0000',
     strokeOpacity: 1.0,
@@ -58,6 +67,7 @@ function initializeMap() {
     strokeWeight: 3,
     map: map
   });
+
 
   infowindow = new google.maps.InfoWindow({
     content: 'loading'
@@ -119,13 +129,6 @@ function RFIDLoadSuccess(TheData) {
   //clear the path
   RFIDPath.setMap(null);
 
-  //Clear the markers
-  /*
-  for (var i = 0; i < Markers.length; i++) {
-    Markers[i].setMap(null);
-  }
-  Markers = [];
-  */
 
   for (var i = 0; i < GridLines.length; i++) {
     GridLines[i].setMap(null);
@@ -138,6 +141,12 @@ function RFIDLoadSuccess(TheData) {
   }
 
   ResetPath(FlightPath, TheData.FlightPath, false, $('#chkRawGPS').is(':checked'));
+  if(TheData.GridLines.length > 0) {
+    _GPSPath.setMap(null);
+  } else {
+    ResetPath(_GPSPath, TheData.GPS, true, true);
+  }
+
   $('#RFIDs').empty();
   var LI = $('<li >' +
     '<div class="c1">RFID</div>' +
@@ -164,20 +173,6 @@ function RFIDLoadSuccess(TheData) {
       '<div class="c3">' + data.Lat + '</div>' +
       '<div class="c4">' + data.Lng + '</div>' +      '</li>');
     $('#RFIDs').append(LI);
-    /*
-    if (data.Lat > 0 && data.Lng > 0){
-      var Pos = new google.maps.LatLng(data.Lat, data.Lng);
-
-      var marker = new google.maps.Marker({
-        position: Pos,
-        map: map,
-        title: '# ' + (i+1) + ' - Row: ' + data.Row + ', Col: ' + data.Col,
-        rfid: data.RFID
-      });
-      marker.addListener('click', fmMarkerClick);
-      Markers.push(marker);
-    }
-    */
   }
 
   for (var i = 0; i < TheData.GridLines.length; i++) {
@@ -284,7 +279,7 @@ function RFIDOverlay(options, LocationData) {
   this.setValues(options);
   this.markerLayer = $('<div />').addClass('overlay');
   this.LocationData = {};
-
+  
   this.setLocationData = function (LocationData) {
     this.LocationData = LocationData;
     this.draw();
@@ -316,8 +311,10 @@ RFIDOverlay.prototype.onRemove = function () {
 RFIDOverlay.prototype.draw = function () {
   var projection = this.getProjection();
   if (!projection) return false;
-  this.markerLayer.empty();
   if (!this.LocationData.RFID) return;
+  this.markerLayer.empty();
+  var IsGridMode = (this.LocationData.GridLines.length > 0);
+
 
   for (var i = 0; i < this.LocationData.RFID.length; i++) {
     var RFID = this.LocationData.RFID[i];
@@ -328,7 +325,8 @@ RFIDOverlay.prototype.draw = function () {
 
     var ID = 'rfid-' + RFID.PayLoadDataRFIDID;
     var MoreClass = (i == 0 ? 'First' : (i == this.LocationData.RFID.length - 1 ? "Last" : ""));
-    var Layer = '<div id="' + ID + '" class="rfid-item ' + MoreClass + '" ' +
+    var Layer = IsGridMode ?
+      '<div id="' + ID + '" class="rfid-item ' + MoreClass + '" ' +
       'style="left:' + (IconLocation.x - 50) + 'px; top:' + IconLocation.y + 'px;">' +
       this.Last5(RFID.RFID) +
       '<ul>' +
@@ -336,7 +334,17 @@ RFIDOverlay.prototype.draw = function () {
       '<li>' + RFID.ReadCount + ' Reads</li>' +
       (MoreClass !== '' ? '<li>' + MoreClass + '<li>' : '') +
       '</ul>' +
-      '</div>';
+      '</div>'
+      :
+      '<div id="' + ID + '" class="rfid-item-box ' + MoreClass + '" ' +
+      'style="left:' + (IconLocation.x - 5) + 'px; top:' + (IconLocation.y - 5) + 'px;">' +
+      '<div class="dot"></div>\n'+
+      '<ul>' +
+      '<li>' + this.Last5(RFID.RFID) + '</li>' +
+      '<li>' + RFID.ReadCount + ' Reads</li>' +
+      '</ul>' +
+      '</div>'
+
     this.markerLayer.append(Layer);
 
   }

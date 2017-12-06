@@ -12,7 +12,6 @@ namespace eX_Portal.Controllers {
     public ActionResult Index() {
       ViewBag.Title = "Payload - RFIDS";
       return View();
-
     }
 
     public JsonResult Runs() {
@@ -65,11 +64,20 @@ namespace eX_Portal.Controllers {
                            EndPoint = new { lat = data.ELat, lng = data.ELng }
                        };
 
+      var GPS = from data in db.PayLoadDataGPS
+                where data.FlightUniqueID == ID
+                orderby data.id
+                select new {
+                  lat = data.Lat,
+                  lng = data.Lng
+                };
+
       var jObject = new {
         RFID = Query1,
         FlightPath = Query2,
         BoundBox = LatLngQuery,
-        GridLines = LinesQuery
+        GridLines = LinesQuery,
+        GPS = GPS
       };
 
       return Json(jObject, JsonRequestBehavior.AllowGet);

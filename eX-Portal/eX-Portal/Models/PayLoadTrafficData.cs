@@ -12,11 +12,15 @@ namespace eX_Portal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class MSTR_TrafficMonitor
+    public partial class PayLoadTrafficData
     {
-        public long MonitorID { get; set; }
-        public string UniqueID { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public string Remarks { get; set; }
+        public long ID { get; set; }
+        public Nullable<int> FrameNumber { get; set; }
+        public Nullable<int> VehicleCount { get; set; }
+        public Nullable<decimal> TimeFrame { get; set; }
+        public Nullable<int> FlightVideoID { get; set; }
+        public Nullable<int> FlightID { get; set; }
+        public Nullable<int> IsProcessed { get; set; }
+        public Nullable<System.DateTime> CreatedTimestamp { get; set; }
     }
 }

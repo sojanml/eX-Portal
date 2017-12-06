@@ -32,6 +32,12 @@ namespace eX_Portal.Models
         public System.DateTime StatusChangedOn { get; set; }
         public int StatusChangedBy { get; set; }
         public int NocBuffer { get; set; }
+        public int BillingDays { get; set; }
+        public int BillingTotalMinutes { get; set; }
+        public int BillingPeakMinutes { get; set; }
+        public int BillingOffPeakMinutes { get; set; }
+        public decimal BillingArea { get; set; }
+        public decimal BillingVolume { get; set; }
     
         public virtual MSTR_NOC MSTR_NOC { get; set; }
     }

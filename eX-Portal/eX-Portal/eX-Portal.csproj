@@ -248,6 +248,7 @@
     <Compile Include="exLogic\DroneCheckListForm.cs" />
     <Compile Include="exLogic\DroneFlightSetup.cs" />
     <Compile Include="exLogic\NOC_QView.cs" />
+    <Compile Include="Models\BillingModelAnnotationsHelper.cs" />
     <Compile Include="Models\BillingRules.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -261,14 +262,14 @@
     <Compile Include="Models\MSTR_NOC.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MSTR_TrafficMonitor.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Nationality.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\NOC_DataAnnotationsHelper.cs" />
     <Compile Include="Models\NOC_Details.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadTrafficData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PortalAlert_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">

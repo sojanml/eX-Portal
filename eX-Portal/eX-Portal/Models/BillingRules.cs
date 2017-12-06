@@ -25,6 +25,7 @@ namespace eX_Portal.Models
         public string RuleDescription { get; set; }
         public string CalculateField { get; set; }
         public string ApplyCondition { get; set; }
+        public string CalculateOn { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BillingRulesCost> BillingRulesCost { get; set; }
