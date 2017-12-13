@@ -30,7 +30,7 @@ var BillingGroup = function () {
       var v = $(this).val();
       var i = parseFloat(v);
       if (isNaN(i)) i = 0;
-      $(this).val(i.toFixed(2));
+      $(this).val(i.toFixed(4));
     });
   };
 

@@ -85,5 +85,7 @@ namespace eX_Portal.ViewModel {
     }
 
     public int ApprovalID { get; set; }
+
+    public List<BillingModule.BillingGroupRule> Billing { get; set; }
   }
 }

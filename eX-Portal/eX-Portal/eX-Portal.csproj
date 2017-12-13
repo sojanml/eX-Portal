@@ -262,6 +262,9 @@
     <Compile Include="Models\BillingRulesGroup.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DroneFlight.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MSTR_NOC.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
@@ -352,9 +355,6 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DroneDocument.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DroneFlightVideo.cs">
@@ -2183,6 +2183,7 @@
     <Content Include="Views\BillingRules\Index.cshtml" />
     <Content Include="Views\Billing\AllRules.cshtml" />
     <Content Include="Views\Billing\Group.cshtml" />
+    <Content Include="Views\Billing\FlightBilling.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -54,7 +54,6 @@ namespace eX_Portal.Models
         public virtual DbSet<MSTR_User_Pilot_Certification> MSTR_User_Pilot_Certification { get; set; }
         public virtual DbSet<MSTR_User_Pilot_ExponentUAS> MSTR_User_Pilot_ExponentUAS { get; set; }
         public virtual DbSet<MSTR_Pilot_Log> MSTR_Pilot_Log { get; set; }
-        public virtual DbSet<DroneFlight> DroneFlights { get; set; }
         public virtual DbSet<MSTR_Account> MSTR_Account { get; set; }
         public virtual DbSet<MSTR_User> MSTR_User { get; set; }
         public virtual DbSet<PayLoadMapData> PayLoadMapDatas { get; set; }
@@ -110,6 +109,7 @@ namespace eX_Portal.Models
         public virtual DbSet<TrafficMonitor> TrafficMonitor { get; set; }
         public virtual DbSet<PayLoadTrafficData> PayLoadTrafficData { get; set; }
         public virtual DbSet<PortalAlert_User> PortalAlert_User { get; set; }
+        public virtual DbSet<DroneFlight> DroneFlight { get; set; }
     
         public virtual ObjectResult<usp_Portal_CreateDrone_Result> usp_Portal_CreateDrone(Nullable<int> ownerID, Nullable<int> manufacturerID, Nullable<int> uAVTypeID, Nullable<System.DateTime> commissionDate)
         {

@@ -1,0 +1,28 @@
+﻿@model List<eX_Portal.BillingModule.BillingGroupRule>
+@{
+  Layout = null;
+  Decimal TotalAmount = 0;
+}
+<h2>Billing</h2>
+
+<table class="flight_billing">
+  @foreach (var bill in Model) {
+    TotalAmount = TotalAmount + bill.CalculatedCost;
+    <tr>
+      <td>@(String.Equals(bill.CalculateOn, "NOC_Details") ? "NOC" : "Flight")</td>
+      <td style="width:100%;">
+        @bill.RuleName
+      <div class="billing-detail">@bill.RuleDescription</div>
+    </td>
+    <td class="bill_amount">@bill.CalculatedCost.ToString("0.00") AED</td>
+  </tr>
+  }
+  <tr>
+    <td>&nbsp;</td>
+    <td style="width:100%;">
+      Total
+    </td>
+    <td class="bill_amount_total">@TotalAmount.ToString("0.00") AED</td>
+  </tr>
+
+</table>

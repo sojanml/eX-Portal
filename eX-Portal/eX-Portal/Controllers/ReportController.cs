@@ -18,6 +18,8 @@ using eX_Portal.ViewModel;
 using System.Text;
 using iTextSharp.tool.xml;
 using Microsoft.Reporting.WebForms;
+using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace eX_Portal.Controllers {
 
@@ -338,12 +340,12 @@ namespace eX_Portal.Controllers {
 
     }
 
-    public ActionResult FlightReport([Bind(Prefix = "ID")]int FlightID = 0) {
+    public async Task<ActionResult> FlightReport([Bind(Prefix = "ID")]int FlightID = 0) {
       // if (!exLogic.User.hasAccess("FLIGHT.MAP")) return RedirectToAction("NoAccess", "Home");
       ViewBag.FlightID = FlightID;
 
-      var FlightData = (
-        from n in db.DroneFlights
+      var FlightData = await (
+        from n in db.DroneFlight
         where n.ID == FlightID
         select new FlightViewModel {
           ID = n.ID,
@@ -355,43 +357,43 @@ namespace eX_Portal.Controllers {
           DroneID = n.DroneID,
           CreatedOn = n.CreatedOn,
           ApprovalID = n.ApprovalID
-        }).ToList().FirstOrDefault();
+        }).FirstOrDefaultAsync();
       if (FlightData == null)
         return HttpNotFound();
 
       if (FlightData.FlightHours == null)
         FlightData.FlightHours = 0;
-      FlightData.PilotName = (
+      FlightData.PilotName = await (
         from n in db.MSTR_User
         where n.UserId == FlightData.PilotID
-        select n.FirstName + " " + n.LastName).FirstOrDefault();
+        select n.FirstName + " " + n.LastName).FirstOrDefaultAsync();
 
-      FlightData.GSCName = (
+      FlightData.GSCName = await (
         from n in db.MSTR_User
         where n.UserId == FlightData.GSCID
-        select n.FirstName + " " + n.LastName).FirstOrDefault();
+        select n.FirstName + " " + n.LastName).FirstOrDefaultAsync();
 
-      FlightData.DroneName = (
+      FlightData.DroneName = await (
         from n in db.MSTR_Drone
         where n.DroneId == FlightData.DroneID
-        select n.DroneName).FirstOrDefault();
+        select n.DroneName).FirstOrDefaultAsync();
 
-      FlightData.PortalAlerts = (
+      FlightData.PortalAlerts = await (
         from n in db.PortalAlerts
         where n.FlightID == FlightID
-        select n).ToList();
+        select n).ToListAsync();
 
 
       var thisApproval =
         from n in db.GCA_Approval
         where n.ApprovalID == FlightData.ApprovalID
         select n;
-      FlightData.Approval = thisApproval.FirstOrDefault();
+      FlightData.Approval = await thisApproval.FirstOrDefaultAsync();
 
       //set Alert message for Report
       //setReportMessages(FlightData.PortalAlerts, FlightData.Approval);
 
-      FlightData.MapData = (
+      FlightData.MapData = await (
         from n in db.FlightMapDatas
         where n.FlightID == FlightID
         orderby n.FlightMapDataID
@@ -399,28 +401,28 @@ namespace eX_Portal.Controllers {
           Lat = (Decimal)n.Latitude,
           Lng =(Decimal)n.Longitude
           }
-        ).ToList();
+        ).ToListAsync();
 
-      FlightData.Videos = (
+      FlightData.Videos = await (
         from n in db.DroneFlightVideos
         where n.FlightID == FlightID
         select n)
         .OrderBy(o => o.CreatedDate)
-        .ToList();
+        .ToListAsync();
 
 
-      FlightData.Approvals = (
+      FlightData.Approvals = await (
         from n in db.GCA_Approval
         where FlightData.FlightDate >= n.StartDate &&
               FlightData.FlightDate <= n.EndDate &&
               n.DroneID == FlightData.DroneID
         select n
-      ).ToList();
+      ).ToListAsync();
 
-      FlightData.Info = (
+      FlightData.Info = await (
         from n in db.FlightInfoes
         where n.FlightID == FlightID
-        select n).FirstOrDefault();
+        select n).FirstOrDefaultAsync();
       if(FlightData.Info == null) {
         FlightData.Info = new Models.FlightInfo();
         LatLng FirstPoint = FlightData.MapData.FirstOrDefault();
@@ -433,6 +435,17 @@ namespace eX_Portal.Controllers {
         FlightData.Info.Pressure = (Decimal)Condition.Today.Pressure;
         FlightData.Info.Temperature = Condition.Today.Temperature.ToString("0.0");
       }
+
+
+      //Billing 
+      int BillingGroupID = 1;
+      BillingModule.BillingGroup grp = new BillingModule.BillingGroup(BillingGroupID);
+      BillingModule.BillingNOC noc = new BillingModule.BillingNOC();
+      Models.DroneFlight flight = await noc.LoadNocForFlight(FlightID);
+      //await noc.GenerateFields();
+      FlightData.Billing = await grp.GenerateBilling(noc, flight);
+
+
       return View(FlightData);
     }
 
@@ -495,7 +508,7 @@ namespace eX_Portal.Controllers {
     }
 
     public ActionResult FlightPDF([Bind(Prefix = "ID")]int FlightID = 0) {
-      var FlightData = (from n in db.DroneFlights
+      var FlightData = (from n in db.DroneFlight
                         where n.ID == FlightID
                         select new FlightViewModel {
                           ID = n.ID,

@@ -30,7 +30,7 @@ namespace eX_Portal.Controllers {
 
 
       var FlightData = (
-        from n in ctx.DroneFlights
+        from n in ctx.DroneFlight
         where n.ID == FlightID
         select new FlightViewModel {
           ID = n.ID,

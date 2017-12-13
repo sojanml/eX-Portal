@@ -41,5 +41,6 @@ namespace eX_Portal.Models
         public Nullable<int> PilotProfileID { get; set; }
         public string ChartColor { get; set; }
         public string ColorName { get; set; }
+        public int BillingRuleGroupID { get; set; }
     }
 }

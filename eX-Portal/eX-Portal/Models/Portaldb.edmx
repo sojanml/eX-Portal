@@ -391,6 +391,13 @@ warning 6002: The table/view 'DCAAPortal.dbo.DCAA_PermitDetail' does not have a 
           <Property Name="ProximityCritical" Type="int" />
           <Property Name="ProximityHigh" Type="int" />
           <Property Name="ProximityWarning" Type="int" />
+          <Property Name="BillingAltitude" Type="int" Nullable="false" />
+          <Property Name="BillingPeakMinutes" Type="int" Nullable="false" />
+          <Property Name="BillingOffPeakMinutes" Type="int" Nullable="false" />
+          <Property Name="BillingTotalMinutes" Type="int" Nullable="false" />
+          <Property Name="BillingArea" Type="numeric" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="BillingVolume" Type="numeric" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="NocApplicationID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -732,6 +739,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="PilotProfileID" Type="int" />
           <Property Name="ChartColor" Type="nvarchar" MaxLength="50" />
           <Property Name="ColorName" Type="nvarchar" MaxLength="10" />
+          <Property Name="BillingRuleGroupID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="MSTR_BlackBox">
           <Key>
@@ -2247,7 +2255,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="ExponentPortalModel.MSTR_User_Pilot_Certification" />
           <EntitySet Name="MSTR_User_Pilot_ExponentUAS" EntityType="ExponentPortalModel.MSTR_User_Pilot_ExponentUAS" />
           <EntitySet Name="MSTR_Pilot_Log" EntityType="ExponentPortalModel.MSTR_Pilot_Log" />
-          <EntitySet Name="DroneFlights" EntityType="ExponentPortalModel.DroneFlight" />
           <EntitySet Name="MSTR_Account" EntityType="ExponentPortalModel.MSTR_Account" />
           <EntitySet Name="MSTR_User" EntityType="ExponentPortalModel.MSTR_User" />
           <EntitySet Name="PayLoadMapDatas" EntityType="ExponentPortalModel.PayLoadMapData" />
@@ -2371,6 +2378,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           </AssociationSet>
           <EntitySet Name="PayLoadTrafficData" EntityType="ExponentPortalModel.PayLoadTrafficData" />
           <EntitySet Name="PortalAlert_User" EntityType="ExponentPortalModel.PortalAlert_User" />
+          <EntitySet Name="DroneFlight" EntityType="ExponentPortalModel.DroneFlight" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2623,61 +2631,6 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="MultiDashRotor" Type="Int32" />
           <Property Name="FlightID" Type="Int32" />
         </EntityType>
-        <EntityType Name="DroneFlight">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PilotID" Type="Int32" />
-          <Property Name="GSCID" Type="Int32" />
-          <Property Name="FlightDate" Type="DateTime" Precision="3" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="DroneID" Type="Int32" />
-          <Property Name="BBFlightID" Type="Int32" />
-          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="LogFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LogTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LogTakeOffTime" Type="DateTime" Precision="3" />
-          <Property Name="LogLandingTime" Type="DateTime" Precision="3" />
-          <Property Name="LogBattery1ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LogBattery1StartV" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="LogBattery1EndV" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="LogBattery2ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LogBattery2StartV" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="LogBattery2EndV" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="LogDateTime" Type="DateTime" Precision="3" />
-          <Property Name="LogCreatedBy" Type="Int32" />
-          <Property Name="Descrepency" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="ActionTaken" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="IsLogged" Type="Byte" />
-          <Property Name="IsFlightOutside" Type="Boolean" />
-          <Property Name="RecordedVideoURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IsFlightSoftFence" Type="Int32" />
-          <Property Name="LowerLimit" Type="Int32" />
-          <Property Name="HigherLimit" Type="Int32" />
-          <Property Name="GridLat" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="GridLng" Type="Decimal" Precision="18" Scale="5" />
-          <Property Name="FlightHours" Type="Int32" />
-          <Property Name="HasFlightInfo" Type="Int32" />
-          <Property Name="FlightDistance" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="IsInsideTimeFrame" Type="Boolean" />
-          <Property Name="IsDistanceWarning" Type="Int32" />
-          <Property Name="IsDistanceCritical" Type="Int32" />
-          <Property Name="ApprovalID" Type="Int32" Nullable="false" />
-          <Property Name="MaxSpeed" Type="Decimal" Precision="12" Scale="5" />
-          <Property Name="MaxAltitude" Type="Decimal" Precision="12" Scale="5" />
-          <Property Name="BoundaryCritical" Type="Int32" />
-          <Property Name="BoundaryHigh" Type="Int32" />
-          <Property Name="BoundaryWarning" Type="Int32" />
-          <Property Name="HeightCritical" Type="Int32" />
-          <Property Name="HeightHigh" Type="Int32" />
-          <Property Name="HeightWarning" Type="Int32" />
-          <Property Name="ProximityCritical" Type="Int32" />
-          <Property Name="ProximityHigh" Type="Int32" />
-          <Property Name="ProximityWarning" Type="Int32" />
-        </EntityType>
         <EntityType Name="MSTR_Account">
           <Key>
             <PropertyRef Name="AccountId" />
@@ -2709,6 +2662,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="PilotProfileID" Type="Int32" />
           <Property Name="ChartColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ColorName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="BillingRuleGroupID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="MSTR_User">
           <Key>
@@ -3805,6 +3759,68 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="AlertID" Type="Int32" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="DroneFlight">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PilotID" Type="Int32" />
+          <Property Name="GSCID" Type="Int32" />
+          <Property Name="FlightDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="DroneID" Type="Int32" />
+          <Property Name="BBFlightID" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="LogFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogTakeOffTime" Type="DateTime" Precision="3" />
+          <Property Name="LogLandingTime" Type="DateTime" Precision="3" />
+          <Property Name="LogBattery1ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogBattery1StartV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery1EndV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery2ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LogBattery2StartV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="LogBattery2EndV" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="IsLogged" Type="Byte" />
+          <Property Name="LogDateTime" Type="DateTime" Precision="3" />
+          <Property Name="LogCreatedBy" Type="Int32" />
+          <Property Name="Descrepency" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTaken" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsFlightOutside" Type="Boolean" />
+          <Property Name="RecordedVideoURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsFlightSoftFence" Type="Int32" />
+          <Property Name="LowerLimit" Type="Int32" />
+          <Property Name="HigherLimit" Type="Int32" />
+          <Property Name="GridLat" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="GridLng" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="FlightHours" Type="Int32" />
+          <Property Name="HasFlightInfo" Type="Int32" />
+          <Property Name="FlightDistance" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="IsInsideTimeFrame" Type="Boolean" />
+          <Property Name="IsDistanceWarning" Type="Int32" />
+          <Property Name="IsDistanceCritical" Type="Int32" />
+          <Property Name="ApprovalID" Type="Int32" Nullable="false" />
+          <Property Name="MaxSpeed" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="MaxAltitude" Type="Decimal" Precision="12" Scale="5" />
+          <Property Name="BoundaryCritical" Type="Int32" />
+          <Property Name="BoundaryHigh" Type="Int32" />
+          <Property Name="BoundaryWarning" Type="Int32" />
+          <Property Name="HeightCritical" Type="Int32" />
+          <Property Name="HeightHigh" Type="Int32" />
+          <Property Name="HeightWarning" Type="Int32" />
+          <Property Name="ProximityCritical" Type="Int32" />
+          <Property Name="ProximityHigh" Type="Int32" />
+          <Property Name="ProximityWarning" Type="Int32" />
+          <Property Name="BillingAltitude" Type="Int32" Nullable="false" />
+          <Property Name="BillingPeakMinutes" Type="Int32" Nullable="false" />
+          <Property Name="BillingOffPeakMinutes" Type="Int32" Nullable="false" />
+          <Property Name="BillingTotalMinutes" Type="Int32" Nullable="false" />
+          <Property Name="BillingArea" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
+          <Property Name="BillingVolume" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
+          <Property Name="NocApplicationID" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4334,65 +4350,10 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DroneFlights">
-            <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
-              <MappingFragment StoreEntitySet="DroneFlight">
-                <ScalarProperty Name="ProximityWarning" ColumnName="ProximityWarning" />
-                <ScalarProperty Name="ProximityHigh" ColumnName="ProximityHigh" />
-                <ScalarProperty Name="ProximityCritical" ColumnName="ProximityCritical" />
-                <ScalarProperty Name="HeightWarning" ColumnName="HeightWarning" />
-                <ScalarProperty Name="HeightHigh" ColumnName="HeightHigh" />
-                <ScalarProperty Name="HeightCritical" ColumnName="HeightCritical" />
-                <ScalarProperty Name="BoundaryWarning" ColumnName="BoundaryWarning" />
-                <ScalarProperty Name="BoundaryHigh" ColumnName="BoundaryHigh" />
-                <ScalarProperty Name="BoundaryCritical" ColumnName="BoundaryCritical" />
-                <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
-                <ScalarProperty Name="MaxSpeed" ColumnName="MaxSpeed" />
-                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
-                <ScalarProperty Name="IsDistanceCritical" ColumnName="IsDistanceCritical" />
-                <ScalarProperty Name="IsDistanceWarning" ColumnName="IsDistanceWarning" />
-                <ScalarProperty Name="IsInsideTimeFrame" ColumnName="IsInsideTimeFrame" />
-                <ScalarProperty Name="FlightDistance" ColumnName="FlightDistance" />
-                <ScalarProperty Name="HasFlightInfo" ColumnName="HasFlightInfo" />
-                <ScalarProperty Name="FlightHours" ColumnName="FlightHours" />
-                <ScalarProperty Name="GridLng" ColumnName="GridLng" />
-                <ScalarProperty Name="GridLat" ColumnName="GridLat" />
-                <ScalarProperty Name="HigherLimit" ColumnName="HigherLimit" />
-                <ScalarProperty Name="LowerLimit" ColumnName="LowerLimit" />
-                <ScalarProperty Name="IsFlightSoftFence" ColumnName="IsFlightSoftFence" />
-                <ScalarProperty Name="RecordedVideoURL" ColumnName="RecordedVideoURL" />
-                <ScalarProperty Name="IsFlightOutside" ColumnName="IsFlightOutside" />
-                <ScalarProperty Name="IsLogged" ColumnName="IsLogged" />
-                <ScalarProperty Name="ActionTaken" ColumnName="ActionTaken" />
-                <ScalarProperty Name="Descrepency" ColumnName="Descrepency" />
-                <ScalarProperty Name="LogCreatedBy" ColumnName="LogCreatedBy" />
-                <ScalarProperty Name="LogDateTime" ColumnName="LogDateTime" />
-                <ScalarProperty Name="LogBattery2EndV" ColumnName="LogBattery2EndV" />
-                <ScalarProperty Name="LogBattery2StartV" ColumnName="LogBattery2StartV" />
-                <ScalarProperty Name="LogBattery2ID" ColumnName="LogBattery2ID" />
-                <ScalarProperty Name="LogBattery1EndV" ColumnName="LogBattery1EndV" />
-                <ScalarProperty Name="LogBattery1StartV" ColumnName="LogBattery1StartV" />
-                <ScalarProperty Name="LogBattery1ID" ColumnName="LogBattery1ID" />
-                <ScalarProperty Name="LogLandingTime" ColumnName="LogLandingTime" />
-                <ScalarProperty Name="LogTakeOffTime" ColumnName="LogTakeOffTime" />
-                <ScalarProperty Name="LogTo" ColumnName="LogTo" />
-                <ScalarProperty Name="LogFrom" ColumnName="LogFrom" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
-                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />
-                <ScalarProperty Name="GSCID" ColumnName="GSCID" />
-                <ScalarProperty Name="PilotID" ColumnName="PilotID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MSTR_Account">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Account">
               <MappingFragment StoreEntitySet="MSTR_Account">
+                <ScalarProperty Name="BillingRuleGroupID" ColumnName="BillingRuleGroupID" />
                 <ScalarProperty Name="ColorName" ColumnName="ColorName" />
                 <ScalarProperty Name="ChartColor" ColumnName="ChartColor" />
                 <ScalarProperty Name="PilotProfileID" ColumnName="PilotProfileID" />
@@ -5513,6 +5474,69 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
               <MappingFragment StoreEntitySet="PortalAlert_User">
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="AlertID" ColumnName="AlertID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DroneFlight">
+            <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
+              <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="NocApplicationID" ColumnName="NocApplicationID" />
+                <ScalarProperty Name="BillingVolume" ColumnName="BillingVolume" />
+                <ScalarProperty Name="BillingArea" ColumnName="BillingArea" />
+                <ScalarProperty Name="BillingTotalMinutes" ColumnName="BillingTotalMinutes" />
+                <ScalarProperty Name="BillingOffPeakMinutes" ColumnName="BillingOffPeakMinutes" />
+                <ScalarProperty Name="BillingPeakMinutes" ColumnName="BillingPeakMinutes" />
+                <ScalarProperty Name="BillingAltitude" ColumnName="BillingAltitude" />
+                <ScalarProperty Name="ProximityWarning" ColumnName="ProximityWarning" />
+                <ScalarProperty Name="ProximityHigh" ColumnName="ProximityHigh" />
+                <ScalarProperty Name="ProximityCritical" ColumnName="ProximityCritical" />
+                <ScalarProperty Name="HeightWarning" ColumnName="HeightWarning" />
+                <ScalarProperty Name="HeightHigh" ColumnName="HeightHigh" />
+                <ScalarProperty Name="HeightCritical" ColumnName="HeightCritical" />
+                <ScalarProperty Name="BoundaryWarning" ColumnName="BoundaryWarning" />
+                <ScalarProperty Name="BoundaryHigh" ColumnName="BoundaryHigh" />
+                <ScalarProperty Name="BoundaryCritical" ColumnName="BoundaryCritical" />
+                <ScalarProperty Name="MaxAltitude" ColumnName="MaxAltitude" />
+                <ScalarProperty Name="MaxSpeed" ColumnName="MaxSpeed" />
+                <ScalarProperty Name="ApprovalID" ColumnName="ApprovalID" />
+                <ScalarProperty Name="IsDistanceCritical" ColumnName="IsDistanceCritical" />
+                <ScalarProperty Name="IsDistanceWarning" ColumnName="IsDistanceWarning" />
+                <ScalarProperty Name="IsInsideTimeFrame" ColumnName="IsInsideTimeFrame" />
+                <ScalarProperty Name="FlightDistance" ColumnName="FlightDistance" />
+                <ScalarProperty Name="HasFlightInfo" ColumnName="HasFlightInfo" />
+                <ScalarProperty Name="FlightHours" ColumnName="FlightHours" />
+                <ScalarProperty Name="GridLng" ColumnName="GridLng" />
+                <ScalarProperty Name="GridLat" ColumnName="GridLat" />
+                <ScalarProperty Name="HigherLimit" ColumnName="HigherLimit" />
+                <ScalarProperty Name="LowerLimit" ColumnName="LowerLimit" />
+                <ScalarProperty Name="IsFlightSoftFence" ColumnName="IsFlightSoftFence" />
+                <ScalarProperty Name="RecordedVideoURL" ColumnName="RecordedVideoURL" />
+                <ScalarProperty Name="IsFlightOutside" ColumnName="IsFlightOutside" />
+                <ScalarProperty Name="ActionTaken" ColumnName="ActionTaken" />
+                <ScalarProperty Name="Descrepency" ColumnName="Descrepency" />
+                <ScalarProperty Name="LogCreatedBy" ColumnName="LogCreatedBy" />
+                <ScalarProperty Name="LogDateTime" ColumnName="LogDateTime" />
+                <ScalarProperty Name="IsLogged" ColumnName="IsLogged" />
+                <ScalarProperty Name="LogBattery2EndV" ColumnName="LogBattery2EndV" />
+                <ScalarProperty Name="LogBattery2StartV" ColumnName="LogBattery2StartV" />
+                <ScalarProperty Name="LogBattery2ID" ColumnName="LogBattery2ID" />
+                <ScalarProperty Name="LogBattery1EndV" ColumnName="LogBattery1EndV" />
+                <ScalarProperty Name="LogBattery1StartV" ColumnName="LogBattery1StartV" />
+                <ScalarProperty Name="LogBattery1ID" ColumnName="LogBattery1ID" />
+                <ScalarProperty Name="LogLandingTime" ColumnName="LogLandingTime" />
+                <ScalarProperty Name="LogTakeOffTime" ColumnName="LogTakeOffTime" />
+                <ScalarProperty Name="LogTo" ColumnName="LogTo" />
+                <ScalarProperty Name="LogFrom" ColumnName="LogFrom" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="BBFlightID" ColumnName="BBFlightID" />
+                <ScalarProperty Name="DroneID" ColumnName="DroneID" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />
+                <ScalarProperty Name="GSCID" ColumnName="GSCID" />
+                <ScalarProperty Name="PilotID" ColumnName="PilotID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

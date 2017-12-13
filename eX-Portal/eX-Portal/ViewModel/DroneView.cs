@@ -20,7 +20,7 @@ namespace eX_Portal.ViewModel {
       AccountInfo = new AccountInfo(DroneInfo.AccountID);
 
       FlightInfo = db
-        .DroneFlights
+        .DroneFlight
         .Where(w => w.DroneID == DroneID && w.MaxAltitude > 5)
         .OrderBy(o => o.ID)
         .Select(s => new FlightInfo {

@@ -84,7 +84,7 @@ namespace eX_Portal.Controllers {
     }
 
     [HttpPost]
-    public ActionResult Register(Models.MSTR_NOC NOC) {
+    public async Task<ActionResult> Register(Models.MSTR_NOC NOC) {
       StringBuilder SB = new StringBuilder();
       ViewBag.DbErrors = "";
       NOC.CreateBy = Util.getLoginUserID();
@@ -221,7 +221,7 @@ namespace eX_Portal.Controllers {
     [ChildActionOnly]
     public ActionResult NOCDetail(int ID = 0) {
       var TheDetail = ctx.NOC_Details.Where(w => w.NocID == ID).FirstOrDefault();
-      if (TheDetail == null) { 
+      if (TheDetail == null) {
         var c = new ContentResult();
         c.Content = "404 - NOC Detail is not found.";
         return c;

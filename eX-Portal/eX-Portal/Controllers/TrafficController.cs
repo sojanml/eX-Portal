@@ -57,7 +57,7 @@ namespace eX_Portal.Controllers {
 
       ViewModel.TrafficDashboard DashBoardInfo = null; 
 
-      var FlightInfo = db.DroneFlights.Where(f => f.ID == FlightID).FirstOrDefault();
+      var FlightInfo = db.DroneFlight.Where(f => f.ID == FlightID).FirstOrDefault();
       if(FlightInfo != null) {
         DashBoardInfo = new ViewModel.TrafficDashboard() {
           FlightID = FlightInfo.ID,

@@ -111,23 +111,31 @@ namespace eX_Portal.BillingModule {
           CostDividedBy = grpSelect.CostDividedBy,
           CostMultipliedBy = grpSelect.CostMultipliedBy,
           ApplyCondition = rule.ApplyCondition,
-          IsActive = (grpSelect.IsSkipRest == 0)
+          IsActive = (grpSelect.IsSkipRest == 0),
+          RuleDescription = rule.RuleDescription
         };
       Rules = Query.ToList();
       RulesIndex = Rules.Select(s => s.RuleID).ToList();
     }
 
 
-    public async Task<List<BillingGroupRule>> GenerateBilling(BillingNOC noc) {
-      var ProcessRules = Rules.Where(w => w.IsActive && w.CalculateOn == "NOC_Details");
+    public async Task<List<BillingGroupRule>> GenerateBilling(BillingNOC noc, Models.DroneFlight flight = null) {
       using (var db = new Models.ExponentPortalEntities()) {
         await db.Database.Connection.OpenAsync();
         await CreateTempTableFor(noc, db);        
-        foreach (var rule in ProcessRules) {
+        foreach (var rule in Rules.Where(w => w.IsActive && w.CalculateOn == "NOC_Details")) {
           await rule.ApplyNoc(noc, db);
         }
+        foreach (var rule in Rules.Where(w => w.IsActive && w.CalculateOn == "DroneFlight")) {
+          await rule.ApplyDroneFlight(flight, db);
+        }
       }
-      return ProcessRules.ToList();
+      //if no flight return only the NOC Rules
+      if(flight == null)
+        return Rules.Where(w => w.IsActive && w.CalculateOn == "NOC_Details").ToList();
+      
+      //Return all active ruels applied
+      return Rules.Where(w => w.IsActive).ToList();
     }
 
     private async Task CreateTempTableFor(BillingNOC noc, Models.ExponentPortalEntities db) {
@@ -207,6 +215,8 @@ CREATE TABLE [#NOC_Details](
     public String CalculateOn { get; set; }
     public String CalculateField { get; set; }
     public String ApplyCondition { get; set; }
+    public String RuleDescription { get; set; }
+
     public Decimal? CostDividedBy {
       get { return _CostDividedBy; } 
       set {
@@ -242,6 +252,23 @@ CREATE TABLE [#NOC_Details](
           Decimal.TryParse(Result.ToString(), out _CalculatedCost);
       }//using ctx.Database.Connection.CreateCommand
 
+    }
+
+    public async Task ApplyDroneFlight(Models.DroneFlight flight, Models.ExponentPortalEntities db) {
+      String SQL =
+        $@"SELECT {CalculateField} * {CostMultipliedBy} / {_CostDividedBy} FROM DroneFlight";
+      if (!String.IsNullOrWhiteSpace(ApplyCondition)) {
+        SQL += $" WHERE ({ApplyCondition})";
+      }
+
+      using (var cmd = db.Database.Connection.CreateCommand()) {
+        cmd.CommandText = SQL;
+        var Result = await cmd.ExecuteScalarAsync();
+        if (Result == null)
+          _CalculatedCost = 0;
+        else
+          Decimal.TryParse(Result.ToString(), out _CalculatedCost);
+      }//using ctx.Database.Connection.CreateCommand
     }
   }
 }

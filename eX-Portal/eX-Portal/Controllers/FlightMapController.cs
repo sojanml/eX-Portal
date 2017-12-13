@@ -132,7 +132,7 @@ namespace eX_Portal.Controllers {
         //no permission check
       } else {
         //Check the drone is in user account
-        int DroneID = Util.toInt(ctx.DroneFlights.Where(x => x.ID == FlightID).Select(x => x.DroneID).FirstOrDefault());
+        int DroneID = Util.toInt(ctx.DroneFlight.Where(x => x.ID == FlightID).Select(x => x.DroneID).FirstOrDefault());
         int AccID = Util.getAccountID();
         bool CheckValid = ctx.MSTR_Drone.Where(x => x.DroneId == DroneID && x.AccountID == AccID).Count() > 0 ? true : false;
         if (!CheckValid)
@@ -391,9 +391,9 @@ namespace eX_Portal.Controllers {
             df.PilotID = Pilotid;
             df.CreatedOn = System.DateTime.UtcNow;
             df.FlightDate = System.DateTime.UtcNow;
-            ctx.DroneFlights.Add(df);
+            ctx.DroneFlight.Add(df);
             ctx.SaveChanges();
-            DroneFlight dft = ctx.DroneFlights.Where(x => x.CreatedOn == df.CreatedOn && x.DroneID==df.DroneID).FirstOrDefault();
+            DroneFlight dft = ctx.DroneFlight.Where(x => x.CreatedOn == df.CreatedOn && x.DroneID==df.DroneID).FirstOrDefault();
             if(df !=null)
             FlightID = df.ID;
 
