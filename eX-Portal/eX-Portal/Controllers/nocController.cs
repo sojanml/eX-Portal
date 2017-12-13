@@ -6,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -226,6 +227,14 @@ namespace eX_Portal.Controllers {
         return c;
       }
       return View(new ViewModel.NOC_Details_Ext(TheDetail));
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Billing(BillingModule.BillingNOC noc) {
+      BillingModule.BillingGroup group = new BillingModule.BillingGroup(1);
+      await noc.GenerateFields();
+      var Billing = await group.GenerateBilling(noc);
+      return Json(Billing, JsonRequestBehavior.AllowGet);
     }
 
 
