@@ -174,3 +174,38 @@ section.top-border ul.noc-info li {
 div.cesium-viewer-bottom {
   display: none !important;
 }
+
+div#NocBillingTotalSection {
+  padding: 0px 5px 5px 5px;
+  font-family: Gobold_Light;
+  border-bottom: 2px #018aff solid;
+  margin-bottom: 5px;
+}
+div#NocBillingTotalSection div.item-left {
+  float: left;
+  color: #f2a003;
+  font-size: 16px;
+}
+div#NocBillingTotalSection div.item-right {
+  float: right;
+  color: #018aff;
+  font-size: 26px;
+}
+
+ul#NocBillingItem {
+  margin: 0px;
+  padding: 0px 5px 0px 5px;
+  list-style: none;
+}
+ul#NocBillingItem li {
+  list-style: none;
+  margin: 0px 0px 5px 0px;
+  padding: 0px 0px 5px 0px;
+  border-bottom: 1px #53a100 solid;
+}
+ul#NocBillingItem li div.NocBillingItemAmount {
+  float: right;
+  color: #53a100;
+  font-size: 18px;
+  font-family: Gobold_Light;
+}

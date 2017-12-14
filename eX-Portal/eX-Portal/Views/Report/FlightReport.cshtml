@@ -75,6 +75,20 @@
         ul.proximity li span {
           color: rgb(255, 89, 0)
         }
+    td.bill_amount_total,
+    td.bill_amount {
+      white-space: nowrap;
+      font-size: 15px;
+      color: #287bff;
+      text-align:right;
+    }
+    td.bill_amount_total {
+      font-size:22px;
+    }
+    div.billing-detail {
+      color:#484848;
+      font-size:10pt;
+    }
   </style>
 </head>
 <body>
@@ -293,7 +307,7 @@
         }
       }
     </table>
-    <p>&nbsp;</p>
+
   }@*if (Model.PortalAlerts.Count > 0)*@
 
   @if (Model.Videos.Count > 0) {
@@ -303,7 +317,7 @@
         <li style="padding:10px 0px 10px 0px; ">@element.VideoURL</li>
       }
     </ul>
-    <p>&nbsp;</p>
+
   }@*if (Model.PortalAlerts.Count > 0)*@
 
 
@@ -340,9 +354,36 @@
       }
     </tbody>
   </table>
-
-    <p>&nbsp;</p>
   }@*if (Model.PortalAlerts.Count > 0)*@
+
+
+  <h1>Billing</h1>
+  @{ 
+    Decimal TotalAmount = 0;
+  }
+  <table width="100%" border="1" cellspacing="0" cellpadding="5" bordercolor="silver" style="border-collapse:collapse">
+    @foreach (var bill in Model.Billing) {
+      TotalAmount = TotalAmount + bill.CalculatedCost;
+      <tr>
+        <td valign="top">@(String.Equals(bill.CalculateOn, "NOC_Details") ? "NOC" : "Flight")</td>
+        <td style="width:100%;" valign="top">
+          @bill.RuleName
+          <div class="billing-detail">@bill.RuleDescription</div>
+        </td >
+        <td valign="top" class="bill_amount">@String.Format("{0:n}", bill.CalculatedCost) AED</td>
+      </tr>
+    }
+    <tr>
+      <td>&nbsp;</td>
+      <td style="width:100%;">
+        Total
+      </td>
+      <td class="bill_amount_total">@String.Format("{0:n}",TotalAmount) AED</td>
+    </tr>
+
+  </table>
+
+  <p>&nbsp;</p>
 </body>
 
 </html>

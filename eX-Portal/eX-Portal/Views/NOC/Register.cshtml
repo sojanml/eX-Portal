@@ -179,8 +179,25 @@
 
   <table class="GoogleMapTable" cellpadding="0" cellspacing="0" border="0">
     <tr>
-      <td valign="top" style="width:80%;">
+      <td valign="top" style="width:60%;">
         <div id="GoogleMap" style=""></div>
+      </td>
+      <td valign="top" style="width:20%;">
+        <div id="NocBilling">
+          <div id="NocBillingTotalSection">
+            <div class="item-left">Total (AED):</div>
+            <div id="NocBillingTotal" class="item-right">0.00</div>
+            <div style="clear:both"></div>
+          </div>
+
+          <ul id="NocBillingItem">
+            <li>
+              <div id="NocBillingItem-3" class="NocBillingItemAmount">0.00</div>
+              Some cost title and description
+              <div style="clear:both"></div>
+            </li>
+          </ul>
+        </div>
       </td>
       <td valign="top" style="width:20%;">
         <div class="GoogleMapCoordinatesScroll">
@@ -252,6 +269,7 @@
 </script>
 
 <script src="~/jquery-ui/jquery.ui.timepicker.js"></script>
+<script src="~/Scripts/jquery.animateNumber.js"></script>
 <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>
 <script src="~/Scripts/ADSB-Map.js"></script>
 <script type="text/javascript" src="~/Scripts/NOC_Register.js"></script>

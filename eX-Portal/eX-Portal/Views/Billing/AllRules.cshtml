@@ -1,0 +1,63 @@
+﻿@model IEnumerable<eX_Portal.Models.BillingRules>
+@{ 
+  int slno = 0;
+}
+
+
+<table class="RulesTable">
+  <tr>
+    <th>#</th>
+    <th>&nbsp;</th>
+    <th>
+      Rule Name
+    </th>
+    <th>
+     Description
+    </th>
+    <th>
+      Field
+    </th>
+    <th>
+      Condition
+    </th>
+    <th>
+      Based On
+    </th>
+    <th></th>
+  </tr>
+
+  @foreach (var item in Model) {
+    <tr>
+      <td>@(++slno)</td>
+      <td>@(String.Equals(item.CalculateOn, "NOC_Details") ? "NOC" : "Flight")</td>
+      <td>        
+        @Html.DisplayFor(modelItem => item.RuleName)
+      </td>
+      <td>
+        @Html.DisplayFor(modelItem => item.RuleDescription)
+      </td>
+      <td>
+        @Html.DisplayFor(modelItem => item.CalculateField)
+      </td>
+      <td>
+        @Html.DisplayFor(modelItem => item.ApplyCondition)
+      </td>
+      <td>
+        @(String.Equals(item.CalculateOn, "NOC_Details") ? "NOC" : "Flight")
+      </td>
+      <td class="menu">
+        <span class="icon">&#xf0d7;</span>
+        <ul>
+          <li>@Html.ActionLink("Edit the Rule", "Rules", new { id = item.RuleID }) </li>
+          <li>@Html.ActionLink("RemoveRule", "RulesDelete", new { id = item.RuleID })</li>
+        </ul>
+      </td>
+    </tr>
+  }
+
+</table>
+
+
+@section header {
+  <link href="~/Content/BillingModule.css" rel="stylesheet" />
+}

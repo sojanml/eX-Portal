@@ -26,6 +26,8 @@
   $(document).on("change", "select.list-PilotID", Ajax.OnUserChange);
   $(document).on("change", "select.list-DroneID", Ajax.OnDroneChange);
 
+  $(document).on("change", "li.active input", NOCMap.LoadNocBilling)
+
   $('#btnCenterLatLng').on("click", function () {
     NOCMap.MovePolygonByCenter();
     NOCMap.SetNOCCoordinates(true);
@@ -261,6 +263,8 @@ var NOCMap = function () {
   var ItemIndex = 0;
   var SetCoordinatesTimer = null;
   var LatLngItemsCount = 0;
+  var _isBillingLoading = false;
+  var _BillingXHR = null;
 
   var _initilizeMap = function () {
     var BoundaryBoxCoordinates = getLatLngArray(_DefaultCoordinates);
@@ -379,7 +383,75 @@ var NOCMap = function () {
     $('#GoogleMapLayer').parent('LI').find('input.Coordinates').val(LatLng);
 
     $('#btnLatLngCancel').fadeOut();
+
+    _loadNocBilling();
   };
+
+  var _loadNocBilling = function () {
+    var _form = document.forms['frmNocAppliation']
+    var TheIndex = $('#NocSections LI.active').attr('data-id');
+    var FormData =
+      'StartDate=' + escape(_form['NOC_Details[' + TheIndex + '].StartDate'].value) + '&' +
+      'EndDate=' + escape(_form['NOC_Details[' + TheIndex + '].EndDate'].value) + '&' +
+      'StartTime=' + escape(_form['NOC_Details[' + TheIndex + '].StartTime'].value) + '&' +
+      'EndTime=' + escape(_form['NOC_Details[' + TheIndex + '].EndTime'].value) + '&' +
+      'Coordinates=' + escape(_form['NOC_Details[' + TheIndex + '].Coordinates'].value) + '&' +
+      'MaxAltitude=' + escape(_form['NOC_Details[' + TheIndex + '].MaxAltitude'].value) + '&' +
+      'LOS=' + (_form['NOC_Details[' + TheIndex + '].LOS'].checked ? 'VLOS' : 'BVLOS');
+
+    if (_isBillingLoading && _BillingXHR)
+      _BillingXHR.abort();
+
+    _isBillingLoading = true;
+    _BillingXHR = $.ajax({
+      type: 'GET',
+      url: '/NOC/Billing/',
+      method: "POST",
+      data: FormData,
+      success: _showBilling,
+      error: function () {
+      },
+      done: function() {
+        _isBillingLoading = false;
+      }
+
+    });
+  }
+
+  var _showBilling = function (BillingData) {
+    var TotalCost = 0;
+    for (var i = 0; i < BillingData.length; i++) {
+      var Billing = BillingData[i];
+      var NocBillingItem = $('div#NocBillingItem-' + Billing.RuleID);
+      if (NocBillingItem.length < 1) {
+        NocBillingItem = $('<div id="NocBillingItem-' + Billing.RuleID + '" class="NocBillingItemAmount">0.00</div>');
+        var LI = $('<LI>' +
+          Billing.RuleName +
+          '<div style= "clear:both" ></div>' +
+          '</LI>');
+        LI.prepend(NocBillingItem);
+        $('UL#NocBillingItem').append(LI);
+      }
+      TotalCost = TotalCost + Billing.CalculatedCost;
+      _AnimateAmountTo(NocBillingItem, Billing.CalculatedCost);
+    }
+    _AnimateAmountTo($('#NocBillingTotal'), TotalCost);
+  }
+
+  var _AnimateAmountTo = function (Element, Amount) {
+    var Now = parseFloat(Element.text());
+    if (isNaN(Now)) Now = 0;
+    Element
+      .prop('number', Now)
+      .animateNumber({
+      number: Amount,
+      numberStep: function (now, tween) {
+        $(tween.elem).text(now.toFixed(2));
+      }
+    },
+    200
+    );
+  }
 
   var resetCoordinates = function (Coordinates) {
     var BoundaryBoxCoordinates = getLatLngArray(Coordinates);
@@ -470,10 +542,12 @@ var NOCMap = function () {
     GetCoordinates: _getCoordinates,
     MovePolygonByCenter: _movePolygonByCenter,
     SetNOCCoordinates: setNOCCoordinates,
-    ResetPolygonByLatLng: _resetPolygonByLatLng
+    ResetPolygonByLatLng: _resetPolygonByLatLng,
+    LoadNocBilling: _loadNocBilling
   };
 
 }();
+
 
 
 var Ajax = function () {

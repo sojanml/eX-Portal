@@ -684,7 +684,7 @@ namespace eX_Portal.Controllers {
     public JsonResult FlightInfo([Bind(Prefix = "ID")] int FlightID = 0) {
       DroneFlight df = new DroneFlight();
       using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
-        df = (from d in ctx.DroneFlights
+        df = (from d in ctx.DroneFlight
               where d.ID == FlightID
               select d).FirstOrDefault();
       }

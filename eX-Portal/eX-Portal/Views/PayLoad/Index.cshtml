@@ -54,27 +54,57 @@
         }
         div.rfid-item.Last {
           color: coral;
-        }         
-        div.rfid-item:hover ul {
+        }
+        div.rfid-item:hover ul,
+        div.rfid-item-box:hover ul{
           display: block;
-          background-color: rgba(0, 0, 0, 0.66);
+        }
+      div.rfid-item-box:hover div.dot {
+        background-color:rgb(255, 216, 0);
+      } 
+      div.rfid-item ul {
+        left: 50px;
+      }
+      div.rfid-item-box ul {
+        left: 15px;
+
+      } 
+      
+      div.rfid-item ul,
+      div.rfid-item-box ul {
+        border: 1px silver solid;
+        margin: 0px;
+        padding: 5px;
+        list-style: none;
+        display: none;
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.66);
+      }
+        div.rfid-item ul li,
+        div.rfid-item-box ul li{
+          margin: 0px;
+          padding: 0px;
+          list-style: none;
+          white-space: nowrap;
         }
 
-        div.rfid-item ul {
-          border: 1px silver solid;
-          margin: 0px;
-          padding: 5px;
-          list-style: none;
-          left: 50px;
-          display: none;
-          position: absolute;
-          
-        }
-          div.rfid-item ul li {
-            margin: 0px;
-            padding: 0px;
-            list-style: none;
-            white-space:nowrap;
-          }
+      div.rfid-item-box {
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        color: white;
+        text-transform: none !important
+      }
+
+      div.rfid-item-box div.dot {
+        width:10px;
+        height:10px;
+        position:relative;
+        top:0px;
+        left:0px;
+        border-radius:50%;
+        background-color:rgba(182, 0, 0, 0.71);
+        cursor:pointer;
+      }
     </style>
   }

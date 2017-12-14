@@ -1,0 +1,192 @@
+﻿@import "common.scss";
+$Gap: 1%;
+
+div.columns {
+  width: 100%;
+
+  & > div.column-2s {
+    width: (100% - $Gap)/2;
+    margin-right: $Gap;
+    float: left;
+  }
+
+  & > div.column-2s:last-child {
+    margin-right: 0px;
+  }
+}
+
+div.validation-summary-errors {
+  color: $BreachColor;
+
+  ul {
+    list-style: none;
+    margin: 10px 0px 10px 0px;
+    border: 1px $BreachColor solid;
+    padding: 5px;
+
+    li {
+      margin: 0px 0px 10px 0px;
+      padding: 0px;
+      list-style: none;
+    }
+  }
+}
+
+table.RulesTable {
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  border-collapse: collapse;
+
+  tr {
+    th {
+      text-align: left;
+    }
+
+    td, th {
+      border-bottom: 1px #dbdbdb solid;
+      padding: 2px 0px 2px 10px;
+    }
+
+    td:first-child, th:first-child {
+      padding-left: 0px;
+    }
+
+    td.menu {
+      position: relative;
+      text-align: right;
+      vertical-align: top;
+
+      ul {
+        z-index: 20;
+        position: absolute;
+        top: 16px;
+        right: 0px;
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+        display: none;
+        border: 1px $AlertColor solid;
+        background-color: white;
+
+        li {
+          list-style: none;
+          margin: 0px;
+          padding: 5px 10px 5px 10px;
+          white-space: nowrap;
+
+          &:hover {
+            background-color: $AlertColor;
+          }
+        }
+      }
+    }
+  }
+
+  tr:hover td.menu ul {
+    display: block;
+  }
+}
+
+table#BillingRules {
+  width: 100%;
+  border-collapse: collapse;
+
+  tr {
+    td {
+      padding: 2px 10px 2px 0px;
+      border-bottom: 1px silver solid;
+
+      span.noc_details,
+      span.droneflight {
+        padding:2px 5px 2px 5px;
+        font-size:10px;
+        color:white;
+      }
+
+      span.noc_details {
+        background-color: $AlertColor;
+      }
+
+      span.droneflight {
+        background-color: $FilterColor;
+      }
+    }
+
+    td:last-child {
+      padding-right: 0px;
+    }
+
+    th {
+      text-align: left;
+      border-bottom: 3px $SafeColor solid;
+    }
+
+    td.InputCol, th.InputCol {
+      white-space: nowrap;
+      width: 100px;
+      min-width: 100px;
+    }
+  }
+
+  td.sorter {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                   supported by Chrome and Opera */
+    cursor: ns-resize;
+    width: 16px;
+    min-width: 16px;
+    background-color: #fae3b9;
+    background-image: url('/images/table-sort.png');
+    background-size: 16px 16px;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+
+  &.sorting-table {
+    cursor: ns-resize;
+  }
+
+
+  tr.sorting-row td {
+    background-color: transparentize($SafeColor, 0.6);
+  }
+
+  div.ruledescription {
+    color: #aaa;
+  }
+}
+
+input.OnOffSwitch {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  + label {
+    padding: 2px;
+    width: 30px;
+    color: white;
+    display: inline-block;
+  }
+
+  + label:after {
+    content: "Off";
+    background-color: $BreachColor;
+    display: block;
+    text-align: center;
+  }
+
+  &:checked + label:after {
+    content: "On";
+    background-color: $SafeColor;
+  }
+}
+
+input.NumberInput {
+  width:120px;
+}

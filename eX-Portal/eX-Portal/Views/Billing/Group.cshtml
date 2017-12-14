@@ -1,0 +1,92 @@
+﻿@model eX_Portal.BillingModule.BillingGroup
+
+@{
+  ViewBag.Title = "Billing Group - " +
+    (String.IsNullOrEmpty(Model.GroupName) ? " [New]" : Model.GroupName);
+  int RuleRow = 0;
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { name = "GroupForm", id = "GroupForm" })) {
+  @Html.AntiForgeryToken()
+
+  <div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.GroupID)
+    <input id="RulesIndex" name="RulesIndex" type="hidden" value="@Model.RulesIndexString" />
+    <div class="form-group">
+      Group Name
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.GroupName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.GroupName, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+
+    <h2>Billing Rules</h2>
+    <div>
+      Please specify the value of Multiplier and/or devider for each rule in this group.<br />
+      You can do the following in the group:
+      <ul>
+        <li>Turn a rule On/Off by slecting the option</li>
+        <li>You can sort the group rules by dragging the handler from left side.</li>
+      </ul>
+    </div>
+    <table id="BillingRules">
+      <tr>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th>Set</th>
+        <th width="100%;">Rule</th>
+        <th class="InputCol">On/Off</th>
+        <th class="InputCol">Devider</th>
+        <th class="InputCol">Multiplier</th>
+      </tr>
+
+      @foreach (var Rule in Model.Rules) {
+        <tr>
+          <td class="sorter"></td>
+          <td class="gap">
+            <input class="RuleID" type="hidden" id="Rule[@RuleRow].RuleID" name="Rule[@RuleRow].RuleID" value="@Rule.RuleID" />
+          </td>
+          <td valign="top">
+            <span class="@Rule.CalculateOn.ToLower()">@(String.Equals(Rule.CalculateOn, "NOC_Details") ? "NOC" : "Flight")</span>
+          </td>
+          <td width="100%;">
+            <div class="rulename">@(RuleRow + 1) - @Rule.RuleName</div>
+            <div class="ruledescription">@Rule.Description</div>
+          </td>
+          <td class="InputCol">
+            <input class="OnOffSwitch" id="Rule[@RuleRow].IsActive"
+                   name="Rule[@RuleRow].IsActive" type="checkbox"
+                   @(Rule.IsActive ? "checked" : "") value="true" />
+            <label class="Off" for="Rule[@RuleRow].IsSkip"></label>
+          </td>
+          <td class="InputCol"><input class="NumberInput" id="Rule[@RuleRow].CostDividedBy" name="Rule[@RuleRow].CostDividedBy" value="@(((Decimal)Rule.CostDividedBy).ToString("0.0000"))" type='number' step='0.0001' placeholder='0.0000' /></td>
+          <td class="InputCol"><input class="NumberInput" id="Rule[@RuleRow].CostMultipliedBy" name="Rule[@RuleRow].CostMultipliedBy" value="@(((Decimal)Rule.CostMultipliedBy).ToString("0.0000"))" type='number' step='0.0001' placeholder='0.0000' /></td>
+        </tr>
+        RuleRow++;
+      }
+
+    </table>
+
+    <div style="margin-top:20px;" class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="Save" class="btn btn-default" />
+      </div>
+    </div>
+  </div>
+}
+
+<div>
+  @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section scripts {
+  <script type="text/javascript" src="~/Scripts/Table-RowSorter/dist/RowSorter.js"></script>
+  <script type="text/javascript" src="~/Scripts/BillingGroup.js"></script>
+}
+
+@section header {
+  <link href="~/Content/BillingModule.css" rel="stylesheet" />
+
+}

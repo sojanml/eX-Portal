@@ -1,0 +1,169 @@
+div.columns {
+  width: 100%;
+}
+div.columns > div.column-2s {
+  width: 49.5%;
+  margin-right: 1%;
+  float: left;
+}
+div.columns > div.column-2s:last-child {
+  margin-right: 0px;
+}
+
+div.validation-summary-errors {
+  color: #fe0000;
+}
+div.validation-summary-errors ul {
+  list-style: none;
+  margin: 10px 0px 10px 0px;
+  border: 1px #fe0000 solid;
+  padding: 5px;
+}
+div.validation-summary-errors ul li {
+  margin: 0px 0px 10px 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+table.RulesTable {
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  border-collapse: collapse;
+}
+table.RulesTable tr th {
+  text-align: left;
+}
+table.RulesTable tr td, table.RulesTable tr th {
+  border-bottom: 1px #dbdbdb solid;
+  padding: 2px 0px 2px 10px;
+}
+table.RulesTable tr td:first-child, table.RulesTable tr th:first-child {
+  padding-left: 0px;
+}
+table.RulesTable tr td.menu {
+  position: relative;
+  text-align: right;
+  vertical-align: top;
+}
+table.RulesTable tr td.menu ul {
+  z-index: 20;
+  position: absolute;
+  top: 16px;
+  right: 0px;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  display: none;
+  border: 1px #f2a003 solid;
+  background-color: white;
+}
+table.RulesTable tr td.menu ul li {
+  list-style: none;
+  margin: 0px;
+  padding: 5px 10px 5px 10px;
+  white-space: nowrap;
+}
+table.RulesTable tr td.menu ul li:hover {
+  background-color: #f2a003;
+}
+table.RulesTable tr:hover td.menu ul {
+  display: block;
+}
+
+table#BillingRules {
+  width: 100%;
+  border-collapse: collapse;
+}
+table#BillingRules tr td {
+  padding: 2px 10px 2px 0px;
+  border-bottom: 1px silver solid;
+}
+table#BillingRules tr td span.noc_details,
+table#BillingRules tr td span.droneflight {
+  padding: 2px 5px 2px 5px;
+  font-size: 10px;
+  color: white;
+}
+table#BillingRules tr td span.noc_details {
+  background-color: #f2a003;
+}
+table#BillingRules tr td span.droneflight {
+  background-color: #018aff;
+}
+table#BillingRules tr td:last-child {
+  padding-right: 0px;
+}
+table#BillingRules tr th {
+  text-align: left;
+  border-bottom: 3px #53a100 solid;
+}
+table#BillingRules tr td.InputCol, table#BillingRules tr th.InputCol {
+  white-space: nowrap;
+  width: 100px;
+  min-width: 100px;
+}
+table#BillingRules td.sorter {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+              supported by Chrome and Opera */
+  cursor: ns-resize;
+  width: 16px;
+  min-width: 16px;
+  background-color: #fae3b9;
+  background-image: url("/images/table-sort.png");
+  background-size: 16px 16px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+table#BillingRules.sorting-table {
+  cursor: ns-resize;
+}
+table#BillingRules tr.sorting-row td {
+  background-color: rgba(83, 161, 0, 0.4);
+}
+table#BillingRules div.ruledescription {
+  color: #aaa;
+}
+
+input.OnOffSwitch {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2);
+  /* IE */
+  -moz-transform: scale(2);
+  /* FF */
+  -webkit-transform: scale(2);
+  /* Safari and Chrome */
+  -o-transform: scale(2);
+  /* Opera */
+}
+input.OnOffSwitch + label {
+  padding: 2px;
+  width: 30px;
+  color: white;
+  display: inline-block;
+}
+input.OnOffSwitch + label:after {
+  content: "Off";
+  background-color: #fe0000;
+  display: block;
+  text-align: center;
+}
+input.OnOffSwitch:checked + label:after {
+  content: "On";
+  background-color: #53a100;
+}
+
+input.NumberInput {
+  width: 120px;
+}

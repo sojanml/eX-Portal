@@ -1,0 +1,35 @@
+{
+  "name": "rowsorter",
+  "version": "2.1.1",
+  "description": "Drag & drop table row sorter pluging with touch support for Vanilla JS and jQuery.",
+  "main": "dist/RowSorter.js",
+  "keywords": [
+    "row sorting",
+    "table sort"
+  ],
+  "authors": [
+    "Gökhan Bora"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:borayazilim/rowsorter.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/borayazilim/rowsorter",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "samples"
+  ],
+  "_release": "2.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.1.1",
+    "commit": "f05b8c5273cd2cf58b37da05166667b139275f1e"
+  },
+  "_source": "https://github.com/borayazilim/rowsorter.git",
+  "_target": "^2.1.1",
+  "_originalSource": "rowsorter",
+  "_direct": true
+}

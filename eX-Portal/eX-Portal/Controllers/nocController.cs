@@ -6,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -83,7 +84,7 @@ namespace eX_Portal.Controllers {
     }
 
     [HttpPost]
-    public ActionResult Register(Models.MSTR_NOC NOC) {
+    public async Task<ActionResult> Register(Models.MSTR_NOC NOC) {
       StringBuilder SB = new StringBuilder();
       ViewBag.DbErrors = "";
       NOC.CreateBy = Util.getLoginUserID();
@@ -220,12 +221,20 @@ namespace eX_Portal.Controllers {
     [ChildActionOnly]
     public ActionResult NOCDetail(int ID = 0) {
       var TheDetail = ctx.NOC_Details.Where(w => w.NocID == ID).FirstOrDefault();
-      if (TheDetail == null) { 
+      if (TheDetail == null) {
         var c = new ContentResult();
         c.Content = "404 - NOC Detail is not found.";
         return c;
       }
       return View(new ViewModel.NOC_Details_Ext(TheDetail));
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Billing(BillingModule.BillingNOC noc) {
+      BillingModule.BillingGroup group = new BillingModule.BillingGroup(1);
+      await noc.GenerateFields();
+      var Billing = await group.GenerateBilling(noc);
+      return Json(Billing, JsonRequestBehavior.AllowGet);
     }
 
 

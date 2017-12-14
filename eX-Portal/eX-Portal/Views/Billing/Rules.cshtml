@@ -1,13 +1,15 @@
 ﻿@model eX_Portal.Models.BillingRules
 
-
+@{ 
+  var LoadLists = new List<SelectListItem> {
+    new SelectListItem{Text="Loading...", Value=""}
+  };
+}
 
   @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-      <h4>BillingRules</h4>
-      <hr />
       @Html.ValidationSummary(true, "", new { @class = "text-danger" })
       <div class="form-group">
         @Html.LabelFor(model => model.RuleName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -20,23 +22,40 @@
       <div class="form-group">
         @Html.LabelFor(model => model.RuleDescription, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-          @Html.EditorFor(model => model.RuleDescription, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.TextAreaFor(model => model.RuleDescription, new { htmlAttributes = new { @class = "form-control" } })
           @Html.ValidationMessageFor(model => model.RuleDescription, "", new { @class = "text-danger" })
         </div>
       </div>
 
-      <div class="form-group">
-        @Html.LabelFor(model => model.CalculateField, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-          @Html.EditorFor(model => model.CalculateField, new { htmlAttributes = new { @class = "form-control" } })
-          @Html.ValidationMessageFor(model => model.CalculateField, "", new { @class = "text-danger" })
+      <div class="columns">
+
+        <div class="form-group column-2s">
+          @Html.LabelFor(model => model.CalculateOn, htmlAttributes: new { @class = "control-label col-md-2" })
+          <div class="col-md-10">
+            @Html.DropDownListFor(model => model.CalculateOn, LoadLists, new { htmlAttributes = new { @class = "form-control" } })            
+            @Html.ValidationMessageFor(model => model.CalculateOn, "", new { @class = "text-danger" })
+          </div>
+        </div>
+
+
+        <div class="form-group column-2s">
+          @Html.LabelFor(model => model.CalculateField, htmlAttributes: new { @class = "control-label col-md-2" })
+          <div class="col-md-10">
+            @Html.DropDownListFor(model => model.CalculateField, LoadLists, new { htmlAttributes = new { @class = "form-control" } })
+            <div style="width:100%; display:none" id="CalculateFieldCustomLayer">
+              <div>Please specify the custom value:</div>
+              <input type="text" name="CalculateFieldCustom" id="CalculateFieldCustom" class="form-control"  />
+            </div>
+            @Html.ValidationMessageFor(model => model.CalculateField, "", new { @class = "text-danger" })
+          </div>
         </div>
       </div>
 
-      <div class="form-group">
+
+      <div class="form-group  column-1-of-2">
         @Html.LabelFor(model => model.ApplyCondition, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-          @Html.EditorFor(model => model.ApplyCondition, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.TextAreaFor(model => model.ApplyCondition, new { htmlAttributes = new { @class = "form-control" } })
           @Html.ValidationMessageFor(model => model.ApplyCondition, "", new { @class = "text-danger" })
         </div>
       </div>
@@ -47,7 +66,22 @@
         </div>
       </div>
     </div>
+    <input type="hidden" name="RuleID" id="RuleID" value="@Model.RuleID" />
   }
 
 
 
+
+@section header {
+  <link href="~/Content/BillingModule.css" rel="stylesheet" />
+}
+
+@section scripts {
+  <script type="text/javascript">
+    var _Form = {
+      CalculateOn: '@Html.Raw(Model == null ? "" : Model.CalculateOn)',
+      CalculateField: '@Html.Raw(Model == null ? "" : Model.CalculateField)',
+    };
+  </script>
+  <script type="text/javascript" src="~/Scripts/BillingModule.js"></script>
+}

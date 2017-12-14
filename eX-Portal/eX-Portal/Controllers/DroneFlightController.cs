@@ -337,7 +337,7 @@ namespace eX_Portal.Controllers {
       if (ModelState.IsValid) {
         int ID = 0;
         ExponentPortalEntities db = new ExponentPortalEntities();
-        db.DroneFlights.Add(theFlight);
+        db.DroneFlight.Add(theFlight);
         db.SaveChanges();
         ID = theFlight.ID;
         db.Dispose();
@@ -364,7 +364,7 @@ namespace eX_Portal.Controllers {
         return RedirectToAction("NoAccess", "Home");
       ViewBag.Title = "Edit RPAS Flight";
       ExponentPortalEntities db = new ExponentPortalEntities();
-      DroneFlight InitialData = db.DroneFlights.Find(FlightID);
+      DroneFlight InitialData = db.DroneFlight.Find(FlightID);
       return View(InitialData);
     }
 
