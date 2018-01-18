@@ -16,6 +16,35 @@ namespace eX_Portal.Controllers {
     // GET: Adsb
     private String DSN = System.Configuration.ConfigurationManager.ConnectionStrings["ADSB_DB"].ToString();
     // GET: FlightMap
+
+
+    [HttpGet]
+    public ActionResult View([Bind(Prefix = "ID")] int FlightID = 0, int IsLive = 0) {
+      if (!exLogic.User.hasAccess("FLIGHT.MAP"))
+        return RedirectToAction("NoAccess", "Home");
+
+      if (exLogic.User.hasAccess("DRONE.VIEWALL") || exLogic.User.hasAccess("DRONE.MANAGE")) {
+        //no permission check
+      } else {
+        //Check the drone is in user account
+        int DroneID = Util.toInt(ctx.DroneFlight.Where(x => x.ID == FlightID).Select(x => x.DroneID).FirstOrDefault());
+        int AccID = Util.getAccountID();
+        bool CheckValid = ctx.MSTR_Drone.Where(x => x.DroneId == DroneID && x.AccountID == AccID).Count() > 0 ? true : false;
+        if (!CheckValid)
+          return RedirectToAction("NoAccess", "Home");
+      }
+      var TheMap = new FlightMap();
+
+      TheMap.GetInformation(FlightID);
+      if (!TheMap.IsLive) {
+        if (!exLogic.User.hasAccess("FLIGHT.ARCHIVE"))
+          return RedirectToAction("NoAccess", "Home");
+      }
+      return View(TheMap);
+
+    }
+
+
     public ActionResult Index([Bind(Prefix = "ID")] int DroneID = 0, string FlightType = "") {
       if (!exLogic.User.hasAccess("FLIGHT"))
         return RedirectToAction("NoAccess", "Home");

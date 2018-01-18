@@ -1,0 +1,20 @@
+@font-face {
+  font-family: "FontAwesome";
+  src: url('/fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('/fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('/fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('/fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('/fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('/fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
+}
+@font-face {
+  font-family: "Avenir Next Condensed";
+  src: url('/fonts/bold');
+  src: url('/fonts/bold?#iefix') format('embedded-opentype'), AvenirNextCondensed/AvenirNextCondensed;
+  font-weight: normal;
+}
+/*
+@include font-face( "Avenir Next Condensed", "../fonts/AvenirNextCondensed-Italic", "normal", "italic" );
+@include font-face( "Avenir Next Condensed", "../fonts/AvenirNextCondensed-Heavy", 900, "normal" );
+@include font-face( "Avenir Next Condensed", "../fonts/AvenirNextCondensed-Medium", 500, "normal" );
+@include font-face( "Avenir Next Condensed", "../fonts/AvenirNextCondensed-Regular", "normal", "normal" );
+@include font-face( "Avenir Next Condensed", "../fonts/AvenirNextCondensed-MediumItalic", 500, "italic" );
+@include font-face( "Avenir Next Condensed", "../fonts/AvenirNextCondensed-BoldItalic", "bold", "italic" );
+@include font-face( "Avenir Next Condensed", "../fonts/AvenirNextCondensed-HeavyItalic", 900, "italic" );
+
+*/

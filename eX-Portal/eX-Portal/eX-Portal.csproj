@@ -901,6 +901,20 @@
     <Content Include="Content\ADSB.css" />
     <Content Include="Content\ADSB2.css" />
     <Content Include="Content\Agriculture.css" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Bold.svg" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-BoldItalic.svg" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBold.svg" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBoldItalic.svg" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Heavy.svg" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-HeavyItalic.svg" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Italic.svg" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Medium.svg" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-MediumItalic.svg" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Regular.svg" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLight.svg" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLightItalic.svg" />
+    <Content Include="Content\AvenirNextCondensed\demo.html" />
+    <Content Include="Content\AvenirNextCondensed\stylesheet.css" />
     <Content Include="Content\black-box.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -912,6 +926,8 @@
     <Content Include="Content\DroneDetail.css" />
     <Content Include="Content\exPortal.css" />
     <Content Include="Content\eXPortalWidget.css" />
+    <Content Include="Content\exPortal_V3.css" />
+    <Content Include="Content\exPortal_V3_Common.css" />
     <Content Include="Content\flight-data.css" />
     <Content Include="Content\font\vjs.svg" />
     <Content Include="Content\ie.css" />
@@ -1108,6 +1124,7 @@
     <Content Include="images\scaler.png" />
     <Content Include="images\table-sort.png" />
     <Content Include="images\time-picker.png" />
+    <Content Include="images\V3\logo.png" />
     <Content Include="images\weather\00.png" />
     <Content Include="images\weather\01.png" />
     <Content Include="images\weather\02.png" />
@@ -1206,6 +1223,7 @@
     </Content>
     <Content Include="red.png" />
     <Content Include="ReportsManager\WebForm1.aspx" />
+    <Content Include="sass\exPortal_V3.scss" />
     <Content Include="Scripts\ADSB-FullScreen.js" />
     <Content Include="Scripts\ADSB-Map.js" />
     <Content Include="Scripts\ADSB.js" />
@@ -1492,6 +1510,54 @@
     <Content Include="Cesium\Assets\IAU2006_XYS\IAU2006_XYS_7.json" />
     <Content Include="Cesium\Assets\IAU2006_XYS\IAU2006_XYS_8.json" />
     <Content Include="Cesium\Assets\IAU2006_XYS\IAU2006_XYS_9.json" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Bold.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Bold.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Bold.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Bold.woff2" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-BoldItalic.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-BoldItalic.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-BoldItalic.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-BoldItalic.woff2" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBold.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBold.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBold.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBold.woff2" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBoldItalic.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBoldItalic.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBoldItalic.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBoldItalic.woff2" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Heavy.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Heavy.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Heavy.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Heavy.woff2" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-HeavyItalic.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-HeavyItalic.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-HeavyItalic.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-HeavyItalic.woff2" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Italic.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Italic.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Italic.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Italic.woff2" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Medium.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Medium.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Medium.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Medium.woff2" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-MediumItalic.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-MediumItalic.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-MediumItalic.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-MediumItalic.woff2" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Regular.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Regular.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Regular.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Regular.woff2" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLight.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLight.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLight.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLight.woff2" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLightItalic.eot" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLightItalic.ttf" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLightItalic.woff" />
+    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLightItalic.woff2" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -1500,6 +1566,7 @@
     <Content Include="sass\DroneDetail.scss" />
     <Content Include="sass\BillingModule.scss" />
     <None Include="sass\common.scss" />
+    <Content Include="sass\exPortal_V3_Common.scss" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
@@ -2006,6 +2073,7 @@
     <Content Include="Views\Shared\_BreadCrumbs.cshtml" />
     <Content Include="Views\Shared\_eXPortal.cshtml" />
     <Content Include="Views\Shared\_eXPortalBeforeLogin.cshtml" />
+    <Content Include="Views\Shared\_exPortal_V2.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Summary\FlightHistorySummary.cshtml" />
@@ -2134,7 +2202,6 @@
     <Content Include="Views\Agriculture\Images.cshtml" />
     <Content Include="Views\Agriculture\BulkUpload.cshtml" />
     <Content Include="Views\Traffic\DMAT.cshtml" />
-    <Content Include="Views\Shared\_exPortal_V2.cshtml" />
     <Content Include="Views\FlightMap\Index.cshtml" />
     <Content Include="Views\FlightMap\Map.cshtml" />
     <Content Include="Views\DashBoard\UserDashboard.cshtml" />
@@ -2184,6 +2251,8 @@
     <Content Include="Views\Billing\AllRules.cshtml" />
     <Content Include="Views\Billing\Group.cshtml" />
     <Content Include="Views\Billing\FlightBilling.cshtml" />
+    <Content Include="Views\FlightMap\View.cshtml" />
+    <Content Include="Views\Shared\_exPortal_V3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

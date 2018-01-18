@@ -1,0 +1,1913 @@
+@font-face {
+  font-family: "FontAwesome";
+  src: url('/fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('/fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('/fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('/fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('/fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('/fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
+}
+@font-face {
+  font-family: "OpenSans";
+  src: url('/fonts/../fonts/OpenSans.ttf?1478508894') format('truetype'), url('/fonts/../fonts/OpenSans.eot?1478508894') format('embedded-opentype'), url('/fonts/../fonts/OpenSans.svg?1478508894') format('svg'), url('/fonts/../fonts/OpenSans.woff?1478508894') format('woff'), url('/fonts/../fonts/OpenSans.woff2?1478508894') format('woff2');
+}
+@font-face {
+  font-family: "Gobold_Light";
+  src: url('/fonts/../fonts/GoboldThinLight.ttf?1478593771') format('truetype'), url('/fonts/../fonts/GoboldThinLight.eot?1478593771') format('embedded-opentype'), url('/fonts/../fonts/GoboldThinLight.svg?1478593771') format('svg'), url('/fonts/../fonts/GoboldThinLight.woff?1478593771') format('woff'), url('/fonts/../fonts/GoboldThinLight.woff2?1478593771') format('woff2');
+}
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+/* line 235, ../sass/exPortal.scss */
+table {
+  box-sizing: border-box;
+}
+
+/* line 239, ../sass/exPortal.scss */
+span.refresh,
+span.icon,
+span.green_icon {
+  font-family: FontAwesome;
+  font-size: 12px;
+  display: inline-block;
+}
+
+/* line 247, ../sass/exPortal.scss */
+span.refresh {
+  margin-left: 5px;
+  cursor: pointer;
+}
+/* line 252, ../sass/exPortal.scss */
+span.refresh:hover {
+  -webkit-animation: spin 3s linear infinite;
+  -moz-animation: spin 3s linear infinite;
+  animation: spin 3s linear infinite;
+}
+
+/* line 259, ../sass/exPortal.scss */
+#flightmap {
+  min-height: 510px;
+}
+
+/* line 263, ../sass/exPortal.scss */
+input,
+select,
+textarea,
+button,
+file {
+  box-sizing: border-box;
+  border: 1px silver solid;
+  font-family: OpenSans;
+  color: #474747;
+  margin: 0px;
+}
+
+/* line 275, ../sass/exPortal.scss */
+input,
+select,
+textarea,
+button {
+  padding: 2px 4px 2px 4px;
+}
+
+/* line 282, ../sass/exPortal.scss */
+input[type=datetime] {
+  background-image: url("../images/cal-icon.png");
+  background-position: calc(100% - 4px) 3px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+/* line 289, ../sass/exPortal.scss */
+input.time-picker {
+  background-image: url("../images/time-picker.png");
+  background-position: calc(100% - 4px) 3px;
+  background-repeat: no-repeat;
+  background-size: 20px;
+}
+
+/* line 296, ../sass/exPortal.scss */
+select {
+  padding: 1px 4px 1px 4px;
+}
+
+/* line 300, ../sass/exPortal.scss */
+div.label {
+  display: inline-block;
+  padding: 0px 5px 0px 5px;
+  background-color: white;
+  border-radius: 10px;
+  width: 30px;
+}
+
+/* line 308, ../sass/exPortal.scss */
+h2 {
+  font-family: Gobold_Light;
+  color: #474747;
+  padding: 5px 0px 5px 0px;
+  margin: 10px 0px 10px 0px;
+  border-bottom: 1px #474747 solid;
+}
+
+/* line 316, ../sass/exPortal.scss */
+a {
+  text-decoration: none;
+  color: #ff0000;
+}
+
+/* line 320, ../sass/exPortal.scss */
+a:hover {
+  text-decoration: underline;
+  color: black;
+}
+
+/* line 325, ../sass/exPortal.scss */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+/* line 332, ../sass/exPortal.scss */
+input.spinner {
+  width: 30px;
+}
+
+/* line 336, ../sass/exPortal.scss */
+ul.simple-list {
+  list-style: none;
+  margin: 0px 0px 0px 5px;
+  padding: 0px;
+}
+/* line 341, ../sass/exPortal.scss */
+ul.simple-list li {
+  margin: 0px;
+  margin: 5px 0px 5px 0px;
+}
+/* line 346, ../sass/exPortal.scss */
+ul.simple-list input[type="checkbox"] {
+  display: none;
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
+}
+/* line 352, ../sass/exPortal.scss */
+ul.simple-list input[type="checkbox"] + label {
+  padding-left: 20px;
+  background-image: url("/images/adsb-check-off.png");
+  background-repeat: no-repeat;
+  background-position: left center;
+  height: 16px;
+  display: block;
+}
+/* line 361, ../sass/exPortal.scss */
+ul.simple-list input[type="checkbox"]:checked + label {
+  background-image: url("/images/adsb-check-on.png");
+}
+
+/* line 367, ../sass/exPortal.scss */
+ul.multi-select {
+  margin: 10px 0px 5px 5px;
+  padding: 0px;
+}
+/* line 371, ../sass/exPortal.scss */
+ul.multi-select li {
+  display: inline-block;
+}
+/* line 375, ../sass/exPortal.scss */
+ul.multi-select input[type="checkbox"] {
+  display: none;
+}
+/* line 378, ../sass/exPortal.scss */
+ul.multi-select input[type="checkbox"] + label {
+  margin: 0px 6px 3px 0px;
+  padding: 0px 5px 0px 5px;
+  border-radius: 6px;
+  background-color: white;
+}
+/* line 385, ../sass/exPortal.scss */
+ul.multi-select input[type="checkbox"]:checked + label {
+  background-color: #53a100;
+  color: white;
+}
+/* line 390, ../sass/exPortal.scss */
+ul.multi-select input[type="checkbox"] + label:hover {
+  background-color: #87d534;
+}
+
+/* line 405, ../sass/exPortal.scss */
+body, html {
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  font-family: OpenSans;
+  color: #292929;
+}
+
+/* line 414, ../sass/exPortal.scss */
+body {
+  padding: 10px 30px 60px 30px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* line 420, ../sass/exPortal.scss */
+footer {
+  border-top: 1px red solid;
+  font-size: 8pt;
+  padding: 3px 0px 10px 0px;
+}
+
+/* line 398, ../sass/exPortal.scss */
+div.clearfix:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+/* line 430, ../sass/exPortal.scss */
+.shaded {
+  background-color: #ededed;
+}
+
+/* line 434, ../sass/exPortal.scss */
+header {
+  font-size: 11px;
+}
+/* line 436, ../sass/exPortal.scss */
+header div.left-section {
+  float: left;
+}
+/* line 440, ../sass/exPortal.scss */
+header div.right-section {
+  float: right;
+}
+/* line 444, ../sass/exPortal.scss */
+header div.logo img {
+  width: auto;
+}
+/* line 398, ../sass/exPortal.scss */
+header:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+/* line 452, ../sass/exPortal.scss */
+.ui-spinner-input {
+  margin: 0px 16px 0px 3px;
+}
+
+/* line 456, ../sass/exPortal.scss */
+nav {
+  text-transform: uppercase;
+}
+
+/* line 463, ../sass/exPortal.scss */
+nav.user-management ul,
+nav.main-menu ul,
+nav.breadcrumbs ul {
+  float: right;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+/* line 469, ../sass/exPortal.scss */
+nav.user-management ul li,
+nav.main-menu ul li,
+nav.breadcrumbs ul li {
+  float: left;
+  padding-right: 5px;
+  padding-left: 5px;
+  position: relative;
+}
+/* line 475, ../sass/exPortal.scss */
+nav.user-management ul li:last-child ul,
+nav.main-menu ul li:last-child ul,
+nav.breadcrumbs ul li:last-child ul {
+  left: auto !important;
+  right: 0px !important;
+}
+/* line 481, ../sass/exPortal.scss */
+nav.user-management ul li ul,
+nav.main-menu ul li ul,
+nav.breadcrumbs ul li ul {
+  position: absolute;
+  top: 14px;
+  left: 0px;
+  display: none;
+  z-index: 10;
+}
+/* line 488, ../sass/exPortal.scss */
+nav.user-management ul li ul li,
+nav.main-menu ul li ul li,
+nav.breadcrumbs ul li ul li {
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  box-sizing: border-box;
+}
+/* line 500, ../sass/exPortal.scss */
+nav.user-management ul li:hover ul,
+nav.main-menu ul li:hover ul,
+nav.breadcrumbs ul li:hover ul {
+  display: block;
+}
+/* line 505, ../sass/exPortal.scss */
+nav.user-management ul li a,
+nav.main-menu ul li a,
+nav.breadcrumbs ul li a {
+  text-decoration: none;
+  color: #292929;
+}
+/* line 398, ../sass/exPortal.scss */
+nav.user-management:after,
+nav.main-menu:after,
+nav.breadcrumbs:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+/* line 516, ../sass/exPortal.scss */
+nav.user-management ul {
+  margin-right: 12px;
+}
+/* line 519, ../sass/exPortal.scss */
+nav.user-management ul li {
+  border-right: 1px black solid;
+}
+/* line 522, ../sass/exPortal.scss */
+nav.user-management ul li:last-child {
+  border-right: 0px white none;
+}
+/* line 526, ../sass/exPortal.scss */
+nav.user-management ul li span.icon {
+  display: inline-block;
+}
+/* line 530, ../sass/exPortal.scss */
+nav.user-management ul li:hover span.icon {
+  -webkit-animation: spin 3s linear infinite;
+  -moz-animation: spin 3s linear infinite;
+  animation: spin 3s linear infinite;
+}
+/* line 536, ../sass/exPortal.scss */
+nav.user-management ul li#user-menu:hover {
+  background-color: #cacaca;
+}
+/* line 540, ../sass/exPortal.scss */
+nav.user-management ul li ul {
+  background-color: #e5e5e5;
+  min-width: 100%;
+  margin-right: 0px;
+}
+/* line 545, ../sass/exPortal.scss */
+nav.user-management ul li ul li {
+  border-right: 0px white none;
+  min-width: 100%;
+}
+/* line 549, ../sass/exPortal.scss */
+nav.user-management ul li ul li:hover {
+  background-color: #cacaca;
+}
+
+/* line 558, ../sass/exPortal.scss */
+nav.main-menu {
+  margin-top: 5px;
+}
+/* line 562, ../sass/exPortal.scss */
+nav.main-menu ul li {
+  padding: 7px 12px 6px 12px;
+  background-color: #e5e5e5;
+}
+/* line 566, ../sass/exPortal.scss */
+nav.main-menu ul li a {
+  display: block;
+  width: 100%;
+}
+/* line 571, ../sass/exPortal.scss */
+nav.main-menu ul li ul {
+  top: 25px;
+  background-color: #cacaca;
+  width: auto;
+}
+/* line 576, ../sass/exPortal.scss */
+nav.main-menu ul li ul li {
+  min-width: 100%;
+  white-space: nowrap;
+  box-sizing: border-box;
+  padding: 5px 12px 5px 12px;
+  background-color: #cacaca;
+}
+/* line 583, ../sass/exPortal.scss */
+nav.main-menu ul li ul li:hover {
+  background-color: #e5e5e5;
+}
+/* line 589, ../sass/exPortal.scss */
+nav.main-menu ul li:last-child {
+  padding-right: 17px;
+}
+/* line 593, ../sass/exPortal.scss */
+nav.main-menu ul li:hover {
+  background-color: #cacaca;
+}
+/* line 599, ../sass/exPortal.scss */
+nav.main-menu div.navigation-logo {
+  float: left;
+  margin-right: 10px;
+  background-color: #e5e5e5;
+}
+/* line 604, ../sass/exPortal.scss */
+nav.main-menu div.navigation-logo img {
+  height: 16px;
+  width: auto;
+  padding: 5px 10px 4px 10px;
+}
+
+/* line 612, ../sass/exPortal.scss */
+nav.breadcrumbs {
+  margin-top: 5px;
+}
+/* line 616, ../sass/exPortal.scss */
+nav.breadcrumbs ul li {
+  padding: 0px 3px 0px 0px;
+}
+/* line 619, ../sass/exPortal.scss */
+nav.breadcrumbs ul li:after {
+  display: inline-block;
+  padding-left: 3px;
+  content: ">";
+}
+/* line 625, ../sass/exPortal.scss */
+nav.breadcrumbs ul li:last-child {
+  color: red;
+  padding-right: 12px;
+}
+/* line 629, ../sass/exPortal.scss */
+nav.breadcrumbs ul li:last-child:after {
+  display: none;
+  padding: 0px;
+  content: "";
+}
+
+/* line 398, ../sass/exPortal.scss */
+div.column-group:after,
+table.info-tiles:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+/* line 646, ../sass/exPortal.scss */
+section {
+  margin: 0px auto 0px auto;
+}
+/* line 398, ../sass/exPortal.scss */
+section:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+/* line 650, ../sass/exPortal.scss */
+section.body-content {
+  font-size: 11pt;
+}
+/* line 654, ../sass/exPortal.scss */
+section div.body-title {
+  padding: 5px 0px 5px 5px;
+  background-color: #474747;
+  color: white;
+  margin: 12px 0px 0px 0px;
+  font-family: Gobold_Light;
+  font-size: 18px;
+  color: #ff9b9b;
+}
+/* line 663, ../sass/exPortal.scss */
+section div.body-title ul.toolbar {
+  float: right;
+  margin: 3px 10px 0px 0px;
+  list-style: none;
+  font-size: 10pt;
+  font-family: Arial;
+}
+/* line 670, ../sass/exPortal.scss */
+section div.body-title ul.toolbar li {
+  display: inline-block;
+  margin-right: 10px;
+}
+/* line 673, ../sass/exPortal.scss */
+section div.body-title ul.toolbar li span.icon {
+  padding-right: 5px;
+}
+/* line 676, ../sass/exPortal.scss */
+section div.body-title ul.toolbar li a {
+  border: 1px silver solid;
+  border-radius: 3px;
+  color: silver;
+  text-decoration: none;
+  padding: 2px 10px 2px 10px;
+}
+/* line 683, ../sass/exPortal.scss */
+section div.body-title ul.toolbar li a:hover {
+  color: white;
+  background-color: #0e0e0e;
+}
+/* line 687, ../sass/exPortal.scss */
+section div.body-title ul.toolbar li a:hover span.edit {
+  color: greenyellow;
+}
+/* line 690, ../sass/exPortal.scss */
+section div.body-title ul.toolbar li a:hover span.delete {
+  color: orangered;
+}
+/* line 701, ../sass/exPortal.scss */
+section div.column {
+  box-sizing: border-box;
+  float: left;
+}
+/* line 705, ../sass/exPortal.scss */
+section div.column:last-child {
+  border-right: 0px red none;
+  margin-right: 0;
+}
+
+@media screen and (min-width: 1200px) {
+  /* line 724, ../sass/exPortal.scss */
+  section {
+    width: 1150px;
+    font-size: 11pt;
+  }
+  /* line 30, ../sass/exPortal.scss */
+  section div.column {
+    margin-right: 15px;
+  }
+  /* line 33, ../sass/exPortal.scss */
+  section div.column div.column-content {
+    width: 100%;
+    padding: 0px 0px 0px 5px;
+    box-sizing: border-box;
+  }
+  /* line 39, ../sass/exPortal.scss */
+  section div.column div.title {
+    padding: 5px 0px 5px 5px;
+    background-color: #474747;
+    margin: 0px;
+    font-family: Gobold_Light;
+    font-size: 12px;
+    color: #cacaca;
+  }
+  /* line 47, ../sass/exPortal.scss */
+  section div.column div.title div.button {
+    float: right;
+    display: inline-block;
+    padding: 1px 8px 1px 8px;
+    background-color: #e5e5e5;
+    color: black;
+    margin-right: 10px;
+    font-family: OpenSans;
+    font-size: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  /* line 59, ../sass/exPortal.scss */
+  section div.column div.title div.button:hover {
+    background-color: #ff9b9b;
+  }
+  /* line 64, ../sass/exPortal.scss */
+  section div.column div.title div.info {
+    display: inline-block;
+    margin: 0px 10px 0px 10px;
+    color: white;
+  }
+  /* line 71, ../sass/exPortal.scss */
+  section div.column div.sub-title {
+    padding: 5px 0px 5px 5px;
+    background-color: #ededed;
+    border-bottom: 2px white solid;
+    margin: 0px 0px 5px 0px;
+    font-family: Gobold_Light;
+    font-size: 10px;
+  }
+  /* line 81, ../sass/exPortal.scss */
+  section div.column.NoVideo div#FlightSummary {
+    width: 100%;
+  }
+  /* line 87, ../sass/exPortal.scss */
+  section div.column-full {
+    width: 1150px;
+  }
+  /* line 91, ../sass/exPortal.scss */
+  section div.column-half {
+    width: 567.5px;
+  }
+  /* line 95, ../sass/exPortal.scss */
+  section div.column-half div.column-2-of-6 {
+    width: 221px;
+  }
+  /* line 99, ../sass/exPortal.scss */
+  section div.column-half div.column-4-of-6 {
+    width: 331.5px;
+  }
+  /* line 104, ../sass/exPortal.scss */
+  section div.column-half div#FlightVideo {
+    width: 240px;
+    height: 160px;
+    float: left;
+    background-color: black;
+  }
+  /* line 111, ../sass/exPortal.scss */
+  section div.column-half div#FlightSummary {
+    width: 327.5px;
+    float: right;
+  }
+  /* line 115, ../sass/exPortal.scss */
+  section div.column-half div#FlightSummary.NoVideo {
+    width: 100%;
+    float: none;
+    padding-top: 5px;
+  }
+  /* line 121, ../sass/exPortal.scss */
+  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td {
+    width: 50%;
+  }
+  /* line 124, ../sass/exPortal.scss */
+  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td > div {
+    line-height: 30px;
+    float: left;
+  }
+  /* line 129, ../sass/exPortal.scss */
+  section div.column-half div#FlightSummary.NoVideo div#GeneralInformation table.infoTable td div.FlightSummaryImage {
+    width: 30px !important;
+    height: 30px !important;
+    margin-right: 10px;
+  }
+  /* line 140, ../sass/exPortal.scss */
+  section div.column-2-of-6 {
+    width: 373.33333px;
+  }
+  /* line 144, ../sass/exPortal.scss */
+  section div.column-4-of-6 {
+    width: 761.66667px;
+  }
+  /* line 148, ../sass/exPortal.scss */
+  section div.column-1-of-3 {
+    width: 373.33333px;
+  }
+  /* line 152, ../sass/exPortal.scss */
+  section div.column-3 {
+    width: 378.33333px;
+  }
+  /* line 156, ../sass/exPortal.scss */
+  section div.column-3 div.column-2-of-6 {
+    width: 145.33333px;
+  }
+  /* line 160, ../sass/exPortal.scss */
+  section div.column-3 div.column-4-of-6 {
+    width: 218px;
+  }
+  /* line 165, ../sass/exPortal.scss */
+  section div.column-3 div#FlightVideo {
+    width: 240px;
+    height: 140px;
+    float: left;
+    background-color: black;
+  }
+  /* line 172, ../sass/exPortal.scss */
+  section div.column-3 div#FlightSummary {
+    width: 100%;
+    align-items: center;
+    float: right;
+  }
+  /* line 177, ../sass/exPortal.scss */
+  section div.column-3 div#FlightSummary.NoVideo {
+    width: 100%;
+    float: none;
+    padding-top: 10px;
+  }
+  /* line 186, ../sass/exPortal.scss */
+  section div.hr {
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    margin-bottom: 2px;
+  }
+  /* line 193, ../sass/exPortal.scss */
+  section div.fixed-height-1 {
+    height: 165px;
+  }
+  /* line 197, ../sass/exPortal.scss */
+  section .top-space, section.top-space {
+    margin-top: 15px;
+  }
+  /* line 203, ../sass/exPortal.scss */
+  section div.two-column-form-group div.form-group {
+    width: 48%;
+    float: left;
+  }
+  /* line 398, ../sass/exPortal.scss */
+  section div.two-column-form-group div.form-group:after {
+    clear: both;
+    display: block;
+    content: "";
+  }
+  /* line 208, ../sass/exPortal.scss */
+  section div.two-column-form-group div.form-group:last-child {
+    margin-left: 4%;
+  }
+
+  /* line 728, ../sass/exPortal.scss */
+  footer {
+    width: 1150px;
+    margin: auto;
+  }
+}
+/* line 735, ../sass/exPortal.scss */
+div#Overlay {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(85, 49, 5, 0.53);
+  display: none;
+}
+/* line 744, ../sass/exPortal.scss */
+div#Overlay img {
+  position: relative;
+  width: 256px;
+  height: 256px;
+  margin-left: -128px;
+  margin-top: -128px;
+  left: 50%;
+  top: 50%;
+  -webkit-animation: spin 3s linear infinite;
+  -moz-animation: spin 3s linear infinite;
+  animation: spin 3s linear infinite;
+}
+
+/* line 759, ../sass/exPortal.scss */
+div.dataTables_wrapper {
+  margin-top: 12px;
+}
+
+/* line 763, ../sass/exPortal.scss */
+div.dataTables_head {
+  background-color: #474747;
+  padding: 5px;
+}
+/* line 398, ../sass/exPortal.scss */
+div.dataTables_head:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+/* line 768, ../sass/exPortal.scss */
+div.dataTables_head label {
+  color: white;
+}
+/* line 772, ../sass/exPortal.scss */
+div.dataTables_head span.refresh {
+  color: white;
+}
+/* line 776, ../sass/exPortal.scss */
+div.dataTables_head input {
+  font-size: 8pt;
+}
+
+/* line 784, ../sass/exPortal.scss */
+table.report thead tr th {
+  padding: 4px 2px 4px 4px;
+  font-weight: normal;
+  text-align: left;
+  border-left: 1px silver solid;
+  border-bottom: 2px solid red;
+}
+/* line 791, ../sass/exPortal.scss */
+table.report thead tr th:last-child {
+  border-left: 0px silver none;
+  border-right: 1px silver solid;
+}
+/* line 801, ../sass/exPortal.scss */
+table.report tbody tr td {
+  border-left: 1px silver solid;
+  padding: 4px 2px 4px 4px;
+  -webkit-transition: background-color 100ms linear;
+  -ms-transition: background-color 100ms linear;
+  transition: background-color 100ms linear;
+}
+/* line 808, ../sass/exPortal.scss */
+table.report tbody tr td:last-child {
+  border-right: 1px silver solid;
+  border-left: 0px silver none;
+}
+/* line 813, ../sass/exPortal.scss */
+table.report tbody tr td.menu {
+  position: relative;
+  width: 16px;
+}
+/* line 817, ../sass/exPortal.scss */
+table.report tbody tr td.menu img {
+  display: none;
+  visibility: hidden;
+}
+/* line 825, ../sass/exPortal.scss */
+table.report tbody tr.even td {
+  background-color: #f1f1f1;
+}
+/* line 832, ../sass/exPortal.scss */
+table.report tbody tr:hover td {
+  -webkit-transition: background-color 100ms linear;
+  -ms-transition: background-color 100ms linear;
+  transition: background-color 100ms linear;
+  background-color: #e5e5e5;
+}
+/* line 841, ../sass/exPortal.scss */
+table.report tbody tr.active td {
+  -webkit-transition: background-color 100ms linear;
+  -ms-transition: background-color 100ms linear;
+  transition: background-color 100ms linear;
+  background-color: #cacaca;
+}
+/* line 850, ../sass/exPortal.scss */
+table.report tbody tr:hover td.menu, table.report tbody tr.active td.menu {
+  background-image: url("../images/menu-drop-down.png");
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+/* line 860, ../sass/exPortal.scss */
+table.report tfoot tr th {
+  color: silver;
+  padding: 4px 2px 4px 4px;
+  font-weight: normal;
+  text-align: left;
+  border-left: 1px silver solid;
+  border-bottom: 1px #474747 solid;
+  border-top: 1px #474747 solid;
+}
+/* line 869, ../sass/exPortal.scss */
+table.report tfoot tr th:last-child {
+  border-left: 0px silver none;
+  border-right: 1px silver solid;
+}
+
+/* line 879, ../sass/exPortal.scss */
+table.dataTable thead .sorting {
+  background-image: none;
+}
+
+/* line 883, ../sass/exPortal.scss */
+UL.qViewMenu {
+  position: absolute;
+  right: 0px;
+  top: 28px;
+  background-color: #cacaca;
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  z-index: 10;
+  display: block;
+}
+/* line 894, ../sass/exPortal.scss */
+UL.qViewMenu li:hover {
+  background-color: #e5e5e5;
+}
+/* line 898, ../sass/exPortal.scss */
+UL.qViewMenu li a {
+  color: black;
+  text-decoration: none;
+  display: block;
+  min-width: 120px;
+  padding: 5px 10px 5px 10px;
+}
+
+/* line 907, ../sass/exPortal.scss */
+div.form-horizontal {
+  border: 1px #474747 solid;
+  margin: 0px auto 40px auto;
+  -moz-border-radius-bottomleft: 10px;
+  -webkit-border-bottom-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  -moz-border-radius-bottomright: 10px;
+  -webkit-border-bottom-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 30px;
+}
+/* line 914, ../sass/exPortal.scss */
+div.form-horizontal.NoBorder {
+  border: 0px red none !important;
+  padding: 0px !important;
+}
+/* line 920, ../sass/exPortal.scss */
+div.form-horizontal span.field-validation-error {
+  display: block;
+  color: red;
+}
+/* line 926, ../sass/exPortal.scss */
+div.form-horizontal div.two-column-form-group div.form-group {
+  width: 48%;
+  float: left;
+}
+/* line 398, ../sass/exPortal.scss */
+div.form-horizontal div.two-column-form-group div.form-group:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+/* line 931, ../sass/exPortal.scss */
+div.form-horizontal div.two-column-form-group div.form-group:last-child {
+  margin-left: 4%;
+}
+/* line 937, ../sass/exPortal.scss */
+div.form-horizontal div.editor-label {
+  padding-bottom: 3px;
+}
+/* line 941, ../sass/exPortal.scss */
+div.form-horizontal div.form-toolbar {
+  padding: 20px 0px 0px 0px;
+}
+/* line 946, ../sass/exPortal.scss */
+div.form-horizontal div.editor-field,
+div.form-horizontal div.form-group {
+  width: 100%;
+  margin-bottom: 12px;
+}
+/* line 951, ../sass/exPortal.scss */
+div.form-horizontal div.editor-field div.col-md-10,
+div.form-horizontal div.form-group div.col-md-10 {
+  width: 100%;
+}
+/* line 956, ../sass/exPortal.scss */
+div.form-horizontal select,
+div.form-horizontal input[type=text],
+div.form-horizontal input[type=file],
+div.form-horizontal input[type=datetime],
+div.form-horizontal input[type=number],
+div.form-horizontal input[type=password],
+div.form-horizontal textarea {
+  width: 100%;
+}
+/* line 966, ../sass/exPortal.scss */
+div.form-horizontal input,
+div.form-horizontal select,
+div.form-horizontal textarea,
+div.form-horizontal button {
+  font-size: 11pt;
+}
+/* line 973, ../sass/exPortal.scss */
+div.form-horizontal textarea {
+  min-height: 150px;
+}
+
+/* line 983, ../sass/exPortal.scss */
+div.form-horizontal input[type=submit],
+div.form-horizontal input[type=button],
+div.form-toolbar input[type=submit],
+div.form-toolbar input[type=button] {
+  padding: 3px 15px 3px 15px;
+  color: #ff9b9b;
+  font-family: Gobold_Light;
+  font-size: 12pt;
+  text-transform: uppercase;
+  background-color: #474747;
+  border: 1px silver outset;
+}
+
+/* line 995, ../sass/exPortal.scss */
+table.infoTable {
+  width: 100%;
+}
+/* line 999, ../sass/exPortal.scss */
+table.infoTable tr td {
+  padding: 0px 5px 5px 0px;
+}
+/* line 1002, ../sass/exPortal.scss */
+table.infoTable tr td span {
+  display: inline-block;
+  padding-left: 0px;
+  color: red;
+}
+
+/* line 1011, ../sass/exPortal.scss */
+div#FlightInfoNOC {
+  background-color: #cacaca;
+  padding: 4px 0px 4px 5px;
+  margin-bottom: 5px;
+}
+/* line 1016, ../sass/exPortal.scss */
+div#FlightInfoNOC span {
+  display: inline-block;
+  padding-left: 0px;
+  color: red;
+}
+
+/* line 1023, ../sass/exPortal.scss */
+#FlightInformation {
+  background-color: #e5e5e5;
+}
+
+/* line 398, ../sass/exPortal.scss */
+#FlightInformation:after,
+#FlightSummary:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+/* line 1033, ../sass/exPortal.scss */
+#FlightInformation table.FlightLastInformation {
+  width: 100%;
+}
+/* line 1036, ../sass/exPortal.scss */
+#FlightInformation table.FlightLastInformation tr td {
+  width: 50%;
+  padding-bottom: 4px;
+  text-transform: uppercase;
+  font-size: 8pt;
+}
+/* line 1041, ../sass/exPortal.scss */
+#FlightInformation table.FlightLastInformation tr td span {
+  font-size: 10pt;
+  font-weight: bold;
+  color: red;
+}
+
+/* line 1050, ../sass/exPortal.scss */
+#FlightGraph,
+#SecondGraph {
+  width: 100%;
+  height: 90px;
+  background-color: white;
+  margin-top: 5px;
+}
+
+/* line 1057, ../sass/exPortal.scss */
+#ThirdGraph {
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  margin-top: 5px;
+  border-top: 1px red solid;
+  padding-top: 5px;
+}
+
+/* line 1066, ../sass/exPortal.scss */
+#FlightData {
+  margin-top: 10px;
+  font-size: 11px;
+}
+/* line 1073, ../sass/exPortal.scss */
+#FlightData div#FlightPichRoll {
+  float: right;
+  width: 70px;
+  height: 125px;
+  padding-top: 10px;
+}
+/* line 1079, ../sass/exPortal.scss */
+#FlightData div#FlightPichRoll div.MapDataHolder {
+  width: 70px;
+  height: 60px;
+  display: block;
+  position: relative;
+  margin-bottom: 20px;
+}
+/* line 1086, ../sass/exPortal.scss */
+#FlightData div#FlightPichRoll div.MapDataHolder div.info {
+  position: absolute;
+  bottom: 0px;
+  width: 70px;
+  background-color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+/* line 1098, ../sass/exPortal.scss */
+#FlightData div#FlightPichRoll img.MapDataShow {
+  position: absolute;
+  width: 40px;
+  padding: 0px 0px 0px 10px;
+  height: 40px;
+  -webkit-transition: 0.3s ease-in-out;
+  -moz-transition: 0.3s ease-in-out;
+  -o-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+/* line 1109, ../sass/exPortal.scss */
+#FlightData div#FlightPichRoll img:hover {
+  -webkit-transform: rotateX(30deg);
+  transform: rotateX(30deg);
+}
+/* line 1116, ../sass/exPortal.scss */
+#FlightData div#FlightDataInfo {
+  width: 497.5px;
+  float: left;
+}
+/* line 1122, ../sass/exPortal.scss */
+#FlightData ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+/* line 1129, ../sass/exPortal.scss */
+#FlightData ul.FlightDataRow li {
+  width: 40px;
+  float: left;
+  margin-right: 5px;
+  padding: 2px 2px 2px 2px;
+}
+/* line 1136, ../sass/exPortal.scss */
+#FlightData ul.FlightDataRow li.col8,
+#FlightData ul.FlightDataRow li.col9 {
+  width: 30px;
+}
+/* line 398, ../sass/exPortal.scss */
+#FlightData ul.FlightDataRow:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+/* line 1145, ../sass/exPortal.scss */
+#FlightData ul#FlightDataHeader > li {
+  border-bottom: 2px red solid;
+  background-color: #e5e5e5;
+}
+/* line 1151, ../sass/exPortal.scss */
+#FlightData ul#FlightDataScroll {
+  height: 125px;
+  width: 100%;
+  overflow-y: auto;
+  border-bottom: 1px red solid;
+}
+/* line 1157, ../sass/exPortal.scss */
+#FlightData ul#FlightDataScroll > li {
+  border-bottom: 1px #e5e5e5 solid;
+}
+
+/* line 1163, ../sass/exPortal.scss */
+div#RpasInformation div.FlightSummaryImage {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  background-size: cover;
+  background-color: white;
+  margin: auto;
+}
+/* line 1172, ../sass/exPortal.scss */
+div#RpasInformation table {
+  margin-top: 5px;
+}
+/* line 1175, ../sass/exPortal.scss */
+div#RpasInformation table td {
+  white-space: nowrap;
+  text-align: center;
+}
+/* line 1179, ../sass/exPortal.scss */
+div#RpasInformation table td a {
+  text-decoration: none;
+  border-bottom: 1px #292929 dotted;
+  color: #292929;
+}
+/* line 1184, ../sass/exPortal.scss */
+div#RpasInformation table td a:hover {
+  border-bottom: 1px red dotted;
+}
+
+/* line 1192, ../sass/exPortal.scss */
+.dash-image {
+  width: 30px;
+  height: 30px;
+  background-color: #565555;
+  -webkit-mask-size: 30px 30px;
+  display: block;
+  margin: 0px 10px 0px 0px;
+  padding: 0px;
+  float: left;
+}
+/* line 1202, ../sass/exPortal.scss */
+.dash-image.img_duration {
+  -webkit-mask-image: url("/images/image5.png");
+  mask-image: url("/images/image5.png");
+}
+/* line 1207, ../sass/exPortal.scss */
+.dash-image.img_altitude {
+  background-color: #dbd301;
+  -webkit-mask-image: url(/images/image7.png);
+  mask-image: url(/images/image7.png);
+}
+/* line 1213, ../sass/exPortal.scss */
+.dash-image.img_speed {
+  background-color: #0b9076;
+  -webkit-mask-image: url(/images/image6.png);
+  mask-image: url(/images/image6.png);
+}
+/* line 1219, ../sass/exPortal.scss */
+.dash-image.img_distance {
+  -webkit-mask-image: url("/images/image12.png");
+  mask-image: url("/images/image12.png");
+}
+
+/* line 1225, ../sass/exPortal.scss */
+div.dashboard-column {
+  background-color: #e5e5e5;
+  margin-bottom: 20px;
+}
+/* line 1229, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height {
+  height: 300px;
+  overflow: auto;
+}
+/* line 1234, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height-organisation {
+  height: 125px;
+  overflow: hidden;
+  position: relative;
+}
+/* line 1240, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height,
+div.dashboard-column div.fixed-height-organisation {
+  padding: 10px;
+}
+/* line 1244, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height div.SummaryImage,
+div.dashboard-column div.fixed-height-organisation div.SummaryImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  background-color: white;
+  background-size: cover;
+  margin: auto;
+}
+/* line 1253, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height div.SummaryCaption,
+div.dashboard-column div.fixed-height-organisation div.SummaryCaption {
+  font-weight: bold;
+  font-size: 12pt;
+  text-align: center;
+  margin: 5px 0px 10px 0px;
+}
+/* line 1260, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul,
+div.dashboard-column div.fixed-height-organisation ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+/* line 1265, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li,
+div.dashboard-column div.fixed-height-organisation ul li {
+  margin: 0px 0px 10px 0px;
+  padding: 0px 0px 10px 0px;
+  border-bottom: 1px #cacaca solid;
+}
+/* line 1271, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li div.icon,
+div.dashboard-column div.fixed-height-organisation ul li div.icon {
+  float: left;
+  margin-right: 10px;
+}
+/* line 1275, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li div.icon img,
+div.dashboard-column div.fixed-height-organisation ul li div.icon img {
+  width: 40px;
+  height: auto;
+}
+/* line 1281, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li div.caption,
+div.dashboard-column div.fixed-height-organisation ul li div.caption {
+  font-weight: bold;
+}
+/* line 1284, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li div.caption a,
+div.dashboard-column div.fixed-height-organisation ul li div.caption a {
+  text-decoration: none;
+  color: #474747;
+}
+/* line 1288, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li div.caption a:hover,
+div.dashboard-column div.fixed-height-organisation ul li div.caption a:hover {
+  color: red;
+}
+/* line 1293, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li div.caption .UniformWidth,
+div.dashboard-column div.fixed-height-organisation ul li div.caption .UniformWidth {
+  width: 200px;
+}
+/* line 1298, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li div.floating,
+div.dashboard-column div.fixed-height-organisation ul li div.floating {
+  float: right;
+  padding: 1px 4px 1px 4px;
+  border-radius: 3px;
+  font-size: 8pt;
+  color: white;
+}
+/* line 1305, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li div.floating.Rejected,
+div.dashboard-column div.fixed-height-organisation ul li div.floating.Rejected {
+  background-color: #fe0000;
+}
+/* line 1309, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li div.floating.Amended,
+div.dashboard-column div.fixed-height-organisation ul li div.floating.Amended {
+  background-color: #f2a003;
+}
+/* line 1313, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li div.floating.Approved,
+div.dashboard-column div.fixed-height-organisation ul li div.floating.Approved {
+  background-color: #53a100;
+}
+/* line 1317, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul li div.floating.New,
+div.dashboard-column div.fixed-height-organisation ul li div.floating.New {
+  background-color: #018aff;
+}
+/* line 1324, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul.single-line li,
+div.dashboard-column div.fixed-height-organisation ul.single-line li {
+  margin: 0px 0px 5px 0px;
+  padding: 0px 0px 5px 0px;
+}
+/* line 398, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul.single-line li:after,
+div.dashboard-column div.fixed-height-organisation ul.single-line li:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+/* line 1329, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul.single-line li div.caption,
+div.dashboard-column div.fixed-height ul.single-line li div.detail,
+div.dashboard-column div.fixed-height-organisation ul.single-line li div.caption,
+div.dashboard-column div.fixed-height-organisation ul.single-line li div.detail {
+  float: left;
+}
+/* line 1334, ../sass/exPortal.scss */
+div.dashboard-column div.fixed-height ul.single-line li div.detail,
+div.dashboard-column div.fixed-height-organisation ul.single-line li div.detail {
+  margin-left: 5px;
+  color: red;
+}
+/* line 1343, ../sass/exPortal.scss */
+div.dashboard-column div.toolbar {
+  height: 20px;
+  padding: 0px 0px 10px 0px;
+}
+/* line 1347, ../sass/exPortal.scss */
+div.dashboard-column div.toolbar.fixed {
+  position: absolute;
+  top: 10px;
+  right: 0px;
+}
+/* line 1353, ../sass/exPortal.scss */
+div.dashboard-column div.toolbar div.button {
+  float: right;
+  margin: 0px 10px 0px 0px;
+  border: 1px #cacaca solid;
+  background-color: white;
+  border-radius: 5px;
+  padding: 2px 15px 4px 15px;
+  cursor: pointer;
+  color: black;
+}
+/* line 1363, ../sass/exPortal.scss */
+div.dashboard-column div.toolbar div.button span.icon {
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-right: 5px;
+  background-color: #53a100;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+/* line 1378, ../sass/exPortal.scss */
+div.dashboard-column div.toolbar div.button:hover {
+  background-color: #474747;
+  color: white;
+}
+
+/* line 1387, ../sass/exPortal.scss */
+#loginForm input[type=text],
+#loginForm input[type=password] {
+  width: 60%;
+}
+
+/* line 1393, ../sass/exPortal.scss */
+table.qDetailView {
+  width: 100%;
+}
+/* line 1397, ../sass/exPortal.scss */
+table.qDetailView tr td {
+  padding: 3px 15px 3px 0px;
+  border-bottom: 1px #e5e5e5 solid;
+}
+/* line 1401, ../sass/exPortal.scss */
+table.qDetailView tr td span.value {
+  padding-left: 15px;
+  color: red;
+}
+
+/* line 1410, ../sass/exPortal.scss */
+div.photo-upload {
+  float: right;
+  width: 160px;
+  height: 160px;
+}
+/* line 1415, ../sass/exPortal.scss */
+div.photo-upload div.user-photo {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+/* line 1416, ../sass/exPortal.scss */
+div.photo-upload div.user-photo img {
+  width: 160px;
+  height: auto;
+}
+
+/* line 1428, ../sass/exPortal.scss */
+div.GraphSection {
+  margin-top: 10px;
+}
+/* line 1432, ../sass/exPortal.scss */
+div.GraphSection table {
+  width: 570px;
+  height: 100px;
+}
+/* line 1437, ../sass/exPortal.scss */
+div.GraphSection table tr td.Graph {
+  width: 281.5px;
+}
+/* line 1441, ../sass/exPortal.scss */
+div.GraphSection table tr td.GraphDivider {
+  width: 7px;
+}
+/* line 1444, ../sass/exPortal.scss */
+div.GraphSection table tr td.GraphDivider > div {
+  margin: 0px 3px 0px 3px;
+  width: 1px;
+  background-color: red;
+  height: 100px;
+  display: block;
+}
+
+/* line 1457, ../sass/exPortal.scss */
+div#Legend ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+/* line 1462, ../sass/exPortal.scss */
+div#Legend ul li {
+  float: left;
+  margin-right: 65px;
+}
+/* line 1466, ../sass/exPortal.scss */
+div#Legend ul li:last-child {
+  margin-right: 0px;
+}
+/* line 1470, ../sass/exPortal.scss */
+div#Legend ul li span {
+  margin-right: 5px;
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: black;
+}
+/* line 1478, ../sass/exPortal.scss */
+div#Legend ul li span.pitch {
+  background-color: #ff5900;
+}
+/* line 1482, ../sass/exPortal.scss */
+div#Legend ul li span.altitude {
+  background-color: #dbd301;
+}
+/* line 1486, ../sass/exPortal.scss */
+div#Legend ul li span.Satellite {
+  background-color: #65ba19;
+}
+/* line 1490, ../sass/exPortal.scss */
+div#Legend ul li span.speed {
+  background-color: #0b9076;
+}
+/* line 1494, ../sass/exPortal.scss */
+div#Legend ul li span.roll {
+  background-color: #9983c7;
+}
+/* line 398, ../sass/exPortal.scss */
+div#Legend:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+/* line 1504, ../sass/exPortal.scss */
+div.adsb-point {
+  position: absolute;
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+  margin-left: -50px;
+  margin-top: -50px;
+}
+/* line 1512, ../sass/exPortal.scss */
+div.adsb-point canvas {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  z-index: 0;
+}
+/* line 1519, ../sass/exPortal.scss */
+div.adsb-point span.tail {
+  position: absolute;
+  background-color: aquamarine;
+  width: 2px;
+  height: 2px;
+  margin-left: -1px;
+  margin-top: -1px;
+  border-radius: 50%;
+  display: block;
+  font-size: 1px;
+}
+/* line 1531, ../sass/exPortal.scss */
+div.adsb-point span.FlightIcon,
+div.adsb-point span.DroneIcon {
+  position: absolute;
+  left: 50px;
+  top: 50px;
+  font-size: 18px;
+  width: 25px;
+  height: 25px;
+  margin-left: -13px;
+  margin-top: -13px;
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+}
+/* line 1550, ../sass/exPortal.scss */
+div.adsb-point span.flight-title {
+  position: absolute;
+  top: 60px;
+  left: 40px;
+  z-index: 10;
+  color: white;
+  display: none;
+  padding: 0px 2px 0px 2px;
+  font-size: 9px;
+}
+/* line 1563, ../sass/exPortal.scss */
+div.adsb-point:hover span.flight-title {
+  display: block;
+}
+/* line 1568, ../sass/exPortal.scss */
+div.adsb-point.breach {
+  color: #fe0000;
+}
+/* line 1571, ../sass/exPortal.scss */
+div.adsb-point.breach span.flight-title,
+div.adsb-point.breach span.tail {
+  background-color: #fe0000;
+}
+/* line 1577, ../sass/exPortal.scss */
+div.adsb-point.alert {
+  color: #ff4e00;
+}
+/* line 1580, ../sass/exPortal.scss */
+div.adsb-point.alert span.flight-title,
+div.adsb-point.alert span.tail {
+  background-color: #f2a003;
+}
+/* line 1586, ../sass/exPortal.scss */
+div.adsb-point.safe {
+  color: #0189ff;
+}
+/* line 1589, ../sass/exPortal.scss */
+div.adsb-point.safe span.flight-title,
+div.adsb-point.safe span.tail {
+  background-color: #53a100;
+}
+/* line 1595, ../sass/exPortal.scss */
+div.adsb-point.normal {
+  color: #ffcc01;
+}
+/* line 1598, ../sass/exPortal.scss */
+div.adsb-point.normal span.flight-title,
+div.adsb-point.normal span.tail {
+  background-color: #ffcc01;
+}
+/* line 1604, ../sass/exPortal.scss */
+div.adsb-point.drone {
+  color: #018aff;
+}
+/* line 1607, ../sass/exPortal.scss */
+div.adsb-point.drone span.flight-title,
+div.adsb-point.drone span.tail {
+  background-color: #018aff;
+}
+/* line 1613, ../sass/exPortal.scss */
+div.adsb-point.drone.breach span.flight-title,
+div.adsb-point.drone.breach span.tail {
+  background-color: red;
+}
+/* line 1620, ../sass/exPortal.scss */
+div.adsb-point.drone.alert span.flight-title,
+div.adsb-point.drone.alert span.tail {
+  background-color: #ff4e00;
+}
+
+/* line 1635, ../sass/exPortal.scss */
+#ShowUserDescription > span {
+  font-weight: bold;
+}
+/* line 1639, ../sass/exPortal.scss */
+#ShowUserDescription #UserDescription {
+  position: absolute;
+  display: none;
+  white-space: nowrap;
+  border: 1px #222222 solid;
+  background-color: #e5e5e5;
+  padding: 10px;
+  -moz-box-shadow: #222222 1px 1px 10px;
+  -webkit-box-shadow: #222222 1px 1px 10px;
+  box-shadow: #222222 1px 1px 10px;
+}
+/* line 1648, ../sass/exPortal.scss */
+#ShowUserDescription #UserDescription ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  float: left;
+}
+/* line 1653, ../sass/exPortal.scss */
+#ShowUserDescription #UserDescription ul:first-child {
+  margin-right: 10px;
+}
+/* line 1656, ../sass/exPortal.scss */
+#ShowUserDescription #UserDescription ul li {
+  list-style: none;
+  padding: 0px 0px 4px 0px;
+}
+/* line 1660, ../sass/exPortal.scss */
+#ShowUserDescription #UserDescription ul li span {
+  color: red;
+  padding-left: 5px;
+}
+/* line 1664, ../sass/exPortal.scss */
+#ShowUserDescription #UserDescription ul li:first-child {
+  font-weight: bold;
+  border-bottom: 1px red solid;
+  margin-bottom: 5px;
+}
+/* line 1674, ../sass/exPortal.scss */
+#ShowUserDescription:hover #UserDescription {
+  display: block;
+}
+
+/* line 1680, ../sass/exPortal.scss */
+div.upload-btn {
+  position: relative;
+  margin-top: 10px;
+}
+/* line 1684, ../sass/exPortal.scss */
+div.upload-btn a {
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 30px;
+  background-color: #474747;
+  z-index: 11;
+  border-radius: 5px;
+  color: #ff9b9b;
+  text-align: center;
+  text-decoration: none;
+  padding: 3px 0px 0px 0px;
+  cursor: pointer;
+  line-height: 30px;
+  font-size: 11pt;
+}
+/* line 1703, ../sass/exPortal.scss */
+div.upload-btn input[type=file] {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 30px;
+  width: 100%;
+  opacity: 0;
+  z-index: 12;
+  cursor: pointer;
+}
+
+/* line 1715, ../sass/exPortal.scss */
+div.error {
+  color: red;
+}
+
+/* line 1720, ../sass/exPortal.scss */
+#DroneIcon {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  margin-left: -12px;
+  margin-top: -12px;
+  background-image: url("/images/Drone.png");
+}
+
+/* line 1730, ../sass/exPortal.scss */
+div.InfoWindow b {
+  color: red;
+}
+/* line 1734, ../sass/exPortal.scss */
+div.InfoWindow span.value, div.InfoWindow span.feet {
+  color: #ff5900;
+  padding-left: 10px;
+}
+/* line 1739, ../sass/exPortal.scss */
+div.InfoWindow span.caption {
+  width: 120px;
+  display: inline-block;
+}
+/* line 1744, ../sass/exPortal.scss */
+div.InfoWindow span.meter {
+  color: forestgreen;
+  padding-left: 10px;
+}
+/* line 1749, ../sass/exPortal.scss */
+div.InfoWindow div.hr {
+  font-size: 1px;
+  height: 1px;
+  width: 100%;
+  background-color: silver;
+  margin: 3px 0px 3px 0px;
+}
+
+/* line 1758, ../sass/exPortal.scss */
+div.show {
+  display: inline-block;
+}
+
+/* line 1762, ../sass/exPortal.scss */
+div.hide {
+  display: none;
+}
+
+/* line 1766, ../sass/exPortal.scss */
+ul.prifle_menu {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+/* line 1771, ../sass/exPortal.scss */
+ul.prifle_menu > ul {
+  margin-left: 50px;
+}
+/* line 1775, ../sass/exPortal.scss */
+ul.prifle_menu > li {
+  margin: 5px 0px 0px 0px;
+  cursor: pointer;
+}
+/* line 1779, ../sass/exPortal.scss */
+ul.prifle_menu > li:hover {
+  color: #53a100;
+}
+/* line 1783, ../sass/exPortal.scss */
+ul.prifle_menu > li span.permission {
+  padding-left: 10px;
+  color: #ff9b9b;
+}
+/* line 1788, ../sass/exPortal.scss */
+ul.prifle_menu > li span.icon {
+  display: none;
+}
+/* line 1791, ../sass/exPortal.scss */
+ul.prifle_menu > li span.icon.on {
+  color: #53a100;
+}
+/* line 1795, ../sass/exPortal.scss */
+ul.prifle_menu > li span.icon.off {
+  color: #fe0000;
+}
+/* line 1802, ../sass/exPortal.scss */
+ul.prifle_menu > li.profile_menu_row.on span.icon.on {
+  display: inline-block;
+}
+/* line 1808, ../sass/exPortal.scss */
+ul.prifle_menu > li.profile_menu_row.off span.icon.off {
+  display: inline-block;
+}
+
+/* line 1817, ../sass/exPortal.scss */
+div.UAV_Selection ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+/* line 1822, ../sass/exPortal.scss */
+div.UAV_Selection ul li {
+  margin: 0px 0px 10px 0px;
+  padding: 0px 0px 10px 0px;
+  clear: both;
+  border-bottom: 1px #cacaca solid;
+}
+/* line 1828, ../sass/exPortal.scss */
+div.UAV_Selection ul li:hover {
+  background-color: #cacaca;
+}
+/* line 1832, ../sass/exPortal.scss */
+div.UAV_Selection ul li input[type=checkbox] {
+  float: right;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  border: 1px red solid;
+  margin: 10px 10px 0px 0px;
+  padding: 0px;
+}
+/* line 1842, ../sass/exPortal.scss */
+div.UAV_Selection ul li div.icon {
+  float: left;
+  padding-right: 10px;
+}
+/* line 1843, ../sass/exPortal.scss */
+div.UAV_Selection ul li div.icon img {
+  width: 50px;
+  height: 50px;
+}
+/* line 1852, ../sass/exPortal.scss */
+div.UAV_Selection ul li div.caption {
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+/* line 1860, ../sass/exPortal.scss */
+#DynamicZoneNotifications {
+  display: none;
+  padding: 5px;
+  width: 100%;
+  border: 1px #fe0000 solid;
+  background-color: rgba(254, 0, 0, 0.2);
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+/* line 1869, ../sass/exPortal.scss */
+#DynamicZoneNotifications > ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+/* line 1873, ../sass/exPortal.scss */
+#DynamicZoneNotifications > ul li {
+  padding-bottom: 10px;
+}
+/* line 1875, ../sass/exPortal.scss */
+#DynamicZoneNotifications > ul li:last-child {
+  padding-bottom: 0px;
+}
+
+/* line 1882, ../sass/exPortal.scss */
+div.outer {
+  overflow: hidden;
+}
+
+/* line 1886, ../sass/exPortal.scss */
+div.center-helper {
+  float: left;
+  position: relative;
+  left: 50%;
+}
+
+/* line 1892, ../sass/exPortal.scss */
+div.inner {
+  float: left;
+  position: relative;
+  left: -50%;
+}
+
+/* line 1899, ../sass/exPortal.scss */
+div.PilotImage {
+  width: 40px;
+  height: 40px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+  border-radius: 50%;
+  border: 1px silver solid;
+  float: left;
+  margin-right: 10px;
+}

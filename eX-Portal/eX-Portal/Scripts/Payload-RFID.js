@@ -2,11 +2,26 @@
 var FlightPath = null;
 var RFIDPath = null;
 var BoundBox = null;
-var Markers = [];
+var Markers = {};
 var GridLines = [];
 var infowindow = null;
 var _RFIDOverlay = {};
 var _GPSPath = {};
+var _UniqueKey = "";
+var _TimerPayloadRunsLoad = null;
+
+var RfidData = {
+  "55C14070C30D32E70C400000": { VIN: "1FD10625", Brand: "Jaguar", Model: "XE S", Make: "2017", Color: "Ultimate Black" },
+  "55C14070C30D32E70DC00000": { VIN: "3E1532EA", Brand: "Jaguar", Model: "XF Saloon", Make: "2017", Color: "Glacier White" },
+  "55C14070C30D32E70CC00000": { VIN: "B0116C0F", Brand: "Jaguar", Model: "XJ R-Sport", Make: "2017", Color: "Italian Racing Red" },
+  "55C14070C30D32E70D400000": { VIN: "7DA447D0", Brand: "Jaguar", Model: "F-Type", Make: "2017", Color: "Polaris White" },
+  "55C14070C30D32E39C400000": { VIN: "AAF23396", Brand: "Land Rover", Model: "Discovery", Make: "2017", Color: "Narvik Black" },
+  "55C14070C30D32E70D800000": { VIN: "32FC77A5", Brand: "Land Rover", Model: "Range Rover Evoque", Make: "2017", Color: "Firenze Red" },
+  "55C14070C30D32E39E400000": { VIN: "6693039E", Brand: "Land Rover", Model: "Discovery SVX", Make: "2017", Color: "Scotia Grey" },
+  "55C14070C30D32E39D400000": { VIN: "80B8BEB1", Brand: "Land Rover", Model: "Range Rover", Make: "2017", Color: "Fuji White" },
+  "55C14070C30D32E39CC00000": { VIN: "8808C8B1", Brand: "Land Rover", Model: "Range Rover Velar", Make: "2017", Color: "Loire Blue" },
+  "55C14070C30D32E70E400000": { VIN: "E2A1C687", Brand: "Land Rover", Model: "Range Rover Sport", Make: "2017", Color: "Montalcino Red" },
+};                                                                  
 
 $(document).ready(function () {
   initializeMap();
@@ -15,7 +30,26 @@ $(document).ready(function () {
   $(document).on("click", "li.RFID", RFIDClick);
   $('#chkRawRFIDGPS').on("click", fnRawRFIDGPS_Click);
   $('#chkRawGPS').on("click", fnRawGPS_Click);
+  $('#chkAutoRefresh').on("click", fnchkAutoRefresh_Click);
 });
+
+function fnchkAutoRefresh_Click(e) {
+  if ($('#chkAutoRefresh').prop('checked')) {
+    PayloadRunsStart();
+  } else {
+    PayloadRunsStop();
+  }
+
+}
+
+function PayloadRunsStart() {
+  if (_TimerPayloadRunsLoad) window.clearTimeout(_TimerPayloadRunsLoad);
+  _TimerPayloadRunsLoad = window.setTimeout(PayloadRunsLoad, 5000);
+}
+function PayloadRunsStop() {
+  if (_TimerPayloadRunsLoad) window.clearTimeout(_TimerPayloadRunsLoad);
+  _TimerPayloadRunsLoad = null;
+}
 
 function fnRawRFIDGPS_Click() {
   RFIDPath.setMap($(this).is(':checked') ? map : null);
@@ -61,6 +95,30 @@ function initializeMap() {
     map: map
   });  
 
+  Markers['TopLeft'] = new google.maps.Marker({
+    map: map,
+    title: 'TopLeft',
+    draggable: true
+  });
+
+  Markers['TopRight'] = new google.maps.Marker({
+    map: map,
+    title: 'TopRight',
+    draggable: true
+  });
+
+  Markers['BottomRight'] = new google.maps.Marker({
+    map: map,
+    title: 'BottomRight',
+    draggable: true
+  });
+
+  Markers['BottomLeft'] = new google.maps.Marker({
+    map: map,
+    title: 'BottomLeft',
+    draggable: true
+  });
+
   RFIDPath = new google.maps.Polyline({
     strokeColor: '#0000FF',
     strokeOpacity: 1.0,
@@ -87,13 +145,27 @@ function PayloadRunsLoad() {
     complete: function () {
     }
   });//$.ajax
-
+  fnchkAutoRefresh_Click();
 }
 
 function PayloadRunsSuccess(TheData) {
+  $('#PayloadRunIDs').empty();  
+
+  var LI = $('<li>' +
+    '<div class="c1">Ref ID</div>' +
+    '<div class="c2">Count</div>' +
+    '<div class="c3">Grid</div>' +
+    '<div class="c4">Date</div>' +
+    '</li>');
+  $('#PayloadRunIDs').append(LI);
+
   for (var i = 0; i < TheData.length; i++) {
     var data = TheData[i];
-    var LI = $('<li class="RFIDRuns" data-UKey="' + data.FlightUniqueID + '">' +
+    var ClassName = data.FlightUniqueID == _UniqueKey ?
+      "active" :
+      (_UniqueKey == "" && i == 0 ? "active" : "");    
+
+    var LI = $('<li class="RFIDRuns ' + ClassName + '" data-UKey="' + data.FlightUniqueID + '">' +
       '<div class="c1">' + data.FlightUniqueID + '</div>' +
       '<div class="c2">' + data.RFIDCount + '</div>' +
       '<div class="c3">' + data.Grid + '</div>' +
@@ -101,12 +173,16 @@ function PayloadRunsSuccess(TheData) {
       '</li>');
     $('#PayloadRunIDs').append(LI);
   }
+
+  $('li.RFIDRuns.active').trigger("click");
 }
 
 function PayloadRunsClick(TheObj) {
   if (IsLoading) return;
   IsLoading = true;
   var uKey = $(this).attr('data-UKey');
+  _UniqueKey = $(this).index() > 1 ? uKey : "";
+
   $('#PayloadRunIDs').find('li.active').removeClass('active');
   $(this).addClass('active');
 
@@ -138,6 +214,10 @@ function RFIDLoadSuccess(TheData) {
   var TheBoundPath = TheData.BoundBox;
   if (TheBoundPath != null) {
     ResetPath(BoundBox, TheBoundPath, true, true);
+    Markers['TopLeft'].setPosition(TheBoundPath[0]);
+    Markers['TopRight'].setPosition(TheBoundPath[1]);
+    Markers['BottomRight'].setPosition(TheBoundPath[2]);
+    Markers['BottomLeft'].setPosition(TheBoundPath[3]);
   }
 
   ResetPath(FlightPath, TheData.FlightPath, false, $('#chkRawGPS').is(':checked'));
@@ -149,12 +229,13 @@ function RFIDLoadSuccess(TheData) {
 
   $('#RFIDs').empty();
   var LI = $('<li >' +
-    '<div class="c1">RFID</div>' +
-    '<div class="c2">Read Count</div>' +
-    '<div class="c3">Row</div>' +
-    '<div class="c4">Col</div>' +
-    '<div class="c5">Lat</div>' +
-    '<div class="c6">Lng</div>' +
+    '<div class="c2">RFID</div>' +
+    '<div class="c2">VIN</div>' +
+    '<div class="c2">Make</div>' +
+    '<div class="c3">Type</div>' +
+    '<div class="c4">Year</div>' +
+    '<div class="c5">Colour</div>' +
+    '<div class="c6">Pos</div>' +
     '</li>');
   $('#RFIDs').append(LI);
 
@@ -166,22 +247,23 @@ function RFIDLoadSuccess(TheData) {
       ' data-RFID="' + data.RFID + '"' +
       ' data-index="' + i + '"' +
       '>' +
-      '<div class="c1">' + data.RFID + '</div>' +
-      '<div class="c2">' + data.ReadCount + '</div>' +
-      '<div class="c3">' + data.Row + '</div>' +
-      '<div class="c4">' + data.Col + '</div>' +
-      '<div class="c3">' + data.Lat + '</div>' +
-      '<div class="c4">' + data.Lng + '</div>' +      '</li>');
+      '<div class="c2">' + data.RFID.substr(14,6) + '</div>' +
+      '<div class="c2">' + (RfidData[data.RFID] ? RfidData[data.RFID].VIN : 'N/A') + '</div>' +
+      '<div class="c2">' + (RfidData[data.RFID] ? RfidData[data.RFID].Brand : 'N/A') + '</div>' +
+      '<div class="c3">' + (RfidData[data.RFID] ? RfidData[data.RFID].Model : 'N/A') + '</div>' +
+      '<div class="c4">' + (RfidData[data.RFID] ? RfidData[data.RFID].Make : 'N/A') + '</div>' +
+      '<div class="c3">' + (RfidData[data.RFID] ? RfidData[data.RFID].Color : 'N/A') + '</div>' +
+      '<div class="c4">R' + data.Row + 'C' + data.Col + '</div>' +      '</li>');
     $('#RFIDs').append(LI);
   }
 
   for (var i = 0; i < TheData.GridLines.length; i++) {
     var data = TheData.GridLines[i];
     var GridLine = new google.maps.Polyline({
-      strokeColor: data.RowCol == 'R' ? '#00FF00' : '#00FF00',
+      strokeColor: data.RowCol == 'R' ? '#0000FF' : '#FFFF00',
       path: [data.StartPoint, data.EndPoint],
-      strokeOpacity: 0.5,
-      strokeWeight: 1,
+      strokeOpacity: 1,
+      strokeWeight: 4,
       map: map
     });
     GridLines.push(GridLine);
@@ -327,11 +409,20 @@ RFIDOverlay.prototype.draw = function () {
     var MoreClass = (i == 0 ? 'First' : (i == this.LocationData.RFID.length - 1 ? "Last" : ""));
     var Layer = IsGridMode ?
       '<div id="' + ID + '" class="rfid-item ' + MoreClass + '" ' +
-      'style="left:' + (IconLocation.x - 50) + 'px; top:' + IconLocation.y + 'px;">' +
-      this.Last5(RFID.RFID) +
+      'style="left:' + (IconLocation.x - 8) + 'px; top:' + (IconLocation.y - 8) + 'px;">' +
+      '<span class="rfid-item-circle"></span>' + 
       '<ul>' +
-      '<li>Row x Col: ' + RFID.Row + ' x ' + RFID.Col + '</li>' +
-      '<li>' + RFID.ReadCount + ' Reads</li>' +
+      '<li class="c4">Pos: R' + RFID.Row + 'C' + RFID.Col +
+      ", VIN: <b>" + (RfidData[RFID.RFID] ? RfidData[RFID.RFID].VIN : 'N/A') + '</b>' +
+      '</li>' +
+      '<li class="c2">' + (RfidData[RFID.RFID] ? RfidData[RFID.RFID].Brand : 'N/A') + 
+      ' ' + (RfidData[RFID.RFID] ? RfidData[RFID.RFID].Model : 'N/A') + 
+      ' [' + (RfidData[RFID.RFID] ? RfidData[RFID.RFID].Make : 'N/A') + "]" +
+      '</li>' +
+      '<li class="c4">' +
+      'Make: ' + (RfidData[RFID.RFID] ? RfidData[RFID.RFID].Make : 'N/A') +
+      ', Model: ' + (RfidData[RFID.RFID] ? RfidData[RFID.RFID].Color : 'N/A') +
+      '</li>' +
       (MoreClass !== '' ? '<li>' + MoreClass + '<li>' : '') +
       '</ul>' +
       '</div>'
@@ -351,3 +442,30 @@ RFIDOverlay.prototype.draw = function () {
 
 };
 
+function getPos() {
+  var PosArray =
+    '(' +
+    'TopLeftLat, TopLeftLon,' +
+    'TopRightLat, TopRightLon,' +
+    'BottomLeftLat, BottomLeftLon, ' +
+    'BottomRightLat, BottomRightLon) VALUES (' +
+    Markers['TopLeft'].getPosition().lat() + ',' + Markers['TopLeft'].getPosition().lng() + ',' +
+    Markers['TopRight'].getPosition().lat() + ',' + Markers['TopRight'].getPosition().lng() + ',' +
+    Markers['BottomLeft'].getPosition().lat() + ',' + Markers['BottomLeft'].getPosition().lng() + ',' +
+    Markers['BottomRight'].getPosition().lat() + ',' + Markers['BottomRight'].getPosition().lng() + ')' +
+    "\n\n\n" +
+
+    'TopLeftLat=' + Markers['TopLeft'].getPosition().lat() + ',\n' +
+    'TopLeftLon= ' + Markers['TopLeft'].getPosition().lng() + ',\n' +
+    'TopRightLat= ' + Markers['TopRight'].getPosition().lat() + ',\n' +
+    'TopRightLon= ' + Markers['TopRight'].getPosition().lng() + ',\n' +
+    'BottomLeftLat= ' + Markers['BottomLeft'].getPosition().lat() + ',\n' +
+    'BottomLeftLon= ' + Markers['BottomLeft'].getPosition().lng() + ',\n' +
+    'BottomRightLat=' + Markers['BottomRight'].getPosition().lat() + ',\n' +
+    'BottomRightLon= ' + Markers['BottomRight'].getPosition().lng();
+
+    ;
+
+  return PosArray;
+
+}
