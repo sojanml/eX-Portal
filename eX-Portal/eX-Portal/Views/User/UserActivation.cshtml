@@ -1,0 +1,72 @@
+﻿
+@model eX_Portal.Models.MSTR_User
+
+@{
+
+    ViewBag.Title = "User Activation";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.UserId)
+    @Html.HiddenFor(model => model.UserName)
+    @Html.HiddenFor(model => model.PhotoUrl)
+    @Html.HiddenFor(model => model.UserProfileId)
+    @Html.HiddenFor(model => model.UserAccountId)
+    @Html.HiddenFor(model => model.EmailId)
+    @Html.HiddenFor(model => model.IsActive)
+    @Html.HiddenFor(model => model.IsPilot)
+
+
+
+    <div class="form-horizontal">
+
+       
+            <p><span class="info">@ViewBag.MessageText</span></p>
+      
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+       
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+             
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+             
+                @Model.EmailId
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.PasswordFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.PasswordFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-toolbar">
+            <input type="submit" value="ChangePassword" />
+        </div>
+
+    </div>
+
+
+
+}
+
+

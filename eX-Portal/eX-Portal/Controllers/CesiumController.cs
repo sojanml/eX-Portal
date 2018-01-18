@@ -16,9 +16,11 @@ namespace CesiumFlight.Controllers
     {
         public ExponentPortalEntities db = new ExponentPortalEntities();
         // GET: Cesium
-        public ActionResult Index(int ID)
+        public ActionResult Index(int ID,string HomeLat,string HomeLong)
         {
             ViewBag.ID = ID;
+            ViewBag.HomeLat = HomeLat;
+            ViewBag.HomeLong = HomeLong;
             return View();
         }
 
@@ -94,67 +96,79 @@ namespace CesiumFlight.Controllers
             }
         }
 
-        public ActionResult Info(int ID)
+        public ActionResult Info(int ID , Int64 lastdataid = 0)
         {
 
-            var flightmapdatas = db.FlightMapDatas.Where(x => x.FlightID == ID && (x.Altitude>0 || x.Speed>0)).OrderBy(x=>x.FlightMapDataID).ToList();
+            var flightmapdatas = db.FlightMapDatas.Where(x => x.FlightID == ID && (x.Altitude>0 || x.Speed>0 ) && x.FlightMapDataID> lastdataid).OrderBy(x=>x.FlightMapDataID).ToList();
             int count = flightmapdatas.Count();
-            FlightMapData firstItem = flightmapdatas.Take(1).FirstOrDefault();
-            FlightMapData LastItem = flightmapdatas.LastOrDefault();
-            JulianDate StartTime = new JulianDate(firstItem.ReadTime.Value);
-            JulianDate EndTime = new JulianDate(LastItem.ReadTime.Value);
-            string curFile = @"C:\Cesium\test.czml";
-            FileInfo info = new FileInfo(curFile);
-            List<Cartographic> pList = new List<Cartographic>();
-            List<JulianDate> JList = new List<JulianDate>();
-            List<Double> HList = new List<Double>();
-            List<Double> PList = new List<Double>();
-            List<Double> RList = new List<Double>();
-            //MemoryStream ms = new MemoryStream();
-            //if (!info.Exists)
-            //{
-            // using ()
-            //        { 
             MemoryStream ms = new MemoryStream();
-                var outputStream = new StreamWriter(ms);
-                // Create an output stream writer for the response.
-                //using (var outputStream = new StreamWriter(fileStream.BaseStream))
-                //{
-                    var cesiumWriter = new CesiumStreamWriter();
-                var output = new CesiumOutputStream(outputStream)
-                {
-                    // Since this is a demo, turning on PrettyFormatting makes the response easier to view
-                    // with web browser developer tools.  It just adds whitespace and newlines to the response,
-                    // so production environments would typically leave this turned off.
-                    PrettyFormatting = true
-                };
+            var outputStream = new StreamWriter(ms);
+            var cesiumWriter = new CesiumStreamWriter();
+            var output = new CesiumOutputStream(outputStream)
+            {
+                // Since this is a demo, turning on PrettyFormatting makes the response easier to view
+                // with web browser developer tools.  It just adds whitespace and newlines to the response,
+                // so production environments would typically leave this turned off.
+                PrettyFormatting = true
+            };
+            if (count > 0)
+            {
 
+               
                 // The whole body of CZML must be wrapped in a JSON array, opened here.
                 output.WriteStartSequence();
+                //if (lastdataid == 0)
+                //{
+                    FlightMapData firstItem = db.FlightMapDatas.Where(x => x.FlightID == ID && (x.Altitude > 0 || x.Speed > 0)).OrderBy(x => x.FlightMapDataID).ToList().Take(1).FirstOrDefault();
+                //flightmapdatas.Take(1).FirstOrDefault();
+                FlightMapData LastItem = db.FlightMapDatas.Where(x => x.FlightID == ID && (x.Altitude > 0 || x.Speed > 0)).OrderBy(x => x.FlightMapDataID).ToList().LastOrDefault();
+                JulianDate StartTime = new JulianDate(firstItem.ReadTime.Value);
+                    JulianDate EndTime = new JulianDate(LastItem.ReadTime.Value);
+                    string curFile = @"C:\Cesium\test.czml";
+                    FileInfo info = new FileInfo(curFile);
+                    List<Cartographic> pList = new List<Cartographic>();
+                    List<JulianDate> JList = new List<JulianDate>();
+                    List<Double> HList = new List<Double>();
+                    List<Double> PList = new List<Double>();
+                    List<Double> RList = new List<Double>();
+                    
+                
 
-                // The first packet (JSON object) of CZML must be the document packet.
-                using (var entity = cesiumWriter.OpenPacket(output))
-                {
+                   
 
-                    entity.WriteId("document");
-                    entity.WriteVersion("1.0");
-                    using (var clock = entity.OpenClockProperty())
+                    // The first packet (JSON object) of CZML must be the document packet.
+                    using (var entity = cesiumWriter.OpenPacket(output))
                     {
-                        clock.WriteCurrentTime(StartTime);
+
+                        entity.WriteId("document");
+                        entity.WriteVersion("1.0");
+                        using (var clock = entity.OpenClockProperty())
+                        {
                         clock.WriteInterval(new TimeInterval(StartTime, EndTime));
-                        clock.WriteMultiplier(2);
-                        clock.WriteStep(ClockStep.SystemClockMultiplier);
-                    }
+                        if (lastdataid == 0)
+                        {
+                            clock.WriteCurrentTime(StartTime);
+                            
+                        }
+                            else
+                        {
+                            clock.WriteCurrentTime(EndTime);
+                        }
+                           
+                            clock.WriteMultiplier(2);
+                            clock.WriteStep(ClockStep.SystemClockMultiplier);
+                        }
+                    //}
+
+
                 }
-
-
-
                 // Open a new CZML packet for each point.
                 using (var entity = cesiumWriter.OpenPacket(output))
                 {
 
                     entity.WriteId("Aircraft");
                     entity.WriteVersion("1.0");
+                    
                     entity.WriteAvailability(new TimeInterval(StartTime, EndTime));
 
                     using (var model = entity.OpenBillboardProperty())
@@ -179,18 +193,15 @@ namespace CesiumFlight.Controllers
 
                     using (var path = entity.OpenPathProperty())
                     {
-                        //  position.WriteUnitQuaternion();
-                        //  path.OpenShowProperty();
+                       
                         using (var show = path.OpenShowProperty())
                         {
+                            if(lastdataid==0)
                             show.WriteInterval(new TimeInterval(StartTime, EndTime));
-                            show.WriteBoolean(true);
+                          
+                            show.WriteBoolean(false);
                         }
-
-
-                        //  path.OpenInterval();
-
-                        //   path.OpenWidthProperty();
+                        
                         path.WriteWidthProperty(1);
                         using (var material = path.OpenMaterialProperty())
                         {
@@ -225,10 +236,6 @@ namespace CesiumFlight.Controllers
 
                             var roll = Convert.ToDouble(fmp.Roll);
                             RList.Add(roll);
-                            // var hpRoll = new Cesium.HeadingPitchRoll(heading, pitch, roll);
-
-                            // var orientation = Quaternion.CreateFromYawPitchRoll(heading, pitch, roll);
-
 
                         }
                         position.WriteCartographicDegrees(JList, pList);
@@ -272,18 +279,29 @@ namespace CesiumFlight.Controllers
 
                     newpitch.WriteNumber(JList, PList);
                     newpitch.Close();
+                    //    custom.Close();
+                    CustomPropertyCesiumWriter LastDataID = custom.OpenCustomPropertyProperty("lastdataid");
+                    // newpitch.Open(output);
+                    LastDataID.AsNumber();
+
+                    LastDataID.WriteNumber(LastItem.FlightMapDataID);
+                    LastDataID.Close();
                     custom.Close();
+
                 }
 
                 output.WriteEndSequence();
 
-            //ms.Position = 0;
+                //ms.Position = 0;
 
-            //ms.Seek(0, SeekOrigin.Begin);
-            outputStream.Flush();
+                //ms.Seek(0, SeekOrigin.Begin);
+                outputStream.Flush();
+               
+                // }
+            }
+
             ms.Seek(0, SeekOrigin.Begin);
             return File(ms, "application/json");
-           // }
         }
 
       

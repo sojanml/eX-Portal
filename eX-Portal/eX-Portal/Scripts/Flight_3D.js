@@ -1,15 +1,23 @@
 ﻿$(document).ready(function () {
-    flight.Init();
+    var drone = {};
+    var czmlDataSource = new Cesium.CzmlDataSource();
+    flight.Init(drone, czmlDataSource);
 });//$(document).ready()
 
-var flight = function () {
+var flight = function (drone, czmlDataSource) {
+   
     var viewer = {};
-    var _init = function () {
+   
+    var _init = function (drone, czmlDataSource) {
         Cesium.BingMapsApi.defaultKey = 'Avg1KA_O2lc_wdCXabCC60Zo6XWEF6WGHTqg57W3LmyHfvoop60OPvRkqVLcNL_X';
         var viewer = new Cesium.Viewer('cesiumContainer', {
             scene3DOnly: true,
             selectionIndicator: false,
-            baseLayerPicker: false
+            baseLayerPicker: false,
+            geocoder: false,
+            homeButton: true,
+            infoBox: false,
+            vrButton: false
         });
 
         // Add Bing imagery
@@ -24,6 +32,10 @@ var flight = function () {
             requestWaterMask: true, // required for water effects
             requestVertexNormals: true // required for terrain lighting
         });
+        //var terrainProvider = new Cesium.VRTheWorldTerrainProvider({
+        //    url: 'http://www.vr-theworld.com/vr-theworld/tiles1.0.0/73/'
+        //});
+        //viewer.terrainProvider = terrainProvider;
 
         // Enable depth testing so things behind the terrain disappear.
         viewer.scene.globe.depthTestAgainstTerrain = true;
@@ -31,7 +43,7 @@ var flight = function () {
         // Enable lighting based on sun/moon positions
         viewer.scene.globe.enableLighting = true;
 
-        var initialPosition = new Cesium.Cartesian3.fromDegrees( 55.259156,25.184184, 200);
+        var initialPosition = new Cesium.Cartesian3.fromDegrees(HomeLong, HomeLat, 200);
         var initialOrientation = new Cesium.HeadingPitchRoll.fromDegrees(7.1077496389876024807, -31.987223091598949054, 0.025883251314954971306);
         var homeCameraView = {
             destination: initialPosition,
@@ -46,7 +58,7 @@ var flight = function () {
 
         // Add some camera flight animation options
         homeCameraView.duration = 2.0;
-        homeCameraView.maximumHeight = 2000;
+        homeCameraView.maximumHeight = 200;
         homeCameraView.pitchAdjustHeight = 2000;
         homeCameraView.endTransform = Cesium.Matrix4.IDENTITY;
         // Override the default home button
@@ -80,9 +92,10 @@ var flight = function () {
         //    viewer.dataSources.add(dataSource);
         //});
 
-     
-        var dronePromise = Cesium.CzmlDataSource.load('..\\info\\' + FlightID);
-        var drone;
+
+       
+        var dronePromise = czmlDataSource.load('..\\info\\' + FlightID);
+        var LastDataID = 0;
         //var i=50;
         //var orientationProperty = new Cesium.SampledProperty(Cesium.Quaternion); 
         dronePromise.then(function (dataSource) {
@@ -94,38 +107,44 @@ var flight = function () {
             var orientationProperty = new Cesium.SampledProperty(Cesium.Quaternion); 
             drone.model = {
                 uri: '../Images/CesiumDrone.gltf',
-                minimumPixelSize: 128,
-                maximumScale: 2000
+                minimumPixelSize: 40,
+                maximumScale: 20
             };
             var positions = drone.position;
             var rolls = newentity.properties.roll;
             var headings = newentity.properties.heading;
             var pitchs = newentity.properties.pitch;
+            var lastitemidproperty = newentity.properties.lastdataid;
+            LastDataID = lastitemidproperty.getValue();
             for (var i = 0; i < positions._property._times.length; i++) {
-
+               
                 var time = positions._property._times[i];
                 // compute orientations 
                 var heading = headings.getValue(time);
-                var pitch = pitchs.getValue(time);
+                var pitch = 0;// pitchs.getValue(time);
                   //  
-                var roll =  rolls.getValue(positions._property._times[i]);
+                var roll = 0;// rolls.getValue(positions._property._times[i]);
               //  var hpRoll = new Cesium.HeadingPitchRoll(0,0,0);
                 var hpRoll= Cesium.HeadingPitchRoll.fromDegrees(heading, pitch, roll);
             var orientation = Cesium.Transforms.headingPitchRollQuaternion(positions.getValue(time), hpRoll);
                // var orientation = Cesium.Quaternion.fromHeadingPitchRoll(hpRoll);
-                orientationProperty.addSample(time, orientation);
+            orientationProperty.addSample(time, orientation);
+            if (i == 0)
+                initialPosition = positions.getValue(time);
             //  i++;
             }
+          
             // Add computed orientation based on sampled positions
-            drone.orientation = orientationProperty;
-           // drone.orientation = new Cesium.VelocityOrientationProperty(drone.position);
+           drone.orientation = orientationProperty;
+        //  drone.orientation = new Cesium.VelocityOrientationProperty(drone.position);
             //new Cesium.VelocityOrientationProperty(drone.position);
             // Smooth path interpolation
             drone.position.setInterpolationOptions({
-                interpolationDegree: 3,
+                interpolationDegree:5,
                 interpolationAlgorithm: Cesium.HermitePolynomialApproximation
             });
             drone.viewFrom = new Cesium.Cartesian3(-30, 0, 0);
+            homeCameraView.destination = initialPosition;
         });
 
         
@@ -138,9 +157,12 @@ var flight = function () {
         function setViewMode() {
             if (droneModeElement.checked) {
                 viewer.trackedEntity = drone;
+
             } else {
                 viewer.trackedEntity = undefined;
+              
                 viewer.scene.camera.flyTo(homeCameraView);
+
             }
         }
 
@@ -153,6 +175,55 @@ var flight = function () {
                 droneModeElement.checked = true;
             }
         });
+
+        //setInterval(function () {
+        //    dronePromise = czmlDataSource.process('..\\info\\' + FlightID + "?lastdataid=" + LastDataID);
+        //    dronePromise.then(function (dataSource) {
+        //        var newdrone = {};
+        //        newdrone = dataSource.entities.values[0];
+        //        var newentity = dataSource.entities.values[1];
+
+        //        // Attach a 3D model
+        //        var orientationProperty = new Cesium.SampledProperty(Cesium.Quaternion);
+              
+        //        var positions = newdrone.position;
+        //        var rolls = newentity.properties.roll;
+        //        var headings = newentity.properties.heading;
+        //        var pitchs = newentity.properties.pitch;
+        //        var lastitemidproperty = newentity.properties.lastdataid;
+        //        LastDataID = lastitemidproperty.getValue();
+        //        for (var i = 0; i < positions._property._times.length; i++) {
+
+        //            var time = positions._property._times[i];
+        //            // compute orientations 
+        //            var heading = headings.getValue(time);
+        //            var pitch = pitchs.getValue(time);
+        //            //  
+        //            var roll = rolls.getValue(positions._property._times[i]);
+        //            //  var hpRoll = new Cesium.HeadingPitchRoll(0,0,0);
+        //            var hpRoll = Cesium.HeadingPitchRoll.fromDegrees(heading, pitch, roll);
+        //            var orientation = Cesium.Transforms.headingPitchRollQuaternion(positions.getValue(time), hpRoll);
+        //            // var orientation = Cesium.Quaternion.fromHeadingPitchRoll(hpRoll);
+        //            orientationProperty.addSample(time, orientation);
+        //            //  i++;
+        //        }
+
+        //        drone.position.addSample(positions);
+        //        // Add computed orientation based on sampled positions
+        //        drone.orientation.addSample(orientationProperty);
+        //        // drone.orientation = new Cesium.VelocityOrientationProperty(drone.position);
+        //        //new Cesium.VelocityOrientationProperty(drone.position);
+        //        // Smooth path interpolation
+        //        drone.position.setInterpolationOptions({
+        //            interpolationDegree: 3,
+        //            interpolationAlgorithm: Cesium.HermitePolynomialApproximation
+        //        });
+        //        drone.viewFrom = new Cesium.Cartesian3(-30, 0, 0);
+        //    });
+
+
+
+        //}, 20000);
 
     };
 
