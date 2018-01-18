@@ -163,7 +163,8 @@ namespace eX_Portal.exLogic {
     public bool IsLive { get; private set; }
     public String InnerPolygon { get; private set; }
     public String OuterPolygon { get; private set; }
-    
+    public string HomeLat { get; private set; }
+    public string HomeLong { get; private set; }
    
 
     public void GetInformation(int FlightID) {
@@ -181,7 +182,9 @@ namespace eX_Portal.exLogic {
         ISNULL(g.ApprovalName,'NO NOC') as ApprovalName,
         ISNULL(g.ApprovalID,0) as ApprovalID,
         g.Coordinates as InnerPolygon,
-        g.InnerBoundaryCoord as OuterPolygon        
+        g.InnerBoundaryCoord as OuterPolygon,
+        DroneFlight.latitude as homelat,
+        DroneFlight.longitude as homelong
       FROM 
         DroneFlight
       LEFT JOIN GCA_Approval as g
@@ -213,7 +216,9 @@ namespace eX_Portal.exLogic {
             PilotID = GetInt(RS, "PilotID");
             InnerPolygon = GetString(RS, "InnerPolygon");
             OuterPolygon = GetString(RS, "OuterPolygon");
-          }
+            HomeLat= GetString(RS, "HomeLat");
+            HomeLong= GetString(RS, "HomeLong");
+                    }
         }//using (var cmd 
 
         var vQuery = from v in ctx.DroneFlightVideos

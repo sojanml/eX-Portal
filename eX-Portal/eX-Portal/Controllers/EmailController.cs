@@ -114,6 +114,22 @@ namespace eX_Portal.Controllers {
             return View(User);
         }
 
+        public ActionResult UserActivation([Bind(Prefix = "ID")] string key)
+        {
+            MSTR_User newUser = ctx.MSTR_User.FirstOrDefault(x => x.ActivationKey == key && x.IsActive == false);
+            if (newUser != null)
+            {
+                ViewBag.Username = newUser.UserName;
 
-  }//public class EmailController
+
+
+
+            }
+            else
+            {
+                ViewBag.Message = "Activation link expired.";
+            }
+            return View(newUser);
+        }
+    }//public class EmailController
 }//namespace eX_Portal.Controllers

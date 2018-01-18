@@ -1219,6 +1219,62 @@ namespace eX_Portal.Controllers {
             return View();
         }
 
+        public ActionResult UserActivation([Bind(Prefix = "ID")] string key)
+        {
+            MSTR_User newUser = db.MSTR_User.FirstOrDefault(x =>  x.ActivationKey == key && x.IsActive == false);
+            if (newUser != null)
+            {
+
+
+                
+                ViewBag.Message = "Thank you for activating the account.Please set your password.";
+
+
+            }
+            else
+            {
+                ViewBag.Message = "Activation link expired.";
+            }
+            return View(newUser);
+        }
+
+        [HttpPost]
+        public ActionResult UserActivation(MSTR_User newUser)
+        {
+          
+            MSTR_User nUser= db.MSTR_User.FirstOrDefault(x => x.UserId ==newUser.UserId);
+
+            if (newUser != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    newUser.Password = newUser.Password.Trim();
+                    newUser.ConfirmPassword = newUser.ConfirmPassword.Trim();
+                    if (newUser.Password==newUser.ConfirmPassword && newUser.Password.Length>0)
+                    {
+                        string Password = Util.GetEncryptedPassword(newUser.Password).ToString();
+                        nUser.Password = Password;
+                        nUser.IsActive = true;
+                        nUser.ConfirmPassword = Password;
+                        db.SaveChanges();
+                    TempData["Message"]= "Thank you for activating the account.Please login to continue";
+                    return RedirectToAction("Index");
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "Password does not match.";
+                }
+            }
+            else
+            {
+                ViewBag.Message = "Activation link expired.";
+            }
+            return View();
+        }
+
+
+
 
         public ActionResult BillingInformation(int ID=0)
         {

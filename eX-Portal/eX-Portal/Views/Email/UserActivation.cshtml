@@ -1,0 +1,19 @@
+﻿
+@model eX_Portal.Models.MSTR_User
+@{
+    Layout = "~/Views/Shared/_Email.cshtml";
+}
+
+<div>
+    <P>Hello,</P>
+
+    <P>
+        Thank you for registering in SkyTrax. 
+        Please click on the link below for activation.
+        <br />
+        <a href="http://dcaa.exponent-ts.com/User/UserActivation/@Model.ActivationKey">Activate</a>
+    </P>
+</div>
+
+
+
