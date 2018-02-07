@@ -204,6 +204,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="BillingModule\BillingGroup.cs" />
+    <Compile Include="BillingModule\BillingNOC.cs" />
+    <Compile Include="BillingModule\RulesManager.cs" />
+    <Compile Include="BillingModule\Settings.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdsbController.cs" />
     <Compile Include="Controllers\AgricultureController.cs" />
@@ -252,6 +256,7 @@
     <Compile Include="exLogic\DroneCheckListForm.cs" />
     <Compile Include="exLogic\DroneFlightSetup.cs" />
     <Compile Include="exLogic\NOC_QView.cs" />
+    <Compile Include="Models\BillingModelAnnotationsHelper.cs" />
     <Compile Include="Models\BillingRules.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -261,18 +266,19 @@
     <Compile Include="Models\BillingRulesGroup.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FlightMapDelayReport_Result.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MSTR_NOC.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MSTR_TrafficMonitor.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Nationality.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\NOC_DataAnnotationsHelper.cs" />
     <Compile Include="Models\NOC_Details.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PayLoadTrafficData.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PortalAlert_User.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
@@ -900,11 +906,13 @@
     <Content Include="Content\ADSB.css" />
     <Content Include="Content\ADSB2.css" />
     <Content Include="Content\Agriculture.css" />
+    <Content Include="Content\BillingModule.css" />
     <Content Include="Content\black-box.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\common.css" />
     <Content Include="Content\dashboard.css" />
     <Content Include="Content\dewa-dashboard.css" />
     <Content Include="Content\drone-live.css" />
@@ -1057,6 +1065,7 @@
     <Content Include="images\drone.svg" />
     <Content Include="images\drop-down.png" />
     <Content Include="images\filter-check.png" />
+    <Content Include="images\FIXED-WING.png" />
     <Content Include="images\flag-RpasEnd.png" />
     <Content Include="images\flag-RpasStart.png" />
     <Content Include="images\FlightType-FIXED-WING.png" />
@@ -1101,6 +1110,11 @@
     <Content Include="images\rta\RpasID.png" />
     <Content Include="images\rta\VechileCount.png" />
     <Content Include="images\rta\zone.png" />
+    <Content Include="images\Ruler.ico" />
+    <Content Include="images\ruler2.png" />
+    <Content Include="images\scale.png" />
+    <Content Include="images\scaler.png" />
+    <Content Include="images\table-sort.png" />
     <Content Include="images\time-picker.png" />
     <Content Include="images\weather\00.png" />
     <Content Include="images\weather\01.png" />
@@ -1205,6 +1219,8 @@
     <Content Include="Scripts\ADSB.js" />
     <Content Include="Scripts\ADSBDashboard.js" />
     <Content Include="Scripts\ADSBFlightMap.js" />
+    <Content Include="Scripts\BillingGroup.js" />
+    <Content Include="Scripts\BillingModule.js" />
     <Content Include="Scripts\FlightMap-ADSB.js" />
     <Content Include="Scripts\Agriculture.js" />
     <Content Include="Scripts\AgricultureBulkUpload.js" />
@@ -1530,6 +1546,21 @@
     <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
+    <Content Include="Scripts\Table-RowSorter\dist\RowSorter.js" />
+    <Content Include="Scripts\Table-RowSorter\examples\basic.html" />
+    <Content Include="Scripts\Table-RowSorter\examples\basic2.html" />
+    <Content Include="Scripts\Table-RowSorter\examples\big_table.php" />
+    <Content Include="Scripts\Table-RowSorter\examples\handler1.html" />
+    <Content Include="Scripts\Table-RowSorter\examples\handler2.html" />
+    <Content Include="Scripts\Table-RowSorter\examples\jquery.html" />
+    <Content Include="Scripts\Table-RowSorter\examples\require.js\require.js" />
+    <Content Include="Scripts\Table-RowSorter\examples\require.js\require_js.html" />
+    <Content Include="Scripts\Table-RowSorter\examples\revert.html" />
+    <Content Include="Scripts\Table-RowSorter\examples\sticky.html" />
+    <Content Include="Scripts\Table-RowSorter\examples\style.html" />
+    <Content Include="Scripts\Table-RowSorter\examples\touch_test.html" />
+    <Content Include="Scripts\Table-RowSorter\Gruntfile.js" />
+    <Content Include="Scripts\Table-RowSorter\src\RowSorter.js" />
     <Content Include="Scripts\traffic-dmat.js" />
     <Content Include="Scripts\TrafficControl-x.js" />
     <Content Include="Scripts\TrafficControl.js" />
@@ -1655,6 +1686,13 @@
     <Content Include="sass\NOC_Register.scss" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.2.1.min.map" />
+    <Content Include="Scripts\Table-RowSorter\.gitignore" />
+    <Content Include="Scripts\Table-RowSorter\bower.json" />
+    <Content Include="Scripts\Table-RowSorter\CHANGES" />
+    <Content Include="Scripts\Table-RowSorter\LICENSE" />
+    <Content Include="Scripts\Table-RowSorter\package.json" />
+    <Content Include="Scripts\Table-RowSorter\README.md" />
+    <Content Include="Scripts\Table-RowSorter\TODO" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\video.dev.js" />
     <Content Include="Scripts\video.js" />
@@ -2150,6 +2188,12 @@
     <Content Include="Views\BillingRules\Edit.cshtml" />
     <Content Include="Views\BillingRules\Index.cshtml" />
     <Content Include="Views\Cesium\Index.cshtml" />
+    <Content Include="Views\Shared\NOC_qViewData.cshtml" />
+    <Content Include="Views\Billing\AllRules.cshtml" />
+    <Content Include="Views\Billing\FlightBilling.cshtml" />
+    <Content Include="Views\Billing\Group.cshtml" />
+    <Content Include="Views\User\UserActivation.cshtml" />
+    <Content Include="Views\Email\UserActivation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
