@@ -58,6 +58,9 @@
     <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.S3.3.3.11.4\lib\net45\AWSSDK.S3.dll</HintPath>
     </Reference>
+    <Reference Include="CesiumLanguageWriter, Version=2.7.0.0, Culture=neutral, PublicKeyToken=ab359b0e398e33e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\CesiumLanguageWriter.2.7.0\lib\net40\CesiumLanguageWriter.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -213,6 +216,7 @@
     <Compile Include="Controllers\BillingController.cs" />
     <Compile Include="Controllers\BillingRulesController.cs" />
     <Compile Include="Controllers\BlackBoxController.cs" />
+    <Compile Include="Controllers\CesiumController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
     <Compile Include="Controllers\DesignController.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
@@ -1319,7 +1323,12 @@
     <Content Include="Scripts\FlightMap-Chart.js" />
     <Content Include="Scripts\FlightMap-DynamicZone.js" />
     <Content Include="Scripts\FlightMap-Map.js" />
+    <Content Include="Scripts\FlightMapView-Charts.js" />
+    <Content Include="Scripts\FlightMapView-Map.js" />
+    <Content Include="Scripts\FlightMapView-Slider.js" />
+    <Content Include="Scripts\FlightMapView.js" />
     <Content Include="Scripts\FlightSetup.js" />
+    <Content Include="Scripts\Flight_3D.js" />
     <Content Include="Scripts\Flight_Gps_Map.js" />
     <Content Include="Scripts\geotag.js" />
     <Content Include="Scripts\GoogleMapLabel.js" />
@@ -1558,6 +1567,8 @@
     <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLightItalic.ttf" />
     <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLightItalic.woff" />
     <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLightItalic.woff2" />
+    <Content Include="Cesium\Images\CesiumDrone.gltf" />
+    <Content Include="images\CesiumDrone.gltf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -1567,6 +1578,7 @@
     <Content Include="sass\BillingModule.scss" />
     <None Include="sass\common.scss" />
     <Content Include="sass\exPortal_V3_Common.scss" />
+    <Content Include="sass\exPortal_V3_FlightMapView.scss" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
@@ -1581,6 +1593,33 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jQueryFlightIndicators\css\flightindicators.css" />
+    <Content Include="Scripts\jQueryFlightIndicators\css\flightindicators.min.css" />
+    <Content Include="Scripts\jQueryFlightIndicators\example.html" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\altitude_pressure.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\altitude_ticks.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\fi_box.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\fi_circle.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\fi_needle.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\fi_needle_small.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\fi_tc_airplane.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\heading_mechanics.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\heading_yaw.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\horizon_back.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\horizon_ball.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\horizon_circle.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\horizon_mechanics.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\speed_mechanics.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\turn_coordinator.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\img\vertical_mechanics.svg" />
+    <Content Include="Scripts\jQueryFlightIndicators\js\jquery.flightindicators.js" />
+    <Content Include="Scripts\jQueryFlightIndicators\js\jquery.flightindicators.min.js" />
+    <Content Include="Scripts\jQueryFlightIndicators\js\jquery.flightindicators.modified.js" />
+    <Content Include="Scripts\jQueryFlightIndicators\_examples_data\example.png" />
+    <Content Include="Scripts\jQueryFlightIndicators\_examples_data\example_highres.png" />
+    <Content Include="Scripts\jQueryFlightIndicators\_examples_data\prism\prism.css" />
+    <Content Include="Scripts\jQueryFlightIndicators\_examples_data\prism\prism.js" />
+    <Content Include="Scripts\jQueryFlightIndicators\_examples_data\style.css" />
     <Content Include="Scripts\map-common.js" />
     <Content Include="Scripts\map-replay-v02.js" />
     <Content Include="Scripts\map-replay-v02_keep.js" />
@@ -1754,6 +1793,16 @@
     <Content Include="Scripts\Table-RowSorter\package.json" />
     <Content Include="Scripts\Table-RowSorter\README.md" />
     <Content Include="Scripts\Table-RowSorter\TODO" />
+    <Content Include="Scripts\jQueryFlightIndicators\.gitignore" />
+    <Content Include="Scripts\jQueryFlightIndicators\bower.json" />
+    <Content Include="Scripts\jQueryFlightIndicators\flightindicators.jquery.json" />
+    <Content Include="Scripts\jQueryFlightIndicators\LICENSE" />
+    <Content Include="Scripts\jQueryFlightIndicators\README.md" />
+    <Content Include="Scripts\jQueryFlightIndicators\_img_sources\altitude.ai" />
+    <Content Include="Scripts\jQueryFlightIndicators\_img_sources\heading.ai" />
+    <Content Include="Scripts\jQueryFlightIndicators\_img_sources\horizon.ai" />
+    <Content Include="Scripts\jQueryFlightIndicators\_img_sources\speed.ai" />
+    <Content Include="Scripts\jQueryFlightIndicators\_img_sources\vertical.ai" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\video.dev.js" />
     <Content Include="Scripts\video.js" />

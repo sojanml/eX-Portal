@@ -36,6 +36,9 @@ namespace eX_Portal.Controllers {
       var TheMap = new FlightMap();
 
       TheMap.GetInformation(FlightID);
+      if(!String.IsNullOrEmpty(TheMap.RPAS_Image)) {
+        TheMap.RPAS_Image = TheMap.RPAS_Image.Replace("/images/", "/images/v3/");
+      }
       if (!TheMap.IsLive) {
         if (!exLogic.User.hasAccess("FLIGHT.ARCHIVE"))
           return RedirectToAction("NoAccess", "Home");

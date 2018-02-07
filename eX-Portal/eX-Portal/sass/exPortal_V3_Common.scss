@@ -4,7 +4,7 @@
 $BodyColor: #1C1C1C;
 $HiliteColor1: #ff0000;
 $HiliteColor2: #18bdec;
-$VerticalGap: 15px;
+//$VerticalGap: 15px;
 
 @include font-face("FontAwesome", font-files( 
 "../fonts/fontawesome-webfont.ttf", 
@@ -17,7 +17,11 @@ $VerticalGap: 15px;
 @font-face {
   font-family: 'Avenir Next Condensed Demi';
   src: url('AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.eot');
-  src: url('AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.eot?#iefix') format('embedded-opentype'), url('AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff2') format('woff2'), url('AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff') format('woff'), url('AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.ttf') format('truetype'), url('AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.svg#AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic') format('svg');
+  src: url('AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.eot?#iefix') format('embedded-opentype'), 
+       url('AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff2') format('woff2'), 
+       url('AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff') format('woff'), 
+       url('AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.ttf') format('truetype'), 
+       url('AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.svg#AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic') format('svg');
   font-weight: 600;
   font-style: italic;
 } 
@@ -109,6 +113,94 @@ $VerticalGap: 15px;
   font-weight: 200;
   font-style: italic;
 }
+
+
+
+@font-face {
+    font-family: 'Advent';
+    src: url('Advent/advent-Lt2.eot');
+    src: url('Advent/advent-Lt2.eot?#iefix') format('embedded-opentype'),
+        url('Advent/advent-Lt2.woff2') format('woff2'),
+        url('Advent/advent-Lt2.woff') format('woff'),
+        url('Advent/advent-Lt2.ttf') format('truetype'),
+        url('Advent/advent-Lt2.svg#advent-Lt2') format('svg');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Advent';
+    src: url('Advent/advent-Regular.eot');
+    src: url('Advent/advent-Regular.eot?#iefix') format('embedded-opentype'),
+        url('Advent/advent-Regular.woff2') format('woff2'),
+        url('Advent/advent-Regular.woff') format('woff'),
+        url('Advent/advent-Regular.ttf') format('truetype'),
+        url('Advent/advent-Regular.svg#advent-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Advent';
+    src: url('Advent/advent-Bd2.eot');
+    src: url('Advent/advent-Bd2.eot?#iefix') format('embedded-opentype'),
+        url('Advent/advent-Bd2.woff2') format('woff2'),
+        url('Advent/advent-Bd2.woff') format('woff'),
+        url('Advent/advent-Bd2.ttf') format('truetype'),
+        url('Advent/advent-Bd2.svg#advent-Bd2') format('svg');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Advent';
+    src: url('Advent/advent-Bd1.eot');
+    src: url('Advent/advent-Bd1.eot?#iefix') format('embedded-opentype'),
+        url('Advent/advent-Bd1.woff2') format('woff2'),
+        url('Advent/advent-Bd1.woff') format('woff'),
+        url('Advent/advent-Bd1.ttf') format('truetype'),
+        url('Advent/advent-Bd1.svg#advent-Bd1') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Advent';
+    src: url('Advent/advent-Lt3.eot');
+    src: url('Advent/advent-Lt3.eot?#iefix') format('embedded-opentype'),
+        url('Advent/advent-Lt3.woff2') format('woff2'),
+        url('Advent/advent-Lt3.woff') format('woff'),
+        url('Advent/advent-Lt3.ttf') format('truetype'),
+        url('Advent/advent-Lt3.svg#advent-Lt3') format('svg');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Advent';
+    src: url('Advent/advent-Bd3.eot');
+    src: url('Advent/advent-Bd3.eot?#iefix') format('embedded-opentype'),
+        url('Advent/advent-Bd3.woff2') format('woff2'),
+        url('Advent/advent-Bd3.woff') format('woff'),
+        url('Advent/advent-Bd3.ttf') format('truetype'),
+        url('Advent/advent-Bd3.svg#advent-Bd3') format('svg');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Advent';
+    src: url('Advent/advent-Lt1.eot');
+    src: url('Advent/advent-Lt1.eot?#iefix') format('embedded-opentype'),
+        url('Advent/advent-Lt1.woff2') format('woff2'),
+        url('Advent/advent-Lt1.woff') format('woff'),
+        url('Advent/advent-Lt1.ttf') format('truetype'),
+        url('Advent/advent-Lt1.svg#advent-Lt1') format('svg');
+    font-weight: 300;
+    font-style: normal;
+}
+
+
 
 @mixin Clear() {
   content: "";

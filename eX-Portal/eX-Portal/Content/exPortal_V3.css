@@ -86,6 +86,55 @@
   font-weight: 200;
   font-style: italic;
 }
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt2.eot");
+  src: url("Advent/advent-Lt2.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt2.woff2") format("woff2"), url("Advent/advent-Lt2.woff") format("woff"), url("Advent/advent-Lt2.ttf") format("truetype"), url("Advent/advent-Lt2.svg#advent-Lt2") format("svg");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Regular.eot");
+  src: url("Advent/advent-Regular.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Regular.woff2") format("woff2"), url("Advent/advent-Regular.woff") format("woff"), url("Advent/advent-Regular.ttf") format("truetype"), url("Advent/advent-Regular.svg#advent-Regular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd2.eot");
+  src: url("Advent/advent-Bd2.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd2.woff2") format("woff2"), url("Advent/advent-Bd2.woff") format("woff"), url("Advent/advent-Bd2.ttf") format("truetype"), url("Advent/advent-Bd2.svg#advent-Bd2") format("svg");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd1.eot");
+  src: url("Advent/advent-Bd1.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd1.woff2") format("woff2"), url("Advent/advent-Bd1.woff") format("woff"), url("Advent/advent-Bd1.ttf") format("truetype"), url("Advent/advent-Bd1.svg#advent-Bd1") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt3.eot");
+  src: url("Advent/advent-Lt3.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt3.woff2") format("woff2"), url("Advent/advent-Lt3.woff") format("woff"), url("Advent/advent-Lt3.ttf") format("truetype"), url("Advent/advent-Lt3.svg#advent-Lt3") format("svg");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd3.eot");
+  src: url("Advent/advent-Bd3.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd3.woff2") format("woff2"), url("Advent/advent-Bd3.woff") format("woff"), url("Advent/advent-Bd3.ttf") format("truetype"), url("Advent/advent-Bd3.svg#advent-Bd3") format("svg");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt1.eot");
+  src: url("Advent/advent-Lt1.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt1.woff2") format("woff2"), url("Advent/advent-Lt1.woff") format("woff"), url("Advent/advent-Lt1.ttf") format("truetype"), url("Advent/advent-Lt1.svg#advent-Lt1") format("svg");
+  font-weight: 300;
+  font-style: normal;
+}
 html, body {
   width: 100%;
   height: 100%;
@@ -93,6 +142,10 @@ html, body {
   padding: 0;
   color: #1C1C1C;
   font-family: 'Avenir Next Condensed';
+}
+
+div {
+  box-sizing: border-box;
 }
 
 span.icon {
@@ -106,6 +159,12 @@ a {
 a:hover {
   text-decoration: none;
   color: #18bdec;
+}
+
+div.clear {
+  display: block;
+  clear: both;
+  float: none;
 }
 
 div#Overlay {
@@ -135,16 +194,11 @@ section::after {
   float: none;
 }
 
-header {
-  margin-top: 15px;
-}
-header:after {
+header::after {
   content: "";
   display: block;
   clear: both;
   float: none;
-  padding-top: 15px;
-  margin-bottom: 15px;
   border-bottom: 1px #7f7f7f solid;
 }
 
@@ -168,10 +222,10 @@ nav.user-management {
 nav.user-management ul {
   margin: 0px;
   padding: 0px;
+  float: right;
 }
 nav.user-management ul li {
   display: inline-block;
-  margin-left: 15px;
 }
 nav.user-management ul li#user-menu {
   position: relative;
@@ -189,6 +243,12 @@ nav.user-management ul li#user-menu ul li {
 }
 nav.user-management ul li#user-menu:hover > a {
   color: #18bdec;
+}
+nav.user-management ul:after {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
 }
 
 nav.main-menu {
@@ -212,8 +272,6 @@ nav.main-menu ul li {
   display: inline-block;
   position: relative;
   white-space: nowrap;
-  padding-right: 15px;
-  padding-left: 15px;
 }
 nav.main-menu ul li:hover > a {
   color: #ff0000;
@@ -228,7 +286,6 @@ nav.main-menu ul li ul {
   z-index: 9;
 }
 nav.main-menu ul li ul li {
-  padding: 5px 15px 0px 15px;
   display: block;
 }
 nav.main-menu ul li ul li a {
@@ -285,12 +342,28 @@ nav.breadcrumbs ul li:last-child:after {
 }
 
 @media screen and (min-width: 720px) {
-  body {
-    font-size: 12pt;
+  header {
+    margin-top: 8px;
+  }
+  header:after {
+    padding-top: 8px;
+    margin-bottom: 8px;
   }
 
-  div.left-section img {
-    height: 48pt;
+  nav.user-management ul li {
+    margin-left: 8px;
+  }
+  nav.user-management ul li ul li {
+    padding: 5px 8px 0px 8px;
+  }
+
+  nav.main-menu ul li {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  body {
+    font-size: 12pt;
   }
 
   nav .user-management > ul > li > ul,
@@ -298,18 +371,45 @@ nav.breadcrumbs ul li:last-child:after {
     top: 12pt;
   }
 
+  #FlightChartInfos div.flightchartinfo div.title {
+    font-size: 9.75pt;
+  }
+  #FlightChartInfos div.flightchartinfo div.sub-title {
+    font-size: 9pt;
+  }
+
   section {
     width: 720px;
     margin: auto;
   }
-}
-@media screen and (min-width: 1080px) {
-  body {
-    font-size: 13pt;
-  }
 
   div.left-section img {
-    height: 52pt;
+    height: 50px;
+  }
+}
+@media screen and (min-width: 1080px) {
+  header {
+    margin-top: 12px;
+  }
+  header:after {
+    padding-top: 12px;
+    margin-bottom: 12px;
+  }
+
+  nav.user-management ul li {
+    margin-left: 12px;
+  }
+  nav.user-management ul li ul li {
+    padding: 5px 12px 0px 12px;
+  }
+
+  nav.main-menu ul li {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  body {
+    font-size: 13pt;
   }
 
   nav .user-management > ul > li > ul,
@@ -317,18 +417,45 @@ nav.breadcrumbs ul li:last-child:after {
     top: 13pt;
   }
 
+  #FlightChartInfos div.flightchartinfo div.title {
+    font-size: 10.75pt;
+  }
+  #FlightChartInfos div.flightchartinfo div.sub-title {
+    font-size: 10pt;
+  }
+
   section {
     width: 1080px;
     margin: auto;
   }
-}
-@media screen and (min-width: 1320px) {
-  body {
-    font-size: 14pt;
-  }
 
   div.left-section img {
-    height: 56pt;
+    height: 60px;
+  }
+}
+@media screen and (min-width: 1320px) {
+  header {
+    margin-top: 15px;
+  }
+  header:after {
+    padding-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  nav.user-management ul li {
+    margin-left: 15px;
+  }
+  nav.user-management ul li ul li {
+    padding: 5px 15px 0px 15px;
+  }
+
+  nav.main-menu ul li {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  body {
+    font-size: 14pt;
   }
 
   nav .user-management > ul > li > ul,
@@ -336,8 +463,19 @@ nav.breadcrumbs ul li:last-child:after {
     top: 14pt;
   }
 
+  #FlightChartInfos div.flightchartinfo div.title {
+    font-size: 11.75pt;
+  }
+  #FlightChartInfos div.flightchartinfo div.sub-title {
+    font-size: 11pt;
+  }
+
   section {
     width: 1320px;
     margin: auto;
+  }
+
+  div.left-section img {
+    height: 70px;
   }
 }

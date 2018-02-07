@@ -59,7 +59,6 @@ function nFormat(n, dp) {
 function pad(Num) {
   if (Num >= 10) return Num;
   return '0' + Num;
-
 }
 
 function getMapStyle() {

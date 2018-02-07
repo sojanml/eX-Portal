@@ -151,8 +151,12 @@ namespace eX_Portal.exLogic {
   public class FlightMap {
     public String PilotName { get; private set; }
     public String PilotImage { get; private set; }
+    public String RPASPermitNo { get; private set; }
     public String GroundStaff { get; private set; }
     public String RPAS { get; private set; }
+    public String RPAS_Description { get; private set; }
+    public String RPAS_Type { get; private set; }
+    public String RPAS_Image { get; set; }
     public String ApprovalName { get; private set; }
     public String FlightDate { get; private set; }
     public int DroneID { get; private set; }
@@ -165,18 +169,21 @@ namespace eX_Portal.exLogic {
     public String OuterPolygon { get; private set; }
     public string HomeLat { get; private set; }
     public string HomeLong { get; private set; }
-   
 
     public void GetInformation(int FlightID) {
       String SQL = @"SELECT 
         DroneFlight.ID as FlightID,
         MSTR_Drone.DroneID,
         MSTR_Drone.DroneName AS RPAS,
+        (SELECT [Name] from LUP_Drone WHERE [Type]='Manufacturer' and LUP_Drone.TypeId = ManufactureId) + ' ' +
+        (SELECT [Name] from LUP_Drone WHERE [Type]='UAVType' and LUP_Drone.TypeId = UavTypeID) as RPAS_Description,
+        (SELECT [GroupName] from LUP_Drone WHERE [Type]='UAVType' and LUP_Drone.TypeId = UavTypeID) as RPAS_Type,
         tblPilot.UserID AS PilotID,
         ISNULL(tblPilot.FirstName,'') + ' ' +  
           ISNULL(tblPilot.MiddleName,'') + ' ' +  
           ISNULL(tblPilot.LastName,'')AS PilotName,
         ISNULL(tblPilot.PhotoURL,'') as PilotImage,
+        ISNULL(tblPilot.RPASPermitNo,'') as RPASPermitNo,
         tblGSC.FirstName AS GroundStaff,
         CONVERT(VARCHAR, FlightDate,120) AS 'FlightDate',
         ISNULL(g.ApprovalName,'NO NOC') as ApprovalName,
@@ -206,8 +213,11 @@ namespace eX_Portal.exLogic {
           while(RS.Read()) {
             PilotName = GetString(RS, "PilotName");
             PilotImage = GetString(RS, "PilotImage");
+            RPASPermitNo = GetString(RS, "RPASPermitNo");
             GroundStaff = GetString(RS, "GroundStaff");
             RPAS = GetString(RS, "RPAS");
+            RPAS_Description = GetString(RS, "RPAS_Description");
+            RPAS_Type = GetString(RS, "RPAS_Type");
             FlightDate = GetString(RS, "FlightDate");
             ApprovalName =  GetString(RS, "ApprovalName");
             DroneID = GetInt(RS, "DroneID");
@@ -218,7 +228,7 @@ namespace eX_Portal.exLogic {
             OuterPolygon = GetString(RS, "OuterPolygon");
             HomeLat= GetString(RS, "HomeLat");
             HomeLong= GetString(RS, "HomeLong");
-                    }
+          }
         }//using (var cmd 
 
         var vQuery = from v in ctx.DroneFlightVideos
@@ -245,6 +255,14 @@ namespace eX_Portal.exLogic {
         PilotImage = $"/Upload/User/{PilotID}/{PilotImage}";
         if(!System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath(PilotImage)))
           PilotImage = "/images/PilotImage.png";
+      }
+
+      if(String.IsNullOrEmpty(RPAS_Type)) {
+        RPAS_Image = "/images/FlightType-MULTI-ROTOR.png";
+      } else {
+        RPAS_Image = $"/images/FlightType-{RPAS_Type}.png";
+        if (!System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath(RPAS_Image)))
+          RPAS_Image = "/images/FlightType-MULTI-ROTOR.png";
       }
     }
 
@@ -296,31 +314,28 @@ namespace eX_Portal.exLogic {
     public Object ChartSummaryData(int FlightID) {
       List<ChartData> ChartDatas = new List<ChartData>();
       String SQL = $@"SELECT
-         ChunkStart = Min(FlightMapDataID),
-         ChunkEnd = Max(FlightMapDataID),
-         Speed = Avg(Speed),
-         Pitch = Avg(Pitch),
-         Roll = Avg(Roll),
-         Altitude = Avg(Altitude),
-         Satellites =Avg(Satellites),
-         FlightTime = Max(ReadTime),
-         Chunk
-      FROM
-         (
-            SELECT
-               Chunk = NTILE(80) OVER (ORDER BY FlightMapDataID),
-               *
-            FROM
-               FlightMapData
-	        WHERE
-	          FlightID= {FlightID} AND
-		        (Speed > 0 OR Altitude > 0)
-         ) AS T
+        ChunkStart = Min(FlightMapDataID),
+        ChunkEnd = Max(FlightMapDataID),
+        Speed = Max(Speed),
+        Pitch = Avg(Pitch),
+        Roll = Avg(Roll),
+        Altitude = Avg(Altitude),
+        Satellites =Avg(Satellites),
+        FlightTime = Max(ReadTime),
+        Chunk
+      FROM(
+        SELECT
+          Chunk = NTILE(120) OVER (ORDER BY FlightMapDataID), 
+          FlightMapData.*
+        FROM
+          FlightMapData
+	      WHERE
+          FlightID= {FlightID} AND (Speed > 0 OR Altitude > 0) 
+        ) AS T
       GROUP BY
-         Chunk
+        Chunk
       ORDER BY 
-         ChunkStart;
-      ";
+       ChunkStart";
       using (var ctx = new ExponentPortalEntities()) {
         ctx.Database.Connection.Open();
         using(var cmd = ctx.Database.Connection.CreateCommand()) {
@@ -333,7 +348,7 @@ namespace eX_Portal.exLogic {
                 Roll = (Double)RS.GetDecimal(RS.GetOrdinal("Roll")),
                 Altitude = (Double)RS.GetDecimal(RS.GetOrdinal("Altitude")),
                 Satellites = (Double)RS.GetInt32(RS.GetOrdinal("Satellites")),
-                FlightTime = RS.GetDateTime(RS.GetOrdinal("FlightTime"))
+                FlightTime = RS.GetDateTime(RS.GetOrdinal("FlightTime")).ToUniversalTime()
               });
             }//while(RS.Read())
           }//using(var RS)
