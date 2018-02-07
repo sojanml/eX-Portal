@@ -5,7 +5,7 @@
 <section class="top-space">
   <div class="column column-half">
     <div id="PayloadRuns">
-      <div class="title">Inventory Summary</div>
+      <div class="title">Flight Summary</div>
       <ul id="PayloadRunIDs">
         <li>
           <div class="c1">ID</div>
@@ -24,6 +24,7 @@
       <form>
         <input type="checkbox" name="chkRawGPS" id="chkRawGPS" /> <label for="chkRawGPS">Show RAW GPS Data</label>
         <input style="margin-left:30px;" type="checkbox" name="chkRawRFIDGPS" id="chkRawRFIDGPS" /> <label for="chkRawRFIDGPS">Show RAW GPS for RFID</label>
+        <input style="margin-left:30px;" type="checkbox" name="chkAutoRefresh" id="chkAutoRefresh" /> <label for="chkAutoRefresh">Auto Refresh</label>
         <ul style="display:none" id="RSSI"></ul>
       </form>
     </div>
@@ -45,10 +46,20 @@
       div.rfid-item {
         position:absolute;
         color:white;
-        width:50px;
+        width:16px;
+        height:16px;
         text-align:center;
         text-transform:none !important
       }
+
+      span.rfid-item-circle {
+        display:block;
+        width:16px;
+        height:16px;
+        background-color:aqua;
+        border-radius:50%;
+      }
+
         div.rfid-item.First {
           color:greenyellow;
         }
@@ -105,6 +116,12 @@
         border-radius:50%;
         background-color:rgba(182, 0, 0, 0.71);
         cursor:pointer;
+      }
+
+      ul#RFIDs li div {
+        font-size: 10px;
+        text-transform: none;
+        width:80px;
       }
     </style>
   }

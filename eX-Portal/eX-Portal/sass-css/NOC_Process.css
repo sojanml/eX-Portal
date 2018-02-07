@@ -1,0 +1,178 @@
+/* line 8, ../sass/NOC_Process.scss */
+div.noc-header div.noc-status ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  float: right;
+}
+/* line 14, ../sass/NOC_Process.scss */
+div.noc-header div.noc-status ul li {
+  margin: 0px 0px 0px 10px;
+  display: inline-block;
+  padding: 3px 10px 3px 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 8pt;
+}
+/* line 22, ../sass/NOC_Process.scss */
+div.noc-header div.noc-status ul li.New {
+  background-color: #018aff;
+}
+/* line 26, ../sass/NOC_Process.scss */
+div.noc-header div.noc-status ul li.Approved {
+  background-color: #53a100;
+}
+/* line 30, ../sass/NOC_Process.scss */
+div.noc-header div.noc-status ul li.Rejected {
+  background-color: #fe0000;
+}
+/* line 34, ../sass/NOC_Process.scss */
+div.noc-header div.noc-status ul li.Amended {
+  background-color: #f2a003;
+}
+/* line 41, ../sass/NOC_Process.scss */
+div.noc-header div.title {
+  color: #018aff;
+  font-size: 18pt;
+  font-weight: bold;
+}
+/* line 47, ../sass/NOC_Process.scss */
+div.noc-header div.sub-title {
+  font-size: 12pt;
+}
+/* line 51, ../sass/NOC_Process.scss */
+div.noc-header div.sub-sub-title {
+  font-size: 10pt;
+}
+
+/* line 58, ../sass/NOC_Process.scss */
+section.noc-detail {
+  border-bottom: 1px solid silver;
+}
+
+/* line 62, ../sass/NOC_Process.scss */
+div.map_layer {
+  width: 100%;
+  height: 300px;
+}
+
+/* line 67, ../sass/NOC_Process.scss */
+ul.noc-actions {
+  list-style: none;
+}
+
+/* line 71, ../sass/NOC_Process.scss */
+div.noc-actions {
+  margin-top: 10px;
+}
+/* line 73, ../sass/NOC_Process.scss */
+div.noc-actions input {
+  display: none;
+}
+/* line 77, ../sass/NOC_Process.scss */
+div.noc-actions label {
+  cursor: pointer;
+  border: 1px silver solid;
+  border-radius: 5px;
+  padding: 0px 10px 4px 10px;
+  color: black;
+}
+/* line 85, ../sass/NOC_Process.scss */
+div.noc-actions input:checked + label.Approved,
+div.noc-actions label.Approved:hover {
+  background-color: #53a100;
+  color: white;
+}
+/* line 91, ../sass/NOC_Process.scss */
+div.noc-actions input:checked + label.Amended,
+div.noc-actions label.Amended:hover {
+  background-color: #f2a003;
+  color: white;
+}
+/* line 97, ../sass/NOC_Process.scss */
+div.noc-actions input:checked + label.Rejected,
+div.noc-actions label.Rejected:hover {
+  background-color: #fe0000;
+  color: white;
+}
+
+/* line 104, ../sass/NOC_Process.scss */
+div.slider {
+  width: 250px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* line 114, ../sass/NOC_Process.scss */
+span.noc-status {
+  margin: 0px 0px 0px 10px;
+  display: inline-block;
+  padding: 3px 10px 3px 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 8pt;
+}
+/* line 122, ../sass/NOC_Process.scss */
+span.noc-status.New {
+  background-color: #018aff;
+}
+/* line 126, ../sass/NOC_Process.scss */
+span.noc-status.Approved {
+  background-color: #53a100;
+}
+/* line 130, ../sass/NOC_Process.scss */
+span.noc-status.Rejected {
+  background-color: #fe0000;
+}
+/* line 134, ../sass/NOC_Process.scss */
+span.noc-status.Amended {
+  background-color: #f2a003;
+}
+
+/* line 141, ../sass/NOC_Process.scss */
+div.noc-detail-header {
+  margin-bottom: 10px;
+}
+
+/* line 145, ../sass/NOC_Process.scss */
+div.noc-drone-info div.QRCode {
+  float: right;
+  margin-bottom: 5px;
+}
+/* line 150, ../sass/NOC_Process.scss */
+div.noc-drone-info div.DroneGroup {
+  float: right;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+/* line 156, ../sass/NOC_Process.scss */
+div.noc-drone-info div.info-title {
+  font-size: 14pt;
+  color: #f2a003;
+  font-weight: bold;
+}
+/* line 162, ../sass/NOC_Process.scss */
+div.noc-drone-info div.info-sub-title {
+  color: #797979;
+}
+
+/* line 168, ../sass/NOC_Process.scss */
+div.noc-pilot-info div.pilot-image {
+  float: right;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px silver solid;
+  background-size: cover;
+  margin-bottom: 5px;
+}
+/* line 178, ../sass/NOC_Process.scss */
+div.noc-pilot-info div.info-title {
+  font-size: 14pt;
+  color: #53a100;
+  font-weight: bold;
+}
+/* line 184, ../sass/NOC_Process.scss */
+div.noc-pilot-info div.info-sub-title {
+  color: #797979;
+}

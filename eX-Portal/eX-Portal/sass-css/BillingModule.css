@@ -1,0 +1,201 @@
+/* line 4, ../sass/BillingModule.scss */
+div.columns {
+  width: 100%;
+}
+/* line 7, ../sass/BillingModule.scss */
+div.columns > div.column-2s {
+  width: 49.5%;
+  margin-right: 1%;
+  float: left;
+}
+/* line 13, ../sass/BillingModule.scss */
+div.columns > div.column-2s:last-child {
+  margin-right: 0px;
+}
+
+/* line 18, ../sass/BillingModule.scss */
+div.validation-summary-errors {
+  color: #fe0000;
+}
+/* line 21, ../sass/BillingModule.scss */
+div.validation-summary-errors ul {
+  list-style: none;
+  margin: 10px 0px 10px 0px;
+  border: 1px #fe0000 solid;
+  padding: 5px;
+}
+/* line 27, ../sass/BillingModule.scss */
+div.validation-summary-errors ul li {
+  margin: 0px 0px 10px 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+/* line 35, ../sass/BillingModule.scss */
+table.RulesTable {
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  border-collapse: collapse;
+}
+/* line 42, ../sass/BillingModule.scss */
+table.RulesTable tr th {
+  text-align: left;
+}
+/* line 46, ../sass/BillingModule.scss */
+table.RulesTable tr td, table.RulesTable tr th {
+  border-bottom: 1px #dbdbdb solid;
+  padding: 2px 0px 2px 10px;
+}
+/* line 51, ../sass/BillingModule.scss */
+table.RulesTable tr td:first-child, table.RulesTable tr th:first-child {
+  padding-left: 0px;
+}
+/* line 55, ../sass/BillingModule.scss */
+table.RulesTable tr td.menu {
+  position: relative;
+  text-align: right;
+  vertical-align: top;
+}
+/* line 60, ../sass/BillingModule.scss */
+table.RulesTable tr td.menu ul {
+  z-index: 20;
+  position: absolute;
+  top: 16px;
+  right: 0px;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  display: none;
+  border: 1px #f2a003 solid;
+  background-color: white;
+}
+/* line 72, ../sass/BillingModule.scss */
+table.RulesTable tr td.menu ul li {
+  list-style: none;
+  margin: 0px;
+  padding: 5px 10px 5px 10px;
+  white-space: nowrap;
+}
+/* line 78, ../sass/BillingModule.scss */
+table.RulesTable tr td.menu ul li:hover {
+  background-color: #f2a003;
+}
+/* line 86, ../sass/BillingModule.scss */
+table.RulesTable tr:hover td.menu ul {
+  display: block;
+}
+
+/* line 91, ../sass/BillingModule.scss */
+table#BillingRules {
+  width: 100%;
+  border-collapse: collapse;
+}
+/* line 96, ../sass/BillingModule.scss */
+table#BillingRules tr td {
+  padding: 2px 10px 2px 0px;
+  border-bottom: 1px silver solid;
+}
+/* line 100, ../sass/BillingModule.scss */
+table#BillingRules tr td span.noc_details,
+table#BillingRules tr td span.droneflight {
+  padding: 2px 5px 2px 5px;
+  font-size: 10px;
+  color: white;
+}
+/* line 107, ../sass/BillingModule.scss */
+table#BillingRules tr td span.noc_details {
+  background-color: #f2a003;
+}
+/* line 111, ../sass/BillingModule.scss */
+table#BillingRules tr td span.droneflight {
+  background-color: #018aff;
+}
+/* line 116, ../sass/BillingModule.scss */
+table#BillingRules tr td:last-child {
+  padding-right: 0px;
+}
+/* line 120, ../sass/BillingModule.scss */
+table#BillingRules tr th {
+  text-align: left;
+  border-bottom: 3px #53a100 solid;
+}
+/* line 125, ../sass/BillingModule.scss */
+table#BillingRules tr td.InputCol, table#BillingRules tr th.InputCol {
+  white-space: nowrap;
+  width: 100px;
+  min-width: 100px;
+}
+/* line 132, ../sass/BillingModule.scss */
+table#BillingRules td.sorter {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+              supported by Chrome and Opera */
+  cursor: ns-resize;
+  width: 16px;
+  min-width: 16px;
+  background-color: #fae3b9;
+  background-image: url("/images/table-sort.png");
+  background-size: 16px 16px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+/* line 150, ../sass/BillingModule.scss */
+table#BillingRules.sorting-table {
+  cursor: ns-resize;
+}
+/* line 155, ../sass/BillingModule.scss */
+table#BillingRules tr.sorting-row td {
+  background-color: rgba(83, 161, 0, 0.4);
+}
+/* line 159, ../sass/BillingModule.scss */
+table#BillingRules div.ruledescription {
+  color: #aaa;
+}
+
+/* line 164, ../sass/BillingModule.scss */
+input.OnOffSwitch {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2);
+  /* IE */
+  -moz-transform: scale(2);
+  /* FF */
+  -webkit-transform: scale(2);
+  /* Safari and Chrome */
+  -o-transform: scale(2);
+  /* Opera */
+}
+/* line 170, ../sass/BillingModule.scss */
+input.OnOffSwitch + label {
+  padding: 2px;
+  width: 30px;
+  color: white;
+  display: inline-block;
+}
+/* line 177, ../sass/BillingModule.scss */
+input.OnOffSwitch + label:after {
+  content: "Off";
+  background-color: #fe0000;
+  display: block;
+  text-align: center;
+}
+/* line 184, ../sass/BillingModule.scss */
+input.OnOffSwitch:checked + label:after {
+  content: "On";
+  background-color: #53a100;
+}
+
+/* line 190, ../sass/BillingModule.scss */
+input.NumberInput {
+  width: 120px;
+}

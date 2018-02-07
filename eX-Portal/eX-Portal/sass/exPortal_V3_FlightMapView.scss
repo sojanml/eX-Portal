@@ -1,0 +1,840 @@
+﻿@import "exPortal_V3_Common";
+
+div.instrument.attitude div.roll div.pitch,
+div.instrument.attitude div.roll {
+  transition-property: all;
+  transition-duration: 1s;
+  transition-delay: 0s;
+}
+
+.ui-state-default, 
+.ui-widget-content .ui-state-default, 
+.ui-widget-header .ui-state-default {
+  border:0px;
+  background-color:$HiliteColor1;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+  border: 0px;
+  background-color: $HiliteColor2;
+}
+.ui-slider .ui-slider-handle {
+  width:16px;
+  height:12px;
+  border:0px;
+}
+
+.ui-slider-horizontal .ui-slider-handle {
+  top: -2px;
+  margin-left: -8px;
+}
+
+div.SpotMarker {
+  $Size: 16px;
+  $Padding: 4px;
+  width: $Size;
+  height: $Size;
+  position: absolute;
+  margin-left: $Size/-2;
+  margin-top: $Size/-2;
+  border-radius: 50%;
+  cursor:default;
+
+  span.Marker {
+    display: block;
+    width: $Size - ($Padding * 2);
+    height: $Size - ($Padding * 2);
+    left: $Padding - 1px;
+    top: $Padding - 1px;
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  div.Marker-ToolTip {
+    display:none;
+    position: absolute;
+    top: $Size;
+    width:auto;
+    height:auto;
+    padding:3px;
+    white-space:nowrap;
+    background-color:rgba(0,0,0,0.5);
+    border:1px black solid;
+    border-radius:3px;
+    color:white;
+  }
+  &:hover {
+    div.Marker-ToolTip {
+      display:block;
+    }
+  }
+}
+
+div#StartMarker {
+  border: 1px white solid;
+
+  span.Marker {
+    background-color: white;
+  }
+}
+
+div#EndMarker {
+  border: 1px $HiliteColor2 solid;
+
+  span.Marker {
+    background-color: $HiliteColor2;
+  }
+}
+
+div#FlightMapDroneIcon {
+  $Size: 32px;
+  width: $Size;
+  height: $Size;
+  position: absolute;
+  margin-left: $Size/-2;
+  margin-top: $Size/-2;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+div#custom-handle {
+  $HandleWidth: 50px;
+  width: $HandleWidth;
+  margin-left: $HandleWidth / -2;
+  line-height: 21px;
+  font-size: 11px;
+  height: 21px;
+  text-align: center;
+}
+
+div#FlightInfoColumn1,
+div#FlightInfoColumn2,
+div#FlightInfoColumn3,
+div#FlightInfoColumn2_3_merge {
+  float: left;
+}
+div#FlightInfoColumn4 {
+  margin-top: 5px;
+
+  &::after {
+    clear: both;
+  }
+
+  div.Toolbar {
+    display: inline-block;
+
+    & > div.button,
+    & > div.round-button {
+      padding: 0px 10px 0px 10px;
+      background-color: silver;
+      margin-right: 2px;
+      display: inline-block;
+      cursor: pointer;
+      height: 30px;
+      box-sizing: content-box;
+      line-height: 30px;
+    }
+
+
+    & > div.button {
+      border-radius: 3px;
+      width: 70px;
+
+      span.icon {
+        color: $HiliteColor1;
+        margin-right: 12px;
+      }
+
+      &:hover {
+        background-color: $HiliteColor1;
+        color: white;
+
+        span.icon {
+          color: $HiliteColor2;
+        }
+      }
+    }
+
+    & > div.round-button {
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: bold;
+      width: 30px;
+      padding: 0px;
+      vertical-align: bottom;
+      text-align: center;
+
+      &.active:hover,
+      &:hover {
+        background-color: $HiliteColor1;
+        color: white;
+      }
+
+      &.active {
+        background-color: $HiliteColor2;
+        color: white;
+      }
+    }
+  }
+
+  div#FlightSlider {
+    display: inline-block;
+    height: 30px;
+    position: relative;
+    vertical-align: bottom;
+
+    div#FlightSliderStart {
+      left: 0px;
+    }
+
+    div#FlightSliderEnd {
+      right: 0px;
+    }
+    div#FlightSliderCenter {
+      width:100%;
+      text-align:center;
+      left:0px;
+      color:$HiliteColor1;
+      font-weight:bold;
+    }
+
+    div#FlightSliderStart,
+    div#FlightSliderEnd,
+    div#FlightSliderCenter {
+      position: absolute;
+      top: 0px;
+      font-size: 14px;
+    }
+
+    div#FlightSliderStart,
+    div#FlightSliderEnd,
+    div#FlightSliderBar,
+    div#FlightSliderCenter {
+      display: inline-block;
+    }
+
+    div#FlightSliderBar {
+      position: absolute;
+      bottom: 0px;
+      background-color: silver;
+    }
+  }
+}
+
+div#FlightInfoColumn3::after {
+  @include Clear();
+}
+
+div#FlightInfoSection::after {
+  @include Clear();
+}
+
+
+nav#flightmap_infobar {
+  ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+
+    li {
+      list-style: none;
+      float: left;
+      overflow: hidden;
+      font-family: 'Advent';
+      font-weight: 800;
+      font-style: normal;
+      text-transform: uppercase;
+
+      div.image {
+        float: left;
+        border-radius: 50%;
+        background-color: #484848;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+
+      div.title1 {
+        font-family: Arial;
+      }
+
+      &.rpas div.image {
+        background-size: 70% 70%;
+        background-position: center center;
+      }
+    }
+  }
+}
+
+
+div#AttitudeMeter {
+  position: relative;
+
+  div.AttitudePichRollBackground {
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+    background-color: $BodyColor;
+  }
+
+  div#attitude {
+    position: relative;
+    z-index: 99;
+    border-radius:50%;
+  }
+
+  div.AttitudePitchSection,
+  div.AttitudeRollSection {
+    position: absolute;
+    color: white;
+    z-index: 99;
+    font-family: 'Advent';
+  }
+
+  div.AttitudePitchSection {
+    left: 10px;
+    text-align: left;
+  }
+
+  div.AttitudeRollSection {
+    right: 10px;
+    text-align: right;
+  }
+}
+
+
+
+div#FlightStatusBar {
+  ul {
+    padding: 0px;
+    list-style: none;
+    display: block;
+
+    li {
+      padding: 0px;
+      list-style: none;
+      display: inline-block;
+
+      & > div {
+        display: block;
+        background-color: $BodyColor;
+        background-size: contain;
+        border-radius: 50%;
+
+        &:hover,
+        &.active {
+          background-color: $HiliteColor1;
+        }
+      }
+
+      div.FlightStatusIconWind {
+        background-image: url('/images/V3/flightmap-wind.png');
+      }
+
+      div.FlightStatusIconTemp {
+        background-image: url('/images/V3/flightmap-temp.png');
+      }
+
+      div.FlightStatusIconAirline {
+        background-image: url('/images/V3/flightmap-airlines.png');
+      }
+
+      div.FlightStatusIconEM {
+        background-image: url('/images/V3/flightmap-em.png');
+      }
+    }
+  }
+
+  div#FlightStatusIconInfo {
+    background-color: $HiliteColor1;
+    color: white;
+    display: inline-block;
+  }
+}
+
+
+
+@mixin AttitudeMeter($VerticalGap, $SizeWithMargin, $FontSize) {
+  $Size: $SizeWithMargin;
+  $Width: $Size;
+  $Height: $Size * 0.56;
+  $BackgroundHeight: $Size * 0.3;
+
+  div#AttitudeMeter {
+    width: $Width;
+    height: $Height;
+
+    div#attitude {
+      left: ($Width - $Height)/2;
+    }
+
+    div#attitude,
+    div.instrument {
+      width: $Height;
+      height: $Height;
+      border-radius: 50%;
+      box-sizing: content-box;
+    }
+
+    div.AttitudePichRollBackground {
+      border-radius: ($BackgroundHeight * 0.4);
+      height: $BackgroundHeight;
+      top: ($Height - $BackgroundHeight)/2;
+    }
+
+    div.AttitudePitchSection,
+    div.AttitudeRollSection {
+      top: ($Height - $BackgroundHeight)/2 + ($BackgroundHeight * 0.2);
+      font-size: $FontSize;
+
+      span.Number,
+      span.Symbol {
+        font-size: $FontSize * 2.4;
+      }
+    }
+  }
+}
+
+div#FlightData {
+  ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+  }
+
+  li {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+
+    div {
+      float: left;
+      display: block;
+      font-family: 'Avenir Next Condensed'
+    }
+
+
+    &::after {
+      @include Clear();
+      border-bottom: 1px #d9d9d9 solid !important;
+    }
+  }
+}
+
+section#BottomSection {
+  div#BottomMapInfo,
+  div#ComSection,
+  div#GoogleMap {
+    float: left;
+  }
+
+  div#BottomMapInfo {
+    background-color: black;
+    display: table;
+
+    div.MapInfoContent {
+      vertical-align: middle;
+      display: table-cell;
+    }
+
+    ul {
+      margin: 0px;
+      padding: 0px;
+      list-style: none;
+
+      li {
+        margin: 0px 0px 10px 0px;
+        padding: 0px;
+        list-style: none;
+        color: white;
+        text-align: center;
+
+        &:last-child {
+          margin-bottom: 0px;
+        }
+
+        div.title {
+          text-transform: uppercase;
+        }
+
+        div.value {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  div#ComSection {
+    background-color: white;
+
+    div.caption {
+      width: 100%;
+      background-color: $HiliteColor2;
+      font-size: 20px;
+      font-family: 'Advent';
+      text-align: center;
+      padding: 5px 0px 5px 0px;
+      font-weight: 800;
+      letter-spacing:5px;
+    }
+  }
+
+  div#GoogleMap {
+    background-color: silver;
+  }
+
+  &::after {
+    @include Clear();
+  }
+}
+
+@mixin BottomSection($MaxWidth, $Height, $FontSize) {
+  $Col1: $MaxWidth * 0.1;
+  $Col2: $MaxWidth * 0.3;
+  $Col3: $MaxWidth * 0.6;
+
+  div#BottomMapInfo,
+  div#ComSection,
+  div#GoogleMap {
+    height: $Height;
+  }
+
+  div#BottomMapInfo {
+    width: $Col1;
+    li {
+      width:$Col1;
+      font-size:$FontSize;
+    }
+  }
+
+  div#ComSection {
+    width: $Col2;
+  }
+
+  div#GoogleMap {
+    width: $Col3;
+  }
+}
+
+@mixin FlightData($MaxWidth, $VSpace, $FontSize, $DataHeight) {
+  $AvailWidth: $MaxWidth - ($VSpace * 8) - 20px;
+  $ColPercentage: ( $AvailWidth * 0.10, $AvailWidth * 0.15, $AvailWidth * 0.15, $AvailWidth * 0.10, $AvailWidth * 0.10, $AvailWidth * 0.10, $AvailWidth * 0.10, $AvailWidth * 0.10, $AvailWidth * 0.10);
+
+  div#FlightData {
+
+    ul {
+      li {
+        div {
+          font-size: $FontSize;
+        }
+
+        @for $i from 1 through 9 {
+          div.col#{$i} {
+            width: nth($ColPercentage, $i);
+
+            @if $i == 9 {
+              margin-right: 0px;
+            }
+            @else {
+              margin-right: $VSpace;
+            }
+          }
+        }
+      }
+      //LI
+    }
+    //UL
+    div.data-rows {
+      height: $DataHeight;
+      overflow: auto;
+      overflow-y: scroll;
+    }
+
+    ul.header-row {
+      li {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+@mixin FlightStatusBar($VerticalGap, $IconHeight) {
+  div#FlightStatusBar {
+    ul {
+      height: $IconHeight;
+      margin: 0px 0px $VerticalGap/2 0px;
+
+      li {
+        width: $IconHeight;
+        height: $IconHeight;
+        margin: 0px $VerticalGap/4 0px 0px;
+
+        & > div {
+          width: $IconHeight;
+          height: $IconHeight;
+        }
+      }
+    }
+
+    div#FlightStatusIconInfo {
+      padding-left: $VerticalGap;
+      padding-right: $VerticalGap;
+      border-radius: $VerticalGap;
+      margin-bottom: $VerticalGap;
+    }
+  }
+}
+
+@mixin FlightStatusMetar($VerticalGap, $MaxSize, $FontSize) {
+  $MetarHeight: $MaxSize * 0.2;
+
+  div#FlightStatusMetar {
+    width: $MaxSize;
+    height: $MetarHeight;
+    display: block;
+    background-color: silver;
+    border-radius: $MetarHeight/2;
+
+    div.MetarTitle {
+
+      $BorderWidth: 8px;
+      box-sizing: border-box;
+      background-color: silver;
+      width: $MetarHeight + ($BorderWidth * 2);
+      height: $MetarHeight + ($BorderWidth * 2);
+      border-radius: 50%;
+      border: $BorderWidth solid white;
+      float: left;
+      margin-left: -1 * $BorderWidth;
+      margin-top: -1 * $BorderWidth;
+
+
+      div.content {
+        text-align: center;
+        vertical-align: middle;
+        display: table-cell;
+        height: $MetarHeight;
+        width: $MetarHeight;
+        font-size: $FontSize;
+
+        div.refresh {
+          font-size: $FontSize - 4px;
+        }
+      }
+    }
+  }
+}
+
+@mixin FlightInfoBar($VerticalGap, $MaxSize, $Width, $FontSize) {
+  nav#flightmap_infobar {
+    margin-bottom: $VerticalGap;
+  }
+
+  nav#flightmap_infobar ul li {
+
+    div.image {
+      margin-right: $VerticalGap;
+    }
+
+    div.title-1 {
+      font-size: $FontSize;
+    }
+
+    div.title-2 {
+      font-size: $FontSize - 1px;
+    }
+
+    div.title-3 {
+      font-size: $FontSize - 2px;
+    }
+  }
+
+  nav#flightmap_infobar ul li {
+    $Sections: 6;
+    $TotalGap: $VerticalGap * ($Sections - 1);
+    $TotalWidth: $MaxSize - $TotalGap;
+
+    //15% of width for normal cell
+    //[4 * 15%  = 60%] + [2 * 25% = 40%] = 100%;
+    $CellWidth: $TotalWidth * (0.50/4);
+    width: $CellWidth;
+    margin-right: $VerticalGap;
+    font-size: $FontSize;
+
+    &.pack-of-2 {
+      //20% of width for the bigger cell
+      width: ($TotalWidth * 0.25);
+    }
+
+    &:last-child {
+      margin-right: 0px;
+    }
+
+    div.image {
+      width: $Width;
+      height: $Width;
+    }
+  }
+}
+
+
+#FlightChartInfos {
+  div.flightchartinfo {
+    float: left;
+    text-align: center;
+
+    div.title {
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    div.sub-title {
+      text-transform: uppercase;
+    }
+  }
+}
+
+@mixin FlightChart($VerticalGap, $MaxSizeWithMargin, $Height, $FontSize) {
+  $MaxSize: $MaxSizeWithMargin;
+  $MaxWidth: $MaxSize - ($VerticalGap * 2);
+
+  div#FlightCharts {
+    width: $MaxSize;
+    height: $Height;
+
+    div.flightchart {
+      width: ($MaxWidth/3);
+      margin-right: $VerticalGap;
+      height: $Height;
+      float: left;
+
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
+  }
+
+  div#FlightChartInfos {
+    width: $MaxSize;
+
+    div.flightchartinfo {
+      width: ($MaxWidth/3);
+      margin-right: $VerticalGap;
+      float: left;
+
+      div.title {
+        font-size: $FontSize * 0.7;
+      }
+
+      div.sub-title {
+        font-size: ($FontSize * 0.6);
+      }
+
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
+  }
+}
+
+@mixin FlightStatus($VerticalGap, $MaxScreenSize, $FontSize, $ScrollerWidth) {
+  $AvailWidth: $MaxScreenSize - (2 * $VerticalGap);
+  $Column1: $AvailWidth * 0.40;
+  $Column2: $AvailWidth * 0.25;
+  $Column3: $AvailWidth * 0.35;
+
+  @include FlightChart($VerticalGap, $Column1, 60px, $FontSize);
+  @include AttitudeMeter($VerticalGap, $Column2, 12px);
+  @include FlightStatusMetar($VerticalGap, $Column3, $FontSize);
+
+  section#FlightStatusInfo {
+    margin-bottom: $VerticalGap;
+  }
+
+  div#FlightInfoColumn1 {
+    width: $Column1;
+    margin-right: $VerticalGap;
+  }
+
+  div#FlightInfoColumn2 {
+    width: $Column2;
+    margin-right: $VerticalGap;
+  }
+
+  div#FlightInfoColumn3 {
+    width: $Column3;
+  }
+
+  div#FlightInfoColumn2_3_merge {
+    width: $Column2 + $Column3 + $VerticalGap;
+  }
+
+  div#FlightInfoColumn4 {
+    $Column4: $Column2 + $Column3 + $VerticalGap;
+    $ScrollerAvail: $Column4 - (306);
+    width: $Column4;
+
+    div#FlightSlider {
+      width: $ScrollerAvail;
+      margin-left: 8px;
+    }
+
+    div#FlightSliderBar {
+      width: 100%;
+      height: 8px;
+      border: 0px;
+    }
+  }
+}
+
+
+@mixin VerticalSpaces($Margin) {
+  div#FlightData {
+    margin-top: $Margin
+  }
+}
+
+
+@media screen and (min-width: 720px) {
+  $MaxSize: 720px;
+  $VerticalGap: 8px;
+  $AvailWidth: $MaxSize - (2 * $VerticalGap);
+  $Column1: $AvailWidth * 0.40;
+  @include FlightInfoBar($VerticalGap, $MaxSize, 30px, 11px);
+  @include FlightStatus($VerticalGap, $MaxSize, 13px,200px);
+  @include FlightStatusBar($VerticalGap, 22px);
+  @include FlightData($Column1, 2px, 10px, 80px);
+  @include BottomSection($MaxSize, 300px, 12px);
+}
+
+
+@media screen and (min-width: 1080px) {
+  $VerticalGap: 12px;
+  $MaxSize: 1080px;
+  $AvailWidth: $MaxSize - (2 * $VerticalGap);
+  $Column1: $AvailWidth * 0.40;
+  @include FlightInfoBar($VerticalGap, $MaxSize, 40px, 15px);
+  @include FlightStatus($VerticalGap, $MaxSize, 14px, 260px);
+  @include FlightStatusBar($VerticalGap, 26px);
+  @include FlightData($Column1, 4px, 10px, 90px);
+  @include BottomSection($MaxSize, 300px, 12px);
+}
+
+@media screen and (min-width: 1320px) {
+  $VerticalGap: 15px;
+  $MaxSize: 1320px;
+  $AvailWidth: $MaxSize - (2 * $VerticalGap);
+  $Column1: $AvailWidth * 0.40;
+  @include FlightInfoBar($VerticalGap, $MaxSize, 50px, 18px);
+  @include FlightStatus($VerticalGap, $MaxSize, 16px, 483px);
+  @include FlightStatusBar($VerticalGap, 32px);
+  @include FlightData($Column1, 5px, 12px, 95px);
+  @include BottomSection($MaxSize, 350px, 13px);
+  @include VerticalSpaces($VerticalGap);
+}
+ 

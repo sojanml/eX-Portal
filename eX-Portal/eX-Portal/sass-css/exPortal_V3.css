@@ -1,0 +1,590 @@
+@font-face {
+  font-family: "FontAwesome";
+  src: url('/fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('/fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('/fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('/fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('/fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('/fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Demi';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.svg#AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic") format("svg");
+  font-weight: 600;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Bold.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Bold.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.svg#AvenirNextCondensed/AvenirNextCondensed-Bold") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Ultra';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.svg#AvenirNextCondensed/AvenirNextCondensed-UltraLight") format("svg");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Italic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Italic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.svg#AvenirNextCondensed/AvenirNextCondensed-Italic") format("svg");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Heavy.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Heavy.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.svg#AvenirNextCondensed/AvenirNextCondensed-Heavy") format("svg");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Demi';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.svg#AvenirNextCondensed/AvenirNextCondensed-DemiBold") format("svg");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Medium.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Medium.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.svg#AvenirNextCondensed/AvenirNextCondensed-Medium") format("svg");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Regular.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Regular.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.svg#AvenirNextCondensed/AvenirNextCondensed-Regular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.svg#AvenirNextCondensed/AvenirNextCondensed-MediumItalic") format("svg");
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.svg#AvenirNextCondensed/AvenirNextCondensed-BoldItalic") format("svg");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.svg#AvenirNextCondensed/AvenirNextCondensed-HeavyItalic") format("svg");
+  font-weight: 900;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Ultra';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.svg#AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic") format("svg");
+  font-weight: 200;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt2.eot");
+  src: url("Advent/advent-Lt2.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt2.woff2") format("woff2"), url("Advent/advent-Lt2.woff") format("woff"), url("Advent/advent-Lt2.ttf") format("truetype"), url("Advent/advent-Lt2.svg#advent-Lt2") format("svg");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Regular.eot");
+  src: url("Advent/advent-Regular.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Regular.woff2") format("woff2"), url("Advent/advent-Regular.woff") format("woff"), url("Advent/advent-Regular.ttf") format("truetype"), url("Advent/advent-Regular.svg#advent-Regular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd2.eot");
+  src: url("Advent/advent-Bd2.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd2.woff2") format("woff2"), url("Advent/advent-Bd2.woff") format("woff"), url("Advent/advent-Bd2.ttf") format("truetype"), url("Advent/advent-Bd2.svg#advent-Bd2") format("svg");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd1.eot");
+  src: url("Advent/advent-Bd1.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd1.woff2") format("woff2"), url("Advent/advent-Bd1.woff") format("woff"), url("Advent/advent-Bd1.ttf") format("truetype"), url("Advent/advent-Bd1.svg#advent-Bd1") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt3.eot");
+  src: url("Advent/advent-Lt3.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt3.woff2") format("woff2"), url("Advent/advent-Lt3.woff") format("woff"), url("Advent/advent-Lt3.ttf") format("truetype"), url("Advent/advent-Lt3.svg#advent-Lt3") format("svg");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd3.eot");
+  src: url("Advent/advent-Bd3.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd3.woff2") format("woff2"), url("Advent/advent-Bd3.woff") format("woff"), url("Advent/advent-Bd3.ttf") format("truetype"), url("Advent/advent-Bd3.svg#advent-Bd3") format("svg");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt1.eot");
+  src: url("Advent/advent-Lt1.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt1.woff2") format("woff2"), url("Advent/advent-Lt1.woff") format("woff"), url("Advent/advent-Lt1.ttf") format("truetype"), url("Advent/advent-Lt1.svg#advent-Lt1") format("svg");
+  font-weight: 300;
+  font-style: normal;
+}
+/* line 3, ../sass/exPortal_V3.scss */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  color: #1C1C1C;
+  font-family: 'Avenir Next Condensed';
+}
+
+/* line 11, ../sass/exPortal_V3.scss */
+span.icon {
+  font-family: 'FontAwesome';
+}
+
+/* line 14, ../sass/exPortal_V3.scss */
+a {
+  text-decoration: none;
+  color: #ff0000;
+}
+/* line 18, ../sass/exPortal_V3.scss */
+a:hover {
+  text-decoration: none;
+  color: #18bdec;
+}
+
+/* line 24, ../sass/exPortal_V3.scss */
+div#Overlay {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.58);
+  z-index: 99;
+  display: none;
+}
+/* line 33, ../sass/exPortal_V3.scss */
+div#Overlay img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -128px;
+  margin-top: -128px;
+  width: 256px;
+  height: 256px;
+}
+
+/* line 44, ../sass/exPortal_V3.scss */
+section::after {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+}
+
+/* line 49, ../sass/exPortal_V3.scss */
+header {
+  margin-top: 15px;
+}
+/* line 52, ../sass/exPortal_V3.scss */
+header:after {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+  padding-top: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px #7f7f7f solid;
+}
+
+/* line 64, ../sass/exPortal_V3.scss */
+div.left-section {
+  float: left;
+}
+/* line 67, ../sass/exPortal_V3.scss */
+div.left-section img {
+  width: auto;
+}
+
+/* line 72, ../sass/exPortal_V3.scss */
+div.right-section {
+  float: right;
+}
+
+/* line 76, ../sass/exPortal_V3.scss */
+nav.user-management {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+}
+/* line 77, ../sass/exPortal_V3.scss */
+nav.user-management ul {
+  margin: 0px;
+  padding: 0px;
+  float: right;
+}
+/* line 82, ../sass/exPortal_V3.scss */
+nav.user-management ul li {
+  display: inline-block;
+  margin-left: 15px;
+}
+/* line 87, ../sass/exPortal_V3.scss */
+nav.user-management ul li#user-menu {
+  position: relative;
+}
+/* line 90, ../sass/exPortal_V3.scss */
+nav.user-management ul li#user-menu ul {
+  position: absolute;
+  left: 0px;
+  display: none;
+}
+/* line 95, ../sass/exPortal_V3.scss */
+nav.user-management ul li#user-menu ul li {
+  display: block;
+  padding: 5px 0px 0px 0px;
+  margin-left: 0px;
+  white-space: nowrap;
+}
+/* line 103, ../sass/exPortal_V3.scss */
+nav.user-management ul li#user-menu:hover > a {
+  color: #18bdec;
+}
+/* line 108, ../sass/exPortal_V3.scss */
+nav.user-management ul:after {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+}
+
+/* line 115, ../sass/exPortal_V3.scss */
+nav.main-menu {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+}
+/* line 116, ../sass/exPortal_V3.scss */
+nav.main-menu ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  float: right;
+  background-color: white;
+}
+/* line 123, ../sass/exPortal_V3.scss */
+nav.main-menu ul a {
+  color: #1C1C1C;
+}
+/* line 128, ../sass/exPortal_V3.scss */
+nav.main-menu ul li {
+  list-style: none;
+  display: inline-block;
+  position: relative;
+  white-space: nowrap;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+/* line 139, ../sass/exPortal_V3.scss */
+nav.main-menu ul li:hover > a {
+  color: #ff0000;
+}
+/* line 143, ../sass/exPortal_V3.scss */
+nav.main-menu ul li:hover ul {
+  display: block;
+}
+/* line 149, ../sass/exPortal_V3.scss */
+nav.main-menu ul li ul {
+  position: absolute;
+  display: none;
+  left: 0;
+  z-index: 9;
+}
+/* line 155, ../sass/exPortal_V3.scss */
+nav.main-menu ul li ul li {
+  padding: 5px 15px 0px 15px;
+  display: block;
+}
+/* line 159, ../sass/exPortal_V3.scss */
+nav.main-menu ul li ul li a {
+  color: #1C1C1C;
+}
+/* line 162, ../sass/exPortal_V3.scss */
+nav.main-menu ul li ul li:hover a {
+  color: #ff0000;
+}
+/* line 169, ../sass/exPortal_V3.scss */
+nav.main-menu ul li:last-child {
+  padding-right: 0px;
+}
+/* line 172, ../sass/exPortal_V3.scss */
+nav.main-menu ul li:last-child ul {
+  right: 0px !important;
+  left: auto !important;
+}
+
+/* line 185, ../sass/exPortal_V3.scss */
+nav.breadcrumbs {
+  margin-top: 5px;
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+}
+/* line 189, ../sass/exPortal_V3.scss */
+nav.breadcrumbs ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  float: right;
+}
+/* line 195, ../sass/exPortal_V3.scss */
+nav.breadcrumbs ul li {
+  padding: 0px 3px 0px 0px;
+  display: inline-block;
+  list-style: none;
+}
+/* line 200, ../sass/exPortal_V3.scss */
+nav.breadcrumbs ul li a {
+  color: #1C1C1C;
+}
+/* line 205, ../sass/exPortal_V3.scss */
+nav.breadcrumbs ul li:hover a {
+  color: #18bdec;
+}
+/* line 210, ../sass/exPortal_V3.scss */
+nav.breadcrumbs ul li:after {
+  display: inline-block;
+  padding-left: 3px;
+  content: ">";
+}
+/* line 216, ../sass/exPortal_V3.scss */
+nav.breadcrumbs ul li:last-child {
+  padding-right: 0px;
+  color: #ff0000;
+}
+/* line 219, ../sass/exPortal_V3.scss */
+nav.breadcrumbs ul li:last-child:after {
+  padding-right: 0px;
+  content: "";
+  display: none;
+}
+
+/* line 233, ../sass/exPortal_V3.scss */
+nav#flightmap_infobar ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+/* line 238, ../sass/exPortal_V3.scss */
+nav#flightmap_infobar ul li {
+  list-style: none;
+  float: left;
+  overflow: hidden;
+  font-family: 'Advent';
+  font-weight: 800;
+  font-style: normal;
+}
+/* line 245, ../sass/exPortal_V3.scss */
+nav#flightmap_infobar ul li div.image {
+  float: left;
+  border-radius: 50%;
+  background-color: #484848;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-right: 15px;
+}
+/* line 253, ../sass/exPortal_V3.scss */
+nav#flightmap_infobar ul li div.title1 {
+  font-family: Arial;
+}
+/* line 257, ../sass/exPortal_V3.scss */
+nav#flightmap_infobar ul li.rpas div.image {
+  background-size: 70% 70%;
+  background-position: center center;
+}
+
+@media screen and (min-width: 720px) {
+  /* line 266, ../sass/exPortal_V3.scss */
+  body {
+    font-size: 12pt;
+  }
+
+  /* line 270, ../sass/exPortal_V3.scss */
+  div.left-section img {
+    height: 48pt;
+  }
+
+  /* line 274, ../sass/exPortal_V3.scss */
+  nav .user-management > ul > li > ul,
+  nav.main-menu > ul > li > ul {
+    top: 12pt;
+  }
+
+  /* line 280, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.title-1 {
+    font-size: 9pt;
+    text-transform: uppercase;
+  }
+  /* line 285, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.title-2 {
+    font-size: 9pt;
+    text-transform: uppercase;
+  }
+  /* line 290, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.title-3 {
+    font-size: 7pt;
+    text-transform: uppercase;
+  }
+
+  /* line 298, ../sass/exPortal_V3.scss */
+  section {
+    width: 720px;
+    margin: auto;
+  }
+
+  /* line 305, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li {
+    width: 80.625px;
+    margin-right: 15px;
+  }
+  /* line 316, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li.pack-of-2 {
+    width: 161.25px;
+  }
+  /* line 321, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li:last-child {
+    margin-right: 0px;
+  }
+  /* line 325, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.image {
+    width: 30px;
+    height: 30px;
+  }
+}
+@media screen and (min-width: 1080px) {
+  /* line 266, ../sass/exPortal_V3.scss */
+  body {
+    font-size: 13pt;
+  }
+
+  /* line 270, ../sass/exPortal_V3.scss */
+  div.left-section img {
+    height: 52pt;
+  }
+
+  /* line 274, ../sass/exPortal_V3.scss */
+  nav .user-management > ul > li > ul,
+  nav.main-menu > ul > li > ul {
+    top: 13pt;
+  }
+
+  /* line 280, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.title-1 {
+    font-size: 10pt;
+    text-transform: uppercase;
+  }
+  /* line 285, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.title-2 {
+    font-size: 10pt;
+    text-transform: uppercase;
+  }
+  /* line 290, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.title-3 {
+    font-size: 8pt;
+    text-transform: uppercase;
+  }
+
+  /* line 298, ../sass/exPortal_V3.scss */
+  section {
+    width: 1080px;
+    margin: auto;
+  }
+
+  /* line 305, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li {
+    width: 125.625px;
+    margin-right: 15px;
+  }
+  /* line 316, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li.pack-of-2 {
+    width: 251.25px;
+  }
+  /* line 321, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li:last-child {
+    margin-right: 0px;
+  }
+  /* line 325, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.image {
+    width: 40px;
+    height: 40px;
+  }
+}
+@media screen and (min-width: 1320px) {
+  /* line 266, ../sass/exPortal_V3.scss */
+  body {
+    font-size: 14pt;
+  }
+
+  /* line 270, ../sass/exPortal_V3.scss */
+  div.left-section img {
+    height: 56pt;
+  }
+
+  /* line 274, ../sass/exPortal_V3.scss */
+  nav .user-management > ul > li > ul,
+  nav.main-menu > ul > li > ul {
+    top: 14pt;
+  }
+
+  /* line 280, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.title-1 {
+    font-size: 11pt;
+    text-transform: uppercase;
+  }
+  /* line 285, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.title-2 {
+    font-size: 11pt;
+    text-transform: uppercase;
+  }
+  /* line 290, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.title-3 {
+    font-size: 9pt;
+    text-transform: uppercase;
+  }
+
+  /* line 298, ../sass/exPortal_V3.scss */
+  section {
+    width: 1320px;
+    margin: auto;
+  }
+
+  /* line 305, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li {
+    width: 155.625px;
+    margin-right: 15px;
+  }
+  /* line 316, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li.pack-of-2 {
+    width: 311.25px;
+  }
+  /* line 321, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li:last-child {
+    margin-right: 0px;
+  }
+  /* line 325, ../sass/exPortal_V3.scss */
+  nav#flightmap_infobar ul li div.image {
+    width: 50px;
+    height: 50px;
+  }
+}

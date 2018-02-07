@@ -1,0 +1,335 @@
+﻿@import "exPortal_V3_Common";
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  color: $BodyColor;
+  font-family: 'Avenir Next Condensed';
+}
+//If you set box-sizing: border-box; on an element padding and border are included in the width and height:
+div {
+  box-sizing: border-box
+}
+
+span.icon {
+  font-family: 'FontAwesome';
+}
+
+a {
+  text-decoration: none;
+  color: $HiliteColor1;
+
+  &:hover {
+    text-decoration: none;
+    color: $HiliteColor2;
+  }
+}
+
+div.clear {
+  display: block;
+  clear: both;
+  float: none;
+}
+
+div#Overlay {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.58);
+  z-index: 99;
+  display: none;
+
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: (-256px/2);
+    margin-top: (-256px/2);
+    width: 256px;
+    height: 256px;
+  }
+}
+
+section::after {
+
+  @include Clear();
+}
+
+header {
+
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+    float: none;
+    border-bottom: 1px #7f7f7f solid;
+  }
+}
+
+
+div.left-section {
+  float: left;
+  img {
+    width: auto;
+  }
+}
+
+div.right-section {
+  float: right;
+}
+
+nav.user-management {
+  ul {
+    margin: 0px;
+    padding: 0px;
+    float: right;
+
+    li {
+      display: inline-block;
+    }
+
+    li#user-menu {
+      position: relative;
+
+      ul {
+        position: absolute;
+        left: 0px;
+        display: none;
+
+        li {
+          display: block;
+          padding: 5px 0px 0px 0px;
+          margin-left: 0px;
+          white-space: nowrap;
+        }
+      }
+
+      &:hover > a {
+        color: $HiliteColor2;
+      }
+    }
+
+    &:after {
+      @include Clear();
+    }
+  }
+
+  @include Clear();
+}
+
+nav.main-menu {
+  ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    float: right;
+    background-color: white;
+
+    a {
+      color: $BodyColor;
+    }
+
+
+    li {
+      list-style: none;
+      display: inline-block;
+      position: relative;
+      white-space: nowrap;
+
+      &:hover {
+        & > a {
+          color: $HiliteColor1;
+        }
+
+        ul {
+          display: block;
+        }
+      }
+
+
+      ul {
+        position: absolute;
+        display: none;
+        left: 0;
+        z-index: 9;
+
+        li {
+          display: block;
+
+          a {
+            color: $BodyColor;
+          }
+
+          &:hover a {
+            color: $HiliteColor1;
+          }
+        }
+      }
+    }
+
+    li:last-child {
+      padding-right: 0px;
+
+      ul {
+        right: 0px !important;
+        left: auto !important;
+      }
+    }
+  }
+
+  @include Clear();
+}
+
+
+
+
+nav.breadcrumbs {
+  margin-top: 5px;
+
+
+  ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    float: right;
+
+    li {
+      padding: 0px 3px 0px 0px;
+      display: inline-block;
+      list-style: none;
+
+      a {
+        color: $BodyColor;
+      }
+
+      &:hover {
+        a {
+          color: $HiliteColor2;
+        }
+      }
+
+      &:after {
+        display: inline-block;
+        padding-left: 3px;
+        content: ">";
+      }
+
+      &:last-child {
+        padding-right: 0px;
+        color: $HiliteColor1;
+
+        &:after {
+          padding-right: 0px;
+          content: "";
+          display: none;
+        }
+      }
+    }
+  }
+
+  @include Clear();
+}
+
+
+@mixin General($VerticalGap) {
+
+  header {
+    margin-top: $VerticalGap;
+
+    &:after {
+      padding-top: $VerticalGap;
+      margin-bottom: $VerticalGap;
+    }
+  }
+
+  nav.user-management {
+    ul {
+      li {
+        margin-left: $VerticalGap;
+
+        ul {
+          li {
+            padding: 5px $VerticalGap 0px $VerticalGap;
+          }
+        }
+      }
+    }
+  }
+
+
+
+  nav.main-menu {
+    ul {
+
+      li {
+        padding-right: $VerticalGap;
+        padding-left: $VerticalGap;
+      }
+    }
+  }
+}
+
+
+
+@mixin FontSizeSettings($VerticalGap, $BodyFontSize) {
+  body {
+    font-size: $BodyFontSize;
+  }
+
+  nav .user-management > ul > li > ul,
+  nav.main-menu > ul > li > ul {
+    top: $BodyFontSize;
+  }
+
+  #FlightChartInfos {
+    div.flightchartinfo {
+      div.title {
+        font-size: $BodyFontSize - 3px;
+      }
+
+      div.sub-title {
+        font-size: $BodyFontSize - 4px;
+        
+      }
+    }
+  }
+}
+
+@mixin SectionSizes($VerticalGap, $MaxWidth, $LogoHeight) {
+  section {
+    width: $MaxWidth;
+    margin: auto;
+  }
+
+  div.left-section img {
+    height: $LogoHeight;
+  }
+}
+
+@media screen and (min-width: 720px) {
+  $MaxSize: 720px;
+  $VerticalGap: 8px;
+  @include General($VerticalGap);
+  @include FontSizeSettings($VerticalGap, 12pt);
+  @include SectionSizes($VerticalGap, $MaxSize, 50px);
+}
+
+@media screen and (min-width: 1080px) {
+  $MaxSize: 1080px;
+  $VerticalGap: 12px;
+  @include General($VerticalGap);
+  @include FontSizeSettings($VerticalGap, 13pt);
+  @include SectionSizes($VerticalGap, $MaxSize, 60px);
+}
+
+@media screen and (min-width: 1320px) {
+  $MaxSize: 1320px;
+  $VerticalGap: 15px;
+  @include General($VerticalGap);
+  @include FontSizeSettings($VerticalGap, 14pt);
+  @include SectionSizes($VerticalGap, $MaxSize, 70px);
+}

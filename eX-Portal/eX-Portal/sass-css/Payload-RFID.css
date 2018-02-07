@@ -1,0 +1,113 @@
+/* line 1, ../sass/Payload-RFID.scss */
+section div.title {
+  padding: 3px 0px 3px 5px;
+  border-bottom: 2px white solid;
+  margin-bottom: 5px;
+  vertical-align: text-bottom;
+  background-color: #c2c0c0;
+  font-size: 12pt;
+}
+
+/* line 11, ../sass/Payload-RFID.scss */
+div#PayloadRuns, div#PayloadRFIDs {
+  height: 215px;
+  width: 100%;
+  border-bottom: 2px red solid;
+}
+
+/* line 19, ../sass/Payload-RFID.scss */
+ul#PayloadRunIDs, ul#RFIDs {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 175px;
+  overflow: auto;
+}
+/* line 28, ../sass/Payload-RFID.scss */
+ul#PayloadRunIDs li, ul#RFIDs li {
+  border-bottom: 1px silver solid;
+  padding: 1px 0px 1px 0px;
+  height: 16px;
+}
+/* line 32, ../sass/Payload-RFID.scss */
+ul#PayloadRunIDs li div, ul#RFIDs li div {
+  height: 16px;
+}
+/* line 39, ../sass/Payload-RFID.scss */
+ul#PayloadRunIDs li.active {
+  background-color: #90ff13;
+}
+/* line 43, ../sass/Payload-RFID.scss */
+ul#PayloadRunIDs li:hover {
+  background-color: #fbd74c;
+}
+/* line 47, ../sass/Payload-RFID.scss */
+ul#PayloadRunIDs li div {
+  float: left;
+  display: block;
+  margin-right: 5px;
+  width: 100px;
+}
+/* line 52, ../sass/Payload-RFID.scss */
+ul#PayloadRunIDs li div.c4 {
+  width: 150px;
+}
+/* line 61, ../sass/Payload-RFID.scss */
+ul#RFIDs li:hover {
+  background-color: #fc9d9d;
+}
+/* line 65, ../sass/Payload-RFID.scss */
+ul#RFIDs li div {
+  width: 70px;
+  float: left;
+  overflow: hidden;
+}
+/* line 71, ../sass/Payload-RFID.scss */
+ul#RFIDs li.active {
+  background-color: aqua;
+}
+/* line 75, ../sass/Payload-RFID.scss */
+ul#RFIDs li div.c1 {
+  width: 200px;
+}
+
+/* line 81, ../sass/Payload-RFID.scss */
+div#RSSIs {
+  border-bottom: 2px red solid;
+  line-height: 20px;
+}
+/* line 85, ../sass/Payload-RFID.scss */
+div#RSSIs label {
+  line-height: 20px;
+  vertical-align: text-bottom;
+}
+/* line 90, ../sass/Payload-RFID.scss */
+div#RSSIs::-webkit-scrollbar-track {
+  background: #ddd;
+}
+/* line 94, ../sass/Payload-RFID.scss */
+div#RSSIs::-webkit-scrollbar-thumb {
+  background: #666;
+}
+/* line 98, ../sass/Payload-RFID.scss */
+div#RSSIs::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* line 104, ../sass/Payload-RFID.scss */
+ul#RSSI {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  white-space: nowrap;
+  width: 5000px;
+}
+/* line 111, ../sass/Payload-RFID.scss */
+ul#RSSI li {
+  float: left;
+  margin-right: 10px;
+  list-style: none;
+  padding-top: 5px;
+}

@@ -1,0 +1,1299 @@
+@font-face {
+  font-family: "FontAwesome";
+  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Demi';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.svg#AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic") format("svg");
+  font-weight: 600;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Bold.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Bold.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.svg#AvenirNextCondensed/AvenirNextCondensed-Bold") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Ultra';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.svg#AvenirNextCondensed/AvenirNextCondensed-UltraLight") format("svg");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Italic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Italic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.svg#AvenirNextCondensed/AvenirNextCondensed-Italic") format("svg");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Heavy.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Heavy.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.svg#AvenirNextCondensed/AvenirNextCondensed-Heavy") format("svg");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Demi';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.svg#AvenirNextCondensed/AvenirNextCondensed-DemiBold") format("svg");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Medium.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Medium.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.svg#AvenirNextCondensed/AvenirNextCondensed-Medium") format("svg");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Regular.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Regular.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.svg#AvenirNextCondensed/AvenirNextCondensed-Regular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.svg#AvenirNextCondensed/AvenirNextCondensed-MediumItalic") format("svg");
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.svg#AvenirNextCondensed/AvenirNextCondensed-BoldItalic") format("svg");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.svg#AvenirNextCondensed/AvenirNextCondensed-HeavyItalic") format("svg");
+  font-weight: 900;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Ultra';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.svg#AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic") format("svg");
+  font-weight: 200;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt2.eot");
+  src: url("Advent/advent-Lt2.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt2.woff2") format("woff2"), url("Advent/advent-Lt2.woff") format("woff"), url("Advent/advent-Lt2.ttf") format("truetype"), url("Advent/advent-Lt2.svg#advent-Lt2") format("svg");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Regular.eot");
+  src: url("Advent/advent-Regular.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Regular.woff2") format("woff2"), url("Advent/advent-Regular.woff") format("woff"), url("Advent/advent-Regular.ttf") format("truetype"), url("Advent/advent-Regular.svg#advent-Regular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd2.eot");
+  src: url("Advent/advent-Bd2.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd2.woff2") format("woff2"), url("Advent/advent-Bd2.woff") format("woff"), url("Advent/advent-Bd2.ttf") format("truetype"), url("Advent/advent-Bd2.svg#advent-Bd2") format("svg");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd1.eot");
+  src: url("Advent/advent-Bd1.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd1.woff2") format("woff2"), url("Advent/advent-Bd1.woff") format("woff"), url("Advent/advent-Bd1.ttf") format("truetype"), url("Advent/advent-Bd1.svg#advent-Bd1") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt3.eot");
+  src: url("Advent/advent-Lt3.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt3.woff2") format("woff2"), url("Advent/advent-Lt3.woff") format("woff"), url("Advent/advent-Lt3.ttf") format("truetype"), url("Advent/advent-Lt3.svg#advent-Lt3") format("svg");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd3.eot");
+  src: url("Advent/advent-Bd3.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd3.woff2") format("woff2"), url("Advent/advent-Bd3.woff") format("woff"), url("Advent/advent-Bd3.ttf") format("truetype"), url("Advent/advent-Bd3.svg#advent-Bd3") format("svg");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt1.eot");
+  src: url("Advent/advent-Lt1.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt1.woff2") format("woff2"), url("Advent/advent-Lt1.woff") format("woff"), url("Advent/advent-Lt1.ttf") format("truetype"), url("Advent/advent-Lt1.svg#advent-Lt1") format("svg");
+  font-weight: 300;
+  font-style: normal;
+}
+div.instrument.attitude div.roll div.pitch,
+div.instrument.attitude div.roll {
+  transition-property: all;
+  transition-duration: 1s;
+  transition-delay: 0s;
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+  border: 0px;
+  background-color: #ff0000;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+  border: 0px;
+  background-color: #18bdec;
+}
+
+.ui-slider .ui-slider-handle {
+  width: 16px;
+  height: 12px;
+  border: 0px;
+}
+
+.ui-slider-horizontal .ui-slider-handle {
+  top: -2px;
+  margin-left: -8px;
+}
+
+div.SpotMarker {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  margin-left: -8px;
+  margin-top: -8px;
+  border-radius: 50%;
+  cursor: default;
+}
+div.SpotMarker span.Marker {
+  display: block;
+  width: 8px;
+  height: 8px;
+  left: 3px;
+  top: 3px;
+  position: absolute;
+  border-radius: 50%;
+}
+div.SpotMarker div.Marker-ToolTip {
+  display: none;
+  position: absolute;
+  top: 16px;
+  width: auto;
+  height: auto;
+  padding: 3px;
+  white-space: nowrap;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px black solid;
+  border-radius: 3px;
+  color: white;
+}
+div.SpotMarker:hover div.Marker-ToolTip {
+  display: block;
+}
+
+div#StartMarker {
+  border: 1px white solid;
+}
+div#StartMarker span.Marker {
+  background-color: white;
+}
+
+div#EndMarker {
+  border: 1px #18bdec solid;
+}
+div#EndMarker span.Marker {
+  background-color: #18bdec;
+}
+
+div#FlightMapDroneIcon {
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  margin-left: -16px;
+  margin-top: -16px;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+div#custom-handle {
+  width: 50px;
+  margin-left: -25px;
+  line-height: 21px;
+  font-size: 11px;
+  height: 21px;
+  text-align: center;
+}
+
+div#FlightInfoColumn1,
+div#FlightInfoColumn2,
+div#FlightInfoColumn3,
+div#FlightInfoColumn2_3_merge {
+  float: left;
+}
+
+div#FlightInfoColumn4 {
+  margin-top: 5px;
+}
+div#FlightInfoColumn4::after {
+  clear: both;
+}
+div#FlightInfoColumn4 div.Toolbar {
+  display: inline-block;
+}
+div#FlightInfoColumn4 div.Toolbar > div.button, div#FlightInfoColumn4 div.Toolbar > div.round-button {
+  padding: 0px 10px 0px 10px;
+  background-color: silver;
+  margin-right: 2px;
+  display: inline-block;
+  cursor: pointer;
+  height: 30px;
+  box-sizing: content-box;
+  line-height: 30px;
+}
+div#FlightInfoColumn4 div.Toolbar > div.button {
+  border-radius: 3px;
+  width: 70px;
+}
+div#FlightInfoColumn4 div.Toolbar > div.button span.icon {
+  color: #ff0000;
+  margin-right: 12px;
+}
+div#FlightInfoColumn4 div.Toolbar > div.button:hover {
+  background-color: #ff0000;
+  color: white;
+}
+div#FlightInfoColumn4 div.Toolbar > div.button:hover span.icon {
+  color: #18bdec;
+}
+div#FlightInfoColumn4 div.Toolbar > div.round-button {
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  width: 30px;
+  padding: 0px;
+  vertical-align: bottom;
+  text-align: center;
+}
+div#FlightInfoColumn4 div.Toolbar > div.round-button.active:hover, div#FlightInfoColumn4 div.Toolbar > div.round-button:hover {
+  background-color: #ff0000;
+  color: white;
+}
+div#FlightInfoColumn4 div.Toolbar > div.round-button.active {
+  background-color: #18bdec;
+  color: white;
+}
+div#FlightInfoColumn4 div#FlightSlider {
+  display: inline-block;
+  height: 30px;
+  position: relative;
+  vertical-align: bottom;
+}
+div#FlightInfoColumn4 div#FlightSlider div#FlightSliderStart {
+  left: 0px;
+}
+div#FlightInfoColumn4 div#FlightSlider div#FlightSliderEnd {
+  right: 0px;
+}
+div#FlightInfoColumn4 div#FlightSlider div#FlightSliderCenter {
+  width: 100%;
+  text-align: center;
+  left: 0px;
+  color: #ff0000;
+  font-weight: bold;
+}
+div#FlightInfoColumn4 div#FlightSlider div#FlightSliderStart,
+div#FlightInfoColumn4 div#FlightSlider div#FlightSliderEnd,
+div#FlightInfoColumn4 div#FlightSlider div#FlightSliderCenter {
+  position: absolute;
+  top: 0px;
+  font-size: 14px;
+}
+div#FlightInfoColumn4 div#FlightSlider div#FlightSliderStart,
+div#FlightInfoColumn4 div#FlightSlider div#FlightSliderEnd,
+div#FlightInfoColumn4 div#FlightSlider div#FlightSliderBar,
+div#FlightInfoColumn4 div#FlightSlider div#FlightSliderCenter {
+  display: inline-block;
+}
+div#FlightInfoColumn4 div#FlightSlider div#FlightSliderBar {
+  position: absolute;
+  bottom: 0px;
+  background-color: silver;
+}
+
+div#FlightInfoColumn3::after {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+}
+
+div#FlightInfoSection::after {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+}
+
+nav#flightmap_infobar ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+nav#flightmap_infobar ul li {
+  list-style: none;
+  float: left;
+  overflow: hidden;
+  font-family: 'Advent';
+  font-weight: 800;
+  font-style: normal;
+  text-transform: uppercase;
+}
+nav#flightmap_infobar ul li div.image {
+  float: left;
+  border-radius: 50%;
+  background-color: #484848;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+nav#flightmap_infobar ul li div.title1 {
+  font-family: Arial;
+}
+nav#flightmap_infobar ul li.rpas div.image {
+  background-size: 70% 70%;
+  background-position: center center;
+}
+
+div#AttitudeMeter {
+  position: relative;
+}
+div#AttitudeMeter div.AttitudePichRollBackground {
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  background-color: #1C1C1C;
+}
+div#AttitudeMeter div#attitude {
+  position: relative;
+  z-index: 99;
+  border-radius: 50%;
+}
+div#AttitudeMeter div.AttitudePitchSection,
+div#AttitudeMeter div.AttitudeRollSection {
+  position: absolute;
+  color: white;
+  z-index: 99;
+  font-family: 'Advent';
+}
+div#AttitudeMeter div.AttitudePitchSection {
+  left: 10px;
+  text-align: left;
+}
+div#AttitudeMeter div.AttitudeRollSection {
+  right: 10px;
+  text-align: right;
+}
+
+div#FlightStatusBar ul {
+  padding: 0px;
+  list-style: none;
+  display: block;
+}
+div#FlightStatusBar ul li {
+  padding: 0px;
+  list-style: none;
+  display: inline-block;
+}
+div#FlightStatusBar ul li > div {
+  display: block;
+  background-color: #1C1C1C;
+  background-size: contain;
+  border-radius: 50%;
+}
+div#FlightStatusBar ul li > div:hover, div#FlightStatusBar ul li > div.active {
+  background-color: #ff0000;
+}
+div#FlightStatusBar ul li div.FlightStatusIconWind {
+  background-image: url("/images/V3/flightmap-wind.png");
+}
+div#FlightStatusBar ul li div.FlightStatusIconTemp {
+  background-image: url("/images/V3/flightmap-temp.png");
+}
+div#FlightStatusBar ul li div.FlightStatusIconAirline {
+  background-image: url("/images/V3/flightmap-airlines.png");
+}
+div#FlightStatusBar ul li div.FlightStatusIconEM {
+  background-image: url("/images/V3/flightmap-em.png");
+}
+div#FlightStatusBar div#FlightStatusIconInfo {
+  background-color: #ff0000;
+  color: white;
+  display: inline-block;
+}
+
+div#FlightData ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+div#FlightData li {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+div#FlightData li div {
+  float: left;
+  display: block;
+  font-family: "Avenir Next Condensed";
+}
+div#FlightData li::after {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+  border-bottom: 1px #d9d9d9 solid !important;
+}
+
+section#BottomSection div#BottomMapInfo,
+section#BottomSection div#ComSection,
+section#BottomSection div#GoogleMap {
+  float: left;
+}
+section#BottomSection div#BottomMapInfo {
+  background-color: black;
+  display: table;
+}
+section#BottomSection div#BottomMapInfo div.MapInfoContent {
+  vertical-align: middle;
+  display: table-cell;
+}
+section#BottomSection div#BottomMapInfo ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+section#BottomSection div#BottomMapInfo ul li {
+  margin: 0px 0px 10px 0px;
+  padding: 0px;
+  list-style: none;
+  color: white;
+  text-align: center;
+}
+section#BottomSection div#BottomMapInfo ul li:last-child {
+  margin-bottom: 0px;
+}
+section#BottomSection div#BottomMapInfo ul li div.title {
+  text-transform: uppercase;
+}
+section#BottomSection div#BottomMapInfo ul li div.value {
+  font-weight: bold;
+}
+section#BottomSection div#ComSection {
+  background-color: white;
+}
+section#BottomSection div#ComSection div.caption {
+  width: 100%;
+  background-color: #18bdec;
+  font-size: 20px;
+  font-family: 'Advent';
+  text-align: center;
+  padding: 5px 0px 5px 0px;
+  font-weight: 800;
+  letter-spacing: 5px;
+}
+section#BottomSection div#GoogleMap {
+  background-color: silver;
+}
+section#BottomSection::after {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+}
+
+#FlightChartInfos div.flightchartinfo {
+  float: left;
+  text-align: center;
+}
+#FlightChartInfos div.flightchartinfo div.title {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+#FlightChartInfos div.flightchartinfo div.sub-title {
+  text-transform: uppercase;
+}
+
+@media screen and (min-width: 720px) {
+  nav#flightmap_infobar {
+    margin-bottom: 8px;
+  }
+
+  nav#flightmap_infobar ul li div.image {
+    margin-right: 8px;
+  }
+  nav#flightmap_infobar ul li div.title-1 {
+    font-size: 11px;
+  }
+  nav#flightmap_infobar ul li div.title-2 {
+    font-size: 10px;
+  }
+  nav#flightmap_infobar ul li div.title-3 {
+    font-size: 9px;
+  }
+
+  nav#flightmap_infobar ul li {
+    width: 85px;
+    margin-right: 8px;
+    font-size: 11px;
+  }
+  nav#flightmap_infobar ul li.pack-of-2 {
+    width: 170px;
+  }
+  nav#flightmap_infobar ul li:last-child {
+    margin-right: 0px;
+  }
+  nav#flightmap_infobar ul li div.image {
+    width: 30px;
+    height: 30px;
+  }
+
+  div#FlightCharts {
+    width: 281.6px;
+    height: 60px;
+  }
+  div#FlightCharts div.flightchart {
+    width: 88.53333px;
+    margin-right: 8px;
+    height: 60px;
+    float: left;
+  }
+  div#FlightCharts div.flightchart:last-child {
+    margin-right: 0px;
+  }
+
+  div#FlightChartInfos {
+    width: 281.6px;
+  }
+  div#FlightChartInfos div.flightchartinfo {
+    width: 88.53333px;
+    margin-right: 8px;
+    float: left;
+  }
+  div#FlightChartInfos div.flightchartinfo div.title {
+    font-size: 9.1px;
+  }
+  div#FlightChartInfos div.flightchartinfo div.sub-title {
+    font-size: 7.8px;
+  }
+  div#FlightChartInfos div.flightchartinfo:last-child {
+    margin-right: 0px;
+  }
+
+  div#AttitudeMeter {
+    width: 176px;
+    height: 98.56px;
+  }
+  div#AttitudeMeter div#attitude {
+    left: 38.72px;
+  }
+  div#AttitudeMeter div#attitude,
+  div#AttitudeMeter div.instrument {
+    width: 98.56px;
+    height: 98.56px;
+    border-radius: 50%;
+    box-sizing: content-box;
+  }
+  div#AttitudeMeter div.AttitudePichRollBackground {
+    border-radius: 21.12px;
+    height: 52.8px;
+    top: 22.88px;
+  }
+  div#AttitudeMeter div.AttitudePitchSection,
+  div#AttitudeMeter div.AttitudeRollSection {
+    top: 33.44px;
+    font-size: 12px;
+  }
+  div#AttitudeMeter div.AttitudePitchSection span.Number,
+  div#AttitudeMeter div.AttitudePitchSection span.Symbol,
+  div#AttitudeMeter div.AttitudeRollSection span.Number,
+  div#AttitudeMeter div.AttitudeRollSection span.Symbol {
+    font-size: 28.8px;
+  }
+
+  div#FlightStatusMetar {
+    width: 246.4px;
+    height: 49.28px;
+    display: block;
+    background-color: silver;
+    border-radius: 24.64px;
+  }
+  div#FlightStatusMetar div.MetarTitle {
+    box-sizing: border-box;
+    background-color: silver;
+    width: 65.28px;
+    height: 65.28px;
+    border-radius: 50%;
+    border: 8px solid white;
+    float: left;
+    margin-left: -8px;
+    margin-top: -8px;
+  }
+  div#FlightStatusMetar div.MetarTitle div.content {
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    height: 49.28px;
+    width: 49.28px;
+    font-size: 13px;
+  }
+  div#FlightStatusMetar div.MetarTitle div.content div.refresh {
+    font-size: 9px;
+  }
+
+  section#FlightStatusInfo {
+    margin-bottom: 8px;
+  }
+
+  div#FlightInfoColumn1 {
+    width: 281.6px;
+    margin-right: 8px;
+  }
+
+  div#FlightInfoColumn2 {
+    width: 176px;
+    margin-right: 8px;
+  }
+
+  div#FlightInfoColumn3 {
+    width: 246.4px;
+  }
+
+  div#FlightInfoColumn2_3_merge {
+    width: 430.4px;
+  }
+
+  div#FlightInfoColumn4 {
+    width: 430.4px;
+  }
+  div#FlightInfoColumn4 div#FlightSlider {
+    width: 124.4px;
+    margin-left: 8px;
+  }
+  div#FlightInfoColumn4 div#FlightSliderBar {
+    width: 100%;
+    height: 8px;
+    border: 0px;
+  }
+
+  div#FlightStatusBar ul {
+    height: 22px;
+    margin: 0px 0px 4px 0px;
+  }
+  div#FlightStatusBar ul li {
+    width: 22px;
+    height: 22px;
+    margin: 0px 2px 0px 0px;
+  }
+  div#FlightStatusBar ul li > div {
+    width: 22px;
+    height: 22px;
+  }
+  div#FlightStatusBar div#FlightStatusIconInfo {
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  div#FlightData ul li div {
+    font-size: 10px;
+  }
+  div#FlightData ul li div.col1 {
+    width: 24.56px;
+    margin-right: 2px;
+  }
+  div#FlightData ul li div.col2 {
+    width: 36.84px;
+    margin-right: 2px;
+  }
+  div#FlightData ul li div.col3 {
+    width: 36.84px;
+    margin-right: 2px;
+  }
+  div#FlightData ul li div.col4 {
+    width: 24.56px;
+    margin-right: 2px;
+  }
+  div#FlightData ul li div.col5 {
+    width: 24.56px;
+    margin-right: 2px;
+  }
+  div#FlightData ul li div.col6 {
+    width: 24.56px;
+    margin-right: 2px;
+  }
+  div#FlightData ul li div.col7 {
+    width: 24.56px;
+    margin-right: 2px;
+  }
+  div#FlightData ul li div.col8 {
+    width: 24.56px;
+    margin-right: 2px;
+  }
+  div#FlightData ul li div.col9 {
+    width: 24.56px;
+    margin-right: 0px;
+  }
+  div#FlightData div.data-rows {
+    height: 80px;
+    overflow: auto;
+    overflow-y: scroll;
+  }
+  div#FlightData ul.header-row li {
+    font-weight: bold;
+  }
+
+  div#BottomMapInfo,
+  div#ComSection,
+  div#GoogleMap {
+    height: 300px;
+  }
+
+  div#BottomMapInfo {
+    width: 72px;
+  }
+  div#BottomMapInfo li {
+    width: 72px;
+    font-size: 12px;
+  }
+
+  div#ComSection {
+    width: 216px;
+  }
+
+  div#GoogleMap {
+    width: 432px;
+  }
+}
+@media screen and (min-width: 1080px) {
+  nav#flightmap_infobar {
+    margin-bottom: 12px;
+  }
+
+  nav#flightmap_infobar ul li div.image {
+    margin-right: 12px;
+  }
+  nav#flightmap_infobar ul li div.title-1 {
+    font-size: 15px;
+  }
+  nav#flightmap_infobar ul li div.title-2 {
+    font-size: 14px;
+  }
+  nav#flightmap_infobar ul li div.title-3 {
+    font-size: 13px;
+  }
+
+  nav#flightmap_infobar ul li {
+    width: 127.5px;
+    margin-right: 12px;
+    font-size: 15px;
+  }
+  nav#flightmap_infobar ul li.pack-of-2 {
+    width: 255px;
+  }
+  nav#flightmap_infobar ul li:last-child {
+    margin-right: 0px;
+  }
+  nav#flightmap_infobar ul li div.image {
+    width: 40px;
+    height: 40px;
+  }
+
+  div#FlightCharts {
+    width: 422.4px;
+    height: 60px;
+  }
+  div#FlightCharts div.flightchart {
+    width: 132.8px;
+    margin-right: 12px;
+    height: 60px;
+    float: left;
+  }
+  div#FlightCharts div.flightchart:last-child {
+    margin-right: 0px;
+  }
+
+  div#FlightChartInfos {
+    width: 422.4px;
+  }
+  div#FlightChartInfos div.flightchartinfo {
+    width: 132.8px;
+    margin-right: 12px;
+    float: left;
+  }
+  div#FlightChartInfos div.flightchartinfo div.title {
+    font-size: 9.8px;
+  }
+  div#FlightChartInfos div.flightchartinfo div.sub-title {
+    font-size: 8.4px;
+  }
+  div#FlightChartInfos div.flightchartinfo:last-child {
+    margin-right: 0px;
+  }
+
+  div#AttitudeMeter {
+    width: 264px;
+    height: 147.84px;
+  }
+  div#AttitudeMeter div#attitude {
+    left: 58.08px;
+  }
+  div#AttitudeMeter div#attitude,
+  div#AttitudeMeter div.instrument {
+    width: 147.84px;
+    height: 147.84px;
+    border-radius: 50%;
+    box-sizing: content-box;
+  }
+  div#AttitudeMeter div.AttitudePichRollBackground {
+    border-radius: 31.68px;
+    height: 79.2px;
+    top: 34.32px;
+  }
+  div#AttitudeMeter div.AttitudePitchSection,
+  div#AttitudeMeter div.AttitudeRollSection {
+    top: 50.16px;
+    font-size: 12px;
+  }
+  div#AttitudeMeter div.AttitudePitchSection span.Number,
+  div#AttitudeMeter div.AttitudePitchSection span.Symbol,
+  div#AttitudeMeter div.AttitudeRollSection span.Number,
+  div#AttitudeMeter div.AttitudeRollSection span.Symbol {
+    font-size: 28.8px;
+  }
+
+  div#FlightStatusMetar {
+    width: 369.6px;
+    height: 73.92px;
+    display: block;
+    background-color: silver;
+    border-radius: 36.96px;
+  }
+  div#FlightStatusMetar div.MetarTitle {
+    box-sizing: border-box;
+    background-color: silver;
+    width: 89.92px;
+    height: 89.92px;
+    border-radius: 50%;
+    border: 8px solid white;
+    float: left;
+    margin-left: -8px;
+    margin-top: -8px;
+  }
+  div#FlightStatusMetar div.MetarTitle div.content {
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    height: 73.92px;
+    width: 73.92px;
+    font-size: 14px;
+  }
+  div#FlightStatusMetar div.MetarTitle div.content div.refresh {
+    font-size: 10px;
+  }
+
+  section#FlightStatusInfo {
+    margin-bottom: 12px;
+  }
+
+  div#FlightInfoColumn1 {
+    width: 422.4px;
+    margin-right: 12px;
+  }
+
+  div#FlightInfoColumn2 {
+    width: 264px;
+    margin-right: 12px;
+  }
+
+  div#FlightInfoColumn3 {
+    width: 369.6px;
+  }
+
+  div#FlightInfoColumn2_3_merge {
+    width: 645.6px;
+  }
+
+  div#FlightInfoColumn4 {
+    width: 645.6px;
+  }
+  div#FlightInfoColumn4 div#FlightSlider {
+    width: 339.6px;
+    margin-left: 8px;
+  }
+  div#FlightInfoColumn4 div#FlightSliderBar {
+    width: 100%;
+    height: 8px;
+    border: 0px;
+  }
+
+  div#FlightStatusBar ul {
+    height: 26px;
+    margin: 0px 0px 6px 0px;
+  }
+  div#FlightStatusBar ul li {
+    width: 26px;
+    height: 26px;
+    margin: 0px 3px 0px 0px;
+  }
+  div#FlightStatusBar ul li > div {
+    width: 26px;
+    height: 26px;
+  }
+  div#FlightStatusBar div#FlightStatusIconInfo {
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+
+  div#FlightData ul li div {
+    font-size: 10px;
+  }
+  div#FlightData ul li div.col1 {
+    width: 37.04px;
+    margin-right: 4px;
+  }
+  div#FlightData ul li div.col2 {
+    width: 55.56px;
+    margin-right: 4px;
+  }
+  div#FlightData ul li div.col3 {
+    width: 55.56px;
+    margin-right: 4px;
+  }
+  div#FlightData ul li div.col4 {
+    width: 37.04px;
+    margin-right: 4px;
+  }
+  div#FlightData ul li div.col5 {
+    width: 37.04px;
+    margin-right: 4px;
+  }
+  div#FlightData ul li div.col6 {
+    width: 37.04px;
+    margin-right: 4px;
+  }
+  div#FlightData ul li div.col7 {
+    width: 37.04px;
+    margin-right: 4px;
+  }
+  div#FlightData ul li div.col8 {
+    width: 37.04px;
+    margin-right: 4px;
+  }
+  div#FlightData ul li div.col9 {
+    width: 37.04px;
+    margin-right: 0px;
+  }
+  div#FlightData div.data-rows {
+    height: 90px;
+    overflow: auto;
+    overflow-y: scroll;
+  }
+  div#FlightData ul.header-row li {
+    font-weight: bold;
+  }
+
+  div#BottomMapInfo,
+  div#ComSection,
+  div#GoogleMap {
+    height: 300px;
+  }
+
+  div#BottomMapInfo {
+    width: 108px;
+  }
+  div#BottomMapInfo li {
+    width: 108px;
+    font-size: 12px;
+  }
+
+  div#ComSection {
+    width: 324px;
+  }
+
+  div#GoogleMap {
+    width: 648px;
+  }
+}
+@media screen and (min-width: 1320px) {
+  nav#flightmap_infobar {
+    margin-bottom: 15px;
+  }
+
+  nav#flightmap_infobar ul li div.image {
+    margin-right: 15px;
+  }
+  nav#flightmap_infobar ul li div.title-1 {
+    font-size: 18px;
+  }
+  nav#flightmap_infobar ul li div.title-2 {
+    font-size: 17px;
+  }
+  nav#flightmap_infobar ul li div.title-3 {
+    font-size: 16px;
+  }
+
+  nav#flightmap_infobar ul li {
+    width: 155.625px;
+    margin-right: 15px;
+    font-size: 18px;
+  }
+  nav#flightmap_infobar ul li.pack-of-2 {
+    width: 311.25px;
+  }
+  nav#flightmap_infobar ul li:last-child {
+    margin-right: 0px;
+  }
+  nav#flightmap_infobar ul li div.image {
+    width: 50px;
+    height: 50px;
+  }
+
+  div#FlightCharts {
+    width: 516px;
+    height: 60px;
+  }
+  div#FlightCharts div.flightchart {
+    width: 162px;
+    margin-right: 15px;
+    height: 60px;
+    float: left;
+  }
+  div#FlightCharts div.flightchart:last-child {
+    margin-right: 0px;
+  }
+
+  div#FlightChartInfos {
+    width: 516px;
+  }
+  div#FlightChartInfos div.flightchartinfo {
+    width: 162px;
+    margin-right: 15px;
+    float: left;
+  }
+  div#FlightChartInfos div.flightchartinfo div.title {
+    font-size: 11.2px;
+  }
+  div#FlightChartInfos div.flightchartinfo div.sub-title {
+    font-size: 9.6px;
+  }
+  div#FlightChartInfos div.flightchartinfo:last-child {
+    margin-right: 0px;
+  }
+
+  div#AttitudeMeter {
+    width: 322.5px;
+    height: 180.6px;
+  }
+  div#AttitudeMeter div#attitude {
+    left: 70.95px;
+  }
+  div#AttitudeMeter div#attitude,
+  div#AttitudeMeter div.instrument {
+    width: 180.6px;
+    height: 180.6px;
+    border-radius: 50%;
+    box-sizing: content-box;
+  }
+  div#AttitudeMeter div.AttitudePichRollBackground {
+    border-radius: 38.7px;
+    height: 96.75px;
+    top: 41.925px;
+  }
+  div#AttitudeMeter div.AttitudePitchSection,
+  div#AttitudeMeter div.AttitudeRollSection {
+    top: 61.275px;
+    font-size: 12px;
+  }
+  div#AttitudeMeter div.AttitudePitchSection span.Number,
+  div#AttitudeMeter div.AttitudePitchSection span.Symbol,
+  div#AttitudeMeter div.AttitudeRollSection span.Number,
+  div#AttitudeMeter div.AttitudeRollSection span.Symbol {
+    font-size: 28.8px;
+  }
+
+  div#FlightStatusMetar {
+    width: 451.5px;
+    height: 90.3px;
+    display: block;
+    background-color: silver;
+    border-radius: 45.15px;
+  }
+  div#FlightStatusMetar div.MetarTitle {
+    box-sizing: border-box;
+    background-color: silver;
+    width: 106.3px;
+    height: 106.3px;
+    border-radius: 50%;
+    border: 8px solid white;
+    float: left;
+    margin-left: -8px;
+    margin-top: -8px;
+  }
+  div#FlightStatusMetar div.MetarTitle div.content {
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    height: 90.3px;
+    width: 90.3px;
+    font-size: 16px;
+  }
+  div#FlightStatusMetar div.MetarTitle div.content div.refresh {
+    font-size: 12px;
+  }
+
+  section#FlightStatusInfo {
+    margin-bottom: 15px;
+  }
+
+  div#FlightInfoColumn1 {
+    width: 516px;
+    margin-right: 15px;
+  }
+
+  div#FlightInfoColumn2 {
+    width: 322.5px;
+    margin-right: 15px;
+  }
+
+  div#FlightInfoColumn3 {
+    width: 451.5px;
+  }
+
+  div#FlightInfoColumn2_3_merge {
+    width: 789px;
+  }
+
+  div#FlightInfoColumn4 {
+    width: 789px;
+  }
+  div#FlightInfoColumn4 div#FlightSlider {
+    width: 483px;
+    margin-left: 8px;
+  }
+  div#FlightInfoColumn4 div#FlightSliderBar {
+    width: 100%;
+    height: 8px;
+    border: 0px;
+  }
+
+  div#FlightStatusBar ul {
+    height: 32px;
+    margin: 0px 0px 7.5px 0px;
+  }
+  div#FlightStatusBar ul li {
+    width: 32px;
+    height: 32px;
+    margin: 0px 3.75px 0px 0px;
+  }
+  div#FlightStatusBar ul li > div {
+    width: 32px;
+    height: 32px;
+  }
+  div#FlightStatusBar div#FlightStatusIconInfo {
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+  }
+
+  div#FlightData ul li div {
+    font-size: 12px;
+  }
+  div#FlightData ul li div.col1 {
+    width: 45.6px;
+    margin-right: 5px;
+  }
+  div#FlightData ul li div.col2 {
+    width: 68.4px;
+    margin-right: 5px;
+  }
+  div#FlightData ul li div.col3 {
+    width: 68.4px;
+    margin-right: 5px;
+  }
+  div#FlightData ul li div.col4 {
+    width: 45.6px;
+    margin-right: 5px;
+  }
+  div#FlightData ul li div.col5 {
+    width: 45.6px;
+    margin-right: 5px;
+  }
+  div#FlightData ul li div.col6 {
+    width: 45.6px;
+    margin-right: 5px;
+  }
+  div#FlightData ul li div.col7 {
+    width: 45.6px;
+    margin-right: 5px;
+  }
+  div#FlightData ul li div.col8 {
+    width: 45.6px;
+    margin-right: 5px;
+  }
+  div#FlightData ul li div.col9 {
+    width: 45.6px;
+    margin-right: 0px;
+  }
+  div#FlightData div.data-rows {
+    height: 95px;
+    overflow: auto;
+    overflow-y: scroll;
+  }
+  div#FlightData ul.header-row li {
+    font-weight: bold;
+  }
+
+  div#BottomMapInfo,
+  div#ComSection,
+  div#GoogleMap {
+    height: 350px;
+  }
+
+  div#BottomMapInfo {
+    width: 132px;
+  }
+  div#BottomMapInfo li {
+    width: 132px;
+    font-size: 13px;
+  }
+
+  div#ComSection {
+    width: 396px;
+  }
+
+  div#GoogleMap {
+    width: 792px;
+  }
+
+  div#FlightData {
+    margin-top: 15px;
+  }
+}
