@@ -70,3 +70,15 @@ button.cesium-infoBox-camera {
 div.cesium-viewer-bottom {
     display: none !important;
 }
+
+.controlPanel {
+    position: absolute;
+    top: 250px;
+    left: 100px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #edffff;
+    white-space: nowrap;
+    padding: 4px 8px;
+    border-radius: 4px;
+   
+}

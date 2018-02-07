@@ -179,22 +179,24 @@ namespace eX_Portal.exLogic {
         ISNULL(tblPilot.PhotoURL,'') as PilotImage,
         tblGSC.FirstName AS GroundStaff,
         CONVERT(VARCHAR, FlightDate,120) AS 'FlightDate',
-        ISNULL(g.ApprovalName,'NO NOC') as ApprovalName,
-        ISNULL(g.ApprovalID,0) as ApprovalID,
+        ISNULL(MC.NOCName,'NO NOC') as ApprovalName,
+        ISNULL(g.NOCID,0) as ApprovalID,
         g.Coordinates as InnerPolygon,
-        g.InnerBoundaryCoord as OuterPolygon,
+        g.OuterCoordinates as OuterPolygon,
         DroneFlight.latitude as homelat,
         DroneFlight.longitude as homelong
       FROM 
         DroneFlight
-      LEFT JOIN GCA_Approval as g
-        ON g.ApprovalID = DroneFlight.ApprovalID
+      LEFT JOIN NOC_Details as g
+        ON g.NOCID = DroneFlight.ApprovalID
       LEFT JOIN MSTR_Drone
         ON MSTR_Drone.DroneId = DroneFlight.DroneID
       LEFT JOIN MSTR_User AS tblPilot
         ON tblPilot.UserID = DroneFlight.PilotID
       LEFT JOIN MSTR_User AS tblGSC
         ON tblGSC.UserID = DroneFlight.GSCID
+        LEFT JOIN MSTR_NOC as MC
+        ON MC.NocApplicationID= g.NocApplicationID
       WHERE
        DroneFlight.ID=" + FlightID;
       

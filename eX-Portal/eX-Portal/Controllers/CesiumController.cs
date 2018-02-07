@@ -16,11 +16,12 @@ namespace CesiumFlight.Controllers
     {
         public ExponentPortalEntities db = new ExponentPortalEntities();
         // GET: Cesium
-        public ActionResult Index(int ID,string HomeLat,string HomeLong)
+        public ActionResult Index([Bind(Prefix = "ID")]int ID,string HomeLat,string HomeLong,int IsLive=0)
         {
             ViewBag.ID = ID;
             ViewBag.HomeLat = HomeLat;
             ViewBag.HomeLong = HomeLong;
+            ViewBag.IsLive = IsLive;
             return View();
         }
 
@@ -117,12 +118,11 @@ namespace CesiumFlight.Controllers
                
                 // The whole body of CZML must be wrapped in a JSON array, opened here.
                 output.WriteStartSequence();
-                //if (lastdataid == 0)
-                //{
+              
                     FlightMapData firstItem = db.FlightMapDatas.Where(x => x.FlightID == ID && (x.Altitude > 0 || x.Speed > 0)).OrderBy(x => x.FlightMapDataID).ToList().Take(1).FirstOrDefault();
-                //flightmapdatas.Take(1).FirstOrDefault();
-                FlightMapData LastItem = db.FlightMapDatas.Where(x => x.FlightID == ID && (x.Altitude > 0 || x.Speed > 0)).OrderBy(x => x.FlightMapDataID).ToList().LastOrDefault();
-                JulianDate StartTime = new JulianDate(firstItem.ReadTime.Value);
+               
+                    FlightMapData LastItem = db.FlightMapDatas.Where(x => x.FlightID == ID && (x.Altitude > 0 || x.Speed > 0)).OrderBy(x => x.FlightMapDataID).ToList().LastOrDefault();
+                    JulianDate StartTime = new JulianDate(firstItem.ReadTime.Value);
                     JulianDate EndTime = new JulianDate(LastItem.ReadTime.Value);
                     string curFile = @"C:\Cesium\test.czml";
                     FileInfo info = new FileInfo(curFile);
@@ -169,40 +169,22 @@ namespace CesiumFlight.Controllers
                     entity.WriteId("Aircraft");
                     entity.WriteVersion("1.0");
                     
-                    entity.WriteAvailability(new TimeInterval(StartTime, EndTime));
+                  entity.WriteAvailability(new TimeInterval(StartTime, EndTime));
 
-                    using (var model = entity.OpenBillboardProperty())
-                    {
-                        model.WriteColorProperty(Color.Red);
-                        using (var eoffset = model.OpenEyeOffsetProperty())
-                        {
-                            eoffset.WriteCartesian(new Cartesian());
-
-                        }
-                        model.WriteHorizontalOriginProperty(CesiumHorizontalOrigin.Center);
-                        using (var poffset = model.OpenPixelOffsetProperty())
-                        {
-                            poffset.WriteCartesian2(new Rectangular(0, 0));
-
-                        }
-                        model.WriteScaleProperty(1);
-                        model.WriteShowProperty(true);
-                        model.WriteVerticalOriginProperty(CesiumVerticalOrigin.Center);
-                        //model.WriteImageProperty(Ima);
-                    }
+                    
 
                     using (var path = entity.OpenPathProperty())
                     {
-                       
+                        
                         using (var show = path.OpenShowProperty())
                         {
-                            if(lastdataid==0)
-                            show.WriteInterval(new TimeInterval(StartTime, EndTime));
+                            //if(lastdataid==0)
+                           // show.WriteInterval(new TimeInterval(StartTime, EndTime));
                           
-                            show.WriteBoolean(false);
+                            show.WriteBoolean(true);
                         }
                         
-                        path.WriteWidthProperty(1);
+                        path.WriteWidthProperty(2);
                         using (var material = path.OpenMaterialProperty())
                         {
                             using (var sol = material.OpenSolidColorProperty())
@@ -213,6 +195,8 @@ namespace CesiumFlight.Controllers
                         }
                         path.WriteResolutionProperty(1200);
                     }
+
+                    
 
                     using (var position = entity.OpenPositionProperty())
                     {
@@ -239,13 +223,11 @@ namespace CesiumFlight.Controllers
 
                         }
                         position.WriteCartographicDegrees(JList, pList);
-
+                     
 
                     }
 
-
-
-                    // position.WriteCartographicDegrees(new Cartographic(lon, lat, 0.0));
+                    
                 }
 
                 // Now we generate some sample points and send them down.
@@ -257,31 +239,23 @@ namespace CesiumFlight.Controllers
                     entity.WriteVersion("1.0");
                     entity.WriteAvailability(new TimeInterval(StartTime, EndTime));
                     var custom = entity.OpenPropertiesProperty();
-
-                    CustomPropertyCesiumWriter newpro = custom.OpenCustomPropertyProperty("heading");
-
-                    // newpro.Open(output);
+                    CustomPropertyCesiumWriter newpro = custom.OpenCustomPropertyProperty("heading");                    
                     newpro.AsNumber();
-
-
                     newpro.WriteNumber(JList, HList);
                     newpro.Close();
 
-                    CustomPropertyCesiumWriter newroll = custom.OpenCustomPropertyProperty("roll");
-                    //  newroll.Open(output);
+                    CustomPropertyCesiumWriter newroll = custom.OpenCustomPropertyProperty("roll");                   
                     newroll.AsNumber();
 
                     newroll.WriteNumber(JList, RList);
                     newroll.Close();
-                    CustomPropertyCesiumWriter newpitch = custom.OpenCustomPropertyProperty("pitch");
-                    // newpitch.Open(output);
+                    CustomPropertyCesiumWriter newpitch = custom.OpenCustomPropertyProperty("pitch");                    // newpitch.Open(output);
                     newpitch.AsNumber();
 
                     newpitch.WriteNumber(JList, PList);
                     newpitch.Close();
-                    //    custom.Close();
                     CustomPropertyCesiumWriter LastDataID = custom.OpenCustomPropertyProperty("lastdataid");
-                    // newpitch.Open(output);
+                    
                     LastDataID.AsNumber();
 
                     LastDataID.WriteNumber(LastItem.FlightMapDataID);

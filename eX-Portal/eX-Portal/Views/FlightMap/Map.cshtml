@@ -141,7 +141,7 @@
           <div class="info" style="float:right">Live</div>
         }
         <div id="FlightDataExport" class="button"><a href="@Url.Action("Export", new { ID = Model.FlightID })">Export</a></div>
-      <div id="btn3D" class="button"><a href="@Url.Action("Index","Cesium", new { ID = Model.FlightID, HomeLat = Model.HomeLat, HomeLong=Model.HomeLong })">3D</a></div>
+      <div id="btn3D" class="button"><a href="@Url.Action("Index","Cesium", new { ID = Model.FlightID, HomeLat = Model.HomeLat, HomeLong=Model.HomeLong,IsLive=Model.IsLive })">3D</a></div>
         </div>
       <div id="flightmap"></div>
      

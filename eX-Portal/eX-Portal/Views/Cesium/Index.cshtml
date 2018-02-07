@@ -5,41 +5,34 @@
 
 
 <div id="cesiumContainer"></div>
-<div class="backdrop" id="menu">
-    <span><strong>Camera Mode</strong></span>
-    <div class="nowrap">
-        <input id="freeMode" name="source" type="radio" checked />
-        <label for="freeMode">Free</label>
-    </div>
-    <div class="nowrap">
-        <input id="droneMode" name="source" type="radio" />
-        <label for="droneMode">Drone View</label>
-    </div>
-   
-    <br>
-    
-</div>
+
 <div id="loadingIndicator" class="cover">
     <div id="loadingIcon" class="loadingIndicator"></div>
 </div>
 
+<div class="controlPanel">
+    <h5>Longitude: <span id="lonlabel"></span></h5>
+    <h5>Latitude: <span id="latlabel"></span></h5>
+    
+</div>
 
-@section header {
-    <link type="text/css" rel="stylesheet" href="~/Cesium/Widgets/widgets.css" />
-    <link type="text/css" rel="stylesheet" href="~/Content/flightmap.css" />
+    @section header {
+        <link type="text/css" rel="stylesheet" href="~/Cesium/Widgets/widgets.css" />
+        <link type="text/css" rel="stylesheet" href="~/Content/flightmap.css" />
 
-}
-
-
+    }
 
 
-@section scripts {
-    <script type="text/javascript">
+
+
+    @section scripts {
+        <script type="text/javascript">
         var FlightID =@ViewBag.ID;
         var HomeLat =@ViewBag.HomeLat;
-        var HomeLong =@ViewBag.HomeLong;
-    </script>
-    <script src="~/Cesium/Cesium.js"></script>
-    <script src="~/Scripts/Flight_3D.js"></script>
-}
+            var HomeLong =@ViewBag.HomeLong;
+            var IsLive = @ViewBag.IsLive;
+        </script>
+        <script src="~/Cesium/Cesium.js"></script>
+        <script src="~/Scripts/Flight_3D.js"></script>
+    }
 

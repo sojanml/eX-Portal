@@ -92,7 +92,7 @@ var flight = function (drone, czmlDataSource) {
         //    viewer.dataSources.add(dataSource);
         //});
 
-
+        var labelText = new Cesium.TimeIntervalCollectionProperty();
        
         var dronePromise = czmlDataSource.load('..\\info\\' + FlightID);
         var LastDataID = 0;
@@ -116,26 +116,32 @@ var flight = function (drone, czmlDataSource) {
             var pitchs = newentity.properties.pitch;
             var lastitemidproperty = newentity.properties.lastdataid;
             LastDataID = lastitemidproperty.getValue();
+           
+            
             for (var i = 0; i < positions._property._times.length; i++) {
-               
+              
                 var time = positions._property._times[i];
-                // compute orientations 
+                // compute orientations
                 var heading = headings.getValue(time);
                 var pitch = 0;// pitchs.getValue(time);
                   //  
                 var roll = 0;// rolls.getValue(positions._property._times[i]);
-              //  var hpRoll = new Cesium.HeadingPitchRoll(0,0,0);
+
+
                 var hpRoll= Cesium.HeadingPitchRoll.fromDegrees(heading, pitch, roll);
-            var orientation = Cesium.Transforms.headingPitchRollQuaternion(positions.getValue(time), hpRoll);
+                var orientation = Cesium.Transforms.headingPitchRollQuaternion(positions.getValue(time), hpRoll);
+
                // var orientation = Cesium.Quaternion.fromHeadingPitchRoll(hpRoll);
             orientationProperty.addSample(time, orientation);
-            if (i == 0)
+            if (i === 0)
                 initialPosition = positions.getValue(time);
             //  i++;
             }
           
             // Add computed orientation based on sampled positions
-           drone.orientation = orientationProperty;
+            drone.orientation = orientationProperty;
+           // drone.description = new Cesium.CallbackProperty(updateLabels, false);
+                // //
         //  drone.orientation = new Cesium.VelocityOrientationProperty(drone.position);
             //new Cesium.VelocityOrientationProperty(drone.position);
             // Smooth path interpolation
@@ -148,36 +154,53 @@ var flight = function (drone, czmlDataSource) {
         });
 
         
+        function updateLabels(time) {
+            var position = drone.position.getValue(time);
 
+           // var d = labelText.findDataForIntervalContainingDate(time);
+            
+            if (position === '1')
+                position = '2';
+            else
+                position = '1';
+            var updateText = 'Latitude :' + String(lat) + '/n Longitude :' + String(lon) ;
 
-        var freeModeElement = document.getElementById('freeMode');
-        var droneModeElement = document.getElementById('droneMode');
-
-        // Create a follow camera by tracking the drone entity
-        function setViewMode() {
-            if (droneModeElement.checked) {
-                viewer.trackedEntity = drone;
-
-            } else {
-                viewer.trackedEntity = undefined;
-              
-                viewer.scene.camera.flyTo(homeCameraView);
-
-            }
+            return updateText;
         }
 
-        freeModeElement.addEventListener('change', setViewMode);
-        droneModeElement.addEventListener('change', setViewMode);
+        viewer.trackedEntity = drone;
+       
 
-        viewer.trackedEntityChanged.addEventListener(function () {
-            if (viewer.trackedEntity === drone) {
-                freeModeElement.checked = false;
-                droneModeElement.checked = true;
+       // viewer.scene.camera.flyTo(homeCameraView);
+        // Create a follow camera by tracking the drone entity
+       
+        viewer.clock.onTick.addEventListener(function (clock) {
+
+            if (typeof drone.position !== 'undefined')
+            {
+            var position = drone.position.getValue(clock.currentTime);
+            var carto = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
+            var lon = Cesium.Math.toDegrees(carto.longitude).toFixed(6);
+            var lat = Cesium.Math.toDegrees(carto.latitude).toFixed(6); 
+            var updateText =+ '/n Longitude :' + String(lon);
+
+            lonlabel.textContent = 'Latitude :' + String(lat);
+            latlabel.textContent = ' Longitude :' + String(lon);
+            if (IsLive)
+            {
+                drone.position = position;
+            }
             }
         });
 
-        //setInterval(function () {
-        //    dronePromise = czmlDataSource.process('..\\info\\' + FlightID + "?lastdataid=" + LastDataID);
+        if (IsLive)
+        {
+            
+        
+        setInterval(function () {
+            dronePromise = czmlDataSource.process('..\\info\\' + FlightID + "?lastdataid=" + LastDataID);
+            
+
         //    dronePromise.then(function (dataSource) {
         //        var newdrone = {};
         //        newdrone = dataSource.entities.values[0];
@@ -223,8 +246,8 @@ var flight = function (drone, czmlDataSource) {
 
 
 
-        //}, 20000);
-
+        }, 20000);
+        }
     };
 
     return {

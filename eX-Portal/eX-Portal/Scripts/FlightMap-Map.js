@@ -56,6 +56,15 @@ $(document).ready(function () {
 function LoadPolygons() {
   var InnerPolyPath = ToPath(Boundaries[0]);
   var OuterPath = ToPath(Boundaries[1]);
+  //var MinBound = ToPath('25.084338 55.189164,25.084346 55.189108,25.08476 55.18768,25.084794 55.187624,25.084818 55.187592,25.085272 55.187212,25.085318 55.187196,25.085364 55.187224,25.0855 55.187328,25.088436 55.189576,25.088484 55.189644,25.084664 55.189388,25.08463 55.189376,25.084598 55.18936,25.084504 55.1893,25.084414 55.189236,25.084354 55.189188');
+  //var BoundPoly = new google.maps.Polygon({
+  //    paths: MinBound,
+  //    strokeWeight: 0,
+  //    fillColor: 'rgb(101, 186, 25)',
+  //    fillOpacity: 0.2,
+  //    map: map,
+  //    clickable: false
+  //});
   if (InnerPolyPath.length < 1) return;
   if (OuterPath.length < 1) return;
 
@@ -91,6 +100,7 @@ function LoadPolygons() {
     map: map,
     clickable: false
   });
+ 
 }
 
 function ToPath(Coordinates) {
