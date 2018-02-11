@@ -43,5 +43,6 @@ namespace eX_Portal.Models
         public Nullable<bool> IsLogData { get; set; }
         public int BlackBoxID { get; set; }
         public int BlackBoxSerial { get; set; }
+        public string Yaw { get; set; }
     }
 }

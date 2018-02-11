@@ -299,6 +299,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.DCAA_PermitDetail' does not have a 
           <Property Name="IsLogData" Type="bit" />
           <Property Name="BlackBoxID" Type="int" Nullable="false" />
           <Property Name="BlackBoxSerial" Type="int" Nullable="false" />
+          <Property Name="Yaw" Type="varchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="DroneDefinition">
           <Key>
@@ -398,6 +399,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.DCAA_PermitDetail' does not have a 
           <Property Name="BillingArea" Type="numeric" Precision="15" Scale="2" Nullable="false" />
           <Property Name="BillingVolume" Type="numeric" Precision="15" Scale="2" Nullable="false" />
           <Property Name="NocApplicationID" Type="int" Nullable="false" />
+          <Property Name="BillingCoordinates" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="DroneFlightVideo">
           <Key>
@@ -1053,6 +1055,32 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedOn" Type="datetime" />
         </EntityType>
+        <EntityType Name="MSTR_TrafficMonitor">
+          <Key>
+            <PropertyRef Name="MonitorID" />
+          </Key>
+          <Property Name="MonitorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UniqueID" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+          <Property Name="FlightID" Type="int" />
+          <Property Name="DD" Type="int" Nullable="false" />
+          <Property Name="DR" Type="int" Nullable="false" />
+          <Property Name="DU" Type="int" Nullable="false" />
+          <Property Name="DL" Type="int" Nullable="false" />
+          <Property Name="RD" Type="int" Nullable="false" />
+          <Property Name="RR" Type="int" Nullable="false" />
+          <Property Name="RU" Type="int" Nullable="false" />
+          <Property Name="RL" Type="int" Nullable="false" />
+          <Property Name="UD" Type="int" Nullable="false" />
+          <Property Name="UR" Type="int" Nullable="false" />
+          <Property Name="UU" Type="int" Nullable="false" />
+          <Property Name="UL" Type="int" Nullable="false" />
+          <Property Name="LD" Type="int" Nullable="false" />
+          <Property Name="LR" Type="int" Nullable="false" />
+          <Property Name="LU" Type="int" Nullable="false" />
+          <Property Name="LL" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="MSTR_User">
           <Key>
             <PropertyRef Name="UserId" />
@@ -1101,6 +1129,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="Nationality" Type="nvarchar" MaxLength="50" />
           <Property Name="VideoKey" Type="nvarchar" MaxLength="100" />
           <Property Name="ActivationKey" Type="nvarchar" MaxLength="50" />
+          <Property Name="DCAAReferenceID" Type="bigint" />
         </EntityType>
         <EntityType Name="MSTR_User_Pilot">
           <Key>
@@ -1760,6 +1789,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="MSTR_Product" EntityType="Self.MSTR_Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Profile" EntityType="Self.MSTR_Profile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_RPAS_User" EntityType="Self.MSTR_RPAS_User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MSTR_TrafficMonitor" EntityType="Self.MSTR_TrafficMonitor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User" EntityType="Self.MSTR_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot" EntityType="Self.MSTR_User_Pilot" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_User_Pilot_Certification" EntityType="Self.MSTR_User_Pilot_Certification" Schema="dbo" store:Type="Tables" />
@@ -2379,6 +2409,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="PayLoadTrafficData" EntityType="ExponentPortalModel.PayLoadTrafficData" />
           <EntitySet Name="PortalAlert_User" EntityType="ExponentPortalModel.PortalAlert_User" />
           <EntitySet Name="DroneFlight" EntityType="ExponentPortalModel.DroneFlight" />
+          <EntitySet Name="MSTR_TrafficMonitor" EntityType="ExponentPortalModel.MSTR_TrafficMonitor" />
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2712,6 +2743,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="Nationality" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="VideoKey" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ActivationKey" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DCAAReferenceID" Type="Int64" />
         </EntityType>
         <EntityType Name="PayLoadMapData">
           <Key>
@@ -3159,6 +3191,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="IsLogData" Type="Boolean" />
           <Property Name="BlackBoxID" Type="Int32" Nullable="false" />
           <Property Name="BlackBoxSerial" Type="Int32" Nullable="false" />
+          <Property Name="Yaw" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="FlightMapData">
           <Key>
@@ -3820,6 +3853,33 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="BillingArea" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
           <Property Name="BillingVolume" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
           <Property Name="NocApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="BillingCoordinates" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MSTR_TrafficMonitor">
+          <Key>
+            <PropertyRef Name="MonitorID" />
+          </Key>
+          <Property Name="MonitorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UniqueID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightID" Type="Int32" />
+          <Property Name="DD" Type="Int32" Nullable="false" />
+          <Property Name="DR" Type="Int32" Nullable="false" />
+          <Property Name="DU" Type="Int32" Nullable="false" />
+          <Property Name="DL" Type="Int32" Nullable="false" />
+          <Property Name="RD" Type="Int32" Nullable="false" />
+          <Property Name="RR" Type="Int32" Nullable="false" />
+          <Property Name="RU" Type="Int32" Nullable="false" />
+          <Property Name="RL" Type="Int32" Nullable="false" />
+          <Property Name="UD" Type="Int32" Nullable="false" />
+          <Property Name="UR" Type="Int32" Nullable="false" />
+          <Property Name="UU" Type="Int32" Nullable="false" />
+          <Property Name="UL" Type="Int32" Nullable="false" />
+          <Property Name="LD" Type="Int32" Nullable="false" />
+          <Property Name="LR" Type="Int32" Nullable="false" />
+          <Property Name="LU" Type="Int32" Nullable="false" />
+          <Property Name="LL" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4387,6 +4447,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="MSTR_User">
             <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_User">
               <MappingFragment StoreEntitySet="MSTR_User">
+                <ScalarProperty Name="DCAAReferenceID" ColumnName="DCAAReferenceID" />
                 <ScalarProperty Name="ActivationKey" ColumnName="ActivationKey" />
                 <ScalarProperty Name="VideoKey" ColumnName="VideoKey" />
                 <ScalarProperty Name="Nationality" ColumnName="Nationality" />
@@ -4863,6 +4924,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="DroneDatas">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneData">
               <MappingFragment StoreEntitySet="DroneData">
+                <ScalarProperty Name="Yaw" ColumnName="Yaw" />
                 <ScalarProperty Name="BlackBoxSerial" ColumnName="BlackBoxSerial" />
                 <ScalarProperty Name="BlackBoxID" ColumnName="BlackBoxID" />
                 <ScalarProperty Name="IsLogData" ColumnName="IsLogData" />
@@ -5480,6 +5542,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySetMapping Name="DroneFlight">
             <EntityTypeMapping TypeName="ExponentPortalModel.DroneFlight">
               <MappingFragment StoreEntitySet="DroneFlight">
+                <ScalarProperty Name="BillingCoordinates" ColumnName="BillingCoordinates" />
                 <ScalarProperty Name="NocApplicationID" ColumnName="NocApplicationID" />
                 <ScalarProperty Name="BillingVolume" ColumnName="BillingVolume" />
                 <ScalarProperty Name="BillingArea" ColumnName="BillingArea" />
@@ -5537,6 +5600,33 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="GSCID" ColumnName="GSCID" />
                 <ScalarProperty Name="PilotID" ColumnName="PilotID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_TrafficMonitor">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_TrafficMonitor">
+              <MappingFragment StoreEntitySet="MSTR_TrafficMonitor">
+                <ScalarProperty Name="LL" ColumnName="LL" />
+                <ScalarProperty Name="LU" ColumnName="LU" />
+                <ScalarProperty Name="LR" ColumnName="LR" />
+                <ScalarProperty Name="LD" ColumnName="LD" />
+                <ScalarProperty Name="UL" ColumnName="UL" />
+                <ScalarProperty Name="UU" ColumnName="UU" />
+                <ScalarProperty Name="UR" ColumnName="UR" />
+                <ScalarProperty Name="UD" ColumnName="UD" />
+                <ScalarProperty Name="RL" ColumnName="RL" />
+                <ScalarProperty Name="RU" ColumnName="RU" />
+                <ScalarProperty Name="RR" ColumnName="RR" />
+                <ScalarProperty Name="RD" ColumnName="RD" />
+                <ScalarProperty Name="DL" ColumnName="DL" />
+                <ScalarProperty Name="DU" ColumnName="DU" />
+                <ScalarProperty Name="DR" ColumnName="DR" />
+                <ScalarProperty Name="DD" ColumnName="DD" />
+                <ScalarProperty Name="FlightID" ColumnName="FlightID" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
+                <ScalarProperty Name="MonitorID" ColumnName="MonitorID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1,13 +1,13 @@
 ﻿var FlightCharts = function () {
   var ChartAltitude = new FlightMapChart('ChartAltitude', 'Altitude','Meter');
   var ChartSpeed = new FlightMapChart('ChartSpeed','Speed','M/S');
-  var ChartSatalite = new FlightMapChart('ChartSatalite', 'Satalite', 'Satalite');
+  var ChartSatellite = new FlightMapChart('ChartSatellite', 'Satellite', 'Satellite');
 
   var _ChartData = {
     xAxis: [],
     Altitude: [],
     Speed: [],
-    Satalite: []
+    Satellite: []
   };
 
   var _AddChartData = function (Data) {
@@ -15,7 +15,7 @@
       var DataItem = Data[i];
       _ChartData.xAxis.push(_FmtTime(DataItem.FlightTime));
       _ChartData.Speed.push(Math.round(DataItem.Speed * 10) / 10);
-      _ChartData.Satalite.push(DataItem.Satellites);
+      _ChartData.Satellite.push(DataItem.Satellites);
       _ChartData.Altitude.push(Math.round(DataItem.Altitude, 0));
     }
   };
@@ -35,15 +35,15 @@
 
     var xAxis = _ChartData.xAxis.slice(StartIndex, EndIndex);
     var Speed = new ChartSeries();
-    var Satalite = new ChartSeries();
+    var Satellite = new ChartSeries();
     var Altitude = new ChartSeries();
     Speed.AddArray(_ChartData.Speed.slice(StartIndex, EndIndex));
-    Satalite.AddArray(_ChartData.Satalite.slice(StartIndex, EndIndex));
+    Satellite.AddArray(_ChartData.Satellite.slice(StartIndex, EndIndex));
     Altitude.AddArray(_ChartData.Altitude.slice(StartIndex, EndIndex));
 
     ChartAltitude.SetData(xAxis, Altitude);
     ChartSpeed.SetData(xAxis, Speed);
-    ChartSatalite.SetData(xAxis, Satalite);
+    ChartSatellite.SetData(xAxis, Satellite);
     
   };
 
@@ -52,22 +52,22 @@
 
     var aAltitude = new ChartSeries();
     var aSpeed = new ChartSeries();
-    var aSatalite = new ChartSeries();
+    var aSatellite = new ChartSeries();
     var xAxis = [];
 
     var MinAltitude = Data[0].Altitude;
     var MinSpeed = Data[0].Speed;
-    var MinSatalite = Data[0].Satellites;
+    var MinSatellite = Data[0].Satellites;
     for (var i = 0; i < Data.length; i++) {
       var DataItem = Data[i];
       xAxis.push(_FmtTime(DataItem.FlightTime));
       aSpeed.Add(Math.round(DataItem.Speed * 10)/10);
-      aSatalite.Add(DataItem.Satellites);
+      aSatellite.Add(DataItem.Satellites);
       aAltitude.Add(Math.round(DataItem.Altitude,0));
     }
     ChartAltitude.Init(xAxis, aAltitude);
     ChartSpeed.Init(xAxis, aSpeed);
-    ChartSatalite.Init(xAxis, aSatalite);
+    ChartSatellite.Init(xAxis, aSatellite);
   };
 
   var _FmtTime = function (sNetDate) {
@@ -155,6 +155,7 @@ function FlightMapChart(DivID, SeriesName, SeriesUnit) {
   };
 
   var _SetData = function (xAxis, yAxisSeries) {
+    if (_Chart == null) return false;
     _Chart.series[0].xAxis.setCategories(xAxis, false);
     _Chart.yAxis[0].setExtremes(yAxisSeries.Min() - 1, yAxisSeries.Max());
     _Chart.series[0].setData(yAxisSeries.Get(), false);

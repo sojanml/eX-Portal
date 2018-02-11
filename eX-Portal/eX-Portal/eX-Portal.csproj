@@ -266,12 +266,15 @@
     <Compile Include="Models\BillingRulesGroup.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FlightMapDelayReport_Result.cs" />
     <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FlightMapDelayReport_Result.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MSTR_NOC.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MSTR_TrafficMonitor.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NOC_DataAnnotationsHelper.cs" />
@@ -360,9 +363,6 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DroneDocument.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DroneFlightVideo.cs">
@@ -1330,12 +1330,12 @@
     <Content Include="Scripts\FlightMap-Chart.js" />
     <Content Include="Scripts\FlightMap-DynamicZone.js" />
     <Content Include="Scripts\FlightMap-Map.js" />
+    <Content Include="Scripts\FlightMapView-3D.js" />
     <Content Include="Scripts\FlightMapView-Charts.js" />
     <Content Include="Scripts\FlightMapView-Map.js" />
     <Content Include="Scripts\FlightMapView-Slider.js" />
     <Content Include="Scripts\FlightMapView.js" />
     <Content Include="Scripts\FlightSetup.js" />
-    <Content Include="Scripts\Flight_3D.js" />
     <Content Include="Scripts\Flight_Gps_Map.js" />
     <Content Include="Scripts\geotag.js" />
     <Content Include="Scripts\GoogleMapLabel.js" />

@@ -57,7 +57,7 @@
       <div id="FlightCharts">
         <div class="flightchart" id="ChartAltitude"></div>
         <div class="flightchart" id="ChartSpeed"></div>
-        <div class="flightchart" id="ChartSatalite"></div>
+        <div class="flightchart" id="ChartSatellite"></div>
       </div>
       <div id="FlightChartInfos">
         <div class="flightchartinfo">
@@ -69,10 +69,10 @@
           <div class="title">Speed</div>
         </div>
         <div class="flightchartinfo">
-          <div class="title">Satalite</div>
+          <div class="title">Satellite</div>
           <div class="sub-title">
-            Min: <span id="info-satalite-min">0</span>
-            Max: <span id="info-satalite-max">0</span>
+            Min: <span id="info-Satellite-min">0</span>
+            Max: <span id="info-Satellite-max">0</span>
           </div>
         </div>
       </div>
@@ -147,6 +147,9 @@
         <div id="btn1x" class="active round-button">1X</div>
         <div id="btn2x" class="round-button">2X</div>
         <div id="btn4x" class="round-button">4X</div>
+        <div id="btn2D" style="display:none;" class="button"><span class="icon">&#xf279;</span><span class="text">2D</span></div>
+        <div id="btn3D" class="button"><span class="icon">&#xf0ac;</span><span class="text">3D</span></div>
+
         <div id="btnExport" class="button"><span class="icon">&#xf093;</span><span class="text">Export</span></div>
       </div>
       <div id="FlightSlider">
@@ -155,7 +158,6 @@
         <div id="FlightSliderBar"></div>
         <div style="" id="FlightSliderEnd">00:00:00</div>
       </div>
-
     </div>
   </div><!-- FlightInfoColumn2_3_merge-->
 </section>
@@ -190,16 +192,19 @@
   <div id="ComSection">
     <div class="caption">COMMS MODULE</div>
   </div>
-  <div id="GoogleMap">
-    
-  </div>
+  <div id="GoogleMap"></div>
+  <div style="display:none;" id="CesiumMap"></div>
 </section>
 
-<p>Some other data is here...</p>
+
+
+
 @section header {
+  <link type="text/css" rel="stylesheet" href="~/Cesium/Widgets/widgets.css" />
   <link rel="stylesheet" href="~/jquery-ui/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="~/Scripts/jQueryFlightIndicators/css/flightindicators.css" />
   <link rel="stylesheet" type="text/css" href="~/Content/exPortal_V3_FlightMapView.css" />  
+  
   <style type="text/css">
   </style>
 }
@@ -208,7 +213,8 @@
   <script type="text/javascript">
     var FlightInfo = {
       FlightID: @Model.FlightID,
-      RPAS_Image: '@Model.RPAS_Image'
+      RPAS_Image: '@Model.RPAS_Image',
+      IsLive: @(Model.IsLive ? "true" : "false")
     };
   </script>
   <!--General Libraries-->
@@ -217,11 +223,13 @@
   <script type="text/javascript" src="~/Scripts/jQueryFlightIndicators/js/jquery.flightindicators.modified.js"></script>
   <script src="~/jquery-ui/jquery-ui.js"></script>
   <script src="~/Scripts/jquery.animateNumber.js"></script>
+  <script src="~/Cesium/Cesium.js"></script>
 
   <!-- Custom Scripts-->
   <script type="text/javascript" src="~/Scripts/ADSB-Map.js"></script>
   <script type="text/javascript" src="~/Scripts/FlightMapView-Charts.js"></script>
   <script type="text/javascript" src="~/Scripts/FlightMapView-Map.js"></script>
-<script type="text/javascript" src="~/Scripts/FlightMapView-Slider.js"></script>
+  <script type="text/javascript" src="~/Scripts/FlightMapView-Slider.js"></script>
+  <script type="text/javascript" src="~/Scripts/FlightMapView-3D.js"></script>
   <script type="text/javascript" src="~/Scripts/FlightMapView.js"></script>
 }

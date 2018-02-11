@@ -2,6 +2,7 @@
   var _slider = null;
   var _OnSlideEvent = null;
   var _SliderData = null;
+  var _SliderActiveTime = null;
 
   var _init = function () {
     _slider = $("#FlightSliderBar").slider({
@@ -26,10 +27,13 @@
     var StartTime = _FmtTime(DataFirst.FlightDateTime);
     var EndTime = _FmtTime(DataLast.FlightDateTime);
     var Max = _TheData.length - 1;
+
+    if (_SliderActiveTime == null) _SliderActiveTime = StartTime;
+
     _slider.slider("option", "max", Max);
     $('#FlightSliderStart').html(StartTime);
     $('#FlightSliderEnd').html(EndTime);
-    $('div#FlightSliderCenter').html(StartTime);
+    $('div#FlightSliderCenter').html(_SliderActiveTime);
     _SliderData = _TheData;
   };
 

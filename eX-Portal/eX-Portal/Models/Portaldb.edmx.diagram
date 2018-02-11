@@ -84,6 +84,7 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PayLoadTrafficData" Width="1.5" PointX="12.375" PointY="16.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.PortalAlert_User" Width="1.5" PointX="14.375" PointY="16.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.DroneFlight" Width="1.5" PointX="16.375" PointY="16.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_TrafficMonitor" Width="1.5" PointX="0.75" PointY="18.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -14,12 +14,11 @@ var FlightMapData = function () {
   var _DataAddedIndex = 0;
   var _IsPaused = false;
 
+
   var PlayIndex = -1;
   var PlayDateTime = null;
   var PlayPositionTime = null;
-
   var _MapPlayInterval = 1000;
-
 
   var _setScreenTextToIndex = function (Index) {
     var Data = _FullData[Index];
@@ -109,29 +108,95 @@ var FlightMapData = function () {
       FlightMap.AutoZoom();
       FlightMapSlider.SetData(_FullData);
       FlightMapTable.SetData(_FullData);
+      FlightMapView3D.AddData(_FullData);
 
-      //Set date time to initilize
-      PlayPositionTime = _FullData[0].FlightDateTime;
       PlayIndex = 0;
-      _setScreenTextToIndex(0);
+      PlayPositionTime = _FullData[PlayIndex].FlightDateTime;
+      _setScreenTextToIndex(PlayIndex);
+
+      if (FlightInfo.IsLive) {
+        _InitilizeLive();
+      }
       return;
-    }
+    } 
 
     //Convert Date time to DateTime Object
     for (var i = 0; i < Data.Data.length; i++) {
-      Data.Data[i].FlightDateTime = toDateTime(Data.Data[i].FlightTime);
+      Data.Data[i].FlightDateTime = Util.toDateTime(Data.Data[i].FlightTime);
     }
 
     //add the loaded data to map
     FlightMap.AddMapData(Data.Data);
     FlightCharts.AddChartData(Data.Data);
     _FullData = _FullData.concat(Data.Data);
+    //Update the last flight ID
+    if (_FullData.length > 0) _FlightMapDataID = _FullData[_FullData.length - 1].FlightMapDataID;
+
+    /*
+    //Set date time to initilize
+    if (FlightInfo.IsLive) {
+      PlayIndex = _FullData.length - 1;
+      PlayPositionTime = _FullData[PlayIndex].FlightDateTime;
+      FlightMapSlider.SetData(_FullData);
+      FlightMapSlider.SetIndex(PlayIndex);
+      
+      _MoveToIndex(PlayIndex);
+    } 
+    */
 
     //Load next set of data
     if (_OnMapLoadDataTimer) window.clearTimeout(_OnMapLoadDataTimer);
-    _FlightMapDataID = Data.Data[Data.Data.length - 1].FlightMapDataID;
-    _LoadMapData(_onMapDataLoad);
+    _LoadMapData(_onMapDataLoad);    
   };
+
+  var _onMapDataLoadLive = function (SourceData) {
+    var Data = SourceData.Data;
+    if (Data.length < 1) {
+      _LoadNextLiveData();
+      return;
+    }
+
+    //Convert Date time to DateTime Object
+    for (var i = 0; i < Data.length; i++) {
+      Data[i].FlightDateTime = Util.toDateTime(Data[i].FlightTime);
+    }
+
+    FlightMap.AddMapData(Data);
+    FlightCharts.AddChartData(Data);
+    FlightMapView3D.AddDataLive(Data);
+
+    _FullData = _FullData.concat(Data);
+    FlightMapSlider.SetData(_FullData);
+    FlightMapTable.SetData(_FullData);
+
+    PlayIndex = _FullData.length - 1;
+    PlayPositionTime = _FullData[PlayIndex].FlightDateTime;
+
+    _setScreenTextToIndex(PlayIndex);
+    FlightMapSlider.SetIndex(PlayIndex);
+    FlightMap.MoveToIndex(PlayIndex);
+    _FlightMapDataID = _FullData[PlayIndex].FlightMapDataID;
+
+    _LoadNextLiveData();
+
+  }
+
+
+  var _InitilizeLive = function () {
+    PlayIndex = _FullData.length - 1;
+    PlayPositionTime = _FullData[PlayIndex].FlightDateTime;
+    FlightMapView3D.Play(PlayPositionTime);
+
+    if (_OnMapLoadDataTimer) window.clearTimeout(_OnMapLoadDataTimer);
+    _LoadMapData(_onMapDataLoadLive);
+  }
+
+  var _LoadNextLiveData = function () {
+    if (_OnMapLoadDataTimer) window.clearTimeout(_OnMapLoadDataTimer);
+    _OnMapLoadDataTimer = window.setTimeout(function () {
+      _LoadMapData(_onMapDataLoadLive)
+    }, 1000);
+  }
 
   var _OnSlideTimer = null;
   var _OnSlide = function (event, ui) {
@@ -145,23 +210,12 @@ var FlightMapData = function () {
       var DataValue = _FullData[index];
       PlayIndex = index;
       PlayPositionTime = _FullData[PlayIndex].FlightDateTime;
+      FlightMapView3D.MoveTo(PlayPositionTime);
       _MoveToIndex(PlayIndex);
     }, 100)
   };
 
-  var toDateTime = function (sNetDate) {
-    var nDate = new Date();
-    if (sNetDate !== null) {
-      var r = /\/Date\(([0-9]+)\)\//i
-      var matches = sNetDate.match(r);
-      if (matches.length === 2) {
-        nDate = new Date(parseInt(matches[1]));
-      }
-    }
-    //Convert date to UTC
-    //nDate.setMinutes(nDate.getMinutes() + nDate.getTimezoneOffset());
-    return nDate;
-  };
+
 
   var _AnimateAmountTo = function (Element, Amount, FixedPosition) {
     var Now = parseFloat(Element.text());
@@ -189,24 +243,13 @@ var FlightMapData = function () {
       .animateNumber({
         number: ToSeconds,
         numberStep: function (now, tween) {
-          $(tween.elem).text(toTime(now));
+          $(tween.elem).text(Util.toTime(now));
         }
       },
       200
       );
   };
 
-  var toTime = function (time) {
-    var sec_num = parseInt(time, 10); // don't forget the second param
-    var hours = Math.floor(sec_num / 3600);
-    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-    var seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-    if (hours < 10) { hours = "0" + hours; }
-    if (minutes < 10) { minutes = "0" + minutes; }
-    if (seconds < 10) { seconds = "0" + seconds; }
-    return hours + ':' + minutes + ':' + seconds;
-  };
 
   var _fnBtnPlayClick = function (e) {
     $('#btnPlay').css({ 'display': 'none' });
@@ -214,6 +257,7 @@ var FlightMapData = function () {
 
     if (_MapPlayTimer) window.clearInterval(_MapPlayTimer);
     _MapPlayTimer = window.setInterval(_fnBtnPlayOnTimer, _MapPlayInterval);
+    FlightMapView3D.Play(PlayPositionTime);
   };
 
   var _fnBtnPauseClick = function (e) {
@@ -221,6 +265,7 @@ var FlightMapData = function () {
     $('#btnPause').css({ 'display': 'none' });
     if (_MapPlayTimer) window.clearInterval(_MapPlayTimer);
     _MapPlayTimer = null;
+    FlightMapView3D.Pause(PlayPositionTime);
   };
 
   var _fnChangeSpeedClick = function () {
@@ -228,12 +273,15 @@ var FlightMapData = function () {
     switch (btn) {
       case '1X':
         _MapPlayInterval = 1000;
+        FlightMapView3D.setSpeed(1);
         break;
       case '2X':
         _MapPlayInterval = 500;
+        FlightMapView3D.setSpeed(2);
         break;
       case '4X':
         _MapPlayInterval = 250;
+        FlightMapView3D.setSpeed(4);
         break;        
     }
     if (_MapPlayTimer) {
@@ -258,7 +306,7 @@ var FlightMapData = function () {
     if (PlayPositionTime < NextIndexTime) return;
 
     PlayIndex++;
-    FlightMapSlider.SetIndex(PlayIndex);
+    FlightMapSlider.SetIndex(PlayIndex);    
     _MoveToIndex(PlayIndex);
   };
 
@@ -269,6 +317,25 @@ var FlightMapData = function () {
     FlightMapTable.AddRow(_FullData, index);
   }
 
+  var _fn2DClick = function (e) {
+    $('#btn2D').hide();
+    $('#btn3D').show();
+    $('#GoogleMap').show();
+    $('#CesiumMap').hide();
+  }
+
+  var _fn3DClick = function (e) {
+    $('#btn2D').show();
+    $('#btn3D').hide();
+    $('#GoogleMap').hide();
+    $('#CesiumMap').show();
+    FlightMapView3D.Init();
+    if (_MapPlayTimer != null) {
+      FlightMapView3D.MoveTo(PlayPositionTime);
+    }
+    if (FlightInfo.IsLive) FlightMapView3D.Play(PlayPositionTime);
+
+  }
 
   var _init = function () {
     _LoadChartData(_onChartDataLoad);
@@ -276,6 +343,8 @@ var FlightMapData = function () {
     $('#btnPlay').on("click", _fnBtnPlayClick);
     $('#btnPause').on("click", _fnBtnPauseClick);
     $('div.round-button').on("click", _fnChangeSpeedClick);
+    $('#btn2D').on("click", _fn2DClick);
+    $('#btn3D').on("click", _fn3DClick);
   };
 
   
@@ -309,7 +378,7 @@ var FlightMapTable = function () {
   var _getRow = function (Data) {
     var HTML = $(
       '<li>\n' +
-      '  <div class="col1">' + _FmtTime(Data.FlightDateTime) + '</div>\n' +
+      '  <div class="col1">' + Util.FmtTime(Data.FlightDateTime) + '</div>\n' +
       '  <div class="col2">' + Data.Lat.toFixed(6) + '</div>\n' +
       '  <div class="col3">' + Data.Lng.toFixed(6) + '</div>\n' +
       '  <div class="col4">' + Data.Altitude.toFixed(1) + '</div>\n' +
@@ -325,15 +394,6 @@ var FlightMapTable = function () {
 
 
 
-  var _FmtTime = function (nDate) {
-    return _pad(nDate.getHours()) + ':' + _pad(nDate.getMinutes()) + ':' + _pad(nDate.getSeconds());
-  };
-
-  var _pad = function (Num) {
-    if (Num >= 10) return Num;
-    return '0' + Num;
-  };
-
   return {
     AddRow: _AddRow,
     SetData: _AddEndRows
@@ -345,12 +405,43 @@ var Util = function () {
     return _pad(nDate.getHours()) + ':' + _pad(nDate.getMinutes()) + ':' + _pad(nDate.getSeconds());
   };
 
+
+  var _toDateTime = function (sNetDate) {
+    var nDate = new Date();
+    if (sNetDate !== null) {
+      var r = /\/Date\(([0-9]+)\)\//i
+      var matches = sNetDate.match(r);
+      if (matches.length === 2) {
+        nDate = new Date(parseInt(matches[1]));
+      }
+    }
+    //Convert date to UTC
+    //nDate.setMinutes(nDate.getMinutes() + nDate.getTimezoneOffset());
+    return nDate;
+  };
+
+
   var _pad = function (Num) {
     if (Num >= 10) return Num;
     return '0' + Num;
   };
 
+
+  var _toTime = function (time) {
+    var sec_num = parseInt(time, 10); // don't forget the second param
+    var hours = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+    if (hours < 10) { hours = "0" + hours; }
+    if (minutes < 10) { minutes = "0" + minutes; }
+    if (seconds < 10) { seconds = "0" + seconds; }
+    return hours + ':' + minutes + ':' + seconds;
+  };
+
   return {
-    FmtTime: _FmtTime
+    FmtTime: _FmtTime,
+    toDateTime: _toDateTime,
+    toTime: _toTime 
   };
 }();

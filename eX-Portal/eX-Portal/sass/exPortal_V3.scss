@@ -315,7 +315,7 @@ nav.breadcrumbs {
   $VerticalGap: 8px;
   @include General($VerticalGap);
   @include FontSizeSettings($VerticalGap, 12pt);
-  @include SectionSizes($VerticalGap, $MaxSize, 50px);
+  @include SectionSizes($VerticalGap, $MaxSize, 30px);
 }
 
 @media screen and (min-width: 1080px) {
@@ -323,13 +323,13 @@ nav.breadcrumbs {
   $VerticalGap: 12px;
   @include General($VerticalGap);
   @include FontSizeSettings($VerticalGap, 13pt);
-  @include SectionSizes($VerticalGap, $MaxSize, 60px);
+  @include SectionSizes($VerticalGap, $MaxSize, 40px);
 }
 
 @media screen and (min-width: 1320px) {
-  $MaxSize: 1320px;
+  $MaxSize: 1260px;
   $VerticalGap: 15px;
   @include General($VerticalGap);
   @include FontSizeSettings($VerticalGap, 14pt);
-  @include SectionSizes($VerticalGap, $MaxSize, 70px);
+  @include SectionSizes($VerticalGap, $MaxSize, 50px);
 }
