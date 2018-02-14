@@ -170,6 +170,10 @@ div.instrument.attitude div.roll {
   margin-left: -8px;
 }
 
+.cesium-viewer .cesium-widget-credits {
+  display: none !important;
+}
+
 div.SpotMarker {
   width: 16px;
   height: 16px;
@@ -470,7 +474,8 @@ div#FlightData li::after {
 
 section#BottomSection div#BottomMapInfo,
 section#BottomSection div#ComSection,
-section#BottomSection div#GoogleMap {
+section#BottomSection div#GoogleMap,
+section#BottomSection div#CesiumMap {
   float: left;
 }
 section#BottomSection div#BottomMapInfo {
@@ -515,7 +520,8 @@ section#BottomSection div#ComSection div.caption {
   font-weight: 800;
   letter-spacing: 5px;
 }
-section#BottomSection div#GoogleMap {
+section#BottomSection div#GoogleMap,
+section#BottomSection div#CesiumMap {
   background-color: silver;
 }
 section#BottomSection::after {
@@ -634,6 +640,10 @@ section#BottomSection::after {
     font-size: 28.8px;
   }
 
+  div#FlightStatusBar {
+    margin-left: 41.28px;
+  }
+
   div#FlightStatusMetar {
     width: 246.4px;
     height: 49.28px;
@@ -690,7 +700,7 @@ section#BottomSection::after {
     width: 430.4px;
   }
   div#FlightInfoColumn4 div#FlightSlider {
-    width: 124.4px;
+    width: 29.4px;
     margin-left: 8px;
   }
   div#FlightInfoColumn4 div#FlightSliderBar {
@@ -769,7 +779,8 @@ section#BottomSection::after {
 
   div#BottomMapInfo,
   div#ComSection,
-  div#GoogleMap {
+  div#GoogleMap,
+  div#CesiumMap {
     height: 300px;
   }
 
@@ -785,7 +796,8 @@ section#BottomSection::after {
     width: 216px;
   }
 
-  div#GoogleMap {
+  div#GoogleMap,
+  div#CesiumMap {
     width: 432px;
   }
 }
@@ -798,19 +810,19 @@ section#BottomSection::after {
     margin-right: 12px;
   }
   nav#flightmap_infobar ul li div.title-1 {
-    font-size: 15px;
+    font-size: 13px;
   }
   nav#flightmap_infobar ul li div.title-2 {
-    font-size: 14px;
+    font-size: 12px;
   }
   nav#flightmap_infobar ul li div.title-3 {
-    font-size: 13px;
+    font-size: 11px;
   }
 
   nav#flightmap_infobar ul li {
     width: 127.5px;
     margin-right: 12px;
-    font-size: 15px;
+    font-size: 13px;
   }
   nav#flightmap_infobar ul li.pack-of-2 {
     width: 255px;
@@ -886,6 +898,10 @@ section#BottomSection::after {
     font-size: 28.8px;
   }
 
+  div#FlightStatusBar {
+    margin-left: 65.92px;
+  }
+
   div#FlightStatusMetar {
     width: 369.6px;
     height: 73.92px;
@@ -942,7 +958,7 @@ section#BottomSection::after {
     width: 645.6px;
   }
   div#FlightInfoColumn4 div#FlightSlider {
-    width: 339.6px;
+    width: 244.6px;
     margin-left: 8px;
   }
   div#FlightInfoColumn4 div#FlightSliderBar {
@@ -1021,7 +1037,8 @@ section#BottomSection::after {
 
   div#BottomMapInfo,
   div#ComSection,
-  div#GoogleMap {
+  div#GoogleMap,
+  div#CesiumMap {
     height: 300px;
   }
 
@@ -1037,7 +1054,8 @@ section#BottomSection::after {
     width: 324px;
   }
 
-  div#GoogleMap {
+  div#GoogleMap,
+  div#CesiumMap {
     width: 648px;
   }
 }
@@ -1050,22 +1068,22 @@ section#BottomSection::after {
     margin-right: 15px;
   }
   nav#flightmap_infobar ul li div.title-1 {
-    font-size: 18px;
+    font-size: 14px;
   }
   nav#flightmap_infobar ul li div.title-2 {
-    font-size: 17px;
+    font-size: 13px;
   }
   nav#flightmap_infobar ul li div.title-3 {
-    font-size: 16px;
+    font-size: 12px;
   }
 
   nav#flightmap_infobar ul li {
-    width: 155.625px;
+    width: 148.125px;
     margin-right: 15px;
-    font-size: 18px;
+    font-size: 14px;
   }
   nav#flightmap_infobar ul li.pack-of-2 {
-    width: 311.25px;
+    width: 296.25px;
   }
   nav#flightmap_infobar ul li:last-child {
     margin-right: 0px;
@@ -1076,11 +1094,11 @@ section#BottomSection::after {
   }
 
   div#FlightCharts {
-    width: 516px;
+    width: 492px;
     height: 60px;
   }
   div#FlightCharts div.flightchart {
-    width: 162px;
+    width: 154px;
     margin-right: 15px;
     height: 60px;
     float: left;
@@ -1090,10 +1108,10 @@ section#BottomSection::after {
   }
 
   div#FlightChartInfos {
-    width: 516px;
+    width: 492px;
   }
   div#FlightChartInfos div.flightchartinfo {
-    width: 162px;
+    width: 154px;
     margin-right: 15px;
     float: left;
   }
@@ -1108,27 +1126,27 @@ section#BottomSection::after {
   }
 
   div#AttitudeMeter {
-    width: 322.5px;
-    height: 180.6px;
+    width: 307.5px;
+    height: 172.2px;
   }
   div#AttitudeMeter div#attitude {
-    left: 70.95px;
+    left: 67.65px;
   }
   div#AttitudeMeter div#attitude,
   div#AttitudeMeter div.instrument {
-    width: 180.6px;
-    height: 180.6px;
+    width: 172.2px;
+    height: 172.2px;
     border-radius: 50%;
     box-sizing: content-box;
   }
   div#AttitudeMeter div.AttitudePichRollBackground {
-    border-radius: 38.7px;
-    height: 96.75px;
-    top: 41.925px;
+    border-radius: 36.9px;
+    height: 92.25px;
+    top: 39.975px;
   }
   div#AttitudeMeter div.AttitudePitchSection,
   div#AttitudeMeter div.AttitudeRollSection {
-    top: 61.275px;
+    top: 58.425px;
     font-size: 12px;
   }
   div#AttitudeMeter div.AttitudePitchSection span.Number,
@@ -1138,18 +1156,22 @@ section#BottomSection::after {
     font-size: 28.8px;
   }
 
+  div#FlightStatusBar {
+    margin-left: 78.1px;
+  }
+
   div#FlightStatusMetar {
-    width: 451.5px;
-    height: 90.3px;
+    width: 430.5px;
+    height: 86.1px;
     display: block;
     background-color: silver;
-    border-radius: 45.15px;
+    border-radius: 43.05px;
   }
   div#FlightStatusMetar div.MetarTitle {
     box-sizing: border-box;
     background-color: silver;
-    width: 106.3px;
-    height: 106.3px;
+    width: 102.1px;
+    height: 102.1px;
     border-radius: 50%;
     border: 8px solid white;
     float: left;
@@ -1160,8 +1182,8 @@ section#BottomSection::after {
     text-align: center;
     vertical-align: middle;
     display: table-cell;
-    height: 90.3px;
-    width: 90.3px;
+    height: 86.1px;
+    width: 86.1px;
     font-size: 16px;
   }
   div#FlightStatusMetar div.MetarTitle div.content div.refresh {
@@ -1173,28 +1195,28 @@ section#BottomSection::after {
   }
 
   div#FlightInfoColumn1 {
-    width: 516px;
+    width: 492px;
     margin-right: 15px;
   }
 
   div#FlightInfoColumn2 {
-    width: 322.5px;
+    width: 307.5px;
     margin-right: 15px;
   }
 
   div#FlightInfoColumn3 {
-    width: 451.5px;
+    width: 430.5px;
   }
 
   div#FlightInfoColumn2_3_merge {
-    width: 789px;
+    width: 753px;
   }
 
   div#FlightInfoColumn4 {
-    width: 789px;
+    width: 753px;
   }
   div#FlightInfoColumn4 div#FlightSlider {
-    width: 483px;
+    width: 352px;
     margin-left: 8px;
   }
   div#FlightInfoColumn4 div#FlightSliderBar {
@@ -1227,39 +1249,39 @@ section#BottomSection::after {
     font-size: 12px;
   }
   div#FlightData ul li div.col1 {
-    width: 45.6px;
+    width: 43.2px;
     margin-right: 5px;
   }
   div#FlightData ul li div.col2 {
-    width: 68.4px;
+    width: 64.8px;
     margin-right: 5px;
   }
   div#FlightData ul li div.col3 {
-    width: 68.4px;
+    width: 64.8px;
     margin-right: 5px;
   }
   div#FlightData ul li div.col4 {
-    width: 45.6px;
+    width: 43.2px;
     margin-right: 5px;
   }
   div#FlightData ul li div.col5 {
-    width: 45.6px;
+    width: 43.2px;
     margin-right: 5px;
   }
   div#FlightData ul li div.col6 {
-    width: 45.6px;
+    width: 43.2px;
     margin-right: 5px;
   }
   div#FlightData ul li div.col7 {
-    width: 45.6px;
+    width: 43.2px;
     margin-right: 5px;
   }
   div#FlightData ul li div.col8 {
-    width: 45.6px;
+    width: 43.2px;
     margin-right: 5px;
   }
   div#FlightData ul li div.col9 {
-    width: 45.6px;
+    width: 43.2px;
     margin-right: 0px;
   }
   div#FlightData div.data-rows {
@@ -1273,24 +1295,26 @@ section#BottomSection::after {
 
   div#BottomMapInfo,
   div#ComSection,
-  div#GoogleMap {
+  div#GoogleMap,
+  div#CesiumMap {
     height: 350px;
   }
 
   div#BottomMapInfo {
-    width: 132px;
+    width: 126px;
   }
   div#BottomMapInfo li {
-    width: 132px;
+    width: 126px;
     font-size: 13px;
   }
 
   div#ComSection {
-    width: 396px;
+    width: 378px;
   }
 
-  div#GoogleMap {
-    width: 792px;
+  div#GoogleMap,
+  div#CesiumMap {
+    width: 756px;
   }
 
   div#FlightData {

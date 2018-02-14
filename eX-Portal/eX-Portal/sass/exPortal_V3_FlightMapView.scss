@@ -34,6 +34,10 @@ div.instrument.attitude div.roll {
   margin-left: -8px;
 }
 
+.cesium-viewer .cesium-widget-credits {
+  display:none !important;
+}
+
 div.SpotMarker {
   $Size: 16px;
   $Padding: 4px;
@@ -429,7 +433,8 @@ div#FlightData {
 section#BottomSection {
   div#BottomMapInfo,
   div#ComSection,
-  div#GoogleMap {
+  div#GoogleMap,
+  div#CesiumMap {
     float: left;
   }
 
@@ -480,11 +485,12 @@ section#BottomSection {
       text-align: center;
       padding: 5px 0px 5px 0px;
       font-weight: 800;
-      letter-spacing:5px;
+      letter-spacing: 5px;
     }
   }
 
-  div#GoogleMap {
+  div#GoogleMap,
+  div#CesiumMap {
     background-color: silver;
   }
 
@@ -500,15 +506,17 @@ section#BottomSection {
 
   div#BottomMapInfo,
   div#ComSection,
-  div#GoogleMap {
+  div#GoogleMap,
+  div#CesiumMap {
     height: $Height;
   }
 
   div#BottomMapInfo {
     width: $Col1;
+
     li {
-      width:$Col1;
-      font-size:$FontSize;
+      width: $Col1;
+      font-size: $FontSize;
     }
   }
 
@@ -516,7 +524,8 @@ section#BottomSection {
     width: $Col2;
   }
 
-  div#GoogleMap {
+  div#GoogleMap,
+  div#CesiumMap {
     width: $Col3;
   }
 }
@@ -592,6 +601,11 @@ section#BottomSection {
 
 @mixin FlightStatusMetar($VerticalGap, $MaxSize, $FontSize) {
   $MetarHeight: $MaxSize * 0.2;
+  $BorderWidth: 8px;
+
+  div#FlightStatusBar {
+    margin-left: $MetarHeight - $BorderWidth;
+  }
 
   div#FlightStatusMetar {
     width: $MaxSize;
@@ -601,8 +615,6 @@ section#BottomSection {
     border-radius: $MetarHeight/2;
 
     div.MetarTitle {
-
-      $BorderWidth: 8px;
       box-sizing: border-box;
       background-color: silver;
       width: $MetarHeight + ($BorderWidth * 2);
@@ -776,7 +788,7 @@ section#BottomSection {
 
   div#FlightInfoColumn4 {
     $Column4: $Column2 + $Column3 + $VerticalGap;
-    $ScrollerAvail: $Column4 - (306);
+    $ScrollerAvail: $Column4 - (306 + 95);
     width: $Column4;
 
     div#FlightSlider {
@@ -818,7 +830,7 @@ section#BottomSection {
   $MaxSize: 1080px;
   $AvailWidth: $MaxSize - (2 * $VerticalGap);
   $Column1: $AvailWidth * 0.40;
-  @include FlightInfoBar($VerticalGap, $MaxSize, 40px, 15px);
+  @include FlightInfoBar($VerticalGap, $MaxSize, 40px, 13px);
   @include FlightStatus($VerticalGap, $MaxSize, 14px, 260px);
   @include FlightStatusBar($VerticalGap, 26px);
   @include FlightData($Column1, 4px, 10px, 90px);
@@ -827,10 +839,10 @@ section#BottomSection {
 
 @media screen and (min-width: 1320px) {
   $VerticalGap: 15px;
-  $MaxSize: 1320px;
+  $MaxSize: 1260px;
   $AvailWidth: $MaxSize - (2 * $VerticalGap);
   $Column1: $AvailWidth * 0.40;
-  @include FlightInfoBar($VerticalGap, $MaxSize, 50px, 18px);
+  @include FlightInfoBar($VerticalGap, $MaxSize, 50px, 14px);
   @include FlightStatus($VerticalGap, $MaxSize, 16px, 483px);
   @include FlightStatusBar($VerticalGap, 32px);
   @include FlightData($Column1, 5px, 12px, 95px);

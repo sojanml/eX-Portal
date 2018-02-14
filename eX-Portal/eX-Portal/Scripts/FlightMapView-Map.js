@@ -63,6 +63,7 @@ var FlightMap = function () {
     _CurrentIndex = Index;
     var LatLng = _FullPath[Index];
     _DroneIcon.MoveTo(LatLng);
+    _map.panTo(LatLng);
     _PolylineCompleted.setPath(_FullPath.slice(0, Index + 1));
     _PolylinePending.setPath(_FullPath.slice(Index ));
   };
