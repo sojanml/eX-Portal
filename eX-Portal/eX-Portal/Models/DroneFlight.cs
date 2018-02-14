@@ -71,5 +71,6 @@ namespace eX_Portal.Models
         public decimal BillingArea { get; set; }
         public decimal BillingVolume { get; set; }
         public int NocApplicationID { get; set; }
+        public string BillingCoordinates { get; set; }
     }
 }

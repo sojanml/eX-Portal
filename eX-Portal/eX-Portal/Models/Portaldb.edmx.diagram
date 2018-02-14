@@ -84,6 +84,9 @@
         <EntityTypeShape EntityType="ExponentPortalModel.PayLoadTrafficData" Width="1.5" PointX="12.375" PointY="16.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.PortalAlert_User" Width="1.5" PointX="14.375" PointY="16.75" />
         <EntityTypeShape EntityType="ExponentPortalModel.DroneFlight" Width="1.5" PointX="16.375" PointY="16.75" />
+        <EntityTypeShape EntityType="ExponentPortalModel.CommsDetail" Width="1.5" PointX="20.625" PointY="14" />
+        <EntityTypeShape EntityType="ExponentPortalModel.MSTR_Comms" Width="1.5" PointX="18.375" PointY="14.25" />
+        <AssociationConnector Association="ExponentPortalModel.FK__CommsDeta__Messa__6774552F" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

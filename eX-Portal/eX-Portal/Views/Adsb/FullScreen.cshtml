@@ -3,106 +3,134 @@
   ViewBag.Title = "No Fly Zone Dashboard";
   //  Layout = null;
 }
-<div style="width:100%; height:600px; position:relative" >
-  <div id="adsb_map" style="width:100%; height:600px"></div>
-  <div id="AddDiv">
-    <div class="button" id="addzone"><span class="icon green">&#xf055;</span>Add New Zone</div>
-  </div>
-</div>
+<table class="restable" >
+    <tr>
+        <td class="restd">
+            <div id="zonedetails" style="height:20%; padding-bottom:50px;">
+
+                <div id="DetailDiv">
+                    <table cellpadding="0" cellspacing="0" class="adsb-detail">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Organization
+                                </td>
+                                <td colspan="3">
+                                    <ul class="radio">
+                                        <li><input type="radio" name="crust" id="crust1" value="Pilots" /><label for="crust1">Deep dish</label></li>
+                                        <li><input type="radio" name="crust" id="crust2" value="Organisation" /><label for="crust2">Thick</label></li>
+                                        <li><input type="radio" name="crust" id="crust3" value="Region" /><label for="crust3">Hand thrown</label></li>
+                                        <li><input type="radio" name="crust" id="crust4" value="AllPilot" /><label for="crust4">Thin</label></li>
+                                        <li><input type="radio" name="crust" id="crust4" value="AllOrg" /><label for="crust4">Thin</label></li>
+
+                                    </ul>
+                                </td>
+                                <td>
+                                    Pilot
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Name
+                                </td>
+                                <td>
+                                    <input type="text" id="zonename" />
+                                </td>
+                                <td>
+                                    Color
+                                </td>
+                                <td>
+
+                                    <select name="cars" id="colorpicker">
+                                        <option value="Orange">Orange</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    Start Date
+                                </td>
+                                <td>
+                                    <input type="text" id="startdate" class="date-picker" />
+                                </td>
+                                <td>
+                                    End Date
+                                </td>
+                                <td>
+                                    <input type="text" id="enddate" class="date-picker" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Descriiption
+                                </td>
+                                <td colspan="3">
+
+                                    <input type="text" id="desc" style="width:100% ;height:100%" />
+
+                                </td>
+                                <td>
+                                    Start Time
+                                </td>
+                                <td>
+                                    <input type="text" id="starttime" class="form-control time-picker" />
+                                </td>
+                                <td>
+                                    End Time
+                                </td>
+                                <td>
+                                    <input type="text" id="endtime" class="form-control time-picker" />
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message
+                                </td>
+                                <td colspan="3">
+                                    <textarea id="ZoneMessage" style="visibility:visible;width:100%;height:100%"></textarea>
+                                </td>
+                                <td>
+                                    Coordinates
+                                </td>
+                                <td colspan="3">
+                                    <textarea id="ZoneCoordinates" style="visibility:visible;width:100%;height:100%"></textarea>
+                                </td>
+                            </tr>
+                            <tr style="text-align:right;">
+                                <td colspan="5"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="form-toolbar" style="text-align:right;">
+                        <input type="button" id="SaveZone" value="Save Zone" />
+                        <input type="button" id="CancelZone" value="Cancel" />
+                        <input type="button" id="RemoveZone" value="Remove" />
+                    </div>
+                </div>
+            </div>
+        </td>
+        <td  class="restd">
+            <div style="width:100%; height:600px; position:relative">
+                <div id="adsb_map" style="width:100%; height:600px"></div>
+                <div id="AddDiv">
+                    <div class="button" id="addzone"><span class="icon green">&#xf055;</span>Add New Zone</div>
+                </div>
+            </div>
+        </td>
+
+    </tr>
+    
+
+</table>
 
 
-<div id="zonedetails" style="height:20%; padding-bottom:50px;">
 
-  <div id="DetailDiv">
-    <table cellpadding="0" cellspacing="0" class="adsb-detail">
-      <tbody>
-        <tr>
-          <td>
-            Name
-          </td>
-          <td>
-            <input type="text" id="zonename" />
-          </td>
-          <td>
-            Color
-          </td>
-          <td>
-           
-              <select name="cars" id="colorpicker">
-                  <option value="Orange">Orange</option>
-               </select>
-          </td>
-          <td>
-            Start Date
-          </td>
-          <td>
-            <input type="text" id="startdate" class="date-picker" />
-          </td>
-          <td>
-            End Date
-          </td>
-          <td>
-            <input type="text" id="enddate" class="date-picker" />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Descriiption
-          </td>
-          <td colspan="3">
 
-            <input type="text" id="desc" style="width:100% ;height:100%" />
 
-          </td>
-          <td>
-            Start Time
-          </td>
-          <td>
-            <input type="text" id="starttime" class="form-control time-picker" />
-          </td>
-          <td>
-            End Time
-          </td>
-          <td>
-            <input type="text" id="endtime" class="form-control time-picker" />
-          </td>
 
-        </tr>
-        <tr>
-            <td>
-                Message
-            </td>
-            <td colspan="3">
-                <textarea id="ZoneMessage" style="visibility:visible;width:100%;height:100%"></textarea>
-            </td>
-          <td>
-            Coordinates
-          </td>
-          <td colspan="3">
-            <textarea id="ZoneCoordinates" style="visibility:visible;width:100%;height:100%"></textarea>
-          </td>
-        </tr>
-        <tr style="text-align:right;">
-          <td colspan="5"></td>
-          <td>
-            
-          </td>
-          <td>
-            
-          </td>
-          <td>
-            
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="form-toolbar" style="text-align:right;">
-      <input type="button" id="SaveZone" value="Save Zone" />
-      <input type="button" id="CancelZone" value="Cancel" />
-      <input type="button" id="RemoveZone" value="Remove" />
-    </div>
-  </div>
-</div>
 
 
 @section header{
@@ -110,6 +138,15 @@
   <link href="~/jquery-ui/jquery-ui.css" rel="stylesheet" />
   <link href="~/jquery-ui/jquery.ui.timepicker.css" rel="stylesheet" />
   <style type="text/css">
+      table.restable {
+          width: 100%;
+          border-collapse: collapse;
+      }
+
+          table.restable td.restd {
+              width: 50%;
+              
+          }
     #AddDiv {
       position: absolute;
       right:60px;
@@ -137,7 +174,7 @@
       color:#4cff00;
     }
     table.adsb-detail {
-      width:100%;
+      
     } 
     table.adsb-detail td {
       padding: 5px 20px 5px 0px;
@@ -147,8 +184,22 @@
       }
       table.adsb-detail td input {
         border-radius:3px;
-        width:100%;
+        
       }
+      ul.radio {
+          margin: 0;
+          padding: 0;
+          margin-left: 0px;
+          list-style: none;
+          width:auto;
+      }
+
+          ul.radio li {
+              border: 1px transparent solid;
+          }
+
+    
+
   </style>
 }
 

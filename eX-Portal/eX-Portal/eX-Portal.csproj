@@ -266,7 +266,6 @@
     <Compile Include="Models\BillingRulesGroup.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FlightMapDelayReport_Result.cs" />
     <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -360,9 +359,6 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DroneDocument.cs">
-      <DependentUpon>Portaldb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DroneFlightVideo.cs">
@@ -909,21 +905,6 @@
     <Content Include="Content\ADSB.css" />
     <Content Include="Content\ADSB2.css" />
     <Content Include="Content\Agriculture.css" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Bold.svg" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-BoldItalic.svg" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBold.svg" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-DemiBoldItalic.svg" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Heavy.svg" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-HeavyItalic.svg" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Italic.svg" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Medium.svg" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-MediumItalic.svg" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-Regular.svg" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLight.svg" />
-    <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLightItalic.svg" />
-    <Content Include="Content\AvenirNextCondensed\demo.html" />
-    <Content Include="Content\AvenirNextCondensed\stylesheet.css" />
-    <Content Include="Content\BillingModule.css" />
     <Content Include="Content\black-box.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -939,7 +920,6 @@
     <Content Include="Content\exPortal_V3.css" />
     <Content Include="Content\exPortal_V3_Common.css" />
     <Content Include="Content\flight-data.css" />
-    <Content Include="Content\flightmap.css" />
     <Content Include="Content\font\vjs.svg" />
     <Content Include="Content\ie.css" />
     <Content Include="Content\internal-dashboard.css" />
@@ -1653,37 +1633,6 @@
     <Content Include="Scripts\rpasUpload.js" />
     <Content Include="Scripts\S3Upload.js" />
     <Content Include="Scripts\site.js" />
-    <Content Include="Scripts\Table-RowSorter\.gitignore" />
-    <Content Include="Scripts\Table-RowSorter\dist\RowSorter.js" />
-    <Content Include="Scripts\Table-RowSorter\examples\basic.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\basic2.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\big_table.php" />
-    <Content Include="Scripts\Table-RowSorter\examples\handler1.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\handler2.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\jquery.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\require.js\require.js" />
-    <Content Include="Scripts\Table-RowSorter\examples\require.js\require_js.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\revert.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\sticky.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\style.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\touch_test.html" />
-    <Content Include="Scripts\Table-RowSorter\Gruntfile.js" />
-    <Content Include="Scripts\Table-RowSorter\src\RowSorter.js" />
-    <Content Include="Scripts\Table-RowSorter\dist\RowSorter.js" />
-    <Content Include="Scripts\Table-RowSorter\examples\basic.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\basic2.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\big_table.php" />
-    <Content Include="Scripts\Table-RowSorter\examples\handler1.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\handler2.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\jquery.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\require.js\require.js" />
-    <Content Include="Scripts\Table-RowSorter\examples\require.js\require_js.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\revert.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\sticky.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\style.html" />
-    <Content Include="Scripts\Table-RowSorter\examples\touch_test.html" />
-    <Content Include="Scripts\Table-RowSorter\Gruntfile.js" />
-    <Content Include="Scripts\Table-RowSorter\src\RowSorter.js" />
     <Content Include="Scripts\traffic-dmat.js" />
     <Content Include="Scripts\TrafficControl-x.js" />
     <Content Include="Scripts\TrafficControl.js" />
@@ -1809,29 +1758,6 @@
     <Content Include="sass\NOC_Register.scss" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.2.1.min.map" />
-    <Content Include="Scripts\Table-RowSorter\.gitignore" />
-    <Content Include="Scripts\Table-RowSorter\bower.json" />
-    <Content Include="Scripts\Table-RowSorter\CHANGES" />
-    <Content Include="Scripts\Table-RowSorter\LICENSE" />
-    <Content Include="Scripts\Table-RowSorter\package.json" />
-    <Content Include="Scripts\Table-RowSorter\README.md" />
-    <Content Include="Scripts\Table-RowSorter\TODO" />
-    <Content Include="Scripts\Table-RowSorter\bower.json" />
-    <Content Include="Scripts\Table-RowSorter\CHANGES" />
-    <Content Include="Scripts\Table-RowSorter\LICENSE" />
-    <Content Include="Scripts\Table-RowSorter\package.json" />
-    <Content Include="Scripts\Table-RowSorter\README.md" />
-    <Content Include="Scripts\Table-RowSorter\TODO" />
-    <Content Include="Scripts\jQueryFlightIndicators\.gitignore" />
-    <Content Include="Scripts\jQueryFlightIndicators\bower.json" />
-    <Content Include="Scripts\jQueryFlightIndicators\flightindicators.jquery.json" />
-    <Content Include="Scripts\jQueryFlightIndicators\LICENSE" />
-    <Content Include="Scripts\jQueryFlightIndicators\README.md" />
-    <Content Include="Scripts\jQueryFlightIndicators\_img_sources\altitude.ai" />
-    <Content Include="Scripts\jQueryFlightIndicators\_img_sources\heading.ai" />
-    <Content Include="Scripts\jQueryFlightIndicators\_img_sources\horizon.ai" />
-    <Content Include="Scripts\jQueryFlightIndicators\_img_sources\speed.ai" />
-    <Content Include="Scripts\jQueryFlightIndicators\_img_sources\vertical.ai" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\video.dev.js" />
     <Content Include="Scripts\video.js" />
@@ -2327,17 +2253,6 @@
     <Content Include="Views\BillingRules\Edit.cshtml" />
     <Content Include="Views\BillingRules\Index.cshtml" />
     <Content Include="Views\Cesium\Index.cshtml" />
-    <Content Include="Views\Shared\NOC_qViewData.cshtml" />
-    <Content Include="Views\Billing\AllRules.cshtml" />
-    <Content Include="Views\Billing\FlightBilling.cshtml" />
-    <Content Include="Views\Billing\Group.cshtml" />
-    <Content Include="Views\User\UserActivation.cshtml" />
-    <Content Include="Views\Email\UserActivation.cshtml" />
-    <Content Include="Views\Billing\AllRules.cshtml" />
-    <Content Include="Views\Billing\Group.cshtml" />
-    <Content Include="Views\Billing\FlightBilling.cshtml" />
-    <Content Include="Views\FlightMap\View.cshtml" />
-    <Content Include="Views\Shared\_exPortal_V3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

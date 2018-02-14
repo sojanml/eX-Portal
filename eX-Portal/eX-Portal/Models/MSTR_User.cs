@@ -58,5 +58,6 @@ namespace eX_Portal.Models
         public string Nationality { get; set; }
         public string VideoKey { get; set; }
         public string ActivationKey { get; set; }
+        public Nullable<long> DCAAReferenceID { get; set; }
     }
 }
