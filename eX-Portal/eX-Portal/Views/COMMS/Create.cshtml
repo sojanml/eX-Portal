@@ -1,0 +1,56 @@
+﻿@model eX_Portal.ViewModel.CommViewModel
+@{
+   
+    ViewBag.Title = "COMMS Message";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+</head>
+<body>
+    <div> 
+@using (Html.BeginForm())
+{
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Message, "Message")<span style="color:red">*</span>
+    </div>
+    <div class="editor-field" id="ddlist">
+        @Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "editor-label", @maxlength = "50" } })
+        @Html.ValidationMessageFor(model => model.Message)
+    </div>
+    <div class="form-toolbar">
+        <input type="submit" value="Create" />
+    </div>
+
+    <div>
+        @foreach (var item in Model.CommsPilotMsgs)
+        {
+            <div>
+        
+                <ul>
+                    <li>
+                        @item.Message @item.Status
+                    </li>
+                    
+                </ul>
+            
+            </div>
+        }
+
+
+    </div>
+
+
+
+}
+
+    </div>
+
+
+
+</body>
+</html>
