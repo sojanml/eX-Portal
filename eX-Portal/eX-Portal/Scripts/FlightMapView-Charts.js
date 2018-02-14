@@ -230,7 +230,7 @@ function FlightMapChart(DivID, SeriesName, SeriesUnit) {
             },
             stops: [
               [0, 'rgba(238,22,21,1)'],
-              [1, 'rgba(64,255,239,1)']
+              [1, 'rgba(95,255,242,1)']
             ]
           },
           marker: {

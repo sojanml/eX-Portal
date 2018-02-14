@@ -1331,11 +1331,13 @@
     <Content Include="Scripts\FlightMap-DynamicZone.js" />
     <Content Include="Scripts\FlightMap-Map.js" />
     <Content Include="Scripts\FlightMapView-3D.js" />
+    <Content Include="Scripts\FlightMapView-ADSB.js" />
     <Content Include="Scripts\FlightMapView-Charts.js" />
     <Content Include="Scripts\FlightMapView-Map.js" />
     <Content Include="Scripts\FlightMapView-Slider.js" />
     <Content Include="Scripts\FlightMapView.js" />
     <Content Include="Scripts\FlightSetup.js" />
+    <Content Include="Scripts\Flight_3D.js" />
     <Content Include="Scripts\Flight_Gps_Map.js" />
     <Content Include="Scripts\geotag.js" />
     <Content Include="Scripts\GoogleMapLabel.js" />
