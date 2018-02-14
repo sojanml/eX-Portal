@@ -4,15 +4,10 @@
 $BodyColor: #1C1C1C;
 $HiliteColor1: #ff0000;
 $HiliteColor2: #18bdec;
-//$VerticalGap: 15px;
+$HiliteColor3: #5ffff2;
 
-@include font-face("FontAwesome", font-files( 
-"../fonts/fontawesome-webfont.ttf", 
-"../fonts/FontAwesome.otf", 
-"../fonts/fontawesome-webfont.svg", 
-"../fonts/fontawesome-webfont.eot", 
-"../fonts/fontawesome-webfont.woff", 
-"../fonts/fontawesome-webfont.woff2" ));
+//$VerticalGap: 15px;
+@include font-face("FontAwesome", font-files( "../fonts/fontawesome-webfont.ttf", "../fonts/FontAwesome.otf", "../fonts/fontawesome-webfont.svg", "../fonts/fontawesome-webfont.eot", "../fonts/fontawesome-webfont.woff", "../fonts/fontawesome-webfont.woff2" ));
 
 @font-face {
   font-family: 'Avenir Next Condensed Demi';

@@ -3,6 +3,7 @@ var FlightMap = function () {
   var _map = null;
   var _DroneIcon = null;
   var _MapMarkers = null;
+  var _ADSBOverlay = null;
 
   var _PolylineCompleted = null;
   var _PolylinePending = null;
@@ -25,6 +26,8 @@ var FlightMap = function () {
     _map = new google.maps.Map(document.getElementById('GoogleMap'), mapOptions);
     _DroneIcon = new DroneIcon({ map: _map }, CenterPosition);
     _MapMarkers = new MapMarkers({ map: _map }, CenterPosition);
+    _ADSBOverlay = new ADSBOverlay({ map: _map });
+    ADSBLoader.Init(_ADSBOverlay);
 
     _PolylineCompleted = new google.maps.Polyline({
       path: [],
@@ -56,7 +59,7 @@ var FlightMap = function () {
     _PolylinePending.setPath(_FullPath);
     _MapMarkers.SetEndData(_FullData[_FullData.length - 1]);
     _MapMarkers.SetStartData(_FullData[0]);
-  }
+  };
 
   var _MoveToIndex = function (Index) {
     if (Index >= _FullPath.length) return;
@@ -70,7 +73,7 @@ var FlightMap = function () {
 
   var _FitBounds = function () {
     _map.fitBounds(_LatLngBounds);
-  }
+  };
 
   return {
     map: _map,
@@ -113,14 +116,14 @@ function MapMarkers(options, InitPosition) {
     this.StartGeoPos = new google.maps.LatLng(Data.Lat, Data.Lng);
     this.SetData(this.StartLayer.find('div.Marker-ToolTip'), Data);
     this.draw();
-  }
+  };
 
   this.SetEndData = function (Data) {
     this.EndData = Data;
     this.EndGeoPos = new google.maps.LatLng(Data.Lat, Data.Lng);
     this.SetData(this.EndLayer.find('div.Marker-ToolTip'), Data);
     this.draw();
-  }
+  };
 
   this.SetData = function (Layer, Data) {
     var Html =
@@ -176,7 +179,7 @@ function DroneIcon(options, DefaultPos) {
     this.draw();
   };
 
-};
+}
 
 DroneIcon.prototype.onAdd = function () {
   var $pane = $(this.getPanes().overlayImage); // Pane 3  
@@ -194,7 +197,7 @@ DroneIcon.prototype.draw = function () {
   var lat = this.lat;
   var lng = this.lng;
   // Determine a random location from the bounds set previously  
-  var IconGeoPos = new google.maps.LatLng(lat, lng)
+  var IconGeoPos = new google.maps.LatLng(lat, lng);
   var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
 
   this.markerLayer.animate({ left: IconLocation.x, top: IconLocation.y });
