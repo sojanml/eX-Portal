@@ -205,6 +205,19 @@ warning 6002: The table/view 'DCAAPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="5" />
           <Property Name="UserID" Type="int" />
         </EntityType>
+        <EntityType Name="CommsDetail">
+          <Key>
+            <PropertyRef Name="CommsID" />
+          </Key>
+          <Property Name="CommsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FromID" Type="int" Nullable="false" />
+          <Property Name="ToID" Type="int" Nullable="false" />
+          <Property Name="MessageID" Type="int" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="StatusUpdatedOn" Type="datetime" />
+        </EntityType>
         <EntityType Name="ContentManagement">
           <Key>
             <PropertyRef Name="CmsID" />
@@ -782,6 +795,15 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="Title" Type="varchar" MaxLength="150" />
           <Property Name="FieldType" Type="varchar" MaxLength="12" />
           <Property Name="Responsibility" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="MSTR_Comms">
+          <Key>
+            <PropertyRef Name="MessageID" />
+          </Key>
+          <Property Name="MessageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="MSTR_Drone">
           <Key>
@@ -1637,6 +1659,18 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="IsSessionEnd" Type="bit" />
           <Property Name="ApplicationID" Type="varchar" MaxLength="50" />
         </EntityType>
+        <Association Name="FK__CommsDeta__Messa__6774552F">
+          <End Role="MSTR_Comms" Type="Self.MSTR_Comms" Multiplicity="1" />
+          <End Role="CommsDetail" Type="Self.CommsDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MSTR_Comms">
+              <PropertyRef Name="MessageID" />
+            </Principal>
+            <Dependent Role="CommsDetail">
+              <PropertyRef Name="MessageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_GroupID">
           <End Role="BillingRulesGroup" Type="Self.BillingRulesGroup" Multiplicity="1" />
           <End Role="BillingRulesCost" Type="Self.BillingRulesCost" Multiplicity="*" />
@@ -1750,6 +1784,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="BlackBoxCost" EntityType="Self.BlackBoxCost" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxLog" EntityType="Self.BlackBoxLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlackBoxTransaction" EntityType="Self.BlackBoxTransaction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommsDetail" EntityType="Self.CommsDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ContentManagement" EntityType="Self.ContentManagement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckList" EntityType="Self.DroneCheckList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DroneCheckListItem" EntityType="Self.DroneCheckListItem" Schema="dbo" store:Type="Tables" />
@@ -1776,6 +1811,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="MSTR_BlackBox" EntityType="Self.MSTR_BlackBox" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_CheckList_Drone" EntityType="Self.MSTR_CheckList_Drone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_CheckListItems_Drone" EntityType="Self.MSTR_CheckListItems_Drone" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MSTR_Comms" EntityType="Self.MSTR_Comms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Drone" EntityType="Self.MSTR_Drone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_Drone_Setup" EntityType="Self.MSTR_Drone_Setup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSTR_DroneCheckList" EntityType="Self.MSTR_DroneCheckList" Schema="dbo" store:Type="Tables" />
@@ -1979,6 +2015,10 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
     [sysdiagrams].[definition] AS [definition]
     FROM [dbo].[sysdiagrams] AS [sysdiagrams]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK__CommsDeta__Messa__6774552F" Association="Self.FK__CommsDeta__Messa__6774552F">
+            <End Role="MSTR_Comms" EntitySet="MSTR_Comms" />
+            <End Role="CommsDetail" EntitySet="CommsDetail" />
+          </AssociationSet>
           <AssociationSet Name="fk_GroupID" Association="Self.fk_GroupID">
             <End Role="BillingRulesGroup" EntitySet="BillingRulesGroup" />
             <End Role="BillingRulesCost" EntitySet="BillingRulesCost" />
@@ -2410,6 +2450,12 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <EntitySet Name="PortalAlert_User" EntityType="ExponentPortalModel.PortalAlert_User" />
           <EntitySet Name="DroneFlight" EntityType="ExponentPortalModel.DroneFlight" />
           <EntitySet Name="MSTR_TrafficMonitor" EntityType="ExponentPortalModel.MSTR_TrafficMonitor" />
+          <EntitySet Name="CommsDetail" EntityType="ExponentPortalModel.CommsDetail" />
+          <EntitySet Name="MSTR_Comms" EntityType="ExponentPortalModel.MSTR_Comms" />
+          <AssociationSet Name="FK__CommsDeta__Messa__6774552F" Association="ExponentPortalModel.FK__CommsDeta__Messa__6774552F">
+            <End Role="MSTR_Comms" EntitySet="MSTR_Comms" />
+            <End Role="CommsDetail" EntitySet="CommsDetail" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -3881,6 +3927,42 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="LU" Type="Int32" Nullable="false" />
           <Property Name="LL" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="CommsDetail">
+          <Key>
+            <PropertyRef Name="CommsID" />
+          </Key>
+          <Property Name="CommsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FromID" Type="Int32" Nullable="false" />
+          <Property Name="ToID" Type="Int32" Nullable="false" />
+          <Property Name="MessageID" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="StatusUpdatedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MSTR_Comms" Relationship="ExponentPortalModel.FK__CommsDeta__Messa__6774552F" FromRole="CommsDetail" ToRole="MSTR_Comms" />
+        </EntityType>
+        <EntityType Name="MSTR_Comms">
+          <Key>
+            <PropertyRef Name="MessageID" />
+          </Key>
+          <Property Name="MessageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CommsDetail" Relationship="ExponentPortalModel.FK__CommsDeta__Messa__6774552F" FromRole="MSTR_Comms" ToRole="CommsDetail" />
+        </EntityType>
+        <Association Name="FK__CommsDeta__Messa__6774552F">
+          <End Type="ExponentPortalModel.MSTR_Comms" Role="MSTR_Comms" Multiplicity="1" />
+          <End Type="ExponentPortalModel.CommsDetail" Role="CommsDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MSTR_Comms">
+              <PropertyRef Name="MessageID" />
+            </Principal>
+            <Dependent Role="CommsDetail">
+              <PropertyRef Name="MessageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5627,6 +5709,30 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
                 <ScalarProperty Name="MonitorID" ColumnName="MonitorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommsDetail">
+            <EntityTypeMapping TypeName="ExponentPortalModel.CommsDetail">
+              <MappingFragment StoreEntitySet="CommsDetail">
+                <ScalarProperty Name="StatusUpdatedOn" ColumnName="StatusUpdatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="MessageID" ColumnName="MessageID" />
+                <ScalarProperty Name="ToID" ColumnName="ToID" />
+                <ScalarProperty Name="FromID" ColumnName="FromID" />
+                <ScalarProperty Name="CommsID" ColumnName="CommsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MSTR_Comms">
+            <EntityTypeMapping TypeName="ExponentPortalModel.MSTR_Comms">
+              <MappingFragment StoreEntitySet="MSTR_Comms">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="MessageID" ColumnName="MessageID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

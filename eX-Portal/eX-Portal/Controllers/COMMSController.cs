@@ -71,42 +71,42 @@ namespace eX_Portal.Controllers
             }
         }
 
-        ///[HttpPost]
-        //public JsonResult Create(string Message)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
-        //        if (Message.Trim().Length > 0)
-        //        {
-        //            MSTR_Comms Comms = new MSTR_Comms();
-        //            Comms.Message = Message;
-        //            Comms.CreatedBy = exLogic.Util.getLoginUserID();
-        //            ctx.MSTR_Comms.Add(Comms);
-        //            ctx.SaveChanges();
+        [HttpPost]
+        public JsonResult CreateMessage(string Message)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+                if (Message.Trim().Length > 0)
+                {
+                    MSTR_Comms Comms = new MSTR_Comms();
+                    Comms.Message = Message;
+                    Comms.CreatedBy = exLogic.Util.getLoginUserID();
+                    ctx.MSTR_Comms.Add(Comms);
+                    ctx.SaveChanges();
 
-        //            List<MSTR_User> UserList = ctx.MSTR_User.Where(x => x.AccountId == 1).ToList();
+                    List<MSTR_User> UserList = ctx.MSTR_User.Where(x => x.AccountId == 1).ToList();
 
-        //            foreach (MSTR_User Us in UserList)
-        //            {
-        //                CommsDetail Cmd = new CommsDetail();
-        //                Cmd.FromID = exLogic.Util.getLoginUserID();
-        //                Cmd.ToID = Us.UserId;
-        //                Cmd.MessageID = Comms.MessageID;
-        //                Cmd.Status = "NEW";
-        //                Cmd.CreatedBy = exLogic.Util.getLoginUserID();
-        //                ctx.CommsDetail.Add(Cmd);
+                    foreach (MSTR_User Us in UserList)
+                    {
+                        CommsDetail Cmd = new CommsDetail();
+                        Cmd.FromID = exLogic.Util.getLoginUserID();
+                        Cmd.ToID = Us.UserId;
+                        Cmd.MessageID = Comms.MessageID;
+                        Cmd.Status = "NEW";
+                        Cmd.CreatedBy = exLogic.Util.getLoginUserID();
+                        ctx.CommsDetail.Add(Cmd);
 
-        //            }
-        //            ctx.SaveChanges();
-        //        }
-        //        return Json("OK"); 
-        //    }
-        //    catch (Exception Ex)
-        //    {
-        //        return Json("Unsuccessful");
-        //    }
-        //}
+                    }
+                    ctx.SaveChanges();
+                }
+                return Json("OK");
+            }
+            catch (Exception Ex)
+            {
+                return Json("Unsuccessful");
+            }
+        }
 
         // GET: COMMS/Edit/5
         public ActionResult Edit(int id)
@@ -153,17 +153,17 @@ namespace eX_Portal.Controllers
         }
 
 
-        public JsonResult GetPilotMessages(int PilotID, DateTime FilterDate )
+        public JsonResult GetPilotMessages(int PilotID, DateTime? FilterDate )
         {
             CommViewModel cvm = new CommViewModel();
             try { 
             
-            cvm.GetPilotMsgs(exLogic.Util.getLoginUserID(),null);
-            return Json(cvm.CommsPilotMsgs);
+            cvm.GetPilotMsgs(exLogic.Util.getLoginUserID(), FilterDate);
+            return Json(cvm.CommsPilotMsgs, JsonRequestBehavior.AllowGet);
             }
             catch (Exception Ex)
             {
-                return Json(cvm.CommsPilotMsgs);
+                return Json(cvm.CommsPilotMsgs, JsonRequestBehavior.AllowGet);
             }
         }
     }
