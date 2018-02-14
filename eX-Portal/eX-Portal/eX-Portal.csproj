@@ -58,8 +58,8 @@
     <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.S3.3.3.11.4\lib\net45\AWSSDK.S3.dll</HintPath>
     </Reference>
-    <Reference Include="CesiumLanguageWriter, Version=2.7.0.0, Culture=neutral, PublicKeyToken=ab359b0e398e33e4, processorArchitecture=MSIL">
-      <HintPath>..\packages\CesiumLanguageWriter.2.7.0\lib\net40\CesiumLanguageWriter.dll</HintPath>
+    <Reference Include="CesiumLanguageWriter, Version=2.7.1.0, Culture=neutral, PublicKeyToken=ab359b0e398e33e4, processorArchitecture=MSIL">
+      <HintPath>packages\CesiumLanguageWriter.2.7.1\lib\net40\CesiumLanguageWriter.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -217,6 +217,7 @@
     <Compile Include="Controllers\BillingRulesController.cs" />
     <Compile Include="Controllers\BlackBoxController.cs" />
     <Compile Include="Controllers\CesiumController.cs" />
+    <Compile Include="Controllers\COMMSController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
     <Compile Include="Controllers\DesignController.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
@@ -266,11 +267,17 @@
     <Compile Include="Models\BillingRulesGroup.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CommsDetail.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FlightMapDelayReport_Result.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MSTR_Comms.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MSTR_NOC.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -292,6 +299,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\CommViewModel.cs" />
     <Compile Include="ViewModel\DynamicZone.cs" />
     <Compile Include="exLogic\ExifLib.cs" />
     <Compile Include="exLogic\FlightMap.cs" />
@@ -2257,6 +2265,7 @@
     <Content Include="Views\BillingRules\Edit.cshtml" />
     <Content Include="Views\BillingRules\Index.cshtml" />
     <Content Include="Views\Cesium\Index.cshtml" />
+    <Content Include="Views\COMMS\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
