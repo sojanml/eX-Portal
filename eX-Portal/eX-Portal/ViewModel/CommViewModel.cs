@@ -14,6 +14,8 @@ namespace eX_Portal.ViewModel
         public int MessageID { get; set; }
         public string Message { get; set; }
         public string Status { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime? StatusUpdatedOn { get; set; }
 
         public CommViewModel()
         {
@@ -24,6 +26,9 @@ namespace eX_Portal.ViewModel
             Message = "";
             Status = "";
             CommsPilotMsgs = new List<CommViewModel>();
+            CreatedOn = new DateTime();
+            StatusUpdatedOn = new DateTime();
+
         }
 
         public List<CommViewModel> CommsPilotMsgs { get; set; }
@@ -53,6 +58,8 @@ namespace eX_Portal.ViewModel
                     cvm.ToID = cd.ToID;
                     cvm.FromID = cd.FromID;
                     cvm.Status = cd.Status;
+                    cvm.CreatedOn = cd.CreatedOn;
+                    cvm.StatusUpdatedOn = cd.StatusUpdatedOn;
                     CommsPilotMsgs.Add(cvm);
                     
 
