@@ -153,12 +153,13 @@ namespace eX_Portal.Controllers
         }
 
 
-        public JsonResult GetPilotMessages(int PilotID, DateTime? FilterDate )
+        public JsonResult GetPilotMessages(DateTime? FilterDate )
         {
             CommViewModel cvm = new CommViewModel();
             try { 
+                
             
-            cvm.GetPilotMsgs(PilotID, FilterDate);
+            cvm.GetPilotMsgs(exLogic.Util.getLoginUserID(), FilterDate);
             return Json(cvm.CommsPilotMsgs, JsonRequestBehavior.AllowGet);
             }
             catch (Exception Ex)
