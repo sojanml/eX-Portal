@@ -217,6 +217,7 @@
     <Compile Include="Controllers\BillingRulesController.cs" />
     <Compile Include="Controllers\BlackBoxController.cs" />
     <Compile Include="Controllers\CesiumController.cs" />
+    <Compile Include="Controllers\COMMSController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
     <Compile Include="Controllers\DesignController.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
@@ -266,11 +267,17 @@
     <Compile Include="Models\BillingRulesGroup.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CommsDetail.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FlightMapDelayReport_Result.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MSTR_Comms.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MSTR_NOC.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
@@ -292,6 +299,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\CommViewModel.cs" />
     <Compile Include="ViewModel\DynamicZone.cs" />
     <Compile Include="exLogic\ExifLib.cs" />
     <Compile Include="exLogic\FlightMap.cs" />
@@ -2259,6 +2267,8 @@
     <Content Include="Views\BillingRules\Edit.cshtml" />
     <Content Include="Views\BillingRules\Index.cshtml" />
     <Content Include="Views\Cesium\Index.cshtml" />
+    <Content Include="Views\COMMS\Create.cshtml" />
+    <Content Include="Views\FlightMap\view.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

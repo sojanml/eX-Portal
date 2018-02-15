@@ -15,6 +15,8 @@ var FlightMap = function () {
   var _CurrentIndex = 0;
   var _FullData = [];
 
+  var _IsMapBusy = false;
+
   var _Init = function (CenterPosition) {
     var mapOptions = {
       zoom: 10,
@@ -45,6 +47,20 @@ var FlightMap = function () {
       strokeWeight: 2,
       map: _map
     });
+
+
+    _map.addListener('center_changed', _MapBusy );
+    _map.addListener('idle', _MapIdle);
+
+  };
+
+  var _MapBusy = function() {
+    _IsMapBusy = true;
+  };
+  var _MapIdle = function () {
+    window.setTimeout(function () {
+      _IsMapBusy = false;
+    }, 200);
   };
 
   var _AddMapData = function (Data) {
@@ -65,10 +81,10 @@ var FlightMap = function () {
     if (Index >= _FullPath.length) return;
     _CurrentIndex = Index;
     var LatLng = _FullPath[Index];
-    _DroneIcon.MoveTo(LatLng);
-    _map.panTo(LatLng);
     _PolylineCompleted.setPath(_FullPath.slice(0, Index + 1));
     _PolylinePending.setPath(_FullPath.slice(Index ));
+    _DroneIcon.MoveTo(LatLng);
+
   };
 
   var _FitBounds = function () {
@@ -136,6 +152,7 @@ function MapMarkers(options, InitPosition) {
   };
 
 
+
 }
 
 
@@ -154,11 +171,14 @@ MapMarkers.prototype.draw = function () {
   var projection = this.getProjection();
   if (!projection) return false;
 
+  //this.StartLayer.clearQueue();
+  //this.EndLayer.clearQueue();
+
   var IconLocation1 = projection.fromLatLngToDivPixel(this.StartGeoPos);
-  this.StartLayer.animate({ left: IconLocation1.x, top: IconLocation1.y });
+  this.StartLayer.css({ left: IconLocation1.x, top: IconLocation1.y });
 
   var IconLocation2 = projection.fromLatLngToDivPixel(this.EndGeoPos);
-  this.EndLayer.animate({ left: IconLocation2.x, top: IconLocation2.y });
+  this.EndLayer.css({ left: IconLocation2.x, top: IconLocation2.y });
 
 };
 
@@ -172,6 +192,7 @@ function DroneIcon(options, DefaultPos) {
       'z-Index': 99
     });
   this.setValues(options);
+
 
   this.MoveTo = function (LatLng) {
     this.lat = LatLng.lat;
@@ -198,9 +219,12 @@ DroneIcon.prototype.draw = function () {
   var lng = this.lng;
   // Determine a random location from the bounds set previously  
   var IconGeoPos = new google.maps.LatLng(lat, lng);
+  //this.map.setCenter(IconGeoPos);
   var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
-
-  this.markerLayer.animate({ left: IconLocation.x, top: IconLocation.y });
+  this.markerLayer.clearQueue();
+  this.markerLayer.css(
+    { left: IconLocation.x, top: IconLocation.y }
+  );
 };
 
 

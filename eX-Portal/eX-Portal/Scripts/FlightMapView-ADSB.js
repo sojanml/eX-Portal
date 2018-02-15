@@ -58,7 +58,7 @@ function ADSBOverlay(options) {
   this.markerLayer = $('<div />').addClass('ADSBOverlay');
   this.ADSBData = {};
   this.ActiveAirlines = {};
-
+  this.IsDrawing = 
 
   this.setADSB = function (Data) {
     for (var i = 0; i < Data.length; i++) {
@@ -88,7 +88,8 @@ function ADSBOverlay(options) {
       DivLayer = $('<div class="ADSB-Icon" data-hexcode="' + HexCode + '" id="ADSB-' + HexCode + '"></div>').css(CSS);
       this.markerLayer.append(DivLayer);
     } else {
-      DivLayer.animate(CSS);
+      DivLayer.clearQueue();
+      DivLayer.css(CSS);
     }
     
   };
