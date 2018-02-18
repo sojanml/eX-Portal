@@ -33,18 +33,21 @@ namespace eX_Portal.ViewModel
 
         public List<CommViewModel> CommsPilotMsgs { get; set; }
 
-        public void GetPilotMsgs(int UserID, DateTime? FilterDate)
+        public void GetPilotMsgs(int UserID, DateTime? FilterDate,int FlightID)
         {
             using (ExponentPortalEntities ctx = new ExponentPortalEntities())
             {
                 List<CommsDetail> MessageList = new List<CommsDetail>();
-                if(FilterDate!=null)
-                 MessageList = ctx.CommsDetail.GroupBy(p => p.MessageID)
-                                .Select(x =>x.Where(s=>s.Status=="READ" || s.Status=="NEW").OrderBy(l=>l.StatusUpdatedOn).FirstOrDefault())
+                var FlightMessage = ctx.CommsDetail.Where(x => x.MSTR_Comms.FlightID == FlightID);
+                if (FilterDate != null)
+
+                   
+                 MessageList = FlightMessage.GroupBy(p => p.MessageID )
+                                .Select(x =>x.Where(s=>(s.Status=="READ" || s.Status=="NEW") ).OrderBy(l=>l.StatusUpdatedOn).FirstOrDefault())
                                 .Where(p => (p.FromID == UserID || p.ToID == UserID) && p.CreatedOn>=FilterDate)
                                 .OrderBy(x=>x.CreatedOn).Take(10).ToList();
                 else
-                    MessageList = ctx.CommsDetail.GroupBy(p => p.MessageID)
+                    MessageList = FlightMessage.GroupBy(p => p.MessageID)
                                .Select(x => x.Where(s => s.Status == "READ" || s.Status == "NEW").OrderBy(l => l.StatusUpdatedOn).FirstOrDefault())
                                .Where(p => (p.FromID == UserID || p.ToID == UserID))
                                .OrderBy(x => x.CreatedOn).Take(10).ToList();

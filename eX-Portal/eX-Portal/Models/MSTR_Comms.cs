@@ -24,6 +24,7 @@ namespace eX_Portal.Models
         public string Message { get; set; }
         public System.DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
+        public Nullable<int> FlightID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CommsDetail> CommsDetail { get; set; }
