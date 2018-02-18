@@ -465,7 +465,7 @@ ADSBOverlay.prototype.draw = function () {
     if (isContinue) {
       if (this.gADSBData[DivID]) {
         $point = $('#' + DivID);
-        $point.animate({ left: IconLocation.x, top: IconLocation.y });
+        $point.css({ left: IconLocation.x, top: IconLocation.y });
         $point.attr('class', 'adsb-point ' + IconClass);
         $point.find(".icon").css({ transform: 'rotate(' + (heading) + 'deg)' });
         $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });

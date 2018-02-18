@@ -246,6 +246,9 @@ div.ADSBOverlay {
     width:16px;
     height:16px;
     background-size:contain;
+    transition-property: all;
+    transition-duration: 0.5s;
+    transition-delay: 0s;
   }
 }
 

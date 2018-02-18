@@ -353,6 +353,9 @@ div.ADSBOverlay div.ADSB-Icon {
   width: 16px;
   height: 16px;
   background-size: contain;
+  transition-property: all;
+  transition-duration: 0.5s;
+  transition-delay: 0s;
 }
 
 @media screen and (min-width: 720px) {

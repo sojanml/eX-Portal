@@ -460,7 +460,7 @@ ADSBOverlay.prototype.draw = function (IsSetADSB) {
     var $point = $('#' + DivID);
 
     if ($point.length) {
-      $point.animate({ left: IconLocation.x, top: IconLocation.y });
+      $point.css({ left: IconLocation.x, top: IconLocation.y });
       $point.find(".icon").css({ transform: 'rotate(' + (heading) + 'deg)' });
       $point.attr({ 'data-lat': lat, 'data-lng': lng, 'data-alt': alt });
       $point.find('img').attr('src', this.getIconImage(this.ADSBData[i]));

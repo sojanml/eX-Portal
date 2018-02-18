@@ -47,7 +47,10 @@ div.SpotMarker {
   margin-left: $Size/-2;
   margin-top: $Size/-2;
   border-radius: 50%;
-  cursor:default;
+  cursor: default;
+  transition-property: all;
+  transition-duration: 0.5s;
+  transition-delay: 0s;
 
   span.Marker {
     display: block;
@@ -60,21 +63,22 @@ div.SpotMarker {
   }
 
   div.Marker-ToolTip {
-    display:none;
+    display: none;
     position: absolute;
     top: $Size;
-    width:auto;
-    height:auto;
-    padding:3px;
-    white-space:nowrap;
-    background-color:rgba(0,0,0,0.5);
-    border:1px black solid;
-    border-radius:3px;
-    color:white;
+    width: auto;
+    height: auto;
+    padding: 3px;
+    white-space: nowrap;
+    background-color: rgba(0,0,0,0.5);
+    border: 1px black solid;
+    border-radius: 3px;
+    color: white;
   }
+
   &:hover {
     div.Marker-ToolTip {
-      display:block;
+      display: block;
     }
   }
 }
@@ -105,6 +109,9 @@ div#FlightMapDroneIcon {
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
+  transition-property: all;
+  transition-duration: 1s;
+  transition-delay: 0s;
 }
 
 div#custom-handle {
@@ -480,12 +487,11 @@ section#BottomSection {
     div.caption {
       width: 100%;
       background-color: $HiliteColor3;
-      font-size: 20px;
       font-family: 'Advent';
       text-align: center;
       padding: 5px 0px 5px 0px;
       font-weight: 800;
-      letter-spacing: 5px;
+
     }
   }
 
@@ -521,7 +527,64 @@ section#BottomSection {
   }
 
   div#ComSection {
+    $CaptionHeight: $FontSize + 8px + 10px;
+    $BottomSectionHeight: 30px;
+    $ButtonWidth: 50px;
+
     width: $Col2;
+
+    div.caption {
+      font-size: $FontSize + 8px;
+      letter-spacing: $FontSize / 3;
+      height: $CaptionHeight;
+      line-height: $FontSize + 8px;
+    }
+
+    div#ComsContent {
+      width: $Col2;
+      height: $Height - ($CaptionHeight +$BottomSectionHeight );
+      overflow-y: scroll;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    div#ComsSendMessage {
+      width: $Col2;
+      height: $BottomSectionHeight;
+      background-color: green;
+
+
+      div.ContentBox, div.ContentButton {
+        float: left;
+        width: 100%;
+        height: $BottomSectionHeight;
+
+        input {
+          margin: 0px;
+          line-height: $BottomSectionHeight;
+          border: 0px;
+          height: $BottomSectionHeight;
+        }
+      }
+
+      div.ContentBox input {
+        padding: 0px 10px 0px 10px;
+        width: $Col2 - $ButtonWidth - 20px;
+      }
+
+      div.ContentButton input {
+        padding: 0px;
+        width: $ButtonWidth;
+      }
+
+      div.ContentButton {
+        width: $ButtonWidth;
+      }
+
+      div.ContentBox {
+        width: $Col2 - $ButtonWidth;
+      }
+    }
   }
 
   div#GoogleMap,

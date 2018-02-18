@@ -4,16 +4,20 @@ var FlightMap = function () {
   var _DroneIcon = null;
   var _MapMarkers = null;
   var _ADSBOverlay = null;
+  var _NoFlyZone = null;
 
   var _PolylineCompleted = null;
   var _PolylinePending = null;
   var _LatLngBounds = new google.maps.LatLngBounds();
+  var _kmlUrl = 'http://dcaa.exponent-ts.com/Map/NoFlyzone';
 
   var _PolylinePendingPath = [];
   var _PolylineCompletedPath = [];
   var _FullPath = [];
   var _CurrentIndex = 0;
   var _FullData = [];
+
+  var _IsMapBusy = false;
 
   var _Init = function (CenterPosition) {
     var mapOptions = {
@@ -27,6 +31,11 @@ var FlightMap = function () {
     _DroneIcon = new DroneIcon({ map: _map }, CenterPosition);
     _MapMarkers = new MapMarkers({ map: _map }, CenterPosition);
     _ADSBOverlay = new ADSBOverlay({ map: _map });
+    _NoFlyZone = new google.maps.KmlLayer(_kmlUrl, {
+      preserveViewport: true,
+      map: _map
+    });
+
     ADSBLoader.Init(_ADSBOverlay);
 
     _PolylineCompleted = new google.maps.Polyline({
@@ -35,7 +44,8 @@ var FlightMap = function () {
       strokeColor: '#18bdec',
       strokeOpacity: 1.0,
       strokeWeight: 2,
-      map: _map
+      map: _map,
+      editable: true
     });
     _PolylinePending = new google.maps.Polyline({
       path: [],
@@ -43,8 +53,42 @@ var FlightMap = function () {
       strokeColor: '#FF0000',
       strokeOpacity: 0.3,
       strokeWeight: 2,
-      map: _map
+      map: _map,
+      editable: true
     });
+
+
+    _map.addListener('center_changed', _MapBusy );
+    _map.addListener('idle', _MapIdle);
+
+    //google.maps.event.addListener(_PolylinePending.getPath(), 'set_at', _ShowPath);
+    //google.maps.event.addListener(_PolylinePending.getPath(), 'insert_at', _ShowPath);
+    window.setInterval(_ShowPath, 10000);
+
+  };
+
+  var _ShowPath = function (vertex) {
+    var ComsContent = $('#ComsContent');
+    var List = $('<UL></UL>');
+    var vertices = _PolylinePending.getPath();
+
+    for (var i = 0; i < vertices.getLength(); i++) {
+      var xy = vertices.getAt(i);
+      List.append($('<li>' + xy.lat() + ',' + xy.lng() + '</li>'));
+    }
+
+    ComsContent.empty();
+    ComsContent.html(List);
+
+  }
+
+  var _MapBusy = function() {
+    _IsMapBusy = true;
+  };
+  var _MapIdle = function () {
+    window.setTimeout(function () {
+      _IsMapBusy = false;
+    }, 200);
   };
 
   var _AddMapData = function (Data) {
@@ -65,10 +109,10 @@ var FlightMap = function () {
     if (Index >= _FullPath.length) return;
     _CurrentIndex = Index;
     var LatLng = _FullPath[Index];
-    _DroneIcon.MoveTo(LatLng);
-    _map.panTo(LatLng);
     _PolylineCompleted.setPath(_FullPath.slice(0, Index + 1));
     _PolylinePending.setPath(_FullPath.slice(Index ));
+    _DroneIcon.MoveTo(LatLng);
+
   };
 
   var _FitBounds = function () {
@@ -136,6 +180,7 @@ function MapMarkers(options, InitPosition) {
   };
 
 
+
 }
 
 
@@ -154,11 +199,14 @@ MapMarkers.prototype.draw = function () {
   var projection = this.getProjection();
   if (!projection) return false;
 
+  //this.StartLayer.clearQueue();
+  //this.EndLayer.clearQueue();
+
   var IconLocation1 = projection.fromLatLngToDivPixel(this.StartGeoPos);
-  this.StartLayer.animate({ left: IconLocation1.x, top: IconLocation1.y });
+  this.StartLayer.css({ left: IconLocation1.x, top: IconLocation1.y });
 
   var IconLocation2 = projection.fromLatLngToDivPixel(this.EndGeoPos);
-  this.EndLayer.animate({ left: IconLocation2.x, top: IconLocation2.y });
+  this.EndLayer.css({ left: IconLocation2.x, top: IconLocation2.y });
 
 };
 
@@ -172,6 +220,7 @@ function DroneIcon(options, DefaultPos) {
       'z-Index': 99
     });
   this.setValues(options);
+
 
   this.MoveTo = function (LatLng) {
     this.lat = LatLng.lat;
@@ -198,9 +247,12 @@ DroneIcon.prototype.draw = function () {
   var lng = this.lng;
   // Determine a random location from the bounds set previously  
   var IconGeoPos = new google.maps.LatLng(lat, lng);
+  //this.map.setCenter(IconGeoPos);
   var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);
-
-  this.markerLayer.animate({ left: IconLocation.x, top: IconLocation.y });
+  this.markerLayer.clearQueue();
+  this.markerLayer.css(
+    { left: IconLocation.x, top: IconLocation.y }
+  );
 };
 
 

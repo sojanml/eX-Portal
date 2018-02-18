@@ -208,6 +208,46 @@ namespace eX_Portal.Controllers {
       return TheMap.GetKML().ToString();
     }
 
+
+    [HttpGet]
+    public String NoFlyZone2() {
+      Response.ContentType = "application/vnd.google-earth.kml+xml";
+      NoFlyZoneMap2 TheMap = new NoFlyZoneMap2();
+      //if (!exLogic.User.hasAccess("FLIGHT.MAP")) return "";
+      using (ExponentPortalEntities db = new ExponentPortalEntities()) {
+        var AllZone =
+          from m in db.MSTR_NoFlyZone
+          where m.DisplayType == "FIXED"
+          select m;
+        foreach (var Row in AllZone) {
+          var Zone = new FlyZone2(Row.FillColour, Row.Coordinates);
+          TheMap.NoFlyZone.Add(Zone);
+        }
+
+        DateTime Today = DateTime.UtcNow.Date;
+        //Convert the Time specifed to GMP
+        //It is in UAE (Dubai) Time zone in table
+        TimeSpan nowTime = DateTime.UtcNow.AddHours(+4).TimeOfDay;
+        var AllZone2 =
+          from m in db.MSTR_NoFlyZone
+          where
+            m.DisplayType == "Dynamic" &&
+            m.StartDate <= Today &&
+            m.EndDate >= Today &&
+            m.StartTime <= nowTime &&
+            m.EndTime >= nowTime &&
+            m.IsDeleted != true
+          select m;
+        foreach (var Row in AllZone2.ToList()) {
+          var Zone = new FlyZone2(Row.FillColour, Row.Coordinates);
+          TheMap.NoFlyZone.Add(Zone);
+        }
+
+      }
+      return TheMap.GetKML().ToString();
+    }
+
+
     [HttpGet]
     public async System.Threading.Tasks.Task<ActionResult> DynamicZoneNotification([Bind(Prefix = "ID")]int FlightID = 0) {
       using (ExponentPortalEntities db = new ExponentPortalEntities()) {
