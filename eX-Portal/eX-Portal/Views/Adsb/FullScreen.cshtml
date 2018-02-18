@@ -1,11 +1,49 @@
 ﻿@model Exponent.ADSB.ADSBQuery
+
+
 @{
   ViewBag.Title = "No Fly Zone Dashboard";
   //  Layout = null;
 }
 <table class="restable" >
-    <tr>
+    <tr class="restd">
         <td class="restd">
+            <div>
+                <div class="editor-label">
+                    Organisation
+                </div>
+                <div class="editor-field" id="ddlist">
+                    @Html.DropDownList("Organisation_Value", new SelectList(ViewBag.Organisations, "Value", "Text"), new { @class = "form-control", @onchange = "FillPilot()", @id = "ddlOrg" })
+                </div>
+                <div class="editor-label">
+                    Pilots
+                </div>
+                <div class="editor-field" id="ddlist">
+                    @Html.DropDownList("Value", new SelectList(Enumerable.Empty<SelectListItem>()), new { @id = "ddlModel" })
+       
+        </div>
+                <div>
+                    <input checked="checked"
+                           id="chkActive"
+                           name="ActivePilot"
+                           type="checkbox"
+                           value="true" /> Active Pilots <br />
+                    <input checked="checked"
+                           id="chkRegion"
+                           name="RegionPilot"
+                           type="checkbox"
+                           value="true" /> Active Pilots in Region
+                </div>
+
+        </div>
+        </td>
+        <td class="restd">
+            <div style="width:100%; height:600px; position:relative">
+                <div id="adsb_map" style="width:100%; height:600px"></div>
+                <div id="AddDiv">
+                    <div class="button" id="addzone"><span class="icon green">&#xf055;</span>Add New Zone</div>
+                </div>
+            </div>
             <div id="zonedetails" style="height:20%; padding-bottom:50px;">
 
                 <div id="DetailDiv">
@@ -112,14 +150,6 @@
                 </div>
             </div>
         </td>
-        <td  class="restd">
-            <div style="width:100%; height:600px; position:relative">
-                <div id="adsb_map" style="width:100%; height:600px"></div>
-                <div id="AddDiv">
-                    <div class="button" id="addzone"><span class="icon green">&#xf055;</span>Add New Zone</div>
-                </div>
-            </div>
-        </td>
 
     </tr>
     
@@ -142,6 +172,10 @@
           width: 100%;
           border-collapse: collapse;
       }
+          table.restable tr.restd {
+              width: 100%;
+              border-collapse: collapse;
+          }
 
           table.restable td.restd {
               width: 50%;
@@ -205,7 +239,34 @@
 
 @section scripts {
   <script type="text/javascript">
-  var InitQuery = @Html.Raw(Json.Encode(Model));
+      var InitQuery = @Html.Raw(Json.Encode(Model));
+      
+
+      function FillPilot()
+      {
+          var OrgID = $('#ddlOrg').val();
+
+          if (OrgID != 0) {
+              $.ajax({
+                  type: 'GET',
+                  url: 'GetPilot',
+                  data: "AccountID=" + $('#ddlOrg').val(),
+                  success: function (data) {
+                      var dValue = data;
+                      $(data).each(function () {
+                          $('#ddlModel').append('<option value="' + this.Value + '">' + this.Text + '</option>');
+
+                      })
+                  },
+                  error: function (e) {
+                      alert(e);
+                  }
+
+
+              });
+          }
+
+      }
   </script>
   <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyDY6IHXH4-fUAzYq6HBR_ndu_lnyyopcTs"></script>
   <script src="~/Scripts/ADSB-Aircraft-DB.js" type="text/javascript"></script>

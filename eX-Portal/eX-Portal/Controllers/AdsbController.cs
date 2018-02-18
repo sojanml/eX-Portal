@@ -49,6 +49,8 @@ namespace eX_Portal.Controllers {
         CN.Close();
       }
 
+            ViewBag.Organisations = GetOrganisations();
+            ViewBag.Pilots = GetPilot(0);
       return View(Params);
     }
 
@@ -112,6 +114,39 @@ namespace eX_Portal.Controllers {
 
             return Json(ezone.ID, JsonRequestBehavior.AllowGet);
 
+        }
+
+        public IEnumerable<SelectListItem> GetOrganisations()
+        {
+            List<SelectListItem> Organisations = new List<SelectListItem>();
+           
+            Organisations = ctx.MSTR_Account
+                            .Select(x => new SelectListItem
+                            {
+                                Value = x.AccountId.ToString(),
+                                Text = x.Name.ToString()
+                            }).ToList();
+
+           Organisations.Insert(0,new SelectListItem() { Value = "0", Text = "All" });
+            
+
+            return Organisations;
+        }
+
+        public JsonResult GetPilot(int AccountID)
+        {
+            List<SelectListItem> Pilots = new List<SelectListItem>();
+            Pilots.Add(new SelectListItem() { Value = "0", Text = "All" });
+            Pilots=ctx.MSTR_User.Where(x=>x.AccountId==AccountID)
+                                                        .Select(x => new SelectListItem
+                                                        {
+                                                            Value = x.UserId.ToString(),
+                                                            Text = x.FirstName.ToString()
+                                                        }).ToList();
+            ViewBag.Pilots = Pilots;
+
+
+            return Json(Pilots,JsonRequestBehavior.AllowGet);
         }
     }
 

@@ -214,7 +214,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.BlackBoxData' does not have a prima
           <Property Name="ToID" Type="int" Nullable="false" />
           <Property Name="MessageID" Type="int" Nullable="false" />
           <Property Name="Status" Type="nvarchar" MaxLength="500" Nullable="false" />
-          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="CreatedBy" Type="int" Nullable="false" />
           <Property Name="StatusUpdatedOn" Type="datetime" />
         </EntityType>
@@ -802,7 +802,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           </Key>
           <Property Name="MessageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="CreatedBy" Type="int" Nullable="false" />
           <Property Name="FlightID" Type="int" />
         </EntityType>
@@ -3937,7 +3937,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="ToID" Type="Int32" Nullable="false" />
           <Property Name="MessageID" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="CreatedBy" Type="Int32" Nullable="false" />
           <Property Name="StatusUpdatedOn" Type="DateTime" Precision="3" />
           <NavigationProperty Name="MSTR_Comms" Relationship="ExponentPortalModel.FK__CommsDeta__Messa__6774552F" FromRole="CommsDetail" ToRole="MSTR_Comms" />
@@ -3948,7 +3948,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           </Key>
           <Property Name="MessageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="CreatedBy" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CommsDetail" Relationship="ExponentPortalModel.FK__CommsDeta__Messa__6774552F" FromRole="MSTR_Comms" ToRole="CommsDetail" />
           <Property Name="FlightID" Type="Int32" />
