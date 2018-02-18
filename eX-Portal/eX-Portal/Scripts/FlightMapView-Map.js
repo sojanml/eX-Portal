@@ -44,8 +44,7 @@ var FlightMap = function () {
       strokeColor: '#18bdec',
       strokeOpacity: 1.0,
       strokeWeight: 2,
-      map: _map,
-      editable: true
+      map: _map
     });
     _PolylinePending = new google.maps.Polyline({
       path: [],
@@ -53,34 +52,16 @@ var FlightMap = function () {
       strokeColor: '#FF0000',
       strokeOpacity: 0.3,
       strokeWeight: 2,
-      map: _map,
-      editable: true
+      map: _map
     });
 
 
     _map.addListener('center_changed', _MapBusy );
     _map.addListener('idle', _MapIdle);
 
-    //google.maps.event.addListener(_PolylinePending.getPath(), 'set_at', _ShowPath);
-    //google.maps.event.addListener(_PolylinePending.getPath(), 'insert_at', _ShowPath);
-    window.setInterval(_ShowPath, 10000);
 
   };
 
-  var _ShowPath = function (vertex) {
-    var ComsContent = $('#ComsContent');
-    var List = $('<UL></UL>');
-    var vertices = _PolylinePending.getPath();
-
-    for (var i = 0; i < vertices.getLength(); i++) {
-      var xy = vertices.getAt(i);
-      List.append($('<li>' + xy.lat() + ',' + xy.lng() + '</li>'));
-    }
-
-    ComsContent.empty();
-    ComsContent.html(List);
-
-  }
 
   var _MapBusy = function() {
     _IsMapBusy = true;

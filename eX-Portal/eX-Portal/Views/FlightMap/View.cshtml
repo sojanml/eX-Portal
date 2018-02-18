@@ -191,9 +191,13 @@
   </div>
   <div id="ComSection">
     <div class="caption">COMMS MODULE</div>
-    <div id="ComsContent"></div>
+    <div id="ComsContent">
+      <ul id="ComsList">
+
+      </ul>
+    </div>
     <div id="ComsSendMessage">
-      <form method="post">
+      <form method="post" id="ComSubmitForm" name="ComSubmitForm">
         <div class="ContentBox">
           <input type="text" id="ComsMessage" name="ComsMessage" value="" placeholder="Message to DCAA" />
         </div>
@@ -243,5 +247,6 @@
   <script type="text/javascript" src="~/Scripts/FlightMapView-Slider.js"></script>
   <script type="text/javascript" src="~/Scripts/FlightMapView-3D.js"></script>
   <script type="text/javascript" src="~/Scripts/FlightMapView-ADSB.js"></script>
+  <script type="text/javascript" src="~/Scripts/FlightMapView-COMMS.js"></script>
   <script type="text/javascript" src="~/Scripts/FlightMapView.js"></script>
 }

@@ -628,13 +628,13 @@ section#BottomSection::after {
     box-sizing: content-box;
   }
   div#AttitudeMeter div.AttitudePichRollBackground {
-    border-radius: 21.12px;
-    height: 52.8px;
-    top: 22.88px;
+    border-radius: 15.488px;
+    height: 38.72px;
+    top: 29.92px;
   }
   div#AttitudeMeter div.AttitudePitchSection,
   div#AttitudeMeter div.AttitudeRollSection {
-    top: 33.44px;
+    top: 37.664px;
     font-size: 12px;
   }
   div#AttitudeMeter div.AttitudePitchSection span.Number,
@@ -929,13 +929,13 @@ section#BottomSection::after {
     box-sizing: content-box;
   }
   div#AttitudeMeter div.AttitudePichRollBackground {
-    border-radius: 31.68px;
-    height: 79.2px;
-    top: 34.32px;
+    border-radius: 23.232px;
+    height: 58.08px;
+    top: 44.88px;
   }
   div#AttitudeMeter div.AttitudePitchSection,
   div#AttitudeMeter div.AttitudeRollSection {
-    top: 50.16px;
+    top: 56.496px;
     font-size: 12px;
   }
   div#AttitudeMeter div.AttitudePitchSection span.Number,
@@ -1230,13 +1230,13 @@ section#BottomSection::after {
     box-sizing: content-box;
   }
   div#AttitudeMeter div.AttitudePichRollBackground {
-    border-radius: 36.9px;
-    height: 92.25px;
-    top: 39.975px;
+    border-radius: 27.06px;
+    height: 67.65px;
+    top: 52.275px;
   }
   div#AttitudeMeter div.AttitudePitchSection,
   div#AttitudeMeter div.AttitudeRollSection {
-    top: 58.425px;
+    top: 65.805px;
     font-size: 12px;
   }
   div#AttitudeMeter div.AttitudePitchSection span.Number,

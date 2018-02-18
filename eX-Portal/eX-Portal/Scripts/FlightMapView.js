@@ -2,6 +2,7 @@
   FlightMapData.Init();
   FlightMapSlider.Init();
   FlightMapSlider.SetOnSlide(FlightMapData.OnSlide);
+  COMMS.Init();
 })
 
 var FlightMapData = function () {
@@ -407,8 +408,10 @@ var Util = function () {
 
 
   var _toDateTime = function (sNetDate) {
-    var nDate = new Date();
-    if (sNetDate !== null) {
+    var nDate = new Date(); 
+    if (sNetDate instanceof Date && isFinite(sNetDate)) {
+      nDate = sNetDate;
+    } else if (sNetDate !== null) {
       var r = /\/Date\(([0-9]+)\)\//i
       var matches = sNetDate.match(r);
       if (matches.length === 2) {
@@ -424,6 +427,14 @@ var Util = function () {
   var _pad = function (Num) {
     if (Num >= 10) return Num;
     return '0' + Num;
+  };
+
+  var _toDateString = function (nDate) {
+    var data = 
+    _pad(nDate.getFullYear()) + '-' + _pad(nDate.getMonth() + 1) + '-' + _pad(nDate.getDate()) + " " +
+      _pad(nDate.getHours()) + ':' + _pad(nDate.getMinutes()) + ':' + _pad(nDate.getSeconds()) + '.' + nDate.getMilliseconds();
+
+    return data;
   };
 
 
@@ -442,6 +453,7 @@ var Util = function () {
   return {
     FmtTime: _FmtTime,
     toDateTime: _toDateTime,
-    toTime: _toTime 
+    toTime: _toTime,
+    toString: _toDateString
   };
 }();

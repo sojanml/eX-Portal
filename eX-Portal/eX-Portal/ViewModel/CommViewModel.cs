@@ -44,7 +44,7 @@ namespace eX_Portal.ViewModel
                    
                  MessageList = FlightMessage.GroupBy(p => p.MessageID )
                                 .Select(x =>x.Where(s=>(s.Status=="READ" || s.Status=="NEW") ).OrderBy(l=>l.StatusUpdatedOn).FirstOrDefault())
-                                .Where(p => (p.FromID == UserID || p.ToID == UserID) && p.CreatedOn>=FilterDate)
+                                .Where(p => (p.FromID == UserID || p.ToID == UserID) && p.CreatedOn > FilterDate)
                                 .OrderBy(x=>x.CreatedOn).Take(10).ToList();
                 else
                     MessageList = FlightMessage.GroupBy(p => p.MessageID)

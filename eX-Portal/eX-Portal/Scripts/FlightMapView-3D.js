@@ -85,8 +85,7 @@
       model: {
         uri: '/Cesium/Images/CesiumDrone.gltf',
         minimumPixelSize: 32,
-        maximumPixelSize:64,
-        maximumScale: 1000
+        maximumPixelSize:128
       },
       path: {
         width: 2,
@@ -141,7 +140,7 @@
     for (var i = 0; i < dataSource.length; i++) {
       var Data = dataSource[i];
       var time = _toUTC(Data.FlightDateTime);
-      var position = Cesium.Cartesian3.fromDegrees(Data.Lng, Data.Lat, Data.Altitude);
+      var position = Cesium.Cartesian3.fromDegrees(Data.Lng, Data.Lat, Data.Altitude + 200);
       var hpRoll = Cesium.HeadingPitchRoll.fromDegrees(Data.Heading, 0, 0);
       //var orientation = Cesium.Quaternion.fromHeadingPitchRoll(hpRoll);
       var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpRoll);
