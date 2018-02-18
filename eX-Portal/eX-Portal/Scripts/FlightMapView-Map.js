@@ -4,10 +4,12 @@ var FlightMap = function () {
   var _DroneIcon = null;
   var _MapMarkers = null;
   var _ADSBOverlay = null;
+  var _NoFlyZone = null;
 
   var _PolylineCompleted = null;
   var _PolylinePending = null;
   var _LatLngBounds = new google.maps.LatLngBounds();
+  var _kmlUrl = 'http://dcaa.exponent-ts.com/Map/NoFlyzone';
 
   var _PolylinePendingPath = [];
   var _PolylineCompletedPath = [];
@@ -29,6 +31,11 @@ var FlightMap = function () {
     _DroneIcon = new DroneIcon({ map: _map }, CenterPosition);
     _MapMarkers = new MapMarkers({ map: _map }, CenterPosition);
     _ADSBOverlay = new ADSBOverlay({ map: _map });
+    _NoFlyZone = new google.maps.KmlLayer(_kmlUrl, {
+      preserveViewport: true,
+      map: _map
+    });
+
     ADSBLoader.Init(_ADSBOverlay);
 
     _PolylineCompleted = new google.maps.Polyline({
@@ -37,7 +44,8 @@ var FlightMap = function () {
       strokeColor: '#18bdec',
       strokeOpacity: 1.0,
       strokeWeight: 2,
-      map: _map
+      map: _map,
+      editable: true
     });
     _PolylinePending = new google.maps.Polyline({
       path: [],
@@ -45,14 +53,34 @@ var FlightMap = function () {
       strokeColor: '#FF0000',
       strokeOpacity: 0.3,
       strokeWeight: 2,
-      map: _map
+      map: _map,
+      editable: true
     });
 
 
     _map.addListener('center_changed', _MapBusy );
     _map.addListener('idle', _MapIdle);
 
+    //google.maps.event.addListener(_PolylinePending.getPath(), 'set_at', _ShowPath);
+    //google.maps.event.addListener(_PolylinePending.getPath(), 'insert_at', _ShowPath);
+    window.setInterval(_ShowPath, 10000);
+
   };
+
+  var _ShowPath = function (vertex) {
+    var ComsContent = $('#ComsContent');
+    var List = $('<UL></UL>');
+    var vertices = _PolylinePending.getPath();
+
+    for (var i = 0; i < vertices.getLength(); i++) {
+      var xy = vertices.getAt(i);
+      List.append($('<li>' + xy.lat() + ',' + xy.lng() + '</li>'));
+    }
+
+    ComsContent.empty();
+    ComsContent.html(List);
+
+  }
 
   var _MapBusy = function() {
     _IsMapBusy = true;
