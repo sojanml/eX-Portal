@@ -17,6 +17,7 @@ var Timers = {
   getADSB: null,
   getChartData: null
 }
+var comms = { OrganizationID: 0, PilotID: 0, ActivePilot: false, ActiveRegionPilot: false };
 
 $(document).ready(function () {
   initializeMap();
@@ -57,6 +58,10 @@ $(document).ready(function () {
      
   });
 
+  $("#btnSubmitMessage").click(function () {
+      setcomms();
+      SaveComms(comms);
+  });
  // Timers['getADSB'] = window.setTimeout(getADSB, 100, _ADSBLayer);
   
 });
@@ -505,4 +510,35 @@ function RemovezonePolygon()
             break;
         }
     }
+}
+
+function SaveComms(comms) {
+    // var Cordinates = getCoordinates();
+    var OuterPolygon = '';
+    $.ajax({
+        type: 'POST',
+        url: '/ADSB/SendMessage',
+        dataType: "json",
+        async: true,
+        data: comms,
+        success: function (data) {
+            //AllZones = data;
+           
+
+        },
+        error: function () {
+            alert('error');
+        }
+    });
+
+    
+}
+
+function setcomms() {
+    comms.OrganizationID = $("#ddlOrg").val();
+
+    comms.PilotID = $("#ddlModel").val();
+    comms.Message = $("#CommMessage").val();
+    comms.ActivePilot = $("#chkActive").val();
+        comms.ActiveRegionPilot = $("#chkRegion").val();
 }
