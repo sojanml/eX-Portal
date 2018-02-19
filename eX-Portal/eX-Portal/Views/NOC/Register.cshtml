@@ -1,5 +1,6 @@
 ﻿@model eX_Portal.Models.MSTR_NOC
 @using eX_Portal.exLogic;
+
 @{
   ViewBag.Title = "NOC Application";
   bool IsOrgAdmin = eX_Portal.exLogic.User.hasAccess("ORGANIZATION.ADMIN");
@@ -185,17 +186,13 @@
       <td valign="top" style="width:20%;">
         <div id="NocBilling">
           <div id="NocBillingTotalSection">
-            <div class="item-left">Total (AED):</div>
+            <div class="item-left">ESTIMATE AED:</div>
             <div id="NocBillingTotal" class="item-right">0.00</div>
             <div style="clear:both"></div>
           </div>
 
           <ul id="NocBillingItem">
-            <li>
-              <div id="NocBillingItem-3" class="NocBillingItemAmount">0.00</div>
-              Some cost title and description
-              <div style="clear:both"></div>
-            </li>
+
           </ul>
         </div>
       </td>

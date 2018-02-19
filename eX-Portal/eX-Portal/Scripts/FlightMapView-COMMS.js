@@ -25,9 +25,18 @@
     for (var i = 0; i < Data.length; i++) {
       var Message = Data[i];
       Message.CreatedOn = Util.toDateTime(Message.CreatedOn);
-      var LI = $('<LI></LI>')
+      var ClassName = "tome";
+      if (Message.FromID == FlightInfo.UserID) {
+        ClassName = "fromme";
+        Message.Name = "You";
+      }
+
+      var LI = $('<LI class="' + ClassName + '"></LI>')
         .append(
-        '<div class="message">' + Message.Message + '</div>' +
+        '<div class="message">' +
+        '<span class="name">' + Message.Name + '</span>' + 
+          Message.Message +
+        '</div>' +
         '<div class="date">' + Util.FmtTime(Message.CreatedOn) + '</div>'
         );
       $('#ComsList').append(LI);
@@ -49,7 +58,9 @@
       data: TheData,
       url: _URL,
       dataType: "json",
-      success: _MessagesLoaded,
+      success: function (data) {
+        $('#ComsMessage').val("");
+      },
       failure: function (msg) {
         alert('Live Drone Position Error' + msg);
       },

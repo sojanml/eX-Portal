@@ -289,6 +289,15 @@ div.ADSBOverlay {
       }
     }
   }
+
+  footer {
+    $FooterColor: rgba(9, 9, 9, 0.59);
+    margin-top: $VerticalGap * 2;
+    margin-bottom: $VerticalGap;
+    border-top: 1px $FooterColor solid;
+    color: $FooterColor;
+    text-align: left;
+  }
 }
 
 

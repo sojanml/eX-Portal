@@ -379,6 +379,14 @@ div.ADSBOverlay div.ADSB-Icon {
     padding-left: 8px;
   }
 
+  footer {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    border-top: 1px rgba(9, 9, 9, 0.59) solid;
+    color: rgba(9, 9, 9, 0.59);
+    text-align: left;
+  }
+
   body {
     font-size: 12pt;
   }
@@ -425,6 +433,14 @@ div.ADSBOverlay div.ADSB-Icon {
     padding-left: 12px;
   }
 
+  footer {
+    margin-top: 24px;
+    margin-bottom: 12px;
+    border-top: 1px rgba(9, 9, 9, 0.59) solid;
+    color: rgba(9, 9, 9, 0.59);
+    text-align: left;
+  }
+
   body {
     font-size: 13pt;
   }
@@ -469,6 +485,14 @@ div.ADSBOverlay div.ADSB-Icon {
   nav.main-menu ul li {
     padding-right: 15px;
     padding-left: 15px;
+  }
+
+  footer {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-top: 1px rgba(9, 9, 9, 0.59) solid;
+    color: rgba(9, 9, 9, 0.59);
+    text-align: left;
   }
 
   body {

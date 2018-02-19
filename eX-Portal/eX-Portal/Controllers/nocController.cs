@@ -231,9 +231,20 @@ namespace eX_Portal.Controllers {
 
     [HttpPost]
     public async Task<ActionResult> Billing(BillingModule.BillingNOC noc) {
-      BillingModule.BillingGroup group = new BillingModule.BillingGroup(1);
+      var BillingGroupID = Util.GetBillingGroupID();
+
+      BillingModule.BillingGroup group = new BillingModule.BillingGroup(BillingGroupID);
       await noc.GenerateFields();
       var Billing = await group.GenerateBilling(noc);
+      return Json(Billing, JsonRequestBehavior.AllowGet);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Estimate(BillingModule.BillingNOC noc) {
+      var BillingGroupID = Util.GetBillingGroupID();
+      BillingModule.BillingGroup group = new BillingModule.BillingGroup(BillingGroupID);
+      await noc.GenerateFields();
+      var Billing = await group.GenerateEstimate(noc);
       return Json(Billing, JsonRequestBehavior.AllowGet);
     }
 

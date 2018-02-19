@@ -59,14 +59,17 @@
       </div>
     </header>
   </section>
+  @RenderSection("toolbar", required: false)
+
   <section class="body-content">
     @RenderBody()
   </section>
 
-  <footer>
-    &copy; Exponent Technology all rights reserved
+  <section>
+    <footer>
+      Copyright @DateTime.Now.Year &copy;  Exponent Technology all rights reserved
     </footer>
-
+  </section>
 
     <div id="Overlay">
       <img src="~/images/loading.png" />
@@ -75,7 +78,7 @@
 
   @Scripts.Render("~/bundles/exPortalScript")
   @RenderSection("scripts", required: false)
-
+  
   
 </body>
 </html>
