@@ -16,7 +16,7 @@ namespace eX_Portal.ViewModel
         public string Status { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? StatusUpdatedOn { get; set; }
-
+        public string FromUser { get; set; }
         public CommViewModel()
         {
             FromID = 0;
@@ -28,7 +28,7 @@ namespace eX_Portal.ViewModel
             CommsPilotMsgs = new List<CommViewModel>();
             CreatedOn = new DateTime();
             StatusUpdatedOn = new DateTime();
-
+            FromUser = "";
         }
 
         public List<CommViewModel> CommsPilotMsgs { get; set; }
@@ -60,6 +60,10 @@ namespace eX_Portal.ViewModel
                     cvm.MessageID = cd.MessageID;
                     cvm.ToID = cd.ToID;
                     cvm.FromID = cd.FromID;
+                    if (cvm.FromID == UserID)
+                        cvm.FromUser = "Me";
+                    else
+                        cvm.FromUser = cd.MSTR_User.FirstName;
                     cvm.Status = cd.Status;
                     cvm.CreatedOn = cd.CreatedOn;
                     cvm.StatusUpdatedOn = cd.StatusUpdatedOn;

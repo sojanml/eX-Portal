@@ -64,29 +64,45 @@ namespace eX_Portal.Controllers {
     public JsonResult CreateMessage(string Message, int FlightID) {
       try {
         // TODO: Add insert logic here
-        if (Message.Trim().Length > 0) {
-          MSTR_Comms Comms = new MSTR_Comms();
-          Comms.Message = Message;
-          Comms.CreatedBy = exLogic.Util.getLoginUserID();
-          Comms.FlightID = FlightID;
-          ctx.MSTR_Comms.Add(Comms);
-          ctx.SaveChanges();
+        int userid= exLogic.Util.getLoginUserID();
+                if (userid != 0)
+                {
+                    if (Message.Trim().Length > 0)
+                    {
+                        MSTR_Comms Comms = new MSTR_Comms();
+                        Comms.Message = Message;
+                        Comms.CreatedBy = userid;
+                        Comms.FlightID = FlightID;
+                        ctx.MSTR_Comms.Add(Comms);
+                        ctx.SaveChanges();
 
-          List<MSTR_User> UserList = ctx.MSTR_User.Where(x => x.AccountId == 1).ToList();
+                        List<MSTR_User> UserList = ctx.MSTR_User.Where(x => x.AccountId == 1).ToList();
 
-          foreach (MSTR_User Us in UserList) {
-            CommsDetail Cmd = new CommsDetail();
-            Cmd.FromID = exLogic.Util.getLoginUserID();
-            Cmd.ToID = Us.UserId;
-            Cmd.MessageID = Comms.MessageID;
-            Cmd.Status = "NEW";
-            Cmd.CreatedBy = exLogic.Util.getLoginUserID();
-            ctx.CommsDetail.Add(Cmd);
+                        foreach (MSTR_User Us in UserList)
+                        {
+                            CommsDetail Cmd = new CommsDetail();
+                            Cmd.FromID = exLogic.Util.getLoginUserID();
+                            Cmd.ToID = Us.UserId;
+                            Cmd.MessageID = Comms.MessageID;
+                            Cmd.Status = "NEW";
+                            Cmd.CreatedBy = exLogic.Util.getLoginUserID();
+                            ctx.CommsDetail.Add(Cmd);
 
-          }
-          ctx.SaveChanges();
-        }
-        return Json("OK");
+                        }
+                        ctx.SaveChanges();
+                        return Json("OK");
+                    }
+                    else
+                    {
+                        return Json("Empty Message");
+                    }
+
+                    
+                }
+                else
+                {
+                    return Json("Invalid User");
+                }
       } catch (Exception Ex) {
         return Json("Unsuccessful");
       }
