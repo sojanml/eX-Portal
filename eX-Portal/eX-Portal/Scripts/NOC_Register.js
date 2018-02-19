@@ -405,7 +405,7 @@ var NOCMap = function () {
     _isBillingLoading = true;
     _BillingXHR = $.ajax({
       type: 'GET',
-      url: '/NOC/Billing/',
+      url: '/NOC/Estimate/',
       method: "POST",
       data: FormData,
       success: _showBilling,
@@ -425,7 +425,8 @@ var NOCMap = function () {
       var NocBillingItem = $('div#NocBillingItem-' + Billing.RuleID);
       if (NocBillingItem.length < 1) {
         NocBillingItem = $('<div id="NocBillingItem-' + Billing.RuleID + '" class="NocBillingItemAmount">0.00</div>');
-        var LI = $('<LI>' +
+        var LI = $('<LI class="' + Billing.CalculateOn + '">' +
+          (Billing.CalculateOn == 'DroneFlight' ? '<span>Estimate</span>' : '') +
           Billing.RuleName +
           '<div style= "clear:both" ></div>' +
           '</LI>');

@@ -101,6 +101,7 @@ var FlightMapData = function () {
     if (!_IsMapInit) {
       _LoadAttitudeMeter(Data.Data);
       FlightMap.Init({ lat: lat, lng: lng });
+      StatusIcons.Init(lat, lng);
     }
     _IsMapInit = true;
       
@@ -129,21 +130,11 @@ var FlightMapData = function () {
     //add the loaded data to map
     FlightMap.AddMapData(Data.Data);
     FlightCharts.AddChartData(Data.Data);
+    FlightSummary.AddData(Data.Data);
     _FullData = _FullData.concat(Data.Data);
     //Update the last flight ID
     if (_FullData.length > 0) _FlightMapDataID = _FullData[_FullData.length - 1].FlightMapDataID;
 
-    /*
-    //Set date time to initilize
-    if (FlightInfo.IsLive) {
-      PlayIndex = _FullData.length - 1;
-      PlayPositionTime = _FullData[PlayIndex].FlightDateTime;
-      FlightMapSlider.SetData(_FullData);
-      FlightMapSlider.SetIndex(PlayIndex);
-      
-      _MoveToIndex(PlayIndex);
-    } 
-    */
 
     //Load next set of data
     if (_OnMapLoadDataTimer) window.clearTimeout(_OnMapLoadDataTimer);
@@ -401,6 +392,57 @@ var FlightMapTable = function () {
   };
 }();
 
+
+var StatusIcons = function () {
+  var _lat = null;
+  var _lng = null;
+
+  var _Init = function (lat, lng) {
+    _lat = lat;
+    _lng = lng;
+
+    $('#FlightStatusBar > ul > li > div').on("click", function () {
+      var elem = $(this);
+      _setInfo(elem)
+    });
+    $('#MetarRefresh').on("click", function (e) {
+      e.preventDefault();
+      _LoadMetarInfo();
+    });
+    _LoadMetarInfo();
+  };
+
+  var _setInfo = function (elem) {
+    var data = elem.attr("data-for");
+    $('#FlightStatusBar > ul > li > div').removeClass("active");
+    elem.addClass("active");
+    $('#FlightStatusIconInfo > span').hide();
+    $('#FlightStatusIcon' + data + 'Text').fadeIn();
+  }
+
+  var _LoadMetarInfo = function () {
+    $.ajax({
+      type: 'GET',
+      url: 'https://api.checkwx.com/metar/lat/' + _lat + '/lon/' + _lng +'/decoded',
+      headers: { 'X-API-Key': '57786cac657c977ca5aa70a898' },
+      dataType: 'json',
+      success: function (result) {
+        $('#FlightStatusIconWindText').html('Wind Speed: ' + (result.data[0].wind.speed_mps * 3.6) + ' Km/H (kmph)');
+        $('#FlightStatusIconTempText').html('Temperature: ' + result.data[0].temperature.celsius + '&deg;C');
+        $('#MetarInfo').html(result.data[0].raw_text);
+      },
+      error: function (error) {
+        // CallBack(error);
+      }
+    });
+  }
+
+  return {
+    Init: _Init
+  };
+}();
+
+
 var Util = function () {
   this._FmtTime = function (nDate) {
     return _pad(nDate.getHours()) + ':' + _pad(nDate.getMinutes()) + ':' + _pad(nDate.getSeconds());
@@ -457,3 +499,40 @@ var Util = function () {
     toString: _toDateString
   };
 }();
+
+var FlightSummary = function () {
+  var _satellite = new Summary();
+  var _altitude = new Summary();
+  var _addData = function (data) {
+    for (var i = 0; i < data.length; i++) {
+      _satellite.Add(data[i].Satellites);
+      _altitude.Add(data[i].Altitude);
+    }
+
+    $('#info-Altitude-min').html(_altitude.Min());
+    $('#info-Altitude-max').html(_altitude.Max());
+    $('#info-Satellite-min').html(_satellite.Min());
+    $('#info-Satellite-max').html(_satellite.Max());
+
+    
+  };
+
+  return {
+    AddData: _addData
+  };
+  
+}();
+
+function Summary () {
+  var _min = 0;
+  var _max = 0;
+  var _AddData = function (num) {
+    if (num < _min) _min = num;
+    if (num > _max) _max = num;
+  };
+  return {
+    Add: _AddData,
+    Min: function () { return _min },
+    Max: function () { return _max }
+  };
+};

@@ -483,7 +483,7 @@ section#BottomSection {
 
   div#ComSection {
     background-color: white;
-     
+
     div.caption {
       width: 100%;
       background-color: $HiliteColor3;
@@ -491,7 +491,40 @@ section#BottomSection {
       text-align: center;
       padding: 5px 0px 5px 0px;
       font-weight: 800;
+    }
 
+    ul#ComsList {
+      margin: 0px;
+      padding: 0px;
+
+      li {
+        margin: 0px 0px 10px 0px;
+        padding: 0px;
+
+        div.message {
+          border-radius: 3px;
+          padding: 2px 10px 2px 10px;
+
+          span.name {
+            padding-right: 20px;
+            font-weight:bold;
+          }
+        }
+
+        &.tome div.message {
+          background-color: $BodyColor;
+          color: white;
+        }
+
+        &.fromme div.message {
+          background-color: silver;
+        }
+
+        div.date {
+          text-align: right;
+          padding-right: 10px;
+        }
+      }
     }
   }
 
@@ -676,6 +709,20 @@ section#BottomSection {
     display: block;
     background-color: silver;
     border-radius: $MetarHeight/2;
+
+    div.MetarInfoContent {
+      box-sizing: border-box;
+      width: $MaxSize - ($BorderWidth * 4 + $MetarHeight);
+      height: $MetarHeight - $BorderWidth * 2;
+      margin-left: $BorderWidth;
+      margin-top: $BorderWidth;
+      float:left;
+      div.MetarInfo {
+        text-align: left;
+        vertical-align: middle;
+        display: table-cell;
+      }
+    }
 
     div.MetarTitle {
       box-sizing: border-box;

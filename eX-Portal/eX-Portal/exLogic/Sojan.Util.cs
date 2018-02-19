@@ -607,6 +607,9 @@ namespace eX_Portal.exLogic {
       return String.Empty;
     }
 
+    public static int GetBillingGroupID() {
+      return 1;
+    }
 
     public static int getAccountID() {
       HttpSessionState Session = HttpContext.Current.Session;

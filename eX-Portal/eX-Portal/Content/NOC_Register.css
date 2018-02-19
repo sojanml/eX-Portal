@@ -176,7 +176,7 @@ div.cesium-viewer-bottom {
 }
 
 div#NocBillingTotalSection {
-  padding: 0px 5px 5px 5px;
+  padding: 0px 0px 5px 0px;
   font-family: Gobold_Light;
   border-bottom: 2px #018aff solid;
   margin-bottom: 5px;
@@ -192,10 +192,18 @@ div#NocBillingTotalSection div.item-right {
   font-size: 26px;
 }
 
+div#NocBilling {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0px 10px 0px 10px;
+}
+
 ul#NocBillingItem {
   margin: 0px;
-  padding: 0px 5px 0px 5px;
+  padding: 0px;
   list-style: none;
+  overflow-y: scroll;
+  height: 355px;
 }
 ul#NocBillingItem li {
   list-style: none;
@@ -208,4 +216,17 @@ ul#NocBillingItem li div.NocBillingItemAmount {
   color: #53a100;
   font-size: 18px;
   font-family: Gobold_Light;
+  padding-left: 5px;
+}
+ul#NocBillingItem li.DroneFlight div.NocBillingItemAmount {
+  color: #f2a003;
+}
+ul#NocBillingItem li span {
+  font-size: 8px;
+  background-color: #f2a003;
+  color: white;
+  display: inline-block;
+  border-radius: 5px;
+  padding: 2px 10px 2px 10px;
+  margin-right: 5px;
 }

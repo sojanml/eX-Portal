@@ -138,6 +138,24 @@ namespace eX_Portal.BillingModule {
       return Rules.Where(w => w.IsActive).ToList();
     }
 
+
+    public async Task<List<BillingGroupRule>> GenerateEstimate(BillingNOC noc) {
+      using (var db = new Models.ExponentPortalEntities()) {
+        await db.Database.Connection.OpenAsync();
+        await CreateTempTableFor(noc, db);
+        foreach (var rule in Rules.Where(w => w.IsActive && w.CalculateOn == "NOC_Details")) {
+          await rule.ApplyNoc(noc, db);
+        }
+        foreach (var rule in Rules.Where(w => w.IsActive && w.CalculateOn == "DroneFlight")) {
+          await rule.ApplyFlightEstimate(noc, db);
+        }
+      }
+
+      //Return all active ruels applied
+      return Rules.Where(w => w.IsActive).ToList();
+    }
+
+
     private async Task CreateTempTableFor(BillingNOC noc, Models.ExponentPortalEntities db) {
       String SQL1 = @"
 CREATE TABLE [#NOC_Details](
@@ -254,11 +272,39 @@ CREATE TABLE [#NOC_Details](
 
     }
 
-    public async Task ApplyDroneFlight(Models.DroneFlight flight, Models.ExponentPortalEntities db) {
+
+    public async Task ApplyFlightEstimate(BillingNOC noc, Models.ExponentPortalEntities db) {
       String SQL =
-        $@"SELECT {CalculateField} * {CostMultipliedBy} / {_CostDividedBy} FROM DroneFlight";
+        $@"SELECT 
+          {CalculateField} * {CostMultipliedBy} / {_CostDividedBy} 
+        FROM #NOC_Details";
       if (!String.IsNullOrWhiteSpace(ApplyCondition)) {
-        SQL += $" WHERE ({ApplyCondition})";
+        String _ACondition = ApplyCondition.Replace("DroneFlight.", "#NOC_Details.");
+        SQL += $" WHERE ({_ACondition})";
+
+      }
+
+      using (var cmd = db.Database.Connection.CreateCommand()) {
+        cmd.CommandText = SQL;
+        var Result = await cmd.ExecuteScalarAsync();
+        if (Result == null)
+          _CalculatedCost = 0;
+        else
+          Decimal.TryParse(Result.ToString(), out _CalculatedCost);
+      }//using ctx.Database.Connection.CreateCommand
+    }
+
+    public async Task ApplyDroneFlight(Models.DroneFlight flight, Models.ExponentPortalEntities db) {
+      if (flight == null)
+        return;
+
+      String SQL =
+        $@"SELECT 
+          {CalculateField} * {CostMultipliedBy} / {_CostDividedBy} 
+        FROM DroneFlight
+          WHERE ID={flight.ID}";
+      if (!String.IsNullOrWhiteSpace(ApplyCondition)) {
+        SQL += $" AND ({ApplyCondition})";
       }
 
       using (var cmd = db.Database.Connection.CreateCommand()) {

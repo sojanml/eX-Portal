@@ -62,7 +62,11 @@
       <div id="FlightChartInfos">
         <div class="flightchartinfo">
           <div class="title">Altitude</div>
-          <div class="sub-title">Breach: <span id="info-breach">None</span></div>
+          <div class="sub-title"> 
+            Min: <span id="info-Altitude-min">0</span>
+            Max: <span id="info-Altitude-max">0</span>
+          
+          </div>
         </div>
 
         <div class="flightchartinfo">
@@ -121,22 +125,29 @@
 
       <div id="FlightStatusBar">
         <ul>
-          <li><div class="active FlightStatusIconWind"></div> </li>
-          <li><div class="FlightStatusIconTemp"></div> </li>
-          <li><div class="FlightStatusIconAirline"></div> </li>
-          <li><div class="FlightStatusIconEM"></div> </li>
+          <li><div data-for="Wind" class="active FlightStatusIconWind"></div> </li>
+          <li><div data-for="Temp" class="FlightStatusIconTemp"></div> </li>
+          <li><div data-for="Airline" class="FlightStatusIconAirline"></div> </li>
+          <li><div data-for="EM" class="FlightStatusIconEM"></div> </li>
         </ul>
-        <div id="FlightStatusIconInfo">Wind Speed: 20 Km/H</div>
+        <div id="FlightStatusIconInfo">
+          <span id="FlightStatusIconWindText">Wind Speed: N/A</span>
+          <span id="FlightStatusIconTempText" style="display:none">Temperature: N/A</span>
+          <span id="FlightStatusIconAirlineText"  style="display:none">Airline: N/A</span>
+          <span id="FlightStatusIconEMText"  style="display:none">EM: N/A</span>
+        </div>
       </div>
       <div id="FlightStatusMetar">
         <div class="CrossCircle"></div>
         <div class="MetarTitle">
           <div class="content">
             <div class="title">METAR</div>
-            <div class="refresh"><a href="#">REFRESH</a></div>
+            <div class="refresh"><a id="MetarRefresh" href="#">REFRESH</a></div>
           </div>
         </div>
-        <div class="MetarInfo"></div>
+        <div class="MetarInfoContent">
+          <div class="MetarInfo" id="MetarInfo"></div>
+        </div>
       </div>
     </div><!---->
     <div class="clear"></div>
@@ -150,7 +161,8 @@
         <div id="btn2D" style="display:none;" class="button"><span class="icon">&#xf279;</span><span class="text">2D</span></div>
         <div id="btn3D" class="button"><span class="icon">&#xf0ac;</span><span class="text">3D</span></div>
 
-        <div id="btnExport" class="button"><span class="icon">&#xf093;</span><span class="text">Export</span></div>
+        <div id="btnExport" class="button">
+          <a href="~/FlightMap/Export/@Model.FlightID"><span class="icon">&#xf093;</span><span class="text">Export</span></a></div>
       </div>
       <div id="FlightSlider">
         <div style="" id="FlightSliderStart">00:00:00</div>
@@ -212,8 +224,6 @@
 </section>
 
 
-
-
 @section header {
   <link type="text/css" rel="stylesheet" href="~/Cesium/Widgets/widgets.css" />
   <link rel="stylesheet" href="~/jquery-ui/jquery-ui.css">
@@ -229,7 +239,8 @@
     var FlightInfo = {
       FlightID: @Model.FlightID,
       RPAS_Image: '@Model.RPAS_Image',
-      IsLive: @(Model.IsLive ? "true" : "false")
+      IsLive: @(Model.IsLive ? "true" : "false"),
+      UserID: @eX_Portal.exLogic.Util.getLoginUserID()
     };
   </script>
   <!--General Libraries-->
