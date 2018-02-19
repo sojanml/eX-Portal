@@ -1672,6 +1672,18 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_FromUser">
+          <End Role="MSTR_User" Type="Self.MSTR_User" Multiplicity="1" />
+          <End Role="CommsDetail" Type="Self.CommsDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MSTR_User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="CommsDetail">
+              <PropertyRef Name="FromID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_GroupID">
           <End Role="BillingRulesGroup" Type="Self.BillingRulesGroup" Multiplicity="1" />
           <End Role="BillingRulesCost" Type="Self.BillingRulesCost" Multiplicity="*" />
@@ -2018,6 +2030,10 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           </EntitySet>
           <AssociationSet Name="FK__CommsDeta__Messa__6774552F" Association="Self.FK__CommsDeta__Messa__6774552F">
             <End Role="MSTR_Comms" EntitySet="MSTR_Comms" />
+            <End Role="CommsDetail" EntitySet="CommsDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FromUser" Association="Self.FK_FromUser">
+            <End Role="MSTR_User" EntitySet="MSTR_User" />
             <End Role="CommsDetail" EntitySet="CommsDetail" />
           </AssociationSet>
           <AssociationSet Name="fk_GroupID" Association="Self.fk_GroupID">
@@ -2457,6 +2473,10 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
             <End Role="MSTR_Comms" EntitySet="MSTR_Comms" />
             <End Role="CommsDetail" EntitySet="CommsDetail" />
           </AssociationSet>
+          <AssociationSet Name="FK_FromUser" Association="ExponentPortalModel.FK_FromUser">
+            <End Role="MSTR_User" EntitySet="MSTR_User" />
+            <End Role="CommsDetail" EntitySet="CommsDetail" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -2791,6 +2811,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="VideoKey" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ActivationKey" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DCAAReferenceID" Type="Int64" />
+          <NavigationProperty Name="CommsDetail" Relationship="ExponentPortalModel.FK_FromUser" FromRole="MSTR_User" ToRole="CommsDetail" />
         </EntityType>
         <EntityType Name="PayLoadMapData">
           <Key>
@@ -3941,6 +3962,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="CreatedBy" Type="Int32" Nullable="false" />
           <Property Name="StatusUpdatedOn" Type="DateTime" Precision="3" />
           <NavigationProperty Name="MSTR_Comms" Relationship="ExponentPortalModel.FK__CommsDeta__Messa__6774552F" FromRole="CommsDetail" ToRole="MSTR_Comms" />
+          <NavigationProperty Name="MSTR_User" Relationship="ExponentPortalModel.FK_FromUser" FromRole="CommsDetail" ToRole="MSTR_User" />
         </EntityType>
         <EntityType Name="MSTR_Comms">
           <Key>
@@ -3962,6 +3984,18 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
             </Principal>
             <Dependent Role="CommsDetail">
               <PropertyRef Name="MessageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FromUser">
+          <End Type="ExponentPortalModel.MSTR_User" Role="MSTR_User" Multiplicity="1" />
+          <End Type="ExponentPortalModel.CommsDetail" Role="CommsDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MSTR_User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="CommsDetail">
+              <PropertyRef Name="FromID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

@@ -24,5 +24,6 @@ namespace eX_Portal.Models
         public Nullable<System.DateTime> StatusUpdatedOn { get; set; }
     
         public virtual MSTR_Comms MSTR_Comms { get; set; }
+        public virtual MSTR_User MSTR_User { get; set; }
     }
 }

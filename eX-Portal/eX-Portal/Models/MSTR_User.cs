@@ -14,6 +14,12 @@ namespace eX_Portal.Models
     
     public partial class MSTR_User
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public MSTR_User()
+        {
+            this.CommsDetail = new HashSet<CommsDetail>();
+        }
+    
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -59,5 +65,8 @@ namespace eX_Portal.Models
         public string VideoKey { get; set; }
         public string ActivationKey { get; set; }
         public Nullable<long> DCAAReferenceID { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CommsDetail> CommsDetail { get; set; }
     }
 }
