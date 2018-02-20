@@ -1363,6 +1363,7 @@
     <Content Include="Scripts\FlightMap-DynamicZone.js" />
     <Content Include="Scripts\FlightMap-Map.js" />
     <Content Include="Scripts\FlightMapView-3D.js" />
+    <Content Include="Scripts\FlightMapView-ADSB.js" />
     <Content Include="Scripts\FlightMapView-Charts.js" />
     <Content Include="Scripts\FlightMapView-COMMS.js" />
     <Content Include="Scripts\FlightMapView-Map.js" />

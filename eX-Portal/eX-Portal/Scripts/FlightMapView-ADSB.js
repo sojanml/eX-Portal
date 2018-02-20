@@ -20,12 +20,25 @@
 var ADSBLoader = function () {
   var _ADSBObj = null;
   var ADSBTimer = null;
+  var LastLoadDateTime = null;
 
   var LoadADSB = function (ADSBObj) {
+    var RequestURL = '/FlightMap/ADSBData';
+    if (!FlightInfo.IsLive && _ADSBObj.DronePosition != null) {
+      var nDate = Util.toDateTime(_ADSBObj.DronePosition.FlightTime);
+      if (LastLoadDateTime != null && nDate.getTime() == LastLoadDateTime.getTime()) {
+        //Same date and time. not required to refresh.
+        StartTimer();
+        return;
+      }
+      LastLoadDateTime = nDate;
+      RequestURL = '/FlightMap/ADSBHistory?History=' + Util.toString(nDate);
+    }
+
     // var QueryData = $('input.spinner, input.query').serialize();
     $.ajax({
       type: "GET",
-      url: '/FlightMap/ADSBData',
+      url: RequestURL,
       contentType: "application/json",
       success: function (data) {
         _ADSBObj.setADSB(data);
@@ -56,18 +69,103 @@ var ADSBLoader = function () {
 function ADSBOverlay(options) {
   this.setValues(options);
   this.markerLayer = $('<div />').addClass('ADSBOverlay');
+  this.infoLayer = $('<div id="ADSBInfo"/>').addClass('ADSBInfo');
   this.ADSBData = {};
   this.ActiveAirlines = {};
-  this.IsDrawing = 
+  this.activeClicked = null;
+  this.infoLine =  new google.maps.Polyline({
+    path: [],
+    geodesic: true,
+    strokeColor: '#18bdec',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+  this.DronePosition = {};
+  this.Clear = function () {
+    this.hideInfoLine();
+    this.ADSBData = {};
+    this.ActiveAirlines = {};
+    this.markerLayer.empty();
+  };
 
   this.setADSB = function (Data) {
     for (var i = 0; i < Data.length; i++) {
       var ADSB = Data[i];
+      if (ADSB.HexCode == null || ADSB.HexCode == "")
+        ADSB.HexCode = ADSB.FlightID;
       this.ADSBData[ADSB.HexCode] = ADSB;
       this.ADSBData[ADSB.HexCode].UpdatedOn = new Date();
     }
     this.draw();
+    this.showInfoLine();
   };
+
+  this.setDroneAt = function (ActiveItem) {
+    this.DronePosition = ActiveItem;
+  };
+
+  this.ADSBOnClick = function (elem) {
+    if (elem == null) {
+      this.hideInfoLine();
+    } else {
+      var HexCode = elem.attr('data-hexcode');
+      this.activeClicked = HexCode;
+      this.showInfoLine();
+    }
+  };
+
+  this.showInfoLine = function () {
+    if (this.activeClicked == null) return;
+    if (this.infoLine == null) return;
+    var projection = this.getProjection();
+    if (projection == null) return;
+
+    var HexCode = this.activeClicked;
+    var ADSB = this.ADSBData[HexCode];
+    var p1 = { lat: this.DronePosition.Lat, lng: this.DronePosition.Lng }
+    var p2 = { lat: ADSB.Lat, lng: ADSB.Lon };
+    this.infoLine.setPath([p1, p2]);
+    this.infoLine.setMap(this.map);
+
+    var IconGeoPos = new google.maps.LatLng(ADSB.Lat, ADSB.Lon);
+    var IconLocation = projection.fromLatLngToDivPixel(IconGeoPos);    
+    var FeetToMeter = 0.3048;    
+    var vDistance = ADSB.Altitude - (this.DronePosition.Altitude / FeetToMeter);
+    var hDistance = Util.getDistance(p1, p2);    
+    var AircraftCode = ADSB.FlightID.substr(0, 3).toUpperCase();
+    var InfoTitle = ADSB.FlightID;
+
+    if (AircraftDB[AircraftCode]) {
+      InfoTitle = AircraftDB[AircraftCode]["IATA"] + ' ' + ADSB.FlightID.substr(3).toUpperCase() +
+        ' (' + AircraftDB[AircraftCode]["Name"] + ')';
+    } else {
+      InfoTitle = '<div class="BigTitle">' + ADSB.FlightID.toUpperCase() + '</div>';
+    }
+
+
+    var Html =
+      '<div class="InfoWindowUpdate">' +
+      '<div class="Header">' + InfoTitle + '</div>' +
+      '<div class="Location"><span>' + ADSB.Lat.toFixed(6) + '&deg;N, ' + ADSB.Lon.toFixed(6) + '&deg;E</span></div>\n' +
+      '<div class="Altitude"><span class="feet">' + ADSB.Altitude.toFixed(0) + ' Feet</span><span class="meter">(' + (ADSB.Altitude * FeetToMeter).toFixed(0) + ' Meter)</span></div>\n' +
+      '<div><span class="caption">Horizontal Distance</span>:<span class="feet">' + (hDistance / FeetToMeter).toFixed(0) + ' Feet</span><span class="meter">(' + hDistance.toFixed(0) + ' Meter)</div>\n' +
+      '<div><span class="caption">Vertical Distance</span>:<span class="feet">' + vDistance.toFixed(0) + ' Feet</span><span class="meter">(' + (vDistance * FeetToMeter).toFixed(0) + ' Meter)</div>\n' +
+      '</div>';
+
+
+    this.infoLayer
+      .html(Html)
+      .css({ left: IconLocation.x + 8, top: IconLocation.y + 8 })
+      .show();
+
+
+  }
+
+  this.hideInfoLine = function () {
+    this.infoLine.setMap(null);
+    this.activeClicked = null;
+    this.infoLayer.hide();
+  }
 
   this.SetOrAdd = function(projection, ADSB) {
     
@@ -99,16 +197,10 @@ function ADSBOverlay(options) {
     if (HexCode in this.ActiveAirlines) {
       var Elapsed = (now.getTime() - this.ActiveAirlines[HexCode].UpdatedOn.getTime()) / 1000;
       if (Elapsed > 10) {
-        console.log(
-          "Total Tracked Flights: " + Object.keys(this.ADSBData).length + 
-          ", Checking Flight: " + HexCode +
-          ", Updated On: " + this.ActiveAirlines[HexCode].UpdatedOn +
-          ", Checking On: " + now +
-          ", Elapsed: " + Elapsed);
-
         console.log("Removing Flight ID: " + HexCode);
         delete this.ADSBData[HexCode];
         $('#ADSB-' + HexCode).remove();
+        if (this.activeClicked == HexCode) this.hideInfoLine();
       }
     }
   };
@@ -120,6 +212,11 @@ function ADSBOverlay(options) {
       Icon = '/images/Drone.png';
     }
     return Icon;
+  }
+
+
+  this.getData = function (HexCode) {
+    return this.ADSBData[HexCode];
   }
 
 }
@@ -161,9 +258,11 @@ ADSBOverlay.prototype.draw = function () {
 ADSBOverlay.prototype.onAdd = function () {
   var $pane = $(this.getPanes().overlayImage); // Pane 3  
   $pane.append(this.markerLayer);
+  $pane.append(this.infoLayer);
 };
 
 ADSBOverlay.prototype.onRemove = function () {
   this.markerLayer.remove();
+  this.infoLayer.remove();
 };
 
