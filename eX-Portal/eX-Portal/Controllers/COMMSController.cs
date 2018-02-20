@@ -24,7 +24,6 @@ namespace eX_Portal.Controllers {
       CommViewModel cvm = new CommViewModel();
       cvm.GetPilotMsgs(null, exLogic.Util.getLoginUserID(), 0);
 
-
       return View(cvm);
     }
 
@@ -64,46 +63,39 @@ namespace eX_Portal.Controllers {
     public JsonResult CreateMessage(string Message, int FlightID) {
       try {
         // TODO: Add insert logic here
-        int userid= exLogic.Util.getLoginUserID();
-                if (userid != 0)
-                {
-                    if (Message.Trim().Length > 0)
-                    {
-                        MSTR_Comms Comms = new MSTR_Comms();
-                        Comms.Message = Message;
-                        Comms.CreatedBy = userid;
-                        Comms.FlightID = FlightID;
-                        
-                        ctx.MSTR_Comms.Add(Comms);
-                        ctx.SaveChanges();
+        int userid = exLogic.Util.getLoginUserID();
+        if (userid != 0) {
+          if (Message.Trim().Length > 0) {
+            MSTR_Comms Comms = new MSTR_Comms();
+            Comms.Message = Message;
+            Comms.CreatedBy = userid;
+            Comms.FlightID = FlightID;
 
-                        List<MSTR_User> UserList = ctx.MSTR_User.Where(x => x.AccountId == 1).ToList();
+            ctx.MSTR_Comms.Add(Comms);
+            ctx.SaveChanges();
 
-                        foreach (MSTR_User Us in UserList)
-                        {
-                            CommsDetail Cmd = new CommsDetail();
-                            Cmd.FromID = exLogic.Util.getLoginUserID();
-                            Cmd.ToID = Us.UserId;
-                            Cmd.MessageID = Comms.MessageID;
-                            Cmd.Status = "NEW";
-                            Cmd.CreatedBy = exLogic.Util.getLoginUserID();
-                            ctx.CommsDetail.Add(Cmd);
+            List<MSTR_User> UserList = ctx.MSTR_User.Where(x => x.AccountId == 1).ToList();
 
-                        }
-                        ctx.SaveChanges();
-                        return Json("OK");
-                    }
-                    else
-                    {
-                        return Json("Empty Message");
-                    }
+            foreach (MSTR_User Us in UserList) {
+              CommsDetail Cmd = new CommsDetail();
+              Cmd.FromID = exLogic.Util.getLoginUserID();
+              Cmd.ToID = Us.UserId;
+              Cmd.MessageID = Comms.MessageID;
+              Cmd.Status = "NEW";
+              Cmd.CreatedBy = exLogic.Util.getLoginUserID();
+              ctx.CommsDetail.Add(Cmd);
 
-                    
-                }
-                else
-                {
-                    return Json("Invalid User");
-                }
+            }
+            ctx.SaveChanges();
+            return Json("OK");
+          } else {
+            return Json("Empty Message");
+          }
+
+
+        } else {
+          return Json("Invalid User");
+        }
       } catch (Exception Ex) {
         return Json("Unsuccessful");
       }
@@ -144,14 +136,15 @@ namespace eX_Portal.Controllers {
     }
 
 
-    public JsonResult GetPilotMessages(DateTime? FilterDate, int UserID = 0, int FlightId =0) {
+    public JsonResult GetPilotMessages(DateTime? FilterDate, int UserID = 0, int FlightId = 0) {
       CommViewModel cvm = new CommViewModel();
       try {
-        cvm.GetPilotMsgs(FilterDate, UserID,  FlightId);
-        return Json(cvm.CommsPilotMsgs, JsonRequestBehavior.AllowGet);
-      } catch (Exception Ex) {
-        return Json(cvm.CommsPilotMsgs, JsonRequestBehavior.AllowGet);
+        cvm.GetPilotMsgs(FilterDate, UserID, FlightId);
+      } catch {
+        //no error
       }
+      return Json(cvm.CommsPilotMsgs, JsonRequestBehavior.AllowGet);
+    
     }
   }
 }
