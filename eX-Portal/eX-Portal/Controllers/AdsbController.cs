@@ -151,27 +151,66 @@ namespace eX_Portal.Controllers {
             return Json(Pilots, JsonRequestBehavior.AllowGet);
         }
 
-        public List<PilotFlight> GetActivePilots()
+        public FlightUser GetActivePilots()
         {
             DateTime dt = DateTime.Now.AddMinutes(-1);
+            var ActFlights = ctx.MSTR_Drone.Where(x => x.FlightTime > dt).Select(x => x.LastFlightID);
             List<int?> ActiveFlights = ctx.MSTR_Drone.Where(x => x.FlightTime > dt).Select(x => x.LastFlightID).ToList();
 
 
-            var ActivePilots = ctx.DroneFlight.Where(x => ActiveFlights.Contains(x.ID)).Select(x => new PilotFlight { PilotID = x.PilotID, FlightID = x.ID,Latitude=x.Latitude,Longitude=x.Longitude }).ToList();
-            return ActivePilots;
+            var ActivePilots = ctx.DroneFlight.Where(x => ActiveFlights.Contains(x.ID)).Select(x => new PilotFlight { PilotID = x.PilotID ,FlightID=x.ID}).ToList();
+            List<int?> ActIDs = ActivePilots.Select(p => p.PilotID).ToList();
+            var ActiveUsers = ctx.MSTR_User.Where(x => ActIDs.Contains(x.UserId)).Select(x=>new PilotUser { UserID = x.UserId, Name = x.FirstName }).ToList();
+
+
+            FlightUser fu = new FlightUser();
+            fu.ActiveFlight = ActivePilots;
+            fu.ActiveUser = ActiveUsers;
+            return fu;
 
         }
+
+        public JsonResult GetActivePilotsList()
+        {
+            FlightUser flUser = new FlightUser();
+            try
+            {
+                flUser = GetActivePilots();
+                return Json(flUser, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception Ex)
+            {
+                flUser = new FlightUser();
+                return Json(flUser, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public class PilotFlight
         {
             public int? PilotID { get; set; }
             public int FlightID { get; set; }
             public Decimal? Latitude { get; set; }
             public Decimal? Longitude { get; set; }
+
         }
+
+        public class PilotUser
+        {
+            public int? UserID { get; set; }
+            public string Name { get; set; }
+
+        }
+
+        public class FlightUser
+        {
+            public List<PilotFlight> ActiveFlight{get;set;}
+             public List<PilotUser> ActiveUser { get; set; }
+    }
 
         public List<PilotFlight> GetActivePilotsRegion(string Coordinates)
         {
-            List<PilotFlight> ActPF = GetActivePilots();
+            FlightUser flUSer= GetActivePilots();
+            List < PilotFlight > ActPF = flUSer.ActiveFlight;
             List<PilotFlight> ActRegionPilot = new List<PilotFlight>();
             foreach(PilotFlight acp in ActPF)
             {
@@ -216,7 +255,8 @@ namespace eX_Portal.Controllers {
             {
                 if (Comm.ActivePilot == true)
                 {
-                    List<PilotFlight> actPilots = GetActivePilots();
+                    FlightUser flUSer =GetActivePilots();
+                    List<PilotFlight> actPilots = flUSer.ActiveFlight;
                     foreach (PilotFlight pil in actPilots)
                     {
                         int Pilotid= pil.PilotID.GetValueOrDefault();
