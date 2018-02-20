@@ -2,6 +2,7 @@
 using eX_Portal.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -150,15 +151,39 @@ namespace eX_Portal.Controllers {
             return Json(Pilots, JsonRequestBehavior.AllowGet);
         }
 
-        public List<int?> GetActivePilots()
+        public List<PilotFlight> GetActivePilots()
         {
             DateTime dt = DateTime.Now.AddMinutes(-1);
             List<int?> ActiveFlights = ctx.MSTR_Drone.Where(x => x.FlightTime > dt).Select(x => x.LastFlightID).ToList();
 
 
-            var ActivePilots = ctx.DroneFlight.Where(x => ActiveFlights.Contains(x.ID)).Select(x => x.PilotID ).ToList();
+            var ActivePilots = ctx.DroneFlight.Where(x => ActiveFlights.Contains(x.ID)).Select(x => new PilotFlight { PilotID = x.PilotID, FlightID = x.ID,Latitude=x.Latitude,Longitude=x.Longitude }).ToList();
             return ActivePilots;
 
+        }
+        public class PilotFlight
+        {
+            public int? PilotID { get; set; }
+            public int FlightID { get; set; }
+            public Decimal? Latitude { get; set; }
+            public Decimal? Longitude { get; set; }
+        }
+
+        public List<PilotFlight> GetActivePilotsRegion(string Coordinates)
+        {
+            List<PilotFlight> ActPF = GetActivePilots();
+            List<PilotFlight> ActRegionPilot = new List<PilotFlight>();
+            foreach(PilotFlight acp in ActPF)
+            {
+                Double? Lats = exLogic.Util.toDouble(acp.Latitude);
+                Double? Longs= exLogic.Util.toDouble(acp.Longitude);
+                bool? inRegion = ctx.usp_CheckFlightinRegion(Coordinates,Lats, Longs).FirstOrDefault();
+               if(inRegion.Value==true)
+                {
+                    ActRegionPilot.Add(acp);
+                }                
+            }
+            return ActRegionPilot;
         }
 
         [HttpPost]
@@ -191,28 +216,58 @@ namespace eX_Portal.Controllers {
             {
                 if (Comm.ActivePilot == true)
                 {
-                    List<int?> actPilots = GetActivePilots();
-                    foreach (int pil in actPilots)
+                    List<PilotFlight> actPilots = GetActivePilots();
+                    foreach (PilotFlight pil in actPilots)
                     {
-                        MSTR_Comms mcom = new MSTR_Comms();
-                        mcom.CreatedBy = exLogic.Util.getLoginUserID();
-                        mcom.Message = Comm.Message;
-                        
-                        ctx.MSTR_Comms.Add(mcom);
-                        ctx.SaveChanges();
+                        int Pilotid= pil.PilotID.GetValueOrDefault();
+                        if(Pilotid!=0)
+                        { 
+                            MSTR_Comms mcom = new MSTR_Comms();
+                            mcom.CreatedBy = exLogic.Util.getLoginUserID();
+                            mcom.Message = Comm.Message;
+                            mcom.FlightID = pil.FlightID;
+                            ctx.MSTR_Comms.Add(mcom);
+                            ctx.SaveChanges();
 
-                        CommsDetail cdet = new CommsDetail();
-                        cdet.FromID = exLogic.Util.getLoginUserID();
-                        cdet.ToID = pil;
-                        cdet.MessageID = mcom.MessageID;
-                        cdet.Status = "NEW";
-                        cdet.StatusUpdatedOn = DateTime.Now;
-                        cdet.CreatedBy = exLogic.Util.getLoginUserID();
-                        ctx.CommsDetail.Add(cdet);
-                        ctx.SaveChanges();
+                            CommsDetail cdet = new CommsDetail();
+                            cdet.FromID = exLogic.Util.getLoginUserID();
+                            cdet.ToID = pil.PilotID.Value;
+                            cdet.MessageID = mcom.MessageID;
+                            cdet.Status = "NEW";
+                            cdet.StatusUpdatedOn = DateTime.Now;
+                            cdet.CreatedBy = exLogic.Util.getLoginUserID();
+                            ctx.CommsDetail.Add(cdet);
+                            ctx.SaveChanges();
+                        }
                     }
                 }
+                else if(Comm.ActiveRegionPilot==true)
+                {
+                    List<PilotFlight> actPilotRegion = GetActivePilotsRegion(Comm.Zone);
+                    foreach (PilotFlight pil in actPilotRegion)
+                    {
+                        int Pilotid = pil.PilotID.GetValueOrDefault();
+                        if (Pilotid != 0)
+                        {
+                            MSTR_Comms mcom = new MSTR_Comms();
+                            mcom.CreatedBy = exLogic.Util.getLoginUserID();
+                            mcom.Message = Comm.Message;
+                            mcom.FlightID = pil.FlightID;
+                            ctx.MSTR_Comms.Add(mcom);
+                            ctx.SaveChanges();
 
+                            CommsDetail cdet = new CommsDetail();
+                            cdet.FromID = exLogic.Util.getLoginUserID();
+                            cdet.ToID = pil.PilotID.Value;
+                            cdet.MessageID = mcom.MessageID;
+                            cdet.Status = "NEW";
+                            cdet.StatusUpdatedOn = DateTime.Now;
+                            cdet.CreatedBy = exLogic.Util.getLoginUserID();
+                            ctx.CommsDetail.Add(cdet);
+                            ctx.SaveChanges();
+                        }
+                    }
+                }
                 
                 else
                 {

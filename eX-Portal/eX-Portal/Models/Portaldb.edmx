@@ -1742,19 +1742,79 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Parameter Name="value" Type="bigint" Mode="In" />
           <Parameter Name="base" Type="int" Mode="In" />
         </Function>
+        <Function Name="ExtentPolygon" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar(max)">
+          <Parameter Name="Coordinates" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Distance" Type="int" Mode="In" />
+        </Function>
+        <Function Name="FlightMapDelayReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FlightID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="fnSplitString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="string" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="delimiter" Type="char" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="splitdata" Type="nvarchar(max)" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <Function Name="GenerateHexCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar(max)">
           <Parameter Name="string" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="stringlength" Type="int" Mode="In" />
+        </Function>
+        <Function Name="gpsConvertDecimalToDMS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
+          <Parameter Name="decimalGPS" Type="decimal" Mode="In" />
+          <Parameter Name="isLongitude" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="MD5" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar(max)">
+          <Parameter Name="StringToEncrypt" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="PeakMinutes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="FromDate" Type="datetime" Mode="In" />
+          <Parameter Name="ToDate" Type="datetime" Mode="In" />
+          <Parameter Name="FromTime" Type="time" Mode="In" />
+          <Parameter Name="ToTime" Type="time" Mode="In" />
+        </Function>
+        <Function Name="ProperCase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
+          <Parameter Name="Text" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="RadiusCalculator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="decimal">
+          <Parameter Name="coordinates" Type="varchar" Mode="In" />
         </Function>
         <Function Name="Recover_Dropped_Objects_Proc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Database_Name" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="Date_From" Type="datetime" Mode="In" />
           <Parameter Name="Date_To" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="Report_FlightHours_By_Account" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AccountID" Type="varchar" Mode="In" />
+          <Parameter Name="IsAccess" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Rotate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="geometry">
+          <Parameter Name="p_geometry" Type="geometry" Mode="In" />
+          <Parameter Name="p_X" Type="float" Mode="In" />
+          <Parameter Name="p_Y" Type="float" Mode="In" />
+          <Parameter Name="p_rotation" Type="int" Mode="In" />
+          <Parameter Name="p_round_x" Type="int" Mode="In" />
+          <Parameter Name="p_round_y" Type="int" Mode="In" />
+        </Function>
         <Function Name="sp_Recover_Dropped_Objects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Database_Name" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="Date_From" Type="datetime" Mode="In" />
           <Parameter Name="Date_To" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="ToogleGeo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar(max)">
+          <Parameter Name="GeoCords" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="udf_Geo_DMS_Decimal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="udf-Geo-DMS-Decimal" ReturnType="float">
+          <Parameter Name="S" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="usp_CheckFlightinRegion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Coordinates" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Latitude" Type="float" Mode="In" />
+          <Parameter Name="Longitude" Type="float" Mode="In" />
         </Function>
         <Function Name="usp_PayLoad_AutoCorrectGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FlightUniqueID" Type="nvarchar" Mode="In" />
@@ -1769,6 +1829,10 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
         <Function Name="usp_Portal_DroneNameList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="usp_Portal_DroneServiceType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Type" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="usp_Portal_GetAlertChartData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AccountID" Type="varchar" Mode="In" />
+          <Parameter Name="IsAccess" Type="int" Mode="In" />
         </Function>
         <Function Name="usp_Portal_GetDroneDropDown" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Type" Type="nvarchar" Mode="In" />
@@ -1785,6 +1849,18 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
         <Function Name="usp_Portal_GetPilotChartData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AccountID" Type="varchar" Mode="In" />
           <Parameter Name="IsAccess" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_Portal_GetPilotData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AccountID" Type="varchar" Mode="In" />
+          <Parameter Name="IsAccess" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_UpdateBillingParameters" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FlightID" Type="int" Mode="In" />
+          <Parameter Name="BillingCoordinates" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="Wordparser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
+          <Parameter Name="multiwordstring" Type="varchar" Mode="In" />
+          <Parameter Name="wordnumber" Type="numeric" Mode="In" />
         </Function>
         <EntityContainer Name="ExponentPortalModelStoreContainer">
           <EntitySet Name="ADSBData" EntityType="Self.ADSBData" Schema="dbo" store:Type="Tables" />
@@ -2477,6 +2553,34 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
             <End Role="MSTR_User" EntitySet="MSTR_User" />
             <End Role="CommsDetail" EntitySet="CommsDetail" />
           </AssociationSet>
+          <FunctionImport Name="FlightMapDelayReport" ReturnType="Collection(ExponentPortalModel.FlightMapDelayReport_Result)">
+            <Parameter Name="FlightID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="fnSplitString" IsComposable="true" ReturnType="Collection(String)">
+            <Parameter Name="string" Mode="In" Type="String" />
+            <Parameter Name="delimiter" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Report_FlightHours_By_Account" ReturnType="Collection(ExponentPortalModel.Report_FlightHours_By_Account_Result)">
+            <Parameter Name="AccountID" Mode="In" Type="String" />
+            <Parameter Name="IsAccess" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_CheckFlightinRegion" ReturnType="Collection(Boolean)">
+            <Parameter Name="Coordinates" Mode="In" Type="String" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Portal_GetAlertChartData">
+            <Parameter Name="AccountID" Mode="In" Type="String" />
+            <Parameter Name="IsAccess" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Portal_GetPilotData">
+            <Parameter Name="AccountID" Mode="In" Type="String" />
+            <Parameter Name="IsAccess" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_UpdateBillingParameters">
+            <Parameter Name="FlightID" Mode="In" Type="Int32" />
+            <Parameter Name="BillingCoordinates" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="ProductHistory">
           <Key>
@@ -3999,6 +4103,30 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="FlightMapDelayReport_Result">
+          <Property Type="Int32" Name="LID" Nullable="true" />
+          <Property Type="Int32" Name="RID" Nullable="true" />
+          <Property Type="DateTime" Name="LCreatedOn" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="RCreatedOn" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="TimeDelay" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Report_FlightHours_By_Account_Result">
+          <Property Type="Int32" Name="M1" Nullable="true" />
+          <Property Type="Int32" Name="M2" Nullable="true" />
+          <Property Type="Int32" Name="M3" Nullable="true" />
+          <Property Type="Int32" Name="M4" Nullable="true" />
+          <Property Type="Int32" Name="M5" Nullable="true" />
+          <Property Type="Int32" Name="M6" Nullable="true" />
+          <Property Type="Int32" Name="M7" Nullable="true" />
+          <Property Type="Int32" Name="M8" Nullable="true" />
+          <Property Type="Int32" Name="M9" Nullable="true" />
+          <Property Type="Int32" Name="M10" Nullable="true" />
+          <Property Type="Int32" Name="M11" Nullable="true" />
+          <Property Type="Int32" Name="M12" Nullable="true" />
+          <Property Type="Int32" Name="AccountID" Nullable="true" />
+          <Property Type="String" Name="AccountName" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="chartcolor" Nullable="true" MaxLength="50" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5773,6 +5901,43 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="FlightMapDelayReport" FunctionName="ExponentPortalModel.Store.FlightMapDelayReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ExponentPortalModel.FlightMapDelayReport_Result">
+                <ScalarProperty Name="LID" ColumnName="LID" />
+                <ScalarProperty Name="RID" ColumnName="RID" />
+                <ScalarProperty Name="LCreatedOn" ColumnName="LCreatedOn" />
+                <ScalarProperty Name="RCreatedOn" ColumnName="RCreatedOn" />
+                <ScalarProperty Name="TimeDelay" ColumnName="TimeDelay" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="fnSplitString" FunctionName="ExponentPortalModel.Store.fnSplitString" />
+          <FunctionImportMapping FunctionImportName="Report_FlightHours_By_Account" FunctionName="ExponentPortalModel.Store.Report_FlightHours_By_Account">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ExponentPortalModel.Report_FlightHours_By_Account_Result">
+                <ScalarProperty Name="M1" ColumnName="M1" />
+                <ScalarProperty Name="M2" ColumnName="M2" />
+                <ScalarProperty Name="M3" ColumnName="M3" />
+                <ScalarProperty Name="M4" ColumnName="M4" />
+                <ScalarProperty Name="M5" ColumnName="M5" />
+                <ScalarProperty Name="M6" ColumnName="M6" />
+                <ScalarProperty Name="M7" ColumnName="M7" />
+                <ScalarProperty Name="M8" ColumnName="M8" />
+                <ScalarProperty Name="M9" ColumnName="M9" />
+                <ScalarProperty Name="M10" ColumnName="M10" />
+                <ScalarProperty Name="M11" ColumnName="M11" />
+                <ScalarProperty Name="M12" ColumnName="M12" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="chartcolor" ColumnName="chartcolor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_CheckFlightinRegion" FunctionName="ExponentPortalModel.Store.usp_CheckFlightinRegion" />
+          <FunctionImportMapping FunctionImportName="usp_Portal_GetAlertChartData" FunctionName="ExponentPortalModel.Store.usp_Portal_GetAlertChartData" />
+          <FunctionImportMapping FunctionImportName="usp_Portal_GetPilotData" FunctionName="ExponentPortalModel.Store.usp_Portal_GetPilotData" />
+          <FunctionImportMapping FunctionImportName="usp_UpdateBillingParameters" FunctionName="ExponentPortalModel.Store.usp_UpdateBillingParameters" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

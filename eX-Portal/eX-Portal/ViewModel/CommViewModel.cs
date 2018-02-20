@@ -83,6 +83,7 @@ namespace eX_Portal.ViewModel
         public bool ActivePilot { get; set; }
         public bool ActiveRegionPilot { get; set; }
         public string Message { get; set; }
+        public string Zone { get; set; }
         public CommsSender()
         {
             OrganizationID = 0;
@@ -90,7 +91,7 @@ namespace eX_Portal.ViewModel
             ActivePilot = false;
             ActiveRegionPilot = false;
             Message = "";
-
+            Zone = "";
         }
     }       
 }

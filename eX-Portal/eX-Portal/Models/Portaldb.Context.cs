@@ -351,5 +351,97 @@ namespace eX_Portal.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Portal_GetPilotChartData", accountIDParameter, isAccessParameter);
         }
+    
+        public virtual ObjectResult<FlightMapDelayReport_Result> FlightMapDelayReport(Nullable<int> flightID)
+        {
+            var flightIDParameter = flightID.HasValue ?
+                new ObjectParameter("FlightID", flightID) :
+                new ObjectParameter("FlightID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FlightMapDelayReport_Result>("FlightMapDelayReport", flightIDParameter);
+        }
+    
+        [DbFunction("ExponentPortalEntities", "fnSplitString")]
+        public virtual IQueryable<string> fnSplitString(string @string, string delimiter)
+        {
+            var stringParameter = @string != null ?
+                new ObjectParameter("string", @string) :
+                new ObjectParameter("string", typeof(string));
+    
+            var delimiterParameter = delimiter != null ?
+                new ObjectParameter("delimiter", delimiter) :
+                new ObjectParameter("delimiter", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<string>("[ExponentPortalEntities].[fnSplitString](@string, @delimiter)", stringParameter, delimiterParameter);
+        }
+    
+        public virtual ObjectResult<Report_FlightHours_By_Account_Result> Report_FlightHours_By_Account(string accountID, Nullable<int> isAccess)
+        {
+            var accountIDParameter = accountID != null ?
+                new ObjectParameter("AccountID", accountID) :
+                new ObjectParameter("AccountID", typeof(string));
+    
+            var isAccessParameter = isAccess.HasValue ?
+                new ObjectParameter("IsAccess", isAccess) :
+                new ObjectParameter("IsAccess", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Report_FlightHours_By_Account_Result>("Report_FlightHours_By_Account", accountIDParameter, isAccessParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<bool>> usp_CheckFlightinRegion(string coordinates, Nullable<double> latitude, Nullable<double> longitude)
+        {
+            var coordinatesParameter = coordinates != null ?
+                new ObjectParameter("Coordinates", coordinates) :
+                new ObjectParameter("Coordinates", typeof(string));
+    
+            var latitudeParameter = latitude.HasValue ?
+                new ObjectParameter("Latitude", latitude) :
+                new ObjectParameter("Latitude", typeof(double));
+    
+            var longitudeParameter = longitude.HasValue ?
+                new ObjectParameter("Longitude", longitude) :
+                new ObjectParameter("Longitude", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("usp_CheckFlightinRegion", coordinatesParameter, latitudeParameter, longitudeParameter);
+        }
+    
+        public virtual int usp_Portal_GetAlertChartData(string accountID, Nullable<int> isAccess)
+        {
+            var accountIDParameter = accountID != null ?
+                new ObjectParameter("AccountID", accountID) :
+                new ObjectParameter("AccountID", typeof(string));
+    
+            var isAccessParameter = isAccess.HasValue ?
+                new ObjectParameter("IsAccess", isAccess) :
+                new ObjectParameter("IsAccess", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Portal_GetAlertChartData", accountIDParameter, isAccessParameter);
+        }
+    
+        public virtual int usp_Portal_GetPilotData(string accountID, Nullable<int> isAccess)
+        {
+            var accountIDParameter = accountID != null ?
+                new ObjectParameter("AccountID", accountID) :
+                new ObjectParameter("AccountID", typeof(string));
+    
+            var isAccessParameter = isAccess.HasValue ?
+                new ObjectParameter("IsAccess", isAccess) :
+                new ObjectParameter("IsAccess", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_Portal_GetPilotData", accountIDParameter, isAccessParameter);
+        }
+    
+        public virtual int usp_UpdateBillingParameters(Nullable<int> flightID, string billingCoordinates)
+        {
+            var flightIDParameter = flightID.HasValue ?
+                new ObjectParameter("FlightID", flightID) :
+                new ObjectParameter("FlightID", typeof(int));
+    
+            var billingCoordinatesParameter = billingCoordinates != null ?
+                new ObjectParameter("BillingCoordinates", billingCoordinates) :
+                new ObjectParameter("BillingCoordinates", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_UpdateBillingParameters", flightIDParameter, billingCoordinatesParameter);
+        }
     }
 }

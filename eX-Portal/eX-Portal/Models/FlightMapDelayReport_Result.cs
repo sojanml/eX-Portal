@@ -13,16 +13,10 @@ namespace eX_Portal.Models
     
     public partial class FlightMapDelayReport_Result
     {
-        public Nullable<int> DroneID { get; set; }
-        public Nullable<int> BlackBoxSerial { get; set; }
         public Nullable<int> LID { get; set; }
         public Nullable<int> RID { get; set; }
         public Nullable<System.DateTime> LCreatedOn { get; set; }
         public Nullable<System.DateTime> RCreatedOn { get; set; }
-        public Nullable<int> LSatellites { get; set; }
-        public Nullable<int> RSatellites { get; set; }
-        public Nullable<decimal> LVolt { get; set; }
-        public Nullable<decimal> RVolt { get; set; }
         public Nullable<int> TimeDelay { get; set; }
     }
 }

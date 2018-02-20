@@ -17,10 +17,11 @@ var Timers = {
   getADSB: null,
   getChartData: null
 }
-var comms = { OrganizationID: 0, PilotID: 0, ActivePilot: false, ActiveRegionPilot: false };
+var comms = { OrganizationID: 0, PilotID: 0, ActivePilot: false, ActiveRegionPilot: false ,Zone:''};
 
 $(document).ready(function () {
-  initializeMap();
+    initializeMap();
+   
   $('#Coordinates').on("change", function (e) {
       e.preventDefault();
       updateCordinates();
@@ -50,19 +51,32 @@ $(document).ready(function () {
       AddPolyClicks();
       $("#AddDiv").show();
       $("#DetailDiv").hide();
+      $("#chkRegion").hide();
+      $('#chkRegion').prop('checked', false);
   });
 
   $("#RemoveZone").click(function () {
       SetZoneValues();
       RemoveZone(EditZone);
-     
+      $('#chkRegion').prop('checked', false);
   });
 
   $("#btnSubmitMessage").click(function () {
       setcomms();
       SaveComms(comms);
   });
+  $("#chkRegion").hide();
  // Timers['getADSB'] = window.setTimeout(getADSB, 100, _ADSBLayer);
+
+  document.addEventListener('keydown', function (event) {
+      const key = event.key; // const {key} = event; ES6+
+      if (key === "Delete") {
+          SetZoneValues();
+          RemoveZone(EditZone);
+          $("#chkRegion").hide();
+          $('#chkRegion').prop('checked', false);
+      }
+  });
   
 });
 
@@ -384,9 +398,11 @@ function DrawPolygons(zone,map,index)
             DetailControls(zone);
             SetEditable(this.mapid, false);
             EditZone = zone;
+
             $("#DetailDiv").show();
             $("#AddDiv").hide();
             $("#RemoveZone").show();
+            $("#chkRegion").show();
         });
         zonespoly.push(InnerPoly);
         google.maps.event.addListener(InnerPoly.getPath(), 'set_at', setCoordinates);
@@ -540,5 +556,6 @@ function setcomms() {
     comms.PilotID = $("#ddlModel").val();
     comms.Message = $("#CommMessage").val();
     comms.ActivePilot = $("#chkActive").val();
-        comms.ActiveRegionPilot = $("#chkRegion").val();
+    comms.ActiveRegionPilot = $("#chkRegion").val();
+    comms.Zone = EditZone.Coordinates;
 }

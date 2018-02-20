@@ -272,7 +272,9 @@
     <Compile Include="Models\DroneFlight.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FlightMapDelayReport_Result.cs" />
+    <Compile Include="Models\FlightMapDelayReport_Result.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MSTR_Comms.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
@@ -291,6 +293,9 @@
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PortalAlert_User.cs">
+      <DependentUpon>Portaldb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Report_FlightHours_By_Account_Result.cs">
       <DependentUpon>Portaldb.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
