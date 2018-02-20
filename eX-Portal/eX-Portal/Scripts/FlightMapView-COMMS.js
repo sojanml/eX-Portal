@@ -28,18 +28,19 @@
       var ClassName = "tome";
       if (Message.FromID == FlightInfo.UserID) {
         ClassName = "fromme";
-        Message.Name = "You";
+        Message.FromUser = "You";
       }
 
       var LI = $('<LI class="' + ClassName + '"></LI>')
         .append(
         '<div class="message">' +
-        '<span class="name">' + Message.Name + '</span>' + 
+        '<span class="name">' + Message.FromUser + '</span>' + 
           Message.Message +
         '</div>' +
         '<div class="date">' + Util.FmtTime(Message.CreatedOn) + '</div>'
         );
       $('#ComsList').append(LI);
+      LI.scrollToView();
       _FilterDate = Message.CreatedOn;
     }
   };

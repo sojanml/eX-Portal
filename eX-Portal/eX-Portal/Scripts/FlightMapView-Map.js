@@ -57,9 +57,6 @@ var FlightMap = function () {
       map: _map
     });
 
-
-
-
     _map.addListener('center_changed', _MapBusy );
     _map.addListener('idle', _MapIdle);
     _map.addListener('click', _MapClick);
