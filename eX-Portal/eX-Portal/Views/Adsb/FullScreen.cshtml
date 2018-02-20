@@ -19,7 +19,7 @@
                     Pilots
                 </div>
                 <div class="editor-field" id="ddlist">
-                    @Html.DropDownList("Value", new SelectList(Enumerable.Empty<SelectListItem>()), new { @id = "ddlModel" })
+                    @Html.DropDownList("Value", new SelectList(Enumerable.Empty<SelectListItem>()),"All Pilot", new { @id = "ddlModel" })
        
         </div>
                 <div>
@@ -33,6 +33,18 @@
                            name="RegionPilot"
                            type="checkbox"
                            value="true" /> Active Pilots in Region
+                </div>
+                <div class="editor-label">
+                    Message
+                </div>
+                <div class="editor-field" id="ddlist">
+                    <textarea id="CommMessage" style="visibility:visible;width:100%;height:100%"></textarea>
+                </div>
+                <div>
+                    <div class="form-toolbar" style="text-align:right;">
+                        <input type="button" id="btnSubmitMessage" value="Submit" />
+                       
+                    </div>
                 </div>
 
         </div>
@@ -247,6 +259,7 @@
           var OrgID = $('#ddlOrg').val();
 
           if (OrgID != 0) {
+              $('#ddlModel').empty();
               $.ajax({
                   type: 'GET',
                   url: 'GetPilot',

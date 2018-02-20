@@ -73,6 +73,7 @@ namespace eX_Portal.Controllers {
                         Comms.Message = Message;
                         Comms.CreatedBy = userid;
                         Comms.FlightID = FlightID;
+                        
                         ctx.MSTR_Comms.Add(Comms);
                         ctx.SaveChanges();
 

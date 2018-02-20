@@ -75,4 +75,22 @@ namespace eX_Portal.ViewModel
             }
         }
     }
+
+    public class CommsSender
+    {
+        public int OrganizationID { get; set; }
+        public int PilotID { get; set; }
+        public bool ActivePilot { get; set; }
+        public bool ActiveRegionPilot { get; set; }
+        public string Message { get; set; }
+        public CommsSender()
+        {
+            OrganizationID = 0;
+            PilotID = 0;
+            ActivePilot = false;
+            ActiveRegionPilot = false;
+            Message = "";
+
+        }
+    }       
 }
