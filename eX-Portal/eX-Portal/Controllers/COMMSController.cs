@@ -22,7 +22,7 @@ namespace eX_Portal.Controllers {
     // GET: COMMS/Create
     public ActionResult Create() {
       CommViewModel cvm = new CommViewModel();
-      cvm.GetPilotMsgs(exLogic.Util.getLoginUserID(), null, 0);
+      cvm.GetPilotMsgs(null, exLogic.Util.getLoginUserID(), 0);
 
 
       return View(cvm);
@@ -144,10 +144,10 @@ namespace eX_Portal.Controllers {
     }
 
 
-    public JsonResult GetPilotMessages(DateTime? FilterDate, int FlightId) {
+    public JsonResult GetPilotMessages(DateTime? FilterDate, int UserID = 0, int FlightId =0) {
       CommViewModel cvm = new CommViewModel();
       try {
-        cvm.GetPilotMsgs(exLogic.Util.getLoginUserID(), FilterDate, FlightId);
+        cvm.GetPilotMsgs(FilterDate, UserID,  FlightId);
         return Json(cvm.CommsPilotMsgs, JsonRequestBehavior.AllowGet);
       } catch (Exception Ex) {
         return Json(cvm.CommsPilotMsgs, JsonRequestBehavior.AllowGet);

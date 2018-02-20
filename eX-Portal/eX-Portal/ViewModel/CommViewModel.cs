@@ -33,47 +33,41 @@ namespace eX_Portal.ViewModel
 
         public List<CommViewModel> CommsPilotMsgs { get; set; }
 
-        public void GetPilotMsgs(int UserID, DateTime? FilterDate,int FlightID)
+        public void GetPilotMsgs(DateTime? FilterDate, int UserID = 0, int FlightID = 0)
         {
+            if (UserID == 0 && FlightID == 0)
+            {
+                return;
+            }
+
             using (ExponentPortalEntities ctx = new ExponentPortalEntities())
             {
                 List<CommsDetail> MessageList = new List<CommsDetail>();
-                var FlightMessage = ctx.CommsDetail.Where(x => x.MSTR_Comms.FlightID == FlightID);
+                var FlightMessage = ctx.CommsDetail.Select(e => e);
+                if(FlightID > 0)
+                    FlightMessage = FlightMessage.Where(x => x.MSTR_Comms.FlightID == FlightID);
+                if (UserID > 0)
+                    FlightMessage = FlightMessage.Where(x => x.FromID == UserID || x.ToID == UserID);
                 if (FilterDate != null)
+                    FlightMessage = FlightMessage.Where(p => p.CreatedOn > FilterDate);
 
-                   
-                 MessageList = FlightMessage.GroupBy(p => p.MessageID )
-                                .Select(x =>x.Where(s=>(s.Status=="READ" || s.Status=="NEW") ).OrderBy(l=>l.StatusUpdatedOn).FirstOrDefault())
-                                .Where(p => (p.FromID == UserID || p.ToID == UserID) && p.CreatedOn > FilterDate)
-                                .OrderBy(x=>x.CreatedOn).Take(10).ToList();
-                else
-                    MessageList = FlightMessage.GroupBy(p => p.MessageID)
-                               .Select(x => x.Where(s => s.Status == "READ" || s.Status == "NEW").OrderBy(l => l.StatusUpdatedOn).FirstOrDefault())
-                               .Where(p => (p.FromID == UserID || p.ToID == UserID))
-                               .OrderBy(x => x.CreatedOn).Take(10).ToList();
-               
-                foreach (CommsDetail cd in MessageList)
-                {
-                    CommViewModel cvm = new CommViewModel();
-
-                    cvm.Message = cd.MSTR_Comms.Message;
-                    cvm.MessageID = cd.MessageID;
-                    cvm.ToID = cd.ToID;
-                    cvm.FromID = cd.FromID;
-                    if (cvm.FromID == UserID)
-                        cvm.FromUser = "Me";
-                    else
-                        cvm.FromUser = cd.MSTR_User.FirstName;
-                    cvm.Status = cd.Status;
-                    cvm.CreatedOn = cd.CreatedOn;
-                    cvm.StatusUpdatedOn = cd.StatusUpdatedOn;
-                    CommsPilotMsgs.Add(cvm);
+                CommsPilotMsgs = FlightMessage
+                    .GroupBy(p => p.MessageID)
+                    .Select(s => s).FirstOrDefault()
+                    .Select(cd => new CommViewModel {
+                        Message = cd.MSTR_Comms.Message,
+                        MessageID = cd.MessageID,
+                        ToID = cd.ToID,
+                        FromID = cd.FromID,
+                        FromUser = cd.MSTR_User.FirstName,
+                        Status = cd.Status,
+                        CreatedOn = cd.CreatedOn,
+                        StatusUpdatedOn = cd.StatusUpdatedOn
+                    }).ToList();
                     
-
-                }
-
             }
         }
+
     }
 
     public class CommsSender
