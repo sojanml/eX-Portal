@@ -8,8 +8,9 @@ var FlightMap = function () {
 
   var _PolylineCompleted = null;
   var _PolylinePending = null;
+  var _infoLine = null;
   var _LatLngBounds = new google.maps.LatLngBounds();
-  var _kmlUrl = 'http://dcaa.exponent-ts.com/Map/NoFlyzone';
+  var _kmlUrl = 'http://portal.exponent-ts.com/Map/NoFlyZone2';
 
   var _PolylinePendingPath = [];
   var _PolylineCompletedPath = [];
@@ -19,7 +20,8 @@ var FlightMap = function () {
 
   var _IsMapBusy = false;
 
-  var _Init = function (CenterPosition) {
+  var _Init = function (FirstData) {
+    var CenterPosition = { lat: FirstData.Lat, lng: FirstData.Lng }
     var mapOptions = {
       zoom: 10,
       mapTypeControl: true,
@@ -35,7 +37,7 @@ var FlightMap = function () {
       preserveViewport: true,
       map: _map
     });
-
+    _ADSBOverlay.setDroneAt(FirstData);
     ADSBLoader.Init(_ADSBOverlay);
 
     _PolylineCompleted = new google.maps.Polyline({
@@ -56,11 +58,43 @@ var FlightMap = function () {
     });
 
 
+
+
     _map.addListener('center_changed', _MapBusy );
     _map.addListener('idle', _MapIdle);
+    _map.addListener('click', _MapClick);
 
+
+    $(document).on("click", 'div.ADSB-Icon', function (e) {
+      _IsMapBusy = true;
+      e.stopPropagation();
+      e.preventDefault();
+      var ActiveItem = _FullData[_CurrentIndex];
+      //_ShowInfoLine($(this));
+      _ADSBOverlay.setDroneAt(ActiveItem);
+      _ADSBOverlay.ADSBOnClick($(this));
+      window.setTimeout(function () {
+        _IsMapBusy = false;
+      },100)
+    });
 
   };
+
+  var _MapClick = function (e) {
+    if (_IsMapBusy) return;
+    _ADSBOverlay.hideInfoLine();
+  }
+
+  var _ShowInfoLine = function (elem) {
+    console.log(elem);
+    
+    var HexCode = elem.attr("data-hexcode");
+    var ADSB = _ADSBOverlay.getData(HexCode);
+    var p1 = { lat: ActiveItem.Lat, lng: ActiveItem.Lng };
+    var p2 = { lat: ADSB.Lat, lng: ADSB.Lon };
+    _infoLine.setPath([p1, p2]);
+    _infoLine.setMap(_map);
+  }
 
 
   var _MapBusy = function() {
@@ -94,10 +128,17 @@ var FlightMap = function () {
     _PolylinePending.setPath(_FullPath.slice(Index ));
     _DroneIcon.MoveTo(LatLng);
 
+    _ADSBOverlay.setDroneAt(_FullData[Index]);
+    _ADSBOverlay.showInfoLine();
+
   };
 
   var _FitBounds = function () {
     _map.fitBounds(_LatLngBounds);
+  };
+
+  var _ClearADSB = function () {
+    _ADSBOverlay.Clear();
   };
 
   return {
@@ -105,12 +146,14 @@ var FlightMap = function () {
     Init: _Init,
     AddMapData: _AddMapData,
     AutoZoom: _FitBounds,
-    MoveToIndex: _MoveToIndex
+    MoveToIndex: _MoveToIndex,
+    ClearADSB: _ClearADSB
   };
 }();
 
 DroneIcon.prototype = new google.maps.OverlayView;
 MapMarkers.prototype = new google.maps.OverlayView;
+
 
 function MapMarkers(options, InitPosition) {
   this.setValues(options);

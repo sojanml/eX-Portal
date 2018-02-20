@@ -356,6 +356,19 @@ div.ADSBOverlay div.ADSB-Icon {
   transition-property: all;
   transition-duration: 0.5s;
   transition-delay: 0s;
+  cursor: pointer;
+  margin-left: -8px;
+  margin-top: -8px;
+}
+
+div#ADSBInfo {
+  position: absolute;
+  border: 1px black solid;
+  background-color: rgba(0, 0, 0, 0.46);
+  color: white;
+  width: auto;
+  white-space: nowrap;
+  padding: 5px;
 }
 
 @media screen and (min-width: 720px) {
