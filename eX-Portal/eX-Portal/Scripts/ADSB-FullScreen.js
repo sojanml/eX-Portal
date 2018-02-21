@@ -79,7 +79,7 @@ $(document).ready(function () {
   });
   var MasterDiv = $("#MasterList");
   MComms.Init(MasterDiv);
-  
+  MComms.SetPostUrl("/COMMS/CreateMessageToUser/");
 });
 
 

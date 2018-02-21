@@ -146,5 +146,53 @@ namespace eX_Portal.Controllers {
       return Json(cvm.CommsPilotMsgs, JsonRequestBehavior.AllowGet);
     
     }
-  }
+
+        [HttpPost]
+        public JsonResult CreateMessageToUser(string Message, int FlightID)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+                int? ToID = ctx.DroneFlight.Where(x => x.ID == FlightID).Select(x => x.PilotID).FirstOrDefault();
+
+                int userid = exLogic.Util.getLoginUserID();
+                if (userid != 0)
+                {
+                    if (Message.Trim().Length > 0)
+                    {
+                        MSTR_Comms Comms = new MSTR_Comms();
+                        Comms.Message = Message;
+                        Comms.CreatedBy = userid;
+                        Comms.FlightID = FlightID;
+
+                        ctx.MSTR_Comms.Add(Comms);
+                        ctx.SaveChanges();
+                        CommsDetail Cmd = new CommsDetail();
+                        Cmd.FromID = userid;
+                        Cmd.ToID = ToID.Value;
+                        Cmd.MessageID = Comms.MessageID;
+                        Cmd.Status = "NEW";
+                        Cmd.CreatedBy = exLogic.Util.getLoginUserID();
+                        ctx.CommsDetail.Add(Cmd);
+                        ctx.SaveChanges();
+                        return Json("OK");
+                    }
+                    else
+                    {
+                        return Json("Empty Message");
+                    }
+
+
+                }
+                else
+                {
+                    return Json("Invalid User");
+                }
+            }
+            catch (Exception Ex)
+            {
+                return Json("Unsuccessful");
+            }
+        }
+    }
 }
