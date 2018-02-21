@@ -9,6 +9,14 @@ using System.Web.Mvc;
 namespace eX_Portal.Controllers {
   public class COMMSController : Controller {
     public ExponentPortalEntities ctx = new ExponentPortalEntities();
+
+    [HttpGet]
+    public ActionResult Chat() {
+      return View();
+    }
+
+
+
     // GET: COMMS
     public ActionResult Index() {
       return View();
