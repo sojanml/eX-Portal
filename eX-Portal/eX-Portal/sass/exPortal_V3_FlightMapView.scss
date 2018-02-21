@@ -134,12 +134,26 @@ div#FlightInfoColumn3 {
 
   div#Toolbar {
 
+
     & > div.button,
     & > div.round-button {
       background-color: silver;
       cursor: pointer;
       box-sizing: content-box;
       float: left;
+
+      &.disabled {
+        color: #a0a0a0 !important;
+        background-color: silver !important;
+
+        span.icon,
+        &:hover,
+        &.active:hover,
+        &.active {
+          color: #a0a0a0 !important;
+          background-color: silver !important;
+        }
+      }
     }
 
 
@@ -179,7 +193,6 @@ div#FlightInfoColumn3 {
         color: white;
       }
     }
-
   }
 
   div#FlightSlider {
@@ -529,6 +542,7 @@ section#BottomSection {
         }
       }
     }
+
   }
 
   div#GoogleMap,
@@ -611,7 +625,18 @@ section#BottomSection {
       div.ContentButton input {
         padding: 0px;
         width: $ButtonWidth;
+        background-color: #50ff00;
+
+        &:hover {
+          background-color: $HiliteColor2;
+        }
+
+        &.disabled, 
+        &.disabled:hover {
+          background-color: silver;
+        }
       }
+
 
       div.ContentButton {
         width: $ButtonWidth;

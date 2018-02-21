@@ -153,11 +153,11 @@
         </div>
       </div>
       <div id="Toolbar">
-        <div id="btnPlay" class="button"><span class="icon">&#xf144;</span><span class="text">Play</span></div>
-        <div id="btnPause" style="display:none;" class="button"><span class="icon">&#xf28b;</span><span class="text">Pause</span></div>
-        <div id="btn1x" class="active round-button">1X</div>
-        <div id="btn2x" class="round-button">2X</div>
-        <div id="btn4x" class="round-button">4X</div>
+        <div id="btnPlay" class="button @(Model.IsLive ? "disabled":"")"><span class="icon">&#xf144;</span><span class="text">Play</span></div>
+        <div id="btnPause" style="display:none;" class="button @(Model.IsLive ? "disabled":"")"><span class="icon">&#xf28b;</span><span class="text">Pause</span></div>
+        <div id="btn1x" class="active round-button @(Model.IsLive ? "disabled":"")">1X</div>
+        <div id="btn2x" class="round-button @(Model.IsLive ? "disabled":"")">2X</div>
+        <div id="btn4x" class="round-button @(Model.IsLive ? "disabled":"")">4X</div>
         <div id="btn2D" style="display:none;" class="button"><span class="icon">&#xf279;</span><span class="text">2D</span></div>
         <div id="btn3D" class="button"><span class="icon">&#xf0ac;</span><span class="text">3D</span></div>
         <div id="btnExport" class="button" data-href="~/FlightMap/Export/@Model.FlightID">
@@ -210,13 +210,13 @@
 
       </ul>
     </div>
-    <div id="ComsSendMessage">
-      <form method="post" id="ComSubmitForm" name="ComSubmitForm">
+    <div id="ComsSendMessage" @(Model.IsLive ? "": "disabled")>
+      <form method="post" id="ComSubmitForm" name="ComSubmitForm" >
         <div class="ContentBox">
-          <input type="text" id="ComsMessage" name="ComsMessage" value="" placeholder="Message to DCAA" />
+          <input @(Model.IsLive ? "": "disabled") type="text" id="ComsMessage" name="ComsMessage" value="" placeholder="Message to DCAA" />
         </div>
         <div class="ContentButton">
-          <input type="submit" name="ComsSubmit" id="ComsSubmit" value="Send" />
+          <input @(Model.IsLive ? "" : "disabled") class="@(Model.IsLive ? "": "disabled")" type="submit" name="ComsSubmit" id="ComsSubmit" value="Send" />
         </div>
       </form>
     </div>
@@ -242,7 +242,9 @@
       FlightID: @Model.FlightID,
       RPAS_Image: '@Model.RPAS_Image',
       IsLive: @(Model.IsLive ? "true" : "false"),
-      UserID: @eX_Portal.exLogic.Util.getLoginUserID()
+      UserID: @eX_Portal.exLogic.Util.getLoginUserID(),
+      OuterPolygon: '@Model.OuterPolygon',
+      InnerPolygon: '@Model.InnerPolygon'
     };
   </script>
   <!--General Libraries-->

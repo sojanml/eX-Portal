@@ -262,6 +262,14 @@ div#FlightInfoColumn3 div#Toolbar > div.button, div#FlightInfoColumn3 div#Toolba
   box-sizing: content-box;
   float: left;
 }
+div#FlightInfoColumn3 div#Toolbar > div.button.disabled, div#FlightInfoColumn3 div#Toolbar > div.round-button.disabled {
+  color: #a0a0a0 !important;
+  background-color: silver !important;
+}
+div#FlightInfoColumn3 div#Toolbar > div.button.disabled span.icon, div#FlightInfoColumn3 div#Toolbar > div.button.disabled:hover, div#FlightInfoColumn3 div#Toolbar > div.button.disabled.active:hover, div#FlightInfoColumn3 div#Toolbar > div.button.disabled.active, div#FlightInfoColumn3 div#Toolbar > div.round-button.disabled span.icon, div#FlightInfoColumn3 div#Toolbar > div.round-button.disabled:hover, div#FlightInfoColumn3 div#Toolbar > div.round-button.disabled.active:hover, div#FlightInfoColumn3 div#Toolbar > div.round-button.disabled.active {
+  color: #a0a0a0 !important;
+  background-color: silver !important;
+}
 div#FlightInfoColumn3 div#Toolbar > div.button {
   border-radius: 3px;
 }
@@ -906,6 +914,13 @@ section#BottomSection::after {
   div#ComSection div#ComsSendMessage div.ContentButton input {
     padding: 0px;
     width: 50px;
+    background-color: #50ff00;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input:hover {
+    background-color: #18bdec;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input.disabled, div#ComSection div#ComsSendMessage div.ContentButton input.disabled:hover {
+    background-color: silver;
   }
   div#ComSection div#ComsSendMessage div.ContentButton {
     width: 50px;
@@ -1259,6 +1274,13 @@ section#BottomSection::after {
   div#ComSection div#ComsSendMessage div.ContentButton input {
     padding: 0px;
     width: 50px;
+    background-color: #50ff00;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input:hover {
+    background-color: #18bdec;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input.disabled, div#ComSection div#ComsSendMessage div.ContentButton input.disabled:hover {
+    background-color: silver;
   }
   div#ComSection div#ComsSendMessage div.ContentButton {
     width: 50px;
@@ -1612,6 +1634,13 @@ section#BottomSection::after {
   div#ComSection div#ComsSendMessage div.ContentButton input {
     padding: 0px;
     width: 50px;
+    background-color: #50ff00;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input:hover {
+    background-color: #18bdec;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input.disabled, div#ComSection div#ComsSendMessage div.ContentButton input.disabled:hover {
+    background-color: silver;
   }
   div#ComSection div#ComsSendMessage div.ContentButton {
     width: 50px;

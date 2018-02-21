@@ -247,6 +247,7 @@ var FlightMapData = function () {
 
 
   var _fnBtnPlayClick = function (e) {
+    if ($('#btnPlay').hasClass("disabled")) return;
     $('#btnPlay').css({ 'display': 'none' });
     $('#btnPause').css({ 'display': 'inline-block' });
 
@@ -256,6 +257,7 @@ var FlightMapData = function () {
   };
 
   var _fnBtnPauseClick = function (e) {
+    if ($('#btnPause').hasClass("disabled")) return;
     $('#btnPlay').css({ 'display': 'inline-block' });
     $('#btnPause').css({ 'display': 'none' });
     if (_MapPlayTimer) window.clearInterval(_MapPlayTimer);
@@ -265,6 +267,7 @@ var FlightMapData = function () {
 
   var _fnChangeSpeedClick = function () {
     var btn = $(this).text();
+    if ($(this).hasClass("disabled")) return;
     switch (btn) {
       case '1X':
         _MapPlayInterval = 1000;
