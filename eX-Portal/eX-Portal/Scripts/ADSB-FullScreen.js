@@ -77,6 +77,8 @@ $(document).ready(function () {
           $('#chkRegion').prop('checked', false);
       }
   });
+  var MasterDiv = $("#MasterList");
+  MComms.Init(MasterDiv);
   
 });
 

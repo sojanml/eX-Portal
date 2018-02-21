@@ -1275,6 +1275,7 @@
     <Content Include="Scripts\ADSBFlightMap.js" />
     <Content Include="Scripts\BillingGroup.js" />
     <Content Include="Scripts\BillingModule.js" />
+    <Content Include="Scripts\Comms.js" />
     <Content Include="Scripts\FlightMap-ADSB.js" />
     <Content Include="Scripts\Agriculture.js" />
     <Content Include="Scripts\AgricultureBulkUpload.js" />
