@@ -3,6 +3,7 @@
   var _MessageID = 0;
   var _PostURL = "/COMMS/CreateMessage/";
   var _IsInit = false;
+  var _IsPostingProgress = false;
 
   var _GetMessages = function () {
     var _URL = "/COMMS/GetPilotMessages/?MessageID=" + _MessageID  + "&FlightID=" + FlightInfo.FlightID;
@@ -48,7 +49,8 @@
 
   var _Post = function (e) {
     e.preventDefault();
-   
+    if (_IsPostingProgress) return false;
+    _IsPostingProgress = true;
 
     if (_GetMessageTimer) window.clearTimeout(_GetMessageTimer);
     var TheData =
@@ -62,6 +64,7 @@
       dataType: "json",
       success: function (data) {
         $('#ComsMessage').val("");
+        _IsPostingProgress = false;
       },
       failure: function (msg) {
         alert('Live Drone Position Error' + msg);
