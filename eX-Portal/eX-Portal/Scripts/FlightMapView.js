@@ -432,6 +432,7 @@ var StatusIcons = function () {
       success: function (result) {
         $('#FlightStatusIconWindText').html('Wind Speed: ' + (result.data[0].wind.speed_mps * 3.6) + ' Km/H (kmph)');
         $('#FlightStatusIconTempText').html('Temperature: ' + result.data[0].temperature.celsius + '&deg;C');
+        $('#FlightStatusIconAirlineText').html('Airport: <b>' + result.data[0].icao + '</b> (' + result.data[0].name + ')');
         $('#MetarInfo').html(result.data[0].raw_text);
       },
       error: function (error) {
@@ -460,7 +461,8 @@ var Util = function () {
       var r = /\/Date\(([0-9]+)\)\//i
       var matches = sNetDate.match(r);
       if (matches.length === 2) {
-        nDate = new Date(parseInt(matches[1]));
+        var TimeInSec = parseInt(matches[1]);
+        nDate = new Date(TimeInSec);
       }
     }
     //Convert date to UTC
@@ -534,7 +536,7 @@ var FlightSummary = function () {
     $('#info-Altitude-max').html(_altitude.Max());
     $('#info-Satellite-min').html(_satellite.Min());
     $('#info-Satellite-max').html(_satellite.Max());
-
+    $('#MapInfoContentAltitude').html(_altitude.Max());
     
   };
 

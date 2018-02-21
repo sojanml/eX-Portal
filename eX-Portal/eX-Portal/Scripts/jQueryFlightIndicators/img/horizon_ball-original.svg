@@ -9,8 +9,8 @@
 	<stop  offset="0.5001" style="stop-color:#E1EBED"/>
 	<stop  offset="1" style="stop-color:#E1EBED"/>
 </linearGradient>
-<path fill="url(#SVGID_1_)" stroke="#898686" stroke-miterlimit="10" d="M373.7,201.2c0,71.7-58.1,129.8-129.7,129.9
-	c-0.1,0-85.6,0-85.7,0c-71.8,0-129.9-58.2-129.9-129.9S86.5,71.3,158.3,71.3h85.6C315.6,71.3,373.7,129.5,373.7,201.2z"/>
+<path fill="url(#SVGID_1_)" d="M373.7,201.2c0,71.7-58.1,129.8-129.7,129.9c-0.1,0-85.6,0-85.7,0c-71.8,0-129.9-58.2-129.9-129.9
+	S86.5,71.3,158.3,71.3h85.6C315.6,71.3,373.7,129.5,373.7,201.2z"/>
 <line fill="none" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" x1="54" y1="200.4" x2="349.2" y2="200.4"/>
 <line fill="none" stroke="#3D3D3D" stroke-width="2" stroke-miterlimit="10" x1="179.9" y1="179" x2="222.6" y2="179"/>
 <line fill="none" stroke="#3D3D3D" stroke-width="2" stroke-miterlimit="10" x1="180.2" y1="223.7" x2="223" y2="223.7"/>

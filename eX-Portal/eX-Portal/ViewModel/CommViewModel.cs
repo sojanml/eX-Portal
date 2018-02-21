@@ -30,20 +30,21 @@ namespace eX_Portal.ViewModel {
 
     public List<CommViewModel> CommsPilotMsgs { get; set; }
 
-    public void GetPilotMsgs(DateTime? FilterDate, int UserID = 0, int FlightID = 0) {
+    public void GetPilotMsgs(int MessageID = 0, int UserID = 0, int FlightID = 0) {
       if (UserID == 0 && FlightID == 0) {
         return;
       }
 
       using (ExponentPortalEntities ctx = new ExponentPortalEntities()) {
         List<CommsDetail> MessageList = new List<CommsDetail>();
-        var FlightMessage = ctx.CommsDetail.Select(e => e);
+        var FlightMessage = ctx.CommsDetail
+          .Where(p => p.MessageID > MessageID)
+          .Select(e => e);
+          
         if (FlightID > 0)
           FlightMessage = FlightMessage.Where(x => x.MSTR_Comms.FlightID == FlightID);
         if (UserID > 0)
           FlightMessage = FlightMessage.Where(x => x.FromID == UserID || x.ToID == UserID);
-        if (FilterDate != null)
-          FlightMessage = FlightMessage.Where(p => p.CreatedOn > FilterDate);
 
         var AlComs = from f in FlightMessage
                      group f by f.MessageID into cd

@@ -1,10 +1,9 @@
 ﻿var COMMS = function () {
   var _GetMessageTimer = null;
-  var _FilterDate = new Date(1980,1,1);
+  var _MessageID = 0;
 
   var _GetMessages = function () {
-    var uDate = Util.toString(_FilterDate);
-    var _URL = "/COMMS/GetPilotMessages/?FilterDate=" + uDate  + "&FlightID=" + FlightInfo.FlightID;
+    var _URL = "/COMMS/GetPilotMessages/?MessageID=" + _MessageID  + "&FlightID=" + FlightInfo.FlightID;
     $.ajax({
       type: "GET",
       url: _URL,
@@ -30,18 +29,18 @@
         ClassName = "fromme";
         Message.FromUser = "You";
       }
-
-      var LI = $('<LI class="' + ClassName + '"></LI>')
+      var ID = 'message-' + Message.MessageID;
+      var LI = $('<LI id="' + ID + '" class="' + ClassName + '"></LI>')
         .append(
         '<div class="message">' +
-        '<span class="name">' + Message.FromUser + '</span>' + 
-          Message.Message +
+        '<div class="name">' + Message.FromUser + '</div>' + 
+        '<div class="content">' +  Message.Message + '</div>' +
         '</div>' +
         '<div class="date">' + Util.FmtTime(Message.CreatedOn) + '</div>'
         );
       $('#ComsList').append(LI);
-      LI.scrollToView();
-      _FilterDate = Message.CreatedOn;
+      document.getElementById(ID).scrollIntoView();
+      _MessageID = Message.MessageID;
     }
   };
 

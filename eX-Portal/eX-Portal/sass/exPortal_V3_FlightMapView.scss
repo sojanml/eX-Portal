@@ -31,7 +31,7 @@ div.instrument.attitude div.roll {
 
 .ui-slider-horizontal .ui-slider-handle {
   top: -2px;
-  margin-left: -8px;
+  margin-left: 0px;
 }
 
 .cesium-viewer .cesium-widget-credits {
@@ -130,36 +130,25 @@ div#FlightInfoColumn3,
 div#FlightInfoColumn2_3_merge {
   float: left;
 }
-div#FlightInfoColumn4 {
-  margin-top: 5px;
+div#FlightInfoColumn3 {
 
-  &::after {
-    clear: both;
-  }
-
-  div.Toolbar {
-    display: inline-block;
+  div#Toolbar {
 
     & > div.button,
     & > div.round-button {
-      padding: 0px 10px 0px 10px;
       background-color: silver;
-      margin-right: 2px;
-      display: inline-block;
       cursor: pointer;
-      height: 30px;
       box-sizing: content-box;
-      line-height: 30px;
+      float: left;
     }
 
 
     & > div.button {
       border-radius: 3px;
-      width: 70px;
 
       span.icon {
         color: $HiliteColor1;
-        margin-right: 12px;
+        margin-right: 6px;
       }
 
       &:hover {
@@ -174,9 +163,7 @@ div#FlightInfoColumn4 {
 
     & > div.round-button {
       border-radius: 50%;
-      font-size: 12px;
       font-weight: bold;
-      width: 30px;
       padding: 0px;
       vertical-align: bottom;
       text-align: center;
@@ -192,6 +179,7 @@ div#FlightInfoColumn4 {
         color: white;
       }
     }
+
   }
 
   div#FlightSlider {
@@ -207,12 +195,13 @@ div#FlightInfoColumn4 {
     div#FlightSliderEnd {
       right: 0px;
     }
+
     div#FlightSliderCenter {
-      width:100%;
-      text-align:center;
-      left:0px;
-      color:$HiliteColor1;
-      font-weight:bold;
+      width: 100%;
+      text-align: center;
+      left: 0px;
+      color: $HiliteColor1;
+      font-weight: bold;
     }
 
     div#FlightSliderStart,
@@ -323,13 +312,16 @@ div#AttitudeMeter {
 div#FlightStatusBar {
   ul {
     padding: 0px;
+    margin:0px;
     list-style: none;
     display: block;
 
     li {
       padding: 0px;
+      margin:0px;
       list-style: none;
-      display: inline-block;
+      float:left;
+
 
       & > div {
         display: block;
@@ -362,23 +354,26 @@ div#FlightStatusBar {
   }
 
   div#FlightStatusIconInfo {
-    background-color: $HiliteColor1;
     color: white;
-    display: inline-block;
+    display: block;
   }
 }
 
 
 
 @mixin AttitudeMeter($VerticalGap, $SizeWithMargin, $FontSize) {
-  $Size: $SizeWithMargin;
+  $MarginTop: $VerticalGap;
+  $MarginLeft: $VerticalGap;
+  $Size: $SizeWithMargin - ($MarginLeft*2);
   $Width: $Size;
-  $Height: $Size * 0.56;
-  $BackgroundHeight: $Size * 0.22;
+  $Height: $Size * 0.65;
+  $BackgroundHeight: $Size * 0.4;
 
   div#AttitudeMeter {
     width: $Width;
     height: $Height;
+    margin-top: $MarginTop;
+    margin-left: $MarginLeft;
 
     div#attitude {
       left: ($Width - $Height)/2;
@@ -400,12 +395,12 @@ div#FlightStatusBar {
 
     div.AttitudePitchSection,
     div.AttitudeRollSection {
-      top: ($Height - $BackgroundHeight)/2 + ($BackgroundHeight * 0.2);
-      font-size: $FontSize;
+      top: ($Height - $BackgroundHeight)/2 + ($BackgroundHeight * 0.3);
+      font-size: $FontSize * 0.8;
 
       span.Number,
       span.Symbol {
-        font-size: $FontSize * 2.4;
+        font-size: $FontSize * 2;
       }
     }
   }
@@ -496,18 +491,25 @@ section#BottomSection {
     ul#ComsList {
       margin: 0px;
       padding: 0px;
+      font-size: 13px;
 
       li {
         margin: 0px 0px 10px 0px;
         padding: 0px;
 
         div.message {
-          border-radius: 3px;
-          padding: 2px 10px 2px 10px;
+          border-radius: 8px;
+          padding: 1px 10px 1px 10px;
 
-          span.name {
-            padding-right: 20px;
-            font-weight:bold;
+          div.name {
+            padding-right: 10px;
+            font-weight: bold;
+            display: table-cell;
+          }
+
+          div.content {
+            display: table-cell;
+            width: auto;
           }
         }
 
@@ -522,7 +524,8 @@ section#BottomSection {
 
         div.date {
           text-align: right;
-          padding-right: 10px;
+          padding-right: 0px;
+          font-size: 10px;
         }
       }
     }
@@ -672,7 +675,7 @@ section#BottomSection {
   div#FlightStatusBar {
     ul {
       height: $IconHeight;
-      margin: 0px 0px $VerticalGap/2 0px;
+      margin: 0px;
 
       li {
         width: $IconHeight;
@@ -687,16 +690,21 @@ section#BottomSection {
     }
 
     div#FlightStatusIconInfo {
-      padding-left: $VerticalGap;
-      padding-right: $VerticalGap;
-      border-radius: $VerticalGap;
-      margin-bottom: $VerticalGap;
+      margin-top: $VerticalGap/4;
+      span {
+        background-color: $HiliteColor1;
+        padding-left: $VerticalGap;
+        padding-right: $VerticalGap;
+        border-radius: $VerticalGap;
+        font-size: 11px;
+        display: table-cell;
+      }
     }
   }
 }
 
 @mixin FlightStatusMetar($VerticalGap, $MaxSize, $FontSize) {
-  $MetarHeight: $MaxSize * 0.2;
+  $MetarHeight: $MaxSize * 0.12;
   $BorderWidth: 8px;
 
   div#FlightStatusBar {
@@ -704,11 +712,13 @@ section#BottomSection {
   }
 
   div#FlightStatusMetar {
+    margin-top: $VerticalGap;
     width: $MaxSize;
     height: $MetarHeight;
     display: block;
     background-color: silver;
     border-radius: $MetarHeight/2;
+    overflow: hidden;
 
     div.MetarInfoContent {
       box-sizing: border-box;
@@ -716,11 +726,15 @@ section#BottomSection {
       height: $MetarHeight - $BorderWidth * 2;
       margin-left: $BorderWidth;
       margin-top: $BorderWidth;
-      float:left;
+      float: left;
+      display:table;
+
       div.MetarInfo {
         text-align: left;
         vertical-align: middle;
         display: table-cell;
+        font-size: $FontSize * 0.7;
+        font-weight:bold;
       }
     }
 
@@ -742,10 +756,10 @@ section#BottomSection {
         display: table-cell;
         height: $MetarHeight;
         width: $MetarHeight;
-        font-size: $FontSize;
+        font-size: $FontSize * 0.8;
 
         div.refresh {
-          font-size: $FontSize - 4px;
+          font-size: $FontSize * 0.5;
         }
       }
     }
@@ -769,10 +783,15 @@ section#BottomSection {
 
     div.title-2 {
       font-size: $FontSize - 1px;
+
+      & > span {
+        font-size: $FontSize + 5px;
+      }
     }
 
     div.title-3 {
       font-size: $FontSize - 2px;
+      color: #929292;
     }
   }
 
@@ -780,17 +799,18 @@ section#BottomSection {
     $Sections: 6;
     $TotalGap: $VerticalGap * ($Sections - 1);
     $TotalWidth: $MaxSize - $TotalGap;
-
+    $FirstSecion: 0.4;
+    $SecondSection: 1 - $FirstSecion;
     //15% of width for normal cell
     //[4 * 15%  = 60%] + [2 * 25% = 40%] = 100%;
-    $CellWidth: $TotalWidth * (0.50/4);
+    $CellWidth: ($TotalWidth * $SecondSection)/4;
     width: $CellWidth;
     margin-right: $VerticalGap;
     font-size: $FontSize;
 
     &.pack-of-2 {
       //20% of width for the bigger cell
-      width: ($TotalWidth * 0.25);
+      width: ($TotalWidth * $FirstSecion) / 2;
     }
 
     &:last-child {
@@ -890,27 +910,62 @@ section#BottomSection {
 
   div#FlightInfoColumn3 {
     width: $Column3;
+    $ButtonFontSize: $FontSize * 0.8;
+    $BigButton: 70px;
+    $Height: $FontSize + 10px;
+    $SmallButton: $Height;
+    $BigButtonCount: 3;
+    $SmallButtonCount: 3;
+    $TotalWidth: ($BigButton * $BigButtonCount) + ($SmallButton * $SmallButtonCount);
+    $HGap: ($Column3 - $TotalWidth) / ($BigButtonCount + $SmallButtonCount - 1);
+
+    div#Toolbar {
+      margin-top: $VerticalGap;
+      width: $Column3;
+      font-size: $ButtonFontSize;
+
+      & > div {
+        float: left;
+      }
+
+      & > div.button {
+        width: $BigButton;
+        height: $Height;
+        line-height: $Height;
+        margin-right: $HGap;
+        box-sizing: border-box;
+        padding: 0px 5px 0px 5px;
+      }
+
+      & > div.round-button {
+        width: $Height;
+        line-height: $Height;
+        height: $SmallButton;
+        margin-right: $HGap;
+        padding: 0px 5px 0px 5px;
+        box-sizing: border-box;
+      }
+
+      & > div:last-child {
+        margin-right: 0px !important;
+      }
+    }
+
+
+    div#FlightSlider {
+      width: $Column3;
+      margin-top: $VerticalGap;
+    }
+
+    div#FlightSliderBar {
+      width: $Column3;
+      height: 8px;
+      border: 0px;
+    }
   }
 
   div#FlightInfoColumn2_3_merge {
     width: $Column2 + $Column3 + $VerticalGap;
-  }
-
-  div#FlightInfoColumn4 {
-    $Column4: $Column2 + $Column3 + $VerticalGap;
-    $ScrollerAvail: $Column4 - (306 + 95);
-    width: $Column4;
-
-    div#FlightSlider {
-      width: $ScrollerAvail;
-      margin-left: 8px;
-    }
-
-    div#FlightSliderBar {
-      width: 100%;
-      height: 8px;
-      border: 0px;
-    }
   }
 }
 
@@ -954,7 +1009,7 @@ section#BottomSection {
   $Column1: $AvailWidth * 0.40;
   @include FlightInfoBar($VerticalGap, $MaxSize, 50px, 14px);
   @include FlightStatus($VerticalGap, $MaxSize, 16px, 483px);
-  @include FlightStatusBar($VerticalGap, 32px);
+  @include FlightStatusBar($VerticalGap, 22px);
   @include FlightData($Column1, 5px, 12px, 95px);
   @include BottomSection($MaxSize, 350px, 13px);
   @include VerticalSpaces($VerticalGap);

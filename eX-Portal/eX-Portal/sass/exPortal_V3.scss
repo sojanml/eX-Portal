@@ -8,6 +8,10 @@ html, body {
   color: $BodyColor;
   font-family: 'Avenir Next Condensed';
 }
+* {
+  margin:0px;
+  padding:0px;
+}
 //If you set box-sizing: border-box; on an element padding and border are included in the width and height:
 div {
   box-sizing: border-box

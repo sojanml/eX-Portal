@@ -124,17 +124,20 @@
     <div id="FlightInfoColumn3">
 
       <div id="FlightStatusBar">
+
         <ul>
           <li><div data-for="Wind" class="active FlightStatusIconWind"></div> </li>
           <li><div data-for="Temp" class="FlightStatusIconTemp"></div> </li>
           <li><div data-for="Airline" class="FlightStatusIconAirline"></div> </li>
           <li><div data-for="EM" class="FlightStatusIconEM"></div> </li>
         </ul>
+        <div class="clear"></div>
+
         <div id="FlightStatusIconInfo">
           <span id="FlightStatusIconWindText">Wind Speed: N/A</span>
           <span id="FlightStatusIconTempText" style="display:none">Temperature: N/A</span>
-          <span id="FlightStatusIconAirlineText"  style="display:none">Airline: N/A</span>
-          <span id="FlightStatusIconEMText"  style="display:none">EM: N/A</span>
+          <span id="FlightStatusIconAirlineText"  style="display:none">Airport: N/A</span>
+          <span id="FlightStatusIconEMText"  style="display:none">EM: Currently not available</span>
         </div>
       </div>
       <div id="FlightStatusMetar">
@@ -149,10 +152,7 @@
           <div class="MetarInfo" id="MetarInfo"></div>
         </div>
       </div>
-    </div><!---->
-    <div class="clear"></div>
-    <div id="FlightInfoColumn4">
-      <div class="Toolbar">
+      <div id="Toolbar">
         <div id="btnPlay" class="button"><span class="icon">&#xf144;</span><span class="text">Play</span></div>
         <div id="btnPause" style="display:none;" class="button"><span class="icon">&#xf28b;</span><span class="text">Pause</span></div>
         <div id="btn1x" class="active round-button">1X</div>
@@ -160,17 +160,19 @@
         <div id="btn4x" class="round-button">4X</div>
         <div id="btn2D" style="display:none;" class="button"><span class="icon">&#xf279;</span><span class="text">2D</span></div>
         <div id="btn3D" class="button"><span class="icon">&#xf0ac;</span><span class="text">3D</span></div>
-
-        <div id="btnExport" class="button">
-          <a href="~/FlightMap/Export/@Model.FlightID"><span class="icon">&#xf093;</span><span class="text">Export</span></a></div>
+        <div id="btnExport" class="button" data-href="~/FlightMap/Export/@Model.FlightID">
+          <span class="icon">&#xf093;</span><span class="text">Export</span>
+        </div>
       </div>
+
       <div id="FlightSlider">
         <div style="" id="FlightSliderStart">00:00:00</div>
         <div id="FlightSliderCenter" class=""></div>
         <div id="FlightSliderBar"></div>
         <div style="" id="FlightSliderEnd">00:00:00</div>
       </div>
-    </div>
+    </div><!---->
+    <div class="clear"></div>
   </div><!-- FlightInfoColumn2_3_merge-->
 </section>
 
@@ -192,11 +194,11 @@
         </li>
         <li>
           <div class="title">NOC #</div>
-          <div class="value">None</div>
+          <div class="value"><span id="MapInfoContentNOC">None</span></div>
         </li>
         <li>
           <div class="title">Max Altitude</div>
-          <div class="value">120 Meter</div>
+          <div class="value"><span id="MapInfoContentAltitude">0</span> Meter</div>
         </li>
       </ul>
     </div>

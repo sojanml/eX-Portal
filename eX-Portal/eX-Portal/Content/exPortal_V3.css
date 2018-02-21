@@ -144,6 +144,11 @@ html, body {
   font-family: 'Avenir Next Condensed';
 }
 
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
 div {
   box-sizing: border-box;
 }

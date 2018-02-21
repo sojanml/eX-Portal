@@ -34,6 +34,7 @@
       mapStyle: Cesium.BingMapsStyle.AERIAL // Can also use Cesium.BingMapsStyle.ROADS
     }));
 
+    /*
     // Load STK World Terrain
     _viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
       url: 'https://assets.agi.com/stk-terrain/world',
@@ -42,16 +43,12 @@
     });
 
     _viewer.scene.globe.depthTestAgainstTerrain = true;
+    */
     _viewer.scene.globe.enableLighting = true;
 
     var initialOrientation = new Cesium.HeadingPitchRoll.fromDegrees(7.1077496389876024807, -31.987223091598949054, 0.025883251314954971306);
     var homeCameraView = {
-      destination: _initPosition,
-      orientation: {
-        heading: initialOrientation.heading,
-        pitch: initialOrientation.pitch,
-        roll: initialOrientation.roll
-      }
+      destination: _initPosition
     };
     // Set the initial view
     _viewer.scene.camera.setView(homeCameraView);
@@ -97,6 +94,12 @@
 
     _viewer.trackedEntity = _entity;
 
+    _viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
+      e.cancel = true;
+      _viewer.trackedEntity = _entity;
+      _viewer.camera.flyTo(_entity);      
+    });
+
   };
 
 
@@ -140,7 +143,7 @@
     for (var i = 0; i < dataSource.length; i++) {
       var Data = dataSource[i];
       var time = _toUTC(Data.FlightDateTime);
-      var position = Cesium.Cartesian3.fromDegrees(Data.Lng, Data.Lat, Data.Altitude + 200);
+      var position = Cesium.Cartesian3.fromDegrees(Data.Lng, Data.Lat, Data.Altitude);
       var hpRoll = Cesium.HeadingPitchRoll.fromDegrees(Data.Heading, 0, 0);
       //var orientation = Cesium.Quaternion.fromHeadingPitchRoll(hpRoll);
       var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpRoll);
