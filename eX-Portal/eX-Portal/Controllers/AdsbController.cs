@@ -153,7 +153,7 @@ namespace eX_Portal.Controllers {
 
         public FlightUser GetActivePilots()
         {
-            DateTime dt = DateTime.Now.AddMinutes(-1);
+            DateTime dt = DateTime.UtcNow.AddMinutes(-1);
             var ActFlights = ctx.MSTR_Drone.Where(x => x.FlightTime > dt).Select(x => x.LastFlightID);
             List<int?> ActiveFlights = ctx.MSTR_Drone.Where(x => x.FlightTime > dt).Select(x => x.LastFlightID).ToList();
 

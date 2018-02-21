@@ -1,6 +1,7 @@
 ﻿var COMMS = function () {
   var _GetMessageTimer = null;
   var _MessageID = 0;
+  var _PostURL = "/COMMS/CreateMessage/";
 
   var _GetMessages = function () {
     var _URL = "/COMMS/GetPilotMessages/?MessageID=" + _MessageID  + "&FlightID=" + FlightInfo.FlightID;
@@ -46,7 +47,7 @@
 
   var _Post = function (e) {
     e.preventDefault();
-    var _URL = "/COMMS/CreateMessage/";
+   
 
     if (_GetMessageTimer) window.clearTimeout(_GetMessageTimer);
     var TheData =
@@ -56,7 +57,7 @@
     $.ajax({
       method: "POST",
       data: TheData,
-      url: _URL,
+      url: _PostURL,
       dataType: "json",
       success: function (data) {
         $('#ComsMessage').val("");
@@ -78,9 +79,13 @@
     if (_GetMessageTimer) window.clearTimeout(_GetMessageTimer);
     _GetMessageTimer = window.setTimeout(_GetMessages, 10);
   };
+  var _setPostUrl = function (url) {
+      _PostURL = url;
 
+  };
   return {
-    Init: _Init
+      Init: _Init,
+      SetPostUrl: _setPostUrl
   };
 
 }();

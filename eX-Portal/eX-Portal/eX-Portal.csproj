@@ -216,7 +216,6 @@
     <Compile Include="Controllers\BillingController.cs" />
     <Compile Include="Controllers\BillingRulesController.cs" />
     <Compile Include="Controllers\BlackBoxController.cs" />
-    <Compile Include="Controllers\CesiumController.cs" />
     <Compile Include="Controllers\COMMSController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
     <Compile Include="Controllers\DesignController.cs" />
