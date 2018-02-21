@@ -169,6 +169,7 @@ namespace eX_Portal.exLogic {
     public String OuterPolygon { get; private set; }
     public string HomeLat { get; private set; }
     public string HomeLong { get; private set; }
+    public int Altitude { get; set; }
 
     public void GetInformation(int FlightID) {
       String SQL = @"SELECT 
@@ -191,7 +192,8 @@ namespace eX_Portal.exLogic {
         g.Coordinates as InnerPolygon,
         g.OuterCoordinates as OuterPolygon,
         DroneFlight.latitude as homelat,
-        DroneFlight.longitude as homelong
+        DroneFlight.longitude as homelong,
+        g.MaxAltitude as Altitude
       FROM 
         DroneFlight
       LEFT JOIN NOC_Details as g
@@ -230,6 +232,7 @@ namespace eX_Portal.exLogic {
             OuterPolygon = GetString(RS, "OuterPolygon");
             HomeLat= GetString(RS, "HomeLat");
             HomeLong= GetString(RS, "HomeLong");
+            Altitude = GetInt(RS, "Altitude");
           }
         }//using (var cmd 
 

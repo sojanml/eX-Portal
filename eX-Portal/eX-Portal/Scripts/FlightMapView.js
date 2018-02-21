@@ -517,12 +517,23 @@ var Util = function () {
     return d; // returns the distance in meter
   };
 
+  var _ToPath = function (Coordinates) {
+      var Path = [];
+      if (Coordinates === '' || Coordinates === 'null') return Path;
+      var aLatLng = Coordinates.split(',');
+      for (var i = 0; i < aLatLng.length; i++) {
+          var Points = aLatLng[i].split(' ');
+          Path.push({ lat: parseFloat(Points[0]), lng: parseFloat(Points[1]) });
+      }
+      return Path;
+  };
   return {
     FmtTime: _FmtTime,
     toDateTime: _toDateTime,
     toTime: _toTime,
     toString: _toDateString,
-    getDistance: _getDistance
+    getDistance: _getDistance,
+    toPath: _ToPath
   };
 }();
 

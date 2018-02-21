@@ -74,7 +74,8 @@ var FlightMap = function () {
         _IsMapBusy = false;
       },100)
     });
-
+    if (FlightInfo.InnerPolygon.length > 0 && FlightInfo.OuterPolygon.length>0 )
+    _DrawNOC(FlightInfo.InnerPolygon, FlightInfo.OuterPolygon);
   };
 
   var _MapClick = function (e) {
@@ -137,6 +138,46 @@ var FlightMap = function () {
   var _ClearADSB = function () {
     _ADSBOverlay.Clear();
   };
+  var _DrawNOC = function (InnerCoordinates, OuterCoodinates) {
+      var InnerPolyPath = Util.toPath(InnerCoordinates);
+      var OuterPath = Util.toPath(OuterCoodinates);
+    
+      if (InnerPolyPath.length < 1) return;
+      if (OuterPath.length < 1) return;
+
+      //Generate Holo Poly
+      var HoloPath = InnerPolyPath;
+      //Close the polygon
+      HoloPath.push(InnerPolyPath[0]);
+      HoloPath = HoloPath.concat(OuterPath.reverse());
+
+      // Construct the polygon.
+      var InnerPoly = new google.maps.Polygon({
+          paths: InnerPolyPath,
+          strokeWeight: 0,
+          fillColor: 'rgb(101, 186, 25)',
+          fillOpacity: 0.2,
+          map: _map,
+          clickable: false
+      });
+      var OuterBorder = new google.maps.Polyline({
+          path: OuterPath,
+          geodesic: true,
+          strokeColor: 'red',
+          strokeOpacity: 0.3,
+          strokeWeight: 3,
+          map: _map,
+          clickable: false
+      });
+      var OuterPoly = new google.maps.Polygon({
+          paths: HoloPath,
+          strokeWeight: 0,
+          fillColor: '#fd2525',
+          fillOpacity: 0.2,
+          map: _map,
+          clickable: false
+      });
+  };
 
   return {
     map: _map,
@@ -145,6 +186,7 @@ var FlightMap = function () {
     AutoZoom: _FitBounds,
     MoveToIndex: _MoveToIndex,
     ClearADSB: _ClearADSB
+   
   };
 }();
 

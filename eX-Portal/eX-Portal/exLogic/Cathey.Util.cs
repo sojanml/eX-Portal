@@ -390,10 +390,10 @@ namespace eX_Portal.exLogic {
       String SQLVideo = 
         $@"CASE 
           WHEN 
-            D.LastFlightID =(Select Top 1  DroneFlight.ID from DroneFlight order by DroneFlight.ID desc) and
+            D.LastFlightID =(Select Top 1  DroneFlight.ID from DroneFlight  where DroneFlight.DroneId=D.DroneID order by DroneFlight.ID desc) and
             D.FlightTime > DATEADD(MINUTE, -1, GETDATE())
           THEN 
-            '<a href=/FlightMap/Map/'+ TRY_CONVERT(nvarchar(10), D.LastFlightID) +'><span class=green_icon>&#xf04b;</span></a>'                             
+            '<a href=/FlightMap/View/'+ TRY_CONVERT(nvarchar(10), D.LastFlightID) +'><span class=green_icon>&#xf04b;</span></a>'                             
           ELSE 
             ''
           END AS LiveStatus";

@@ -194,7 +194,7 @@
         </li>
         <li>
           <div class="title">NOC #</div>
-          <div class="value"><span id="MapInfoContentNOC">None</span></div>
+          <div class="value"><span id="MapInfoContentNOC">@Model.ApprovalID</span></div>
         </li>
         <li>
           <div class="title">Max Altitude</div>
@@ -244,7 +244,8 @@
       IsLive: @(Model.IsLive ? "true" : "false"),
       UserID: @eX_Portal.exLogic.Util.getLoginUserID(),
       OuterPolygon: '@Model.OuterPolygon',
-      InnerPolygon: '@Model.InnerPolygon'
+      InnerPolygon: '@Model.InnerPolygon',
+      Altitude:@Model.Altitude
     };
   </script>
   <!--General Libraries-->
@@ -264,5 +265,6 @@
   <script type="text/javascript" src="~/Scripts/FlightMapView-3D.js"></script>
   <script type="text/javascript" src="~/Scripts/FlightMapView-ADSB.js"></script>
   <script type="text/javascript" src="~/Scripts/FlightMapView-COMMS.js"></script>
+
   <script type="text/javascript" src="~/Scripts/FlightMapView.js"></script>
 }

@@ -9,7 +9,9 @@
   var _initPosition = null;
 
   var _ClockSpeed = 1;
-
+  var _NoFlyZones = {};
+  var _AddedOuterPolygon = {};
+  var _AddedInnerPolygon = {};
   var _init = function () {
     //do not intilize again.
     if (_viewer !== null) return;
@@ -100,6 +102,8 @@
       _viewer.camera.flyTo(_entity);      
     });
 
+    _loadNoFlyZone();
+    _drawPolygon(FlightInfo.InnerPolygon, FlightInfo.OuterPolygon, FlightInfo.Altitude);
   };
 
 
@@ -202,6 +206,91 @@
     Cesium.JulianDate.addSeconds(nDt, FixTime, nDt2);
     return nDt2;
   };
+  var _loadNoFlyZone = function () {
+      $.ajax({
+          type: "GET",
+          url: '/NOC/NoFlyZone',
+          contentType: "application/json",
+          success: _drawNoFlyZone,
+          error: function (data, text) {
+              //alert('Failed to fetch flight: ' + data);
+          },
+          complete: function () {
+          }
+      });
+  };
+
+  var _drawNoFlyZone = function (data) {
+      for (var i = 0; i < data.length; i++) {
+          if (data[i].Coordinates === null) continue;
+          var Coordinates = GPS.ToCesium(data[i].Coordinates, 1200);
+          var id = 'NoFlyZone' + i;
+          var Color = Cesium.Color.BLUE.withAlpha(0.3);
+          switch (data[i].Color.toLowerCase()) {
+              case 'red':
+                  Color = Cesium.Color.RED.withAlpha(0.3);
+                  break;
+              case 'green':
+                  Color = Cesium.Color.GREEN.withAlpha(0.3);
+                  break;
+              case 'orange':
+                  Color = Cesium.Color.ORANGE.withAlpha(0.3);
+                  break;
+          }
+          _NoFlyZones[id] = new Cesium.Entity({
+              id: id,
+              polygon: {
+                  hierarchy: Coordinates,
+                  extrudedHeight: 0,
+                  perPositionHeight: true,
+                  material: Color,
+                  outline: true,
+                  outlineColor: Cesium.Color.BLACK,
+                  show: true
+              }
+          });
+          _viewer.entities.add(_NoFlyZones[id]);
+      }
+  };
+
+  var _drawPolygon = function (InCoordinates, OuCoordinates,Altitude) {
+
+      var InnerCoordinates = GPS.ToCesium(InCoordinates, Altitude);
+      var OuterCoordinates = GPS.ToCesium(OuCoordinates, Altitude);
+      var InnerPolygon = new Cesium.Entity({
+          id: 'InnerPolygon',
+          polygon: {
+              hierarchy: InnerCoordinates,
+              extrudedHeight: 0,
+              perPositionHeight: true,
+              material: Cesium.Color.BLUE.withAlpha(0.2),
+              outline: true,
+              outlineColor: Cesium.Color.BLACK,
+              show: true
+          }
+      });
+      var OuterPolygon = new Cesium.Entity({
+          id: 'OuterPolygon',
+          polygon: {
+              hierarchy:
+              {
+                  positions: OuterCoordinates,
+                  holes: [{
+                      positions: InnerCoordinates
+                  }]
+              },
+              extrudedHeight: 0,
+              perPositionHeight: true,
+              material: Cesium.Color.YELLOW.withAlpha(0.5),
+              outline: true,
+              outlineColor: Cesium.Color.BLACK,
+              show: true
+          }
+      });
+
+    //  _viewer.entities.add(InnerPolygon);
+      _viewer.entities.add(OuterPolygon);
+  }
 
   return {
     Init: _init,
@@ -212,4 +301,38 @@
     Pause: _pause,
     setSpeed: _setSpeed
   };
+}();
+
+
+var GPS = function () {
+
+    var _toCesiumCartesian3 = function (Coordinates, Altitude, IsClosePolygon) {
+        if (Altitude + '' === 'undefiend') Altitude = 50;
+        var CesiumCoordinates = [];
+        var aCoordinates = Coordinates.split(',');
+        for (var i = 0; i < aCoordinates.length; i++) {
+            var LatLng = aCoordinates[i].split(" ");
+            var Lat = parseFloat(LatLng[0]);
+            var Lng = parseFloat(LatLng[1]);
+            CesiumCoordinates.push(Lng, Lat, Altitude);
+        }
+        if (IsClosePolygon) {
+            var fLng = CesiumCoordinates[0];
+            var fLat = CesiumCoordinates[1];
+            var fAlt = CesiumCoordinates[2];
+            CesiumCoordinates.push(fLng, fLat, fAlt);
+        }
+        return Cesium.Cartesian3.fromDegreesArrayHeights(CesiumCoordinates);
+    };
+
+
+    var _bounds = function () {
+        return Cesium.Rectangle.fromDegrees(MinLat, MinLng);
+    }
+
+    return {
+        ToCesium: _toCesiumCartesian3,
+        Bounds: _bounds
+    };
+
 }();
