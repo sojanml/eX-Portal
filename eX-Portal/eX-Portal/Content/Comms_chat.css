@@ -1,0 +1,439 @@
+@font-face {
+  font-family: "FontAwesome";
+  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Demi';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.svg#AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic") format("svg");
+  font-weight: 600;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Bold.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Bold.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.svg#AvenirNextCondensed/AvenirNextCondensed-Bold") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Ultra';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.svg#AvenirNextCondensed/AvenirNextCondensed-UltraLight") format("svg");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Italic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Italic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.svg#AvenirNextCondensed/AvenirNextCondensed-Italic") format("svg");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Heavy.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Heavy.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.svg#AvenirNextCondensed/AvenirNextCondensed-Heavy") format("svg");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Demi';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.svg#AvenirNextCondensed/AvenirNextCondensed-DemiBold") format("svg");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Medium.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Medium.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.svg#AvenirNextCondensed/AvenirNextCondensed-Medium") format("svg");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Regular.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Regular.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.svg#AvenirNextCondensed/AvenirNextCondensed-Regular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.svg#AvenirNextCondensed/AvenirNextCondensed-MediumItalic") format("svg");
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.svg#AvenirNextCondensed/AvenirNextCondensed-BoldItalic") format("svg");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.svg#AvenirNextCondensed/AvenirNextCondensed-HeavyItalic") format("svg");
+  font-weight: 900;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Ultra';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.svg#AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic") format("svg");
+  font-weight: 200;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt2.eot");
+  src: url("Advent/advent-Lt2.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt2.woff2") format("woff2"), url("Advent/advent-Lt2.woff") format("woff"), url("Advent/advent-Lt2.ttf") format("truetype"), url("Advent/advent-Lt2.svg#advent-Lt2") format("svg");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Regular.eot");
+  src: url("Advent/advent-Regular.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Regular.woff2") format("woff2"), url("Advent/advent-Regular.woff") format("woff"), url("Advent/advent-Regular.ttf") format("truetype"), url("Advent/advent-Regular.svg#advent-Regular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd2.eot");
+  src: url("Advent/advent-Bd2.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd2.woff2") format("woff2"), url("Advent/advent-Bd2.woff") format("woff"), url("Advent/advent-Bd2.ttf") format("truetype"), url("Advent/advent-Bd2.svg#advent-Bd2") format("svg");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd1.eot");
+  src: url("Advent/advent-Bd1.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd1.woff2") format("woff2"), url("Advent/advent-Bd1.woff") format("woff"), url("Advent/advent-Bd1.ttf") format("truetype"), url("Advent/advent-Bd1.svg#advent-Bd1") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt3.eot");
+  src: url("Advent/advent-Lt3.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt3.woff2") format("woff2"), url("Advent/advent-Lt3.woff") format("woff"), url("Advent/advent-Lt3.ttf") format("truetype"), url("Advent/advent-Lt3.svg#advent-Lt3") format("svg");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd3.eot");
+  src: url("Advent/advent-Bd3.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd3.woff2") format("woff2"), url("Advent/advent-Bd3.woff") format("woff"), url("Advent/advent-Bd3.ttf") format("truetype"), url("Advent/advent-Bd3.svg#advent-Bd3") format("svg");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt1.eot");
+  src: url("Advent/advent-Lt1.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt1.woff2") format("woff2"), url("Advent/advent-Lt1.woff") format("woff"), url("Advent/advent-Lt1.ttf") format("truetype"), url("Advent/advent-Lt1.svg#advent-Lt1") format("svg");
+  font-weight: 300;
+  font-style: normal;
+}
+div#ActivePilots {
+  display: block;
+  border-bottom: 1px white solid;
+  float: left;
+}
+div#ActivePilots ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+div#ActivePilots ul li {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  border-bottom: 1px #18bdec solid;
+  padding: 3px 10px 3px 10px;
+}
+div#ActivePilots ul li.active {
+  background-color: #18bdec;
+  color: white;
+}
+div#ActivePilots ul li:hover {
+  background-color: #18bdec;
+}
+
+ul#ComsList {
+  margin: 0px;
+  padding: 0px;
+  font-size: 13px;
+}
+ul#ComsList li {
+  margin: 0px 0px 10px 0px;
+  padding: 0px;
+}
+ul#ComsList li div.message {
+  border-radius: 8px;
+  padding: 1px 10px 1px 10px;
+}
+ul#ComsList li div.message div.name {
+  padding-right: 10px;
+  font-weight: bold;
+  display: table-cell;
+}
+ul#ComsList li div.message div.content {
+  display: table-cell;
+  width: auto;
+}
+ul#ComsList li.tome div.message {
+  background-color: #1C1C1C;
+  color: white;
+}
+ul#ComsList li.fromme div.message {
+  background-color: silver;
+}
+ul#ComsList li div.date {
+  text-align: right;
+  padding-right: 0px;
+  font-size: 10px;
+}
+
+div#ComSection {
+  display: block;
+  border: 1px #18bdec solid;
+  overflow: hidden;
+}
+div#ComSection div.caption {
+  width: 100%;
+  background-color: #18bdec;
+  font-family: 'Advent';
+  text-align: center;
+  padding: 5px 0px 5px 0px;
+  font-weight: 800;
+}
+
+@media screen and (min-width: 720px) {
+  div#ActivePilots {
+    width: 180px;
+    height: 400px;
+    box-sizing: border-box;
+  }
+  div#ActivePilots ul li {
+    width: 180px;
+    box-sizing: border-box;
+  }
+
+  div#ComSection {
+    height: 400px;
+    width: 540px;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  ul#ActivePilotList {
+    padding-top: 28px !important;
+  }
+
+  div#ComSection {
+    width: 540px;
+  }
+  div#ComSection div.caption {
+    font-size: 18px;
+    letter-spacing: 3.33333px;
+    height: 28px;
+    line-height: 18px;
+  }
+  div#ComSection div#ComsContent {
+    width: 540px;
+    height: 342px;
+    overflow-y: scroll;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  div#ComSection div#ComsSendMessage {
+    width: 540px;
+    height: 30px;
+    background-color: green;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox, div#ComSection div#ComsSendMessage div.ContentButton {
+    float: left;
+    width: 100%;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input, div#ComSection div#ComsSendMessage div.ContentButton input {
+    margin: 0px;
+    line-height: 30px;
+    border: 0px;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input {
+    padding: 0px 10px 0px 10px;
+    width: 470px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input {
+    padding: 0px;
+    width: 50px;
+    background-color: #50ff00;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input:hover {
+    background-color: #18bdec;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input.disabled, div#ComSection div#ComsSendMessage div.ContentButton input.disabled:hover {
+    background-color: silver;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton {
+    width: 50px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox {
+    width: 490px;
+  }
+}
+@media screen and (min-width: 1080px) {
+  div#ActivePilots {
+    width: 270px;
+    height: 400px;
+    box-sizing: border-box;
+  }
+  div#ActivePilots ul li {
+    width: 270px;
+    box-sizing: border-box;
+  }
+
+  div#ComSection {
+    height: 400px;
+    width: 810px;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  ul#ActivePilotList {
+    padding-top: 28px !important;
+  }
+
+  div#ComSection {
+    width: 810px;
+  }
+  div#ComSection div.caption {
+    font-size: 18px;
+    letter-spacing: 3.33333px;
+    height: 28px;
+    line-height: 18px;
+  }
+  div#ComSection div#ComsContent {
+    width: 810px;
+    height: 342px;
+    overflow-y: scroll;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  div#ComSection div#ComsSendMessage {
+    width: 810px;
+    height: 30px;
+    background-color: green;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox, div#ComSection div#ComsSendMessage div.ContentButton {
+    float: left;
+    width: 100%;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input, div#ComSection div#ComsSendMessage div.ContentButton input {
+    margin: 0px;
+    line-height: 30px;
+    border: 0px;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input {
+    padding: 0px 10px 0px 10px;
+    width: 740px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input {
+    padding: 0px;
+    width: 50px;
+    background-color: #50ff00;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input:hover {
+    background-color: #18bdec;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input.disabled, div#ComSection div#ComsSendMessage div.ContentButton input.disabled:hover {
+    background-color: silver;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton {
+    width: 50px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox {
+    width: 760px;
+  }
+}
+@media screen and (min-width: 1320px) {
+  div#ActivePilots {
+    width: 315px;
+    height: 400px;
+    box-sizing: border-box;
+  }
+  div#ActivePilots ul li {
+    width: 315px;
+    box-sizing: border-box;
+  }
+
+  div#ComSection {
+    height: 400px;
+    width: 945px;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  ul#ActivePilotList {
+    padding-top: 28px !important;
+  }
+
+  div#ComSection {
+    width: 945px;
+  }
+  div#ComSection div.caption {
+    font-size: 18px;
+    letter-spacing: 3.33333px;
+    height: 28px;
+    line-height: 18px;
+  }
+  div#ComSection div#ComsContent {
+    width: 945px;
+    height: 342px;
+    overflow-y: scroll;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  div#ComSection div#ComsSendMessage {
+    width: 945px;
+    height: 30px;
+    background-color: green;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox, div#ComSection div#ComsSendMessage div.ContentButton {
+    float: left;
+    width: 100%;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input, div#ComSection div#ComsSendMessage div.ContentButton input {
+    margin: 0px;
+    line-height: 30px;
+    border: 0px;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input {
+    padding: 0px 10px 0px 10px;
+    width: 875px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input {
+    padding: 0px;
+    width: 50px;
+    background-color: #50ff00;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input:hover {
+    background-color: #18bdec;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input.disabled, div#ComSection div#ComsSendMessage div.ContentButton input.disabled:hover {
+    background-color: silver;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton {
+    width: 50px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox {
+    width: 895px;
+  }
+}

@@ -1651,6 +1651,7 @@
     <None Include="sass\common.scss" />
     <Content Include="sass\exPortal_V3_Common.scss" />
     <Content Include="sass\exPortal_V3_FlightMapView.scss" />
+    <Content Include="sass\Comms_chat.scss" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
@@ -2341,6 +2342,7 @@
     <Content Include="Views\COMMS\Create.cshtml" />
     <Content Include="Views\FlightMap\view.cshtml" />
     <Content Include="Views\Shared\_exPortal_V3.cshtml" />
+    <Content Include="Views\COMMS\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

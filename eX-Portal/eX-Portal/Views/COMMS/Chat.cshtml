@@ -1,0 +1,50 @@
+﻿@{
+  Layout = "~/Views/Shared/_exPortal_V3.cshtml";
+  ViewBag.Title = "Online Chat";
+}
+
+<section id="ChatWindow">
+  <div id="ActivePilots">
+    <ul id="ActivePilotList">
+
+    </ul>
+  </div>
+  <div id="ComSection">
+    <div class="caption">COMMS MODULE</div>
+    <div id="ComsContent">
+      <ul id="ComsList">
+        <li>Please select a pilot from listed on left for online chat.</li>
+
+      </ul>
+    </div>
+    <div id="ComsSendMessage" >
+      <form method="post" id="ComSubmitForm" name="ComSubmitForm">
+        <div class="ContentBox">
+          <input  type="text" id="ComsMessage" name="ComsMessage" value="" placeholder="Message to pilot" />
+        </div>
+        <div class="ContentButton">
+          <input type="submit" name="ComsSubmit" id="ComsSubmit" value="Send" />
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+@section header {
+<link rel="stylesheet" type="text/css" href="~/Content/Comms_chat.css" /> 
+}
+
+
+@section scripts {
+    <script src="~/Scripts/FlightMapView-COMMS.js" type="text/javascript"></script>
+  <script src="~/Scripts/Comms.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var FlightInfo = {
+    FlightID: 0,
+    UserID: @eX_Portal.exLogic.Util.getLoginUserID()
+  };
+
+
+  </script>
+}

@@ -2,6 +2,7 @@
   var _GetMessageTimer = null;
   var _MessageID = 0;
   var _PostURL = "/COMMS/CreateMessage/";
+  var _IsInit = false;
 
   var _GetMessages = function () {
     var _URL = "/COMMS/GetPilotMessages/?MessageID=" + _MessageID  + "&FlightID=" + FlightInfo.FlightID;
@@ -67,10 +68,21 @@
       },
       complete: function (msg) {
         if (_GetMessageTimer) window.clearTimeout(_GetMessageTimer);
-        _GetMessageTimer = window.setTimeout(_GetMessages, 20);
+        _GetMessageTimer = window.setTimeout(_GetMessages, 2000);
       }
     });
 
+  }
+
+  var _Start = function () {
+    $('#ComsList').empty();
+    _MessageID = 0;
+    if (!_IsInit) {
+      $('#ComSubmitForm').on("submit", _Post);
+    }
+    if (_GetMessageTimer) window.clearTimeout(_GetMessageTimer);
+    _GetMessageTimer = window.setTimeout(_GetMessages, 10);
+    _IsInit = true;
   }
 
   var _Init = function () {
@@ -81,11 +93,12 @@
   };
   var _setPostUrl = function (url) {
       _PostURL = url;
-
   };
+
   return {
-      Init: _Init,
-      SetPostUrl: _setPostUrl
+    Init: _Init,
+    Start: _Start,
+    SetPostUrl: _setPostUrl
   };
 
 }();
