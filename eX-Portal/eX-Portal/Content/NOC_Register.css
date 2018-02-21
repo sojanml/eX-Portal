@@ -81,6 +81,9 @@ ul#NocSections li {
 ul#NocSections li.active div.title {
   background-color: darkgreen;
 }
+ul#NocSections div.title span.Estimate {
+  color: yellow;
+}
 
 table.GoogleMapCoordinates {
   border-collapse: collapse;
@@ -173,6 +176,16 @@ section.top-border ul.noc-info li {
 
 div.cesium-viewer-bottom {
   display: none !important;
+}
+
+div.TotalEstimate {
+  font-family: Gobold_Light;
+  font-size: 18pt;
+  margin-top: 20px;
+  color: #018aff;
+}
+div.TotalEstimate span {
+  color: #53a100;
 }
 
 div#NocBillingTotalSection {

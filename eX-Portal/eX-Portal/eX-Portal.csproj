@@ -1612,7 +1612,6 @@
     <Content Include="Content\AvenirNextCondensed\AvenirNextCondensed-UltraLightItalic.woff2" />
     <Content Include="Cesium\Images\CesiumDrone.gltf" />
     <Content Include="images\CesiumDrone.gltf" />
-    <Content Include="Content\Advent\Advent - Shortcut.lnk" />
     <Content Include="Content\Advent\advent-Bd1.eot" />
     <Content Include="Content\Advent\advent-Bd1.ttf" />
     <Content Include="Content\Advent\advent-Bd1.woff" />
