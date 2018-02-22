@@ -37,7 +37,7 @@
         .append(
         '<div class="message">' +
         '<div class="name">' + Message.FromUser + '</div>' + 
-        '<div class="content">' +  Message.Message + '</div>' +
+        '<div class="content">' +  Message.Message.replace(/\n/g,'<br>') + '</div>' +
         '</div>' +
         '<div class="date">' + Util.FmtTime(Message.CreatedOn) + '</div>'
         );

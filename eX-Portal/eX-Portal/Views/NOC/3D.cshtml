@@ -44,6 +44,18 @@
   </div>
 </section>
 
+@foreach (eX_Portal.Models.NOC_Details noc in Model.NOC_Details) {
+  <section class="top-space top-border">
+    <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px;">
+      @Html.Action("NocDetail", new { ID = noc.NocID })
+    </div>
+    <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px;">
+      <img width="567" height="300" src="@Html.Action("StaticGoogleMap", new { NocID = noc.NocID })" />
+    </div>
+  </section>
+}
+
+
 <div id="cesiumContainer"></div>
 @section toolbar {
   <ul class="toolbar">

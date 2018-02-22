@@ -188,23 +188,18 @@ function ADSBOverlay(options) {
     } else {
       DivLayer.clearQueue();
       DivLayer.css(CSS);
-    }
-    
+    }    
   };
 
   this.ResetIcon = function (now, elem) {
     var HexCode = elem.attr("data-hexcode");
-    if (HexCode in this.ActiveAirlines) {
-      var Elapsed = (now.getTime() - this.ActiveAirlines[HexCode].UpdatedOn.getTime()) / 1000;
-      if (Elapsed > 10) {
-        console.log("Removing Flight ID: " + HexCode);
-        delete this.ADSBData[HexCode];
-        $('#ADSB-' + HexCode).remove();
-        if (this.activeClicked == HexCode) this.hideInfoLine();
-      }
+    if (!(HexCode in this.ActiveAirlines)) {
+      console.log("Removing Flight ID: " + HexCode);
+      delete this.ADSBData[HexCode];
+      $('#ADSB-' + HexCode).remove();
+      if (this.activeClicked == HexCode) this.hideInfoLine();
     }
   };
-
 
   this.getIconImage = function (FlightID) {
     var Icon = '/images/Airline.png';
@@ -233,9 +228,7 @@ ADSBOverlay.prototype.draw = function () {
   //Adding Flight Icon to screen
   for (HexCode in this.ADSBData) {
     var ADSB = this.ADSBData[HexCode];
-    this.ActiveAirlines[HexCode] = {
-      UpdatedOn: ADSB.UpdatedOn
-    };
+    this.ActiveAirlines[HexCode] = true;
     this.SetOrAdd(projection, ADSB);
   }
   /*
