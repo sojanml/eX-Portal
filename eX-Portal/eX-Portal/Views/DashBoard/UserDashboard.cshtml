@@ -84,18 +84,18 @@
         @foreach (var Item in @Model.ApprovalList) {
           <li>
 
-            <div class="floating @Item.ApprovalStatus">@Item.ApprovalStatus</div>
-              <div class="caption">#@Item.ApprovalID - <a href="@Url.Action("NOCRegistrationDetails", "Rpas",new  { ID = Item.ApprovalID})">@Item.ApprovalName</a></div>
+            <div class="floating @Item.Status">@Item.Status</div>
+              <div class="caption">#@Item.NocID - <a href="@Url.Action("View", "noc",new  { ID = Item.NocApplicationID})">@Item.MSTR_NOC.NocName</a></div>
             <div class="detail">@(((DateTime)Item.StartDate).ToString("dd-MMM-yyyy")) @@ @Item.StartTime</div>
           </li>
         }
       </ul>
     </div>
     <div class="toolbar">
-        <a href="@Url.Action("NOCRegister", "Rpas")"><div class="button">
+        <a href="@Url.Action("Register", "NOC")"><div class="button">
           <span class="icon">&#xf067;</span>
           Apply for NOC</div></a>
-@if (eX_Portal.exLogic.User.hasAccess("NOC.MULTIPLE"))
+@*@if (eX_Portal.exLogic.User.hasAccess("NOC.MULTIPLE"))
 {
         <a href="@Url.Action("Register", "NOC")">
             <div class="button">
@@ -103,7 +103,7 @@
                 Apply for Multiple NOC
             </div>
         </a>
-}
+}*@
 </div>
 
   </div>

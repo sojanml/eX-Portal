@@ -260,7 +260,7 @@ namespace eX_Portal.exLogic {
       UserDashboardModel UserDashboard = new UserDashboardModel();
       UserDashboardModel.PilotDetail PDetail = new UserDashboardModel.PilotDetail();
       List<UserDashboardModel.RPASDetail> RPASDet = new List<UserDashboardModel.RPASDetail>();
-      List<GCA_Approval> AppList = new List<GCA_Approval>();
+      List<NOC_Details> AppList = new List<NOC_Details>();
       string PilotSQL = 
         $@"SELECT 
           a.[UserName]
@@ -340,24 +340,25 @@ namespace eX_Portal.exLogic {
       }
 
       string ApprovalSQL = $@"Select
-        ApprovalID,
-        ApprovalName,
-        StartDate,
-        EndDate,
+        NOCID,
+        NOCName,
+        NOC_Details.StartDate,
+        NOC_Details.EndDate,
         StartTime,
         EndTime,
         MaxAltitude,
         MinAltitude,        
         case IsUseCamara when 1 then 'Yes' else 'No' end as Camara,       
-        ApprovalStatus as Status,
+        Status,
         Count(*) Over() as _TotalRecords,
-        ApprovalID as _PKey
+        NOCID as _PKey
       FROM
-        GCA_Approval
+        NOC_Details
+		join MSTR_NOC on NOC_Details.NOCApplicationID=MSTR_NOC.NOCApplicationID
       LEFT JOIN MSTR_User ON
-        MSTR_User.UserID = GCA_Approval.CreatedBy
+        MSTR_User.UserID = NOC_Details.PilotID
       LEFT JOIN MSTR_Drone  on 
-        GCA_Approval.DroneId= MSTR_Drone.DroneId";
+        NOC_Details.DroneId= MSTR_Drone.DroneId";
       if(IsOrganisationAdmin) {
         ApprovalSQL += $@"
         where 
@@ -365,29 +366,34 @@ namespace eX_Portal.exLogic {
       } else {
         ApprovalSQL += $@"
         where 
-          GCA_Approval.[PilotUserId]={UserID}";
+          NOC_Details.[PilotID]={UserID}";
       }
-      ApprovalSQL += "\nOrder By StartDate DESC";
+      ApprovalSQL += "\nOrder By NOC_Details.StartDate DESC";
 
-      using (var ctx = new ExponentPortalEntities())
-      using (var cmd = ctx.Database.Connection.CreateCommand()) {
-        ctx.Database.Connection.Open();
-        cmd.CommandText = ApprovalSQL;
-        using (var reader = cmd.ExecuteReader()) {
-          while (reader.Read()) {
-            GCA_Approval GCADet = new GCA_Approval();
-            GCADet.ApprovalID = Util.toInt(reader[0]);
-            GCADet.ApprovalName = reader[1].ToString();
-            GCADet.ApprovalStatus = reader[9].ToString();
-            GCADet.StartDate = reader.GetDateTime(reader.GetOrdinal("StartDate"));
-            GCADet.EndDate = reader.GetDateTime(reader.GetOrdinal("StartDate"));
-            GCADet.StartTime = reader["StartTime"].ToString();
-            GCADet.EndTime = reader["EndTime"].ToString();
-            AppList.Add(GCADet);
-          }
-        }
-      }
-      String SQLVideo = 
+
+            var ct = new ExponentPortalEntities();
+            
+                var NocList = from noc in ct.NOC_Details
+                              join user in ct.MSTR_User on noc.PilotID equals user.UserId
+                              join drone in ct.MSTR_Drone on noc.DroneID equals drone.DroneId
+                              select noc;
+                if (IsOrganisationAdmin)
+                {
+                    NocList = NocList.Where(x => x.MSTR_NOC.AccountID == PDetail.AccountId);
+
+                }
+                else
+                {
+                    NocList = NocList.Where(x => x.PilotID == UserID);
+                }
+                NocList = NocList.OrderByDescending(x => x.StartDate).Select(x => x);
+                List<NOC_Details> NOCList= NocList.ToList();
+
+                AppList = NOCList;
+
+            
+           
+       String SQLVideo = 
         $@"CASE 
           WHEN 
             D.LastFlightID =(Select Top 1  DroneFlight.ID from DroneFlight  where DroneFlight.DroneId=D.DroneID order by DroneFlight.ID desc) and

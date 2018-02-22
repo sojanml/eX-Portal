@@ -104,7 +104,7 @@ namespace eX_Portal.ViewModel {
       public string LiveStatus { get; set; }
     }
     public ApproalDetail ApprovalDetails { get; set; }
-    public List<GCA_Approval> ApprovalList { get; set; }
+    public List<NOC_Details> ApprovalList { get; set; }
     public List<RPASDetail> RPASList { get; set; }
     public PilotDetail Pilot { get; set; }
   }
