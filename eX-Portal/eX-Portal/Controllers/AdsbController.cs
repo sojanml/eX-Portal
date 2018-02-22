@@ -51,8 +51,8 @@ namespace eX_Portal.Controllers {
         CN.Close();
       }
 
-      ViewBag.Organisations = GetOrganisations();
-      ViewBag.Pilots = GetPilot(0);
+   //   ViewBag.Organisations = GetOrganisations();
+   //   ViewBag.Pilots = GetPilot(0);
       return View(Params);
     }
 

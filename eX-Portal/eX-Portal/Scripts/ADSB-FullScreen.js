@@ -51,21 +51,21 @@ $(document).ready(function () {
       AddPolyClicks();
       $("#AddDiv").show();
       $("#DetailDiv").hide();
-      $("#chkRegion").hide();
-      $('#chkRegion').prop('checked', false);
+     // $("#chkRegion").hide();
+     // $('#chkRegion').prop('checked', false);
   });
 
   $("#RemoveZone").click(function () {
       SetZoneValues();
       RemoveZone(EditZone);
-      $('#chkRegion').prop('checked', false);
+   //   $('#chkRegion').prop('checked', false);
   });
 
   $("#btnSubmitMessage").click(function () {
       setcomms();
       SaveComms(comms);
   });
-  $("#chkRegion").hide();
+  //$("#chkRegion").hide();
  // Timers['getADSB'] = window.setTimeout(getADSB, 100, _ADSBLayer);
 
   document.addEventListener('keydown', function (event) {
@@ -77,9 +77,7 @@ $(document).ready(function () {
           $('#chkRegion').prop('checked', false);
       }
   });
-  var MasterDiv = $("#MasterList");
-  MComms.Init(MasterDiv);
-  MComms.SetPostUrl("/COMMS/CreateMessageToUser/");
+ 
 });
 
 
