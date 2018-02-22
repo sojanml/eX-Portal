@@ -101,6 +101,10 @@ ul#NocSections {
       background-color: darkgreen;
     }
   }
+  
+  div.title span.Estimate {
+    color: yellow;
+  }
 }
 
 table.GoogleMapCoordinates {
@@ -213,11 +217,21 @@ div.cesium-viewer-bottom {
   display:none !important;
 }
 
+div.TotalEstimate {
+  font-family: Gobold_Light;
+  font-size: 18pt;
+  margin-top: 20px;
+  color: $FilterColor;
+  span {
+    color: $SafeColor
+  }
+}
+
 div#NocBillingTotalSection {
   padding: 0px 0px 5px 0px;
   font-family: Gobold_Light;
-  border-bottom:2px $FilterColor solid;
-  margin-bottom:5px;
+  border-bottom: 2px $FilterColor solid;
+  margin-bottom: 5px;
 
   div.item-left {
     float: left;

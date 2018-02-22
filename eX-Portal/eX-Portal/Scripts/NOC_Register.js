@@ -422,6 +422,7 @@ var NOCMap = function () {
     var TotalCost = 0;
     for (var i = 0; i < BillingData.length; i++) {
       var Billing = BillingData[i];
+
       var NocBillingItem = $('div#NocBillingItem-' + Billing.RuleID);
       if (NocBillingItem.length < 1) {
         NocBillingItem = $('<div id="NocBillingItem-' + Billing.RuleID + '" class="NocBillingItemAmount">0.00</div>');
@@ -436,7 +437,30 @@ var NOCMap = function () {
       TotalCost = TotalCost + Billing.CalculatedCost;
       _AnimateAmountTo(NocBillingItem, Billing.CalculatedCost);
     }
-    _AnimateAmountTo($('#NocBillingTotal'), TotalCost);
+    
+    var _form = document.forms['frmNocAppliation']
+    var TheIndex = $('#NocSections LI.active').attr('data-id');
+
+    _form['NOC_Details[' + TheIndex + '].Estimate'].value = TotalCost.toFixed(2);
+    _AnimateAmountTo($('#NocEstimate_' + TheIndex), TotalCost);
+    _AnimateAmountTo($('#NocBillingTotal'), TotalCost);    
+
+    _GenerateNOCTotal();
+  }
+
+  var _GenerateNOCTotal = function () {
+    var _form = document.forms['frmNocAppliation']
+    var Items = $('#NocSections LI');
+    var Total = 0;
+    Items.each(function () {
+      var Index = $(this).attr('data-id');
+      if (Index !== undefined) {
+        var Amount = parseFloat(_form['NOC_Details[' + Index + '].Estimate'].value);
+        if (isNaN(Amount)) Amount = 0;
+        Total = Total + Amount;
+      }
+    });
+    _AnimateAmountTo($('#TotalEstimateAmount'), Total);
   }
 
   var _AnimateAmountTo = function (Element, Amount) {

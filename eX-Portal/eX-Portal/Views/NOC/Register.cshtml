@@ -61,6 +61,7 @@
             </td>
           </tr>
         </table>
+        <div class="TotalEstimate">Total Estimate AED: <span class="Estimate" id="TotalEstimateAmount">0.00</span></div>
       </div>
     </div>
     <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px">
@@ -94,12 +95,11 @@
   <section id="NOCDetails" style="display:none;">
     <div id="NocSection[#]" class="column form-horizontal NoBorder" style="width:100%; margin-bottom:5px;">
       <div class="title">
-        <span class="hilite">[sl#]</span> NOC Information
+        <span class="hilite">[sl#] -</span> NOC ESTIMATE AED <span class="Estimate" id="NocEstimate[#]">0.0</span>
         <div id="" data-id="[#]" class="button btnSetCoordinates"><span class="icon gps">&#xf1cd;</span>Set Coordinates </div>
         <div data-id="[#]" class="button btnAddNoc"><span class="icon add">&#xf055;</span>Add Duplicate NOC</div>
         <div data-id="[#]" class="button btnDeleteNoc"><span class="icon delete">&#xf057;</span>Delete </div>
-      </div>
-
+      </div>      
       <table class="noc_table">
         <tr>
           <td>Start Date &amp; Time</td>
@@ -171,6 +171,7 @@
     </section>
     <div class="toolbar">
       <input type="hidden" style="width:100%; " class="Coordinates"  name="NOC_Details[$].Coordinates" id="Coordinates[#]" value="" />
+      <input type="hidden" name="NOC_Details[$].Estimate" id="Estimate[#]" />
     </div>
 
   </section>
