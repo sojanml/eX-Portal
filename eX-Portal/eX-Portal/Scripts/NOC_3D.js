@@ -1,6 +1,11 @@
 ﻿$(document).ready(function () {
-  NOC_3D.AddTollBar(NOCDetails);
-  NOC_3D.Init(NOCDetails[0]);
+  //NOC_3D.AddTollBar(NOCDetails);
+  var IDs = Object.keys(NOCDetails);
+  var firstKey = IDs[0];
+  NOC_3D.Init(NOCDetails[firstKey]);
+  $('div.noc-3d-view').on("click", function () {
+    NOC_3D.ViewIn3D($(this));
+  });
 });//$(document).ready()
 
 
@@ -9,6 +14,15 @@ var NOC_3D = function () {
   var AddedOuterPolygon = {};
   var AddedInnerPolygon = {};
   var NoFlyZones = {};
+
+  var _ViewIn3D = function (elem) {
+    var Key = elem.attr('data-nocid');
+    NOC_3D.DrawPolygon(NOCDetails[Key]);
+
+    $('#cesiumContainer')
+      .insertAfter($('#noc-section-' + Key))
+      .show();
+  }
 
   var _init = function (Coordinates) {
     viewer = new Cesium.Viewer('cesiumContainer', {
@@ -141,7 +155,8 @@ var NOC_3D = function () {
   return {
     Init: _init,
     DrawPolygon: _drawPolygon,
-    AddTollBar: _addToolBar
+    AddTollBar: _addToolBar,
+    ViewIn3D: _ViewIn3D
   };
 }();
 
