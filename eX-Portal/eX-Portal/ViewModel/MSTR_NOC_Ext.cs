@@ -44,6 +44,7 @@ namespace eX_Portal.ViewModel {
     private String _UAVType;
     private String _QRCode;
     private String _UAVGroup;
+        private String _RPASSerialNum;
 
     private int DroneID = 0;
     private MSTR_Drone _droneinfo = null;
@@ -73,9 +74,9 @@ namespace eX_Portal.ViewModel {
           _UAVType = xUAVType.Name;
           _UAVGroup = xUAVType.Group;
         }
-
-        String QRCodePath = System.Web.Hosting.HostingEnvironment.MapPath("/Upload/QRCode");
-        String QRImagePath = $"{QRCodePath}//{DroneName}.png";
+                _RPASSerialNum = _droneinfo.RpasSerialNo;
+                String QRCodePath = System.Web.Hosting.HostingEnvironment.MapPath("/Upload/QRCode/By100/");
+        String QRImagePath = $"{QRCodePath}{DroneName}.png";
         if (System.IO.File.Exists(QRImagePath)) {
           _QRCode = $"/Upload/QRCode/By100/{DroneName}.png";
         } else {
@@ -107,8 +108,8 @@ namespace eX_Portal.ViewModel {
           _UAVType = xUAVType.Name;
           _UAVGroup = xUAVType.Group;
         }
-
-        String QRCodePath = System.Web.Hosting.HostingEnvironment.MapPath("/Upload/QRCode");
+                _RPASSerialNum = _droneinfo.RpasSerialNo;
+                String QRCodePath = System.Web.Hosting.HostingEnvironment.MapPath("/Upload/QRCode/By100");
         String QRImagePath = $"{QRCodePath}//{DroneName}.png";
         if (System.IO.File.Exists(QRImagePath)) {
           _QRCode = $"/Upload/QRCode/By100/{DroneName}.png";
@@ -143,7 +144,11 @@ namespace eX_Portal.ViewModel {
     public String DroneName { 
       get { return _droneinfo == null ? "Invalid" : _droneinfo.DroneName; }
     }
-  }
+        public String RPASSerialNo
+        {
+            get { return _RPASSerialNum == null ? "Invalid" : _droneinfo.RpasSerialNo; }
+        }
+    }
 
 
   public class NOC_Details_Ext: Models.NOC_Details {

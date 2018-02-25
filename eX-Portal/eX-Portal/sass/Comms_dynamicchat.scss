@@ -1,0 +1,216 @@
+﻿@import "exPortal_V3_Common";
+
+div#ActivePilots {
+  display: block;
+  border-bottom: 1px white solid;
+  float:left;
+  ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+
+    li {
+      margin: 0px;
+      padding: 0px;
+      list-style: none;
+      border-bottom: 1px $HiliteColor2 solid;
+      padding: 3px 10px 3px 10px;
+
+      &.active {
+        background-color: $HiliteColor2;
+        color: white;
+      }
+
+      &:hover {
+        background-color: $HiliteColor2;
+      }
+    }
+  }
+}
+
+
+ul#ComsList {
+  margin: 0px;
+  padding: 0px;
+  font-size: 13px;
+
+  li {
+    margin: 0px 0px 10px 0px;
+    padding: 0px;
+
+    div.message {
+      border-radius: 8px;
+      padding: 1px 10px 1px 10px;
+
+      div.name {
+        padding-right: 10px;
+        font-weight: bold;
+        display: table-cell;
+      }
+
+      div.content {
+        display: table-cell;
+        width: auto;
+      }
+    }
+
+    &.tome div.message {
+      background-color: $BodyColor;
+      color: white;
+    }
+
+    &.fromme div.message {
+      background-color: silver;
+    }
+
+    div.date {
+      text-align: right;
+      padding-right: 0px;
+      font-size: 10px;
+    }
+  }
+}
+
+
+div#ComSection {
+  display: block;
+  border: 1px $HiliteColor2 solid;
+  overflow: hidden;
+
+  div.caption {
+    width: 100%;
+    background-color: $HiliteColor2;
+    font-family: 'Advent';
+    text-align: center;
+    padding: 5px 0px 5px 0px;
+    font-weight: 800;
+  }
+}
+
+@mixin ChatModule($Width, $MaxHeight) {
+    $Width: $Width/2;
+    $Left: $Width * 0.25;
+    $Right: $Width * 0.75;
+
+    div#ActivePilots {
+        width: $Left;
+        height: $MaxHeight;
+        box-sizing: border-box;
+
+        ul li {
+            width: $Left;
+            box-sizing: border-box;
+        }
+    }
+
+    div#ComSection {
+        height: $MaxHeight;
+        width: $Right;
+        box-sizing: border-box;
+        float: left;
+    }
+
+    @include ChatSection($Right, $MaxHeight);
+}
+
+@mixin ChatSection($Col2, $Height) {
+  $FontSize: 10px;
+  $CaptionHeight: $FontSize + 8px + 10px;
+
+  ul#ActivePilotList {
+    padding-top: $CaptionHeight !important;
+  }
+
+  div#ComSection {
+    $BottomSectionHeight: 30px;
+    $ButtonWidth: 50px;
+
+    width: $Col2;
+
+    div.caption {
+      font-size: $FontSize + 8px;
+      letter-spacing: $FontSize / 3;
+      height: $CaptionHeight;
+      line-height: $FontSize + 8px;
+    }
+
+    div#ComsContent {
+      width: $Col2;
+      height: $Height - ($CaptionHeight +$BottomSectionHeight );
+      overflow-y: scroll;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    div#ComsSendMessage {
+      width: $Col2;
+      height: $BottomSectionHeight;
+      background-color: green;
+
+
+      div.ContentBox, div.ContentButton {
+        float: left;
+        width: 100%;
+        height: $BottomSectionHeight;
+
+        input {
+          margin: 0px;
+          line-height: $BottomSectionHeight;
+          border: 0px;
+          height: $BottomSectionHeight;
+        }
+      }
+
+      div.ContentBox input {
+        padding: 0px 10px 0px 10px;
+        width: $Col2 - $ButtonWidth - 20px;
+      }
+
+      div.ContentButton input {
+        padding: 0px;
+        width: $ButtonWidth;
+        background-color: #50ff00;
+
+        &:hover {
+          background-color: $HiliteColor2;
+        }
+
+        &.disabled,
+        &.disabled:hover {
+          background-color: silver;
+        }
+      }
+
+
+      div.ContentButton {
+        width: $ButtonWidth;
+      }
+
+      div.ContentBox {
+        width: $Col2 - $ButtonWidth;
+      }
+    }
+  }
+}
+
+
+@media screen and (min-width: 720px) {
+    $MaxSize: 680px;
+    $MaxHeight: 400px;
+    $VerticalGap: 8px;
+    @include ChatModule($MaxSize, $MaxHeight);
+}
+
+@media screen and (min-width: 1080px) {
+    $MaxSize: 1000px;
+    $MaxHeight: 400px;
+    $VerticalGap: 12px;
+    @include ChatModule($MaxSize, $MaxHeight);
+}
+
+@media screen and (min-width: 1320px) {
+    $MaxSize: 1220px;
+    $MaxHeight: 350px;
+    $VerticalGap: 15px;
+    @include ChatModule($MaxSize, $MaxHeight);
+}

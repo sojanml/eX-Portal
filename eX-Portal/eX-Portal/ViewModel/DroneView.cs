@@ -113,7 +113,7 @@ namespace eX_Portal.ViewModel {
     public String OtherRPASType { get; set; }
     [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MMM-yyyy}")]
     public DateTime CommissionDate { get; set; }
-
+    public string RPASSerialNumber { get; set; }
     private int DroneSerialNumber = 0;
     private int AccountID = 0;
     private int LoginUserID = 0;
@@ -144,7 +144,7 @@ namespace eX_Portal.ViewModel {
         ModelID = 0,
         MakeID = 0,
         RefName = Description,
-        RpasSerialNo = Description
+        RpasSerialNo = RPASSerialNumber
       };
       db.MSTR_Drone.Add(Drone);
       db.SaveChanges();

@@ -21,6 +21,7 @@ namespace eX_Portal.Controllers {
         static String QRDir50 = "~/Upload/QRCode/By50/";
         static String QRDir100= "~/Upload/QRCode/By100/";
         static String QRDir250 = "~/Upload/QRCode/By250/";
+        static List<string> imgPaths = new List<string>();
         public ActionResult Live() {
       if (!exLogic.User.hasAccess("DRONE"))
         return RedirectToAction("NoAccess", "Home");
@@ -51,6 +52,7 @@ namespace eX_Portal.Controllers {
       String SQL = "SELECT \n" +
           "  D.[DroneName] as RPAS,\n" +
           "  D.[ModelName] as Description,\n" +
+          "  D.[RPASSerialNo] as RPASSerialNo,\n" +
           "  D.[CommissionDate],\n" +
           "  O.Name as Organization,\n" +
           "  M.Name as Manufacture,\n" +
@@ -744,19 +746,34 @@ namespace eX_Portal.Controllers {
       if (String.IsNullOrEmpty(DroneView.Description)) {
         ModelState.AddModelError("Description", "Description must be valid.");
       }
+            bool result = ValidateRPASSerialNumber(DroneView.RPASSerialNumber);
+      
 
-      if (!ModelState.IsValid) {
+      if (!ModelState.IsValid || result) {
         return View(DroneView);
       }
 
       MSTR_Drone Drone = DroneView.Create();
             SaveQRCode(Drone.DroneName);
       MoveDroneUploadFileTo(Drone.DroneId);
-      if (exLogic.User.hasAccess("DRONE.MANAGE"))
-        return RedirectToAction("Manage", new { ID = Drone.DroneId });
-      else
-        return RedirectToAction("index", "Home");
+      //if (exLogic.User.hasAccess("DRONE.MANAGE"))
+      //  return RedirectToAction("Manage", new { ID = Drone.DroneId });
+      //else
+        return RedirectToAction("Detail", "Drone", new { ID = Drone.DroneId });
     }
+        public bool ValidateRPASSerialNumber(string RPASSerialNumber)
+        {
+            bool result = true;
+            int AccountID = Util.getAccountID();
+            List<MSTR_Drone> DroneList = ctx.MSTR_Drone.Where(x => x.RpasSerialNo == RPASSerialNumber && x.AccountID == AccountID).Select(x=>x).ToList();
+            if (DroneList.Count > 0)
+                result= true;
+            else
+                result= false;
+            return result;
+        }
+
+
 
         private void SaveQRCode(string DroneName)
         {
@@ -776,8 +793,8 @@ namespace eX_Portal.Controllers {
                 {
                     using (QRCode qrCode = new QRCode(qrCodeData))
                     {
-                       // Bitmap img = qrCode.GetGraphic(5, Color.Black, Color.White,
-                         //   null,0,0,false);
+                        //Bitmap img = qrCode.GetGraphic(5, Color.Black, Color.White,
+                        //    null, 0, 0, false);
 
                         Bitmap img50 = qrCode.GetGraphic(2, Color.Black, Color.White,
                             null, 0, 0, false);
@@ -1173,8 +1190,9 @@ new { ID = DroneID, FlightID = "_Pkey" }));
       ViewBag.Actions = Actions;
       ExponentPortalEntities Db = new ExponentPortalEntities();
       ViewBag.DroneID = DroneID;
-
-      List<DroneDocument> Docs = (
+            List<DroneDocument> Docs= new List<DroneDocument>();
+      if (DroneID!=0)
+         Docs = (
         from o in Db.DroneDocuments
         where o.DocumentType == "Drone Image" &&
         o.DroneID == DroneID
@@ -1213,7 +1231,7 @@ new { ID = DroneID, FlightID = "_Pkey" }));
         //Save the file to Disk
         if (!Directory.Exists(UploadDir))
           Directory.CreateDirectory(UploadDir);
-        TheFile.SaveAs(FullName);
+         TheFile.SaveAs(FullName);
         TheFile.InputStream.Close();
         TheFile.InputStream.Dispose();
         GC.Collect();
@@ -1271,7 +1289,8 @@ new { ID = DroneID, FlightID = "_Pkey" }));
 
           ")";
         int DocumentID = Util.InsertSQL(SQL);
-
+                imgPaths.Add(FileURL);
+                TempData["Images"] = imgPaths;
       } catch (Exception ex) {
         JsonText.Clear();
         JsonText.Append("{");
@@ -1283,12 +1302,12 @@ new { ID = DroneID, FlightID = "_Pkey" }));
     }//UploadDroneFile
 
     private void MoveDroneUploadFileTo(int DroneID) {
-
+            List<string> Filenames =(List<string>)TempData["Images"];
       ExponentPortalEntities db = new ExponentPortalEntities();
       var FileList = (
       from t1 in db.DroneDocuments
       where t1.DroneID == 0 &&
-   t1.DocumentType == "Drone Image"
+   t1.DocumentType == "Drone Image" && Filenames.Contains(t1.DocumentName)
       select new {
         Name = t1.DocumentName
       }).ToList();
@@ -1301,8 +1320,9 @@ new { ID = DroneID, FlightID = "_Pkey" }));
           continue;
         String OldFullPath = OldUploadDir + file.Name.ToString();
         String NewFullPath = NewUploadDir + file.Name.ToString();
-        String OldThumbFullPath = OldUploadDir + file.Name.Replace(".jpg", ".t.png");
-        String NewThumbFullPath = NewUploadDir + file.Name.Replace(".jpg", ".t.png");
+                string ext = file.Name.Substring(file.Name.Length - 4, 4);
+        String OldThumbFullPath = OldUploadDir + file.Name.Replace(ext, ".t.png");
+        String NewThumbFullPath = NewUploadDir + file.Name.Replace(ext, ".t.png");
         if (System.IO.File.Exists(OldFullPath)) {
           if (!Directory.Exists(NewFullPath))
             Directory.CreateDirectory(NewUploadDir);

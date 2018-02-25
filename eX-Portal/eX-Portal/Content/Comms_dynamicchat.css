@@ -135,3 +135,305 @@
   font-weight: 300;
   font-style: normal;
 }
+div#ActivePilots {
+  display: block;
+  border-bottom: 1px white solid;
+  float: left;
+}
+div#ActivePilots ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+div#ActivePilots ul li {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  border-bottom: 1px #18bdec solid;
+  padding: 3px 10px 3px 10px;
+}
+div#ActivePilots ul li.active {
+  background-color: #18bdec;
+  color: white;
+}
+div#ActivePilots ul li:hover {
+  background-color: #18bdec;
+}
+
+ul#ComsList {
+  margin: 0px;
+  padding: 0px;
+  font-size: 13px;
+}
+ul#ComsList li {
+  margin: 0px 0px 10px 0px;
+  padding: 0px;
+}
+ul#ComsList li div.message {
+  border-radius: 8px;
+  padding: 1px 10px 1px 10px;
+}
+ul#ComsList li div.message div.name {
+  padding-right: 10px;
+  font-weight: bold;
+  display: table-cell;
+}
+ul#ComsList li div.message div.content {
+  display: table-cell;
+  width: auto;
+}
+ul#ComsList li.tome div.message {
+  background-color: #1C1C1C;
+  color: white;
+}
+ul#ComsList li.fromme div.message {
+  background-color: silver;
+}
+ul#ComsList li div.date {
+  text-align: right;
+  padding-right: 0px;
+  font-size: 10px;
+}
+
+div#ComSection {
+  display: block;
+  border: 1px #18bdec solid;
+  overflow: hidden;
+}
+div#ComSection div.caption {
+  width: 100%;
+  background-color: #18bdec;
+  font-family: 'Advent';
+  text-align: center;
+  padding: 5px 0px 5px 0px;
+  font-weight: 800;
+}
+
+@media screen and (min-width: 720px) {
+  div#ActivePilots {
+    width: 85px;
+    height: 400px;
+    box-sizing: border-box;
+  }
+  div#ActivePilots ul li {
+    width: 85px;
+    box-sizing: border-box;
+  }
+
+  div#ComSection {
+    height: 400px;
+    width: 255px;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  ul#ActivePilotList {
+    padding-top: 28px !important;
+  }
+
+  div#ComSection {
+    width: 255px;
+  }
+  div#ComSection div.caption {
+    font-size: 18px;
+    letter-spacing: 3.33333px;
+    height: 28px;
+    line-height: 18px;
+  }
+  div#ComSection div#ComsContent {
+    width: 255px;
+    height: 342px;
+    overflow-y: scroll;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  div#ComSection div#ComsSendMessage {
+    width: 255px;
+    height: 30px;
+    background-color: green;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox, div#ComSection div#ComsSendMessage div.ContentButton {
+    float: left;
+    width: 100%;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input, div#ComSection div#ComsSendMessage div.ContentButton input {
+    margin: 0px;
+    line-height: 30px;
+    border: 0px;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input {
+    padding: 0px 10px 0px 10px;
+    width: 185px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input {
+    padding: 0px;
+    width: 50px;
+    background-color: #50ff00;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input:hover {
+    background-color: #18bdec;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input.disabled, div#ComSection div#ComsSendMessage div.ContentButton input.disabled:hover {
+    background-color: silver;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton {
+    width: 50px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox {
+    width: 205px;
+  }
+}
+@media screen and (min-width: 1080px) {
+  div#ActivePilots {
+    width: 125px;
+    height: 400px;
+    box-sizing: border-box;
+  }
+  div#ActivePilots ul li {
+    width: 125px;
+    box-sizing: border-box;
+  }
+
+  div#ComSection {
+    height: 400px;
+    width: 375px;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  ul#ActivePilotList {
+    padding-top: 28px !important;
+  }
+
+  div#ComSection {
+    width: 375px;
+  }
+  div#ComSection div.caption {
+    font-size: 18px;
+    letter-spacing: 3.33333px;
+    height: 28px;
+    line-height: 18px;
+  }
+  div#ComSection div#ComsContent {
+    width: 375px;
+    height: 342px;
+    overflow-y: scroll;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  div#ComSection div#ComsSendMessage {
+    width: 375px;
+    height: 30px;
+    background-color: green;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox, div#ComSection div#ComsSendMessage div.ContentButton {
+    float: left;
+    width: 100%;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input, div#ComSection div#ComsSendMessage div.ContentButton input {
+    margin: 0px;
+    line-height: 30px;
+    border: 0px;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input {
+    padding: 0px 10px 0px 10px;
+    width: 305px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input {
+    padding: 0px;
+    width: 50px;
+    background-color: #50ff00;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input:hover {
+    background-color: #18bdec;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input.disabled, div#ComSection div#ComsSendMessage div.ContentButton input.disabled:hover {
+    background-color: silver;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton {
+    width: 50px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox {
+    width: 325px;
+  }
+}
+@media screen and (min-width: 1320px) {
+  div#ActivePilots {
+    width: 152.5px;
+    height: 350px;
+    box-sizing: border-box;
+  }
+  div#ActivePilots ul li {
+    width: 152.5px;
+    box-sizing: border-box;
+  }
+
+  div#ComSection {
+    height: 350px;
+    width: 457.5px;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  ul#ActivePilotList {
+    padding-top: 28px !important;
+  }
+
+  div#ComSection {
+    width: 457.5px;
+  }
+  div#ComSection div.caption {
+    font-size: 18px;
+    letter-spacing: 3.33333px;
+    height: 28px;
+    line-height: 18px;
+  }
+  div#ComSection div#ComsContent {
+    width: 457.5px;
+    height: 292px;
+    overflow-y: scroll;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  div#ComSection div#ComsSendMessage {
+    width: 457.5px;
+    height: 30px;
+    background-color: green;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox, div#ComSection div#ComsSendMessage div.ContentButton {
+    float: left;
+    width: 100%;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input, div#ComSection div#ComsSendMessage div.ContentButton input {
+    margin: 0px;
+    line-height: 30px;
+    border: 0px;
+    height: 30px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox input {
+    padding: 0px 10px 0px 10px;
+    width: 387.5px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input {
+    padding: 0px;
+    width: 50px;
+    background-color: #50ff00;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input:hover {
+    background-color: #18bdec;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton input.disabled, div#ComSection div#ComsSendMessage div.ContentButton input.disabled:hover {
+    background-color: silver;
+  }
+  div#ComSection div#ComsSendMessage div.ContentButton {
+    width: 50px;
+  }
+  div#ComSection div#ComsSendMessage div.ContentBox {
+    width: 407.5px;
+  }
+}

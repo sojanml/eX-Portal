@@ -951,6 +951,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\common.css" />
+    <Content Include="Content\Comms_dynamicchat.css" />
     <Content Include="Content\dashboard.css" />
     <Content Include="Content\dewa-dashboard.css" />
     <Content Include="Content\drone-live.css" />
@@ -1651,6 +1652,7 @@
     <Content Include="sass\exPortal_V3_Common.scss" />
     <Content Include="sass\exPortal_V3_FlightMapView.scss" />
     <Content Include="sass\Comms_chat.scss" />
+    <Content Include="sass\Comms_dynamicchat.scss" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
