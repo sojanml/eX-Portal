@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -40,7 +41,8 @@ namespace eX_Portal.exLogic {
       //  ctx=new ExponentPortalEntities();
       List<SelectListItem> SelectList = new List<SelectListItem>();
       SelectList.Add(new SelectListItem { Text = "Please Select...", Value = "0" });
-      using (var ctx = new ExponentPortalEntities()) {
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            using (var ctx = new ExponentPortalEntities()) {
         using (var cmd = ctx.Database.Connection.CreateCommand()) {
 
           ctx.Database.Connection.Open();
@@ -55,7 +57,7 @@ namespace eX_Portal.exLogic {
           cmd.CommandType = CommandType.StoredProcedure;
           using (var reader = cmd.ExecuteReader()) {
             while (reader.Read()) {
-              SelectList.Add(new SelectListItem { Text = reader["Name"].ToString(), Value = reader["Code"].ToString() });
+              SelectList.Add(new SelectListItem { Text = textInfo.ToTitleCase(reader["Name"].ToString().ToLower()), Value = reader["Code"].ToString() });
             }
           }
           if (TypeField == "Camera")

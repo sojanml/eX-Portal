@@ -97,18 +97,26 @@ namespace eX_Portal.exLogic {
         Height = Width;
         Width = (int)((Width * X) / Y);
       }
-      Bitmap newImage = new Bitmap(Width, Height);
-      using (Graphics gr = Graphics.FromImage(newImage)) {
-        gr.SmoothingMode = SmoothingMode.HighQuality;
-        gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
-        gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
-        gr.DrawImage(image, new Rectangle(0, 0, Width, Height));
-      }
-      image.Dispose();
-      newImage.Save(ThumbnailImage);
-      newImage.Dispose();
+            using (image) { 
+            using (Bitmap newImage = new Bitmap(Width, Height))
+            {
+                using (Graphics gr = Graphics.FromImage(newImage))
+                {
 
-      return ThumbnailImage;
+                    gr.SmoothingMode = SmoothingMode.HighQuality;
+                    gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    gr.DrawImage(image, new Rectangle(0, 0, Width, Height));
+
+                    newImage.Save(ThumbnailImage);
+                }
+            }
+              //  image.Save(_InputFileName, image.RawFormat);
+            }
+           
+            //image.Dispose();
+            
+            return ThumbnailImage;
     }
 
     public GPSInfo getGPS() {
