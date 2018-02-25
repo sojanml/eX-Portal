@@ -71,7 +71,10 @@ namespace eX_Portal.Controllers {
       } else {
         return RedirectToAction("NoAccess", "Home");
       }
-        
+            if (UserID == 0)
+                UserID = Util.getLoginUserID();
+
+
       Models.MSTR_User User = db.MSTR_User.Find(UserID);
       if (User == null)
         return RedirectToAction("Error", "Home");

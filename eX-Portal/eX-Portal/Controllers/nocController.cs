@@ -63,7 +63,7 @@ namespace eX_Portal.Controllers {
       ViewBag.DbErrors = "";
 
       //to create gcaapproval
-      if (!exLogic.User.hasAccess("FLIGHT.SETUP"))
+      if (!exLogic.User.hasAccess("FLIGHT.SETUP") && !exLogic.User.hasAccess("NOC.REGISTER"))
         return RedirectToAction("NoAccess", "Home");
 
       var NOC = new Models.MSTR_NOC();
