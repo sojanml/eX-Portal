@@ -385,7 +385,7 @@ function DrawPolygons(zone,map,index)
             paths: InnerPolyPath,
             strokeWeight: 0,
             fillColor: fcolor,
-            fillOpacity: 0.9,
+            fillOpacity: 0.3,
             zIndex: 1,
             content: index + '' + zone.Name,
             mapid: zone.ID

@@ -102,7 +102,34 @@
 
 
     <div id="MasterDivChat">
-      @Html.Action("Chat", "COMMS")
+
+
+      <section id="ChatWindow">
+        <div id="ActivePilots">
+          <div class="caption">Active Pilots</div>
+          <ul id="ActivePilotList"></ul>
+        </div>
+        <div id="ComSection">
+          <div class="caption">COMMS MODULE</div>
+          <div id="ComsContent">
+            <ul id="ComsList">
+              <li>Please select a pilot from listed on left for online chat.</li>
+
+            </ul>
+          </div>
+          <div id="ComsSendMessage">
+            <form method="post" id="ComSubmitForm" name="ComSubmitForm">
+              <div class="ContentBox">
+                <input type="text" id="ComsMessage" name="ComsMessage" value="" placeholder="Type the message that you want to send." />
+              </div>
+              <div class="ContentButton">
+                <input type="submit" name="ComsSubmit" id="ComsSubmit" value="Send" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
     </div>
 
     <div id="MessageDivInbox">

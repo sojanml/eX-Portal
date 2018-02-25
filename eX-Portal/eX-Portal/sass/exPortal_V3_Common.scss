@@ -6,6 +6,16 @@ $HiliteColor1: #ff0000;
 $HiliteColor2: #18bdec;
 $HiliteColor3: #5ffff2;
 
+$MenuColor: #e5e5e5;
+$ShadedColur: #ededed;
+$MenuHiliteColor: #cacaca;
+
+$BreachColor: #fe0000;
+$AlertColor: #f2a003;
+$SafeColor: #53a100;
+$FilterColor: #018aff;
+
+
 //$VerticalGap: 15px;
 @include font-face("FontAwesome", font-files( "../fonts/fontawesome-webfont.ttf", "../fonts/FontAwesome.otf", "../fonts/fontawesome-webfont.svg", "../fonts/fontawesome-webfont.eot", "../fonts/fontawesome-webfont.woff", "../fonts/fontawesome-webfont.woff2" ));
 

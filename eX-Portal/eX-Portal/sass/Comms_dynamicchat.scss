@@ -1,14 +1,15 @@
 ﻿@import "exPortal_V3_Common";
 
 
- 
+
 
 div#ActivePilots {
   display: block;
   border-bottom: 1px white solid;
-  float:left;
+  float: left;
+
   ul {
-    margin: 0px;
+    margin: 5px 0px 0px 0px;
     padding: 0px;
     list-style: none;
 
@@ -16,16 +17,16 @@ div#ActivePilots {
       margin: 0px;
       padding: 0px;
       list-style: none;
-      border-bottom: 1px $HiliteColor2 solid;
+      border-bottom: 1px $HiliteColor3 solid;
       padding: 3px 10px 3px 10px;
+      font-size: 12px;
 
       &.active {
-        background-color: $HiliteColor2;
-        color: white;
+        background-color: $MenuColor;
       }
 
       &:hover {
-        background-color: $HiliteColor2;
+        background-color: $MenuHiliteColor;
       }
     }
   }
@@ -104,12 +105,15 @@ span.icon {
 
 div#ComSection {
   display: block;
-  border: 1px $HiliteColor2 solid;
+  border: 1px $HiliteColor3 solid;
   overflow: hidden;
+}
 
+div#ActivePilots,
+div#ComSection {
   div.caption {
     width: 100%;
-    background-color: $HiliteColor2;
+    background-color: $HiliteColor3;
     font-family: 'Advent';
     text-align: center;
     padding: 5px 0px 5px 0px;
@@ -149,7 +153,7 @@ div#ComSection {
 }
 
 div#MessageDivInbox {
-  border: 1px solid $HiliteColor1;
+  border: 1px solid $MenuHiliteColor;
   padding: 0px;
   margin-top: 20px;
   box-sizing: border-box;
@@ -164,9 +168,8 @@ div#MessageDivInbox {
   div.caption {
     font-size: 18px;
     letter-spacing: 3.33333px;
-    background-color: $HiliteColor1;
-    color:white;
-    padding:2px 10px 2px 10px;
+    background-color: $MenuHiliteColor;
+    padding: 2px 10px 2px 10px;
     text-align: center;
   }
 }
@@ -181,15 +184,15 @@ div#DetailDiv {
   margin-bottom: 20px;
 
   div.caption {
-    background-color: $HiliteColor3;
+    background-color: $AlertColor;
     font-size: 18px;
     letter-spacing: 3.33333px;
     color: white;
     padding: 2px 10px 2px 10px;
     text-align: center;
-  }
+  } 
 
-  border: 1px $HiliteColor3 solid;
+  border: 1px $AlertColor solid;
 }
 
 @mixin SetColumns ($MaxSize, $VerticalGap) {
@@ -245,8 +248,16 @@ div#DetailDiv {
   $FontSize: 10px;
   $CaptionHeight: $FontSize + 8px + 10px;
 
-  ul#ActivePilotList {
-    padding-top: $CaptionHeight !important;
+
+  div#ActivePilots {
+    div.caption {
+      font-size: $FontSize + 8px;
+      letter-spacing: $FontSize / 3;
+      height: $CaptionHeight;
+      line-height: $FontSize + 8px;
+      text-transform: uppercase;
+      border-bottom: 1px $HiliteColor3 solid;
+    }
   }
 
   div#ComSection {
@@ -284,14 +295,15 @@ div#DetailDiv {
         input {
           margin: 0px;
           line-height: $BottomSectionHeight;
-          border: 0px;
+          border: 1px $MenuColor solid;
+          box-sizing: border-box;
           height: $BottomSectionHeight;
         }
       }
 
       div.ContentBox input {
         padding: 0px 10px 0px 10px;
-        width: $Col2 - $ButtonWidth - 20px;
+        width: $Col2 - $ButtonWidth;
       }
 
       div.ContentButton input {

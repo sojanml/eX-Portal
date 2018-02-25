@@ -3,7 +3,6 @@
   FlightMapSlider.Init();
   FlightMapSlider.SetOnSlide(FlightMapData.OnSlide);
   COMMS.Init();
-  ``
 
 })
 
@@ -116,7 +115,7 @@ var FlightMapData = function () {
 
       PlayIndex = 0;
       PlayPositionTime = _FullData[PlayIndex].FlightDateTime;
-      _setScreenTextToIndex(PlayIndex);
+      _setScreenTextToIndex(_FullData.length - 1);
 
       if (FlightInfo.IsLive) {
         _InitilizeLive();

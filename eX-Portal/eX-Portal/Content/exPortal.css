@@ -330,7 +330,7 @@ body {
 }
 
 footer {
-  border-top: 1px red solid;
+  border-top: 1px #cacaca solid;
   font-size: 8pt;
   padding: 3px 0px 10px 0px;
 }
@@ -552,7 +552,8 @@ section div.body-title {
   margin: 12px 0px 0px 0px;
   font-family: Advent;
   font-size: 18px;
-  color: #ff9b9b;
+  color: white;
+  text-transform: uppercase;
 }
 section div.body-title ul.toolbar {
   float: right;
@@ -612,7 +613,9 @@ section div.column:last-child {
     background-color: #474747;
     margin: 0px;
     font-family: Advent;
-    font-size: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
     color: #cacaca;
   }
   section div.column div.title div.button {
@@ -1162,7 +1165,7 @@ div.dashboard-column {
   margin-bottom: 20px;
 }
 div.dashboard-column div.fixed-height {
-  height: 300px;
+  height: 400px;
   overflow: auto;
 }
 div.dashboard-column div.fixed-height-organisation {

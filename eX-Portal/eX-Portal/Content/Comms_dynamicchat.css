@@ -141,7 +141,7 @@ div#ActivePilots {
   float: left;
 }
 div#ActivePilots ul {
-  margin: 0px;
+  margin: 5px 0px 0px 0px;
   padding: 0px;
   list-style: none;
 }
@@ -149,15 +149,15 @@ div#ActivePilots ul li {
   margin: 0px;
   padding: 0px;
   list-style: none;
-  border-bottom: 1px #18bdec solid;
+  border-bottom: 1px #5ffff2 solid;
   padding: 3px 10px 3px 10px;
+  font-size: 12px;
 }
 div#ActivePilots ul li.active {
-  background-color: #18bdec;
-  color: white;
+  background-color: #e5e5e5;
 }
 div#ActivePilots ul li:hover {
-  background-color: #18bdec;
+  background-color: #cacaca;
 }
 
 ul#ComsList {
@@ -223,12 +223,14 @@ span.icon {
 
 div#ComSection {
   display: block;
-  border: 1px #18bdec solid;
+  border: 1px #5ffff2 solid;
   overflow: hidden;
 }
+
+div#ActivePilots div.caption,
 div#ComSection div.caption {
   width: 100%;
-  background-color: #18bdec;
+  background-color: #5ffff2;
   font-family: 'Advent';
   text-align: center;
   padding: 5px 0px 5px 0px;
@@ -236,7 +238,7 @@ div#ComSection div.caption {
 }
 
 div#MessageDivInbox {
-  border: 1px solid #ff0000;
+  border: 1px solid #cacaca;
   padding: 0px;
   margin-top: 20px;
   box-sizing: border-box;
@@ -250,21 +252,20 @@ div#MessageDivInbox select {
 div#MessageDivInbox div.caption {
   font-size: 18px;
   letter-spacing: 3.33333px;
-  background-color: #ff0000;
-  color: white;
+  background-color: #cacaca;
   padding: 2px 10px 2px 10px;
   text-align: center;
 }
 
 div#DetailDiv {
   margin-bottom: 20px;
-  border: 1px #5ffff2 solid;
+  border: 1px #f2a003 solid;
 }
 div#DetailDiv table td {
   padding: 0px 0px 5px 0px;
 }
 div#DetailDiv div.caption {
-  background-color: #5ffff2;
+  background-color: #f2a003;
   font-size: 18px;
   letter-spacing: 3.33333px;
   color: white;
@@ -331,8 +332,13 @@ div#DetailDiv div.caption {
     float: left;
   }
 
-  ul#ActivePilotList {
-    padding-top: 28px !important;
+  div#ActivePilots div.caption {
+    font-size: 18px;
+    letter-spacing: 3.33333px;
+    height: 28px;
+    line-height: 18px;
+    text-transform: uppercase;
+    border-bottom: 1px #5ffff2 solid;
   }
 
   div#ComSection {
@@ -364,12 +370,13 @@ div#DetailDiv div.caption {
   div#ComSection div#ComsSendMessage div.ContentBox input, div#ComSection div#ComsSendMessage div.ContentButton input {
     margin: 0px;
     line-height: 30px;
-    border: 0px;
+    border: 1px #e5e5e5 solid;
+    box-sizing: border-box;
     height: 30px;
   }
   div#ComSection div#ComsSendMessage div.ContentBox input {
     padding: 0px 10px 0px 10px;
-    width: 182px;
+    width: 202px;
   }
   div#ComSection div#ComsSendMessage div.ContentButton input {
     padding: 0px;
@@ -448,8 +455,13 @@ div#DetailDiv div.caption {
     float: left;
   }
 
-  ul#ActivePilotList {
-    padding-top: 28px !important;
+  div#ActivePilots div.caption {
+    font-size: 18px;
+    letter-spacing: 3.33333px;
+    height: 28px;
+    line-height: 18px;
+    text-transform: uppercase;
+    border-bottom: 1px #5ffff2 solid;
   }
 
   div#ComSection {
@@ -481,12 +493,13 @@ div#DetailDiv div.caption {
   div#ComSection div#ComsSendMessage div.ContentBox input, div#ComSection div#ComsSendMessage div.ContentButton input {
     margin: 0px;
     line-height: 30px;
-    border: 0px;
+    border: 1px #e5e5e5 solid;
+    box-sizing: border-box;
     height: 30px;
   }
   div#ComSection div#ComsSendMessage div.ContentBox input {
     padding: 0px 10px 0px 10px;
-    width: 300.5px;
+    width: 320.5px;
   }
   div#ComSection div#ComsSendMessage div.ContentButton input {
     padding: 0px;
@@ -565,8 +578,13 @@ div#DetailDiv div.caption {
     float: left;
   }
 
-  ul#ActivePilotList {
-    padding-top: 28px !important;
+  div#ActivePilots div.caption {
+    font-size: 18px;
+    letter-spacing: 3.33333px;
+    height: 28px;
+    line-height: 18px;
+    text-transform: uppercase;
+    border-bottom: 1px #5ffff2 solid;
   }
 
   div#ComSection {
@@ -598,12 +616,13 @@ div#DetailDiv div.caption {
   div#ComSection div#ComsSendMessage div.ContentBox input, div#ComSection div#ComsSendMessage div.ContentButton input {
     margin: 0px;
     line-height: 30px;
-    border: 0px;
+    border: 1px #e5e5e5 solid;
+    box-sizing: border-box;
     height: 30px;
   }
   div#ComSection div#ComsSendMessage div.ContentBox input {
     padding: 0px 10px 0px 10px;
-    width: 396.875px;
+    width: 416.875px;
   }
   div#ComSection div#ComsSendMessage div.ContentButton input {
     padding: 0px;

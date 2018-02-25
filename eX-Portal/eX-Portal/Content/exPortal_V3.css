@@ -270,7 +270,9 @@ nav.main-menu ul {
   padding: 0px;
   list-style: none;
   float: right;
-  background-color: white;
+  background-color: #e5e5e5;
+  text-transform: uppercase;
+  font-size: 13px;
 }
 nav.main-menu ul a {
   color: #1C1C1C;
@@ -280,6 +282,11 @@ nav.main-menu ul li {
   display: inline-block;
   position: relative;
   white-space: nowrap;
+  padding: 2px 10px 2px 10px;
+  background-color: #e5e5e5;
+}
+nav.main-menu ul li:hover {
+  background-color: #cacaca;
 }
 nav.main-menu ul li:hover > a {
   color: #ff0000;
@@ -292,18 +299,16 @@ nav.main-menu ul li ul {
   display: none;
   left: 0;
   z-index: 9;
+  background-color: #e5e5e5;
+  top: 21px;
 }
 nav.main-menu ul li ul li {
   display: block;
+  min-width: 80px;
+  white-space: nowrap;
 }
 nav.main-menu ul li ul li a {
   color: #1C1C1C;
-}
-nav.main-menu ul li ul li:hover a {
-  color: #ff0000;
-}
-nav.main-menu ul li:last-child {
-  padding-right: 0px;
 }
 nav.main-menu ul li:last-child ul {
   right: 0px !important;
@@ -396,26 +401,17 @@ div#ADSBInfo {
     padding: 5px 8px 0px 8px;
   }
 
-  nav.main-menu ul li {
-    padding-right: 8px;
-    padding-left: 8px;
-  }
-
   footer {
     margin-top: 16px;
     margin-bottom: 8px;
     border-top: 1px rgba(9, 9, 9, 0.59) solid;
     color: rgba(9, 9, 9, 0.59);
     text-align: left;
+    font-size: 12px;
   }
 
   body {
     font-size: 12pt;
-  }
-
-  nav .user-management > ul > li > ul,
-  nav.main-menu > ul > li > ul {
-    top: 12pt;
   }
 
   #FlightChartInfos div.flightchartinfo div.title {
@@ -450,26 +446,17 @@ div#ADSBInfo {
     padding: 5px 12px 0px 12px;
   }
 
-  nav.main-menu ul li {
-    padding-right: 12px;
-    padding-left: 12px;
-  }
-
   footer {
     margin-top: 24px;
     margin-bottom: 12px;
     border-top: 1px rgba(9, 9, 9, 0.59) solid;
     color: rgba(9, 9, 9, 0.59);
     text-align: left;
+    font-size: 12px;
   }
 
   body {
     font-size: 13pt;
-  }
-
-  nav .user-management > ul > li > ul,
-  nav.main-menu > ul > li > ul {
-    top: 13pt;
   }
 
   #FlightChartInfos div.flightchartinfo div.title {
@@ -504,26 +491,17 @@ div#ADSBInfo {
     padding: 5px 15px 0px 15px;
   }
 
-  nav.main-menu ul li {
-    padding-right: 15px;
-    padding-left: 15px;
-  }
-
   footer {
     margin-top: 30px;
     margin-bottom: 15px;
     border-top: 1px rgba(9, 9, 9, 0.59) solid;
     color: rgba(9, 9, 9, 0.59);
     text-align: left;
+    font-size: 12px;
   }
 
   body {
     font-size: 14pt;
-  }
-
-  nav .user-management > ul > li > ul,
-  nav.main-menu > ul > li > ul {
-    top: 14pt;
   }
 
   #FlightChartInfos div.flightchartinfo div.title {

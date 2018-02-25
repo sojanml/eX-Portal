@@ -41,7 +41,9 @@ $FilterColor: #018aff;
       background-color: $ReportHeadBackground;
       margin: 0px;
       font-family: Advent;
-      font-size: 12px;
+      font-size: 18px;
+      font-weight:bold;
+      text-transform:uppercase;
       color: $MenuHiliteColor;
 
       div.button {
@@ -418,7 +420,7 @@ body {
 }
 
 footer {
-  border-top: 1px red solid;
+  border-top: 1px $MenuHiliteColor solid;
   font-size: 8pt;
   padding: 3px 0px 10px 0px;
 }
@@ -658,7 +660,9 @@ section {
     margin: $VerticalGap 0px 0px 0px;
     font-family: Advent;
     font-size: 18px;
-    color: $TitleTextColor;
+    color: white;
+    text-transform: uppercase;
+
 
     ul.toolbar {
       float: right;
@@ -1230,7 +1234,7 @@ div.dashboard-column {
   margin-bottom: 20px;
 
   div.fixed-height {
-    height: 300px;
+    height: 400px;
     overflow: auto;
   }
 

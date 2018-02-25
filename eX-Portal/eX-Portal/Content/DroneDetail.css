@@ -22,7 +22,9 @@ ul.list-info li span {
   color: #53a100;
 }
 ul.list-info li b {
-  color: #018aff;
+  font-family: advent;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 section.top_space {
@@ -49,7 +51,9 @@ ul.flight-info li span {
   color: #53a100;
 }
 ul.flight-info li b {
-  color: #f2a003;
+  font-family: advent;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 div.PilotImageIcon {
@@ -80,8 +84,9 @@ div.pilot-info div.pilot-image {
 }
 div.pilot-info div.info-title {
   font-size: 14pt;
-  color: #53a100;
-  font-weight: bold;
+  font-family: advent;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 div.pilot-info div.info-sub-title {
   color: #797979;

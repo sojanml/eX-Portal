@@ -279,6 +279,9 @@ div#FlightInfoColumn3 div#Toolbar > div.button, div#FlightInfoColumn3 div#Toolba
   box-sizing: content-box;
   float: left;
 }
+div#FlightInfoColumn3 div#Toolbar > div.button a, div#FlightInfoColumn3 div#Toolbar > div.round-button a {
+  color: #1C1C1C;
+}
 div#FlightInfoColumn3 div#Toolbar > div.button.disabled, div#FlightInfoColumn3 div#Toolbar > div.round-button.disabled {
   color: #a0a0a0 !important;
   background-color: silver !important;

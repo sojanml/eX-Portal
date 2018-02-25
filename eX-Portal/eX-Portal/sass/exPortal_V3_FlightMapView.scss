@@ -159,6 +159,10 @@ div#FlightInfoColumn3 {
       box-sizing: content-box;
       float: left;
 
+      a {
+        color: $BodyColor;
+      }
+
       &.disabled {
         color: #a0a0a0 !important;
         background-color: silver !important;

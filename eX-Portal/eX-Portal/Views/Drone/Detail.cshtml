@@ -1,8 +1,12 @@
 ﻿@model eX_Portal.ViewModel.DroneDetailView
 @using eX_Portal.exLogic;
+@{
+  ViewBag.Title = "";
+}
 
 <section class="top_space">
   <div class="column column-1-of-3 dashboard-column">
+    <div class="title">RPAS Information</div>
     <div class="RpasGroupIcon" style="background-image:url('/images/FlightType-@(Model.DroneInfo.UAVGroup).png')"></div>
     <ul class="list-info">
       <li><b>@Model.DroneInfo.DroneName</b></li>
@@ -25,6 +29,7 @@
   </div>
 
   <div class="column column-1-of-3 dashboard-column">
+    <div class="title">Recent Flights</div>
     @foreach(var Flight in Model.FlightInfo) {
       <ul class="flight-info">
         <li><b># @Flight.ID on @Flight.FlightDate.ToString("dd-MMM-yyyy HH:mm")</b></li>
@@ -36,6 +41,7 @@
     }
   </div>
   <div class="column column-1-of-3 dashboard-column"> 
+    <div class="title">Pilots of RPAS</div>
     @foreach (var Pilot in Model.PilotInfo.OrderBy( o => o.FullName)) {
       <div class="pilot-info">
         <div class="pilot-image" style="background-image: url('@Pilot.PhotoUrl')"></div>

@@ -160,8 +160,8 @@
         <div id="btn4x" class="round-button @(Model.IsLive ? "disabled":"")">4X</div>
         <div id="btn2D" style="display:none;" class="button"><span class="icon">&#xf279;</span><span class="text">2D</span></div>
         <div id="btn3D" class="button"><span class="icon">&#xf0ac;</span><span class="text">3D</span></div>
-        <div id="btnExport" class="button" data-href="~/FlightMap/Export/@Model.FlightID">
-          <span class="icon">&#xf093;</span><span class="text">Export</span>
+        <div id="btnExport" class="button" data-href="">
+          <a href="~/FlightMap/Export/@Model.FlightID"><span class="icon">&#xf093;</span><span class="text">Export</span></a>
         </div>
       </div>
 

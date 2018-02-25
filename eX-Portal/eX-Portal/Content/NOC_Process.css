@@ -1,3 +1,140 @@
+@font-face {
+  font-family: "FontAwesome";
+  src: url('../fonts/../fonts/fontawesome-webfont.ttf?1450774730') format('truetype'), url('../fonts/../fonts/FontAwesome.otf?1450774730') format('opentype'), url('../fonts/../fonts/fontawesome-webfont.svg?1450774730') format('svg'), url('../fonts/../fonts/fontawesome-webfont.eot?1450774730') format('embedded-opentype'), url('../fonts/../fonts/fontawesome-webfont.woff?1450774730') format('woff'), url('../fonts/../fonts/fontawesome-webfont.woff2?1450774730') format('woff2');
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Demi';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic.svg#AvenirNextCondensed/AvenirNextCondensed-DemiBoldItalic") format("svg");
+  font-weight: 600;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Bold.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Bold.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Bold.svg#AvenirNextCondensed/AvenirNextCondensed-Bold") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Ultra';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLight.svg#AvenirNextCondensed/AvenirNextCondensed-UltraLight") format("svg");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Italic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Italic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Italic.svg#AvenirNextCondensed/AvenirNextCondensed-Italic") format("svg");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Heavy.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Heavy.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Heavy.svg#AvenirNextCondensed/AvenirNextCondensed-Heavy") format("svg");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Demi';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-DemiBold.svg#AvenirNextCondensed/AvenirNextCondensed-DemiBold") format("svg");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Medium.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Medium.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Medium.svg#AvenirNextCondensed/AvenirNextCondensed-Medium") format("svg");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Regular.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-Regular.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-Regular.svg#AvenirNextCondensed/AvenirNextCondensed-Regular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-MediumItalic.svg#AvenirNextCondensed/AvenirNextCondensed-MediumItalic") format("svg");
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-BoldItalic.svg#AvenirNextCondensed/AvenirNextCondensed-BoldItalic") format("svg");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-HeavyItalic.svg#AvenirNextCondensed/AvenirNextCondensed-HeavyItalic") format("svg");
+  font-weight: 900;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Avenir Next Condensed Ultra';
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.eot");
+  src: url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.eot?#iefix") format("embedded-opentype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.woff2") format("woff2"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.woff") format("woff"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.ttf") format("truetype"), url("AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic.svg#AvenirNextCondensed/AvenirNextCondensed-UltraLightItalic") format("svg");
+  font-weight: 200;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt2.eot");
+  src: url("Advent/advent-Lt2.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt2.woff2") format("woff2"), url("Advent/advent-Lt2.woff") format("woff"), url("Advent/advent-Lt2.ttf") format("truetype"), url("Advent/advent-Lt2.svg#advent-Lt2") format("svg");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Regular.eot");
+  src: url("Advent/advent-Regular.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Regular.woff2") format("woff2"), url("Advent/advent-Regular.woff") format("woff"), url("Advent/advent-Regular.ttf") format("truetype"), url("Advent/advent-Regular.svg#advent-Regular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd2.eot");
+  src: url("Advent/advent-Bd2.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd2.woff2") format("woff2"), url("Advent/advent-Bd2.woff") format("woff"), url("Advent/advent-Bd2.ttf") format("truetype"), url("Advent/advent-Bd2.svg#advent-Bd2") format("svg");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd1.eot");
+  src: url("Advent/advent-Bd1.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd1.woff2") format("woff2"), url("Advent/advent-Bd1.woff") format("woff"), url("Advent/advent-Bd1.ttf") format("truetype"), url("Advent/advent-Bd1.svg#advent-Bd1") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt3.eot");
+  src: url("Advent/advent-Lt3.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt3.woff2") format("woff2"), url("Advent/advent-Lt3.woff") format("woff"), url("Advent/advent-Lt3.ttf") format("truetype"), url("Advent/advent-Lt3.svg#advent-Lt3") format("svg");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Bd3.eot");
+  src: url("Advent/advent-Bd3.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Bd3.woff2") format("woff2"), url("Advent/advent-Bd3.woff") format("woff"), url("Advent/advent-Bd3.ttf") format("truetype"), url("Advent/advent-Bd3.svg#advent-Bd3") format("svg");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Advent';
+  src: url("Advent/advent-Lt1.eot");
+  src: url("Advent/advent-Lt1.eot?#iefix") format("embedded-opentype"), url("Advent/advent-Lt1.woff2") format("woff2"), url("Advent/advent-Lt1.woff") format("woff"), url("Advent/advent-Lt1.ttf") format("truetype"), url("Advent/advent-Lt1.svg#advent-Lt1") format("svg");
+  font-weight: 300;
+  font-style: normal;
+}
 div.noc-header div.noc-status ul {
   margin: 0px;
   padding: 0px;
@@ -11,6 +148,8 @@ div.noc-header div.noc-status ul li {
   border-radius: 5px;
   color: white;
   font-size: 8pt;
+  min-width: 50px;
+  text-align: center;
 }
 div.noc-header div.noc-status ul li.New {
   background-color: #018aff;
@@ -176,33 +315,30 @@ section#noc-sections div#section-left ul {
   padding: 0px;
 }
 section#noc-sections div#section-left ul li {
-  border-left: 1px #018aff solid;
-  border-top: 1px #018aff solid;
-  border-bottom: 1px #018aff solid;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
   padding: 5px 10px 5px 10px;
   margin-bottom: 5px;
   background-color: white;
   cursor: pointer;
+  border-bottom: 1px #cacaca solid;
+  box-sizing: border-box;
 }
-section#noc-sections div#section-left ul li:hover, section#noc-sections div#section-left ul li.active {
-  background-color: #018aff;
-  color: white;
+section#noc-sections div#section-left ul li:hover {
+  background-color: #cacaca;
+}
+section#noc-sections div#section-left ul li.active {
+  background-color: #e5e5e5;
 }
 section#noc-sections div#section-right {
   width: 1000px;
-  border: 1px #018aff solid;
-  border-top-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  padding: 10px;
 }
 section#noc-sections div#section-right div#content {
   margin-right: 8px;
+  padding: 10px;
+  background-color: #e5e5e5;
 }
 section#noc-sections div#section-right div#content, section#noc-sections div#section-right div#GoogleMap, section#noc-sections div#section-right div#cesiumContainer {
-  width: 485px;
+  width: 495px;
   height: 380px;
   float: left;
+  box-sizing: border-box;
 }

@@ -108,9 +108,9 @@
       </div>      
       <table class="noc_table">
         <tr>
-          <td>Start Date &amp; Time</td>
-          <td>End Date &amp; Time</td>
-          <td>Height - Take Off and Max (AGL in Meter) </td>
+          <td>Start Date &amp; Time (UTC)</td>
+          <td>End Date &amp; Time (UTC)</td>
+          <td>Height (AGL in Meter) </td>
           <td>Operation Type</td>
           <td>Camera in Use?</td>
         </tr>
@@ -125,8 +125,9 @@
           </td>
 
           <td>
-            <input class="altitude" name="NOC_Details[$].MinAltitude" id="MinAltitude[#]" type="number" value="">
-            <input class="altitude" name="NOC_Details[$].MaxAltitude" id="MaxAltitude[#]" type="number" value="">
+            Take Off: <input class="altitude" name="NOC_Details[$].MinAltitude" id="MinAltitude[#]" type="number" value="">
+            Max: <input class="altitude" name="NOC_Details[$].MaxAltitude" id="MaxAltitude[#]" type="number" value="">
+
           </td>
           <td>
             <input type="radio" name="NOC_Details[$].LOS" id="LOS[#]_VLOS" value="VLOS" checked /><label for="LOS[#]_VLOS">VLOS</label>

@@ -29,7 +29,9 @@ ul.list-info {
     }
 
     b {
-      color: $FilterColor
+      font-family: advent;
+      font-weight:800;
+      text-transform:uppercase;
     }
   }
 }
@@ -60,7 +62,9 @@ ul.flight-info {
     }
 
     b {
-      color: $AlertColor
+      font-family: advent;
+      font-weight: 800;
+      text-transform: uppercase;
     }
   }
 }
@@ -95,8 +99,9 @@ div.pilot-info {
 
   div.info-title {
     font-size: 14pt;
-    color: $SafeColor;
-    font-weight: bold;
+    font-family: advent;
+    font-weight: 800;
+    text-transform: uppercase;
   }
 
   div.info-sub-title {

@@ -1,4 +1,6 @@
-﻿$BreachColor: #fe0000;
+﻿@import "exPortal_V3_Common";
+
+$BreachColor: #fe0000;
 $AlertColor: #f2a003;
 $SafeColor: #53a100;
 $FilterColor: #018aff;
@@ -18,6 +20,8 @@ div.noc-header {
         border-radius: 5px;
         color: white;
         font-size: 8pt;
+        min-width:50px;
+        text-align:center;
 
         &.New {
           background-color: $FilterColor;
@@ -228,19 +232,19 @@ section#noc-sections {
       padding: 0px;
 
       li {
-        border-left: 1px $FilterColor solid;
-        border-top: 1px $FilterColor solid;
-        border-bottom: 1px $FilterColor solid;
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
         padding: 5px 10px 5px 10px;
         margin-bottom: 5px;
         background-color: white;
         cursor: pointer;
+        border-bottom: 1px $MenuHiliteColor solid;
+        box-sizing: border-box;
 
-        &:hover, &.active {
-          background-color: $FilterColor;
-          color: white;
+        &:hover {
+          background-color: $MenuHiliteColor;
+        }
+
+        &.active {
+          background-color: $MenuColor;
         }
       }
     }
@@ -250,20 +254,18 @@ section#noc-sections {
 
   div#section-right {
     width: $ColWidth;
-    border: 1px $FilterColor solid;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    padding: $Padding;
 
     div#content {
       margin-right: $Padding - 2px;
+      padding: $Padding;
+      background-color: $MenuColor;
     }
 
     div#content, div#GoogleMap, div#cesiumContainer {
-      width: ($ColWidth - $Padding * 3)/2;
+      width: ($ColWidth - $Padding )/2;
       height: ($Height - $Padding * 2);
       float: left;
+      box-sizing: border-box;
     }
   }
 }

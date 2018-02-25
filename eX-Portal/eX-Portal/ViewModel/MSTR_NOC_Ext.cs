@@ -13,16 +13,16 @@ namespace eX_Portal.ViewModel {
     public PilotInfo(int PilotID = 0) {
       var Usr = ctx.MSTR_User.Where(w => w.UserId == PilotID).FirstOrDefault();
 
-      this.FirstName = Usr.FirstName;
-      this.LastName = Usr.LastName;
-      this.UserId = Usr.UserId;
-      this.EmailId = Usr.EmailId;
-      this.RPASPermitNo = Usr.RPASPermitNo;
-      this.DOE_RPASPermit = Usr.DOE_RPASPermit;
-      this.DOI_RPASPermit = Usr.DOI_RPASPermit;
-      this.PhotoUrl = Usr.PhotoUrl;
-
       if (Usr != null) {
+        this.FirstName = Usr.FirstName;
+        this.LastName = Usr.LastName;
+        this.UserId = Usr.UserId;
+        this.EmailId = Usr.EmailId;
+        this.RPASPermitNo = Usr.RPASPermitNo;
+        this.DOE_RPASPermit = Usr.DOE_RPASPermit;
+        this.DOI_RPASPermit = Usr.DOI_RPASPermit;
+        this.PhotoUrl = Usr.PhotoUrl;
+
         if (String.IsNullOrEmpty(this.PhotoUrl)) {
           this.PhotoUrl = "/images/PilotImage.png";
         } else {

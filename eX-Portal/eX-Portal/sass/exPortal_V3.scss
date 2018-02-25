@@ -129,13 +129,16 @@ nav.user-management {
 }
 
 nav.main-menu {
+  $FontSize: 13px;
+
   ul {
     margin: 0px;
     padding: 0px;
     list-style: none;
     float: right;
-    background-color: white;
-
+    background-color: $MenuColor;
+    text-transform: uppercase;
+    font-size:$FontSize;
     a {
       color: $BodyColor;
     }
@@ -146,6 +149,8 @@ nav.main-menu {
       display: inline-block;
       position: relative;
       white-space: nowrap;
+      padding: 2px 10px 2px 10px;
+      background-color: $MenuColor;
 
       &:hover {
         & > a {
@@ -155,6 +160,8 @@ nav.main-menu {
         ul {
           display: block;
         }
+
+        background-color: $MenuHiliteColor;
       }
 
 
@@ -163,24 +170,22 @@ nav.main-menu {
         display: none;
         left: 0;
         z-index: 9;
+        background-color: $MenuColor;
+        top: $FontSize + 8px;
 
         li {
           display: block;
+          min-width: 80px;
+          white-space: nowrap;
 
           a {
             color: $BodyColor;
-          }
-
-          &:hover a {
-            color: $HiliteColor1;
           }
         }
       }
     }
 
     li:last-child {
-      padding-right: 0px;
-
       ul {
         right: 0px !important;
         left: auto !important;
@@ -301,15 +306,7 @@ div#ADSBInfo {
 
 
 
-  nav.main-menu {
-    ul {
 
-      li {
-        padding-right: $VerticalGap;
-        padding-left: $VerticalGap;
-      }
-    }
-  }
 
   footer {
     $FooterColor: rgba(9, 9, 9, 0.59);
@@ -318,6 +315,7 @@ div#ADSBInfo {
     border-top: 1px $FooterColor solid;
     color: $FooterColor;
     text-align: left;
+    font-size:12px;
   }
 }
 
@@ -328,10 +326,7 @@ div#ADSBInfo {
     font-size: $BodyFontSize;
   }
 
-  nav .user-management > ul > li > ul,
-  nav.main-menu > ul > li > ul {
-    top: $BodyFontSize;
-  }
+
 
   #FlightChartInfos {
     div.flightchartinfo {
