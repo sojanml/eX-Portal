@@ -103,6 +103,9 @@ nav.user-management {
         position: absolute;
         left: 0px;
         display: none;
+        background-color: white;
+        z-index: 20;
+        padding:0px 10px 10px 10px;
 
         li {
           display: block;

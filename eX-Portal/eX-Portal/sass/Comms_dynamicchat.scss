@@ -1,5 +1,8 @@
 ﻿@import "exPortal_V3_Common";
 
+
+ 
+
 div#ActivePilots {
   display: block;
   border-bottom: 1px white solid;
@@ -72,6 +75,33 @@ ul#ComsList {
 }
 
 
+
+#AddDiv {
+  position: absolute;
+  right: 60px;
+  top: 10px;
+  z-index: 10;
+  border-radius: 5px;
+}
+
+div.button {
+  background-color: #272727;
+  color: white;
+  border: 2px #272727 solid;
+  border-radius: 3px;
+  font-size: 12px;
+  padding: 2px 10px 2px 10px;
+  cursor: pointer
+}
+
+div.button:hover {
+  background-color: #3e3e3e;
+}
+
+span.icon {
+  padding-right: 5px;
+}
+
 div#ComSection {
   display: block;
   border: 1px $HiliteColor2 solid;
@@ -88,30 +118,128 @@ div#ComSection {
 }
 
 @mixin ChatModule($Width, $MaxHeight) {
-    $Width: $Width/2;
-    $Left: $Width * 0.25;
-    $Right: $Width * 0.75;
 
-    div#ActivePilots {
-        width: $Left;
-        height: $MaxHeight;
-        box-sizing: border-box;
 
-        ul li {
-            width: $Left;
-            box-sizing: border-box;
-        }
+  $Left: $Width * 0.25;
+  $Right: $Width * 0.75;
+
+  section#ChatWindow {
+    width: $Width  !important;
+  }
+
+  div#ActivePilots {
+    width: $Left;
+    height: $MaxHeight;
+    box-sizing: border-box;
+
+    ul li {
+      width: $Left;
+      box-sizing: border-box;
     }
+  }
 
-    div#ComSection {
-        height: $MaxHeight;
-        width: $Right;
-        box-sizing: border-box;
-        float: left;
-    }
+  div#ComSection {
+    height: $MaxHeight;
+    width: $Right;
+    box-sizing: border-box;
+    float: left;
+  }
 
-    @include ChatSection($Right, $MaxHeight);
+  @include ChatSection($Right, $MaxHeight);
 }
+
+div#MessageDivInbox {
+  border: 1px solid $HiliteColor1;
+  padding: 0px;
+  margin-top: 20px;
+  box-sizing: border-box;
+
+  select {
+    width: 100%;
+    padding: 2px;
+    margin: 0px;
+    box-sizing: border-box;
+  }
+
+  div.caption {
+    font-size: 18px;
+    letter-spacing: 3.33333px;
+    background-color: $HiliteColor1;
+    color:white;
+    padding:2px 10px 2px 10px;
+    text-align: center;
+  }
+}
+
+div#DetailDiv {
+  table {
+    td {
+      padding: 0px 0px 5px 0px;
+    }
+  }
+
+  margin-bottom: 20px;
+
+  div.caption {
+    background-color: $HiliteColor3;
+    font-size: 18px;
+    letter-spacing: 3.33333px;
+    color: white;
+    padding: 2px 10px 2px 10px;
+    text-align: center;
+  }
+
+  border: 1px $HiliteColor3 solid;
+}
+
+@mixin SetColumns ($MaxSize, $VerticalGap) {
+  $ColWidth: ($MaxSize - $VerticalGap)/2;
+  $Height: 600px;
+
+  div#PageDiv {
+    width: $MaxSize;
+    height: $Height;
+  }
+
+  div#firstDiv, div#secondDiv {
+    float: left;
+    width: $ColWidth;
+    height: auto !important;
+    padding: 0px;
+    box-sizing: border-box;
+  }
+
+  div#firstDiv {
+    margin-right: $VerticalGap;
+  }
+
+  div#MessageDivInbox {
+    width: $ColWidth;
+
+    div.content {
+      padding: 10px;
+      width: $ColWidth - 2px;
+      box-sizing: border-box;
+    }
+  }
+
+
+  div#DetailDiv {
+    width: $ColWidth;
+
+    div.content {
+      padding: 10px;
+      width: $ColWidth;
+
+      table {
+        width: $ColWidth - 20px;
+      }
+    }
+  }
+
+  @include ChatModule($ColWidth, 200px);
+}
+
 
 @mixin ChatSection($Col2, $Height) {
   $FontSize: 10px;
@@ -198,19 +326,24 @@ div#ComSection {
     $MaxSize: 680px;
     $MaxHeight: 400px;
     $VerticalGap: 8px;
-    @include ChatModule($MaxSize, $MaxHeight);
+  @include SetColumns($MaxSize, $VerticalGap);
+
 }
 
 @media screen and (min-width: 1080px) {
     $MaxSize: 1000px;
     $MaxHeight: 400px;
     $VerticalGap: 12px;
-    @include ChatModule($MaxSize, $MaxHeight);
+  @include SetColumns($MaxSize, $VerticalGap);
+
 }
 
 @media screen and (min-width: 1320px) {
-    $MaxSize: 1220px;
+    $MaxSize: 1260px;
     $MaxHeight: 350px;
     $VerticalGap: 15px;
-    @include ChatModule($MaxSize, $MaxHeight);
+  @include SetColumns($MaxSize, $VerticalGap);
+
 }
+
+

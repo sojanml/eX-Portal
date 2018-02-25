@@ -3,16 +3,111 @@
 
 @{
   ViewBag.Title = "No Fly Zone Dashboard";
-   Layout = "~/Views/Shared/_exPortal_V3.cshtml";
+  Layout = "~/Views/Shared/_exPortal_V3.cshtml";
 }
 <div id="PageDiv">
-   
+
   <div id="firstDiv">
 
-    <div id="MasterDiv">
+    <div id="DetailDiv">
+      <div class="caption">DYNAMIC ZONE</div>
+      <div class="content">
+        <table cellpadding="0" cellspacing="0" class="adsb-detail">
+          <tbody>
+
+            <tr>
+              <td>
+                Name
+              </td>
+              <td>
+                <input type="text" id="zonename" />
+              </td>
+              <td>
+                Color
+              </td>
+              <td>
+
+                <select name="cars" id="colorpicker">
+                  <option value="Orange">Orange</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Start Date
+              </td>
+              <td>
+                <input type="text" id="startdate" class="date-picker" />
+              </td>
+              <td>
+                End Date
+              </td>
+              <td>
+                <input type="text" id="enddate" class="date-picker" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Descriiption
+              </td>
+              <td colspan="3">
+
+                <input type="text" id="desc" style="width:100% ;height:100%" />
+
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Start Time
+              </td>
+              <td>
+                <input type="text" id="starttime" class="form-control time-picker" />
+              </td>
+              <td>
+                End Time
+              </td>
+              <td>
+                <input type="text" id="endtime" class="form-control time-picker" />
+              </td>
+
+            </tr>
+            <tr>
+              <td>
+                Message
+              </td>
+              <td colspan="3">
+                <textarea id="ZoneMessage" style="visibility:visible;width:100%;height:100%"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Coordinates
+              </td>
+              <td colspan="3">
+                <textarea id="ZoneCoordinates" style="visibility:visible;width:100%;height:100%"></textarea>
+              </td>
+            </tr>
+            <tr style="text-align:right;">
+              <td colspan="4"></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="form-toolbar" style="text-align:right;">
+          <input type="button" id="SaveZone" value="Save Zone" />
+          <input type="button" id="CancelZone" value="Cancel" />
+          <input type="button" id="RemoveZone" value="Remove" />
+        </div>
+      </div>
+    </div>
+
+
+    <div id="MasterDivChat">
       @Html.Action("Chat", "COMMS")
     </div>
-    <div id="MessageDiv">
+
+    <div id="MessageDivInbox">
+      <div class="caption">INBOX MODULE</div>
+      <div class="content">
       <div class="editor-label">
         Organisation
       </div>
@@ -47,117 +142,29 @@
       <div>
         <div class="form-toolbar" style="text-align:right;">
           <input type="button" id="btnSubmitMessage" value="Submit" />
-
         </div>
       </div>
-
+      </div>
     </div>
+
+
+
   </div>
-   
-    <div id="secondDiv">
-        <div style="width:100%; height:600px; position:relative">
-            <div id="adsb_map" style="width:100%; height:600px"></div>
-            <div id="AddDiv">
-                <div class="button" id="addzone"><span class="icon green">&#xf055;</span>Add New Zone</div>
-            </div>
-        </div>
-        <div id="zonedetails" style="height:20%; padding-bottom:50px;">
 
-            <div id="DetailDiv">
-                <table cellpadding="0" cellspacing="0" class="adsb-detail">
-                    <tbody>
+  <div id="secondDiv">
+    <div style="width:100%; height:600px; position:relative">
+      <div id="adsb_map" style="width:100%; height:600px"></div>
+      <div id="AddDiv">
+        <div class="button" id="addzone"><span class="icon green">&#xf055;</span>Add New Zone</div>
+      </div>
+    </div>
+    <div id="zonedetails" style="height:20%; padding-bottom:50px;">
 
-                        <tr>
-                            <td>
-                                Name
-                            </td>
-                            <td>
-                                <input type="text" id="zonename" />
-                            </td>
-                            <td>
-                                Color
-                            </td>
-                            <td>
-
-                                <select name="cars" id="colorpicker">
-                                    <option value="Orange">Orange</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Start Date
-                            </td>
-                            <td>
-                                <input type="text" id="startdate" class="date-picker" />
-                            </td>
-                            <td>
-                                End Date
-                            </td>
-                            <td>
-                                <input type="text" id="enddate" class="date-picker" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Descriiption
-                            </td>
-                            <td colspan="3">
-
-                                <input type="text" id="desc" style="width:100% ;height:100%" />
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Start Time
-                            </td>
-                            <td>
-                                <input type="text" id="starttime" class="form-control time-picker" />
-                            </td>
-                            <td>
-                                End Time
-                            </td>
-                            <td>
-                                <input type="text" id="endtime" class="form-control time-picker" />
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td>
-                                Message
-                            </td>
-                            <td colspan="3">
-                                <textarea id="ZoneMessage" style="visibility:visible;width:100%;height:100%"></textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Coordinates
-                            </td>
-                            <td colspan="3">
-                                <textarea id="ZoneCoordinates" style="visibility:visible;width:100%;height:100%"></textarea>
-                            </td>
-                        </tr>
-                        <tr style="text-align:right;">
-                            <td colspan="4"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="form-toolbar" style="text-align:right;">
-                    <input type="button" id="SaveZone" value="Save Zone" />
-                    <input type="button" id="CancelZone" value="Cancel" />
-                    <input type="button" id="RemoveZone" value="Remove" />
-                </div>
-            </div>
-        </div>
 
     </div>
+
+  </div>
 </div>
-
-
-
-
 
 
 
@@ -165,135 +172,134 @@
   <link href="~/Content/black-box.css" rel="stylesheet" />
   <link href="~/jquery-ui/jquery-ui.css" rel="stylesheet" />
   <link href="~/jquery-ui/jquery.ui.timepicker.css" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="~/Content/Comms_dynamicchat.css" /> 
-  <style type="text/css">
-    table.restable {
-      width: 100%;
-      border-collapse: collapse;
-      display: inline-block;
-    }
-
-      table.restable tr.restd {
+  <link rel="stylesheet" type="text/css" href="~/Content/Comms_dynamicchat.css" />
+  @*
+    <style type="text/css">
+      table.restable {
         width: 100%;
         border-collapse: collapse;
+        display: inline-block;
       }
 
-      table.restable td.restd {
-        width: 50%;
+        table.restable tr.restd {
+          width: 100%;
+          border-collapse: collapse;
+        }
+
+        table.restable td.restd {
+          width: 50%;
+        }
+
+      #AddDiv {
+        position: absolute;
+        right: 60px;
+        top: 10px;
+        z-index: 10;
+        border-radius: 5px;
       }
 
-    #AddDiv {
-      position: absolute;
-      right: 60px;
-      top: 10px;
-      z-index: 10;
-      border-radius: 5px;
-    }
-
-    div.button {
-      background-color: #272727;
-      color: white;
-      border: 2px #272727 solid;
-      border-radius: 3px;
-      font-size: 12px;
-      padding: 2px 10px 2px 10px;
-      cursor: pointer
-    }
-
-      div.button:hover {
-        background-color: #3e3e3e;
-      }
-
-    span.icon {
-      padding-right: 5px;
-    }
-
-    span.green {
-      color: #4cff00;
-    }
-
-    table.adsb-detail {
-    }
-
-      table.adsb-detail td {
-        padding: 5px 20px 5px 0px;
-      }
-
-      table.adsb-detail tr td:last-child {
-        padding-right: 0px;
-      }
-
-      table.adsb-detail td input {
+      div.button {
+        background-color: #272727;
+        color: white;
+        border: 2px #272727 solid;
         border-radius: 3px;
+        font-size: 12px;
+        padding: 2px 10px 2px 10px;
+        cursor: pointer
       }
 
-    ul.radio {
-      margin: 0;
-      padding: 0;
-      margin-left: 0px;
-      list-style: none;
-      width: auto;
-    }
+        div.button:hover {
+          background-color: #3e3e3e;
+        }
 
-      ul.radio li {
-        border: 1px transparent solid;
+      span.icon {
+        padding-right: 5px;
       }
 
-    div.MasterList {
-      list-style-type: none;
-      width: 20%;
-      float: left;
-      height: 350px;
-    }
+      span.green {
+        color: #4cff00;
+      }
 
-    ul.Masterul li.ActPilot p {
-      font: 200 12px/1.5 Georgia, Times New Roman, serif;
-    }
+      table.adsb-detail {
+      }
 
-    li.ActPilot {
-      padding: 2px;
-    }
+        table.adsb-detail td {
+          padding: 5px 20px 5px 0px;
+        }
 
-      li.ActPilot:hover {
+        table.adsb-detail tr td:last-child {
+          padding-right: 0px;
+        }
+
+        table.adsb-detail td input {
+          border-radius: 3px;
+        }
+
+      ul.radio {
+        margin: 0;
+        padding: 0;
+        margin-left: 0px;
+        list-style: none;
+        width: auto;
+      }
+
+        ul.radio li {
+          border: 1px transparent solid;
+        }
+
+      div.MasterList {
+        list-style-type: none;
+        width: 20%;
+        float: left;
+        height: 350px;
+      }
+
+      ul.Masterul li.ActPilot p {
+        font: 200 12px/1.5 Georgia, Times New Roman, serif;
+      }
+
+      li.ActPilot {
+        padding: 2px;
+      }
+
+        li.ActPilot:hover {
+          background: #eee;
+          cursor: pointer;
+        }
+
+      li.selected {
         background: #eee;
         cursor: pointer;
       }
 
-    li.selected {
-      background: #eee;
-      cursor: pointer;
-    }
 
+      div#firstDiv {
+        width: 50%;
+        display: inline-block;
+        float: left;
+      }
 
-    div#firstDiv {
-      width: 50%;
-      display: inline-block;
-      float: left;
-    }
+      div#secondDiv {
+        width: 50%;
+        display: inline-block;
+        float: right;
+      }
 
-    div#secondDiv {
-      width: 50%;
-      display: inline-block;
-      float: right;
-    }
+      div#MasterDiv {
+        height: 350px;
+      }
 
-    div#MasterDiv {
-      height: 350px;
-    }
+      div.PageDiv {
+        width: 100%;
+        display: inline-block;
+      }
 
-    div.PageDiv {
-      width: 100%;
-      display: inline-block;
-    }
-
-    #ddlist {
-      width: 400px;
-      max-width: 400px;
-    }
-
-    
-
-  </style>
+      #ddlist {
+        width: 400px;
+        max-width: 400px;
+      }
+    </style>
+  *@
 }
 
 @section scripts {

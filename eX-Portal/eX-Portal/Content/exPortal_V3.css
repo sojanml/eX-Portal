@@ -239,6 +239,9 @@ nav.user-management ul li#user-menu ul {
   position: absolute;
   left: 0px;
   display: none;
+  background-color: white;
+  z-index: 20;
+  padding: 0px 10px 10px 10px;
 }
 nav.user-management ul li#user-menu ul li {
   display: block;
