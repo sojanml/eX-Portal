@@ -2344,6 +2344,9 @@
     <Content Include="Views\FlightMap\view.cshtml" />
     <Content Include="Views\Shared\_exPortal_V3.cshtml" />
     <Content Include="Views\COMMS\Chat.cshtml" />
+    <Content Include="Views\Billing\FlightBilling.cshtml" />
+    <Content Include="Views\Billing\AllRules.cshtml" />
+    <Content Include="Views\Billing\Group.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
