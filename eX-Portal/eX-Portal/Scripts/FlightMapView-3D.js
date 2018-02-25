@@ -27,7 +27,8 @@
       infoBox: false,
       vrButton: false,
       animation: false,
-      timeline: true
+      timeline: true,
+      fullscreenElement: "CesiumMap"
     });
 
     // Add Bing imagery

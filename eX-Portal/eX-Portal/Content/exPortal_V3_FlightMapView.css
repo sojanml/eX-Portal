@@ -174,6 +174,23 @@ div.instrument.attitude div.roll {
   display: none !important;
 }
 
+.cesium-viewer:-moz-full-screen {
+  background-color: pink;
+}
+
+.cesium-viewer:-webkit-full-screen {
+  background-color: pink;
+}
+
+.cesium-viewer:fullscreen {
+  background-color: pink;
+}
+
+div#CesiumMap {
+  width: 100%;
+  height: 100%;
+}
+
 div.SpotMarker {
   width: 16px;
   height: 16px;
@@ -361,7 +378,6 @@ nav#flightmap_infobar ul li {
   float: left;
   overflow: hidden;
   font-family: 'Advent';
-  font-weight: 800;
   font-style: normal;
   text-transform: uppercase;
 }
@@ -474,7 +490,7 @@ div#FlightData li::after {
 section#BottomSection div#BottomMapInfo,
 section#BottomSection div#ComSection,
 section#BottomSection div#GoogleMap,
-section#BottomSection div#CesiumMap {
+section#BottomSection div#CesiumMapHolder {
   float: left;
 }
 section#BottomSection div#BottomMapInfo {
@@ -584,12 +600,14 @@ section#BottomSection::after {
   }
   nav#flightmap_infobar ul li div.title-1 {
     font-size: 11px;
+    font-weight: 800;
   }
   nav#flightmap_infobar ul li div.title-2 {
-    font-size: 10px;
+    font-size: 8px;
   }
   nav#flightmap_infobar ul li div.title-2 > span {
     font-size: 16px;
+    font-weight: 800;
   }
   nav#flightmap_infobar ul li div.title-3 {
     font-size: 9px;
@@ -700,7 +718,7 @@ section#BottomSection::after {
     display: table;
   }
   div#FlightStatusMetar div.MetarInfoContent div.MetarInfo {
-    text-align: left;
+    text-align: center;
     vertical-align: middle;
     display: table-cell;
     font-size: 9.1px;
@@ -724,6 +742,9 @@ section#BottomSection::after {
     height: 29.568px;
     width: 29.568px;
     font-size: 10.4px;
+  }
+  div#FlightStatusMetar div.MetarTitle div.content div.title {
+    font-weight: bold;
   }
   div#FlightStatusMetar div.MetarTitle div.content div.refresh {
     font-size: 6.5px;
@@ -863,7 +884,7 @@ section#BottomSection::after {
   div#BottomMapInfo,
   div#ComSection,
   div#GoogleMap,
-  div#CesiumMap {
+  div#CesiumMapHolder {
     height: 300px;
   }
 
@@ -909,7 +930,9 @@ section#BottomSection::after {
   }
   div#ComSection div#ComsSendMessage div.ContentBox input {
     padding: 0px 10px 0px 10px;
-    width: 146px;
+    width: 166px;
+    border: 1px silver solid;
+    box-sizing: border-box;
   }
   div#ComSection div#ComsSendMessage div.ContentButton input {
     padding: 0px;
@@ -930,7 +953,7 @@ section#BottomSection::after {
   }
 
   div#GoogleMap,
-  div#CesiumMap {
+  div#CesiumMapHolder {
     width: 432px;
   }
 }
@@ -944,12 +967,14 @@ section#BottomSection::after {
   }
   nav#flightmap_infobar ul li div.title-1 {
     font-size: 13px;
+    font-weight: 800;
   }
   nav#flightmap_infobar ul li div.title-2 {
-    font-size: 12px;
+    font-size: 10px;
   }
   nav#flightmap_infobar ul li div.title-2 > span {
     font-size: 18px;
+    font-weight: 800;
   }
   nav#flightmap_infobar ul li div.title-3 {
     font-size: 11px;
@@ -1060,7 +1085,7 @@ section#BottomSection::after {
     display: table;
   }
   div#FlightStatusMetar div.MetarInfoContent div.MetarInfo {
-    text-align: left;
+    text-align: center;
     vertical-align: middle;
     display: table-cell;
     font-size: 9.8px;
@@ -1084,6 +1109,9 @@ section#BottomSection::after {
     height: 44.352px;
     width: 44.352px;
     font-size: 11.2px;
+  }
+  div#FlightStatusMetar div.MetarTitle div.content div.title {
+    font-weight: bold;
   }
   div#FlightStatusMetar div.MetarTitle div.content div.refresh {
     font-size: 7px;
@@ -1223,7 +1251,7 @@ section#BottomSection::after {
   div#BottomMapInfo,
   div#ComSection,
   div#GoogleMap,
-  div#CesiumMap {
+  div#CesiumMapHolder {
     height: 300px;
   }
 
@@ -1269,7 +1297,9 @@ section#BottomSection::after {
   }
   div#ComSection div#ComsSendMessage div.ContentBox input {
     padding: 0px 10px 0px 10px;
-    width: 254px;
+    width: 274px;
+    border: 1px silver solid;
+    box-sizing: border-box;
   }
   div#ComSection div#ComsSendMessage div.ContentButton input {
     padding: 0px;
@@ -1290,7 +1320,7 @@ section#BottomSection::after {
   }
 
   div#GoogleMap,
-  div#CesiumMap {
+  div#CesiumMapHolder {
     width: 648px;
   }
 }
@@ -1304,12 +1334,14 @@ section#BottomSection::after {
   }
   nav#flightmap_infobar ul li div.title-1 {
     font-size: 14px;
+    font-weight: 800;
   }
   nav#flightmap_infobar ul li div.title-2 {
-    font-size: 13px;
+    font-size: 11px;
   }
   nav#flightmap_infobar ul li div.title-2 > span {
     font-size: 19px;
+    font-weight: 800;
   }
   nav#flightmap_infobar ul li div.title-3 {
     font-size: 12px;
@@ -1420,7 +1452,7 @@ section#BottomSection::after {
     display: table;
   }
   div#FlightStatusMetar div.MetarInfoContent div.MetarInfo {
-    text-align: left;
+    text-align: center;
     vertical-align: middle;
     display: table-cell;
     font-size: 11.2px;
@@ -1444,6 +1476,9 @@ section#BottomSection::after {
     height: 51.66px;
     width: 51.66px;
     font-size: 12.8px;
+  }
+  div#FlightStatusMetar div.MetarTitle div.content div.title {
+    font-weight: bold;
   }
   div#FlightStatusMetar div.MetarTitle div.content div.refresh {
     font-size: 8px;
@@ -1583,7 +1618,7 @@ section#BottomSection::after {
   div#BottomMapInfo,
   div#ComSection,
   div#GoogleMap,
-  div#CesiumMap {
+  div#CesiumMapHolder {
     height: 350px;
   }
 
@@ -1629,7 +1664,9 @@ section#BottomSection::after {
   }
   div#ComSection div#ComsSendMessage div.ContentBox input {
     padding: 0px 10px 0px 10px;
-    width: 308px;
+    width: 328px;
+    border: 1px silver solid;
+    box-sizing: border-box;
   }
   div#ComSection div#ComsSendMessage div.ContentButton input {
     padding: 0px;
@@ -1650,7 +1687,7 @@ section#BottomSection::after {
   }
 
   div#GoogleMap,
-  div#CesiumMap {
+  div#CesiumMapHolder {
     width: 756px;
   }
 

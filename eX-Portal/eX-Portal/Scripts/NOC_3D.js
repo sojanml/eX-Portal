@@ -1,13 +1,165 @@
 ﻿$(document).ready(function () {
-  //NOC_3D.AddTollBar(NOCDetails);
-  var IDs = Object.keys(NOCDetails);
-  var firstKey = IDs[0];
-  NOC_3D.Init(NOCDetails[firstKey]);
-  $('div.noc-3d-view').on("click", function () {
-    NOC_3D.ViewIn3D($(this));
+  NOCView.Init();
+
+  $('LI.noc-li-item').on("click", function () {
+    NOCView.SetActive($(this));
   });
+
+  $('#btnSwitch3D').on("click", function () {
+    $('#btnSwitch3D').hide();
+    $('#btnSwitch2D').show();
+
+    $('#GoogleMap').hide();
+    $('#cesiumContainer').show();
+  });
+
+  $('#btnSwitch2D').on("click", function () {
+    $('#btnSwitch2D').hide();
+    $('#btnSwitch3D').show();
+
+    $('#GoogleMap').show();
+    $('#cesiumContainer').hide();
+
+    GoogleMap.Reset();
+
+  });
+
+
 });//$(document).ready()
 
+
+var NOCView = function () {
+  var _setActive = function(elem) {
+    var nocid = elem.attr("data-nocid");
+    GoogleMap.SetPath(NOCDetails[nocid].Coordinates, NOCDetails[nocid].OuterCoordinates);
+    NOC_3D.DrawPolygon(NOCDetails[nocid]);
+    $('LI.noc-li-item').removeClass("active");
+    elem.addClass("active");
+
+    $('#content').html($('#noc-section-' + nocid).html());
+  }
+
+  var _Init = function () {
+    var IDs = Object.keys(NOCDetails);
+    var firstKey = IDs[0];
+
+    GoogleMap.init();
+    NOC_3D.Init(NOCDetails[firstKey]);
+
+    GoogleMap.SetPath(NOCDetails[firstKey].Coordinates, NOCDetails[firstKey].OuterCoordinates);
+    $('LI.noc-li-item:first-child').addClass("active");
+
+    $('#content').html($('#noc-section-' + firstKey).html());
+  };
+
+  return {
+    SetActive: _setActive,
+    Init: _Init
+  };
+
+}();
+
+var GoogleMap = function () {
+
+  var _map = {};
+  var _poly = {};
+  var _outerPoly = {};
+  var _outer = [];
+  var _innerPath = [];
+  var _outerPath = [];
+
+
+  var _SetPath = function (inner, outer) {
+    _inner = getLatLngArray(inner);    
+    _outer = getLatLngArray(outer);
+    _outerPath = _holoPolygon(_inner, _outer);
+
+    _poly.setPath(_inner);
+    _poly.setMap(_map);
+
+    _outerPoly.setPath(_outerPath);
+    _outerPoly.setMap(_map);
+
+    _map.fitBounds(getBounds(_outer));
+  }
+
+  var _Reset = function () {
+    _poly.setPath(_inner);
+    _poly.setMap(_map);
+
+    _outerPoly.setPath(_outerPath);
+    _outerPoly.setMap(_map);
+
+    _map.fitBounds(getBounds(_outer));
+
+  }
+
+  var _init = function (CenterPoint) {
+    _map = new google.maps.Map(document.getElementById('GoogleMap'), {
+      center: { lat: 25.05569, lng: 55.44882 },
+      zoom: 10,
+      styles: getADSBMapStyle()
+    });
+
+
+    // Construct the polygon.
+    _poly = new google.maps.Polygon({
+      paths: _innerPath,
+      strokeColor: '#FF0000',
+      strokeWeight: 0,
+      fillColor: '#FF0000',
+      fillOpacity: 0.2
+
+    });
+
+    // Construct the polygon.
+    _outerPoly = new google.maps.Polygon({
+      paths: _outerPath,
+      strokeWeight: 0,
+      fillColor: '#00FF00',
+      fillOpacity: 0.2
+    });
+
+    _map.fitBounds(getBounds(_outer));
+
+  };
+  
+
+  var _holoPolygon = function (inner, outer) {
+    var nArray = inner.concat(inner[0]);
+
+    for (var i = outer.length - 1; i >= 0; i--) {
+      nArray.push(outer[i]);
+    }
+    nArray.push(outer[0]);
+    return nArray;
+  }
+
+  var getLatLngArray = function (Cordinates) {
+    var Bounds = [];
+    var LatLng = Cordinates.split(',');
+    for (var i = 0; i < LatLng.length; i++) {
+      var Bound = LatLng[i].split(" ");
+      Bounds.push({ lat: parseFloat(Bound[0]), lng: parseFloat(Bound[1]) });
+    }
+    return Bounds;
+  };
+
+  var getBounds = function (Coordinates) {
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = Coordinates.length - 1; i >= 0; i--) {
+      bounds.extend(Coordinates[i]);
+    }
+    return bounds;
+  }
+  
+  return {
+    init: _init,
+    SetPath: _SetPath,
+    Reset: _Reset
+  };
+
+}();
 
 var NOC_3D = function () {
   var viewer = {};
@@ -19,9 +171,7 @@ var NOC_3D = function () {
     var Key = elem.attr('data-nocid');
     NOC_3D.DrawPolygon(NOCDetails[Key]);
 
-    $('#cesiumContainer')
-      .insertAfter($('#noc-section-' + Key))
-      .show();
+
   }
 
   var _init = function (Coordinates) {
@@ -128,11 +278,10 @@ var NOC_3D = function () {
     AddedInnerPolygon.polygon.hierarchy = InnerCoordinates;
     AddedOuterPolygon.polygon.hierarchy = {
       positions: OuterCoordinates,
-      /*holes: [{
+      holes: [{
         positions: InnerCoordinates
-      }]*/
+      }]
     };
-
     viewer.zoomTo(AddedOuterPolygon)
   }
 

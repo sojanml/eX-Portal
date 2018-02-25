@@ -38,6 +38,23 @@ div.instrument.attitude div.roll {
   display:none !important;
 }
 
+.cesium-viewer:-moz-full-screen {
+  background-color: pink;
+}
+
+.cesium-viewer:-webkit-full-screen {
+  background-color: pink;
+}
+
+.cesium-viewer:fullscreen {
+  background-color: pink;
+}
+
+div#CesiumMap {
+  width:100%;
+  height:100%;
+}
+
 div.SpotMarker {
   $Size: 16px;
   $Padding: 4px;
@@ -260,7 +277,6 @@ nav#flightmap_infobar {
       float: left;
       overflow: hidden;
       font-family: 'Advent';
-      font-weight: 800;
       font-style: normal;
       text-transform: uppercase;
 
@@ -449,7 +465,7 @@ section#BottomSection {
   div#BottomMapInfo,
   div#ComSection,
   div#GoogleMap,
-  div#CesiumMap {
+  div#CesiumMapHolder {
     float: left;
   }
 
@@ -542,7 +558,6 @@ section#BottomSection {
         }
       }
     }
-
   }
 
   div#GoogleMap,
@@ -563,7 +578,7 @@ section#BottomSection {
   div#BottomMapInfo,
   div#ComSection,
   div#GoogleMap,
-  div#CesiumMap {
+  div#CesiumMapHolder {
     height: $Height;
   }
 
@@ -619,7 +634,9 @@ section#BottomSection {
 
       div.ContentBox input {
         padding: 0px 10px 0px 10px;
-        width: $Col2 - $ButtonWidth - 20px;
+        width: $Col2 - $ButtonWidth;
+        border:1px silver solid;
+        box-sizing: border-box;
       }
 
       div.ContentButton input {
@@ -631,7 +648,7 @@ section#BottomSection {
           background-color: $HiliteColor2;
         }
 
-        &.disabled, 
+        &.disabled,
         &.disabled:hover {
           background-color: silver;
         }
@@ -649,7 +666,7 @@ section#BottomSection {
   }
 
   div#GoogleMap,
-  div#CesiumMap {
+  div#CesiumMapHolder {
     width: $Col3;
   }
 }
@@ -755,11 +772,12 @@ section#BottomSection {
       display:table;
 
       div.MetarInfo {
-        text-align: left;
+        text-align: center;
         vertical-align: middle;
         display: table-cell;
         font-size: $FontSize * 0.7;
         font-weight:bold;
+
       }
     }
 
@@ -783,6 +801,10 @@ section#BottomSection {
         width: $MetarHeight;
         font-size: $FontSize * 0.8;
 
+        div.title {
+          font-weight:bold;
+        }
+
         div.refresh {
           font-size: $FontSize * 0.5;
         }
@@ -804,13 +826,15 @@ section#BottomSection {
 
     div.title-1 {
       font-size: $FontSize;
+      font-weight: 800;
     }
 
     div.title-2 {
-      font-size: $FontSize - 1px;
+      font-size: $FontSize - 3px;
 
       & > span {
         font-size: $FontSize + 5px;
+        font-weight: 800;
       }
     }
 

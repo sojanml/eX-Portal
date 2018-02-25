@@ -1,4 +1,4 @@
-@import "compass";
+@import "exPortal_V3_Common";
 
 $MaxResolution: 1150px;
 $MenuColor: #e5e5e5;
@@ -40,7 +40,7 @@ $FilterColor: #018aff;
       padding: 5px 0px 5px 5px;
       background-color: $ReportHeadBackground;
       margin: 0px;
-      font-family: Gobold_Light;
+      font-family: Advent;
       font-size: 12px;
       color: $MenuHiliteColor;
 
@@ -51,7 +51,7 @@ $FilterColor: #018aff;
         background-color: $MenuColor;
         color: black;
         margin-right: 10px;
-        font-family: OpenSans;
+        font-family: "Avenir Next Condensed";
         font-size: 10px;
         border-radius: 4px;
         cursor: pointer;
@@ -73,13 +73,13 @@ $FilterColor: #018aff;
       background-color: $ShadedColur;
       border-bottom: 2px white solid;
       margin: 0px 0px 5px 0px;
-      font-family: Gobold_Light;
+      font-family: Advent;
       font-size: 10px;
     }
 
     &.NoVideo {
       div#FlightSummary {
-        width:100%;
+        width: 100%;
       }
     }
   }
@@ -267,7 +267,7 @@ button,
 file {
   box-sizing: border-box;
   border: 1px silver solid;
-  font-family: OpenSans;
+  font-family: "Avenir Next Condensed"; 
   color: $ReportHeadBackground;
   margin: 0px;
 }
@@ -306,7 +306,7 @@ div.label {
 }
 
 h2 {
-  font-family: Gobold_Light;
+  font-family: Advent;
   color: $ReportHeadBackground;
   padding: 5px 0px 5px 0px;
   margin: 10px 0px 10px 0px;
@@ -407,7 +407,7 @@ body, html {
   height: 100%;
   padding: 0px;
   margin: 0px;
-  font-family: OpenSans;
+  font-family: "Avenir Next Condensed";
   color: #292929;
 }
 
@@ -656,7 +656,7 @@ section {
     background-color: $ReportHeadBackground;
     color: white;
     margin: $VerticalGap 0px 0px 0px;
-    font-family: Gobold_Light;
+    font-family: Advent;
     font-size: 18px;
     color: $TitleTextColor;
 
@@ -668,11 +668,13 @@ section {
       font-family: Arial;
 
       li {
-        display:inline-block;
-        margin-right:10px;
+        display: inline-block;
+        margin-right: 10px;
+
         span.icon {
-          padding-right:5px;
+          padding-right: 5px;
         }
+
         a {
           border: 1px silver solid;
           border-radius: 3px;
@@ -687,8 +689,9 @@ section {
             span.edit {
               color: greenyellow;
             }
+
             span.delete {
-              color:orangered;
+              color: orangered;
             }
           }
         }
@@ -980,11 +983,11 @@ div.form-horizontal {
 
 div.form-horizontal,
 div.form-toolbar {
-  input[type=submit], 
+  input[type=submit],
   input[type=button] {
     padding: 3px 15px 3px 15px;
     color: $TitleTextColor;
-    font-family: Gobold_Light;
+    font-family: Advent;
     font-size: 12pt;
     text-transform: uppercase;
     background-color: $ReportHeadBackground;

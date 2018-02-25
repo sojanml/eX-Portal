@@ -14,7 +14,10 @@
           <li class="Approved">@Model.CountApproved Approved</li>
           <li class="Rejected">@Model.CountRejected Rejected</li>
           <li class="Amended">@Model.CountAmended Amended</li>
+          <li id="btnSwitch3D" class="button"><span class="icon">&#xf0ac;</span>3D MAP</li>
+          <li style="display:none;" id="btnSwitch2D" class="button"><span class="icon">&#xf279;</span>2D MAP</li>
         </ul>
+
       </div>
       <div class="title">@Model.AccountName</div>
       <div class="sub-title">@Model.FlightType for @Model.FlightFor</div>
@@ -25,32 +28,49 @@
 </section>
 
 
+
+<section id="noc-sections" class="top-space top-border">
+  <div id="section-left">
+    <ul>
+      @foreach (eX_Portal.Models.NOC_Details noc in Model.NOC_Details) {
+        <li class="noc-li-item" data-nocid="@noc.NocID">
+          @noc.StartDate.ToString("dd-MMM-yyyy")
+          @noc.StartTime.ToString().Substring(0, 5)
+          <br />
+          @noc.EndDate.ToString("dd-MMM-yyyy")
+          @noc.EndTime.ToString().Substring(0, 5)
+        </li>
+      }
+    </ul>
+  </div>
+  <div id="section-right">
+    <div id="content"></div>
+    <div id="GoogleMap"></div>
+    <div style="display:none;" id="cesiumContainer"></div>
+  </div>
+  <div style="clear:both">&nbsp;</div>
+</section>
+
+
+
 @foreach (eX_Portal.Models.NOC_Details noc in Model.NOC_Details) {
-  <section id="noc-section-@noc.NocID" class="top-space top-border">
-    <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px;">
-      @Html.Action("NocDetail", new { ID = noc.NocID })
-    </div>
-    <div id="frm" class="column column-half form-horizontal NoBorder" style="margin-bottom:10px; position:relative">
-      <div class="OverlayButton">
-        <div data-nocid="@noc.NocID"  class="noc-3d-view button">3D View</div>
-      </div>
-      <img width="567" height="300" src="@Html.Action("StaticGoogleMap", new { NocID = noc.NocID })" />
-    </div>
-  </section>
+  <div style="display:none" id="noc-section-@noc.NocID">
+    @Html.Action("NocDetail", new { ID = noc.NocID })
+  </div>
 }
 
-<div id="cesiumContainer"></div>
+
 
 
 @section header {
   <link type="text/css" rel="stylesheet" href="~/Content/NOC_Process.css" />
-<link type="text/css" rel="stylesheet" href="~/Cesium/Widgets/widgets.css" />
-<link type="text/css" rel="stylesheet" href="~/Content/NOC_Register.css" />
+  <link type="text/css" rel="stylesheet" href="~/Cesium/Widgets/widgets.css" />
+  <link type="text/css" rel="stylesheet" href="~/Content/NOC_Register.css" />
 }
 
 @section toolbar {
   <ul class="toolbar">
-    <li><a href="@Url.Action("Index")"> Cancel </a></li>
+    <li><a href="@Url.Action("Home")"> Back </a></li>
   </ul>
 }
 
@@ -69,5 +89,9 @@
     }
   </script>
   <script src="~/Cesium/Cesium.js"></script>
+  <script type="text/javascript" src="//maps.google.com/maps/api/js?key=AIzaSyD_zdKS2syz3Jqr8F_jZRLsJj0u73-lfog"></script>
+  <script src="~/Scripts/ADSB-Map.js"></script>
   <script src="~/Scripts/NOC_3D.js"></script>
+
+
 }

@@ -319,14 +319,14 @@ var FlightMapData = function () {
     $('#btn2D').hide();
     $('#btn3D').show();
     $('#GoogleMap').show();
-    $('#CesiumMap').hide();
+    $('#CesiumMapHolder').hide();
   }
 
   var _fn3DClick = function (e) {
     $('#btn2D').show();
     $('#btn3D').hide();
     $('#GoogleMap').hide();
-    $('#CesiumMap').show();
+    $('#CesiumMapHolder').show();
     FlightMapView3D.Init();
     if (_MapPlayTimer != null) {
       FlightMapView3D.MoveTo(PlayPositionTime);

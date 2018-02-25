@@ -14,6 +14,15 @@ namespace eX_Portal.exLogic {
     static IEnumerable<SelectListItem> DDoptions = Enumerable.Empty<SelectListItem>();
     static ExponentPortalEntities ctx = new ExponentPortalEntities();
 
+    public static String GetSMSNumber(int UserID) {
+      var Query = from u in ctx.MSTR_User
+                  where u.UserId == UserID
+                  select u.MobileNo;
+      String Mobile = Query.FirstOrDefault().ToString();
+      return Mobile;
+
+    }
+
     public static IEnumerable<SelectListItem> GetDdListDroneForUser(int UserID) {
       var Query = from d in ctx.MSTR_Drone
                   join u in ctx.M2M_Drone_User.Where(t => t.UserID == UserID) on

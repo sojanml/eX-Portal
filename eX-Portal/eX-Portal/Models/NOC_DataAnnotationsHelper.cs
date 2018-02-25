@@ -7,7 +7,7 @@ using System.Web;
 namespace eX_Portal.Models {
 
   [MetadataType(typeof(MSTR_NOC_DataAnnotationsHelper))]
-  public partial class MSTR_NOC { }
+  public partial class MSTR_NOC {}
 
   public class MSTR_NOC_DataAnnotationsHelper {
     [Required]

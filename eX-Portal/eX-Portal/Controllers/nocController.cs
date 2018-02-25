@@ -89,10 +89,14 @@ namespace eX_Portal.Controllers {
       ViewBag.DbErrors = "";
       NOC.CreateBy = Util.getLoginUserID();
       NOC.CreatedOn = DateTime.UtcNow;
+      if (NOC.FlightType == "0")
+        NOC.FlightType = Request.Form["FlightTypeOther"];
       NOC.NocName = NOC.FlightType + " for " + NOC.FlightFor;
       NOC.AccountID = Util.getAccountID();
       foreach (var noc in NOC.NOC_Details) {
         noc.Status = "New";
+        if (noc.PilotID == 0)
+          noc.PilotID = Util.getLoginUserID();
         noc.StatusChangedBy = Util.getLoginUserID();
         noc.StatusChangedOn = DateTime.UtcNow;
         noc.OuterCoordinates = noc.Coordinates;
@@ -112,7 +116,7 @@ namespace eX_Portal.Controllers {
 
       try {
         ctx.MSTR_NOC.Add(NOC);
-        ctx.SaveChanges();
+        await ctx.SaveChangesAsync();
       } catch (DbEntityValidationException e) {
         foreach (var eve in e.EntityValidationErrors) {
           SB.AppendLine($"Entity of type '{eve.Entry.Entity.GetType().Name}' in state '{eve.Entry.State}'<br>");
@@ -307,9 +311,11 @@ namespace eX_Portal.Controllers {
       if (exLogic.User.hasAccess("NOC.PROCESS")) {
         nView.addMenu("Process", Url.Action("Process", new { ID = "_Pkey" }));
       }
+      /*
       if (exLogic.User.hasAccess("NOC.3D")) {
         nView.addMenu("3D", Url.Action("3D", new { ID = "_Pkey" }));
       }
+      */
       if (Request.IsAjaxRequest()) {
         Response.ContentType = "text/javascript";
         return PartialView("NOC_qViewData", nView);

@@ -173,8 +173,8 @@ CREATE TABLE [#NOC_Details](
 	[BillingTotalMinutes] [int] NOT NULL,
 	[BillingPeakMinutes] [int] NOT NULL,
 	[BillingOffPeakMinutes] [int] NOT NULL,
-	[BillingArea] [numeric](12, 2) NOT NULL,
-	[BillingVolume] [numeric](12, 2) NOT NULL
+	[BillingArea] decimal NOT NULL,
+	[BillingVolume] decimal NOT NULL
 )";
 
       String SQL2 = 

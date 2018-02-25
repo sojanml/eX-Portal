@@ -8,7 +8,9 @@
     <div class="QRCode"><img src="@Model.DroneInfo.QRCode" width="50" height="50"/></div>
     <div class="DroneGroup"><img src="~/images/FlightType-@(Model.DroneInfo.UAVGroup).png" width="50" height="50" /></div>
     <div class="info-title">@Model.DroneName</div>
-    <div class="info-sub-title">@Model.DroneInfo.DroneRefName <span>(@Model.DroneInfo.Manufacturer @Model.DroneInfo.UAVType)</span></div>
+    <div class="info-sub-title">
+      @(Model.DroneInfo.DroneRefName == Model.DroneName ? "" : Model.DroneInfo.DroneRefName)
+    <span>(@Model.DroneInfo.Manufacturer @Model.DroneInfo.UAVType)</span></div>
     <div style="clear:both"></div>
   </div>
   <div class="noc-pilot-info">
@@ -39,9 +41,9 @@
     </td>
   </tr>
   <tr>
-    <td>Altitude: </td>
+    <td>Height (AGL in Meter): </td>
     <td>
-      Min: @Model.MinAltitude Meter,
+      Take Off: @Model.MinAltitude Meter,
       Max: @Model.MaxAltitude Meter
     </td>
   </tr>

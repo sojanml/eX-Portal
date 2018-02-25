@@ -105,7 +105,7 @@ table.GoogleMapCoordinates th input[type=text], table.GoogleMapCoordinates td in
 table.GoogleMapCoordinates th {
   background-color: darkgreen;
   margin: 0px;
-  font-family: Gobold_Light;
+  font-family: Advent;
   font-size: 12px;
   color: #cacaca;
 }
@@ -209,7 +209,7 @@ div.cesium-viewer-bottom {
 }
 
 div.TotalEstimate {
-  font-family: Gobold_Light;
+  font-family: Advent;
   font-size: 18pt;
   margin-top: 20px;
   color: #018aff;
@@ -220,7 +220,7 @@ div.TotalEstimate span {
 
 div#NocBillingTotalSection {
   padding: 0px 0px 5px 0px;
-  font-family: Gobold_Light;
+  font-family: Advent;
   border-bottom: 2px #018aff solid;
   margin-bottom: 5px;
 }
@@ -258,7 +258,7 @@ ul#NocBillingItem li div.NocBillingItemAmount {
   float: right;
   color: #53a100;
   font-size: 18px;
-  font-family: Gobold_Light;
+  font-family: Advent;
   padding-left: 5px;
 }
 ul#NocBillingItem li.DroneFlight div.NocBillingItemAmount {

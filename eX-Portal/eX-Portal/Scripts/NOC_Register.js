@@ -21,7 +21,7 @@
   $(document).on("click", "div.btnDeleteNoc", function () {
     NOC.DeleteNocRow($(this));
   });
-  
+
 
   $(document).on("change", "select.list-PilotID", Ajax.OnUserChange);
   $(document).on("change", "select.list-DroneID", Ajax.OnDroneChange);
@@ -44,6 +44,10 @@
 
   $('#frmNocAppliation').on("submit", frmValidator.OnSubmit)
 
+  $('#FlightType').on("change", function () {
+    var id = $(this).val();
+    $('#FlightTypeOther').css({'display': (id == "0" ? "block" : "none")});
+  });
 
   NOC.InitilizeForm(IsOrgAdmin);
 
@@ -426,7 +430,7 @@ var NOCMap = function () {
       var NocBillingItem = $('div#NocBillingItem-' + Billing.RuleID);
       if (NocBillingItem.length < 1) {
         NocBillingItem = $('<div id="NocBillingItem-' + Billing.RuleID + '" class="NocBillingItemAmount">0.00</div>');
-        var LI = $('<LI class="' + Billing.CalculateOn + '">' +
+        var LI = $('<LI id="NocBillingLI-' + Billing.RuleID + '" class="' + Billing.CalculateOn + '">' +
           (Billing.CalculateOn == 'DroneFlight' ? '<span>Estimate</span>' : '') +
           Billing.RuleName +
           '<div style= "clear:both" ></div>' +
@@ -434,6 +438,13 @@ var NOCMap = function () {
         LI.prepend(NocBillingItem);
         $('UL#NocBillingItem').append(LI);
       }
+
+      if (Billing.CalculatedCost <= 0) {
+        $('#NocBillingLI-' + Billing.RuleID).hide();
+      } else {
+        $('#NocBillingLI-' + Billing.RuleID).show();
+      }
+
       TotalCost = TotalCost + Billing.CalculatedCost;
       _AnimateAmountTo(NocBillingItem, Billing.CalculatedCost);
     }

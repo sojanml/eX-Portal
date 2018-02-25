@@ -34,12 +34,32 @@ div.noc-header {
         &.Amended {
           background-color: $AlertColor;
         }
+
+        &.button {
+          background-color: #474747;
+          font-weight: bold;
+          cursor: pointer;
+          padding: 10px;
+
+          span.icon {
+            padding-right: 10px;
+            color: $SafeColor
+          }
+
+          &:hover {
+            background-color: $SafeColor;
+
+            span.icon {
+              color: $BreachColor;
+            }
+          }
+        }
       }
     }
   }
 
   div.title {
-    color: $FilterColor;
+    font-family:advent;
     font-size: 18pt;
     font-weight: bold;
   }
@@ -155,7 +175,7 @@ div.noc-drone-info {
 
   div.info-title {
     font-size: 14pt;
-    color: $AlertColor;
+    font-family: advent;
     font-weight: bold;
   }
 
@@ -177,11 +197,73 @@ div.noc-pilot-info {
 
   div.info-title {
     font-size: 14pt;
-    color: $SafeColor;
+    font-family: advent;
     font-weight: bold;
   }
 
   div.info-sub-title {
     color: #797979;
+  }
+}
+
+section#noc-sections {
+  $Height: 400px;
+  $Width: 1150px;
+  $Left: 150px;
+  $ColWidth: $Width - $Left;
+
+  div#section-left,
+  div#section-right {
+    float: left;
+    box-sizing: border-box;
+  }
+
+  div#section-left {
+    height: $Height;
+    width: $Left;
+    overflow: auto;
+
+    ul {
+      margin: 0px;
+      padding: 0px;
+
+      li {
+        border-left: 1px $FilterColor solid;
+        border-top: 1px $FilterColor solid;
+        border-bottom: 1px $FilterColor solid;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        padding: 5px 10px 5px 10px;
+        margin-bottom: 5px;
+        background-color: white;
+        cursor: pointer;
+
+        &:hover, &.active {
+          background-color: $FilterColor;
+          color: white;
+        }
+      }
+    }
+  }
+
+  $Padding: 10px;
+
+  div#section-right {
+    width: $ColWidth;
+    border: 1px $FilterColor solid;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: $Padding;
+
+    div#content {
+      margin-right: $Padding - 2px;
+    }
+
+    div#content, div#GoogleMap, div#cesiumContainer {
+      width: ($ColWidth - $Padding * 3)/2;
+      height: ($Height - $Padding * 2);
+      float: left;
+    }
   }
 }

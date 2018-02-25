@@ -24,8 +24,24 @@ div.noc-header div.noc-status ul li.Rejected {
 div.noc-header div.noc-status ul li.Amended {
   background-color: #f2a003;
 }
+div.noc-header div.noc-status ul li.button {
+  background-color: #474747;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px;
+}
+div.noc-header div.noc-status ul li.button span.icon {
+  padding-right: 10px;
+  color: #53a100;
+}
+div.noc-header div.noc-status ul li.button:hover {
+  background-color: #53a100;
+}
+div.noc-header div.noc-status ul li.button:hover span.icon {
+  color: #fe0000;
+}
 div.noc-header div.title {
-  color: #018aff;
+  font-family: advent;
   font-size: 18pt;
   font-weight: bold;
 }
@@ -120,7 +136,7 @@ div.noc-drone-info div.DroneGroup {
 }
 div.noc-drone-info div.info-title {
   font-size: 14pt;
-  color: #f2a003;
+  font-family: advent;
   font-weight: bold;
 }
 div.noc-drone-info div.info-sub-title {
@@ -138,9 +154,55 @@ div.noc-pilot-info div.pilot-image {
 }
 div.noc-pilot-info div.info-title {
   font-size: 14pt;
-  color: #53a100;
+  font-family: advent;
   font-weight: bold;
 }
 div.noc-pilot-info div.info-sub-title {
   color: #797979;
+}
+
+section#noc-sections div#section-left,
+section#noc-sections div#section-right {
+  float: left;
+  box-sizing: border-box;
+}
+section#noc-sections div#section-left {
+  height: 400px;
+  width: 150px;
+  overflow: auto;
+}
+section#noc-sections div#section-left ul {
+  margin: 0px;
+  padding: 0px;
+}
+section#noc-sections div#section-left ul li {
+  border-left: 1px #018aff solid;
+  border-top: 1px #018aff solid;
+  border-bottom: 1px #018aff solid;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 5px 10px 5px 10px;
+  margin-bottom: 5px;
+  background-color: white;
+  cursor: pointer;
+}
+section#noc-sections div#section-left ul li:hover, section#noc-sections div#section-left ul li.active {
+  background-color: #018aff;
+  color: white;
+}
+section#noc-sections div#section-right {
+  width: 1000px;
+  border: 1px #018aff solid;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 10px;
+}
+section#noc-sections div#section-right div#content {
+  margin-right: 8px;
+}
+section#noc-sections div#section-right div#content, section#noc-sections div#section-right div#GoogleMap, section#noc-sections div#section-right div#cesiumContainer {
+  width: 485px;
+  height: 380px;
+  float: left;
 }

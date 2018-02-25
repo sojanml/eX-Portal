@@ -848,9 +848,9 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="Longitude" Type="decimal" Precision="18" Scale="5" />
           <Property Name="FlightTime" Type="datetime" />
           <Property Name="LastFlightID" Type="int" />
-          <Property Name="RpasSerialNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="RpasSerialNo" Type="nvarchar" MaxLength="250" />
           <Property Name="BlackBoxID" Type="int" />
-          <Property Name="RefName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RefName" Type="nvarchar" MaxLength="250" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" />
           <Property Name="MaxAllupWeight" Type="nvarchar" MaxLength="50" />
           <Property Name="color" Type="nvarchar" MaxLength="50" />
@@ -1224,8 +1224,8 @@ warning 6002: The table/view 'DCAAPortal.dbo.ip2location' does not have a primar
           <Property Name="BillingTotalMinutes" Type="int" Nullable="false" />
           <Property Name="BillingPeakMinutes" Type="int" Nullable="false" />
           <Property Name="BillingOffPeakMinutes" Type="int" Nullable="false" />
-          <Property Name="BillingArea" Type="numeric" Precision="12" Scale="2" Nullable="false" />
-          <Property Name="BillingVolume" Type="numeric" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="BillingArea" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="BillingVolume" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="PayLoad_AutoFix">
           <Key>
@@ -2554,7 +2554,7 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
             <End Role="CommsDetail" EntitySet="CommsDetail" />
           </AssociationSet>
           <FunctionImport Name="FlightMapDelayReport" ReturnType="Collection(ExponentPortalModel.FlightMapDelayReport_Result)">
-            <Parameter Name="FlightID" Mode="In" Type="Int32" />
+          <Parameter Name="FlightID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="fnSplitString" IsComposable="true" ReturnType="Collection(String)">
             <Parameter Name="string" Mode="In" Type="String" />
@@ -3256,9 +3256,9 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="Longitude" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="FlightTime" Type="DateTime" Precision="3" />
           <Property Name="LastFlightID" Type="Int32" />
-          <Property Name="RpasSerialNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RpasSerialNo" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="BlackBoxID" Type="Int32" />
-          <Property Name="RefName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RefName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="MaxAllupWeight" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="color" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -3896,8 +3896,8 @@ warning 6002: The table/view 'DCAAPortal.dbo.sysdiagrams' does not have a primar
           <Property Name="BillingTotalMinutes" Type="Int32" Nullable="false" />
           <Property Name="BillingPeakMinutes" Type="Int32" Nullable="false" />
           <Property Name="BillingOffPeakMinutes" Type="Int32" Nullable="false" />
-          <Property Name="BillingArea" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
-          <Property Name="BillingVolume" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="BillingArea" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="BillingVolume" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="TrafficMonitor">
           <Key>
