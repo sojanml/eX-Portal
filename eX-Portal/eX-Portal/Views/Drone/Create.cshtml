@@ -2,8 +2,10 @@
 
 @{
   ViewBag.Title = "RPAS Registration";
-  var UAVTypeList = eX_Portal.exLogic.Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown");
-  var ManufactureList = eX_Portal.exLogic.Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown");
+  var oUAVTypeList = eX_Portal.exLogic.Util.GetDropDowntList("UAVType", "Name", "Code", "usp_Portal_GetDroneDropDown");
+  var oManufactureList = eX_Portal.exLogic.Util.GetDropDowntList("Manufacturer", "Name", "Code", "usp_Portal_GetDroneDropDown");
+  var UAVTypeList = eX_Portal.exLogic.Util.SetProperCase(oUAVTypeList);
+  var ManufactureList = eX_Portal.exLogic.Util.SetProperCase(oManufactureList);
 
 }
 

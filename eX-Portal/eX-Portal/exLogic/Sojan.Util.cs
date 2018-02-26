@@ -17,6 +17,30 @@ using System.ComponentModel;
 
 namespace eX_Portal.exLogic {
   public partial class Util {
+    public static IEnumerable<SelectListItem> SetProperCase(IEnumerable<SelectListItem> ListItems) {
+      List<SelectListItem> nListItems = new List<SelectListItem>();
+      foreach (SelectListItem item in ListItems) {
+        item.Text = SetProperCase(item.Text);
+        nListItems.Add(item);
+      }
+      return nListItems;
+    }
+
+    public static String SetProperCase(String Text) {
+      int SquareAt = Text.IndexOf("[");
+      String LeftPart =
+        SquareAt > 0 ?
+        Text.Substring(0, SquareAt - 1) :
+        Text;
+      String RightPart =
+        SquareAt > 0 ?
+        " " + Text.Substring(SquareAt) :
+        String.Empty;
+
+      TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+      return textInfo.ToTitleCase(LeftPart) + RightPart.ToUpper();
+    }
+
     public static int EmailQue(
       int UserID,
       String ToAddress,
