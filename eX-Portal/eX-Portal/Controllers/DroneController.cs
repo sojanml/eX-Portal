@@ -69,17 +69,25 @@ namespace eX_Portal.Controllers {
           "Left join LUP_Drone U on\n" +
           "  UAVTypeID = U.TypeID and\n" +
           "  U.Type= 'UAVType'\n";
-      //if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
-      //{
-      //           SQL +=
-      //             "WHERE\n" +
-      //             "  D.AccountID=" + Util.getAccountID();
-      //}else 
-      if (!exLogic.User.hasAccess("DRONE.MANAGE")) {
+            //if (!exLogic.User.hasAccess("DRONE.VIEWALL"))
+            //{
+            //    SQL +=
+            //      "WHERE\n" +
+            //      "  D.AccountID=" + Util.getAccountID();
+            //}
+            //else
+            if (!exLogic.User.hasAccess("DRONE.VIEWALL") && exLogic.User.hasAccess("ORGANIZATION.ADMIN")) {
         SQL +=
           "WHERE\n" +
           "  D.AccountID=" + Util.getAccountID();
-      }
+        }else if(!exLogic.User.hasAccess("DRONE.VIEWALL") && exLogic.User.hasAccess("ORGANIZATION.ADMIN"))
+            {
+                SQL += @"left join
+                 [M2M_Drone_User] on
+                  D.DroneId =[M2M_Drone_User].DroneID
+                  and [M2M_Drone_User].UserID =" + Util.getLoginUserID()+
+                  " where [M2M_Drone_User].UserID =" + Util.getLoginUserID();
+            }
       qView nView = new qView(SQL);
 
       if (exLogic.User.hasAccess("DRONE"))
@@ -495,9 +503,14 @@ namespace eX_Portal.Controllers {
       if (!exLogic.User.hasDrone(DroneID))
         return RedirectToAction("NoAccess", "Home");
 
-      
-      var DroneDetail = new ViewModel.DroneDetailView(DroneID);
-      ViewBag.Title = DroneDetail.DroneInfo.DroneName;
+            var DroneDetail= new ViewModel.DroneDetailView();
+            int UserID = Util.getLoginUserID();
+       
+      if (!exLogic.User.hasAccess("ORGANIZATION.ADMIN") && !exLogic.User.hasAccess("DRONE.MANAGE"))
+                DroneDetail= new ViewModel.DroneDetailView(DroneID,UserID);
+      else
+                DroneDetail = new ViewModel.DroneDetailView(DroneID);
+            ViewBag.Title = DroneDetail.DroneInfo.DroneName;
 
       return View(DroneDetail);
     }
@@ -778,7 +791,7 @@ namespace eX_Portal.Controllers {
         private void SaveQRCode(string DroneName)
         {
             string level = "L";
-            Url generator = new Url("http://dcaa.exponent-ts.com/Drone/DroneView/"+ DroneName);
+            Url generator = new Url("http://portal.exponent-ts.com/Drone/DroneView/"+ DroneName);
             string payload = generator.ToString();
             String UploadPath = Server.MapPath(Url.Content(QRCodeUploadDir));
             String PathBy50 = Server.MapPath(Url.Content(QRDir50));

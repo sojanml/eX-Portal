@@ -259,7 +259,8 @@ namespace eX_Portal.Controllers {
       String SQL = "";
 
       if (exLogic.User.hasAccess("DRONE.MANAGE")) {
-        SQL = $@"SELECT  
+                SQL = $@"SELECT  
+                            [NocApplicationID] ,
                             [MSTR_Account].[name] as [Organization],
                             Firstname + ' ' + MiddleName + ' ' + LastName as [User],
                             [NOCName],
@@ -278,11 +279,13 @@ namespace eX_Portal.Controllers {
                             LEFT OUTER JOIN MSTR_Account
                             ON MSTR_Account.AccountId = [MSTR_NOC].AccountID
                             LEFT OUTER JOIN MSTR_User
-                            ON MSTR_User.UserId=[CreateBy]
-                            where enddate>=getdate() ";
-      } else {
+                            ON MSTR_User.UserId=[CreateBy]";
+                     //       order by MSTR_NOC.NocApplicationID";
+                          //  where enddate>=getdate() ";
+      } else if(exLogic.User.hasAccess("ORGANIZATION.ADMIN")) {
         int Accountid = Util.getAccountID();
         SQL = $@"SELECT  
+                            [NocApplicationID] ,
                             Firstname + ' ' + MiddleName + ' ' + LastName as [User],
                             [NOCName],
                             [StartDate],
@@ -299,9 +302,30 @@ namespace eX_Portal.Controllers {
                             FROM [MSTR_NOC]
                             LEFT OUTER JOIN MSTR_User
                             ON MSTR_User.UserId=[CreateBy]
-                            where enddate>getdate()  and [MSTR_NOC].Accountid= " + Accountid;
+                            where  [MSTR_NOC].Accountid= " + Accountid;
 
       }
+      else
+        {
+                int Userid = Util.getLoginUserID();
+            SQL = $@"SELECT   NocApplicationID,
+                        [NOCName],
+                        [StartDate],
+                        [EndDate],
+	                    CAST([CountApproved] as varchar(10))+  ' Approved'
+	                    + CHAR(13) + CHAR(10)+
+                        CAST([CountRejected] as varchar(20)) +' Rejected'
+	                    + CHAR(13) + CHAR(10)+
+                        CAST([CountAmended] as varchar(20)) +' Amended'
+	                    +  CHAR(13) + CHAR(10)+ 
+                        CAST([CountNew] as varchar(20)) +' New' +'' as Status,
+                        Count(*) Over() as _TotalRecords,
+                        [NocApplicationID] as _PKey
+                        FROM [MSTR_NOC]
+                        LEFT OUTER JOIN MSTR_User
+                        ON MSTR_User.UserId=[CreateBy]
+                        where [MSTR_NOC].[CreateBy]= " + Userid;
+        }
 
 
 

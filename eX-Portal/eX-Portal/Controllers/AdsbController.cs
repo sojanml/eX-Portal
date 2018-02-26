@@ -90,7 +90,32 @@ namespace eX_Portal.Controllers {
         ctx.MSTR_NoFlyZone.Add(ezone);
         ctx.SaveChanges();
       }
-      List<MSTR_NoFlyZone> NoFlyZoneList = ctx.MSTR_NoFlyZone.ToList();
+            var flUSer = GetActivePilots();
+            int UserID = exLogic.Util.getLoginUserID();
+            foreach (PilotFlight pil in flUSer)
+            {
+                int Pilotid = pil.PilotID.GetValueOrDefault();
+                if (Pilotid != 0)
+                {
+                    MSTR_Comms mcom = new MSTR_Comms();
+                    mcom.CreatedBy = UserID;
+                    mcom.Message = Zone.Message;
+                    mcom.FlightID = pil.FlightID;
+                    ctx.MSTR_Comms.Add(mcom);
+                    ctx.SaveChanges();
+
+                    CommsDetail cdet = new CommsDetail();
+                    cdet.FromID = UserID;
+                    cdet.ToID = pil.PilotID.Value;
+                    cdet.MessageID = mcom.MessageID;
+                    cdet.Status = "NEW";
+                    cdet.StatusUpdatedOn = DateTime.Now;
+                    cdet.CreatedBy = UserID;
+                    ctx.CommsDetail.Add(cdet);
+                    ctx.SaveChanges();
+                }
+            }
+            List<MSTR_NoFlyZone> NoFlyZoneList = ctx.MSTR_NoFlyZone.ToList();
 
       return Json(ezone.ID, JsonRequestBehavior.AllowGet);
 

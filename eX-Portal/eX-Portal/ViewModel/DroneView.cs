@@ -15,24 +15,27 @@ namespace eX_Portal.ViewModel {
     public List<FlightInfo> FlightInfo ;
     public List<PilotInfo> PilotInfo;
 
-    public DroneDetailView(int DroneID) {
+    public DroneDetailView(int DroneID,int UserID=0) {
       DroneInfo = new DroneInfo(DroneID);
       AccountInfo = new AccountInfo(DroneInfo.AccountID);
 
-      FlightInfo = db
-        .DroneFlight
-        .Where(w => w.DroneID == DroneID && w.MaxAltitude > 5)
-        .OrderBy(o => o.ID)
-        .Select(s => new FlightInfo {
-          ID = s.ID,
-          FlightDate  = (DateTime)s.FlightDate,
-          FlightDistance = (int)s.FlightDistance,
-          FlightHours = (int)s.FlightHours,
-          MaxAltitude = (int)s.MaxAltitude,
-          PilotID = (int)s.PilotID
-        })
-        .Take(5).OrderByDescending(x=>x.ID)
-        .ToList();
+            var _FlightInfo = db
+               .DroneFlight
+               .Where(w => w.DroneID == DroneID && w.MaxAltitude > 5);
+            
+                         
+            if (UserID != 0)
+                _FlightInfo = _FlightInfo.Where(x => x.PilotID == UserID);
+
+            FlightInfo = _FlightInfo.Select(s => new FlightInfo
+                     {
+                         ID = s.ID,
+                         FlightDate = (DateTime)s.FlightDate,
+                         FlightDistance = (int)s.FlightDistance,
+                         FlightHours = (int)s.FlightHours,
+                         MaxAltitude = (int)s.MaxAltitude,
+                         PilotID = (int)s.PilotID
+                     }).Take(5).OrderByDescending(x => x.ID).ToList();
 
        
       var PilotIDs = db
@@ -51,7 +54,11 @@ namespace eX_Portal.ViewModel {
             DroneInfo = new DroneInfo(DroneName);
             AccountInfo = new AccountInfo(DroneInfo.AccountID);
     }
-  }
+        public DroneDetailView()
+        {
+
+        }
+    }
 
 
   public class AccountInfo : MSTR_Account {

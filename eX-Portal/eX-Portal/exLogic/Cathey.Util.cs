@@ -433,7 +433,7 @@ namespace eX_Portal.exLogic {
          M2M_Drone_User.DroneID = D.DroneID AND
          M2M_Drone_User.UserID = {PDetail.UserId}
         where 
-          D.[AccountID]={PDetail.AccountId} AND
+          M2M_Drone_User.UserID ={PDetail.UserId} AND
           M2M_Drone_User.DroneID IS NOT NULL"; 
       }
 
