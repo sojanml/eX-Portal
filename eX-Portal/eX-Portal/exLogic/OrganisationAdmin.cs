@@ -37,7 +37,7 @@ namespace eX_Portal.exLogic {
       var DB = new Models.ExponentPortalEntities();
       int AccountID = Util.getAccountID();
       var Query = from u in DB.MSTR_User
-                  where u.AccountId == AccountID
+                  where u.AccountId == AccountID && u.IsPilot==true
                   orderby u.FirstName
                   select u;
       var TheList =  Query.ToList();
